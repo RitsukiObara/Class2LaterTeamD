@@ -21,6 +21,7 @@
 #include "objectElevation.h"
 #include "skybox.h"
 #include "confetti.h"
+#include "player.h"
 
 //--------------------------------------------
 // マクロ定義
@@ -88,6 +89,9 @@ HRESULT CGame::Init(void)
 	CConfetti::Create(D3DXVECTOR3(0.0f, 440.0f, 0.0f), D3DXVECTOR3(10.0f, 10.0f, 0.0f), D3DXVECTOR3(-0.02f, 0.03f, -0.03f), 0.9f, D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f), 9999);
 	CConfetti::Create(D3DXVECTOR3(30.0f, 440.0f, 0.0f), D3DXVECTOR3(10.0f, 10.0f, 0.0f), D3DXVECTOR3(-0.03f, -0.03f, 0.0f), 0.7f, D3DXCOLOR(0.0f, 1.0f, 1.0f, 1.0f), 9999);
 	CConfetti::Create(D3DXVECTOR3(-30.0f, 440.0f, 0.0f), D3DXVECTOR3(10.0f, 10.0f, 0.0f), D3DXVECTOR3(0.02f, 0.02f, 0.0f), 1.1f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f), 9999);
+
+	// プレイヤーの生成
+	CPlayer::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	// 情報の初期化
 	m_nFinishCount = 0;				// 終了カウント
@@ -254,7 +258,7 @@ void CGame::SetData(const MODE mode)
 	}
 
 	// スタート状態にする
-	m_GameState = STATE_START;
+	m_GameState = STATE_PLAY;
 
 	// 情報の初期化
 	m_nFinishCount = 0;				// 終了カウント

@@ -49,6 +49,9 @@
     <Filter Include="Edit">
       <UniqueIdentifier>{c9bb4e21-e702-4f01-86db-6b165e693f90}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Player">
+      <UniqueIdentifier>{8f235ce4-f31a-4d77-9785-c11060ac5785}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="fade.cpp">
@@ -246,6 +249,9 @@
     <ClCompile Include="confetti.cpp">
       <Filter>Staging</Filter>
     </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -442,6 +448,9 @@
     </ClInclude>
     <ClInclude Include="confetti.h">
       <Filter>Staging</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>Player</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

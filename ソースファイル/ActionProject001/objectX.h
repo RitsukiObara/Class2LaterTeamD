@@ -28,6 +28,7 @@ public:			// 誰でもアクセスできる
 	{
 		// 通常モデル
 		TYPE_RIPPLE = 0,		// 波紋
+		TYPE_KARIPLAYER,		// 仮プレイヤー
 
 		// エディットモデル
 		TYPE_MAX,				// 全モデルの総数
