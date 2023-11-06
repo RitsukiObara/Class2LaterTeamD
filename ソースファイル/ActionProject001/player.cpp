@@ -191,22 +191,54 @@ void CPlayer::Move(void)
 	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_D) == true)
 	{ // Dキーを押した場合
 
-		// 向きを設定する
-		rot.y = -D3DX_PI * 0.5f;
+		if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_W) == true)
+		{ // Wキーを押した場合
+
+			// 向きを設定する
+			rot.y = D3DX_PI * 0.25f;
+		}
+		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true)
+		{ // Sキーを押した場合
+
+			// 向きを設定する
+			rot.y = D3DX_PI * 0.75f;
+		}
+		else
+		{ // 上記以外
+
+			// 向きを設定する
+			rot.y = D3DX_PI * 0.5f;
+		}
 
 		// 移動量を設定する
-		m_move.x = 4.0f;
-		m_move.z = 0.0f;
+		m_move.x = sinf(rot.y) * 20.0f;
+		m_move.z = cosf(rot.y) * 20.0f;
 	}
 	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_A) == true)
 	{ // Aキーを押した場合
 
-		// 向きを設定する
-		rot.y = D3DX_PI * 0.5f;
+		if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_W) == true)
+		{ // Wキーを押した場合
+
+			// 向きを設定する
+			rot.y = D3DX_PI * -0.25f;
+		}
+		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true)
+		{ // Sキーを押した場合
+
+			// 向きを設定する
+			rot.y = D3DX_PI * -0.75f;
+		}
+		else
+		{ // 上記以外
+
+			// 向きを設定する
+			rot.y = D3DX_PI * -0.5f;
+		}
 
 		// 移動量を設定する
-		m_move.x = -4.0f;
-		m_move.z = 0.0f;
+		m_move.x = sinf(rot.y) * 20.0f;
+		m_move.z = cosf(rot.y) * 20.0f;
 	}
 	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_W) == true)
 	{ // Wキーを押した場合
@@ -215,8 +247,8 @@ void CPlayer::Move(void)
 		rot.y = 0.0f;
 
 		// 移動量を設定する
-		m_move.x = 0.0f;
-		m_move.z = 4.0f;
+		m_move.x = sinf(rot.y) * 20.0f;
+		m_move.z = cosf(rot.y) * 20.0f;
 	}
 	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true)
 	{ // Sキーを押した場合
@@ -225,8 +257,8 @@ void CPlayer::Move(void)
 		rot.y = D3DX_PI;
 
 		// 移動量を設定する
-		m_move.x = 0.0f;
-		m_move.z = -4.0f;
+		m_move.x = sinf(rot.y) * 20.0f;
+		m_move.z = cosf(rot.y) * 20.0f;
 	}
 	else
 	{ // 上記以外

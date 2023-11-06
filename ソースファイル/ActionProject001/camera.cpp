@@ -39,7 +39,7 @@
 // 位置・距離関係
 #define POS_SPEED					(30.0f)				// 移動速度
 #define DIS_SPEED					(16.0f)				// 距離の移動量
-#define CAMERA_DISTANCE				(550.0f)			// カメラの距離
+#define CAMERA_DISTANCE				(700.0f)			// カメラの距離
 #define POSR_POINT					(40.0f)				// 追従モードの注視点の位置
 #define POSV_POINT					(40.0f)				// 追従モードの視点の位置
 #define CORRECT_POSR				(0.22f)				// 注視点の補正倍率
@@ -773,7 +773,9 @@ void CCamera::TypeProcess(void)
 	case CCamera::TYPE_NONE:		// 通常
 
 		// 追跡処理
-		Chase();
+		//Chase();
+
+		NoneCamera();
 
 		break;
 
@@ -835,6 +837,41 @@ void CCamera::Chase(void)
 		m_posV.y += (m_posVDest.y - m_posV.y) * CORRECT_POSR;
 		m_posV.z += (m_posVDest.z - m_posV.z) * CORRECT_POSV;
 	}
+}
+
+//=======================
+// 通常カメラの処理
+//=======================
+void CCamera::NoneCamera(void)
+{
+	// ローカル変数宣言
+	D3DXVECTOR3 pos;					// 位置
+	D3DXVECTOR3 rot;					// 向き
+	m_DisDest = CAMERA_DISTANCE;		// 目的の距離
+
+	// 距離の補正処理
+	useful::Correct(m_DisDest, &m_Dis, CORRECT_POSR);
+	useful::Correct(m_rotDest, &m_rot.y, CORRECT_POSR);
+
+	// 目的の注視点を設定する
+	m_posRDest.x = 0.0f;
+	m_posRDest.y = 0.0f;
+	m_posRDest.z = 0.0f;
+
+	// 目的の視点を設定する
+	m_posVDest.x = 0.0f;
+	m_posVDest.y = 3000.0f;
+	m_posVDest.z = -100.0f;
+
+	// 注視点を補正
+	m_posR.x += (m_posRDest.x - m_posR.x) * CORRECT_POSR;
+	m_posR.y += (m_posRDest.y - m_posR.y) * CORRECT_POSR;
+	m_posR.z += (m_posRDest.z - m_posR.z) * CORRECT_POSR;
+
+	// 視点を補正
+	m_posV.x += (m_posVDest.x - m_posV.x) * CORRECT_POSV;
+	m_posV.y += (m_posVDest.y - m_posV.y) * CORRECT_POSR;
+	m_posV.z += (m_posVDest.z - m_posV.z) * CORRECT_POSV;
 }
 
 //=======================

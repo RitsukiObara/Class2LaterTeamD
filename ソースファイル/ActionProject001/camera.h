@@ -63,6 +63,7 @@ private:		// 自分だけアクセス出来る
 	void MovePosR(void);			// 注視点操作処理
 	void MoveRange(void);			// 距離操作処理
 	void Chase(void);				// 追跡処理
+	void NoneCamera(void);			// 通常状態のカメラ処理
 	void Vibrate(void);				// 振動処理
 	void Control(void);				// 操作処理
 	void PosSet(void);				// 位置の設定処理
