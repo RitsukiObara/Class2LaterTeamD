@@ -186,7 +186,7 @@ void CRankingTable::SetData(void)
 	CManager::Get()->GetFile()->Load(CFile::TYPE_RANKING);
 
 	// ランキングの入れ替え処理
-	RankSwap(CGame::GetScore());
+	//RankSwap(CGame::GetScore());
 
 	// 順位のセーブ処理
 	CManager::Get()->GetFile()->Save(CFile::TYPE_RANKING);

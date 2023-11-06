@@ -19,46 +19,7 @@
 const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 {
 	// オブジェクトモデル
-	"data\\MODEL\\Airplane.x",			// 飛行機
-	"data\\MODEL\\Screw.x",				// ネジ(アイテム)
-	"data\\MODEL\\ScrewParts.x",		// ネジ(破片)
-	"data\\MODEL\\GearParts.x",			// 歯車(破片)
-	"data\\MODEL\\RingParts.x",			// 輪(破片)
-	"data\\MODEL\\WoodChip.x",			// 木片(破片)
-	"data\\MODEL\\RedRustParts.x",		// 赤さび(破片)
-	"data\\MODEL\\Table.x",				// 台
-	"data\\MODEL\\Macchina.x",			// マキナ草
-	"data\\MODEL\\Goal.x",				// ゴール
-	"data\\MODEL\\GoalPoint.x",			// ゴールの中心
 	"data\\MODEL\\Ripple.x",			// 波紋
-	"data\\MODEL\\Pork.x",				// ポーク
-	"data\\MODEL\\SignBoard.x",			// 看板
-	"data\\MODEL\\Needle.x",			// 棘
-	"data\\MODEL\\IronBlock.x",			// 鉄箱
-	"data\\MODEL\\WoodBlock.x",			// 木箱
-
-	// 敵モデル
-	"data\\MODEL\\Itocan.x",			// イトキャン
-	"data\\MODEL\\MachiDori.x",			// マシンドリー
-	"data\\MODEL\\Garrejante.x",		// ガレジャンテ
-
-	// プレイヤーモデル
-	"data/MODEL/ReonWaist.x",			// プレイヤーの腰
-	"data/MODEL/ReonBody.x",			// プレイヤーの体
-	"data/MODEL/ReonNeck.x",			// プレイヤーの首
-	"data/MODEL/ReonHead.x",			// プレイヤーの頭
-	"data/MODEL/ReonRArm.x",			// プレイヤーの右腕
-	"data/MODEL/ReonLArm.x",			// プレイヤーの左腕
-	"data/MODEL/ReonRUpper.x",			// プレイヤーの右上腕
-	"data/MODEL/ReonLUpper.x",			// プレイヤーの左上腕
-	"data/MODEL/ReonRHand.x",			// プレイヤーの右手
-	"data/MODEL/ReonLHand.x",			// プレイヤーの左手
-	"data/MODEL/ReonRLeg.x",			// プレイヤーの右脚
-	"data/MODEL/ReonLLeg.x",			// プレイヤーの左脚
-	"data/MODEL/ReonRShin.x",			// プレイヤーの右脛
-	"data/MODEL/ReonLShin.x",			// プレイヤーの左脛
-	"data/MODEL/ReonRFoot.x",			// プレイヤーの右足
-	"data/MODEL/ReonLFoot.x",			// プレイヤーの左足
 };
 
 //------------------------------------------------------------

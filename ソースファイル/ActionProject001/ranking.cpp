@@ -93,9 +93,6 @@ void CRanking::Update(void)
 		m_nTransCount % SET_TITLE_TIMER == 0)
 	{ // ENTERキーを押したまたは、カウントが一定数に達した場合
 
-		// スコアのリセット処理
-		CGame::ResetScore();
-
 		// タイトルに遷移する
 		CManager::Get()->GetFade()->SetFade(CScene::MODE_TITLE);
 
