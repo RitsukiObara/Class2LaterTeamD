@@ -21,7 +21,7 @@
 //=========================
 // コンストラクタ
 //=========================
-CEffect2D::CEffect2D() : CObject2D(CObject2D::TYPE_EFFECT, CObject::PRIORITY_UI)
+CEffect2D::CEffect2D() : CObject2D(CObject::TYPE_EFFECT, CObject::PRIORITY_UI)
 {
 	// 全ての値をクリアする
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// 移動量

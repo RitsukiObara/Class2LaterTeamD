@@ -16,7 +16,7 @@
 //=========================
 // コンストラクタ
 //=========================
-CLocus2D::CLocus2D() : CObject2D(CObject2D::TYPE_LOCUS, CObject::PRIORITY_PLAYER)
+CLocus2D::CLocus2D() : CObject2D(CObject::TYPE_LOCUS, CObject::PRIORITY_PLAYER)
 {
 	// 全ての値をクリアする
 	m_nLife = 0;			// 寿命

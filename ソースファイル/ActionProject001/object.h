@@ -23,47 +23,29 @@ public:			// 誰でもアクセスできる
 	enum TYPE
 	{
 		TYPE_NONE = 0,			// 無し
-		TYPE_PLAYER,			// プレイヤー
-		TYPE_AIRPLANE,			// 飛行機
-		TYPE_TIME,				// 時間
+		TYPE_TITLELOGO,			// タイトル
+		TYPE_TIME,				// タイム
+		TYPE_STUN,				// 気絶
+		TYPE_SKYBOX,			// スカイボックス
 		TYPE_SHADOW,			// 影
 		TYPE_SCORE,				// スコア
-		TYPE_GAMESCORE,			// ゲームスコア
+		TYPE_RIPPLE,			// 波紋
+		TYPE_RANKINGWORD,		// ランキングの文字
+		TYPE_RANKINGTABLE,		// 取ったスコア
+		TYPE_RANKINGPRECE,		// 順位
 		TYPE_PAUSE,				// ポーズ
+		TYPE_ORBIT,				// 軌跡
+		TYPE_FIELD,				// 地面
 		TYPE_3DPOLYGON,			// 3Dポリゴン
-		TYPE_CHARA,				// キャラクター
+		TYPE_NEWRECORD,			// 新記録
 		TYPE_MESH,				// メッシュ
-		TYPE_FIELD,				// フィールド
 		TYPE_LOGOMARK,			// ロゴマーク
 		TYPE_LOCUS,				// 残像
-		TYPE_EFFECT,			// エフェクト
-		TYPE_SCREW,				// ネジ
-		TYPE_COLLPOLY,			// 当たり判定ポリゴン
-		TYPE_DESTRUCTION,		// 撃破
-		TYPE_ENEMY,				// 敵
 		TYPE_FRACTION,			// 破片
-		TYPE_NEWRECORD,			// 新記録
-		TYPE_SCREWUI,			// ネジのUI
-		TYPE_COMBO,				// コンボ
-		TYPE_VIVLIO,			// ビブリオ草
-		TYPE_RIPPLE,			// 波紋
-		TYPE_GOAL,				// ゴール
-		TYPE_BONUSCOMBO,		// ボーナスコンボ
-		TYPE_TITLELOGO,			// タイトルロゴ
-		TYPE_EDIT,				// エディット
-		TYPE_SKYBOX,			// スカイボックス
-		TYPE_STUN,				// 気絶演出
-		TYPE_ORBIT,				// 軌跡
-		TYPE_PORK,				// ポーク
-		TYPE_SIGNBOARD,			// 看板
-		TYPE_TURN,				// 振り向き
-		TYPE_RANKINGWORD,		// ランキングの文字
-		TYPE_RANKINGTABLE,		// ランキング表
-		TYPE_RANKINGPRECE,		// ランキングの順位表示
-		TYPE_TUTORIAL,			// チュートリアル
-		TYPE_BLOCK,				// ブロック
-		TYPE_LIFEUI,			// 体力UI
-		TYPE_PUSHTIMING,		// 押すタイミング
+		TYPE_EFFECT,			// エフェクト
+		TYPE_DESTRUCTION,		// 撃波
+		TYPE_COLLPOLY,			// 当たり判定ポリゴン
+		TYPE_CHARA,				// キャラクター
 		TYPE_MAX				// この列挙型の総数
 	};
 

@@ -155,6 +155,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="collpolygon.cpp" />
+    <ClCompile Include="confetti.cpp" />
     <ClCompile Include="fraction.cpp" />
     <ClCompile Include="mesh_manager.cpp" />
     <ClCompile Include="new_record.cpp" />
@@ -224,6 +225,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="collpolygon.h" />
+    <ClInclude Include="confetti.h" />
     <ClInclude Include="fraction.h" />
     <ClInclude Include="mesh_manager.h" />
     <ClInclude Include="objectAnim.h" />

@@ -243,6 +243,9 @@
     <ClCompile Include="collpolygon.cpp">
       <Filter>Useful</Filter>
     </ClCompile>
+    <ClCompile Include="confetti.cpp">
+      <Filter>Staging</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -436,6 +439,9 @@
     </ClInclude>
     <ClInclude Include="collpolygon.h">
       <Filter>Useful</Filter>
+    </ClInclude>
+    <ClInclude Include="confetti.h">
+      <Filter>Staging</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
