@@ -182,50 +182,50 @@ void CFraction::SetData(const D3DXVECTOR3& pos, const TYPE type)
 	SetRot(NONE_D3DXVECTOR3);		// 向き
 	SetScale(NONE_SCALE);			// 拡大率
 
-	switch (type)
-	{
-	case TYPE_SCREW:		// ネジ
+	//switch (type)
+	//{
+	//case TYPE_SCREW:		// ネジ
 
-		// モデル情報を設定する
-		SetFileData(CXFile::TYPE_FRAC_SCREW);
+	//	// モデル情報を設定する
+	//	SetFileData(CXFile::TYPE_FRAC_SCREW);
 
-		break;
+	//	break;
 
-	case TYPE_GEAR:			// 歯車
+	//case TYPE_GEAR:			// 歯車
 
-		// モデル情報を設定する
-		SetFileData(CXFile::TYPE_FRAC_GEAR);
+	//	// モデル情報を設定する
+	//	SetFileData(CXFile::TYPE_FRAC_GEAR);
 
-		break;
+	//	break;
 
-	case TYPE_RING:			// 輪
+	//case TYPE_RING:			// 輪
 
-		// モデル情報を設定する
-		SetFileData(CXFile::TYPE_FRAC_RING);
+	//	// モデル情報を設定する
+	//	SetFileData(CXFile::TYPE_FRAC_RING);
 
-		break;
+	//	break;
 
-	case TYPE_WOODBOX:		// 木箱
+	//case TYPE_WOODBOX:		// 木箱
 
-		// モデル情報を設定する
-		SetFileData(CXFile::TYPE_FRAC_WOOD);
+	//	// モデル情報を設定する
+	//	SetFileData(CXFile::TYPE_FRAC_WOOD);
 
-		break;
+	//	break;
 
-	case TYPE_REDRUST:		// 赤さび
+	//case TYPE_REDRUST:		// 赤さび
 
-		// モデル情報を設定する
-		SetFileData(CXFile::TYPE_FRAC_REDRUST);
+	//	// モデル情報を設定する
+	//	SetFileData(CXFile::TYPE_FRAC_REDRUST);
 
-		break;
+	//	break;
 
-	default:
+	//default:
 
-		// 停止
-		assert(false);
+	//	// 停止
+	//	assert(false);
 
-		break;
-	}
+	//	break;
+	//}
 
 	// 移動量の設定処理
 	MoveSet();

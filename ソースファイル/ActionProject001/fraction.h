@@ -30,11 +30,6 @@ public:			// 誰でもアクセスできる
 	// 列挙型定義(種類)
 	enum TYPE
 	{
-		TYPE_SCREW = 0,		// ネジ
-		TYPE_GEAR,			// 歯車
-		TYPE_RING,			// 輪っか
-		TYPE_WOODBOX,		// 木箱
-		TYPE_REDRUST,		// 赤さび
 		TYPE_MAX			// この列挙型の総数
 	};
 
