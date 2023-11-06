@@ -20,14 +20,6 @@
 #include "fade.h"
 
 #include "elevation_manager.h"
-#include "airplane_manager.h"
-#include "screw_manager.h"
-#include "enemy_manager.h"
-#include "table_manager.h"
-#include "macchina_manager.h"
-#include "pork_manager.h"
-#include "needle_manager.h"
-#include "block_manager.h"
 #include "mesh_manager.h"
 
 //--------------------------------------------
@@ -58,14 +50,6 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 {
 	// マネージャーの生成処理
 	CElevationManager::Create();		// 起伏マネージャー
-	CAirplaneManager::Create();			// 飛行機マネージャー
-	CScrewManager::Create();			// ネジマネージャー
-	CEnemyManager::Create();			// 敵マネージャー
-	CTableManager::Create();			// 台マネージャー
-	CMacchinaManager::Create();			// マキナ草マネージャー
-	CPorkManager::Create();				// ポークマネージャー
-	CNeedleManager::Create();			// 棘マネージャー
-	CBlockManager::Create();			// ブロックマネージャー
 	CMeshManager::Create();				// メッシュマネージャー
 
 	if (m_pFile == nullptr)
@@ -365,7 +349,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 #ifdef _DEBUG
 
 		// フェードのメモリを確保する
-		m_pFade = m_pFade->Create(CScene::MODE_GAME);
+		m_pFade = m_pFade->Create(CScene::MODE_LOGO);
 #else
 
 		// シーンのメモリを確保する
@@ -514,14 +498,6 @@ void CManager::Uninit(void)
 
 	// マネージャーの終了処理
 	CElevationManager::Get()->Uninit();		// 起伏マネージャー
-	CAirplaneManager::Get()->Uninit();		// 飛行機マネージャー
-	CScrewManager::Get()->Uninit();			// ネジマネージャー
-	CEnemyManager::Get()->Uninit();			// 敵マネージャー
-	CTableManager::Get()->Uninit();			// 台マネージャー
-	CMacchinaManager::Get()->Uninit();		// マキナ草マネージャー
-	CPorkManager::Get()->Uninit();			// ポークマネージャー
-	CNeedleManager::Get()->Uninit();		// 棘マネージャー
-	CBlockManager::Get()->Uninit();			// ブロックマネージャー
 	CMeshManager::Get()->Uninit();			// メッシュマネージャー
 
 	// マネージャーのメモリを解放する
