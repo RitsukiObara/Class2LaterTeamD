@@ -19,6 +19,7 @@
 #include "scene.h"
 #include "file.h"
 #include "pause.h"
+#include "player.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -800,39 +801,40 @@ void CCamera::Chase(void)
 	// ローカル変数宣言
 	D3DXVECTOR3 pos;					// 位置
 	D3DXVECTOR3 rot;					// 向き
+	CPlayer* pPlayer = CPlayer::Get();	// プレイヤーのポインタ
 	m_DisDest = CAMERA_DISTANCE;		// 目的の距離
 
 	// 距離の補正処理
 	useful::Correct(m_DisDest, &m_Dis, CORRECT_POSR);
 	useful::Correct(m_rotDest, &m_rot.y, CORRECT_POSR);
 
-	//if (pPlayer != nullptr)
-	//{ // プレイヤーが NULL じゃない場合
+	if (pPlayer != nullptr)
+	{ // プレイヤーが NULL じゃない場合
 
-	//	// プレイヤーの情報を取得する
-	//	pos = pPlayer->GetPos();		// 位置
-	//	rot = pPlayer->GetRot();		// 向き
+		// プレイヤーの情報を取得する
+		pos = pPlayer->GetPos();		// 位置
+		rot = pPlayer->GetRot();		// 向き
 
-	//	// 目的の注視点を設定する
-	//	m_posRDest.x = pos.x + CHASE_SHIFT_X;
-	//	m_posRDest.y = pos.y + POSR_SHIFT_Y;
-	//	m_posRDest.z = pos.z;
+		// 目的の注視点を設定する
+		m_posRDest.x = pos.x + CHASE_SHIFT_X;
+		m_posRDest.y = pos.y + POSR_SHIFT_Y;
+		m_posRDest.z = pos.z;
 
-	//	// 目的の視点を設定する
-	//	m_posVDest.x = m_posRDest.x + sinf(m_rot.y) * -m_Dis;
-	//	m_posVDest.y = pos.y + POSV_SHIFT_Y;
-	//	m_posVDest.z = m_posRDest.z + cosf(m_rot.y) * -m_Dis;
+		// 目的の視点を設定する
+		m_posVDest.x = m_posRDest.x + sinf(m_rot.y) * -m_Dis;
+		m_posVDest.y = pos.y + POSV_SHIFT_Y;
+		m_posVDest.z = m_posRDest.z + cosf(m_rot.y) * -m_Dis;
 
-	//	// 注視点を補正
-	//	m_posR.x += (m_posRDest.x - m_posR.x) * CORRECT_POSR;
-	//	m_posR.y += (m_posRDest.y - m_posR.y) * CORRECT_POSR;
-	//	m_posR.z += (m_posRDest.z - m_posR.z) * CORRECT_POSR;
+		// 注視点を補正
+		m_posR.x += (m_posRDest.x - m_posR.x) * CORRECT_POSR;
+		m_posR.y += (m_posRDest.y - m_posR.y) * CORRECT_POSR;
+		m_posR.z += (m_posRDest.z - m_posR.z) * CORRECT_POSR;
 
-	//	// 視点を補正
-	//	m_posV.x += (m_posVDest.x - m_posV.x) * CORRECT_POSV;
-	//	m_posV.y += (m_posVDest.y - m_posV.y) * CORRECT_POSR;
-	//	m_posV.z += (m_posVDest.z - m_posV.z) * CORRECT_POSV;
-	//}
+		// 視点を補正
+		m_posV.x += (m_posVDest.x - m_posV.x) * CORRECT_POSV;
+		m_posV.y += (m_posVDest.y - m_posV.y) * CORRECT_POSR;
+		m_posV.z += (m_posVDest.z - m_posV.z) * CORRECT_POSV;
+	}
 }
 
 //=======================
@@ -843,64 +845,54 @@ void CCamera::Vibrate(void)
 	// ローカル変数宣言
 	D3DXVECTOR3 pos;			// 位置
 	D3DXVECTOR3 rot;			// 向き
-	//CPlayer* pPlayer = CPlayer::Get();	// プレイヤーのポインタ
+	CPlayer* pPlayer = CPlayer::Get();	// プレイヤーのポインタ
 
-	//if (pPlayer != nullptr)
-	//{ // プレイヤーが NULL じゃない場合
+	if (pPlayer != nullptr)
+	{ // プレイヤーが NULL じゃない場合
 
-	//	// プレイヤーの情報を取得する
-	//	pos = pPlayer->GetPos();		// 位置
-	//	rot = pPlayer->GetRot();		// 向き
+		// プレイヤーの情報を取得する
+		pos = pPlayer->GetPos();		// 位置
+		rot = pPlayer->GetRot();		// 向き
 
-	//	if (m_nSwingCount % 5 == 0)
-	//	{ // 揺れカウントが一定数ごとに
+		if (m_nSwingCount % 5 == 0)
+		{ // 揺れカウントが一定数ごとに
 
-	//		float f = (float)(rand() % 8 + 6);
+			float f = (float)(rand() % 8 + 6);
 
-	//		if (m_nSwingCount % 2 == 0)
-	//		{ // カウントが偶数の場合
+			if (m_nSwingCount % 2 == 0)
+			{ // カウントが偶数の場合
 
-	//			// 目的の注視点を設定する
-	//			m_posRDest.y = pos.y + POSR_SHIFT_Y - f;
-	//		}
-	//		else
-	//		{ // カウントが奇数の場合
+				// 目的の注視点を設定する
+				m_posRDest.y = pos.y + POSR_SHIFT_Y - f;
+			}
+			else
+			{ // カウントが奇数の場合
 
-	//			// 目的の注視点を設定する
-	//			m_posRDest.y = pos.y + POSR_SHIFT_Y + f;
-	//		}
+				// 目的の注視点を設定する
+				m_posRDest.y = pos.y + POSR_SHIFT_Y + f;
+			}
 
-	//		// 目的の注視点を設定する
-	//		m_posRDest.x = pos.x + CHASE_SHIFT_X;
-	//		m_posRDest.z = pos.z;
+			// 目的の注視点を設定する
+			m_posRDest.x = pos.x + CHASE_SHIFT_X;
+			m_posRDest.z = pos.z;
 
-	//		// 目的の視点を設定する
-	//		m_posVDest.x = m_posRDest.x + sinf(m_rot.y) * -m_Dis;
-	//		m_posVDest.y = pos.y + POSV_SHIFT_Y;
-	//		m_posVDest.z = m_posRDest.z + cosf(m_rot.y) * -m_Dis;
-	//	}
+			// 目的の視点を設定する
+			m_posVDest.x = m_posRDest.x + sinf(m_rot.y) * -m_Dis;
+			m_posVDest.y = pos.y + POSV_SHIFT_Y;
+			m_posVDest.z = m_posRDest.z + cosf(m_rot.y) * -m_Dis;
+		}
 
-	//	// 注視点を補正
-	//	m_posR.x += (m_posRDest.x - m_posR.x) * 0.3f;
-	//	m_posR.y += (m_posRDest.y - m_posR.y) * 0.3f;
-	//	m_posR.z += (m_posRDest.z - m_posR.z) * 0.3f;
+		// 注視点を補正
+		m_posR.x += (m_posRDest.x - m_posR.x) * 0.3f;
+		m_posR.y += (m_posRDest.y - m_posR.y) * 0.3f;
+		m_posR.z += (m_posRDest.z - m_posR.z) * 0.3f;
 
-	//	// 視点を補正
-	//	m_posV.x += (m_posVDest.x - m_posV.x) * 0.3f;
-	//	m_posV.y += (m_posVDest.y - m_posV.y) * 0.3f;
-	//	m_posV.z += (m_posVDest.z - m_posV.z) * 0.3f;
+		// 視点を補正
+		m_posV.x += (m_posVDest.x - m_posV.x) * 0.3f;
+		m_posV.y += (m_posVDest.y - m_posV.y) * 0.3f;
+		m_posV.z += (m_posVDest.z - m_posV.z) * 0.3f;
+	}
 
-	//	if (pPlayer->GetAbility()->GetAbility() != CAbility::ABILITY_GROUNDQUAKE)
-	//	{ // カウント数が一定以上になった場合
-
-	//		// 種類を設定する
-	//		SetType(TYPE_NONE);
-
-	//		// 揺れカウントを初期化する
-	//		m_nSwingCount = 0;
-	//	}
-	//}
-
-	//// 揺れカウントを加算する
-	//m_nSwingCount++;
+	// 揺れカウントを加算する
+	m_nSwingCount++;
 }

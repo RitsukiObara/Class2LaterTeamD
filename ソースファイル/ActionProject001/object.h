@@ -46,6 +46,7 @@ public:			// 誰でもアクセスできる
 		TYPE_DESTRUCTION,		// 撃波
 		TYPE_COLLPOLY,			// 当たり判定ポリゴン
 		TYPE_CHARA,				// キャラクター
+		TYPE_PLAYER,			// プレイヤー
 		TYPE_MAX				// この列挙型の総数
 	};
 
