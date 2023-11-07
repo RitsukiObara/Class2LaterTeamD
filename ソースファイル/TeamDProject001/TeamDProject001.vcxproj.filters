@@ -276,6 +276,9 @@
     <ClCompile Include="obstacle_manager.cpp">
       <Filter>Gimmick</Filter>
     </ClCompile>
+    <ClCompile Include="edit.cpp">
+      <Filter>Edit</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -490,6 +493,9 @@
     </ClInclude>
     <ClInclude Include="obstacle_manager.h">
       <Filter>Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="edit.h">
+      <Filter>Edit</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

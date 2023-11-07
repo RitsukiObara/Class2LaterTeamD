@@ -48,6 +48,7 @@ public:			// 誰でもアクセスできる
 		TYPE_CHARA,				// キャラクター
 		TYPE_PLAYER,			// プレイヤー
 		TYPE_OBSTACLE,			// 障害物
+		TYPE_EDIT,				// エディット
 		TYPE_MAX				// この列挙型の総数
 	};
 

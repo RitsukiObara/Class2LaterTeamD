@@ -382,6 +382,28 @@ bool useful::RectangleCollisionXZ(const D3DXVECTOR3& pos0, const D3DXVECTOR3& po
 }
 
 //======================
+// YZÀ•W‚Ì‹éŒ`‚Ì“–‚½‚è”»’è
+//======================
+bool useful::RectangleCollisionYZ(const D3DXVECTOR3& pos0, const D3DXVECTOR3& pos1, const D3DXVECTOR3& VtxMax0, const D3DXVECTOR3& VtxMax1, const D3DXVECTOR3& VtxMin0, const D3DXVECTOR3& VtxMin1)
+{
+	if (pos0.y + VtxMax0.y >= pos1.y + VtxMin1.y &&
+		pos0.y + VtxMin0.y <= pos1.y + VtxMax1.y &&
+		pos0.z + VtxMax0.z >= pos1.z + VtxMin1.z &&
+		pos0.z + VtxMin0.z <= pos1.z + VtxMax1.z)
+	{ // “–‚½‚è”»’è‚É“–‚½‚Á‚Ä‚¢‚½ê‡
+
+		// true ‚ð•Ô‚·
+		return true;
+	}
+	else
+	{ // “–‚½‚è”»’è‚É“–‚½‚Á‚Ä‚¢‚È‚¢ê‡
+
+		// false ‚ð•Ô‚·
+		return false;
+	}
+}
+
+//======================
 // ‰~’Œ‚Ì“–‚½‚è”»’è
 //======================
 void useful::CylinderCollision(D3DXVECTOR3* TargetPos, const D3DXVECTOR3& ObjectPos, const float fObjectRadius)
