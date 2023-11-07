@@ -58,6 +58,9 @@
     <Filter Include="Sample">
       <UniqueIdentifier>{f5d433fb-141f-414b-99a1-7632e8dbe80e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Gimmick">
+      <UniqueIdentifier>{16f9da42-ab31-4f91-a514-280773383f5f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="fade.cpp">
@@ -267,6 +270,9 @@
     <ClCompile Include="game_timer.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="obstacle.cpp">
+      <Filter>Gimmick</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -475,6 +481,9 @@
     </ClInclude>
     <ClInclude Include="game_timer.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="obstacle.h">
+      <Filter>Gimmick</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
