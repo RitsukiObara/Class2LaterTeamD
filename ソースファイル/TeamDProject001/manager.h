@@ -35,9 +35,6 @@ class CManager
 {
 public:						// 誰でもアクセスできる
 
-	CManager();				// コンストラクタ
-	~CManager();			// デストラクタ
-
 	// メンバ関数
 	HRESULT Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow);		// 初期化処理
 	void Uninit(void);							// 終了処理
@@ -66,6 +63,9 @@ public:						// 誰でもアクセスできる
 	static CManager* Get(void);				// マネージャーの取得処理
 
 private:					// 自分だけアクセスできる
+
+	CManager();				// コンストラクタ
+	~CManager();			// デストラクタ
 
 	// メンバ変数
 	CRenderer* m_pRenderer;					// レンダラーの情報

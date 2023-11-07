@@ -22,6 +22,7 @@
 #include "skybox.h"
 #include "player.h"
 #include "game_timer.h"
+#include "edit.h"
 
 //--------------------------------------------
 // マクロ定義
@@ -36,6 +37,12 @@ CPause* CGame::m_pPause = nullptr;							// ポーズの情報
 CGame::STATE CGame::m_GameState = CGame::STATE_START;		// ゲームの進行状態
 int CGame::m_nFinishCount = 0;								// 終了カウント
 
+// デバッグ版
+#ifdef _DEBUG
+CEdit* CGame::m_pEdit = nullptr;							// エディットの情報
+bool CGame::m_bEdit = false;								// エディット状況
+#endif
+
 //=========================================
 // コンストラクタ
 //=========================================
@@ -45,6 +52,12 @@ CGame::CGame() : CScene(TYPE_NONE, PRIORITY_BG)
 	m_pPause = nullptr;			// ポーズ
 	m_nFinishCount = 0;			// 終了カウント
 	m_GameState = STATE_START;	// 状態
+
+// デバッグ版
+#ifdef _DEBUG
+	m_pEdit = nullptr;			// エディット
+	m_bEdit = false;			// エディット状況
+#endif
 }
 
 //=========================================
@@ -126,30 +139,36 @@ void CGame::Update(void)
 	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_F7) == true)
 	{ // F7キーを押した場合
 
-		//// エディット状況を入れ替える
-		//m_bEdit = m_bEdit ? false : true;
+		// エディット状況を入れ替える
+		m_bEdit = m_bEdit ? false : true;
 
-		//if (m_bEdit == true)
-		//{ // エディット状況が true の場合
+		if (m_bEdit == true)
+		{ // エディット状況が true の場合
 
-		//}
-		//else
-		//{ // 上記以外
+			if (m_pEdit == nullptr)
+			{ // エディット状況が NULL の場合
 
-		//	if (m_pEdit != nullptr)
-		//	{ // エディット状況が NULL じゃない場合
+				// エディットの生成処理
+				m_pEdit = CEdit::Create();
+			}
+		}
+		else
+		{ // 上記以外
 
-		//		// 終了処理
-		//		m_pEdit->Uninit();
-		//		m_pEdit = nullptr;
-		//	}
-		//	else
-		//	{ // 上記以外
+			if (m_pEdit != nullptr)
+			{ // エディット状況が NULL じゃない場合
 
-		//		// 停止
-		//		assert(false);
-		//	}
-		//}
+				// 終了処理
+				m_pEdit->Uninit();
+				m_pEdit = nullptr;
+			}
+			else
+			{ // 上記以外
+
+				// 停止
+				assert(false);
+			}
+		}
 	}
 
 #endif
@@ -194,17 +213,23 @@ void CGame::Update(void)
 
 #ifdef _DEBUG
 
-	//if (m_bEdit == true)
-	//{ // エディット状況が true の場合
+	if (m_bEdit == true)
+	{ // エディット状況が true の場合
 
-	//	if (m_pEdit != nullptr)
-	//	{ // エディットが NULL じゃない場合
+		if (m_pEdit != nullptr)
+		{ // エディットが NULL じゃない場合
 
-	//		// エディットの更新処理
-	//		m_pEdit->Update();
-	//	}
-	//}
-	//else
+			// エディットの更新処理
+			m_pEdit->Update();
+		}
+
+		for (int nCnt = 0; nCnt < PRIORITY_MAX; nCnt++)
+		{
+			// 死亡判別処理
+			CObject::DeathDecision(nCnt);
+		}
+	}
+	else
 	{ // 上記以外
 
 		if (CManager::Get()->GetRenderer() != nullptr)
@@ -342,24 +367,24 @@ void CGame::DeletePause(void)
 	m_pPause = nullptr;
 }
 
-//// デバッグ版
-//#ifdef _DEBUG
-////======================================
-//// エディットの取得処理
-////======================================
-//CEdit* CGame::GetEdit(void)
-//{
-//	// エディットの情報を返す
-//	return m_pEdit;
-//}
-//
-////======================================
-//// エディット状況の取得処理
-////======================================
-//bool CGame::IsEdit(void)
-//{
-//	// エディット状況を返す
-//	return m_bEdit;
-//}
-//
-//#endif
+// デバッグ版
+#ifdef _DEBUG
+//======================================
+// エディットの取得処理
+//======================================
+CEdit* CGame::GetEdit(void)
+{
+	// エディットの情報を返す
+	return m_pEdit;
+}
+
+//======================================
+// エディット状況の取得処理
+//======================================
+bool CGame::IsEdit(void)
+{
+	// エディット状況を返す
+	return m_bEdit;
+}
+
+#endif

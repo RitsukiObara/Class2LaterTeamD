@@ -79,6 +79,9 @@ void CPlayer::Uninit(void)
 //=====================================
 void CPlayer::Update(void)
 {
+	// ‘O‰ñ‚ÌˆÊ’u‚ğİ’è‚·‚é
+	SetPosOld(GetPos());
+
 	// ˆÚ“®ˆ—
 	Move();
 
