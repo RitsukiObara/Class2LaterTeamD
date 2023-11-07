@@ -264,6 +264,9 @@
     <ClCompile Include="sample_manager.cpp">
       <Filter>Sample</Filter>
     </ClCompile>
+    <ClCompile Include="game_timer.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -469,6 +472,9 @@
     </ClInclude>
     <ClInclude Include="sample_manager.h">
       <Filter>Sample</Filter>
+    </ClInclude>
+    <ClInclude Include="game_timer.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

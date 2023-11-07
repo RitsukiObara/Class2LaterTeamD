@@ -22,6 +22,7 @@
 #include "skybox.h"
 #include "confetti.h"
 #include "player.h"
+#include "game_timer.h"
 
 //--------------------------------------------
 // マクロ定義
@@ -92,6 +93,9 @@ HRESULT CGame::Init(void)
 
 	// プレイヤーの生成
 	CPlayer::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+
+	// 生成処理
+	CGameTime::Create();
 
 	// 情報の初期化
 	m_nFinishCount = 0;				// 終了カウント
