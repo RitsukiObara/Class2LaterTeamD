@@ -19,9 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{24A80DAE-CCA3-45DB-A706-0158704378C4}</ProjectGuid>
+    <ProjectGuid>{46A493B6-0A10-4E4B-B51C-BAAE7B1DEAF7}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>ActionProject001</RootNamespace>
+    <RootNamespace>TeamDProject001</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -36,7 +36,7 @@
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -79,9 +79,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)</OutDir>
-    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -117,16 +114,14 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <WarningLevel>Level4</WarningLevel>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <PrecompiledHeaderFile>precompile.h</PrecompiledHeaderFile>
-      <ForcedIncludeFiles>precompile.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -154,23 +149,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="collpolygon.cpp" />
-    <ClCompile Include="confetti.cpp" />
-    <ClCompile Include="fraction.cpp" />
-    <ClCompile Include="mesh_manager.cpp" />
-    <ClCompile Include="new_record.cpp" />
-    <ClCompile Include="objectAnim.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="character.cpp" />
     <ClCompile Include="collision.cpp" />
+    <ClCompile Include="collpolygon.cpp" />
+    <ClCompile Include="confetti.cpp" />
     <ClCompile Include="debugproc.cpp" />
     <ClCompile Include="destruction.cpp" />
-    <ClCompile Include="objectDonut2D.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="effect2D.cpp" />
     <ClCompile Include="elevation_manager.cpp" />
     <ClCompile Include="fade.cpp" />
     <ClCompile Include="file.cpp" />
+    <ClCompile Include="fraction.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="light.cpp" />
@@ -181,18 +172,23 @@
     <ClCompile Include="manager.cpp" />
     <ClCompile Include="mesh_cylinder.cpp" />
     <ClCompile Include="mesh_dome.cpp" />
-    <ClCompile Include="objectElevation.cpp" />
     <ClCompile Include="mesh_field.cpp" />
+    <ClCompile Include="mesh_manager.cpp" />
     <ClCompile Include="mesh_wall.cpp" />
     <ClCompile Include="model.cpp" />
     <ClCompile Include="motion.cpp" />
+    <ClCompile Include="new_record.cpp" />
     <ClCompile Include="number.cpp" />
     <ClCompile Include="object.cpp" />
     <ClCompile Include="object2D.cpp" />
     <ClCompile Include="object3D.cpp" />
     <ClCompile Include="object3Dfan.cpp" />
+    <ClCompile Include="objectAnim.cpp" />
     <ClCompile Include="objectbillboard.cpp" />
+    <ClCompile Include="objectDonut2D.cpp" />
+    <ClCompile Include="objectElevation.cpp" />
     <ClCompile Include="Objectmesh.cpp" />
+    <ClCompile Include="objectScroll.cpp" />
     <ClCompile Include="objectX.cpp" />
     <ClCompile Include="orbit.cpp" />
     <ClCompile Include="Particle.cpp" />
@@ -201,7 +197,6 @@
     <ClCompile Include="player.cpp" />
     <ClCompile Include="precompile.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="ranking.cpp" />
     <ClCompile Include="ranking_precedence.cpp" />
@@ -212,7 +207,6 @@
     <ClCompile Include="ripple.cpp" />
     <ClCompile Include="scene.cpp" />
     <ClCompile Include="score.cpp" />
-    <ClCompile Include="objectScroll.cpp" />
     <ClCompile Include="shadowCircle.cpp" />
     <ClCompile Include="shadowModel.cpp" />
     <ClCompile Include="skybox.cpp" />
@@ -225,22 +219,19 @@
     <ClCompile Include="useful.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="collpolygon.h" />
-    <ClInclude Include="confetti.h" />
-    <ClInclude Include="fraction.h" />
-    <ClInclude Include="mesh_manager.h" />
-    <ClInclude Include="objectAnim.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="character.h" />
     <ClInclude Include="collision.h" />
+    <ClInclude Include="collpolygon.h" />
+    <ClInclude Include="confetti.h" />
     <ClInclude Include="debugproc.h" />
     <ClInclude Include="destruction.h" />
-    <ClInclude Include="objectDonut2D.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="effect2D.h" />
     <ClInclude Include="elevation_manager.h" />
     <ClInclude Include="fade.h" />
     <ClInclude Include="file.h" />
+    <ClInclude Include="fraction.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="light.h" />
@@ -251,8 +242,8 @@
     <ClInclude Include="manager.h" />
     <ClInclude Include="mesh_cylinder.h" />
     <ClInclude Include="mesh_dome.h" />
-    <ClInclude Include="objectElevation.h" />
     <ClInclude Include="mesh_field.h" />
+    <ClInclude Include="mesh_manager.h" />
     <ClInclude Include="mesh_wall.h" />
     <ClInclude Include="model.h" />
     <ClInclude Include="motion.h" />
@@ -262,8 +253,12 @@
     <ClInclude Include="object2D.h" />
     <ClInclude Include="object3D.h" />
     <ClInclude Include="object3Dfan.h" />
+    <ClInclude Include="objectAnim.h" />
     <ClInclude Include="objectbillboard.h" />
+    <ClInclude Include="objectDonut2D.h" />
+    <ClInclude Include="objectElevation.h" />
     <ClInclude Include="Objectmesh.h" />
+    <ClInclude Include="objectScroll.h" />
     <ClInclude Include="objectX.h" />
     <ClInclude Include="orbit.h" />
     <ClInclude Include="Particle.h" />
@@ -280,7 +275,6 @@
     <ClInclude Include="ripple.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="score.h" />
-    <ClInclude Include="objectScroll.h" />
     <ClInclude Include="shadowCircle.h" />
     <ClInclude Include="shadowModel.h" />
     <ClInclude Include="skybox.h" />

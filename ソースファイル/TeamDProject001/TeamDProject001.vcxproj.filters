@@ -1,0 +1,459 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Edit">
+      <UniqueIdentifier>{119c1718-4182-482a-a8ab-c964cdf3460b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mesh">
+      <UniqueIdentifier>{26814ded-5863-4f36-9577-2c5361729168}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object">
+      <UniqueIdentifier>{601aef49-8dca-4778-bef5-e18cd93358dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Player">
+      <UniqueIdentifier>{6525e328-f0cd-4b74-aa93-2899d1a22b4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{4871f68b-e0b2-450e-bc5a-a3163186e2f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\Title">
+      <UniqueIdentifier>{d740bbf6-0d81-478b-8347-bd216e01e57c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\Tutorial">
+      <UniqueIdentifier>{6db030f2-2bf4-4dc0-81ff-2a535e0ad5d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\Game">
+      <UniqueIdentifier>{6e15f435-a589-46f0-8596-3e02a88ba8c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\Result">
+      <UniqueIdentifier>{48091c9d-e44f-4651-a764-9c124b2dd1f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\Ranking">
+      <UniqueIdentifier>{a0b48465-3191-4a1b-a561-3d2f7f3778e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\Logo">
+      <UniqueIdentifier>{5435744e-d7a3-4d9e-b059-36b2dc34a33c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Staging">
+      <UniqueIdentifier>{c64a48d9-58ef-4870-a05c-cdb0b5732a87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{a2c0ce48-5f05-4556-9ba1-cd3113b6acf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Useful">
+      <UniqueIdentifier>{d3159b58-0cb6-4a71-8f12-a93bdc1499f2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="fade.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="manager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mesh_cylinder.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="mesh_field.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="mesh_dome.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="mesh_wall.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="character.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="elevation_manager.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="mesh_manager.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="model.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="object.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="object2D.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="object3D.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="object3Dfan.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="objectAnim.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="objectbillboard.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="objectDonut2D.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="objectElevation.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Objectmesh.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="objectScroll.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="objectX.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>Player</Filter>
+    </ClCompile>
+    <ClCompile Include="game.cpp">
+      <Filter>Scene\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="logo.cpp">
+      <Filter>Scene\Logo</Filter>
+    </ClCompile>
+    <ClCompile Include="logo_mark.cpp">
+      <Filter>Scene\Logo</Filter>
+    </ClCompile>
+    <ClCompile Include="new_record.cpp">
+      <Filter>Scene\Ranking</Filter>
+    </ClCompile>
+    <ClCompile Include="ranking.cpp">
+      <Filter>Scene\Ranking</Filter>
+    </ClCompile>
+    <ClCompile Include="ranking_precedence.cpp">
+      <Filter>Scene\Ranking</Filter>
+    </ClCompile>
+    <ClCompile Include="ranking_table.cpp">
+      <Filter>Scene\Ranking</Filter>
+    </ClCompile>
+    <ClCompile Include="ranking_word.cpp">
+      <Filter>Scene\Ranking</Filter>
+    </ClCompile>
+    <ClCompile Include="result.cpp">
+      <Filter>Scene\Result</Filter>
+    </ClCompile>
+    <ClCompile Include="title.cpp">
+      <Filter>Scene\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="title_logo.cpp">
+      <Filter>Scene\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="scene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="confetti.cpp">
+      <Filter>Staging</Filter>
+    </ClCompile>
+    <ClCompile Include="destruction.cpp">
+      <Filter>Staging</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>Staging</Filter>
+    </ClCompile>
+    <ClCompile Include="effect2D.cpp">
+      <Filter>Staging</Filter>
+    </ClCompile>
+    <ClCompile Include="fraction.cpp">
+      <Filter>Staging</Filter>
+    </ClCompile>
+    <ClCompile Include="locus2D.cpp">
+      <Filter>Staging</Filter>
+    </ClCompile>
+    <ClCompile Include="orbit.cpp">
+      <Filter>Staging</Filter>
+    </ClCompile>
+    <ClCompile Include="Particle.cpp">
+      <Filter>Staging</Filter>
+    </ClCompile>
+    <ClCompile Include="particle2D.cpp">
+      <Filter>Staging</Filter>
+    </ClCompile>
+    <ClCompile Include="ripple.cpp">
+      <Filter>Staging</Filter>
+    </ClCompile>
+    <ClCompile Include="skybox.cpp">
+      <Filter>Staging</Filter>
+    </ClCompile>
+    <ClCompile Include="stun.cpp">
+      <Filter>Staging</Filter>
+    </ClCompile>
+    <ClCompile Include="number.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="pause.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="score.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="time.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="camera.cpp">
+      <Filter>Useful</Filter>
+    </ClCompile>
+    <ClCompile Include="collision.cpp">
+      <Filter>Useful</Filter>
+    </ClCompile>
+    <ClCompile Include="collpolygon.cpp">
+      <Filter>Useful</Filter>
+    </ClCompile>
+    <ClCompile Include="debugproc.cpp">
+      <Filter>Useful</Filter>
+    </ClCompile>
+    <ClCompile Include="file.cpp">
+      <Filter>Useful</Filter>
+    </ClCompile>
+    <ClCompile Include="input.cpp">
+      <Filter>Useful</Filter>
+    </ClCompile>
+    <ClCompile Include="light.cpp">
+      <Filter>Useful</Filter>
+    </ClCompile>
+    <ClCompile Include="motion.cpp">
+      <Filter>Useful</Filter>
+    </ClCompile>
+    <ClCompile Include="precompile.cpp">
+      <Filter>Useful</Filter>
+    </ClCompile>
+    <ClCompile Include="renderer.cpp">
+      <Filter>Useful</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowCircle.cpp">
+      <Filter>Useful</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowModel.cpp">
+      <Filter>Useful</Filter>
+    </ClCompile>
+    <ClCompile Include="sound.cpp">
+      <Filter>Useful</Filter>
+    </ClCompile>
+    <ClCompile Include="texture.cpp">
+      <Filter>Useful</Filter>
+    </ClCompile>
+    <ClCompile Include="useful.cpp">
+      <Filter>Useful</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="fade.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="main.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="manager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh_cylinder.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh_dome.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh_field.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh_wall.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="character.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="elevation_manager.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh_manager.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="model.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="object.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="object2D.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="object3D.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="object3Dfan.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="objectAnim.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="objectbillboard.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="objectDonut2D.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="objectElevation.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Objectmesh.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="objectScroll.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="objectX.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>Player</Filter>
+    </ClInclude>
+    <ClInclude Include="game.h">
+      <Filter>Scene\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="logo.h">
+      <Filter>Scene\Logo</Filter>
+    </ClInclude>
+    <ClInclude Include="logo_mark.h">
+      <Filter>Scene\Logo</Filter>
+    </ClInclude>
+    <ClInclude Include="new_record.h">
+      <Filter>Scene\Ranking</Filter>
+    </ClInclude>
+    <ClInclude Include="ranking.h">
+      <Filter>Scene\Ranking</Filter>
+    </ClInclude>
+    <ClInclude Include="ranking_precedence.h">
+      <Filter>Scene\Ranking</Filter>
+    </ClInclude>
+    <ClInclude Include="ranking_table.h">
+      <Filter>Scene\Ranking</Filter>
+    </ClInclude>
+    <ClInclude Include="ranking_word.h">
+      <Filter>Scene\Ranking</Filter>
+    </ClInclude>
+    <ClInclude Include="result.h">
+      <Filter>Scene\Result</Filter>
+    </ClInclude>
+    <ClInclude Include="title.h">
+      <Filter>Scene\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="title_logo.h">
+      <Filter>Scene\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="scene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="confetti.h">
+      <Filter>Staging</Filter>
+    </ClInclude>
+    <ClInclude Include="destruction.h">
+      <Filter>Staging</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>Staging</Filter>
+    </ClInclude>
+    <ClInclude Include="effect2D.h">
+      <Filter>Staging</Filter>
+    </ClInclude>
+    <ClInclude Include="locus2D.h">
+      <Filter>Staging</Filter>
+    </ClInclude>
+    <ClInclude Include="orbit.h">
+      <Filter>Staging</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>Staging</Filter>
+    </ClInclude>
+    <ClInclude Include="particle2D.h">
+      <Filter>Staging</Filter>
+    </ClInclude>
+    <ClInclude Include="ripple.h">
+      <Filter>Staging</Filter>
+    </ClInclude>
+    <ClInclude Include="skybox.h">
+      <Filter>Staging</Filter>
+    </ClInclude>
+    <ClInclude Include="stun.h">
+      <Filter>Staging</Filter>
+    </ClInclude>
+    <ClInclude Include="fraction.h">
+      <Filter>Staging</Filter>
+    </ClInclude>
+    <ClInclude Include="number.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="pause.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="score.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="time.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="camera.h">
+      <Filter>Useful</Filter>
+    </ClInclude>
+    <ClInclude Include="collision.h">
+      <Filter>Useful</Filter>
+    </ClInclude>
+    <ClInclude Include="collpolygon.h">
+      <Filter>Useful</Filter>
+    </ClInclude>
+    <ClInclude Include="debugproc.h">
+      <Filter>Useful</Filter>
+    </ClInclude>
+    <ClInclude Include="file.h">
+      <Filter>Useful</Filter>
+    </ClInclude>
+    <ClInclude Include="input.h">
+      <Filter>Useful</Filter>
+    </ClInclude>
+    <ClInclude Include="light.h">
+      <Filter>Useful</Filter>
+    </ClInclude>
+    <ClInclude Include="motion.h">
+      <Filter>Useful</Filter>
+    </ClInclude>
+    <ClInclude Include="precompile.h">
+      <Filter>Useful</Filter>
+    </ClInclude>
+    <ClInclude Include="renderer.h">
+      <Filter>Useful</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowCircle.h">
+      <Filter>Useful</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowModel.h">
+      <Filter>Useful</Filter>
+    </ClInclude>
+    <ClInclude Include="sound.h">
+      <Filter>Useful</Filter>
+    </ClInclude>
+    <ClInclude Include="texture.h">
+      <Filter>Useful</Filter>
+    </ClInclude>
+    <ClInclude Include="useful.h">
+      <Filter>Useful</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
