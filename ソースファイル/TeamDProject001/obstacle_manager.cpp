@@ -1,24 +1,24 @@
 //============================================
 //
-// サンプルマネージャー処理[obstacle_manager.cpp]
+// 障害物マネージャー処理[obstacle_manager.cpp]
 // Author：小原立暉
 //
 //============================================
 //********************************************
 // インクルードファイル
 //********************************************
-#include "sample.h"
-#include "sample_manager.h"
+#include "obstacle.h"
+#include "obstacle_manager.h"
 
 //--------------------------------------------
 // 静的メンバ変数宣言
 //--------------------------------------------
-CSampleManager* CSampleManager::m_pManager = nullptr;			// マネージャー
+CObstacleManager* CObstacleManager::m_pManager = nullptr;			// 障害物の変数
 
 //============================
 // コンストラクタ
 //============================
-CSampleManager::CSampleManager()
+CObstacleManager::CObstacleManager()
 {
 	// 全ての値をクリアする
 	m_pTop = nullptr;		// 先頭のオブジェクト
@@ -28,7 +28,7 @@ CSampleManager::CSampleManager()
 //============================
 // 登録処理
 //============================
-void CSampleManager::Regist(CListSample* pThis)
+void CObstacleManager::Regist(CObstacle* pThis)
 {
 	if (m_pTop == nullptr)
 	{ // オブジェクトが NULL の場合
@@ -46,7 +46,7 @@ void CSampleManager::Regist(CListSample* pThis)
 	{ // 上記以外
 
 		// ローカルポインタを宣言
-		CListSample* pObject = m_pTop;			// 先頭のオブジェクト
+		CObstacle* pObject = m_pTop;			// 先頭のオブジェクト
 
 		while (pObject->GetNext() != nullptr)
 		{ // オブジェクトがある限り回る
@@ -72,10 +72,10 @@ void CSampleManager::Regist(CListSample* pThis)
 //============================
 // 終了処理
 //============================
-void CSampleManager::Uninit(void)
+void CObstacleManager::Uninit(void)
 {
 	// ローカル変数宣言
-	CListSample* pObj = nullptr;		// 現在のオブジェクトのポインタ
+	CObstacle* pObj = nullptr;		// 現在のオブジェクトのポインタ
 
 	// オブジェクトを代入する
 	pObj = m_pTop;
@@ -98,7 +98,7 @@ void CSampleManager::Uninit(void)
 //============================
 // デストラクタ
 //============================
-CSampleManager::~CSampleManager()
+CObstacleManager::~CObstacleManager()
 {
 
 }
@@ -106,7 +106,7 @@ CSampleManager::~CSampleManager()
 //===========================================
 // オブジェクトの取得処理
 //===========================================
-CListSample* CSampleManager::GetTop(void)
+CObstacle* CObstacleManager::GetTop(void)
 {
 	// オブジェクトの情報を渡す
 	return m_pTop;
@@ -115,10 +115,10 @@ CListSample* CSampleManager::GetTop(void)
 //===========================================
 // リスト構造の引き抜き処理
 //===========================================
-void CSampleManager::Pull(CListSample* pThis)
+void CObstacleManager::Pull(CObstacle* pThis)
 {
 	// ローカル変数宣言
-	CListSample* pObj = nullptr;		// 現在のオブジェクトのポインタ
+	CObstacle* pObj = nullptr;		// 現在のオブジェクトのポインタ
 
 	// オブジェクトを代入する
 	pObj = m_pTop;
@@ -158,13 +158,13 @@ void CSampleManager::Pull(CListSample* pThis)
 //============================
 //生成処理
 //============================
-CSampleManager* CSampleManager::Create(void)
+CObstacleManager* CObstacleManager::Create(void)
 {
 	if (m_pManager == nullptr)
 	{ // オブジェクトが NULL の場合
 
 		// オブジェクトを生成
-		m_pManager = new CSampleManager;
+		m_pManager = new CObstacleManager;
 	}
 	else
 	{ // オブジェクトが NULL じゃない場合
@@ -190,7 +190,7 @@ CSampleManager* CSampleManager::Create(void)
 //============================
 // 取得処理
 //============================
-CSampleManager* CSampleManager::Get(void)
+CObstacleManager* CObstacleManager::Get(void)
 {
 	// マネージャーのポインタを返す
 	return m_pManager;

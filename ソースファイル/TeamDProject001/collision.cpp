@@ -12,6 +12,8 @@
 #include "shadowCircle.h"
 #include "objectElevation.h"
 #include "elevation_manager.h"
+#include "obstacle.h"
+#include "obstacle_manager.h"
 #include "useful.h"
 
 //===============================
@@ -37,6 +39,66 @@ void collision::ShadowCollision(const D3DXVECTOR3& pos, int nIdx)
 
 		// 位置を設定する
 		pShadow->SetPos(posCand);
+	}
+}
+
+//===============================
+// 障害物の当たり判定
+//===============================
+void collision::ObstacleCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth)
+{
+	// ローカル変数宣言
+	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を取得する
+
+	while (pObstacle != nullptr)
+	{ // ブロックの情報が NULL じゃない場合
+
+		if (pObstacle->GetPos().y + pObstacle->GetFileData().vtxMax.y >= pos.y &&
+			pObstacle->GetPos().y + pObstacle->GetFileData().vtxMin.y <= pos.y + fHeight &&
+			pObstacle->GetPos().z + pObstacle->GetFileData().vtxMax.z >= pos.z - fDepth&&
+			pObstacle->GetPos().z + pObstacle->GetFileData().vtxMin.z <= pos.z + fDepth)
+		{ // X軸の判定に入れる場合
+
+			if (pObstacle->GetPosOld().x + pObstacle->GetFileData().vtxMax.x <= posOld.x - fWidth &&
+				pObstacle->GetPos().x + pObstacle->GetFileData().vtxMax.x >= pos.x - fWidth)
+			{ // 右にぶつかった場合
+
+				// 位置を設定する
+				pos.x = pObstacle->GetPos().x + +pObstacle->GetFileData().vtxMax.x + (fWidth + COLLISION_ADD_DIFF_LENGTH);
+			}
+			else if (pObstacle->GetPosOld().x + pObstacle->GetFileData().vtxMin.x >= posOld.x + fWidth &&
+				pObstacle->GetPos().x + pObstacle->GetFileData().vtxMin.x <= pos.x + fWidth)
+			{ // 左にぶつかった場合
+
+				// 位置を設定する
+				pos.x = pObstacle->GetPos().x + +pObstacle->GetFileData().vtxMin.x - (fWidth + COLLISION_ADD_DIFF_LENGTH);
+			}
+		}
+
+		if (pObstacle->GetPos().x + pObstacle->GetFileData().vtxMax.x >= pos.x - fWidth &&
+			pObstacle->GetPos().x + pObstacle->GetFileData().vtxMin.x <= pos.x + fWidth &&
+			pObstacle->GetPos().y + pObstacle->GetFileData().vtxMax.y >= pos.y &&
+			pObstacle->GetPos().y + pObstacle->GetFileData().vtxMin.y <= pos.y + fHeight)
+		{ // Z軸の判定に入れる場合
+
+			if (pObstacle->GetPosOld().z + pObstacle->GetFileData().vtxMax.z <= posOld.z - fDepth &&
+				pObstacle->GetPos().z + pObstacle->GetFileData().vtxMax.z >= pos.z - fDepth)
+			{ // 奥にぶつかった場合
+
+				// 位置を設定する
+				pos.z = pObstacle->GetPos().z + +pObstacle->GetFileData().vtxMax.z + (fDepth + COLLISION_ADD_DIFF_LENGTH);
+			}
+			else if (pObstacle->GetPosOld().z + pObstacle->GetFileData().vtxMin.z >= posOld.z + fDepth &&
+				pObstacle->GetPos().z + pObstacle->GetFileData().vtxMin.z <= pos.z + fDepth)
+			{ // 手前にぶつかった場合
+
+				// 位置を設定する
+				pos.z = pObstacle->GetPos().z + +pObstacle->GetFileData().vtxMin.z - (fDepth + COLLISION_ADD_DIFF_LENGTH);
+			}
+		}
+		
+		// 次のオブジェクトを代入する
+		pObstacle = pObstacle->GetNext();
 	}
 }
 

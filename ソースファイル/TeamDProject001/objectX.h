@@ -29,6 +29,7 @@ public:			// 誰でもアクセスできる
 		// 通常モデル
 		TYPE_RIPPLE = 0,		// 波紋
 		TYPE_KARIPLAYER,		// 仮プレイヤー
+		TYPE_WOODBLOCK,			// 木箱
 
 		// エディットモデル
 		TYPE_MAX,				// 全モデルの総数

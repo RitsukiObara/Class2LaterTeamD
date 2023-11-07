@@ -273,6 +273,9 @@
     <ClCompile Include="obstacle.cpp">
       <Filter>Gimmick</Filter>
     </ClCompile>
+    <ClCompile Include="obstacle_manager.cpp">
+      <Filter>Gimmick</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -483,6 +486,9 @@
       <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="obstacle.h">
+      <Filter>Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="obstacle_manager.h">
       <Filter>Gimmick</Filter>
     </ClInclude>
   </ItemGroup>

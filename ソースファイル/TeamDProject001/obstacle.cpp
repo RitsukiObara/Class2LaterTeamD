@@ -11,6 +11,7 @@
 #include "manager.h"
 #include "renderer.h"
 #include "obstacle.h"
+#include "obstacle_manager.h"
 #include "useful.h"
 
 //-------------------------------------------
@@ -22,7 +23,16 @@
 //==============================
 CObstacle::CObstacle() : CModel(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 {
+	// 全ての値をクリアする
+	m_pPrev = nullptr;		// 前のへのポインタ
+	m_pNext = nullptr;		// 次のへのポインタ
 
+	if (CObstacleManager::Get() != nullptr)
+	{ // マネージャーが存在していた場合
+
+		// マネージャーへの登録処理
+		CObstacleManager::Get()->Regist(this);
+	}
 }
 
 //==============================
@@ -31,6 +41,42 @@ CObstacle::CObstacle() : CModel(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 CObstacle::~CObstacle()
 {
 
+}
+
+//============================
+// 前のポインタの設定処理
+//============================
+void CObstacle::SetPrev(CObstacle* pPrev)
+{
+	// 前のポインタを設定する
+	m_pPrev = pPrev;
+}
+
+//============================
+// 後のポインタの設定処理
+//============================
+void CObstacle::SetNext(CObstacle* pNext)
+{
+	// 次のポインタを設定する
+	m_pNext = pNext;
+}
+
+//============================
+// 前のポインタの設定処理
+//============================
+CObstacle* CObstacle::GetPrev(void) const
+{
+	// 前のポインタを返す
+	return m_pPrev;
+}
+
+//============================
+// 次のポインタの設定処理
+//============================
+CObstacle* CObstacle::GetNext(void) const
+{
+	// 次のポインタを返す
+	return m_pNext;
 }
 
 //==============================
@@ -56,6 +102,17 @@ void CObstacle::Uninit(void)
 {
 	// 終了処理
 	CModel::Uninit();
+
+	if (CObstacleManager::Get() != nullptr)
+	{ // マネージャーが存在していた場合
+
+		// リスト構造の引き抜き処理
+		CObstacleManager::Get()->Pull(this);
+	}
+
+	// リスト構造関係のポインタを NULL にする
+	m_pPrev = nullptr;
+	m_pNext = nullptr;
 }
 
 //=====================================
@@ -87,7 +144,7 @@ void CObstacle::SetData(const D3DXVECTOR3& pos)
 	SetScale(NONE_SCALE);			// 拡大率
 
 	// モデル情報を設定する
-	SetFileData(CXFile::TYPE_KARIPLAYER);
+	SetFileData(CXFile::TYPE_WOODBLOCK);
 }
 
 //=======================================

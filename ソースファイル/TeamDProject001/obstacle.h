@@ -22,6 +22,12 @@ public:			// 誰でもアクセスできる
 	CObstacle();			// コンストラクタ
 	~CObstacle();			// デストラクタ
 
+	// リスト構造関係
+	void SetPrev(CObstacle* pPrev);		// 前のポインタの設定処理
+	void SetNext(CObstacle* pNext);		// 後のポインタの設定処理
+	CObstacle* GetPrev(void) const;		// 前のポインタの設定処理
+	CObstacle* GetNext(void) const;		// 次のポインタの設定処理
+
 	// メンバ関数
 	HRESULT Init(void);		// 初期化処理
 	void Uninit(void);		// 終了処理
@@ -35,6 +41,9 @@ public:			// 誰でもアクセスできる
 
 private:		// 自分だけアクセスできる
 
+	// リスト構造関係
+	CObstacle* m_pPrev;	// 前へのポインタ
+	CObstacle* m_pNext;	// 次へのポインタ
 };
 
 #endif

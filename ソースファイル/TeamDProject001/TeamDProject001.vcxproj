@@ -196,6 +196,7 @@
     <ClCompile Include="objectScroll.cpp" />
     <ClCompile Include="objectX.cpp" />
     <ClCompile Include="obstacle.cpp" />
+    <ClCompile Include="obstacle_manager.cpp" />
     <ClCompile Include="orbit.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="particle2D.cpp" />
@@ -271,6 +272,7 @@
     <ClInclude Include="objectScroll.h" />
     <ClInclude Include="objectX.h" />
     <ClInclude Include="obstacle.h" />
+    <ClInclude Include="obstacle_manager.h" />
     <ClInclude Include="orbit.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="particle2D.h" />
