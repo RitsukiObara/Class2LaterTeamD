@@ -12,10 +12,13 @@
 #include "file.h"
 #include "object.h"
 
+#include "obstacle_manager.h"
+
 //--------------------------------------------
 // マクロ定義
 //--------------------------------------------
 #define RANKING_BIN			"data\\BIN\\Ranking.bin"		// ランキングのテキスト
+#define OBSTACLE_TXT		"data\\TXT\\Obstacle.txt"		// 障害物のテキスト
 
 //--------------------------------------------
 // 静的メンバ変数宣言
@@ -195,6 +198,59 @@ HRESULT CFile::SaveRanking(void)
 }
 
 //===========================================
+// 障害物のセーブ処理
+//===========================================
+HRESULT CFile::SaveObstacle(void)
+{
+	// ローカル変数宣言
+	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を代入する
+
+	// ポインタを宣言
+	FILE *pFile;				// ファイルポインタ
+
+	// ファイルを読み込み形式で開く
+	pFile = fopen(OBSTACLE_TXT, "w");
+
+	if (pFile != nullptr)
+	{ // ファイルが開けた場合
+
+		while (pObstacle != nullptr)
+		{ // オブジェクトへのポインタが NULL じゃなかった場合
+
+			// 文字列を書き込む
+			fprintf(pFile, "SET_OBSTACLE\n");		// 障害物の設定を書き込む
+
+			fprintf(pFile, "\tPOS = ");			// 位置の設定を書き込む
+			fprintf(pFile, "%.1f %.1f %.1f\n", pObstacle->GetPos().x, pObstacle->GetPos().y, pObstacle->GetPos().z);			// 位置を書き込む
+
+			fprintf(pFile, "\tTYPE = ");		// 種類の設定を書き込む
+			fprintf(pFile, "%d\n", pObstacle->GetType());			// 種類を書き込む
+
+			// 文字列を書き込む
+			fprintf(pFile, "END_SET_OBSTACLE\n\n");	// 障害物の設定の終了を書き込む
+
+			// 次のオブジェクトを代入する
+			pObstacle = pObstacle->GetNext();
+		}
+
+		// ファイルを閉じる
+		fclose(pFile);
+	}
+	else
+	{ // ファイルが開けなかった場合
+
+		// 停止
+		assert(false);
+
+		// 失敗を返す
+		return E_FAIL;
+	}
+
+	// 成功を返す
+	return S_OK;
+}
+
+//===========================================
 // ランキングのロード処理
 //===========================================
 HRESULT CFile::LoadRanking(void)
@@ -236,4 +292,83 @@ HRESULT CFile::LoadRanking(void)
 		// 失敗を返す
 		return E_FAIL;
 	}
+}
+
+//===========================================
+// 障害物のロード処理
+//===========================================
+HRESULT CFile::LoadObstacle(void)
+{
+	// 変数を宣言
+	int nEnd;							// テキスト読み込み終了の確認用
+	char aString[MAX_STRING];			// テキストの文字列の代入用
+	m_ObstacleInfo.nNum = 0;			// 総数
+	m_ObstacleInfo.bSuccess = false;	// 成功状況
+
+	// ポインタを宣言
+	FILE *pFile;						// ファイルポインタ
+
+	// ファイルを読み込み形式で開く
+	pFile = fopen(OBSTACLE_TXT, "r");
+
+	if (pFile != nullptr)
+	{ // ファイルが開けた場合
+
+		do
+		{ // 読み込んだ文字列が EOF ではない場合ループ
+
+			// ファイルから文字列を読み込む
+			nEnd = fscanf(pFile, "%s", &aString[0]);	// テキストを読み込みきったら EOF を返す
+
+			if (strcmp(&aString[0], "SET_OBSTACLE") == 0)
+			{ // 読み込んだ文字列が SET_OBSTACLE の場合
+
+				do
+				{ // 読み込んだ文字列が END_SET_OBSTACLE ではない場合ループ
+
+				  // ファイルから文字列を読み込む
+					fscanf(pFile, "%s", &aString[0]);
+
+					if (strcmp(&aString[0], "POS") == 0)
+					{ // 読み込んだ文字列が POS の場合
+
+						fscanf(pFile, "%s", &aString[0]);				// = を読み込む (不要)
+						fscanf(pFile, "%f%f%f",
+							&m_ObstacleInfo.pos[m_ObstacleInfo.nNum].x,
+							&m_ObstacleInfo.pos[m_ObstacleInfo.nNum].y,
+							&m_ObstacleInfo.pos[m_ObstacleInfo.nNum].z);		// 位置を読み込む
+					}
+					else if (strcmp(&aString[0], "TYPE") == 0)
+					{ // 読み込んだ文字列が TYPE の場合
+
+						fscanf(pFile, "%s", &aString[0]);				// = を読み込む (不要)
+						fscanf(pFile, "%d",
+							&m_ObstacleInfo.type[m_ObstacleInfo.nNum]);		// 位置を読み込む
+					}
+
+				} while (strcmp(&aString[0], "END_SET_OBSTACLE") != 0);		// 読み込んだ文字列が END_SET_OBSTACLE ではない場合ループ
+
+				// データの総数を増やす
+				m_ObstacleInfo.nNum++;
+			}
+		} while (nEnd != EOF);				// 読み込んだ文字列が EOF ではない場合ループ
+
+		// ファイルを閉じる
+		fclose(pFile);
+
+		// 成功状況を true にする
+		m_ObstacleInfo.bSuccess = true;
+	}
+	else
+	{ // ファイルが開けなかった場合
+
+		// 停止
+		assert(false);
+
+		// 失敗を返す
+		return E_FAIL;
+	}
+
+	// 成功を返す
+	return S_OK;
 }

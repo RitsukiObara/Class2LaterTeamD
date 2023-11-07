@@ -24,8 +24,9 @@
 CObstacle::CObstacle() : CModel(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 {
 	// 全ての値をクリアする
-	m_pPrev = nullptr;		// 前のへのポインタ
-	m_pNext = nullptr;		// 次のへのポインタ
+	m_type = TYPE_WOODBLOCK;	// 種類
+	m_pPrev = nullptr;			// 前のへのポインタ
+	m_pNext = nullptr;			// 次のへのポインタ
 
 	if (CObstacleManager::Get() != nullptr)
 	{ // マネージャーが存在していた場合
@@ -91,6 +92,9 @@ HRESULT CObstacle::Init(void)
 		return E_FAIL;
 	}
 
+	// 全ての値を初期化する
+	m_type = TYPE_WOODBLOCK;	// 種類
+
 	// 値を返す
 	return S_OK;
 }
@@ -138,13 +142,14 @@ void CObstacle::Draw(void)
 void CObstacle::SetData(const D3DXVECTOR3& pos)
 {
 	// 情報の設定処理
-	SetPos(pos);					// 位置
-	SetPosOld(pos);					// 前回の位置
-	SetRot(NONE_D3DXVECTOR3);		// 向き
-	SetScale(NONE_SCALE);			// 拡大率
+	SetPos(pos);							// 位置
+	SetPosOld(pos);							// 前回の位置
+	SetRot(NONE_D3DXVECTOR3);				// 向き
+	SetScale(NONE_SCALE);					// 拡大率
+	SetFileData(CXFile::TYPE_WOODBLOCK);	// モデルの情報設定
 
-	// モデル情報を設定する
-	SetFileData(CXFile::TYPE_WOODBLOCK);
+	// 全ての値を初期化する
+	m_type = TYPE_WOODBLOCK;	// 種類
 }
 
 //=======================================
@@ -200,4 +205,22 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos)
 
 	// 破片のポインタを返す
 	return pFrac;
+}
+
+//=======================================
+// 種類の設定処理
+//=======================================
+void CObstacle::SetType(const TYPE type)
+{
+	// 種類を設定する
+	m_type = type;
+}
+
+//=======================================
+// 種類の取得処理
+//=======================================
+CObstacle::TYPE CObstacle::GetType(void)
+{
+	// 種類を返す
+	return m_type;
 }

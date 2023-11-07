@@ -19,6 +19,13 @@ class CObstacle : public CModel
 {
 public:			// 誰でもアクセスできる
 
+	// 列挙型定義(種類)
+	enum TYPE
+	{
+		TYPE_WOODBLOCK = 0,		// 木箱
+		TYPE_MAX				// この列挙型の総数
+	};
+
 	CObstacle();			// コンストラクタ
 	~CObstacle();			// デストラクタ
 
@@ -36,10 +43,17 @@ public:			// 誰でもアクセスできる
 
 	void SetData(const D3DXVECTOR3& pos);				// 情報の設定処理
 
+	// セット・ゲット関係
+	void SetType(const TYPE type);		// 種類の設定処理
+	TYPE GetType(void);					// 種類の取得処理
+
 	// 静的メンバ関数
 	static CObstacle* Create(const D3DXVECTOR3& pos);	// 生成処理
 
 private:		// 自分だけアクセスできる
+
+	// メンバ変数
+	TYPE m_type;		// 種類
 
 	// リスト構造関係
 	CObstacle* m_pPrev;	// 前へのポインタ

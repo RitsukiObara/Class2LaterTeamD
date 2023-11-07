@@ -12,6 +12,7 @@
 //********************************************
 #include "main.h"
 #include "ranking.h"
+#include "obstacle.h"
 
 //--------------------------------------------
 // マクロ定義
@@ -29,14 +30,24 @@ public:			// 誰でもアクセスできる
 	enum TYPE
 	{
 		TYPE_RANKING = 0,	// ランキング
+		TYPE_OBSTACLE,		// 障害物
 		TYPE_MAX			// この列挙型の総数
 	};
 
 	// ランキングの情報
 	struct SRankingInfo
 	{
-		int aRank[MAX_RANKING];				// ランキングのデータ
-		bool bSuccess;						// 成功状況
+		int aRank[MAX_RANKING];					// ランキングのデータ
+		bool bSuccess;							// 成功状況
+	};
+
+	// 障害物の情報
+	struct SObstacleInfo
+	{
+		D3DXVECTOR3 pos[MAX_FILE_DATA];			// 位置
+		CObstacle::TYPE type[MAX_FILE_DATA];	// 種類
+		int nNum;								// 総数
+		bool bSuccess;							// 成功状況
 	};
 
 	CFile();					// コンストラクタ
@@ -56,12 +67,15 @@ private:		// 自分のみアクセスできる
 
 	// メンバ関数(セーブ関係)
 	HRESULT SaveRanking(void);		// ランキングのセーブ処理
+	HRESULT SaveObstacle(void);		// 障害物のセーブ処理
 
 	// メンバ関数(ロード関係)
 	HRESULT LoadRanking(void);		// ランキングのロード処理
+	HRESULT LoadObstacle(void);		// 障害物のロード処理
 
 	// メンバ変数
 	SRankingInfo m_RankingInfo;		// ランキングの情報
+	SObstacleInfo m_ObstacleInfo;	// 障害物の情報
 
 	// 静的メンバ変数
 	static const char* c_apBooleanDisp[2];			// bool型の表示
