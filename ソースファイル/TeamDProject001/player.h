@@ -38,10 +38,14 @@ private:		// 自分だけアクセスできる
 
 	// メンバ関数
 	void Move(void);			// 移動処理
+	void Jump(void);			// ジャンプ処理
 	void Elevation(void);		// 起伏地面の当たり判定
 
 	// メンバ変数
 	D3DXVECTOR3 m_move;			// 移動量
+
+	bool m_bJump;				// ジャンプしたか
+	bool m_bLand;				// 着地したか
 
 	// 静的メンバ変数
 	static CPlayer* m_pPlayer;	// プレイヤーの情報

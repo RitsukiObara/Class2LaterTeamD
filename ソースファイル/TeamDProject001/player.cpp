@@ -20,6 +20,8 @@
 //-------------------------------------------
 // マクロ定義
 //-------------------------------------------
+#define GRAVITY		(1.0f)			// 重力
+#define ADD_MOVE_Y	(30.0f)			// 浮力
 
 //-------------------------------------------
 // 静的メンバ変数宣言
@@ -33,6 +35,9 @@ CPlayer::CPlayer() : CModel(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 {
 	// 全ての値をクリアする
 	m_move = NONE_D3DXVECTOR3;			// 移動量
+
+	m_bJump = false;					// ジャンプしたか
+	m_bLand = true;						// 着地したか
 }
 
 //==============================
@@ -84,6 +89,9 @@ void CPlayer::Update(void)
 
 	// 移動処理
 	Move();
+
+	// ジャンプ処理
+	Jump();
 
 	// 起伏地面の当たり判定
 	Elevation();
@@ -272,7 +280,36 @@ void CPlayer::Move(void)
 	}
 
 	// 下の移動量を設定する
-	m_move.y = -50.0f;
+	//m_move.y = -50.0f;
+
+	// 位置を加算する
+	pos += m_move;
+
+	// 情報を適用する
+	SetPos(pos);
+	SetRot(rot);
+}
+
+//=======================================
+// ジャンプ処理
+//=======================================
+void CPlayer::Jump(void)
+{
+	// ローカル変数宣言
+	D3DXVECTOR3 pos = GetPos();
+	D3DXVECTOR3 rot = GetRot();
+
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_SPACE) == true &&
+		m_bJump == false && m_bLand == true)
+	{ // SPACEキーを押した場合
+
+		m_move.y = ADD_MOVE_Y;	// 浮力代入
+
+		m_bJump = true;		// ジャンプしてる状態にする
+		m_bLand = false;	// 着地してない状態にする
+	}
+
+	m_move.y -= GRAVITY;		// 重力加算
 
 	// 位置を加算する
 	pos += m_move;
@@ -303,6 +340,9 @@ void CPlayer::Elevation(void)
 
 		  // 高さを設定する
 			pos.y = fHeight;
+
+			m_bJump = false;		// ジャンプしてない状態にする
+			m_bLand = true;			// 着地した状態にする
 		}
 
 		// 次のポインタを取得する
