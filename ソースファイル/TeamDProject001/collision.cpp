@@ -96,6 +96,28 @@ void collision::ObstacleCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, c
 				pos.z = pObstacle->GetPos().z + +pObstacle->GetFileData().vtxMin.z - (fDepth + COLLISION_ADD_DIFF_LENGTH);
 			}
 		}
+
+		if (pObstacle->GetPos().x + pObstacle->GetFileData().vtxMax.x >= pos.x - fWidth &&
+			pObstacle->GetPos().x + pObstacle->GetFileData().vtxMin.x <= pos.x + fWidth &&
+			pObstacle->GetPos().z + pObstacle->GetFileData().vtxMax.z >= pos.z &&
+			pObstacle->GetPos().z + pObstacle->GetFileData().vtxMin.z <= pos.z + fDepth)
+		{ // Y軸の判定に入れる場合
+
+			if (pObstacle->GetPosOld().y + pObstacle->GetFileData().vtxMax.y <= posOld.y &&
+				pObstacle->GetPos().y + pObstacle->GetFileData().vtxMax.y >= pos.y)
+			{ // 上にぶつかった場合
+
+				// 位置を設定する
+				pos.y = pObstacle->GetPos().y + +pObstacle->GetFileData().vtxMax.y + COLLISION_ADD_DIFF_LENGTH;
+			}
+			else if (pObstacle->GetPosOld().y + pObstacle->GetFileData().vtxMin.y >= posOld.y + fHeight &&
+				pObstacle->GetPos().y + pObstacle->GetFileData().vtxMin.y <= pos.y + fHeight)
+			{ // 下にぶつかった場合
+
+				// 位置を設定する
+				pos.y = pObstacle->GetPos().y + +pObstacle->GetFileData().vtxMin.y - (fHeight + COLLISION_ADD_DIFF_LENGTH);
+			}
+		}
 		
 		// 次のオブジェクトを代入する
 		pObstacle = pObstacle->GetNext();

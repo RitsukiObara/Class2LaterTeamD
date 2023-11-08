@@ -63,6 +63,8 @@ public:			// 誰でもアクセスできる
 	void SetRankingInfo(int* pRank);		// ランキングの設定処理
 	SRankingInfo GetRankingInfo(void);		// ランキングの取得処理
 
+	void SetMap(void);				// マップの設定処理
+
 private:		// 自分のみアクセスできる
 
 	// メンバ関数(セーブ関係)
