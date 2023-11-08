@@ -79,6 +79,12 @@ HRESULT CGame::Init(void)
 	// メッシュの読み込み処理
 	CMesh::TxtSet();
 
+	// マップの情報をロードする
+	CManager::Get()->GetFile()->Load(CFile::TYPE_OBSTACLE);
+
+	// マップの設定処理
+	CManager::Get()->GetFile()->SetMap();
+
 	// メッシュのテキスト読み込み
 	//CMesh::TxtSet();
 
@@ -227,6 +233,13 @@ void CGame::Update(void)
 		{
 			// 死亡判別処理
 			CObject::DeathDecision(nCnt);
+		}
+
+		if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_F8) == true)
+		{ // F8キーを押した場合
+
+			// 情報をセーブする
+			CManager::Get()->GetFile()->Save(CFile::TYPE_OBSTACLE);
 		}
 	}
 	else

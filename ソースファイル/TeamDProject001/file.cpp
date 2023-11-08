@@ -34,13 +34,23 @@ const char* CFile::c_apBooleanDisp[2] =					// bool型の表示
 //===========================================
 CFile::CFile()
 {
+	for (int nCntInfo = 0; nCntInfo < MAX_FILE_DATA; nCntInfo++)
+	{
+		m_ObstacleInfo.pos[nCntInfo] = NONE_D3DXVECTOR3;				// 位置
+		m_ObstacleInfo.type[nCntInfo] = CObstacle::TYPE_WOODBLOCK;		// 種類
+	}
+
 	for (int nCntRank = 0; nCntRank < MAX_RANKING; nCntRank++)
 	{
 		m_RankingInfo.aRank[nCntRank] = 0;				// ランキングの値
 	}
 
+	// 総数をクリアする
+	m_ObstacleInfo.nNum = 0;			// 障害物
+
 	// 成功状況をクリアする
 	m_RankingInfo.bSuccess = false;		// ランキング
+	m_ObstacleInfo.bSuccess = false;	// 障害物
 }
 
 //===========================================
@@ -62,6 +72,18 @@ HRESULT CFile::Save(const TYPE type)
 
 		// ランキングのセーブ処理
 		if (FAILED(SaveRanking()))
+		{ // 失敗した場合
+
+			// 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
+	case TYPE_OBSTACLE:
+
+		// 障害物のセーブ処理
+		if (FAILED(SaveObstacle()))
 		{ // 失敗した場合
 
 			// 失敗を返す
@@ -93,6 +115,18 @@ HRESULT CFile::Load(const TYPE type)
 
 		// ランキングのロード処理
 		if (FAILED(LoadRanking()))
+		{ // 失敗した場合
+
+			// 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
+	case TYPE_OBSTACLE:
+
+		// 障害物のロード処理
+		if (FAILED(LoadObstacle()))
 		{ // 失敗した場合
 
 			// 失敗を返す
@@ -135,17 +169,43 @@ CFile::SRankingInfo CFile::GetRankingInfo(void)
 }
 
 //===========================================
+// マップの設定処理
+//===========================================
+void CFile::SetMap(void)
+{
+	if (m_ObstacleInfo.bSuccess == true)
+	{ // 成功状況が true の場合
+
+		for (int nCntObst = 0; nCntObst < m_ObstacleInfo.nNum; nCntObst++)
+		{
+			// 障害物の生成処理
+			CObstacle::Create(m_ObstacleInfo.pos[nCntObst]);
+		}
+	}
+}
+
+//===========================================
 // 初期化処理
 //===========================================
 HRESULT CFile::Init(void)
 {
+	for (int nCntInfo = 0; nCntInfo < MAX_FILE_DATA; nCntInfo++)
+	{
+		m_ObstacleInfo.pos[nCntInfo] = NONE_D3DXVECTOR3;				// 位置
+		m_ObstacleInfo.type[nCntInfo] = CObstacle::TYPE_WOODBLOCK;		// 種類
+	}
+
 	for (int nCntRank = 0; nCntRank < MAX_RANKING; nCntRank++)
 	{
 		m_RankingInfo.aRank[nCntRank] = 0;				// ランキングの値
 	}
 
+	// 総数をクリアする
+	m_ObstacleInfo.nNum = 0;			// 障害物
+
 	// 成功状況をクリアする
 	m_RankingInfo.bSuccess = false;		// ランキング
+	m_ObstacleInfo.bSuccess = false;	// 障害物
 
 	// 成功を返す
 	return S_OK;
