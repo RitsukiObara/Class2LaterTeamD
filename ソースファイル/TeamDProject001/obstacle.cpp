@@ -21,7 +21,7 @@
 //==============================
 // コンストラクタ
 //==============================
-CObstacle::CObstacle() : CModel(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
+CObstacle::CObstacle() : CModel(CObject::TYPE_WOODBLOCK, CObject::PRIORITY_BLOCK)
 {
 	// 全ての値をクリアする
 	m_type = TYPE_WOODBLOCK;	// 種類

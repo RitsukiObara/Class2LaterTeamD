@@ -279,6 +279,9 @@
     <ClCompile Include="edit.cpp">
       <Filter>Edit</Filter>
     </ClCompile>
+    <ClCompile Include="weapon_selectUI.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -496,6 +499,9 @@
     </ClInclude>
     <ClInclude Include="edit.h">
       <Filter>Edit</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_selectUI.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
