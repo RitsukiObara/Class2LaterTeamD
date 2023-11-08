@@ -10,12 +10,23 @@
 //********************************************
 // インクルードファイル
 //********************************************
-#include "time.h"
+#include "object.h"
+
+//--------------------------------------------
+// マクロ定義
+//--------------------------------------------
+#define GAME_TIME_DIGIT		(3)		// ゲームタイマーの桁数
+
+//--------------------------------------------
+// 前方宣言
+//--------------------------------------------
+class CNumber;			// 数字
+class CObject2D;		// 2Dポリゴン
 
 //--------------------------------------------
 // クラス定義(ゲームタイム)
 //--------------------------------------------
-class CGameTime : public CTime
+class CGameTime : public CObject
 {
 public:				// 誰でもアクセスできる
 
@@ -25,7 +36,7 @@ public:				// 誰でもアクセスできる
 	void Update(void);		// 更新処理
 	void Draw(void);		// 描画処理
 
-	void TimeStart(void);	// タイムの開始処理
+	void SetData(void);		// 情報の設定処理
 
 	// 静的メンバ変数
 	static CGameTime* Get(void);			// 取得処理
@@ -37,14 +48,13 @@ private:			// 自分だけアクセスできる
 	~CGameTime();			// デストラクタ
 
 	// メンバ関数
-	void Basic(void);			// 通常の更新処理
-	void PauseProcess(void);	// ポーズ中の処理
 	void Calculate(void);		// 計算処理
 
 	// メンバ変数
-	DWORD m_StartTime;		// 開始時間
-	DWORD m_PauseTime;		// ポーズ中の時間
-	bool m_bGoal;			// ゴール状況
+	CNumber* m_apNumber[GAME_TIME_DIGIT];	// 番号の情報
+	CObject2D* m_pColon;					// コロン
+	int m_nSeconds;							// 秒数
+	int m_nFrame;							// フレーム数
 
 	// 静的メンバ変数
 	static CGameTime* m_pGameTimer;		// ゲームタイマーの情報
