@@ -12,6 +12,7 @@
 #include "input.h"
 #include "manager.h"
 #include "renderer.h"
+#include "debugproc.h"
 #include "useful.h"
 
 #include "elevation_manager.h"
@@ -95,6 +96,9 @@ void CPlayer::Update(void)
 
 	// 起伏地面の当たり判定
 	Elevation();
+
+	// デバッグ表示
+	CManager::Get()->GetDebugProc()->Print("位置：%f %f %f\n向き：%f %f %f\nジャンプ状況：%d\n", GetPos().x, GetPos().y, GetPos().z, GetRot().x, GetRot().y, GetRot().z, m_bJump);
 }
 
 //=====================================
@@ -196,7 +200,6 @@ CPlayer* CPlayer::Create(const D3DXVECTOR3& pos)
 void CPlayer::Move(void)
 {
 	// ローカル変数宣言
-	D3DXVECTOR3 pos = GetPos();
 	D3DXVECTOR3 rot = GetRot();
 
 	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_D) == true)
@@ -279,14 +282,7 @@ void CPlayer::Move(void)
 		m_move.z = 0.0f;
 	}
 
-	// 下の移動量を設定する
-	//m_move.y = -50.0f;
-
-	// 位置を加算する
-	pos += m_move;
-
-	// 情報を適用する
-	SetPos(pos);
+	// 向きを適用する
 	SetRot(rot);
 }
 
