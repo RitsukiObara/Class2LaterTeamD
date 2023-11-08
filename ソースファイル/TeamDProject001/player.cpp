@@ -39,6 +39,7 @@ CPlayer::CPlayer() : CModel(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 
 	m_bJump = false;					// ジャンプしたか
 	m_bLand = true;						// 着地したか
+	m_bAttack = false;					// 攻撃したか
 }
 
 //==============================
@@ -93,6 +94,9 @@ void CPlayer::Update(void)
 
 	// ジャンプ処理
 	Jump();
+
+	// 攻撃処理
+	Attack();
 
 	// 起伏地面の当たり判定
 	Elevation();
@@ -295,7 +299,7 @@ void CPlayer::Jump(void)
 	D3DXVECTOR3 pos = GetPos();
 	D3DXVECTOR3 rot = GetRot();
 
-	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_SPACE) == true &&
+	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_SPACE) == true &&
 		m_bJump == false && m_bLand == true)
 	{ // SPACEキーを押した場合
 
@@ -313,6 +317,18 @@ void CPlayer::Jump(void)
 	// 情報を適用する
 	SetPos(pos);
 	SetRot(rot);
+}
+
+//=======================================
+// 攻撃処理
+//=======================================
+void CPlayer::Attack(void)
+{
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_J) == true && m_bAttack == false)
+	{ // Jキーを押した場合
+
+		m_bAttack = true;		// 攻撃した状態にする
+	}
 }
 
 //=======================================

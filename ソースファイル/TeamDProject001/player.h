@@ -39,6 +39,7 @@ private:		// 自分だけアクセスできる
 	// メンバ関数
 	void Move(void);			// 移動処理
 	void Jump(void);			// ジャンプ処理
+	void Attack(void);			// 攻撃処理
 	void Elevation(void);		// 起伏地面の当たり判定
 
 	// メンバ変数
@@ -46,6 +47,7 @@ private:		// 自分だけアクセスできる
 
 	bool m_bJump;				// ジャンプしたか
 	bool m_bLand;				// 着地したか
+	bool m_bAttack;				// 攻撃したか
 
 	// 静的メンバ変数
 	static CPlayer* m_pPlayer;	// プレイヤーの情報
