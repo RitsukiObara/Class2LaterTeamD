@@ -291,6 +291,15 @@
     <ClCompile Include="weapon_balloon.cpp">
       <Filter>UI\WeaponSelectUI</Filter>
     </ClCompile>
+    <ClCompile Include="honey.cpp">
+      <Filter>Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="slime.cpp">
+      <Filter>Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="hairball.cpp">
+      <Filter>Gimmick</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -517,6 +526,15 @@
     </ClInclude>
     <ClInclude Include="weapon_balloon.h">
       <Filter>UI\WeaponSelectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="honey.h">
+      <Filter>Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="slime.h">
+      <Filter>Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="hairball.h">
+      <Filter>Gimmick</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
