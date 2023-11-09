@@ -23,6 +23,7 @@
 #include "rat.h"
 #include "game_timer.h"
 #include "edit.h"
+#include "weapon_selectUI.h"
 
 //--------------------------------------------
 // マクロ定義
@@ -113,8 +114,11 @@ HRESULT CGame::Init(void)
 		m_apRat[nCntRat]->SetRatIdx(nCntRat);											// ネズミの番号を設定する
 	}
 
-	// 生成処理
+	// タイマーの生成処理
 	CGameTime::Create();
+
+	// 武器選択UIを生成
+	CWeaponSelectUI::Create();
 
 	// 情報の初期化
 	m_nFinishCount = 0;				// 終了カウント
