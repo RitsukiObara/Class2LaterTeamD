@@ -13,15 +13,10 @@
 #include "weapon_cage.h"
 #include "useful.h"
 
-//-------------------------------------------
-// マクロ定義
-//-------------------------------------------
-#define WEAPON_CAGE_POS		(D3DXVECTOR3(0.0f, 0.0f, 0.0f))		// 武器小屋の位置
-
 //==============================
 // コンストラクタ
 //==============================
-CWeaponCage::CWeaponCage() : CModel(CObject::TYPE_FRACTION, CObject::PRIORITY_PLAYER)
+CWeaponCage::CWeaponCage() : CModel(CObject::TYPE_WEAPONCAGE, CObject::PRIORITY_PLAYER)
 {
 	// 全ての値をクリアする
 }
@@ -81,11 +76,11 @@ void CWeaponCage::Draw(void)
 //=====================================
 // 情報の設定処理
 //=====================================
-void CWeaponCage::SetData(void)
+void CWeaponCage::SetData(const D3DXVECTOR3& pos)
 {
 	// 情報の設定処理
-	SetPos(WEAPON_CAGE_POS);				// 位置
-	SetPosOld(WEAPON_CAGE_POS);				// 前回の位置
+	SetPos(pos);							// 位置
+	SetPosOld(pos);							// 前回の位置
 	SetRot(NONE_D3DXVECTOR3);				// 向き
 	SetScale(NONE_SCALE);					// 拡大率
 	SetFileData(CXFile::TYPE_WEAPONCAGE);	// モデル情報
@@ -94,7 +89,7 @@ void CWeaponCage::SetData(void)
 //=======================================
 // 生成処理
 //=======================================
-CWeaponCage* CWeaponCage::Create(void)
+CWeaponCage* CWeaponCage::Create(const D3DXVECTOR3& pos)
 {
 	// ローカルオブジェクトを生成
 	CWeaponCage* pCage = nullptr;	// インスタンスを生成
@@ -130,7 +125,7 @@ CWeaponCage* CWeaponCage::Create(void)
 		}
 
 		// 情報の設定処理
-		pCage->SetData();
+		pCage->SetData(pos);
 	}
 	else
 	{ // オブジェクトが NULL の場合

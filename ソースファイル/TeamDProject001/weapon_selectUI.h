@@ -16,6 +16,7 @@
 // 前方宣言
 //-------------------------------------------
 class CWeaponCage;		// 武器小屋
+class CWeaponBalloon;	// 武器のふきだし
 
 //-------------------------------------------
 // クラス定義(武器選択UI)
@@ -33,15 +34,15 @@ public:		// 誰でもアクセスできる
 	void Update(void);			// 更新処理
 	void Draw(void);			// 描画処理
 
-	void SetData(void);			// 情報の設定処理
-
 	// 静的メンバ関数
 	static CWeaponSelectUI* Create(void);	// 生成処理
 
 private:		// 自分だけアクセスできる
 
 	// メンバ変数
-	CWeaponCage* m_pWeaponCage;		// 武器小屋の情報
+	D3DXVECTOR3 m_pos;			// 位置
+	CWeaponCage* m_pCage;		// 武器小屋の情報
+	CWeaponBalloon* m_pBalloon;	// ふきだしの情報
 };
 
 #endif

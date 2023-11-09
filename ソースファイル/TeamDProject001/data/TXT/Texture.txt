@@ -6,6 +6,7 @@
 #===========================================================
 
 # テクスチャの情報
+TEXTURE = data\TEXTURE\Balloon.png			# ふきだし
 TEXTURE = data\TEXTURE\Dstr001.png			# 撃破(トゲトゲ)
 TEXTURE = data\TEXTURE\Dstr002.png			# 撃破(フワフワ)
 TEXTURE = data\TEXTURE\Dstr003.png			# 撃破(爆発)

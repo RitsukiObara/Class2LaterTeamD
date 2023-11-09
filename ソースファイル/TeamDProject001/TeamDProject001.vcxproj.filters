@@ -288,6 +288,9 @@
     <ClCompile Include="weapon_cage.cpp">
       <Filter>UI\WeaponSelectUI</Filter>
     </ClCompile>
+    <ClCompile Include="weapon_balloon.cpp">
+      <Filter>UI\WeaponSelectUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -510,6 +513,9 @@
       <Filter>UI\WeaponSelectUI</Filter>
     </ClInclude>
     <ClInclude Include="weapon_cage.h">
+      <Filter>UI\WeaponSelectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_balloon.h">
       <Filter>UI\WeaponSelectUI</Filter>
     </ClInclude>
   </ItemGroup>

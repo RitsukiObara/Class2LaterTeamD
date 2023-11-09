@@ -11,10 +11,12 @@
 #include "texture.h"
 
 #include "weapon_cage.h"
+#include "weapon_balloon.h"
 
 //---------------------------------------
 // マクロ定義
 //---------------------------------------
+#define BALLOON_TEXTURE		"data\\TEXTURE\\Balloon.png"		// ふきだしのテクスチャ
 
 //==========================================
 // コンストラクタ
@@ -22,7 +24,9 @@
 CWeaponSelectUI::CWeaponSelectUI() : CObject(TYPE_WEAPONSELECTUI, PRIORITY_PLAYER)
 {
 	// 全ての値をクリアする
-	m_pWeaponCage = nullptr;		// 武器小屋の情報
+	m_pos = NONE_D3DXVECTOR3;	// 位置
+	m_pCage = nullptr;			// 武器小屋の情報
+	m_pBalloon = nullptr;		// ふきだしの情報
 }
 
 //==========================================
@@ -38,11 +42,21 @@ CWeaponSelectUI::~CWeaponSelectUI()
 //==========================================
 HRESULT CWeaponSelectUI::Init(void)
 {
-	if (m_pWeaponCage == nullptr)
+	// 全ての値を初期化する
+	m_pos = NONE_D3DXVECTOR3;	// 位置
+
+	if (m_pCage == nullptr)
 	{ // 武器小屋の情報が NULL の場合
 
 		// 武器小屋を生成する
-		m_pWeaponCage = CWeaponCage::Create();
+		m_pCage = CWeaponCage::Create(m_pos);
+	}
+
+	if (m_pBalloon == nullptr)
+	{ // ふきだしの情報が NULL の場合
+
+		// ふきだしを生成する
+		m_pBalloon = CWeaponBalloon::Create(D3DXVECTOR3(m_pos.x, m_pos.y + 50.0f, m_pos.z), BALLOON_TEXTURE);
 	}
 
 	// 成功を返す
@@ -54,12 +68,20 @@ HRESULT CWeaponSelectUI::Init(void)
 //========================================
 void CWeaponSelectUI::Uninit(void)
 {
-	if (m_pWeaponCage != nullptr)
+	if (m_pCage != nullptr)
 	{ // 武器小屋が NULL じゃない場合
 
 		// 武器小屋の終了処理
-		m_pWeaponCage->Uninit();
-		m_pWeaponCage = nullptr;
+		m_pCage->Uninit();
+		m_pCage = nullptr;
+	}
+
+	if (m_pBalloon != nullptr)
+	{ // ふきだしが NULL じゃない場合
+
+		// ふきだしの終了処理
+		m_pBalloon->Uninit();
+		m_pBalloon = nullptr;
 	}
 
 	// 本体の終了処理
@@ -79,11 +101,18 @@ void CWeaponSelectUI::Update(void)
 //=====================================
 void CWeaponSelectUI::Draw(void)
 {
-	if (m_pWeaponCage != nullptr)
+	if (m_pCage != nullptr)
 	{ // 武器小屋が NULL じゃない場合
 
 		// 描画処理
-		m_pWeaponCage->Draw();
+		m_pCage->Draw();
+	}
+
+	if (m_pBalloon != nullptr)
+	{ // ふきだしが NULL じゃない場合
+
+		// 描画処理
+		m_pBalloon->Draw();
 	}
 }
 
