@@ -32,6 +32,7 @@
 #define MAX_LIFE	(3)				// 寿命の最大値
 #define TIME_DAMAGE	(60 * 1)		// ダメージ食らうまでの時間
 #define SPEED		(20.0f)			// 速度
+#define SIZE		(D3DXVECTOR3(30.0f, 50.0f, 30.0f))		// サイズ
 
 //==============================
 // コンストラクタ
@@ -105,7 +106,7 @@ void CRat::Update(void)
 	m_fSpeed = SPEED;
 
 	// 障害物との当たり判定
-	collision::ObstacleHit(this, 30.0f, 50.0f, 30.0f);
+	collision::ObstacleHit(this, SIZE.x, SIZE.y, SIZE.z);
 
 	// 移動処理
 	Move();
@@ -498,7 +499,7 @@ void CRat::ObstacleCollision(void)
 	D3DXVECTOR3 pos = GetPos();
 
 	// 障害物との衝突判定
-	//collision::ObstacleCollision(pos, GetPosOld(), 30.0f, 50.0f, 30.0f);
+	collision::ObstacleCollision(pos, GetPosOld(), SIZE.x, SIZE.y, SIZE.z);
 
 	// 位置を設定する
 	SetPos(pos);

@@ -33,6 +33,7 @@ public:			// 誰でもアクセスできる
 		TYPE_WEAPONCAGE,		// 武器小屋
 		TYPE_HONEY,				// 蜂蜜
 		TYPE_SLIME,				// スライム
+		TYPE_HAIRBALL,			// 毬
 
 		// エディットモデル
 		TYPE_MAX,				// 全モデルの総数

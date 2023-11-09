@@ -16,6 +16,7 @@
 
 #include "honey.h"
 #include "slime.h"
+#include "hairball.h"
 
 //==============================
 // コンストラクタ
@@ -192,6 +193,13 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const TYPE type)
 
 			// スライムを生成する
 			pObstacle = new CSlime;
+
+			break;
+
+		case CObstacle::TYPE_HAIRBALL:
+
+			// 毬を生成する
+			pObstacle = new CHairBall;
 
 			break;
 
