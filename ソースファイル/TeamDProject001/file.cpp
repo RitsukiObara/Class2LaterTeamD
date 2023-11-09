@@ -37,7 +37,7 @@ CFile::CFile()
 	for (int nCntInfo = 0; nCntInfo < MAX_FILE_DATA; nCntInfo++)
 	{
 		m_ObstacleInfo.pos[nCntInfo] = NONE_D3DXVECTOR3;				// ˆÊ’u
-		m_ObstacleInfo.type[nCntInfo] = CObstacle::TYPE_WOODBLOCK;		// Ží—Þ
+		m_ObstacleInfo.type[nCntInfo] = CObstacle::TYPE_HONEY;			// Ží—Þ
 	}
 
 	for (int nCntRank = 0; nCntRank < MAX_RANKING; nCntRank++)
@@ -179,7 +179,7 @@ void CFile::SetMap(void)
 		for (int nCntObst = 0; nCntObst < m_ObstacleInfo.nNum; nCntObst++)
 		{
 			// áŠQ•¨‚Ì¶¬ˆ—
-			CObstacle::Create(m_ObstacleInfo.pos[nCntObst]);
+			CObstacle::Create(m_ObstacleInfo.pos[nCntObst], m_ObstacleInfo.type[nCntObst]);
 		}
 	}
 }
@@ -191,8 +191,8 @@ HRESULT CFile::Init(void)
 {
 	for (int nCntInfo = 0; nCntInfo < MAX_FILE_DATA; nCntInfo++)
 	{
-		m_ObstacleInfo.pos[nCntInfo] = NONE_D3DXVECTOR3;				// ˆÊ’u
-		m_ObstacleInfo.type[nCntInfo] = CObstacle::TYPE_WOODBLOCK;		// Ží—Þ
+		m_ObstacleInfo.pos[nCntInfo] = NONE_D3DXVECTOR3;			// ˆÊ’u
+		m_ObstacleInfo.type[nCntInfo] = CObstacle::TYPE_HONEY;		// Ží—Þ
 	}
 
 	for (int nCntRank = 0; nCntRank < MAX_RANKING; nCntRank++)

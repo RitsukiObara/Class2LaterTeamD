@@ -31,6 +31,7 @@ public:			// 誰でもアクセスできる
 		TYPE_KARIPLAYER,		// 仮プレイヤー
 		TYPE_WOODBLOCK,			// 木箱
 		TYPE_WEAPONCAGE,		// 武器小屋
+		TYPE_HONEY,				// 蜂蜜
 
 		// エディットモデル
 		TYPE_MAX,				// 全モデルの総数

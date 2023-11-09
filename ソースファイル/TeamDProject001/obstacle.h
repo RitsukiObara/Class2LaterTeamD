@@ -22,12 +22,14 @@ public:			// 誰でもアクセスできる
 	// 列挙型定義(種類)
 	enum TYPE
 	{
-		TYPE_WOODBLOCK = 0,		// 木箱
+		TYPE_HONEY = 0,			// 蜂蜜
 		TYPE_MAX				// この列挙型の総数
 	};
 
 	CObstacle();			// コンストラクタ
-	~CObstacle();			// デストラクタ
+	CObstacle(CObject::TYPE type, PRIORITY priority = PRIORITY_BLOCK);			// コンストラクタ
+	virtual ~CObstacle();	// デストラクタ
+	void Box(void);			// コンストラクタの箱
 
 	// リスト構造関係
 	void SetPrev(CObstacle* pPrev);		// 前のポインタの設定処理
@@ -36,19 +38,21 @@ public:			// 誰でもアクセスできる
 	CObstacle* GetNext(void) const;		// 次のポインタの設定処理
 
 	// メンバ関数
-	HRESULT Init(void);		// 初期化処理
-	void Uninit(void);		// 終了処理
-	void Update(void);		// 更新処理
-	void Draw(void);		// 描画処理
+	virtual HRESULT Init(void);		// 初期化処理
+	virtual void Uninit(void);		// 終了処理
+	virtual void Update(void);		// 更新処理
+	virtual void Draw(void);		// 描画処理
 
-	void SetData(const D3DXVECTOR3& pos);				// 情報の設定処理
+	virtual void SetData(const D3DXVECTOR3& pos, const TYPE type);			// 情報の設定処理
+
+	virtual bool Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth) = 0;		// ヒット処理
 
 	// セット・ゲット関係
 	void SetType(const TYPE type);		// 種類の設定処理
 	TYPE GetType(void);					// 種類の取得処理
 
 	// 静的メンバ関数
-	static CObstacle* Create(const D3DXVECTOR3& pos);	// 生成処理
+	static CObstacle* Create(const D3DXVECTOR3& pos, const TYPE type);		// 生成処理
 
 private:		// 自分だけアクセスできる
 

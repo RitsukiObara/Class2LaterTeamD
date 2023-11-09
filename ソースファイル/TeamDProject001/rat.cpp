@@ -31,6 +31,7 @@
 #define ATTACK_DISTANCE	(200.0f)	// 攻撃範囲までの距離
 #define MAX_LIFE	(3)				// 寿命の最大値
 #define TIME_DAMAGE	(60 * 1)		// ダメージ食らうまでの時間
+#define SPEED		(20.0f)			// 速度
 
 //==============================
 // コンストラクタ
@@ -42,7 +43,7 @@ CRat::CRat() : CModel(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 	m_nRatIdx = NONE_RATIDX;			// ネズミの番号
 	m_nLife = 0;						// 寿命
 	m_nDamageCounter = TIME_DAMAGE;		// ダメージ食らうまでのカウンター
-
+	m_fSpeed = 0.0f;					// 速度
 	m_bJump = false;					// ジャンプしたか
 	m_bLand = true;						// 着地したか
 	m_bAttack = false;					// 攻撃したか
@@ -72,7 +73,7 @@ HRESULT CRat::Init(void)
 	// 全ての値を初期化する
 	m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_nRatIdx = NONE_RATIDX;			// ネズミの番号
-
+	m_fSpeed = 0.0f;					// 速度
 	m_nLife = MAX_LIFE;					// 寿命
 	m_nDamageCounter = TIME_DAMAGE;		// ダメージ食らうまでのカウンター
 
@@ -99,6 +100,12 @@ void CRat::Update(void)
 {
 	// 前回の位置を設定する
 	SetPosOld(GetPos());
+
+	// 移動量を設定する(移動量を常に一定にするため)
+	m_fSpeed = SPEED;
+
+	// 障害物との当たり判定
+	collision::ObstacleHit(this, 30.0f, 50.0f, 30.0f);
 
 	// 移動処理
 	Move();
@@ -142,6 +149,42 @@ void CRat::SetData(const D3DXVECTOR3& pos)
 	SetRot(NONE_D3DXVECTOR3);				// 向き
 	SetScale(NONE_SCALE);					// 拡大率
 	SetFileData(CXFile::TYPE_KARIPLAYER);	// モデルの情報設定
+}
+
+//=======================================
+// 移動量の設定処理
+//=======================================
+void CRat::SetMove(const D3DXVECTOR3& move)
+{
+	// 移動量を設定する
+	m_move = move;
+}
+
+//=======================================
+// 移動量の取得処理
+//=======================================
+D3DXVECTOR3 CRat::GetMove(void) const
+{
+	// 移動量を返す
+	return m_move;
+}
+
+//=======================================
+// 速度の設定処理
+//=======================================
+void CRat::SetSpeed(const float fSpeed)
+{
+	// 速度を設定する
+	m_fSpeed = fSpeed;
+}
+
+//=======================================
+// 速度の取得処理
+//=======================================
+float CRat::GetSpeed(void) const
+{
+	// 速度を返す
+	return m_fSpeed;
 }
 
 //=======================================
@@ -246,10 +289,6 @@ void CRat::Move(void)
 			// 向きを設定する
 			rot.y = D3DX_PI * 0.5f;
 		}
-
-		// 移動量を設定する
-		m_move.x = sinf(rot.y) * 20.0f;
-		m_move.z = cosf(rot.y) * 20.0f;
 	}
 	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_A) == true)
 	{ // Aキーを押した場合
@@ -272,38 +311,29 @@ void CRat::Move(void)
 			// 向きを設定する
 			rot.y = D3DX_PI * -0.5f;
 		}
-
-		// 移動量を設定する
-		m_move.x = sinf(rot.y) * 20.0f;
-		m_move.z = cosf(rot.y) * 20.0f;
 	}
 	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_W) == true)
 	{ // Wキーを押した場合
 
 		// 向きを設定する
 		rot.y = 0.0f;
-
-		// 移動量を設定する
-		m_move.x = sinf(rot.y) * 20.0f;
-		m_move.z = cosf(rot.y) * 20.0f;
 	}
 	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true)
 	{ // Sキーを押した場合
 
 		// 向きを設定する
 		rot.y = D3DX_PI;
-
-		// 移動量を設定する
-		m_move.x = sinf(rot.y) * 20.0f;
-		m_move.z = cosf(rot.y) * 20.0f;
 	}
 	else
 	{ // 上記以外
 
-		// 移動量を設定する
-		m_move.x = 0.0f;
-		m_move.z = 0.0f;
+		// 速度を設定する
+		m_fSpeed = 0.0f;
 	}
+
+	// 移動量を設定する
+	m_move.x = sinf(rot.y) * m_fSpeed;
+	m_move.z = cosf(rot.y) * m_fSpeed;
 
 	// 向きを適用する
 	SetRot(rot);
@@ -467,8 +497,8 @@ void CRat::ObstacleCollision(void)
 	// 位置を取得する
 	D3DXVECTOR3 pos = GetPos();
 
-	// 障害物との当たり判定
-	collision::ObstacleCollision(pos, GetPosOld(), 30.0f, 50.0f, 30.0f);
+	// 障害物との衝突判定
+	//collision::ObstacleCollision(pos, GetPosOld(), 30.0f, 50.0f, 30.0f);
 
 	// 位置を設定する
 	SetPos(pos);

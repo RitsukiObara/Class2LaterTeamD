@@ -31,6 +31,10 @@ public:			// 誰でもアクセスできる
 	void SetData(const D3DXVECTOR3& pos);				// 情報の設定処理
 
 	// セット・ゲット関係
+	void SetMove(const D3DXVECTOR3& move);	// 移動量の設定処理
+	D3DXVECTOR3 GetMove(void) const;		// 移動量の取得処理
+	void SetSpeed(const float fSpeed);		// 速度の設定処理
+	float GetSpeed(void) const;				// 速度の取得処理
 	void SetRatIdx(const int nIdx);			// ネズミの番号の設定処理
 	int GetRatIdx(void) const;				// ネズミの番号の取得処理
 
@@ -52,7 +56,7 @@ private:		// 自分だけアクセスできる
 	int m_nRatIdx;				// ネズミの番号
 	int m_nLife;				// 寿命
 	int m_nDamageCounter;		// ダメージ食らうまでのカウンター
-
+	float m_fSpeed;				// 速度
 	bool m_bJump;				// ジャンプしたか
 	bool m_bLand;				// 着地したか
 	bool m_bAttack;				// 攻撃したか

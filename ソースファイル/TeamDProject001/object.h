@@ -47,7 +47,7 @@ public:			// 誰でもアクセスできる
 		TYPE_COLLPOLY,			// 当たり判定ポリゴン
 		TYPE_CHARA,				// キャラクター
 		TYPE_PLAYER,			// プレイヤー
-		TYPE_WOODBLOCK,			// 木箱
+		TYPE_OBSTACLE,			// 障害物
 		TYPE_EDIT,				// エディット
 		TYPE_WEAPONSELECTUI,	// 武器選択画面UI
 		TYPE_WEAPONCAGE,		// 武器小屋

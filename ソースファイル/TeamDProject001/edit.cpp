@@ -28,7 +28,8 @@
 CEdit::CEdit() : CModel(CObject::TYPE_EDIT, CObject::PRIORITY_UI)
 {
 	// 全ての値をクリアする
-	m_type = TYPE::TYPE_OBSTACLE;		// 種類
+	m_type = TYPE::TYPE_OBSTACLE;			// 種類
+	m_obstacleType = CObstacle::TYPE_HONEY;	// 障害物の種類
 }
 
 //==============================
@@ -52,7 +53,8 @@ HRESULT CEdit::Init(void)
 	}
 
 	// 全ての値を初期化する
-	m_type = TYPE::TYPE_OBSTACLE;		// 種類
+	m_type = TYPE::TYPE_OBSTACLE;			// 種類
+	m_obstacleType = CObstacle::TYPE_HONEY;	// 障害物の種類
 
 	// 値を返す
 	return S_OK;
@@ -284,7 +286,7 @@ void CEdit::Set(void)
 		case CEdit::TYPE_OBSTACLE:		// 障害物
 
 			// 障害物の生成処理
-			CObstacle::Create(GetPos());
+			CObstacle::Create(GetPos(), m_obstacleType);
 
 			break;
 

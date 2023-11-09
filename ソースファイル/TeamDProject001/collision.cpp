@@ -10,6 +10,7 @@
 #include "game.h"
 #include "collision.h"
 #include "shadowCircle.h"
+#include "rat.h"
 #include "objectElevation.h"
 #include "elevation_manager.h"
 #include "obstacle.h"
@@ -121,7 +122,44 @@ void collision::ObstacleCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, c
 
 		// 次のオブジェクトを代入する
 		pObstacle = pObstacle->GetNext();
+	}
+}
 
+//===============================
+// 障害物の当たり判定
+//===============================
+void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight, const float fDepth)
+{
+	// ローカル変数宣言
+	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を取得する
+	D3DXVECTOR3 pos = pRat->GetPos();			// 位置を取得する
+
+	while (pObstacle != nullptr)
+	{ // ブロックの情報が NULL じゃない場合
+
+		if (pObstacle->Hit(pos, fWidth, fHeight, fDepth) == true)
+		{ // 障害物の当たり判定が通った場合
+
+			switch (pObstacle->GetType())
+			{
+			case CObstacle::TYPE_HONEY:
+
+				// 移動量を設定する
+				pRat->SetSpeed(pRat->GetSpeed() * 0.3f);
+
+				break;
+
+			default:
+
+				// 停止
+				assert(false);
+
+				break;
+			}
+		}
+
+		// 次のオブジェクトを代入する
+		pObstacle = pObstacle->GetNext();
 	}
 }
 

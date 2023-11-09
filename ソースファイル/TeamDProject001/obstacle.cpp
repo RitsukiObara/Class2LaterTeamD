@@ -14,26 +14,24 @@
 #include "obstacle_manager.h"
 #include "useful.h"
 
-//-------------------------------------------
-// マクロ定義
-//-------------------------------------------
+#include "honey.h"
 
 //==============================
 // コンストラクタ
 //==============================
-CObstacle::CObstacle() : CModel(CObject::TYPE_WOODBLOCK, CObject::PRIORITY_BLOCK)
+CObstacle::CObstacle() : CModel(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 {
-	// 全ての値をクリアする
-	m_type = TYPE_WOODBLOCK;	// 種類
-	m_pPrev = nullptr;			// 前のへのポインタ
-	m_pNext = nullptr;			// 次のへのポインタ
+	// コンストラクタの箱
+	Box();
+}
 
-	if (CObstacleManager::Get() != nullptr)
-	{ // マネージャーが存在していた場合
-
-		// マネージャーへの登録処理
-		CObstacleManager::Get()->Regist(this);
-	}
+//==============================
+// オーバーロードコンストラクタ
+//==============================
+CObstacle::CObstacle(CObject::TYPE type, PRIORITY priority) : CModel(type, priority)
+{
+	// コンストラクタの箱
+	Box();
 }
 
 //==============================
@@ -42,6 +40,24 @@ CObstacle::CObstacle() : CModel(CObject::TYPE_WOODBLOCK, CObject::PRIORITY_BLOCK
 CObstacle::~CObstacle()
 {
 
+}
+
+//==============================
+// コンストラクタの箱
+//==============================
+void CObstacle::Box(void)
+{
+	// 全ての値をクリアする
+	m_type = TYPE_HONEY;	// 種類
+	m_pPrev = nullptr;		// 前のへのポインタ
+	m_pNext = nullptr;		// 次のへのポインタ
+
+	if (CObstacleManager::Get() != nullptr)
+	{ // マネージャーが存在していた場合
+
+		// マネージャーへの登録処理
+		CObstacleManager::Get()->Regist(this);
+	}
 }
 
 //============================
@@ -93,7 +109,7 @@ HRESULT CObstacle::Init(void)
 	}
 
 	// 全ての値を初期化する
-	m_type = TYPE_WOODBLOCK;	// 種類
+	m_type = TYPE_HONEY;	// 種類
 
 	// 値を返す
 	return S_OK;
@@ -139,23 +155,22 @@ void CObstacle::Draw(void)
 //=====================================
 // 情報の設定処理
 //=====================================
-void CObstacle::SetData(const D3DXVECTOR3& pos)
+void CObstacle::SetData(const D3DXVECTOR3& pos, const TYPE type)
 {
 	// 情報の設定処理
 	SetPos(pos);							// 位置
 	SetPosOld(pos);							// 前回の位置
 	SetRot(NONE_D3DXVECTOR3);				// 向き
 	SetScale(NONE_SCALE);					// 拡大率
-	SetFileData(CXFile::TYPE_WOODBLOCK);	// モデルの情報設定
 
 	// 全ての値を初期化する
-	m_type = TYPE_WOODBLOCK;	// 種類
+	m_type = type;		// 種類
 }
 
 //=======================================
 // 生成処理
 //=======================================
-CObstacle* CObstacle::Create(const D3DXVECTOR3& pos)
+CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const TYPE type)
 {
 	// ローカルオブジェクトを生成
 	CObstacle* pFrac = nullptr;	// インスタンスを生成
@@ -163,8 +178,22 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos)
 	if (pFrac == nullptr)
 	{ // オブジェクトが NULL の場合
 
-		// インスタンスを生成
-		pFrac = new CObstacle;
+		switch (type)
+		{
+		case CObstacle::TYPE_HONEY:
+
+			// 蜂蜜を生成する
+			pFrac = new CHoney;
+
+			break;
+
+		default:
+
+			//停止
+			assert(false);
+
+			break;
+		}
 	}
 	else
 	{ // オブジェクトが NULL じゃない場合
@@ -191,7 +220,7 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos)
 		}
 
 		// 情報の設定処理
-		pFrac->SetData(pos);
+		pFrac->SetData(pos, type);
 	}
 	else
 	{ // オブジェクトが NULL の場合
