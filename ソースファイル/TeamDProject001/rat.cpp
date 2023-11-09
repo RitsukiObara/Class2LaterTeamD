@@ -20,6 +20,7 @@
 #include "objectElevation.h"
 #include "obstacle_manager.h"
 #include "obstacle.h"
+#include "collision.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -28,6 +29,8 @@
 #define ADD_MOVE_Y	(30.0f)			// 浮力
 #define NONE_RATIDX	(-1)			// ネズミの番号の初期値
 #define ATTACK_DISTANCE	(200.0f)	// 攻撃範囲までの距離
+#define MAX_LIFE	(3)				// 寿命の最大値
+#define TIME_DAMAGE	(60 * 1)		// ダメージ食らうまでの時間
 
 //==============================
 // コンストラクタ
@@ -37,10 +40,13 @@ CRat::CRat() : CModel(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 	// 全ての値をクリアする
 	m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_nRatIdx = NONE_RATIDX;			// ネズミの番号
+	m_nLife = 0;						// 寿命
+	m_nDamageCounter = TIME_DAMAGE;		// ダメージ食らうまでのカウンター
 
 	m_bJump = false;					// ジャンプしたか
 	m_bLand = true;						// 着地したか
 	m_bAttack = false;					// 攻撃したか
+
 }
 
 //==============================
@@ -66,6 +72,9 @@ HRESULT CRat::Init(void)
 	// 全ての値を初期化する
 	m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_nRatIdx = NONE_RATIDX;			// ネズミの番号
+
+	m_nLife = MAX_LIFE;					// 寿命
+	m_nDamageCounter = TIME_DAMAGE;		// ダメージ食らうまでのカウンター
 
 	// 値を返す
 	return S_OK;
@@ -100,11 +109,14 @@ void CRat::Update(void)
 	// 攻撃処理
 	Attack();
 
+	// ヒット処理
+	Hit();
+
 	// 起伏地面の当たり判定
 	Elevation();
 
 	// デバッグ表示
-	CManager::Get()->GetDebugProc()->Print("位置：%f %f %f\n向き：%f %f %f\nジャンプ状況：%d\n", GetPos().x, GetPos().y, GetPos().z, GetRot().x, GetRot().y, GetRot().z, m_bJump);
+	CManager::Get()->GetDebugProc()->Print("位置：%f %f %f\n向き：%f %f %f\nジャンプ状況：%d\n寿命：%d\n", GetPos().x, GetPos().y, GetPos().z, GetRot().x, GetRot().y, GetRot().z, m_bJump, m_nLife);
 }
 
 //=====================================
@@ -360,9 +372,54 @@ void CRat::Attack(void)
 
 		//m_bAttack = true;		// 攻撃した状態にする
 	}
+}
 
-	// 情報を適用する
-	SetPos(pos);
+//=======================================
+// ヒット処理
+//=======================================
+void CRat::Hit(void)
+{
+	// ローカル変数宣言
+	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を取得する
+	D3DXVECTOR3 pos = GetPos();
+
+	if (m_nDamageCounter >= TIME_DAMAGE)
+	{ // ダメージ食らう時間になったら
+
+		while (pObstacle != nullptr)
+		{ // ブロックの情報が NULL じゃない場合
+
+			if (useful::RectangleCollisionXY(pos, pObstacle->GetPos(),
+				GetFileData().vtxMax, pObstacle->GetFileData().vtxMax,
+				GetFileData().vtxMin, pObstacle->GetFileData().vtxMin) == true)
+			{ // XYの矩形に当たってたら
+
+				if (useful::RectangleCollisionXZ(pos, pObstacle->GetPos(),
+					GetFileData().vtxMax, pObstacle->GetFileData().vtxMax,
+					GetFileData().vtxMin, pObstacle->GetFileData().vtxMin) == true)
+				{ // XZの矩形に当たってたら
+
+					m_nLife--;		// 寿命減らす
+					m_nDamageCounter = 0;		// ダメージ食らうまでの時間リセット
+
+					if (m_nLife <= 0)
+					{ // 寿命が無いとき
+
+						// 終了処理
+						Uninit();
+					}
+				}
+			}
+
+			// 次のオブジェクトを代入する
+			pObstacle = pObstacle->GetNext();
+		}
+	}
+	else
+	{ // ダメージ食らう時間じゃなかったら
+
+		m_nDamageCounter++;		// ダメージ食らうまでの時間加算
+	}
 }
 
 //=======================================

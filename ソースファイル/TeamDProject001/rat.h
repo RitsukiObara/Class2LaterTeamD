@@ -44,10 +44,13 @@ private:		// 自分だけアクセスできる
 	void Jump(void);			// ジャンプ処理
 	void Attack(void);			// 攻撃処理
 	void Elevation(void);		// 起伏地面の当たり判定
+	void Hit(void);				// ヒット処理
 
 	// メンバ変数
 	D3DXVECTOR3 m_move;			// 移動量
 	int m_nRatIdx;				// ネズミの番号
+	int m_nLife;				// 寿命
+	int m_nDamageCounter;		// ダメージ食らうまでのカウンター
 
 	bool m_bJump;				// ジャンプしたか
 	bool m_bLand;				// 着地したか
