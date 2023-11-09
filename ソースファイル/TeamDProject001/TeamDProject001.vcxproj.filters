@@ -129,9 +129,6 @@
     <ClCompile Include="objectX.cpp">
       <Filter>Object</Filter>
     </ClCompile>
-    <ClCompile Include="player.cpp">
-      <Filter>Player</Filter>
-    </ClCompile>
     <ClCompile Include="game.cpp">
       <Filter>Scene\Game</Filter>
     </ClCompile>
@@ -279,6 +276,12 @@
     <ClCompile Include="edit.cpp">
       <Filter>Edit</Filter>
     </ClCompile>
+    <ClCompile Include="weapon_selectUI.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="rat.cpp">
+      <Filter>Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -346,9 +349,6 @@
     </ClInclude>
     <ClInclude Include="objectX.h">
       <Filter>Object</Filter>
-    </ClInclude>
-    <ClInclude Include="player.h">
-      <Filter>Player</Filter>
     </ClInclude>
     <ClInclude Include="game.h">
       <Filter>Scene\Game</Filter>
@@ -496,6 +496,12 @@
     </ClInclude>
     <ClInclude Include="edit.h">
       <Filter>Edit</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_selectUI.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="rat.h">
+      <Filter>Player</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

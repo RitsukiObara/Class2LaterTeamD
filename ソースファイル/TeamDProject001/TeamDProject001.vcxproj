@@ -202,7 +202,7 @@
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="particle2D.cpp" />
     <ClCompile Include="pause.cpp" />
-    <ClCompile Include="player.cpp" />
+    <ClCompile Include="rat.cpp" />
     <ClCompile Include="precompile.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -228,6 +228,7 @@
     <ClCompile Include="title.cpp" />
     <ClCompile Include="title_logo.cpp" />
     <ClCompile Include="useful.cpp" />
+    <ClCompile Include="weapon_selectUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h" />
@@ -279,7 +280,7 @@
     <ClInclude Include="Particle.h" />
     <ClInclude Include="particle2D.h" />
     <ClInclude Include="pause.h" />
-    <ClInclude Include="player.h" />
+    <ClInclude Include="rat.h" />
     <ClInclude Include="precompile.h" />
     <ClInclude Include="ranking.h" />
     <ClInclude Include="ranking_precedence.h" />
@@ -302,6 +303,7 @@
     <ClInclude Include="title.h" />
     <ClInclude Include="title_logo.h" />
     <ClInclude Include="useful.h" />
+    <ClInclude Include="weapon_selectUI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

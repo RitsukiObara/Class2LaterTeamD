@@ -15,9 +15,12 @@
 //-----------------------------------
 // クラス定義(プレイヤー)
 //-----------------------------------
-class CPlayer : public CModel
+class CRat : public CModel
 {
 public:			// 誰でもアクセスできる
+
+	CRat();			// コンストラクタ
+	~CRat();			// デストラクタ
 
 	// メンバ関数
 	HRESULT Init(void);		// 初期化処理
@@ -27,14 +30,14 @@ public:			// 誰でもアクセスできる
 
 	void SetData(const D3DXVECTOR3& pos);				// 情報の設定処理
 
+	// セット・ゲット関係
+	void SetRatIdx(const int nIdx);			// ネズミの番号の設定処理
+	int GetRatIdx(void) const;				// ネズミの番号の取得処理
+
 	// 静的メンバ関数
-	static CPlayer* Get(void);							// 取得処理
-	static CPlayer* Create(const D3DXVECTOR3& pos);		// 生成処理
+	static CRat* Create(const D3DXVECTOR3& pos);		// 生成処理
 
 private:		// 自分だけアクセスできる
-
-	CPlayer();			// コンストラクタ
-	~CPlayer();			// デストラクタ
 
 	// メンバ関数
 	void Move(void);			// 移動処理
@@ -44,13 +47,11 @@ private:		// 自分だけアクセスできる
 
 	// メンバ変数
 	D3DXVECTOR3 m_move;			// 移動量
+	int m_nRatIdx;				// ネズミの番号
 
 	bool m_bJump;				// ジャンプしたか
 	bool m_bLand;				// 着地したか
 	bool m_bAttack;				// 攻撃したか
-
-	// 静的メンバ変数
-	static CPlayer* m_pPlayer;	// プレイヤーの情報
 };
 
 #endif

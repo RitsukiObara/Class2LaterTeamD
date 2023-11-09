@@ -13,6 +13,7 @@
 #include "renderer.h"
 #include "texture.h"
 
+#include "number.h"
 #include "pause.h"
 
 //--------------------------------------------------
@@ -23,20 +24,29 @@ CGameTime* CGameTime::m_pGameTimer = nullptr;		// ゲームタイマーの情報
 //--------------------------------------------------
 // マクロ定義
 //--------------------------------------------------
-#define TIME_POS			(D3DXVECTOR3(500.0f, 50.0f, 0.0f))		// ゲームタイマーの点のサイズ
-#define TIME_SIZE			(D3DXVECTOR3(25.0f, 40.0f, 0.0f))		// ゲームタイマーの点のサイズ
-#define TIME_DOT_SIZE		(D3DXVECTOR3(8.0f, 8.0f, 0.0f))			// ゲームタイマーの点のサイズ
+#define TIME_COUNTDOWN		(180)	// 秒数
+#define ONE_SECOND			(60)	// 1秒のフレーム数
+#define TIME_POS			(D3DXVECTOR3(500.0f, 50.0f, 0.0f))		// ゲームタイマーの位置
+#define TIME_SIZE			(D3DXVECTOR3(25.0f, 40.0f, 0.0f))		// ゲームタイマーのサイズ
+#define TIME_CORON_POS		(D3DXVECTOR3(540.0f, 50.0f, 0.0f))		// ゲームタイマーのコロンの位置
+#define TIME_CORON_SIZE		(D3DXVECTOR3(20.0f, 40.0f, 0.0f))		// ゲームタイマーのコロンのサイズ
 #define TIME_WIDTH_SHIFT	(50.0f)									// ゲームタイマーのずらす横幅
+#define NUMBER_TEXTURE		"data\\TEXTURE\\TimeNumber.png"			// 数字のテクスチャ
+#define CORON_TEXTURE		"data\\TEXTURE\\TimeCoron.png"			// コロンのテクスチャ
 
 //========================
 // コンストラクタ
 //========================
-CGameTime::CGameTime() : CTime(CObject::TYPE_TIME, CObject::PRIORITY_UI)
+CGameTime::CGameTime() : CObject(CObject::TYPE_TIME, CObject::PRIORITY_UI)
 {
 	// 全ての値を初期化する
-	m_StartTime = 0;		// 開始時刻
-	m_PauseTime = 0;		// ポーズ中の時間
-	m_bGoal = false;		// ゴール状況
+	for (int nCnt = 0; nCnt < GAME_TIME_DIGIT; nCnt++)
+	{
+		m_apNumber[nCnt] = nullptr;		// 数字の情報
+	}
+	m_pColon = nullptr;					// コロン
+	m_nSeconds = TIME_COUNTDOWN;		// 秒数
+	m_nFrame = 0;						// フレーム数
 }
 
 //========================
@@ -53,15 +63,47 @@ CGameTime::~CGameTime()
 HRESULT CGameTime::Init(void)
 {
 	// 全ての値を初期化する
-	m_StartTime = 0;		// 開始時刻
-	m_bGoal = false;		// ゴール状況
-	m_PauseTime = 0;		// ポーズ中の時間
+	m_nSeconds = TIME_COUNTDOWN;		// 秒数
+	m_nFrame = 0;						// フレーム数
 
-	if (FAILED(CTime::Init()))
-	{ // 初期化に失敗した場合
+	for (int nCnt = 0; nCnt < GAME_TIME_DIGIT; nCnt++)
+	{
+		if (m_apNumber[nCnt] == nullptr)
+		{ // 数字の情報が NULL の場合
 
-		// 失敗を返す
-		return E_FAIL;
+			// 数字を生成する
+			m_apNumber[nCnt] = new CNumber(CObject::TYPE_NONE, CObject::PRIORITY_UI);
+
+			if (m_apNumber[nCnt] != nullptr)
+			{ // 数字の情報が NULL じゃない場合
+
+				if (FAILED(m_apNumber[nCnt]->Init()))
+				{ // 初期化処理に失敗した場合
+
+					// 停止
+					assert(false);
+
+					// 失敗を返す
+					return E_FAIL;
+				}
+			}
+			else
+			{ // 上記以外
+
+				// 停止
+				assert(false);
+
+				// 失敗を返す
+				return E_FAIL;
+			}
+		}
+	}
+
+	if (m_pColon == nullptr)
+	{ // コロンが NULL の場合
+
+		// コロンを生成する
+		m_pColon = CObject2D::Create(CObject2D::TYPE_NONE, TYPE_NONE, PRIORITY_UI);
 	}
 
 	// 成功を返す
@@ -73,8 +115,27 @@ HRESULT CGameTime::Init(void)
 //========================
 void CGameTime::Uninit(void)
 {
-	// タイムの終了処理
-	CTime::Uninit();
+	for (int nCnt = 0; nCnt < GAME_TIME_DIGIT; nCnt++)
+	{
+		if (m_apNumber[nCnt] != nullptr)
+		{ // 数字の情報が NULL じゃない場合
+
+			// 数字の終了処理
+			m_apNumber[nCnt]->Uninit();
+			m_apNumber[nCnt] = nullptr;
+		}
+	}
+
+	if (m_pColon != nullptr)
+	{ // コロンの情報が NULL じゃない場合
+
+		// コロンの終了処理
+		m_pColon->Uninit();
+		m_pColon = nullptr;
+	}
+
+	// 本体の終了処理
+	Release();
 
 	// ゲームタイマーを NULL にする
 	m_pGameTimer = nullptr;
@@ -85,36 +146,13 @@ void CGameTime::Uninit(void)
 //========================
 void CGameTime::Update(void)
 {
-	if (CGame::GetPause() != nullptr)
-	{ // ポーズの情報がある場合
+	if ((CGame::GetPause() != nullptr &&
+		CGame::GetPause()->GetPause() == false) &&
+		CGame::GetState() != CGame::STATE_START)
+	{ // 一定の状態以外の場合
 
-		if (CGame::GetPause()->GetPause() == true &&
-			CGame::GetState() == CGame::STATE_PLAY)
-		{ // ポーズ中かつ、プレイ中の場合
-
-			// ポーズ中の処理
-			PauseProcess();
-		}
-		else
-		{ // 上記以外
-
-			if (CGame::GetState() != CGame::STATE_START)
-			{ // スタート状態または、カウントダウン状態以外の場合
-
-				// 通常の更新処理
-				Basic();
-			}
-		}
-	}
-	else
-	{ // 上記以外
-
-		if (CGame::GetState() != CGame::STATE_START)
-		{ // スタート状態または、カウントダウン状態以外の場合
-
-			// 通常の更新処理
-			Basic();
-		}
+		// 計算処理
+		Calculate();
 	}
 }
 
@@ -123,78 +161,95 @@ void CGameTime::Update(void)
 //========================
 void CGameTime::Draw(void)
 {
-	// 描画処理
-	CTime::Draw();
-}
+	for (int nCnt = 0; nCnt < GAME_TIME_DIGIT; nCnt++)
+	{
+		if (m_apNumber[nCnt] != nullptr)
+		{ // 数字が NULL じゃない場合
 
-//========================
-// タイムの開始処理
-//========================
-void CGameTime::TimeStart(void)
-{
-	// 現在の時刻を取得する
-	m_StartTime = timeGetTime();
-}
-
-//========================
-// 通常の更新処理
-//========================
-void CGameTime::Basic(void)
-{
-	if (CGame::GetState() == CGame::STATE_GOAL)
-	{ // ゴール状態の場合
-
-		// ゴール状況を true にする
-		m_bGoal = true;
+			// 描画処理
+			m_apNumber[nCnt]->Draw();
+		}
 	}
 
-	if (m_bGoal == false)
-	{ // ゴール状況が false の場合
+	if (m_pColon != nullptr)
+	{ // コロンの情報が NULL じゃない場合
 
-		// 計算処理
-		Calculate();
-
-		// 1桁ごとのテクスチャの設定処理
-		SetTexture();
+		// 描画処理
+		m_pColon->Draw();
 	}
 }
 
 //========================
-// ポーズ中の処理
+// 情報の設定処理
 //========================
-void CGameTime::PauseProcess(void)
+void CGameTime::SetData(void)
 {
 	// ローカル変数宣言
-	DWORD NowTime = timeGetTime();		// 現在の時刻
-	DWORD TotalTime = GetTotalTime();	// 合計時間
+	int aTexU[GAME_TIME_DIGIT];		// 時間のテクスチャ座標
 
-	// ポーズ中の時間を設定する
-	m_PauseTime = (NowTime - m_StartTime) - TotalTime;
-}
+	// 全ての値を初期化する
+	m_nSeconds = TIME_COUNTDOWN;		// 秒数
+	m_nFrame = 0;						// フレーム数
 
-//========================
-// 計算処理
-//========================
-void CGameTime::Calculate(void)
-{
-	// ローカル変数宣言
-	DWORD NowTime;				// 現在の時刻
+	//値の計算
+	aTexU[0] = m_nSeconds / ONE_SECOND;
+	aTexU[1] = m_nSeconds % ONE_SECOND / 10;
+	aTexU[2] = m_nSeconds % 10;
 
-	// 現在時刻を取得する
-	NowTime = timeGetTime();
+	for (int nCnt = 0; nCnt < GAME_TIME_DIGIT; nCnt++)
+	{
+		if (m_apNumber[nCnt] != nullptr)
+		{ // 数字の情報が NULL じゃない場合
 
-	// 経過した秒数を測る
-	SetTotalTime((NowTime - m_StartTime) - m_PauseTime);
+			if (nCnt == 0)
+			{ // 0以外の場合
 
-	if (GetTotalTime() >= MAX_TIME)
-	{ // 経過時間が 最大数 を超えた場合
+				// 位置を設定する
+				m_apNumber[nCnt]->SetPos(TIME_POS);
+			}
+			else
+			{ // 上記以外
 
-		// 経過時間を補正する
-		SetTotalTime(MAX_TIME);
+				// 位置を設定する
+				m_apNumber[nCnt]->SetPos(D3DXVECTOR3(TIME_POS.x + (nCnt * TIME_WIDTH_SHIFT) + TIME_CORON_SIZE.x, TIME_POS.y, TIME_POS.z));
+			}
+
+			// 情報を設定する
+			m_apNumber[nCnt]->SetRot(NONE_D3DXVECTOR3);		// 向き
+			m_apNumber[nCnt]->SetSize(TIME_SIZE);			// サイズ
+			m_apNumber[nCnt]->SetAngle();					// 方向
+			m_apNumber[nCnt]->SetLength();					// 長さ
+
+			m_apNumber[nCnt]->SetType(CNumber::TYPE_TIME);	// 番号の種類
+			m_apNumber[nCnt]->SetNumber(aTexU[nCnt]);		// 番号を設定する
+
+			// テクスチャの割り当て処理
+			m_apNumber[nCnt]->BindTexture(CManager::Get()->GetTexture()->Regist(NUMBER_TEXTURE));
+
+			// 頂点情報の設定処理
+			m_apNumber[nCnt]->SetVertex();
+
+			// テクスチャの設定処理(アニメーションバージョン)
+			m_apNumber[nCnt]->SetVtxTextureAnim(NUMBER_TEXTURE_PATTERN, aTexU[nCnt]);
+		}
 	}
 
-	// 数値の設定処理
-	SetNumber();
+	if (m_pColon != nullptr)
+	{ // コロンが NULL じゃない場合
+
+		// 情報の設定処理
+		m_pColon->SetPos(TIME_CORON_POS);		// 位置
+		m_pColon->SetRot(NONE_D3DXVECTOR3);		// 向き
+		m_pColon->SetSize(TIME_CORON_SIZE);		// サイズ
+		m_pColon->SetAngle();					// 方向
+		m_pColon->SetLength();					// 長さ
+
+		// テクスチャの割り当て処理
+		m_pColon->BindTexture(CManager::Get()->GetTexture()->Regist(CORON_TEXTURE));
+
+		// 頂点座標の設定処理
+		m_pColon->SetVertex();
+	}
 }
 
 //========================
@@ -230,6 +285,9 @@ CGameTime* CGameTime::Create(void)
 	else
 	{ // オブジェクトが NULL じゃない場合
 
+		// 停止
+		assert(false);
+
 		// NULL を返す
 		return nullptr;
 	}
@@ -249,10 +307,7 @@ CGameTime* CGameTime::Create(void)
 		}
 
 		// 情報の設定処理
-		m_pGameTimer->SetData(TIME_POS, NONE_D3DXVECTOR3, TIME_SIZE, TIME_DOT_SIZE, TIME_WIDTH_SHIFT);
-
-		// 現在時刻を設定する
-		m_pGameTimer->m_StartTime = timeGetTime();
+		m_pGameTimer->SetData();
 	}
 	else
 	{ // オブジェクトが NULL の場合
@@ -266,4 +321,44 @@ CGameTime* CGameTime::Create(void)
 
 	// 時間のポインタを返す
 	return m_pGameTimer;
+}
+
+//========================
+// 計算処理
+//========================
+void CGameTime::Calculate(void)
+{
+	// 各桁の数字を格納
+	int aTexU[GAME_TIME_DIGIT];
+
+	// 時間の経過を加算する
+	m_nFrame++;
+
+	if ((m_nFrame % ONE_SECOND) == 0)
+	{ // 1秒経ったら
+
+		// 1秒減らす
+		m_nSeconds--;
+
+		if (m_nSeconds <= 0)
+		{ // 時間が0を超えた場合
+
+			// 時間を補正する
+			m_nSeconds = 0;
+		}
+
+		// 値の計算
+		aTexU[0] = m_nSeconds / ONE_SECOND;
+		aTexU[1] = m_nSeconds % ONE_SECOND / 10;
+		aTexU[2] = m_nSeconds % 10;
+
+		for (int nCnt = 0; nCnt < GAME_TIME_DIGIT; nCnt++)
+		{
+			// 数字の設定処理
+			m_apNumber[nCnt]->SetNumber(aTexU[nCnt]);
+
+			// テクスチャの設定処理(アニメーションバージョン)
+			m_apNumber[nCnt]->SetVtxTextureAnim(NUMBER_TEXTURE_PATTERN, aTexU[nCnt]);
+		}
+	}
 }
