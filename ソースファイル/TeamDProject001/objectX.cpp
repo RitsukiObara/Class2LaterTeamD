@@ -26,6 +26,7 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\Honey.x",				// 蜂蜜
 	"data\\MODEL\\Slime.x",				// スライム
 	"data\\MODEL\\HairBall.x",			// 毬
+	"data\\MODEL\\HoneyBottle.x",		// 蜂蜜のボトル
 };
 
 //------------------------------------------------------------

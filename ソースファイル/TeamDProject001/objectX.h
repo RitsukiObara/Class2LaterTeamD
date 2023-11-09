@@ -34,6 +34,7 @@ public:			// 誰でもアクセスできる
 		TYPE_HONEY,				// 蜂蜜
 		TYPE_SLIME,				// スライム
 		TYPE_HAIRBALL,			// 毬
+		TYPE_HONEYBOTTLE,		// 蜂蜜のボトル
 
 		// エディットモデル
 		TYPE_MAX,				// 全モデルの総数
