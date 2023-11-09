@@ -40,11 +40,12 @@ public:			// 誰でもアクセスできる
 private:		// 自分だけアクセスできる
 
 	// メンバ関数
-	void Move(void);			// 移動処理
-	void Jump(void);			// ジャンプ処理
-	void Attack(void);			// 攻撃処理
-	void Elevation(void);		// 起伏地面の当たり判定
-	void Hit(void);				// ヒット処理
+	void Move(void);				// 移動処理
+	void Jump(void);				// ジャンプ処理
+	void Attack(void);				// 攻撃処理
+	void Elevation(void);			// 起伏地面の当たり判定
+	void ObstacleCollision(void);	// 障害物との当たり判定
+	void Hit(void);					// ヒット処理
 
 	// メンバ変数
 	D3DXVECTOR3 m_move;			// 移動量

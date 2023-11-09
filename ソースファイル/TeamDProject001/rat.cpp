@@ -115,6 +115,9 @@ void CRat::Update(void)
 	// 起伏地面の当たり判定
 	Elevation();
 
+	// 障害物との当たり判定
+	ObstacleCollision();
+
 	// デバッグ表示
 	CManager::Get()->GetDebugProc()->Print("位置：%f %f %f\n向き：%f %f %f\nジャンプ状況：%d\n寿命：%d\n", GetPos().x, GetPos().y, GetPos().z, GetRot().x, GetRot().y, GetRot().z, m_bJump, m_nLife);
 }
@@ -435,7 +438,7 @@ void CRat::Elevation(void)
 	while (pMesh != nullptr)
 	{ // 地面の情報がある限り回す
 
-	  // 当たり判定を取る
+		// 当たり判定を取る
 		fHeight = pMesh->ElevationCollision(pos);
 
 		if (pos.y < fHeight)
@@ -453,5 +456,20 @@ void CRat::Elevation(void)
 	}
 
 	// 位置を更新する
+	SetPos(pos);
+}
+
+//=======================================
+// 障害物との当たり判定
+//=======================================
+void CRat::ObstacleCollision(void)
+{
+	// 位置を取得する
+	D3DXVECTOR3 pos = GetPos();
+
+	// 障害物との当たり判定
+	collision::ObstacleCollision(pos, GetPosOld(), 30.0f, 50.0f, 30.0f);
+
+	// 位置を設定する
 	SetPos(pos);
 }
