@@ -18,7 +18,8 @@
 
 #include "elevation_manager.h"
 #include "objectElevation.h"
-#include "collision.h"
+#include "obstacle_manager.h"
+#include "obstacle.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -26,6 +27,7 @@
 #define GRAVITY		(1.0f)			// 重力
 #define ADD_MOVE_Y	(30.0f)			// 浮力
 #define NONE_RATIDX	(-1)			// ネズミの番号の初期値
+#define ATTACK_DISTANCE	(200.0f)	// 攻撃範囲までの距離
 
 //==============================
 // コンストラクタ
@@ -327,13 +329,34 @@ void CRat::Jump(void)
 void CRat::Attack(void)
 {
 	// ローカル変数宣言
+	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を取得する
 	D3DXVECTOR3 pos = GetPos();
-	D3DXVECTOR3 posOld = GetPosOld();
+	D3DXVECTOR3 rot = GetRot();
 
-	//if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_J) == true/* && m_bAttack == false*/)
+	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_J) == true/* && m_bAttack == false*/)
 	{ // Jキーを押した場合
 
-		collision::ObstacleRectCollision(pos, 50.0f, 50.0f, 50.0f);
+		while (pObstacle != nullptr)
+		{ // ブロックの情報が NULL じゃない場合
+
+			if (useful::RectangleCollisionXY(D3DXVECTOR3(pos.x + sinf(rot.y) * ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * ATTACK_DISTANCE), pObstacle->GetPos(),
+				GetFileData().vtxMax, pObstacle->GetFileData().vtxMax,
+				GetFileData().vtxMin, pObstacle->GetFileData().vtxMin) == true)
+			{ // XYの矩形に当たってたら
+
+				if (useful::RectangleCollisionXZ(D3DXVECTOR3(pos.x + sinf(rot.y) * ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * ATTACK_DISTANCE), pObstacle->GetPos(),
+					GetFileData().vtxMax, pObstacle->GetFileData().vtxMax,
+					GetFileData().vtxMin, pObstacle->GetFileData().vtxMin) == true)
+				{ // XZの矩形に当たってたら
+
+					// 障害物の終了処理
+					pObstacle->Uninit();
+				}
+			}
+
+			// 次のオブジェクトを代入する
+			pObstacle = pObstacle->GetNext();
+		}
 
 		//m_bAttack = true;		// 攻撃した状態にする
 	}
