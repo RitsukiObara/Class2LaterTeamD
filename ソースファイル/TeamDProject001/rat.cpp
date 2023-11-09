@@ -8,7 +8,8 @@
 // インクルードファイル
 //*******************************************
 #include "main.h"
-#include "player.h"
+#include "rat.h"
+#include "game.h"
 #include "input.h"
 #include "manager.h"
 #include "renderer.h"
@@ -23,19 +24,16 @@
 //-------------------------------------------
 #define GRAVITY		(1.0f)			// 重力
 #define ADD_MOVE_Y	(30.0f)			// 浮力
-
-//-------------------------------------------
-// 静的メンバ変数宣言
-//-------------------------------------------
-CPlayer* CPlayer::m_pPlayer = nullptr;		// プレイヤーの情報
+#define NONE_RATIDX	(-1)			// ネズミの番号の初期値
 
 //==============================
 // コンストラクタ
 //==============================
-CPlayer::CPlayer() : CModel(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
+CRat::CRat() : CModel(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 {
 	// 全ての値をクリアする
 	m_move = NONE_D3DXVECTOR3;			// 移動量
+	m_nRatIdx = NONE_RATIDX;			// ネズミの番号
 
 	m_bJump = false;					// ジャンプしたか
 	m_bLand = true;						// 着地したか
@@ -45,7 +43,7 @@ CPlayer::CPlayer() : CModel(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 //==============================
 // デストラクタ
 //==============================
-CPlayer::~CPlayer()
+CRat::~CRat()
 {
 
 }
@@ -53,7 +51,7 @@ CPlayer::~CPlayer()
 //==============================
 // 破片の初期化処理
 //==============================
-HRESULT CPlayer::Init(void)
+HRESULT CRat::Init(void)
 {
 	if (FAILED(CModel::Init()))
 	{ // 初期化処理に失敗した場合
@@ -64,6 +62,7 @@ HRESULT CPlayer::Init(void)
 
 	// 全ての値を初期化する
 	m_move = NONE_D3DXVECTOR3;			// 移動量
+	m_nRatIdx = NONE_RATIDX;			// ネズミの番号
 
 	// 値を返す
 	return S_OK;
@@ -72,19 +71,19 @@ HRESULT CPlayer::Init(void)
 //========================================
 // 破片の終了処理
 //========================================
-void CPlayer::Uninit(void)
+void CRat::Uninit(void)
 {
+	// ネズミを消去する
+	CGame::DeleteRat(m_nRatIdx);
+
 	// 終了処理
 	CModel::Uninit();
-
-	// プレイヤーの情報を NULL にする
-	m_pPlayer = nullptr;
 }
 
 //=====================================
 // 破片の更新処理
 //=====================================
-void CPlayer::Update(void)
+void CRat::Update(void)
 {
 	// 前回の位置を設定する
 	SetPosOld(GetPos());
@@ -108,7 +107,7 @@ void CPlayer::Update(void)
 //=====================================
 // 破片の描画処理
 //=====================================
-void CPlayer::Draw(void)
+void CRat::Draw(void)
 {
 	// 描画処理
 	CModel::Draw();
@@ -117,7 +116,7 @@ void CPlayer::Draw(void)
 //=====================================
 // 情報の設定処理
 //=====================================
-void CPlayer::SetData(const D3DXVECTOR3& pos)
+void CRat::SetData(const D3DXVECTOR3& pos)
 {
 	// 情報の設定処理
 	SetPos(pos);							// 位置
@@ -128,34 +127,36 @@ void CPlayer::SetData(const D3DXVECTOR3& pos)
 }
 
 //=======================================
-// 取得処理
+// ネズミの番号の設定処理
 //=======================================
-CPlayer* CPlayer::Get(void)
+void CRat::SetRatIdx(const int nIdx)
 {
-	if (m_pPlayer != nullptr)
-	{ // プレイヤーが NULL じゃない場合
+	// ネズミの番号を設定する
+	m_nRatIdx = nIdx;
+}
 
-		// プレイヤーの情報を返す
-		return m_pPlayer;
-	}
-	else
-	{ // 上記以外
-
-		// NULL を返す
-		return nullptr;
-	}
+//=======================================
+// ネズミの番号の取得処理
+//=======================================
+int CRat::GetRatIdx(void) const
+{
+	// ネズミの番号を返す
+	return m_nRatIdx;
 }
 
 //=======================================
 // 生成処理
 //=======================================
-CPlayer* CPlayer::Create(const D3DXVECTOR3& pos)
+CRat* CRat::Create(const D3DXVECTOR3& pos)
 {
-	if (m_pPlayer == nullptr)
+	// ネズミのポインタ
+	CRat* pRat = nullptr;
+
+	if (pRat == nullptr)
 	{ // オブジェクトが NULL の場合
 
 		// インスタンスを生成
-		m_pPlayer = new CPlayer;
+		pRat = new CRat;
 	}
 	else
 	{ // オブジェクトが NULL じゃない場合
@@ -167,11 +168,11 @@ CPlayer* CPlayer::Create(const D3DXVECTOR3& pos)
 		return nullptr;
 	}
 
-	if (m_pPlayer != nullptr)
+	if (pRat != nullptr)
 	{ // オブジェクトが NULL じゃない場合
 
 		// 初期化処理
-		if (FAILED(m_pPlayer->Init()))
+		if (FAILED(pRat->Init()))
 		{ // 初期化に失敗した場合
 
 			// 停止
@@ -182,7 +183,7 @@ CPlayer* CPlayer::Create(const D3DXVECTOR3& pos)
 		}
 
 		// 情報の設定処理
-		m_pPlayer->SetData(pos);
+		pRat->SetData(pos);
 	}
 	else
 	{ // オブジェクトが NULL の場合
@@ -195,13 +196,13 @@ CPlayer* CPlayer::Create(const D3DXVECTOR3& pos)
 	}
 
 	// プレイヤーのポインタを返す
-	return m_pPlayer;
+	return pRat;
 }
 
 //=======================================
 // 移動処理
 //=======================================
-void CPlayer::Move(void)
+void CRat::Move(void)
 {
 	// ローカル変数宣言
 	D3DXVECTOR3 rot = GetRot();
@@ -293,7 +294,7 @@ void CPlayer::Move(void)
 //=======================================
 // ジャンプ処理
 //=======================================
-void CPlayer::Jump(void)
+void CRat::Jump(void)
 {
 	// ローカル変数宣言
 	D3DXVECTOR3 pos = GetPos();
@@ -322,7 +323,7 @@ void CPlayer::Jump(void)
 //=======================================
 // 攻撃処理
 //=======================================
-void CPlayer::Attack(void)
+void CRat::Attack(void)
 {
 	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_J) == true && m_bAttack == false)
 	{ // Jキーを押した場合
@@ -334,7 +335,7 @@ void CPlayer::Attack(void)
 //=======================================
 // 起伏地面の当たり判定
 //=======================================
-void CPlayer::Elevation(void)
+void CRat::Elevation(void)
 {
 	// ローカル変数宣言
 	CElevation* pMesh = CElevationManager::Get()->GetTop();		// 起伏の先頭のオブジェクトを取得する
