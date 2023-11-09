@@ -228,6 +228,7 @@
     <ClCompile Include="title.cpp" />
     <ClCompile Include="title_logo.cpp" />
     <ClCompile Include="useful.cpp" />
+    <ClCompile Include="weapon_cage.cpp" />
     <ClCompile Include="weapon_selectUI.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -303,6 +304,7 @@
     <ClInclude Include="title.h" />
     <ClInclude Include="title_logo.h" />
     <ClInclude Include="useful.h" />
+    <ClInclude Include="weapon_cage.h" />
     <ClInclude Include="weapon_selectUI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
