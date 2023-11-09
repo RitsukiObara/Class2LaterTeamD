@@ -30,6 +30,7 @@ public:			// 誰でもアクセスできる
 		TYPE_RIPPLE = 0,		// 波紋
 		TYPE_KARIPLAYER,		// 仮プレイヤー
 		TYPE_WOODBLOCK,			// 木箱
+		TYPE_WEAPONCAGE,		// 武器小屋
 
 		// エディットモデル
 		TYPE_MAX,				// 全モデルの総数
