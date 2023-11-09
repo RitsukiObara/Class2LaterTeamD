@@ -49,6 +49,7 @@ void collision::ObstacleCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, c
 {
 	// ローカル変数宣言
 	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を取得する
+	bool bHit = false;		// 当たったか
 
 	while (pObstacle != nullptr)
 	{ // ブロックの情報が NULL じゃない場合
@@ -65,6 +66,7 @@ void collision::ObstacleCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, c
 
 				// 位置を設定する
 				pos.x = pObstacle->GetPos().x + +pObstacle->GetFileData().vtxMax.x + (fWidth + COLLISION_ADD_DIFF_LENGTH);
+				bHit = true;		// 当たった状態にする
 			}
 			else if (pObstacle->GetPosOld().x + pObstacle->GetFileData().vtxMin.x >= posOld.x + fWidth &&
 				pObstacle->GetPos().x + pObstacle->GetFileData().vtxMin.x <= pos.x + fWidth)
@@ -72,6 +74,7 @@ void collision::ObstacleCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, c
 
 				// 位置を設定する
 				pos.x = pObstacle->GetPos().x + +pObstacle->GetFileData().vtxMin.x - (fWidth + COLLISION_ADD_DIFF_LENGTH);
+				bHit = true;		// 当たった状態にする
 			}
 		}
 
@@ -87,6 +90,7 @@ void collision::ObstacleCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, c
 
 				// 位置を設定する
 				pos.z = pObstacle->GetPos().z + +pObstacle->GetFileData().vtxMax.z + (fDepth + COLLISION_ADD_DIFF_LENGTH);
+				bHit = true;		// 当たった状態にする
 			}
 			else if (pObstacle->GetPosOld().z + pObstacle->GetFileData().vtxMin.z >= posOld.z + fDepth &&
 				pObstacle->GetPos().z + pObstacle->GetFileData().vtxMin.z <= pos.z + fDepth)
@@ -94,6 +98,7 @@ void collision::ObstacleCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, c
 
 				// 位置を設定する
 				pos.z = pObstacle->GetPos().z + +pObstacle->GetFileData().vtxMin.z - (fDepth + COLLISION_ADD_DIFF_LENGTH);
+				bHit = true;		// 当たった状態にする
 			}
 		}
 
@@ -109,6 +114,7 @@ void collision::ObstacleCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, c
 
 				// 位置を設定する
 				pos.y = pObstacle->GetPos().y + +pObstacle->GetFileData().vtxMax.y + COLLISION_ADD_DIFF_LENGTH;
+				bHit = true;		// 当たった状態にする
 			}
 			else if (pObstacle->GetPosOld().y + pObstacle->GetFileData().vtxMin.y >= posOld.y + fHeight &&
 				pObstacle->GetPos().y + pObstacle->GetFileData().vtxMin.y <= pos.y + fHeight)
@@ -116,11 +122,119 @@ void collision::ObstacleCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, c
 
 				// 位置を設定する
 				pos.y = pObstacle->GetPos().y + +pObstacle->GetFileData().vtxMin.y - (fHeight + COLLISION_ADD_DIFF_LENGTH);
+				bHit = true;		// 当たった状態にする
 			}
 		}
 		
+		//if (bHit == true)
+		//{//当たってたら
+
+		//	// 障害物の終了処理
+		//	pObstacle->Uninit();
+		//}
+
 		// 次のオブジェクトを代入する
 		pObstacle = pObstacle->GetNext();
+		bHit = false;		// 当たってない状態にする
+
+	}
+}
+
+//===============================
+// 障害物の矩形当たり判定
+//===============================
+void collision::ObstacleRectCollision(D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth)
+{
+	// ローカル変数宣言
+	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を取得する
+	bool bHit = false;		// 当たったか
+
+	while (pObstacle != nullptr)
+	{ // ブロックの情報が NULL じゃない場合
+
+		if (pObstacle->GetPos().y + pObstacle->GetFileData().vtxMax.y >= pos.y &&
+			pObstacle->GetPos().y + pObstacle->GetFileData().vtxMin.y <= pos.y + fHeight &&
+			pObstacle->GetPos().z + pObstacle->GetFileData().vtxMax.z >= pos.z - fDepth&&
+			pObstacle->GetPos().z + pObstacle->GetFileData().vtxMin.z <= pos.z + fDepth)
+		{ // X軸の判定に入れる場合
+
+			if (/*pObstacle->GetPosOld().x + pObstacle->GetFileData().vtxMax.x <= posOld.x - fWidth &&*/
+				pObstacle->GetPos().x + pObstacle->GetFileData().vtxMax.x >= pos.x - fWidth)
+			{ // 右にぶつかった場合
+
+			  // 位置を設定する
+				//pos.x = pObstacle->GetPos().x + +pObstacle->GetFileData().vtxMax.x + (fWidth + COLLISION_ADD_DIFF_LENGTH);
+				bHit = true;		// 当たった状態にする
+			}
+			else if (/*pObstacle->GetPosOld().x + pObstacle->GetFileData().vtxMin.x >= posOld.x + fWidth &&*/
+				pObstacle->GetPos().x + pObstacle->GetFileData().vtxMin.x <= pos.x + fWidth)
+			{ // 左にぶつかった場合
+
+			  // 位置を設定する
+				//pos.x = pObstacle->GetPos().x + +pObstacle->GetFileData().vtxMin.x - (fWidth + COLLISION_ADD_DIFF_LENGTH);
+				bHit = true;		// 当たった状態にする
+			}
+		}
+
+		if (pObstacle->GetPos().x + pObstacle->GetFileData().vtxMax.x >= pos.x - fWidth &&
+			pObstacle->GetPos().x + pObstacle->GetFileData().vtxMin.x <= pos.x + fWidth &&
+			pObstacle->GetPos().y + pObstacle->GetFileData().vtxMax.y >= pos.y &&
+			pObstacle->GetPos().y + pObstacle->GetFileData().vtxMin.y <= pos.y + fHeight)
+		{ // Z軸の判定に入れる場合
+
+			if (/*pObstacle->GetPosOld().z + pObstacle->GetFileData().vtxMax.z <= posOld.z - fDepth &&*/
+				pObstacle->GetPos().z + pObstacle->GetFileData().vtxMax.z >= pos.z - fDepth)
+			{ // 奥にぶつかった場合
+
+			  // 位置を設定する
+				//pos.z = pObstacle->GetPos().z + +pObstacle->GetFileData().vtxMax.z + (fDepth + COLLISION_ADD_DIFF_LENGTH);
+				bHit = true;		// 当たった状態にする
+			}
+			else if (/*pObstacle->GetPosOld().z + pObstacle->GetFileData().vtxMin.z >= posOld.z + fDepth &&*/
+				pObstacle->GetPos().z + pObstacle->GetFileData().vtxMin.z <= pos.z + fDepth)
+			{ // 手前にぶつかった場合
+
+			  // 位置を設定する
+				//pos.z = pObstacle->GetPos().z + +pObstacle->GetFileData().vtxMin.z - (fDepth + COLLISION_ADD_DIFF_LENGTH);
+				bHit = true;		// 当たった状態にする
+			}
+		}
+
+		if (pObstacle->GetPos().x + pObstacle->GetFileData().vtxMax.x >= pos.x - fWidth &&
+			pObstacle->GetPos().x + pObstacle->GetFileData().vtxMin.x <= pos.x + fWidth &&
+			pObstacle->GetPos().z + pObstacle->GetFileData().vtxMax.z >= pos.z &&
+			pObstacle->GetPos().z + pObstacle->GetFileData().vtxMin.z <= pos.z + fDepth)
+		{ // Y軸の判定に入れる場合
+
+			if (/*pObstacle->GetPosOld().y + pObstacle->GetFileData().vtxMax.y <= posOld.y &&*/
+				pObstacle->GetPos().y + pObstacle->GetFileData().vtxMax.y >= pos.y)
+			{ // 上にぶつかった場合
+
+			  // 位置を設定する
+				//pos.y = pObstacle->GetPos().y + +pObstacle->GetFileData().vtxMax.y + COLLISION_ADD_DIFF_LENGTH;
+				bHit = true;		// 当たった状態にする
+			}
+			else if (/*pObstacle->GetPosOld().y + pObstacle->GetFileData().vtxMin.y >= posOld.y + fHeight &&*/
+				pObstacle->GetPos().y + pObstacle->GetFileData().vtxMin.y <= pos.y + fHeight)
+			{ // 下にぶつかった場合
+
+			  // 位置を設定する
+				//pos.y = pObstacle->GetPos().y + +pObstacle->GetFileData().vtxMin.y - (fHeight + COLLISION_ADD_DIFF_LENGTH);
+				bHit = true;		// 当たった状態にする
+			}
+		}
+
+		if (bHit == true)
+		{//当たってたら
+
+			// 障害物の終了処理
+			pObstacle->Uninit();
+		}
+
+		// 次のオブジェクトを代入する
+		pObstacle = pObstacle->GetNext();
+		bHit = false;		// 当たってない状態にする
+
 	}
 }
 

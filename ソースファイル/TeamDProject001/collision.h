@@ -23,6 +23,9 @@ namespace collision
 	// 障害物の当たり判定
 	void ObstacleCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth);			// 障害物の当たり判定
 
+	// 障害物の矩形の当たり判定
+	void ObstacleRectCollision(D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth);			// 障害物の当たり判定
+
 	// 起伏地面の当たり判定
 	bool ElevOutRangeCollision(D3DXVECTOR3* pPos, const D3DXVECTOR3& posOld, const float fWidth);			// 起伏地面の範囲外の当たり判定
 }

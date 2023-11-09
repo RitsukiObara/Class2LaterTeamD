@@ -17,6 +17,7 @@
 
 #include "elevation_manager.h"
 #include "objectElevation.h"
+#include "collision.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -324,11 +325,20 @@ void CPlayer::Jump(void)
 //=======================================
 void CPlayer::Attack(void)
 {
-	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_J) == true && m_bAttack == false)
+	// ローカル変数宣言
+	D3DXVECTOR3 pos = GetPos();
+	D3DXVECTOR3 posOld = GetPosOld();
+
+	//if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_J) == true/* && m_bAttack == false*/)
 	{ // Jキーを押した場合
 
-		m_bAttack = true;		// 攻撃した状態にする
+		collision::ObstacleRectCollision(pos, 50.0f, 50.0f, 50.0f);
+
+		//m_bAttack = true;		// 攻撃した状態にする
 	}
+
+	// 情報を適用する
+	SetPos(pos);
 }
 
 //=======================================
