@@ -149,6 +149,13 @@ void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight,
 
 				break;
 
+			case CObstacle::TYPE_SLIME:
+
+				// ˆÚ“®—Ê‚ğİ’è‚·‚é
+				pRat->SetSpeed(pRat->GetSpeed() * 0.7f);
+
+				break;
+
 			default:
 
 				// ’â~

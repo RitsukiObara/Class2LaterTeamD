@@ -15,6 +15,7 @@
 #include "useful.h"
 
 #include "honey.h"
+#include "slime.h"
 
 //==============================
 // コンストラクタ
@@ -173,9 +174,9 @@ void CObstacle::SetData(const D3DXVECTOR3& pos, const TYPE type)
 CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const TYPE type)
 {
 	// ローカルオブジェクトを生成
-	CObstacle* pFrac = nullptr;	// インスタンスを生成
+	CObstacle* pObstacle = nullptr;	// インスタンスを生成
 
-	if (pFrac == nullptr)
+	if (pObstacle == nullptr)
 	{ // オブジェクトが NULL の場合
 
 		switch (type)
@@ -183,7 +184,14 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const TYPE type)
 		case CObstacle::TYPE_HONEY:
 
 			// 蜂蜜を生成する
-			pFrac = new CHoney;
+			pObstacle = new CHoney;
+
+			break;
+
+		case CObstacle::TYPE_SLIME:
+
+			// スライムを生成する
+			pObstacle = new CSlime;
 
 			break;
 
@@ -205,11 +213,11 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const TYPE type)
 		return nullptr;
 	}
 
-	if (pFrac != nullptr)
+	if (pObstacle != nullptr)
 	{ // オブジェクトが NULL じゃない場合
 
 		// 初期化処理
-		if (FAILED(pFrac->Init()))
+		if (FAILED(pObstacle->Init()))
 		{ // 初期化に失敗した場合
 
 			// 停止
@@ -220,7 +228,7 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const TYPE type)
 		}
 
 		// 情報の設定処理
-		pFrac->SetData(pos, type);
+		pObstacle->SetData(pos, type);
 	}
 	else
 	{ // オブジェクトが NULL の場合
@@ -232,8 +240,8 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const TYPE type)
 		return nullptr;
 	}
 
-	// 破片のポインタを返す
-	return pFrac;
+	// 障害物のポインタを返す
+	return pObstacle;
 }
 
 //=======================================
