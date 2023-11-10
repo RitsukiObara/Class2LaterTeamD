@@ -756,8 +756,8 @@ void CCamera::PlayCamera(void)
 		CGame::GetPause()->GetPause() == false)
 	{ // ƒ|[ƒY‚ª NULL ‚¶‚á‚È‚¢ê‡
 
-		// ’ÇÕˆ—
-		Chase();
+		// í—Ş‚²‚Æ‚Ìˆ—
+		TypeProcess();
 	}
 
 #endif
