@@ -22,6 +22,19 @@ public:			// 誰でもアクセスできる
 	CRat();			// コンストラクタ
 	~CRat();			// デストラクタ
 
+	// 列挙型定義(状態)
+	typedef enum
+	{
+		STATE_NONE = 0, // 何でもない状態
+		STATE_WATE,     // 待機状態
+		STATE_RUN,      // 走行状態
+		STATE_ATACK,    // 攻撃状態
+		STATE_MUTEKI,	// 無敵状態
+		STATE_DAMAGE,	// ダメージ状態
+		STATE_DEATH,    // 死亡状態
+		STATE_MAX
+	}STATE;
+
 	// メンバ関数
 	HRESULT Init(void);		// 初期化処理
 	void Uninit(void);		// 終了処理
@@ -37,6 +50,8 @@ public:			// 誰でもアクセスできる
 	float GetSpeed(void) const;				// 速度の取得処理
 	void SetRatIdx(const int nIdx);			// ネズミの番号の設定処理
 	int GetRatIdx(void) const;				// ネズミの番号の取得処理
+	void SetState(STATE state);				// ネズミの状態の設定処理
+	STATE GetState(void);					// ネズミの状態の取得処理
 
 	// 静的メンバ関数
 	static CRat* Create(const D3DXVECTOR3& pos);		// 生成処理
@@ -60,6 +75,7 @@ private:		// 自分だけアクセスできる
 	bool m_bJump;				// ジャンプしたか
 	bool m_bLand;				// 着地したか
 	bool m_bAttack;				// 攻撃したか
+	STATE m_State;				// ネズミの状態
 };
 
 #endif
