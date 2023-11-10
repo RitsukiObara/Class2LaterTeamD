@@ -22,6 +22,7 @@
 #include "elevation_manager.h"
 #include "mesh_manager.h"
 #include "obstacle_manager.h"
+#include "block_manager.h"
 
 //--------------------------------------------
 // 静的メンバ変数宣言
@@ -53,6 +54,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	CElevationManager::Create();		// 起伏マネージャー
 	CMeshManager::Create();				// メッシュマネージャー
 	CObstacleManager::Create();			// 障害物マネージャー
+	CBlockManager::Create();			// ブロックマネージャー
 
 	if (m_pFile == nullptr)
 	{ // ファイルへのポインタが nullptr の場合
@@ -502,6 +504,7 @@ void CManager::Uninit(void)
 	CElevationManager::Get()->Uninit();		// 起伏マネージャー
 	CMeshManager::Get()->Uninit();			// メッシュマネージャー
 	CObstacleManager::Get()->Uninit();		// 障害物マネージャー
+	CBlockManager::Get()->Uninit();			// ブロックマネージャー
 
 	// マネージャーのメモリを解放する
 	delete m_pManager;
