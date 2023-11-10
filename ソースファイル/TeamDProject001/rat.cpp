@@ -15,6 +15,7 @@
 #include "renderer.h"
 #include "debugproc.h"
 #include "useful.h"
+#include "Particle.h"
 
 #include "elevation_manager.h"
 #include "objectElevation.h"
@@ -48,6 +49,7 @@ CRat::CRat() : CModel(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 	m_bJump = false;					// ジャンプしたか
 	m_bLand = true;						// 着地したか
 	m_bAttack = false;					// 攻撃したか
+	m_State = STATE_NONE;
 
 }
 
@@ -436,6 +438,8 @@ void CRat::Hit(void)
 					m_nLife--;		// 寿命減らす
 					m_nDamageCounter = 0;		// ダメージ食らうまでの時間リセット
 
+					CParticle::Create(pos, CParticle::TYPE_ENEMYDEATH); //パーティクル
+
 					if (m_nLife <= 0)
 					{ // 寿命が無いとき
 
@@ -503,4 +507,20 @@ void CRat::ObstacleCollision(void)
 
 	// 位置を設定する
 	SetPos(pos);
+}
+
+//=======================================
+// ネズミの状態の設定処理
+//=======================================
+void CRat::SetState(STATE state)
+{
+	m_State = state;
+}
+
+//=======================================
+// ネズミの状態の取得処理
+//=======================================
+CRat::STATE CRat::GetState(void)
+{
+	return m_State;
 }

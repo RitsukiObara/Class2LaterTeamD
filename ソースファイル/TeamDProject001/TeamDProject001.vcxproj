@@ -42,7 +42,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -76,6 +76,9 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <ExecutablePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x64;$(ExecutablePath)</ExecutablePath>
+    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include</IncludePath>
+    <ReferencePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x64;$(ReferencePath)</ReferencePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -107,8 +110,9 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -153,6 +157,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="block.cpp" />
+    <ClCompile Include="block_manager.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="Cat.cpp" />
     <ClCompile Include="character.cpp" />
@@ -179,6 +185,7 @@
     <ClCompile Include="logo_mark.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manager.cpp" />
+    <ClCompile Include="map.cpp" />
     <ClCompile Include="mesh_cylinder.cpp" />
     <ClCompile Include="mesh_dome.cpp" />
     <ClCompile Include="mesh_field.cpp" />
@@ -237,6 +244,8 @@
     <ClCompile Include="weapon_selectUI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="block.h" />
+    <ClInclude Include="block_manager.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="Cat.h" />
     <ClInclude Include="character.h" />
@@ -263,6 +272,7 @@
     <ClInclude Include="logo_mark.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="manager.h" />
+    <ClInclude Include="map.h" />
     <ClInclude Include="mesh_cylinder.h" />
     <ClInclude Include="mesh_dome.h" />
     <ClInclude Include="mesh_field.h" />
