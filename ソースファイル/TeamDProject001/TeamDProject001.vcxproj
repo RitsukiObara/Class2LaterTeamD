@@ -157,6 +157,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="block.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="Cat.cpp" />
     <ClCompile Include="character.cpp" />
@@ -241,6 +242,7 @@
     <ClCompile Include="weapon_selectUI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="block.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="Cat.h" />
     <ClInclude Include="character.h" />

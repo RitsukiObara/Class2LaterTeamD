@@ -61,7 +61,6 @@
     <Filter Include="Gimmick">
       <UniqueIdentifier>{16f9da42-ab31-4f91-a514-280773383f5f}</UniqueIdentifier>
     </Filter>
-
     <Filter Include="UI\WeaponSelectUI">
       <UniqueIdentifier>{f023ad43-3ac2-4525-a7fc-20769fcab501}</UniqueIdentifier>
     </Filter>
@@ -283,7 +282,6 @@
     <ClCompile Include="edit.cpp">
       <Filter>Edit</Filter>
     </ClCompile>
-
     <ClCompile Include="rat.cpp">
       <Filter>Player</Filter>
     </ClCompile>
@@ -307,6 +305,9 @@
     </ClCompile>
     <ClCompile Include="Cat.cpp">
       <Filter>Cat</Filter>
+    </ClCompile>
+    <ClCompile Include="block.cpp">
+      <Filter>Gimmick</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -547,6 +548,8 @@
     <ClInclude Include="Cat.h">
       <Filter>Cat</Filter>
     </ClInclude>
-
+    <ClInclude Include="block.h">
+      <Filter>Gimmick</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
