@@ -252,7 +252,6 @@ void CCat::AttackStateManager(void)
 	{
 	case ATTACKSTATE_MOVE:
 
-
 		CEffect::Create(m_AttackPos, NONE_D3DXVECTOR3, 1, 400.0f, CEffect::TYPE::TYPE_NONE, D3DXCOLOR(0.0f, 0.0f, 1.0f, 0.8f), true);
 
 		break;
@@ -271,6 +270,11 @@ void CCat::AttackStateManager(void)
 	case ATTACKSTATE_ATTACK:
 
 		CEffect::Create(m_AttackPos, NONE_D3DXVECTOR3, 1, 400.0f, CEffect::TYPE::TYPE_NONE, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f), true);
+
+		if (useful::CircleCollisionXZ(m_AttackPos, m_AttackPos,10.0f,10.0f) == true)
+		{
+
+		}
 
 		if (m_nAtkStateCount <= 0)
 		{//ó‘ÔƒJƒEƒ“ƒg‚ª‚O‚É‚È‚Á‚½Žž
