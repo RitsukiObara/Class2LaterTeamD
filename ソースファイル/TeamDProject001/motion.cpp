@@ -333,7 +333,15 @@ void CMotion::Load(STYLE type)
 	case TYPE_PLAYER:		// プレイヤー
 
 		// プレイヤーのモーションのロード処理
-		LoadPlayer();
+		LoadMotion("data/TXT/PlayerMotion.txt");
+
+		break;
+
+	case TYPE_CAT:			// 猫
+					
+
+		// 猫のモーションのロード処理
+		LoadMotion("data/TXT/motion_rat.txt");
 
 		break;
 
@@ -347,9 +355,9 @@ void CMotion::Load(STYLE type)
 }
 
 //============================================================
-// プレイヤーのモーションのロード処理
+// 指定されたファイルのモーションのロード処理
 //============================================================
-void CMotion::LoadPlayer(void)
+void CMotion::LoadMotion(const char *pFilename)
 {
 	// 変数を宣言
 	D3DXVECTOR3 rot;				// 向きの設定処理
@@ -365,7 +373,7 @@ void CMotion::LoadPlayer(void)
 	FILE  *pFile;							// ファイルポインタ
 
 	// ファイルを読み込み形式で開く
-	pFile = fopen("data/TXT/PlayerMotion.txt", "r");
+	pFile = fopen(pFilename, "r");
 
 	if (pFile != nullptr)
 	{ // ファイルが開けた場合

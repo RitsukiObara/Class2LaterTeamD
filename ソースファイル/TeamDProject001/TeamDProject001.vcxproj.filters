@@ -61,6 +61,9 @@
     <Filter Include="Gimmick">
       <UniqueIdentifier>{16f9da42-ab31-4f91-a514-280773383f5f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Cat">
+      <UniqueIdentifier>{2f0cfa38-123d-404e-b4b5-8fc83900d5b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="fade.cpp">
@@ -279,6 +282,9 @@
     <ClCompile Include="edit.cpp">
       <Filter>Edit</Filter>
     </ClCompile>
+    <ClCompile Include="Cat.cpp">
+      <Filter>Cat</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -496,6 +502,9 @@
     </ClInclude>
     <ClInclude Include="edit.h">
       <Filter>Edit</Filter>
+    </ClInclude>
+    <ClInclude Include="Cat.h">
+      <Filter>Cat</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

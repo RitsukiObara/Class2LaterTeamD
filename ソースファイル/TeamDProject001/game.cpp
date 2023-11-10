@@ -21,6 +21,7 @@
 #include "objectElevation.h"
 #include "skybox.h"
 #include "player.h"
+#include "Cat.h"
 #include "game_timer.h"
 #include "edit.h"
 
@@ -103,6 +104,9 @@ HRESULT CGame::Init(void)
 
 	// ƒvƒŒƒCƒ„[‚Ì¶¬
 	CPlayer::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+
+	//”L‚Ì¶¬
+	CCat::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	// ¶¬ˆ—
 	CGameTime::Create();
