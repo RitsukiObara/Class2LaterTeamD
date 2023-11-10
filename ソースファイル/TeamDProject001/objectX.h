@@ -39,6 +39,12 @@ public:			// 誰でもアクセスできる
 		TYPE_TISSUEBOX,			// ティッシュ箱
 		TYPE_CARDBOARD,			// 段ボール
 
+		//マップモデル
+		TYPE_KITCHEN,			//キッチン
+		TYPE_TAP,				//蛇口部分
+		TYPE_IH_OFF,			//IH（off）
+		TYPE_IH_ON,				//IH（on）
+
 		// 猫モデル
 		TYPE_CAT_BODY,			// 体
 		TYPE_CAT_HEAD,			// 頭

@@ -19,6 +19,7 @@
 #include "sound.h"
 
 #include "objectElevation.h"
+#include "map.h"
 #include "skybox.h"
 #include "rat.h"
 #include "Cat.h"
@@ -109,6 +110,9 @@ HRESULT CGame::Init(void)
 
 	// シーンの初期化
 	CScene::Init();
+
+	//マップの生成
+	//CMap::Create();
 
 	// ネズミの生成
 	for (int nCntRat = 0; nCntRat < MAX_RAT; nCntRat++)
