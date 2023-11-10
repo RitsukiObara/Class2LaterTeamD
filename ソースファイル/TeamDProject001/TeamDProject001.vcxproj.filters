@@ -22,9 +22,6 @@
     <Filter Include="Object">
       <UniqueIdentifier>{601aef49-8dca-4778-bef5-e18cd93358dc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Player">
-      <UniqueIdentifier>{6525e328-f0cd-4b74-aa93-2899d1a22b4c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Scene">
       <UniqueIdentifier>{4871f68b-e0b2-450e-bc5a-a3163186e2f9}</UniqueIdentifier>
     </Filter>
@@ -66,6 +63,9 @@
     </Filter>
     <Filter Include="Cat">
       <UniqueIdentifier>{2f0cfa38-123d-404e-b4b5-8fc83900d5b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rat">
+      <UniqueIdentifier>{6525e328-f0cd-4b74-aa93-2899d1a22b4c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -283,7 +283,7 @@
       <Filter>Edit</Filter>
     </ClCompile>
     <ClCompile Include="rat.cpp">
-      <Filter>Player</Filter>
+      <Filter>Rat</Filter>
     </ClCompile>
     <ClCompile Include="weapon_selectUI.cpp">
       <Filter>UI\WeaponSelectUI</Filter>
@@ -307,6 +307,9 @@
       <Filter>Cat</Filter>
     </ClCompile>
     <ClCompile Include="block.cpp">
+      <Filter>Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="block_manager.cpp">
       <Filter>Gimmick</Filter>
     </ClCompile>
   </ItemGroup>
@@ -525,7 +528,7 @@
       <Filter>Edit</Filter>
     </ClInclude>
     <ClInclude Include="rat.h">
-      <Filter>Player</Filter>
+      <Filter>Rat</Filter>
     </ClInclude>
     <ClInclude Include="weapon_selectUI.h">
       <Filter>UI\WeaponSelectUI</Filter>
@@ -549,6 +552,9 @@
       <Filter>Cat</Filter>
     </ClInclude>
     <ClInclude Include="block.h">
+      <Filter>Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="block_manager.h">
       <Filter>Gimmick</Filter>
     </ClInclude>
   </ItemGroup>
