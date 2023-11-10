@@ -43,6 +43,14 @@ public:			// 誰でもアクセスできる
 		MOTIONTYPE_MAX				// この列挙型の総数
 	};
 
+	enum ATTACKSTATE
+	{
+		ATTACKSTATE_MOVE = 0,		// 移動
+		ATTACKSTATE_STANDBY,		// スタンバイ
+		ATTACKSTATE_ATTACK,			// 攻撃中
+		ATTACKSTATE_MAX				// この列挙型の総数
+	};
+
 	CCat();				// コンストラクタ
 	~CCat();				// デストラクタ
 
@@ -55,18 +63,7 @@ public:			// 誰でもアクセスできる
 	void Hit(void);			// ヒット処理
 	void SetData(const D3DXVECTOR3& pos);		// 情報の設定処理
 
-												// セット・ゲット関係
-	void SetMove(const D3DXVECTOR3& move);		// 移動量の設定処理
-	D3DXVECTOR3 GetMove(void) const;			// 移動量の取得処理
-	void SetRotDest(const D3DXVECTOR3& rot);	// 目標の向きの設定処理
-	D3DXVECTOR3 GetRotDest(void) const;			// 目標の向きの取得処理
-	void SetSpeed(float fSpeed);				// 速度の設定処理
-	float GetSpeed(void) const;					// 速度の取得処理
-	void SetAlpha(const float fAlpha);			// 透明度の設定処理
-	void SwapAlpha(void);						// 透明度の入れ替え処理
-	float GetAlpha(void) const;					// 透明度の取得処理
-	void SetEnableMove(bool bMove);				// 移動状況の設定処理
-	bool IsMove(void) const;					// 移動状況の取得処理
+	// セット・ゲット関係
 
 	CMotion* GetMotion(void) const;				// モーションの情報の取得処理
 	CCatAct* GetAction(void) const;			// アクションの情報の取得処理
@@ -78,26 +75,24 @@ public:			// 誰でもアクセスできる
 private:		// 自分だけアクセスできる
 
 	// メンバ関数
-	void CollisionMagicWall(void);	// 移動制限判定
-
-	void StartProcess(void);		// スタート状態の処理
-	void GoalProcess(void);			// ゴール状態の処理
-	void LeaveProcess(void);		// 退場状態の処理
-	void FinishProcess(void);		// 終了状態の処理
+	void MoveAttackPos();
+	void Attack();
+	void AttackStateManager();
+	void CollisionMagicWall();
+	void DebugMessage();
 
 	// メンバ変数
 	CMotion* m_pMotion;				// モーションの情報
-	CCatAct* m_pAction;			// プレイヤーの行動の情報
+	CCatAct* m_pAction;				// プレイヤーの行動の情報
 
+	D3DXVECTOR3 m_AttackPos;		// 攻撃の位置
 	D3DXVECTOR3 m_posDest;			// 目的の位置
 	D3DXVECTOR3 m_move;				// 移動量
 	D3DXVECTOR3 m_rotDest;			// 目的の向き
 	int m_nShadowIdx;				// 影のインデックス
-	int m_nStartCount;				// スタートカウント
-	int m_nGoalCount;				// ゴール時のカウント
-	float m_fSpeed;					// 速度
-	float m_fAlpha;					// 透明度
-	bool m_bMove;					// 移動状況
+
+	ATTACKSTATE m_AttackState;		// 攻撃の状態
+	int m_nAtkStateCount;			// 攻撃の状態のカウント
 
 	// 静的メンバ変数
 	static CCat* m_pPlayer;		// プレイヤーのポインタ

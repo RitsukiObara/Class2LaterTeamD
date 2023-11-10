@@ -9,6 +9,7 @@
 //*******************************************
 #include "main.h"
 #include "block.h"
+#include "block_manager.h"
 #include "manager.h"
 #include "renderer.h"
 #include "useful.h"
@@ -19,7 +20,16 @@
 CBlock::CBlock() : CModel(CObject::TYPE_BLOCK, CObject::PRIORITY_BLOCK)
 {
 	// 全ての値をクリアする
-	m_type = TYPE_WOODBLOCK;		// 種類
+	m_type = TYPE_WOODBLOCK;	// 種類
+	m_pPrev = nullptr;			// 前のへのポインタ
+	m_pNext = nullptr;			// 次のへのポインタ
+
+	if (CBlockManager::Get() != nullptr)
+	{ // マネージャーが存在していた場合
+
+		// マネージャーへの登録処理
+		CBlockManager::Get()->Regist(this);
+	}
 }
 
 //==============================
@@ -28,6 +38,42 @@ CBlock::CBlock() : CModel(CObject::TYPE_BLOCK, CObject::PRIORITY_BLOCK)
 CBlock::~CBlock()
 {
 
+}
+
+//============================
+// 前のポインタの設定処理
+//============================
+void CBlock::SetPrev(CBlock* pPrev)
+{
+	// 前のポインタを設定する
+	m_pPrev = pPrev;
+}
+
+//============================
+// 後のポインタの設定処理
+//============================
+void CBlock::SetNext(CBlock* pNext)
+{
+	// 次のポインタを設定する
+	m_pNext = pNext;
+}
+
+//============================
+// 前のポインタの設定処理
+//============================
+CBlock* CBlock::GetPrev(void) const
+{
+	// 前のポインタを返す
+	return m_pPrev;
+}
+
+//============================
+// 次のポインタの設定処理
+//============================
+CBlock* CBlock::GetNext(void) const
+{
+	// 次のポインタを返す
+	return m_pNext;
 }
 
 //==============================
@@ -56,6 +102,17 @@ void CBlock::Uninit(void)
 {
 	// 終了処理
 	CModel::Uninit();
+
+	if (CBlockManager::Get() != nullptr)
+	{ // マネージャーが存在していた場合
+
+		// リスト構造の引き抜き処理
+		CBlockManager::Get()->Pull(this);
+	}
+
+	// リスト構造関係のポインタを NULL にする
+	m_pPrev = nullptr;
+	m_pNext = nullptr;
 }
 
 //=====================================

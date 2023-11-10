@@ -37,6 +37,12 @@ public:			// 誰でもアクセスできる
 		TYPE_HAIRBALL,			// 毬
 		TYPE_HONEYBOTTLE,		// 蜂蜜のボトル
 
+		//マップモデル
+		TYPE_KITCHEN,			//キッチン
+		TYPE_TAP,				//蛇口部分
+		TYPE_IH_OFF,			//IH（off）
+		TYPE_IH_ON,				//IH（on）
+
 		// 猫モデル
 		TYPE_CAT_BODY,			// 体
 		TYPE_CAT_HEAD,			// 頭
