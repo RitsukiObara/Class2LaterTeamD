@@ -729,13 +729,13 @@ void CCamera::PlayCamera(void)
 // ポーズ以外のカメラ
 #if 1
 
-	//if (CGame::IsEdit() == true)
-	//{ // エディット状態の場合
+	if (CGame::IsEdit() == true)
+	{ // エディット状態の場合
 
-	//	// 操作処理
-	//	Control();
-	//}
-	//else
+		// 操作処理
+		Control();
+	}
+	else
 	{ // 上記以外
 
 		if (CGame::GetPause() != nullptr &&

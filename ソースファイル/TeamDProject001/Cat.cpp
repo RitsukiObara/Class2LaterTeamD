@@ -138,7 +138,7 @@ HRESULT CCat::Init(void)
 	}
 
 	// モーションの設定処理
-	m_pMotion->Set(MOTIONTYPE_APPEAR);
+	m_pMotion->Set(MOTIONTYPE_NEUTRAL);
 
 	// 全ての値を初期化する
 	m_posDest = NONE_D3DXVECTOR3;	// 目的の位置
@@ -179,46 +179,8 @@ void CCat::Update(void)
 	// 前回の位置の設定処理
 	SetPosOld(GetPos());
 
-	switch (CGame::GetState())
-	{
-	case CGame::STATE_START:
-
-		// スタート状態の処理
-		StartProcess();
-
-		break;
-
-	case CGame::STATE_PLAY:
-
-		break;
-
-	case CGame::STATE_GOAL:
-
-		// ゴール状態の処理
-		GoalProcess();
-
-		break;
-
-	case CGame::STATE_FINISH:
-
-		// 終了状態の処理
-		FinishProcess();
-
-		break;
-
-	default:
-
-		// 停止
-		assert(false);
-
-		break;
-	}
-
 	// モーションの更新処理
 	m_pMotion->Update();
-
-	// 行動制限判定
-	CollisionMagicWall();
 
 	 // 影の位置向きの設定処理
 	CShadowCircle::SetPosRot(m_nShadowIdx, GetPos(), GetRot());
@@ -351,9 +313,9 @@ void CCat::SetData(const D3DXVECTOR3& pos)
 {
 	// 全ての値を初期化する
 	m_posDest = pos;	// 目的の位置
-	SetPos(D3DXVECTOR3(pos.x - 500.0f, pos.y + 400.0f, pos.z));		// 位置
+	SetPos(pos);		// 位置
 	SetPosOld(GetPos());			// 前回の位置
-	SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));				// 向き
+	SetRot(NONE_D3DXVECTOR3);		// 向き
 	SetScale(NONE_SCALE);			// 拡大率
 
 	m_rotDest = GetRot();	// 目的の向きを設定する
@@ -365,13 +327,13 @@ void CCat::SetData(const D3DXVECTOR3& pos)
 		GetHierarchy(nCntData)->SetPosOld(pos);										// 前回の位置
 		GetHierarchy(nCntData)->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));				// 向き
 		GetHierarchy(nCntData)->SetScale(NONE_SCALE);								// 拡大率
-		GetHierarchy(nCntData)->SetFileData(CXFile::TYPE(nCntData));				// データの設定処理
+		GetHierarchy(nCntData)->SetFileData(CXFile::TYPE(INIT_CAT + nCntData));				// データの設定処理
 	}
 
 	// ローカル変数宣言
 	CShadowCircle* pShadow = nullptr;		// 影へのポインタ
 
-											// 影の設定処理
+	// 影の設定処理
 	pShadow = CShadowCircle::Create(pos, GetRot(), 40.0f);
 
 	if (pShadow != nullptr)
@@ -382,7 +344,7 @@ void CCat::SetData(const D3DXVECTOR3& pos)
 	}
 
 	// モーションの設定処理
-	m_pMotion->Set(MOTIONTYPE_APPEAR);
+	m_pMotion->Set(MOTIONTYPE_NEUTRAL);
 
 	// カメラを設定する
 	CManager::Get()->GetCamera()->SetPosR(D3DXVECTOR3(pos.x, pos.y + START_CAMERA_POSR_Y, pos.z));

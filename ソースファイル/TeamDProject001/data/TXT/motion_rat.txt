@@ -84,7 +84,7 @@ MOTIONSET
 	LOOP = 1		# ループするかどうか[0:ループしない / 1:ループする]
 	NUM_KEY = 2		# キー数
 
-	KEYSET			# --- << KEY : 0 / 2 >> ---
+	KEYSET			# --- << KEY: 0 / 2 >> ---
 		FRAME = 50
 		KEY	# ----- [ 0 ] -----
 			POS = 0.00 0.00 0.00
@@ -117,7 +117,7 @@ MOTIONSET
 		END_KEY
 	END_KEYSET
 
-	KEYSET			# --- << KEY : 1 / 2 >> ---
+	KEYSET			# --- << KEY: 1 / 2 >> ---
 		FRAME = 51
 		KEY	# ----- [ 0 ] -----
 			POS = 0.00 0.00 0.00
@@ -159,7 +159,7 @@ MOTIONSET
 	LOOP = 1		# ループするかどうか[0:ループしない / 1:ループする]
 	NUM_KEY = 4		# キー数
 
-	KEYSET			# --- << KEY : 0 / 4 >> ---
+	KEYSET			# --- << KEY: 0 / 4 >> ---
 		FRAME = 10
 		KEY	# ----- [ 0 ] -----
 			POS = 0.00 0.00 0.00
@@ -192,7 +192,7 @@ MOTIONSET
 		END_KEY
 	END_KEYSET
 
-	KEYSET			# --- << KEY : 1 / 4 >> ---
+	KEYSET			# --- << KEY: 1 / 4 >> ---
 		FRAME = 15
 		KEY	# ----- [ 0 ] -----
 			POS = 0.00 0.00 0.00
@@ -225,7 +225,7 @@ MOTIONSET
 		END_KEY
 	END_KEYSET
 
-	KEYSET			# --- << KEY : 2 / 4 >> ---
+	KEYSET			# --- << KEY: 2 / 4 >> ---
 		FRAME = 10
 		KEY	# ----- [ 0 ] -----
 			POS = 0.00 0.00 0.00
@@ -258,7 +258,7 @@ MOTIONSET
 		END_KEY
 	END_KEYSET
 
-	KEYSET			# --- << KEY : 3 / 4 >> ---
+	KEYSET			# --- << KEY: 3 / 4 >> ---
 		FRAME = 15
 		KEY	# ----- [ 0 ] -----
 			POS = 0.00 0.00 0.00
@@ -299,7 +299,7 @@ MOTIONSET
 	LOOP = 1		# ループするかどうか[0:ループしない / 1:ループする]
 	NUM_KEY = 2		# キー数
 
-	KEYSET			# --- << KEY : 0 / 2 >> ---
+	KEYSET			# --- << KEY: 0 / 2 >> ---
 		FRAME = 20
 		KEY	# ----- [ 0 ] -----
 			POS = 0.00 0.00 0.00
@@ -332,7 +332,7 @@ MOTIONSET
 		END_KEY
 	END_KEYSET
 
-	KEYSET			# --- << KEY : 1 / 2 >> ---
+	KEYSET			# --- << KEY: 1 / 2 >> ---
 		FRAME = 40
 		KEY	# ----- [ 0 ] -----
 			POS = 0.00 0.00 0.00
