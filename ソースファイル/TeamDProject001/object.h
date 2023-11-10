@@ -54,7 +54,7 @@ public:			// 誰でもアクセスできる
 		TYPE_WEAPONCAGE,		// 武器小屋
 		TYPE_WEAPONBALLOON,		// 武器のふきだし
 		TYPE_BLOCK,				// ブロック
-		TYPE_MAP				//マップ
+		TYPE_MAP,				//マップ
 		TYPE_MAX				// この列挙型の総数
 	};
 

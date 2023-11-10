@@ -112,7 +112,7 @@ HRESULT CGame::Init(void)
 	CScene::Init();
 
 	//マップの生成
-	CMap::Create();
+	//CMap::Create();
 
 	// ネズミの生成
 	for (int nCntRat = 0; nCntRat < MAX_RAT; nCntRat++)
