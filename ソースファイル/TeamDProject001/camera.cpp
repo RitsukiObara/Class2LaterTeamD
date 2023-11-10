@@ -729,13 +729,13 @@ void CCamera::PlayCamera(void)
 // ポーズ以外のカメラ
 #if 1
 
-	//if (CGame::IsEdit() == true)
-	//{ // エディット状態の場合
+	if (CGame::IsEdit() == true)
+	{ // エディット状態の場合
 
-	//	// 操作処理
-	//	Control();
-	//}
-	//else
+		// 操作処理
+		Control();
+	}
+	else
 	{ // 上記以外
 
 		if (CGame::GetPause() != nullptr &&
@@ -860,8 +860,8 @@ void CCamera::NoneCamera(void)
 
 	// 目的の視点を設定する
 	m_posVDest.x = 0.0f;
-	m_posVDest.y = 3000.0f;
-	m_posVDest.z = -100.0f;
+	m_posVDest.y = 2000.0f;
+	m_posVDest.z = -2000.0f;
 
 	// 注視点を補正
 	m_posR.x += (m_posRDest.x - m_posR.x) * CORRECT_POSR;

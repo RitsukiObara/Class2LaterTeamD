@@ -21,6 +21,7 @@
 #include "objectElevation.h"
 #include "skybox.h"
 #include "rat.h"
+#include "Cat.h"
 #include "game_timer.h"
 #include "edit.h"
 #include "weapon_selectUI.h"
@@ -114,7 +115,10 @@ HRESULT CGame::Init(void)
 		m_apRat[nCntRat]->SetRatIdx(nCntRat);											// ネズミの番号を設定する
 	}
 
-	// タイマーの生成処理
+	//猫の生成
+	CCat::Create(D3DXVECTOR3(400.0f, 0.0f, 400.0f));
+
+	// 生成処理
 	CGameTime::Create();
 
 	// 武器選択UIを生成
@@ -253,8 +257,8 @@ void CGame::Update(void)
 			CObject::DeathDecision(nCnt);
 		}
 
-		if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_F8) == true)
-		{ // F8キーを押した場合
+		if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_F9) == true)
+		{ // F9キーを押した場合
 
 			// 情報をセーブする
 			CManager::Get()->GetFile()->Save(CFile::TYPE_OBSTACLE);
