@@ -70,6 +70,12 @@
     <Filter Include="Map">
       <UniqueIdentifier>{8863d5a5-bcd2-4f27-a1ee-0d3618800a6b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Gimmick\Block">
+      <UniqueIdentifier>{96053638-e013-439a-b50c-fb7048d8b7fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gimmick\Obstacle">
+      <UniqueIdentifier>{c2ffa712-7635-4505-a018-0be269887b9d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="fade.cpp">
@@ -276,12 +282,6 @@
     <ClCompile Include="game_timer.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="obstacle.cpp">
-      <Filter>Gimmick</Filter>
-    </ClCompile>
-    <ClCompile Include="obstacle_manager.cpp">
-      <Filter>Gimmick</Filter>
-    </ClCompile>
     <ClCompile Include="edit.cpp">
       <Filter>Edit</Filter>
     </ClCompile>
@@ -297,26 +297,32 @@
     <ClCompile Include="weapon_balloon.cpp">
       <Filter>UI\WeaponSelectUI</Filter>
     </ClCompile>
-    <ClCompile Include="honey.cpp">
-      <Filter>Gimmick</Filter>
-    </ClCompile>
-    <ClCompile Include="slime.cpp">
-      <Filter>Gimmick</Filter>
-    </ClCompile>
-    <ClCompile Include="hairball.cpp">
-      <Filter>Gimmick</Filter>
-    </ClCompile>
     <ClCompile Include="Cat.cpp">
       <Filter>Cat</Filter>
     </ClCompile>
-    <ClCompile Include="block.cpp">
-      <Filter>Gimmick</Filter>
-    </ClCompile>
-    <ClCompile Include="block_manager.cpp">
-      <Filter>Gimmick</Filter>
-    </ClCompile>
     <ClCompile Include="map.cpp">
       <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="block.cpp">
+      <Filter>Gimmick\Block</Filter>
+    </ClCompile>
+    <ClCompile Include="block_manager.cpp">
+      <Filter>Gimmick\Block</Filter>
+    </ClCompile>
+    <ClCompile Include="hairball.cpp">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="honey.cpp">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="obstacle.cpp">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="obstacle_manager.cpp">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="slime.cpp">
+      <Filter>Gimmick\Obstacle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -524,12 +530,6 @@
     <ClInclude Include="game_timer.h">
       <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="obstacle.h">
-      <Filter>Gimmick</Filter>
-    </ClInclude>
-    <ClInclude Include="obstacle_manager.h">
-      <Filter>Gimmick</Filter>
-    </ClInclude>
     <ClInclude Include="edit.h">
       <Filter>Edit</Filter>
     </ClInclude>
@@ -545,26 +545,32 @@
     <ClInclude Include="weapon_balloon.h">
       <Filter>UI\WeaponSelectUI</Filter>
     </ClInclude>
-    <ClInclude Include="honey.h">
-      <Filter>Gimmick</Filter>
-    </ClInclude>
-    <ClInclude Include="slime.h">
-      <Filter>Gimmick</Filter>
-    </ClInclude>
-    <ClInclude Include="hairball.h">
-      <Filter>Gimmick</Filter>
-    </ClInclude>
     <ClInclude Include="Cat.h">
       <Filter>Cat</Filter>
     </ClInclude>
-    <ClInclude Include="block.h">
-      <Filter>Gimmick</Filter>
-    </ClInclude>
-    <ClInclude Include="block_manager.h">
-      <Filter>Gimmick</Filter>
-    </ClInclude>
     <ClInclude Include="map.h">
       <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="block.h">
+      <Filter>Gimmick\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="block_manager.h">
+      <Filter>Gimmick\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="hairball.h">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="honey.h">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="obstacle.h">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="obstacle_manager.h">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="slime.h">
+      <Filter>Gimmick\Obstacle</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -127,7 +127,7 @@ HRESULT CGame::Init(void)
 	CWeaponSelectUI::Create();
 
 	// ブロックの設置
-	CBlock::Create(D3DXVECTOR3(400.0f, 0.0f, -400.0f), NONE_D3DXVECTOR3, CBlock::TYPE::TYPE_WOODBLOCK);
+	CBlock::Create(D3DXVECTOR3(400.0f, 0.0f, -400.0f), NONE_D3DXVECTOR3, CBlock::TYPE::TYPE_CARDBOARD);
 
 	// 情報の初期化
 	m_nFinishCount = 0;				// 終了カウント

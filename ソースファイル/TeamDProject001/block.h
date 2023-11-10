@@ -22,7 +22,7 @@ public:			// 誰でもアクセスできる
 	// 列挙型定義(種類)
 	enum TYPE
 	{
-		TYPE_WOODBLOCK = 0,		// 木箱
+		TYPE_CARDBOARD = 0,		// 段ボール
 		TYPE_MAX				// この列挙型の総数
 	};
 

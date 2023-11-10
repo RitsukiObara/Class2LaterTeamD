@@ -36,6 +36,8 @@ public:			// 誰でもアクセスできる
 		TYPE_SLIME,				// スライム
 		TYPE_HAIRBALL,			// 毬
 		TYPE_HONEYBOTTLE,		// 蜂蜜のボトル
+		TYPE_TISSUEBOX,			// ティッシュ箱
+		TYPE_CARDBOARD,			// 段ボール
 
 		// 猫モデル
 		TYPE_CAT_BODY,			// 体
