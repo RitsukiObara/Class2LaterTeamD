@@ -20,7 +20,7 @@
 CBlock::CBlock() : CModel(CObject::TYPE_BLOCK, CObject::PRIORITY_BLOCK)
 {
 	// 全ての値をクリアする
-	m_type = TYPE_WOODBLOCK;	// 種類
+	m_type = TYPE_CARDBOARD;	// 種類
 	m_pPrev = nullptr;			// 前のへのポインタ
 	m_pNext = nullptr;			// 次のへのポインタ
 
@@ -77,7 +77,7 @@ CBlock* CBlock::GetNext(void) const
 }
 
 //==============================
-// 破片の初期化処理
+// 初期化処理
 //==============================
 HRESULT CBlock::Init(void)
 {
@@ -89,14 +89,14 @@ HRESULT CBlock::Init(void)
 	}
 
 	// 全ての値を初期化する
-	m_type = TYPE_WOODBLOCK;		// 種類
+	m_type = TYPE_CARDBOARD;		// 種類
 
 	// 値を返す
 	return S_OK;
 }
 
 //========================================
-// 破片の終了処理
+// 終了処理
 //========================================
 void CBlock::Uninit(void)
 {
@@ -116,7 +116,7 @@ void CBlock::Uninit(void)
 }
 
 //=====================================
-// 破片の更新処理
+// 更新処理
 //=====================================
 void CBlock::Update(void)
 {
@@ -124,7 +124,7 @@ void CBlock::Update(void)
 }
 
 //=====================================
-// 破片の描画処理
+// 描画処理
 //=====================================
 void CBlock::Draw(void)
 {
@@ -142,10 +142,26 @@ void CBlock::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE 
 	SetPosOld(pos);							// 前回の位置
 	SetRot(rot);							// 向き
 	SetScale(NONE_SCALE);					// 拡大率
-	SetFileData(CXFile::TYPE_WOODBLOCK);	// モデルの情報
 
 	// 全ての値を初期化する
 	m_type = type;			// 種類
+
+	switch (m_type)
+	{
+	case CBlock::TYPE_CARDBOARD:
+
+		// 段ボール
+		SetFileData(CXFile::TYPE_WOODBLOCK);	// モデルの情報
+
+		break;
+
+	default:
+
+		// 停止
+		assert(false);
+
+		break;
+	}
 }
 
 //=====================================

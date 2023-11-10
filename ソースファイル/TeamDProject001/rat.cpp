@@ -505,6 +505,9 @@ void CRat::ObstacleCollision(void)
 	// 障害物との衝突判定
 	collision::ObstacleCollision(pos, GetPosOld(), SIZE.x, SIZE.y, SIZE.z);
 
+	// ブロックとの当たり判定
+	collision::BlockCollision(pos, GetPosOld(), SIZE.x, SIZE.y, SIZE.z);
+
 	// 位置を設定する
 	SetPos(pos);
 }
