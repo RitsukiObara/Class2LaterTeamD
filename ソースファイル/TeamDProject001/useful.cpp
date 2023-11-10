@@ -247,7 +247,7 @@ float useful::InnerProduct(const D3DXVECTOR3 VecMove, const D3DXVECTOR3 VecNor)
 //======================
 // 外積の当たり判定処理(XZ軸版)
 //======================
-bool useful::CollisionOuterProductXZ(D3DXVECTOR3& Targetpos, D3DXVECTOR3& TargetposOld, const D3DXVECTOR3 posRight, const D3DXVECTOR3 posLeft)
+bool useful::CollisionOuterProductXZ(D3DXVECTOR3& Targetpos, const D3DXVECTOR3& TargetposOld, const D3DXVECTOR3 posRight, const D3DXVECTOR3 posLeft)
 {
 	// ローカル変数宣言
 	D3DXVECTOR3 vecMove, vecLine, vecTopos, posCross;	// 外積の変数
@@ -306,7 +306,7 @@ bool useful::CollisionOuterProductXZ(D3DXVECTOR3& Targetpos, D3DXVECTOR3& Target
 //======================
 // 外積の当たり判定処理(XY軸版)
 //======================
-bool useful::CollisionOuterProductXY(D3DXVECTOR3& Targetpos, D3DXVECTOR3& TargetposOld, const D3DXVECTOR3 posRight, const D3DXVECTOR3 posLeft)
+bool useful::CollisionOuterProductXY(D3DXVECTOR3& Targetpos, const D3DXVECTOR3& TargetposOld, const D3DXVECTOR3 posRight, const D3DXVECTOR3 posLeft)
 {
 	// ローカル変数宣言
 	D3DXVECTOR3 vecMove, vecLine, vecTopos, posCross;	// 外積の変数

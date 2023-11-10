@@ -77,7 +77,7 @@ CBlock* CBlock::GetNext(void) const
 }
 
 //==============================
-// 破片の初期化処理
+// 初期化処理
 //==============================
 HRESULT CBlock::Init(void)
 {
@@ -96,7 +96,7 @@ HRESULT CBlock::Init(void)
 }
 
 //========================================
-// 破片の終了処理
+// 終了処理
 //========================================
 void CBlock::Uninit(void)
 {
@@ -116,7 +116,7 @@ void CBlock::Uninit(void)
 }
 
 //=====================================
-// 破片の更新処理
+// 更新処理
 //=====================================
 void CBlock::Update(void)
 {
@@ -124,7 +124,7 @@ void CBlock::Update(void)
 }
 
 //=====================================
-// 破片の描画処理
+// 描画処理
 //=====================================
 void CBlock::Draw(void)
 {
@@ -151,7 +151,7 @@ void CBlock::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE 
 	case CBlock::TYPE_CARDBOARD:
 
 		// 段ボール
-		SetFileData(CXFile::TYPE_CARDBOARD);	// モデルの情報
+		SetFileData(CXFile::TYPE_WOODBLOCK);	// モデルの情報
 
 		break;
 
