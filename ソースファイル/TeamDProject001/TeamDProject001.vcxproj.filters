@@ -64,6 +64,9 @@
     <Filter Include="UI\WeaponSelectUI">
       <UniqueIdentifier>{f023ad43-3ac2-4525-a7fc-20769fcab501}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Cat">
+      <UniqueIdentifier>{2f0cfa38-123d-404e-b4b5-8fc83900d5b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="fade.cpp">
@@ -300,6 +303,12 @@
     <ClCompile Include="hairball.cpp">
       <Filter>Gimmick</Filter>
     </ClCompile>
+    <ClCompile Include="Cat.cpp">
+      <Filter>Cat</Filter>
+    </ClCompile>
+    <ClCompile Include="block.cpp">
+      <Filter>Gimmick</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -534,6 +543,12 @@
       <Filter>Gimmick</Filter>
     </ClInclude>
     <ClInclude Include="hairball.h">
+      <Filter>Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="Cat.h">
+      <Filter>Cat</Filter>
+    </ClInclude>
+    <ClInclude Include="block.h">
       <Filter>Gimmick</Filter>
     </ClInclude>
   </ItemGroup>

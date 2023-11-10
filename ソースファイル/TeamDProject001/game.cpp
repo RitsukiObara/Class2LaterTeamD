@@ -21,9 +21,11 @@
 #include "objectElevation.h"
 #include "skybox.h"
 #include "rat.h"
+#include "Cat.h"
 #include "game_timer.h"
 #include "edit.h"
 #include "weapon_selectUI.h"
+#include "block.h"
 
 //--------------------------------------------
 // マクロ定義
@@ -108,17 +110,24 @@ HRESULT CGame::Init(void)
 	// シーンの初期化
 	CScene::Init();
 
+	// ネズミの生成
 	for (int nCntRat = 0; nCntRat < MAX_RAT; nCntRat++)
 	{
 		m_apRat[nCntRat] = CRat::Create(D3DXVECTOR3(500.0f * nCntRat, 0.0f, 0.0f));		// ネズミの情報
 		m_apRat[nCntRat]->SetRatIdx(nCntRat);											// ネズミの番号を設定する
 	}
 
-	// タイマーの生成処理
+	//猫の生成
+	CCat::Create(D3DXVECTOR3(400.0f, 0.0f, 400.0f));
+
+	// 生成処理
 	CGameTime::Create();
 
 	// 武器選択UIを生成
 	CWeaponSelectUI::Create();
+
+	// ブロックの設置
+	CBlock::Create(D3DXVECTOR3(400.0f, 0.0f, -400.0f), NONE_D3DXVECTOR3, CBlock::TYPE::TYPE_WOODBLOCK);
 
 	// 情報の初期化
 	m_nFinishCount = 0;				// 終了カウント
@@ -253,8 +262,8 @@ void CGame::Update(void)
 			CObject::DeathDecision(nCnt);
 		}
 
-		if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_F8) == true)
-		{ // F8キーを押した場合
+		if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_F9) == true)
+		{ // F9キーを押した場合
 
 			// 情報をセーブする
 			CManager::Get()->GetFile()->Save(CFile::TYPE_OBSTACLE);

@@ -27,6 +27,7 @@ public:			// 誰でもアクセスできる
 	enum STYLE
 	{
 		TYPE_PLAYER = 0,			// プレイヤー
+		TYPE_CAT,					// 猫
 		TYPE_MAX					// この列挙型の総数
 	};
 
@@ -78,6 +79,7 @@ public:			// 誰でもアクセスできる
 	void SetModel(CHierarchy **ppHier, int nNumModel);	// モデルの設定処理
 	void Load(STYLE type);								// モーションのロード処理
 	void LoadPlayer(void);								// プレイヤーのモーションのロード処理
+	void LoadMotion(const char *pFilename);				// 指定されたファイルのモーションのロード処理
 
 	// 静的メンバ関数
 	static CMotion* Create();							// モーションの生成処理

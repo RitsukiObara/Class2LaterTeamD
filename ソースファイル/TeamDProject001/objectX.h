@@ -13,6 +13,7 @@
 #define INIT_VTX_MIN	(D3DXVECTOR3( 9999.0f,  9999.0f,  9999.0f))		// モデルの最小の頂点座標の初期値
 #define INIT_VTX_MAX	(D3DXVECTOR3(-9999.0f, -9999.0f, -9999.0f))		// モデルの最大の頂点座標の初期値
 #define INIT_SIZE		(D3DXVECTOR3(0.0f, 0.0f, 0.0f))					// モデルサイズの初期値
+#define INIT_CAT		(CXFile::TYPE_CAT_BODY)							// 猫モデルの開始位置
 
 //------------------------------------------------------------
 // クラス定義(Xファイル)
@@ -35,6 +36,14 @@ public:			// 誰でもアクセスできる
 		TYPE_SLIME,				// スライム
 		TYPE_HAIRBALL,			// 毬
 		TYPE_HONEYBOTTLE,		// 蜂蜜のボトル
+
+		// 猫モデル
+		TYPE_CAT_BODY,			// 体
+		TYPE_CAT_HEAD,			// 頭
+		TYPE_CAT_LHAND,			// 左手
+		TYPE_CAT_RHAND,			// 右手
+		TYPE_CAT_LLEG,			// 左足
+		TYPE_CAT_RLEG,			// 右足
 
 		// エディットモデル
 		TYPE_MAX,				// 全モデルの総数

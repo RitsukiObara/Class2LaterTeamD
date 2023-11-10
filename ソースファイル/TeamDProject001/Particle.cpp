@@ -290,7 +290,7 @@ void CParticle::InitEnemyDeath(const D3DXVECTOR3& pos)
 		nLife = rand() % 10 + 20;
 
 		// 半径を設定する
-		fRadius = (float)(rand() % 10 + 15);
+		fRadius = (float)(rand() % 800 + 15);
 
 		// エフェクトの生成処理
 		CEffect::Create

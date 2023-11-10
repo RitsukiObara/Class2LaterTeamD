@@ -15,6 +15,7 @@
 #include "renderer.h"
 #include "debugproc.h"
 #include "useful.h"
+#include "Particle.h"
 
 #include "elevation_manager.h"
 #include "objectElevation.h"
@@ -435,6 +436,8 @@ void CRat::Hit(void)
 
 					m_nLife--;		// 寿命減らす
 					m_nDamageCounter = 0;		// ダメージ食らうまでの時間リセット
+
+					CParticle::Create(pos, CParticle::TYPE_ENEMYDEATH); //パーティクル
 
 					if (m_nLife <= 0)
 					{ // 寿命が無いとき
