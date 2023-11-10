@@ -860,8 +860,8 @@ void CCamera::NoneCamera(void)
 
 	// –Ú“I‚Ì‹“_‚ğİ’è‚·‚é
 	m_posVDest.x = 0.0f;
-	m_posVDest.y = 3000.0f;
-	m_posVDest.z = -100.0f;
+	m_posVDest.y = 2000.0f;
+	m_posVDest.z = -2000.0f;
 
 	// ’‹“_‚ğ•â³
 	m_posR.x += (m_posRDest.x - m_posR.x) * CORRECT_POSR;

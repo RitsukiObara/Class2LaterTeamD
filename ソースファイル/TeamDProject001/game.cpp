@@ -257,8 +257,8 @@ void CGame::Update(void)
 			CObject::DeathDecision(nCnt);
 		}
 
-		if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_F8) == true)
-		{ // F8キーを押した場合
+		if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_F9) == true)
+		{ // F9キーを押した場合
 
 			// 情報をセーブする
 			CManager::Get()->GetFile()->Save(CFile::TYPE_OBSTACLE);
