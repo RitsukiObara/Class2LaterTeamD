@@ -50,6 +50,9 @@ public:			// 誰でもアクセスできる
 		TYPE_CAT,				// 猫
 		TYPE_OBSTACLE,			// 障害物
 		TYPE_EDIT,				// エディット
+		TYPE_WEAPONSELECTUI,	// 武器選択画面UI
+		TYPE_WEAPONCAGE,		// 武器小屋
+		TYPE_WEAPONBALLOON,		// 武器のふきだし
 		TYPE_MAX				// この列挙型の総数
 	};
 

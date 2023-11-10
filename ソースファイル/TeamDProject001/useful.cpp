@@ -135,13 +135,38 @@ bool useful::CircleCollisionXZ(const D3DXVECTOR3& pos0, const D3DXVECTOR3& pos1,
 	if (fLength <= (fRadius0 * fRadius1))
 	{ // オブジェクトが当たった場合
 
-	  // true を返す
+		// true を返す
 		return true;
 	}
 	else
 	{ // オブジェクトが当たっていない場合
 
-	  // false を返す
+		// false を返す
+		return false;
+	}
+}
+
+//======================
+// 円の当たり判定(YZ平面)
+//======================
+bool useful::CircleCollisionYZ(const D3DXVECTOR3& pos0, const D3DXVECTOR3& pos1, const float fRadius0, const float fRadius1)
+{
+	// ローカル変数宣言
+	float fLength;
+
+	// 円の範囲を算出
+	fLength = (pos1.y - pos0.y) * (pos1.y - pos0.y) + (pos1.z - pos0.z) * (pos1.z - pos0.z);
+
+	if (fLength <= (fRadius0 * fRadius1))
+	{ // オブジェクトが当たった場合
+
+		// true を返す
+		return true;
+	}
+	else
+	{ // オブジェクトが当たっていない場合
+
+		// false を返す
 		return false;
 	}
 }

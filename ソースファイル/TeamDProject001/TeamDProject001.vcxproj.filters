@@ -61,6 +61,10 @@
     <Filter Include="Gimmick">
       <UniqueIdentifier>{16f9da42-ab31-4f91-a514-280773383f5f}</UniqueIdentifier>
     </Filter>
+
+    <Filter Include="UI\WeaponSelectUI">
+      <UniqueIdentifier>{f023ad43-3ac2-4525-a7fc-20769fcab501}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Cat">
       <UniqueIdentifier>{2f0cfa38-123d-404e-b4b5-8fc83900d5b0}</UniqueIdentifier>
     </Filter>
@@ -131,9 +135,6 @@
     </ClCompile>
     <ClCompile Include="objectX.cpp">
       <Filter>Object</Filter>
-    </ClCompile>
-    <ClCompile Include="player.cpp">
-      <Filter>Player</Filter>
     </ClCompile>
     <ClCompile Include="game.cpp">
       <Filter>Scene\Game</Filter>
@@ -282,6 +283,28 @@
     <ClCompile Include="edit.cpp">
       <Filter>Edit</Filter>
     </ClCompile>
+
+    <ClCompile Include="rat.cpp">
+      <Filter>Player</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_selectUI.cpp">
+      <Filter>UI\WeaponSelectUI</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_cage.cpp">
+      <Filter>UI\WeaponSelectUI</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_balloon.cpp">
+      <Filter>UI\WeaponSelectUI</Filter>
+    </ClCompile>
+    <ClCompile Include="honey.cpp">
+      <Filter>Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="slime.cpp">
+      <Filter>Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="hairball.cpp">
+      <Filter>Gimmick</Filter>
+    </ClCompile>
     <ClCompile Include="Cat.cpp">
       <Filter>Cat</Filter>
     </ClCompile>
@@ -352,9 +375,6 @@
     </ClInclude>
     <ClInclude Include="objectX.h">
       <Filter>Object</Filter>
-    </ClInclude>
-    <ClInclude Include="player.h">
-      <Filter>Player</Filter>
     </ClInclude>
     <ClInclude Include="game.h">
       <Filter>Scene\Game</Filter>
@@ -503,8 +523,30 @@
     <ClInclude Include="edit.h">
       <Filter>Edit</Filter>
     </ClInclude>
+    <ClInclude Include="rat.h">
+      <Filter>Player</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_selectUI.h">
+      <Filter>UI\WeaponSelectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_cage.h">
+      <Filter>UI\WeaponSelectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_balloon.h">
+      <Filter>UI\WeaponSelectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="honey.h">
+      <Filter>Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="slime.h">
+      <Filter>Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="hairball.h">
+      <Filter>Gimmick</Filter>
+    </ClInclude>
     <ClInclude Include="Cat.h">
       <Filter>Cat</Filter>
     </ClInclude>
+
   </ItemGroup>
 </Project>

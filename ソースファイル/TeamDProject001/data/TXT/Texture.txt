@@ -6,6 +6,7 @@
 #===========================================================
 
 # テクスチャの情報
+TEXTURE = data\TEXTURE\Balloon.png			# ふきだし
 TEXTURE = data\TEXTURE\Dstr001.png			# 撃破(トゲトゲ)
 TEXTURE = data\TEXTURE\Dstr002.png			# 撃破(フワフワ)
 TEXTURE = data\TEXTURE\Dstr003.png			# 撃破(爆発)
@@ -20,6 +21,7 @@ TEXTURE = data\TEXTURE\PauseTitle.png		# タイトル
 TEXTURE = data\TEXTURE\Rank.png				# 順位
 TEXTURE = data\TEXTURE\RankingWord.png		# ランキングの文字
 TEXTURE = data\TEXTURE\SkyBox.jpg			# スカイボックス
+TEXTURE = data\TEXTURE\TimeCoron.png		# タイムのコロン
 TEXTURE = data\TEXTURE\TimeNumber.png		# タイムの数字
 TEXTURE = data\TEXTURE\TitleLogo.png		# タイトルロゴ
 

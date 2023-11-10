@@ -10,7 +10,7 @@
 //-------------------------------------------
 // インクルードファイル
 //-------------------------------------------
-#include "main.h"
+#include "object.h"
 
 //-------------------------------------------
 // 前方宣言
@@ -51,14 +51,14 @@ public:		// 誰でもアクセスできる
 		D3DXVECTOR3 size;		// サイズ
 	};
 
-	CPause();					// コンストラクタ
-	virtual ~CPause();			// デストラクタ
+	CPause();				// コンストラクタ
+	~CPause();				// デストラクタ
 
 	// メンバ関数
-	virtual HRESULT Init(void);	// 初期化処理
-	virtual void Uninit(void);	// 終了処理
-	virtual void Update(void);	// 更新処理
-	virtual void Draw(void);	// 描画処理
+	HRESULT Init(void);	// 初期化処理
+	void Uninit(void);	// 終了処理
+	void Update(void);	// 更新処理
+	void Draw(void);	// 描画処理
 
 	// セット・ゲット関係
 	void SetPause(const bool bPause);		// ポーズ状況の設定処理

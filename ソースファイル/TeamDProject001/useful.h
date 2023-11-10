@@ -24,6 +24,7 @@ namespace useful
 	void ColReverse(float *pData);													// 1.0f‚Æ0.0f‚ğ”½“]‚·‚éˆ—
 	bool CircleCollisionXY(const D3DXVECTOR3& pos0, const D3DXVECTOR3& pos1, const float fRadius0, const float fRadius1);		// ‰~‚Ì“–‚½‚è”»’è(XY•½–Ê)
 	bool CircleCollisionXZ(const D3DXVECTOR3& pos0, const D3DXVECTOR3& pos1, const float fRadius0, const float fRadius1);		// ‰~‚Ì“–‚½‚è”»’è(XZ•½–Ê)
+	bool CircleCollisionYZ(const D3DXVECTOR3& pos0, const D3DXVECTOR3& pos1, const float fRadius0, const float fRadius1);		// ‰~‚Ì“–‚½‚è”»’è(YZ•½–Ê)
 	float LineOuterProductXZ(D3DXVECTOR3 posLeft, D3DXVECTOR3 posRight, D3DXVECTOR3 pos);										// ŠOÏ‚Ì¶‰E”»’fˆ—(XZ•½–Ê)
 	float LineOuterProductXY(D3DXVECTOR3 posUp, D3DXVECTOR3 posDown, D3DXVECTOR3 pos);											// ŠOÏ‚Ì¶‰E”»’fˆ—(XY•½–Ê)
 	void NormalizeVector(D3DXVECTOR3& nor, const D3DXVECTOR3& posRight, const D3DXVECTOR3& posLeft, const D3DXVECTOR3& pos);	// –@ü‚ÌŒvZ(³‹K‰»)

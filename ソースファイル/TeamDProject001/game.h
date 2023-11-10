@@ -13,10 +13,16 @@
 #include "scene.h"
 
 //--------------------------------------------
+// マクロ定義
+//--------------------------------------------
+#define MAX_RAT			(3)		// ネズミの最大数
+
+//--------------------------------------------
 // 前方宣言
 //--------------------------------------------
 class CPause;			// ポーズ
 class CEdit;			// エディット
+class CRat;				// ネズミ
 
 //--------------------------------------------
 // クラス(ゲームクラス)
@@ -54,6 +60,7 @@ public:						// 誰でもアクセスできる
 
 	// NULL化処理
 	static void DeletePause(void);		// ポーズのNULL化処理
+	static void DeleteRat(int nIdx);	// ネズミのNULL化処理
 
 // デバッグ版
 #ifdef _DEBUG
@@ -69,6 +76,7 @@ private:					// 自分だけアクセスできる
 
 	// 静的メンバ変数(最初から必要な物を配置しておく)
 	static CPause* m_pPause;			// ポーズの情報
+	static CRat* m_apRat[MAX_RAT];		// ネズミの情報
 	static STATE m_GameState;			// ゲームの進行状態
 	static int m_nFinishCount;			// 終了カウント
 

@@ -11,6 +11,7 @@
 // インクルードファイル
 //***********************************
 #include "model.h"
+#include "obstacle.h"
 
 //-----------------------------------
 // クラス定義(エディット)
@@ -52,7 +53,8 @@ private:		// 自分だけアクセスできる
 	void DeleteObstacle(void);	// 障害物の消去処理
 
 	// メンバ変数宣言
-	TYPE m_type;			// 種類
+	TYPE m_type;					// 種類
+	CObstacle::TYPE m_obstacleType;	// 障害物の種類
 };
 
 #endif

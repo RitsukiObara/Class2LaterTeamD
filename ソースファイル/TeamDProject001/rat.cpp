@@ -8,7 +8,8 @@
 // インクルードファイル
 //*******************************************
 #include "main.h"
-#include "player.h"
+#include "rat.h"
+#include "game.h"
 #include "input.h"
 #include "manager.h"
 #include "renderer.h"
@@ -17,35 +18,43 @@
 
 #include "elevation_manager.h"
 #include "objectElevation.h"
+#include "obstacle_manager.h"
+#include "obstacle.h"
+#include "collision.h"
 
 //-------------------------------------------
 // マクロ定義
 //-------------------------------------------
 #define GRAVITY		(1.0f)			// 重力
 #define ADD_MOVE_Y	(30.0f)			// 浮力
-
-//-------------------------------------------
-// 静的メンバ変数宣言
-//-------------------------------------------
-CPlayer* CPlayer::m_pPlayer = nullptr;		// プレイヤーの情報
+#define NONE_RATIDX	(-1)			// ネズミの番号の初期値
+#define ATTACK_DISTANCE	(200.0f)	// 攻撃範囲までの距離
+#define MAX_LIFE	(3)				// 寿命の最大値
+#define TIME_DAMAGE	(60 * 1)		// ダメージ食らうまでの時間
+#define SPEED		(20.0f)			// 速度
+#define SIZE		(D3DXVECTOR3(30.0f, 50.0f, 30.0f))		// サイズ
 
 //==============================
 // コンストラクタ
 //==============================
-CPlayer::CPlayer() : CModel(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
+CRat::CRat() : CModel(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 {
 	// 全ての値をクリアする
 	m_move = NONE_D3DXVECTOR3;			// 移動量
-
+	m_nRatIdx = NONE_RATIDX;			// ネズミの番号
+	m_nLife = 0;						// 寿命
+	m_nDamageCounter = TIME_DAMAGE;		// ダメージ食らうまでのカウンター
+	m_fSpeed = 0.0f;					// 速度
 	m_bJump = false;					// ジャンプしたか
 	m_bLand = true;						// 着地したか
 	m_bAttack = false;					// 攻撃したか
+
 }
 
 //==============================
 // デストラクタ
 //==============================
-CPlayer::~CPlayer()
+CRat::~CRat()
 {
 
 }
@@ -53,7 +62,7 @@ CPlayer::~CPlayer()
 //==============================
 // 破片の初期化処理
 //==============================
-HRESULT CPlayer::Init(void)
+HRESULT CRat::Init(void)
 {
 	if (FAILED(CModel::Init()))
 	{ // 初期化処理に失敗した場合
@@ -64,6 +73,10 @@ HRESULT CPlayer::Init(void)
 
 	// 全ての値を初期化する
 	m_move = NONE_D3DXVECTOR3;			// 移動量
+	m_nRatIdx = NONE_RATIDX;			// ネズミの番号
+	m_fSpeed = 0.0f;					// 速度
+	m_nLife = MAX_LIFE;					// 寿命
+	m_nDamageCounter = TIME_DAMAGE;		// ダメージ食らうまでのカウンター
 
 	// 値を返す
 	return S_OK;
@@ -72,22 +85,28 @@ HRESULT CPlayer::Init(void)
 //========================================
 // 破片の終了処理
 //========================================
-void CPlayer::Uninit(void)
+void CRat::Uninit(void)
 {
+	// ネズミを消去する
+	CGame::DeleteRat(m_nRatIdx);
+
 	// 終了処理
 	CModel::Uninit();
-
-	// プレイヤーの情報を NULL にする
-	m_pPlayer = nullptr;
 }
 
 //=====================================
 // 破片の更新処理
 //=====================================
-void CPlayer::Update(void)
+void CRat::Update(void)
 {
 	// 前回の位置を設定する
 	SetPosOld(GetPos());
+
+	// 移動量を設定する(移動量を常に一定にするため)
+	m_fSpeed = SPEED;
+
+	// 障害物との当たり判定
+	collision::ObstacleHit(this, SIZE.x, SIZE.y, SIZE.z);
 
 	// 移動処理
 	Move();
@@ -98,17 +117,23 @@ void CPlayer::Update(void)
 	// 攻撃処理
 	Attack();
 
+	// ヒット処理
+	Hit();
+
 	// 起伏地面の当たり判定
 	Elevation();
 
+	// 障害物との当たり判定
+	ObstacleCollision();
+
 	// デバッグ表示
-	CManager::Get()->GetDebugProc()->Print("位置：%f %f %f\n向き：%f %f %f\nジャンプ状況：%d\n", GetPos().x, GetPos().y, GetPos().z, GetRot().x, GetRot().y, GetRot().z, m_bJump);
+	CManager::Get()->GetDebugProc()->Print("位置：%f %f %f\n向き：%f %f %f\nジャンプ状況：%d\n寿命：%d\n", GetPos().x, GetPos().y, GetPos().z, GetRot().x, GetRot().y, GetRot().z, m_bJump, m_nLife);
 }
 
 //=====================================
 // 破片の描画処理
 //=====================================
-void CPlayer::Draw(void)
+void CRat::Draw(void)
 {
 	// 描画処理
 	CModel::Draw();
@@ -117,7 +142,7 @@ void CPlayer::Draw(void)
 //=====================================
 // 情報の設定処理
 //=====================================
-void CPlayer::SetData(const D3DXVECTOR3& pos)
+void CRat::SetData(const D3DXVECTOR3& pos)
 {
 	// 情報の設定処理
 	SetPos(pos);							// 位置
@@ -128,34 +153,72 @@ void CPlayer::SetData(const D3DXVECTOR3& pos)
 }
 
 //=======================================
-// 取得処理
+// 移動量の設定処理
 //=======================================
-CPlayer* CPlayer::Get(void)
+void CRat::SetMove(const D3DXVECTOR3& move)
 {
-	if (m_pPlayer != nullptr)
-	{ // プレイヤーが NULL じゃない場合
+	// 移動量を設定する
+	m_move = move;
+}
 
-		// プレイヤーの情報を返す
-		return m_pPlayer;
-	}
-	else
-	{ // 上記以外
+//=======================================
+// 移動量の取得処理
+//=======================================
+D3DXVECTOR3 CRat::GetMove(void) const
+{
+	// 移動量を返す
+	return m_move;
+}
 
-		// NULL を返す
-		return nullptr;
-	}
+//=======================================
+// 速度の設定処理
+//=======================================
+void CRat::SetSpeed(const float fSpeed)
+{
+	// 速度を設定する
+	m_fSpeed = fSpeed;
+}
+
+//=======================================
+// 速度の取得処理
+//=======================================
+float CRat::GetSpeed(void) const
+{
+	// 速度を返す
+	return m_fSpeed;
+}
+
+//=======================================
+// ネズミの番号の設定処理
+//=======================================
+void CRat::SetRatIdx(const int nIdx)
+{
+	// ネズミの番号を設定する
+	m_nRatIdx = nIdx;
+}
+
+//=======================================
+// ネズミの番号の取得処理
+//=======================================
+int CRat::GetRatIdx(void) const
+{
+	// ネズミの番号を返す
+	return m_nRatIdx;
 }
 
 //=======================================
 // 生成処理
 //=======================================
-CPlayer* CPlayer::Create(const D3DXVECTOR3& pos)
+CRat* CRat::Create(const D3DXVECTOR3& pos)
 {
-	if (m_pPlayer == nullptr)
+	// ネズミのポインタ
+	CRat* pRat = nullptr;
+
+	if (pRat == nullptr)
 	{ // オブジェクトが NULL の場合
 
 		// インスタンスを生成
-		m_pPlayer = new CPlayer;
+		pRat = new CRat;
 	}
 	else
 	{ // オブジェクトが NULL じゃない場合
@@ -167,11 +230,11 @@ CPlayer* CPlayer::Create(const D3DXVECTOR3& pos)
 		return nullptr;
 	}
 
-	if (m_pPlayer != nullptr)
+	if (pRat != nullptr)
 	{ // オブジェクトが NULL じゃない場合
 
 		// 初期化処理
-		if (FAILED(m_pPlayer->Init()))
+		if (FAILED(pRat->Init()))
 		{ // 初期化に失敗した場合
 
 			// 停止
@@ -182,7 +245,7 @@ CPlayer* CPlayer::Create(const D3DXVECTOR3& pos)
 		}
 
 		// 情報の設定処理
-		m_pPlayer->SetData(pos);
+		pRat->SetData(pos);
 	}
 	else
 	{ // オブジェクトが NULL の場合
@@ -195,13 +258,13 @@ CPlayer* CPlayer::Create(const D3DXVECTOR3& pos)
 	}
 
 	// プレイヤーのポインタを返す
-	return m_pPlayer;
+	return pRat;
 }
 
 //=======================================
 // 移動処理
 //=======================================
-void CPlayer::Move(void)
+void CRat::Move(void)
 {
 	// ローカル変数宣言
 	D3DXVECTOR3 rot = GetRot();
@@ -227,10 +290,6 @@ void CPlayer::Move(void)
 			// 向きを設定する
 			rot.y = D3DX_PI * 0.5f;
 		}
-
-		// 移動量を設定する
-		m_move.x = sinf(rot.y) * 20.0f;
-		m_move.z = cosf(rot.y) * 20.0f;
 	}
 	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_A) == true)
 	{ // Aキーを押した場合
@@ -253,38 +312,29 @@ void CPlayer::Move(void)
 			// 向きを設定する
 			rot.y = D3DX_PI * -0.5f;
 		}
-
-		// 移動量を設定する
-		m_move.x = sinf(rot.y) * 20.0f;
-		m_move.z = cosf(rot.y) * 20.0f;
 	}
 	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_W) == true)
 	{ // Wキーを押した場合
 
 		// 向きを設定する
 		rot.y = 0.0f;
-
-		// 移動量を設定する
-		m_move.x = sinf(rot.y) * 20.0f;
-		m_move.z = cosf(rot.y) * 20.0f;
 	}
 	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true)
 	{ // Sキーを押した場合
 
 		// 向きを設定する
 		rot.y = D3DX_PI;
-
-		// 移動量を設定する
-		m_move.x = sinf(rot.y) * 20.0f;
-		m_move.z = cosf(rot.y) * 20.0f;
 	}
 	else
 	{ // 上記以外
 
-		// 移動量を設定する
-		m_move.x = 0.0f;
-		m_move.z = 0.0f;
+		// 速度を設定する
+		m_fSpeed = 0.0f;
 	}
+
+	// 移動量を設定する
+	m_move.x = sinf(rot.y) * m_fSpeed;
+	m_move.z = cosf(rot.y) * m_fSpeed;
 
 	// 向きを適用する
 	SetRot(rot);
@@ -293,7 +343,7 @@ void CPlayer::Move(void)
 //=======================================
 // ジャンプ処理
 //=======================================
-void CPlayer::Jump(void)
+void CRat::Jump(void)
 {
 	// ローカル変数宣言
 	D3DXVECTOR3 pos = GetPos();
@@ -322,19 +372,94 @@ void CPlayer::Jump(void)
 //=======================================
 // 攻撃処理
 //=======================================
-void CPlayer::Attack(void)
+void CRat::Attack(void)
 {
-	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_J) == true && m_bAttack == false)
+	// ローカル変数宣言
+	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を取得する
+	D3DXVECTOR3 pos = GetPos();
+	D3DXVECTOR3 rot = GetRot();
+
+	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_J) == true/* && m_bAttack == false*/)
 	{ // Jキーを押した場合
 
-		m_bAttack = true;		// 攻撃した状態にする
+		while (pObstacle != nullptr)
+		{ // ブロックの情報が NULL じゃない場合
+
+			if (useful::RectangleCollisionXY(D3DXVECTOR3(pos.x + sinf(rot.y) * ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * ATTACK_DISTANCE), pObstacle->GetPos(),
+				GetFileData().vtxMax, pObstacle->GetFileData().vtxMax,
+				GetFileData().vtxMin, pObstacle->GetFileData().vtxMin) == true)
+			{ // XYの矩形に当たってたら
+
+				if (useful::RectangleCollisionXZ(D3DXVECTOR3(pos.x + sinf(rot.y) * ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * ATTACK_DISTANCE), pObstacle->GetPos(),
+					GetFileData().vtxMax, pObstacle->GetFileData().vtxMax,
+					GetFileData().vtxMin, pObstacle->GetFileData().vtxMin) == true)
+				{ // XZの矩形に当たってたら
+
+					// 障害物の終了処理
+					pObstacle->Uninit();
+				}
+			}
+
+			// 次のオブジェクトを代入する
+			pObstacle = pObstacle->GetNext();
+		}
+
+		//m_bAttack = true;		// 攻撃した状態にする
+	}
+}
+
+//=======================================
+// ヒット処理
+//=======================================
+void CRat::Hit(void)
+{
+	// ローカル変数宣言
+	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を取得する
+	D3DXVECTOR3 pos = GetPos();
+
+	if (m_nDamageCounter >= TIME_DAMAGE)
+	{ // ダメージ食らう時間になったら
+
+		while (pObstacle != nullptr)
+		{ // ブロックの情報が NULL じゃない場合
+
+			if (useful::RectangleCollisionXY(pos, pObstacle->GetPos(),
+				GetFileData().vtxMax, pObstacle->GetFileData().vtxMax,
+				GetFileData().vtxMin, pObstacle->GetFileData().vtxMin) == true)
+			{ // XYの矩形に当たってたら
+
+				if (useful::RectangleCollisionXZ(pos, pObstacle->GetPos(),
+					GetFileData().vtxMax, pObstacle->GetFileData().vtxMax,
+					GetFileData().vtxMin, pObstacle->GetFileData().vtxMin) == true)
+				{ // XZの矩形に当たってたら
+
+					m_nLife--;		// 寿命減らす
+					m_nDamageCounter = 0;		// ダメージ食らうまでの時間リセット
+
+					if (m_nLife <= 0)
+					{ // 寿命が無いとき
+
+						// 終了処理
+						Uninit();
+					}
+				}
+			}
+
+			// 次のオブジェクトを代入する
+			pObstacle = pObstacle->GetNext();
+		}
+	}
+	else
+	{ // ダメージ食らう時間じゃなかったら
+
+		m_nDamageCounter++;		// ダメージ食らうまでの時間加算
 	}
 }
 
 //=======================================
 // 起伏地面の当たり判定
 //=======================================
-void CPlayer::Elevation(void)
+void CRat::Elevation(void)
 {
 	// ローカル変数宣言
 	CElevation* pMesh = CElevationManager::Get()->GetTop();		// 起伏の先頭のオブジェクトを取得する
@@ -344,7 +469,7 @@ void CPlayer::Elevation(void)
 	while (pMesh != nullptr)
 	{ // 地面の情報がある限り回す
 
-	  // 当たり判定を取る
+		// 当たり判定を取る
 		fHeight = pMesh->ElevationCollision(pos);
 
 		if (pos.y < fHeight)
@@ -362,5 +487,20 @@ void CPlayer::Elevation(void)
 	}
 
 	// 位置を更新する
+	SetPos(pos);
+}
+
+//=======================================
+// 障害物との当たり判定
+//=======================================
+void CRat::ObstacleCollision(void)
+{
+	// 位置を取得する
+	D3DXVECTOR3 pos = GetPos();
+
+	// 障害物との衝突判定
+	collision::ObstacleCollision(pos, GetPosOld(), SIZE.x, SIZE.y, SIZE.z);
+
+	// 位置を設定する
 	SetPos(pos);
 }

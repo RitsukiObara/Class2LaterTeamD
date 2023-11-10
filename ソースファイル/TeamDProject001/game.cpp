@@ -20,10 +20,11 @@
 
 #include "objectElevation.h"
 #include "skybox.h"
-#include "player.h"
+#include "rat.h"
 #include "Cat.h"
 #include "game_timer.h"
 #include "edit.h"
+#include "weapon_selectUI.h"
 
 //--------------------------------------------
 // マクロ定義
@@ -35,6 +36,7 @@
 // 静的メンバ変数宣言
 //--------------------------------------------
 CPause* CGame::m_pPause = nullptr;							// ポーズの情報
+CRat* CGame::m_apRat[MAX_RAT] = {};							// ネズミの情報
 CGame::STATE CGame::m_GameState = CGame::STATE_START;		// ゲームの進行状態
 int CGame::m_nFinishCount = 0;								// 終了カウント
 
@@ -53,6 +55,11 @@ CGame::CGame() : CScene(TYPE_NONE, PRIORITY_BG)
 	m_pPause = nullptr;			// ポーズ
 	m_nFinishCount = 0;			// 終了カウント
 	m_GameState = STATE_START;	// 状態
+
+	for (int nCntRat = 0; nCntRat < MAX_RAT; nCntRat++)
+	{
+		m_apRat[nCntRat] = nullptr;		// ネズミの情報
+	}
 
 // デバッグ版
 #ifdef _DEBUG
@@ -102,14 +109,20 @@ HRESULT CGame::Init(void)
 	// シーンの初期化
 	CScene::Init();
 
-	// プレイヤーの生成
-	CPlayer::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	for (int nCntRat = 0; nCntRat < MAX_RAT; nCntRat++)
+	{
+		m_apRat[nCntRat] = CRat::Create(D3DXVECTOR3(500.0f * nCntRat, 0.0f, 0.0f));		// ネズミの情報
+		m_apRat[nCntRat]->SetRatIdx(nCntRat);											// ネズミの番号を設定する
+	}
 
 	//猫の生成
 	CCat::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	// 生成処理
 	CGameTime::Create();
+
+	// 武器選択UIを生成
+	CWeaponSelectUI::Create();
 
 	// 情報の初期化
 	m_nFinishCount = 0;				// 終了カウント
@@ -126,6 +139,11 @@ void CGame::Uninit(void)
 {
 	// ポインタを NULL にする
 	m_pPause = nullptr;			// ポーズ
+
+	for (int nCntRat = 0; nCntRat < MAX_RAT; nCntRat++)
+	{
+		m_apRat[nCntRat] = nullptr;		// ネズミの情報
+	}
 
 	// 情報を初期化する
 	m_GameState = STATE_START;	// ゲームの進行状態
@@ -382,6 +400,25 @@ void CGame::DeletePause(void)
 {
 	// ポーズのポインタを NULL にする
 	m_pPause = nullptr;
+}
+
+//======================================
+// ネズミのNULL化処理
+//======================================
+void CGame::DeleteRat(int nIdx)
+{
+	if (nIdx >= 0)
+	{ // 番号が 0 以上の場合
+
+		// ネズミのポインタを NULL にする
+		m_apRat[nIdx] = nullptr;
+	}
+	else
+	{ // 上記以外
+
+		// 停止
+		assert(false);
+	}
 }
 
 // デバッグ版
