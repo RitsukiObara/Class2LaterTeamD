@@ -18,18 +18,18 @@ HRESULT CMap::Init(void)
 
 	//キッチンの生成と初期化
 	m_Model[1]->Create();
-	m_Model[1]->SetFileData(CXFile::TYPE_IH);
+	m_Model[1]->SetFileData(CXFile::TYPE_IH_OFF);
 
 	//キッチンの生成と初期化
 	m_Model[2]->Create();
-	m_Model[21]->SetFileData(CXFile::TYPE_IH);
+	m_Model[21]->SetFileData(CXFile::TYPE_IH_ON);
 
 	//キッチンの生成と初期化
 	m_Model[3]->Create();
 	m_Model[3]->SetFileData(CXFile::TYPE_TAP);
 
 }
-CMap* CMap::Create(D3DXVECTOR3 pos)
+CMap* CMap::Create(void)
 {
 	CMap *pMap;
 
