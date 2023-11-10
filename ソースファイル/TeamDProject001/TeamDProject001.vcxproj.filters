@@ -67,6 +67,9 @@
     <Filter Include="Rat">
       <UniqueIdentifier>{6525e328-f0cd-4b74-aa93-2899d1a22b4c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map">
+      <UniqueIdentifier>{8863d5a5-bcd2-4f27-a1ee-0d3618800a6b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="fade.cpp">
@@ -312,6 +315,9 @@
     <ClCompile Include="block_manager.cpp">
       <Filter>Gimmick</Filter>
     </ClCompile>
+    <ClCompile Include="map.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -556,6 +562,9 @@
     </ClInclude>
     <ClInclude Include="block_manager.h">
       <Filter>Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="map.h">
+      <Filter>Map</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
