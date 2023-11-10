@@ -35,11 +35,11 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\IH_on.x",				//IH（on状態）
 
 	// 猫モデル
-	"data\\MODEL\\rat\\00_rat_body.x",	// 体のあの辺
-	"data\\MODEL\\rat\\01_rat_head.x",	// 頭のこの辺
-	"data\\MODEL\\rat\\02_rat_Lhand.x",	// 左手のあっち
-	"data\\MODEL\\rat\\03_rat_Rhand.x",	// 右手とこっち
-	"data\\MODEL\\rat\\04_rat_Lleg.x",	// ひき肉
+	"data\\MODEL\\rat\\00_rat_body.x",	// 体
+	"data\\MODEL\\rat\\01_rat_head.x",	// 頭
+	"data\\MODEL\\rat\\02_rat_Lhand.x",	// 左手
+	"data\\MODEL\\rat\\03_rat_Rhand.x",	// 右手
+	"data\\MODEL\\rat\\04_rat_Lleg.x",	// 左足
 	"data\\MODEL\\rat\\05_rat_Rleg.x",	// 右足
 };
 
