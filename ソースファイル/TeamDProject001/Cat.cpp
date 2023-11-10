@@ -22,6 +22,7 @@
 #include "collision.h"
 #include "elevation_manager.h"
 #include "objectElevation.h"
+#include "effect.h"
 #include "Particle.h"
 #include "motion.h"
 #include "shadowCircle.h"
@@ -31,29 +32,7 @@
 //--------------------------------------------
 // マクロ定義
 //--------------------------------------------
-#define MAX_LIFE				(3)			// 体力の最大数
-#define COLLISION_WIDTH			(20.0f)		// 当たり判定時に使う時の幅
-#define COLLISION_HEIGHT		(150.0f)	// 当たり判定時に使う時の高さ
-#define COLLISION_DEPTH			(20.0f)		// 当たり判定時に使う時の奥行
-#define START_CAMERA_POSR_Y		(100.0f)	// スタート時のカメラの注視点(Y軸)
-#define START_CAMERA_POSV_Y		(130.0f)	// スタート時のカメラの視点(Y軸)
-#define START_CAMERA_DISTANCE	(200.0f)	// スタート時のカメラの距離
-#define START_COUNT				(40)		// スタートのカウント
-#define PUNCH_COUNT				(150)		// パンチ状態のカウント数
-#define GOAL_COUNT				(80)		// ゴール状態のカウント数
-#define LEAVE_GRAVITY			(0.4f)		// 退場状態の重力
-#define FINISH_GRAVITY			(-0.6f)		// 終了状態の重力
-#define NEAR_POS				(0.0f)		// 手前の位置
-#define FAR_POS					(1000.0f)	// 奥行の位置
-#define ADD_GRAVITY				(-50.0f)	// 追加の重力
-#define FALL_HEIGHT				(-600.0f)	// 落ちた判定が通る所
-#define PUNCH_DSTR_SHIFT		(D3DXVECTOR3(40.0f, 100.0f, 0.0f))		// パンチ時の撃破のずらす幅
-#define PUNCH_DSTR_SIZE			(D3DXVECTOR3(100.0f, 100.0f, 0.0f))		// パンチ時の撃破のサイズ
-#define PUNCH_DSTR_COL			(D3DXCOLOR(1.0f, 0.3f, 0.0f, 1.0f))		// パンチ時の撃破の色
-#define PUNCH_DSTR_LIFE			(6)			// パンチ時の撃破の寿命
-#define PUNCH_RIPPLE_SHIFT		(D3DXVECTOR3(45.0f, 100.0f, 0.0f))		// パンチ時の波紋のずらす幅
-#define OUT_RANGE_GRAVITY		(-5.0f)		// 範囲外に出たときの重力
-#define ADD_START_POS			(D3DXVECTOR3(20.0f, -20.0f, 0.0f))		// スタート状態の加算する位置
+#define MOVE_SPEED				(20.0f)			// 体力の最大数
 
 //--------------------------------------------
 // 静的メンバ変数宣言
@@ -68,15 +47,11 @@ CCat::CCat() : CCharacter(CObject::TYPE_CAT, CObject::PRIORITY_PLAYER)
 	// 全ての値をクリアする
 	m_pMotion = nullptr;			// モーションの情報
 	m_pAction = nullptr;			// プレイヤーの行動の情報
+	m_AttackPos = NONE_D3DXVECTOR3;	//攻撃の位置
 	m_posDest = NONE_D3DXVECTOR3;	// 目的の位置
 	m_move = NONE_D3DXVECTOR3;		// 移動量
 	m_rotDest = NONE_D3DXVECTOR3;	// 目的の向き
 	m_nShadowIdx = INIT_SHADOW;		// 影のインデックス
-	m_nStartCount = 0;				// スタートカウント
-	m_nGoalCount = 0;				// ゴール時のカウント
-	m_fSpeed = 0.0f;				// 速度
-	m_fAlpha = 1.0f;				// 透明度
-	m_bMove = false;				// 移動状況
 }
 
 //=========================================
@@ -145,13 +120,8 @@ HRESULT CCat::Init(void)
 	m_move = NONE_D3DXVECTOR3;		// 移動量
 	m_rotDest = NONE_D3DXVECTOR3;	// 目的の向き
 	m_nShadowIdx = INIT_SHADOW;		// 影のインデックス
-	m_nStartCount = 0;				// スタートカウント
-	m_nGoalCount = 0;				// ゴール時のカウント
-	m_fSpeed = 0.0f;				// 速度
-	m_fAlpha = 1.0f;				// 透明度
-	m_bMove = false;				// 移動状況
 
-									// 値を返す
+	// 値を返す
 	return S_OK;
 }
 
@@ -182,11 +152,24 @@ void CCat::Update(void)
 	// モーションの更新処理
 	m_pMotion->Update();
 
+	if (m_AttackState == ATTACKSTATE_MOVE)
+	{// 移動状態の時
+
+		// 攻撃位置の移動入力処理
+		MoveAttackPos();
+
+		// 攻撃入力の処理
+		Attack();
+	}
+
+	// 攻撃状態の管理
+	AttackStateManager();
+
 	 // 影の位置向きの設定処理
 	CShadowCircle::SetPosRot(m_nShadowIdx, GetPos(), GetRot());
 
-	// プレイヤーの情報を表示
-	CManager::Get()->GetDebugProc()->Print("位置：%f %f %f\n移動量：%f %f %f\n", GetPos().x, GetPos().y, GetPos().z, m_move.x, m_move.y, m_move.z);
+	// デバッグ表示
+	DebugMessage();
 }
 
 //===========================================
@@ -210,6 +193,111 @@ void CCat::Draw(void)
 
 	// 描画処理
 	CCharacter::Draw();
+}
+
+//===========================================
+// 攻撃位置の移動処理
+//===========================================
+void CCat::MoveAttackPos(void)
+{
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_I) == true)
+	{ // Wキーを押していた場合
+
+	  // 位置を加算する
+		m_AttackPos.z += MOVE_SPEED;
+	}
+
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_K) == true)
+	{ // Sキーを押していた場合
+
+	  // 位置を加算する
+		m_AttackPos.z -= MOVE_SPEED;
+	}
+
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_L) == true)
+	{ // Dキーを押していた場合
+
+	  // 位置を加算する
+		m_AttackPos.x += MOVE_SPEED;
+	}
+
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_J) == true)
+	{ // Aキーを押していた場合
+
+	  // 位置を加算する
+		m_AttackPos.x -= MOVE_SPEED;
+	}
+}
+
+//===========================================
+// 攻撃処理
+//===========================================
+void CCat::Attack(void)
+{
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_RETURN) == true)
+	{ // Wキーを押していた場合
+
+		// 状態を攻撃準備にする
+		m_AttackState = ATTACKSTATE_STANDBY;
+		m_nAtkStateCount = 20;
+	}
+}
+
+//===========================================
+// 攻撃状態の管理
+//===========================================
+void CCat::AttackStateManager(void)
+{
+	switch (m_AttackState)
+	{
+	case ATTACKSTATE_MOVE:
+
+
+		CEffect::Create(m_AttackPos, NONE_D3DXVECTOR3, 1, 400.0f, CEffect::TYPE::TYPE_NONE, D3DXCOLOR(0.0f, 0.0f, 1.0f, 0.8f), true);
+
+		break;
+
+	case ATTACKSTATE_STANDBY:
+
+		CEffect::Create(m_AttackPos, NONE_D3DXVECTOR3, 1, 400.0f, CEffect::TYPE::TYPE_NONE, D3DXCOLOR(1.0f, 1.0f, 0.0f, 0.5f), true);
+
+		if (m_nAtkStateCount <= 0)
+		{//状態カウントが０になった時
+			m_AttackState = ATTACKSTATE_ATTACK;
+			m_nAtkStateCount = 10;
+		}
+		break;
+
+	case ATTACKSTATE_ATTACK:
+
+		CEffect::Create(m_AttackPos, NONE_D3DXVECTOR3, 1, 400.0f, CEffect::TYPE::TYPE_NONE, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f), true);
+
+		if (m_nAtkStateCount <= 0)
+		{//状態カウントが０になった時
+			m_AttackState = ATTACKSTATE_MOVE;
+		}
+		break;
+	}
+
+	if (m_nAtkStateCount > 0)
+	{
+		m_nAtkStateCount--;
+	}
+}
+
+//===========================================
+// デバッグ表示
+//===========================================
+void CCat::DebugMessage(void)
+{
+	CManager::Get()->GetDebugProc()->Print("\n 猫情報--------------------------------------------\n");
+
+	// 猫の攻撃位置情報を表示
+	CManager::Get()->GetDebugProc()->Print("位置：%f %f %f\n", m_AttackPos.x, m_AttackPos.y, m_AttackPos.z);
+
+	// 猫の操作方法を表示
+	CManager::Get()->GetDebugProc()->Print("移動入力：上:[I] / 左:[J] / 下:[K] / 右:[L] \n");
+	CManager::Get()->GetDebugProc()->Print("攻撃 : [ENTER] \n");
 }
 
 //===========================================
@@ -345,183 +433,4 @@ void CCat::SetData(const D3DXVECTOR3& pos)
 
 	// モーションの設定処理
 	m_pMotion->Set(MOTIONTYPE_NEUTRAL);
-
-	// カメラを設定する
-	CManager::Get()->GetCamera()->SetPosR(D3DXVECTOR3(pos.x, pos.y + START_CAMERA_POSR_Y, pos.z));
-	CManager::Get()->GetCamera()->SetPosV(D3DXVECTOR3(pos.x, pos.y + START_CAMERA_POSV_Y, pos.z));
-	CManager::Get()->GetCamera()->SetDistance(START_CAMERA_DISTANCE);
-}
-
-//=======================================
-// 移動量の設定処理
-//=======================================
-void CCat::SetMove(const D3DXVECTOR3& move)
-{
-	// 移動量を設定する
-	m_move = move;
-}
-
-//=======================================
-// 移動量の取得処理
-//=======================================
-D3DXVECTOR3 CCat::GetMove(void) const
-{
-	// 移動量を返す
-	return m_move;
-}
-
-//=======================================
-// 目標の向きの設定処理
-//=======================================
-void CCat::SetRotDest(const D3DXVECTOR3& rot)
-{
-	// 目標の向きを設定する
-	m_rotDest = rot;
-}
-
-//=======================================
-// 目標の向きの取得処理
-//=======================================
-D3DXVECTOR3 CCat::GetRotDest(void) const
-{
-	// 目標の向きを返す
-	return m_rotDest;
-}
-
-//=======================================
-// 速度の設定処理
-//=======================================
-void CCat::SetSpeed(float fSpeed)
-{
-	// 速度を設定する
-	m_fSpeed = fSpeed;
-}
-
-//=======================================
-// 速度の取得処理
-//=======================================
-float CCat::GetSpeed(void) const
-{
-	// 速度を返す
-	return m_fSpeed;
-}
-
-//=======================================
-// 透明度の設定処理
-//=======================================
-void CCat::SetAlpha(const float fAlpha)
-{
-	// 透明度を設定する
-	m_fAlpha = fAlpha;
-}
-
-//=======================================
-// 透明度の入れ替え処理
-//=======================================
-void CCat::SwapAlpha(void)
-{
-	// 透明度を入れ替える
-	m_fAlpha = (m_fAlpha >= 1.0f) ? 0.0f : 1.0f;
-}
-
-//=======================================
-// 透明度の取得処理
-//=======================================
-float CCat::GetAlpha(void) const
-{
-	// 透明度を返す
-	return m_fAlpha;
-}
-
-//=======================================
-// 移動状況の設定処理
-//=======================================
-void CCat::SetEnableMove(bool bMove)
-{
-	// 移動状況を設定する
-	m_bMove = bMove;
-}
-
-//=======================================
-// 移動状況の取得処理
-//=======================================
-bool CCat::IsMove(void) const
-{
-	// 移動状況を返す
-	return m_bMove;
-}
-
-//=======================================
-// 移動制限判定
-//=======================================
-void CCat::CollisionMagicWall(void)
-{
-	// ローカル変数宣言
-	D3DXVECTOR3 pos = GetPos();		// 位置を取得する
-
-	if (pos.z >= FAR_POS)
-	{ // 位置が一定以上になった場合
-
-	  // 位置を補正する
-		pos.z = FAR_POS;
-	}
-
-	if (pos.z <= NEAR_POS)
-	{ // 位置を一定以下になった場合
-
-	  // 位置を補正する
-		pos.z = NEAR_POS;
-	}
-
-	// 位置を適用する
-	SetPos(pos);
-}
-
-//=======================================
-// スタート状態の処理
-//=======================================
-void CCat::StartProcess(void)
-{
-	// ローカル変数宣言
-	D3DXVECTOR3 pos = GetPos();		// 位置を取得する
-
-									// 位置を加算する
-	pos += ADD_START_POS;
-
-	if (pos.x >= m_posDest.x)
-	{ // 位置が目的を超えた場合
-
-	}
-
-	if (m_nStartCount >= START_COUNT)
-	{ // スタートカウントを設定する
-
-	}
-
-	// 位置を適用する
-	SetPos(pos);
-}
-
-//=======================================
-// ゴール状態の処理
-//=======================================
-void CCat::GoalProcess(void)
-{
-
-}
-
-//=======================================
-// 退場状態の処理
-//=======================================
-void CCat::LeaveProcess(void)
-{
-
-}
-
-//=======================================
-// 終了状態の処理
-//=======================================
-void CCat::FinishProcess(void)
-{
-
 }
