@@ -27,6 +27,7 @@ namespace useful
 	bool CircleCollisionYZ(const D3DXVECTOR3& pos0, const D3DXVECTOR3& pos1, const float fRadius0, const float fRadius1);		// 円の当たり判定(YZ平面)
 	float LineOuterProductXZ(D3DXVECTOR3 posLeft, D3DXVECTOR3 posRight, D3DXVECTOR3 pos);										// 外積の左右判断処理(XZ平面)
 	float LineOuterProductXY(D3DXVECTOR3 posUp, D3DXVECTOR3 posDown, D3DXVECTOR3 pos);											// 外積の左右判断処理(XY平面)
+	float LineOuterProductYZ(D3DXVECTOR3 posUp, D3DXVECTOR3 posDown, D3DXVECTOR3 pos);											// 外積の左右判断処理(YZ平面)
 	void NormalizeVector(D3DXVECTOR3& nor, const D3DXVECTOR3& posRight, const D3DXVECTOR3& posLeft, const D3DXVECTOR3& pos);	// 法線の計算(正規化)
 	float InnerProduct(const D3DXVECTOR3 VecMove, const D3DXVECTOR3 VecNor);		// 内積の判定処理
 	bool CollisionOuterProductXZ(D3DXVECTOR3& Targetpos, const D3DXVECTOR3& TargetposOld, const D3DXVECTOR3 posRight, const D3DXVECTOR3 posLeft);		// 外積の当たり判定処理(XZ軸版)

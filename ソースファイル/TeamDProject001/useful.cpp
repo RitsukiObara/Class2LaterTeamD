@@ -210,6 +210,25 @@ float useful::LineOuterProductXY(D3DXVECTOR3 posUp, D3DXVECTOR3 posDown, D3DXVEC
 }
 
 //======================
+// 外積の左右判断処理(YZ平面)
+//======================
+float useful::LineOuterProductYZ(D3DXVECTOR3 posUp, D3DXVECTOR3 posDown, D3DXVECTOR3 pos)
+{
+	// 変数を宣言
+	D3DXVECTOR3 vecLine;	// 境界線ベクトル
+	D3DXVECTOR3 vecToPos;	// 左端と位置のベクトル
+
+	// 境界線ベクトルを求める
+	vecLine = posDown - posUp;
+
+	// 左端と位置のベクトルを求める
+	vecToPos = pos - posUp;
+
+	// 外積の計算結果を返す
+	return (vecLine.y * vecToPos.z) - (vecLine.z * vecToPos.y);
+}
+
+//======================
 // 法線の計算(正規化)
 //======================
 void useful::NormalizeVector(D3DXVECTOR3& nor, const D3DXVECTOR3& posRight, const D3DXVECTOR3& posLeft,const D3DXVECTOR3& pos)

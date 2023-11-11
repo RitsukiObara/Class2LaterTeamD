@@ -247,7 +247,7 @@ void collision::BlockCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, cons
 {
 	// 先頭のブロックの情報を取得する
 	CBlock* pBlock = CBlockManager::Get()->GetTop();
-	
+
 	// それぞれの位置
 	D3DXVECTOR3 vtxLeftUp;		// 左上の位置
 	D3DXVECTOR3 vtxLeftDown;	// 左下の位置
@@ -283,6 +283,17 @@ void collision::BlockCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, cons
 		vtxRightDown.x = pBlock->GetPos().x + sinf(pBlock->GetRot().y - D3DX_PI - fAngle) * fLength;
 		vtxRightDown.y = pBlock->GetPos().y + pBlock->GetFileData().vtxMin.y;
 		vtxRightDown.z = pBlock->GetPos().z + cosf(pBlock->GetRot().y + D3DX_PI - fAngle) * fLength;
+
+		if (useful::LineOuterProductXZ(vtxLeftUp, vtxRightUp, pos) >= 0.0f &&
+			useful::LineOuterProductXZ(vtxRightUp, vtxRightDown, pos) >= 0.0f &&
+			useful::LineOuterProductXZ(vtxRightDown, vtxLeftDown, pos) >= 0.0f &&
+			useful::LineOuterProductXZ(vtxLeftDown, vtxLeftUp, pos) >= 0.0f)
+		{ // 真ん中の境界線より左側に居た場合
+
+			// 前回の位置に補正する
+			pos.x = posOld.x;
+			pos.z = posOld.z;
+		}
 
 		//if (pBlock->GetPos().y + pBlock->GetFileData().vtxMax.y >= pos.y &&
 		//	pBlock->GetPos().y + pBlock->GetFileData().vtxMin.y <= pos.y + fHeight &&
