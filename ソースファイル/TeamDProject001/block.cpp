@@ -146,12 +146,20 @@ void CBlock::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE 
 	// 全ての値を初期化する
 	m_type = type;			// 種類
 
+	// 種類によるモデル情報の設定
 	switch (m_type)
 	{
 	case CBlock::TYPE_CARDBOARD:
 
 		// 段ボール
-		SetFileData(CXFile::TYPE_WOODBLOCK);	// モデルの情報
+		SetFileData(CXFile::TYPE_WOODBLOCK);
+
+		break;
+
+	case CBlock::TYPE_TISSUE:
+
+		// ティッシュ箱
+		SetFileData(CXFile::TYPE_TISSUEBOX);
 
 		break;
 
