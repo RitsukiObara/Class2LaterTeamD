@@ -87,6 +87,19 @@ void CConfetti::Update(void)
 	SetPos(pos);
 	SetRot(rot);
 
+	// 寿命を減算する
+	m_nLife--;
+
+	if (m_nLife <= 0)
+	{ // 寿命が0以下の場合
+
+		// 終了処理
+		Uninit();
+
+		// この先の処理を行わない
+		return;
+	}
+
 	// 頂点座標の設定処理
 	SetVertex();
 }
