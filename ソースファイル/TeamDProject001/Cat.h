@@ -17,13 +17,6 @@
 // 前方宣言
 //--------------------------------------------
 class CMotion;				// モーション
-class CCatAct;			// プレイヤーの行動
-class CAbility;				// 能力
-class CScrewUI;				// ネジUI
-class CCombo;				// コンボ
-class CBlock;				// ブロック
-class CLifeUI;				// 体力UI
-class CPushTiming;			// 押すタイミング
 
 //--------------------------------------------
 // クラス(プレイヤークラス)
@@ -32,9 +25,9 @@ class CCat : public CCharacter
 {
 public:			// 誰でもアクセスできる
 
-//************************************************************
-//	列挙型定義(モーションの種類)
-//************************************************************
+	//************************************************************
+	//	列挙型定義(モーションの種類)
+	//************************************************************
 	enum MOTIONTYPE
 	{
 		MOTIONTYPE_NEUTRAL = 0,		// 待機
@@ -66,7 +59,6 @@ public:			// 誰でもアクセスできる
 	// セット・ゲット関係
 
 	CMotion* GetMotion(void) const;				// モーションの情報の取得処理
-	CCatAct* GetAction(void) const;			// アクションの情報の取得処理
 
 	// 静的メンバ関数
 	static CCat* Get(void);					// 取得処理
@@ -83,7 +75,6 @@ private:		// 自分だけアクセスできる
 
 	// メンバ変数
 	CMotion* m_pMotion;				// モーションの情報
-	CCatAct* m_pAction;				// プレイヤーの行動の情報
 
 	D3DXVECTOR3 m_AttackPos;		// 攻撃の位置
 	D3DXVECTOR3 m_posDest;			// 目的の位置

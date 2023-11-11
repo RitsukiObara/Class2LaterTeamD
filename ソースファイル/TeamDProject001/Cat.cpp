@@ -46,7 +46,6 @@ CCat::CCat() : CCharacter(CObject::TYPE_CAT, CObject::PRIORITY_PLAYER)
 {
 	// 全ての値をクリアする
 	m_pMotion = nullptr;			// モーションの情報
-	m_pAction = nullptr;			// プレイヤーの行動の情報
 	m_AttackPos = NONE_D3DXVECTOR3;	//攻撃の位置
 	m_posDest = NONE_D3DXVECTOR3;	// 目的の位置
 	m_move = NONE_D3DXVECTOR3;		// 移動量
@@ -311,15 +310,6 @@ CMotion* CCat::GetMotion(void) const
 {
 	// モーションの情報を返す
 	return m_pMotion;
-}
-
-//===========================================
-// アクションの情報の設定処理
-//===========================================
-CCatAct* CCat::GetAction(void) const
-{
-	// 行動状態の情報を返す
-	return m_pAction;
 }
 
 //===========================================

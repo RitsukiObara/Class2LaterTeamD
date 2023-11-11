@@ -271,17 +271,17 @@ void CRat::Move(void)
 	// ローカル変数宣言
 	D3DXVECTOR3 rot = GetRot();
 
-	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_D) == true)
-	{ // Dキーを押した場合
+	if (CManager::Get()->GetInputGamePad()->GetGameStickLXPress(m_nRatIdx) > 0)
+	{ // 右を押した場合
 
-		if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_W) == true)
-		{ // Wキーを押した場合
+		if (CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) > 0)
+		{ // 上を押した場合
 
 			// 向きを設定する
 			rot.y = D3DX_PI * 0.25f;
 		}
-		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true)
-		{ // Sキーを押した場合
+		else if (CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) < 0)
+		{ // 下を押した場合
 
 			// 向きを設定する
 			rot.y = D3DX_PI * 0.75f;
@@ -293,17 +293,17 @@ void CRat::Move(void)
 			rot.y = D3DX_PI * 0.5f;
 		}
 	}
-	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_A) == true)
-	{ // Aキーを押した場合
+	else if (CManager::Get()->GetInputGamePad()->GetGameStickLXPress(m_nRatIdx) < 0)
+	{ // 左を押した場合
 
-		if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_W) == true)
-		{ // Wキーを押した場合
+		if (CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) > 0)
+		{ // 上を押した場合
 
 			// 向きを設定する
 			rot.y = D3DX_PI * -0.25f;
 		}
-		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true)
-		{ // Sキーを押した場合
+		else if (CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) < 0)
+		{ // 下を押した場合
 
 			// 向きを設定する
 			rot.y = D3DX_PI * -0.75f;
@@ -315,14 +315,14 @@ void CRat::Move(void)
 			rot.y = D3DX_PI * -0.5f;
 		}
 	}
-	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_W) == true)
-	{ // Wキーを押した場合
+	else if (CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) > 0)
+	{ // 上を押した場合
 
 		// 向きを設定する
 		rot.y = 0.0f;
 	}
-	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true)
-	{ // Sキーを押した場合
+	else if (CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) < 0)
+	{ // 下を押した場合
 
 		// 向きを設定する
 		rot.y = D3DX_PI;
@@ -351,9 +351,9 @@ void CRat::Jump(void)
 	D3DXVECTOR3 pos = GetPos();
 	D3DXVECTOR3 rot = GetRot();
 
-	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_SPACE) == true &&
+	if (CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_A, m_nRatIdx) == true &&
 		m_bJump == false && m_bLand == true)
-	{ // SPACEキーを押した場合
+	{ // Aボタンを押した場合
 
 		m_move.y = ADD_MOVE_Y;	// 浮力代入
 
@@ -381,8 +381,8 @@ void CRat::Attack(void)
 	D3DXVECTOR3 pos = GetPos();
 	D3DXVECTOR3 rot = GetRot();
 
-	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_J) == true/* && m_bAttack == false*/)
-	{ // Jキーを押した場合
+	if (CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_B,m_nRatIdx) == true/* && m_bAttack == false*/)
+	{ // Bボタンを押した場合
 
 		while (pObstacle != nullptr)
 		{ // ブロックの情報が NULL じゃない場合
