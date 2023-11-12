@@ -231,7 +231,6 @@
     <ClCompile Include="shadowCircle.cpp" />
     <ClCompile Include="shadowModel.cpp" />
     <ClCompile Include="skybox.cpp" />
-    <ClCompile Include="slash.cpp" />
     <ClCompile Include="slime.cpp" />
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="stun.cpp" />
@@ -316,7 +315,6 @@
     <ClInclude Include="shadowCircle.h" />
     <ClInclude Include="shadowModel.h" />
     <ClInclude Include="skybox.h" />
-    <ClInclude Include="slash.h" />
     <ClInclude Include="slime.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="stun.h" />
