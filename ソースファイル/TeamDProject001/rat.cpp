@@ -1,6 +1,6 @@
 //===========================================
 //
-// プレイヤーのメイン処理[player.cpp]
+// ラットのメイン処理[rat.cpp]
 // Author 小原立暉
 //
 //===========================================
@@ -9,38 +9,40 @@
 //*******************************************
 #include "main.h"
 #include "rat.h"
+#include "motion.h"
 #include "game.h"
 #include "input.h"
 #include "manager.h"
 #include "renderer.h"
 #include "debugproc.h"
 #include "useful.h"
-#include "Particle.h"
 
+#include "collision.h"
 #include "elevation_manager.h"
 #include "objectElevation.h"
 #include "obstacle_manager.h"
 #include "obstacle.h"
-#include "collision.h"
+#include "Particle.h"
 
 //-------------------------------------------
 // マクロ定義
 //-------------------------------------------
-#define GRAVITY		(1.0f)			// 重力
-#define ADD_MOVE_Y	(30.0f)			// 浮力
-#define NONE_RATIDX	(-1)			// ネズミの番号の初期値
-#define ATTACK_DISTANCE	(200.0f)	// 攻撃範囲までの距離
-#define MAX_LIFE	(3)				// 寿命の最大値
-#define TIME_DAMAGE	(60 * 1)		// ダメージ食らうまでの時間
-#define SPEED		(20.0f)			// 速度
-#define SIZE		(D3DXVECTOR3(30.0f, 50.0f, 30.0f))		// サイズ
+#define GRAVITY			(1.0f)			// 重力
+#define ADD_MOVE_Y		(30.0f)			// 浮力
+#define NONE_RATIDX		(-1)			// ネズミの番号の初期値
+#define ATTACK_DISTANCE	(200.0f)		// 攻撃範囲までの距離
+#define MAX_LIFE		(3)				// 寿命の最大値
+#define TIME_DAMAGE		(60 * 1)		// ダメージ食らうまでの時間
+#define SPEED			(20.0f)			// 速度
+#define SIZE			(D3DXVECTOR3(30.0f, 50.0f, 30.0f))		// サイズ
 
 //==============================
 // コンストラクタ
 //==============================
-CRat::CRat() : CModel(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
+CRat::CRat() : CCharacter(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 {
 	// 全ての値をクリアする
+	m_pMotion = nullptr;				// モーションの情報
 	m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_nRatIdx = NONE_RATIDX;			// ネズミの番号
 	m_nLife = 0;						// 寿命
@@ -66,12 +68,53 @@ CRat::~CRat()
 //==============================
 HRESULT CRat::Init(void)
 {
-	if (FAILED(CModel::Init()))
+	if (FAILED(CCharacter::Init()))
 	{ // 初期化処理に失敗した場合
+
+	  // 停止
+		assert(false);
 
 		// 失敗を返す
 		return E_FAIL;
 	}
+
+	// ベタ打ち
+	SetNumModel(6);
+
+	// データの設定処理
+	CCharacter::SetData();
+
+	if (m_pMotion == nullptr)
+	{ // モーションが NULL だった場合
+
+	  // モーションの生成処理
+		m_pMotion = CMotion::Create();
+	}
+	else
+	{ // ポインタが NULL じゃない場合
+
+		// 停止
+		assert(false);
+	}
+
+	if (m_pMotion != nullptr)
+	{ // ポインタが NULL じゃない場合
+
+		// モーションの情報を取得する
+		m_pMotion->SetModel(GetHierarchy(), GetNumModel());
+
+		// ロード処理
+		m_pMotion->Load(CMotion::TYPE_CAT);
+	}
+	else
+	{ // ポインタが NULL じゃない場合
+
+	  // 停止
+		assert(false);
+	}
+
+	// モーションの設定処理
+	m_pMotion->Set(MOTIONTYPE_NEUTRAL);
 
 	// 全ての値を初期化する
 	m_move = NONE_D3DXVECTOR3;			// 移動量
@@ -89,11 +132,15 @@ HRESULT CRat::Init(void)
 //========================================
 void CRat::Uninit(void)
 {
+	// モーションのメモリを開放する
+	delete m_pMotion;
+	m_pMotion = nullptr;
+
 	// ネズミを消去する
 	CGame::DeleteRat(m_nRatIdx);
 
 	// 終了処理
-	CModel::Uninit();
+	CCharacter::Uninit();
 }
 
 //=====================================
@@ -128,6 +175,9 @@ void CRat::Update(void)
 	// 障害物との当たり判定
 	ObstacleCollision();
 
+	// モーションの更新処理
+	m_pMotion->Update();
+
 	// デバッグ表示
 	CManager::Get()->GetDebugProc()->Print("位置：%f %f %f\n向き：%f %f %f\nジャンプ状況：%d\n寿命：%d\n", GetPos().x, GetPos().y, GetPos().z, GetRot().x, GetRot().y, GetRot().z, m_bJump, m_nLife);
 }
@@ -138,7 +188,7 @@ void CRat::Update(void)
 void CRat::Draw(void)
 {
 	// 描画処理
-	CModel::Draw();
+	CCharacter::Draw();
 }
 
 //=====================================
@@ -151,7 +201,19 @@ void CRat::SetData(const D3DXVECTOR3& pos)
 	SetPosOld(pos);							// 前回の位置
 	SetRot(NONE_D3DXVECTOR3);				// 向き
 	SetScale(NONE_SCALE);					// 拡大率
-	SetFileData(CXFile::TYPE_KARIPLAYER);	// モデルの情報設定
+
+	for (int nCntData = 0; nCntData < GetNumModel(); nCntData++)
+	{
+		// 初期化処理
+		GetHierarchy(nCntData)->SetPos(pos);										// 位置
+		GetHierarchy(nCntData)->SetPosOld(pos);										// 前回の位置
+		GetHierarchy(nCntData)->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));				// 向き
+		GetHierarchy(nCntData)->SetScale(NONE_SCALE);								// 拡大率
+		GetHierarchy(nCntData)->SetFileData(CXFile::TYPE(INIT_CAT + nCntData));		// データの設定処理
+	}
+
+	// モーションの設定処理
+	m_pMotion->Set(MOTIONTYPE_NEUTRAL);
 }
 
 //=======================================
@@ -388,13 +450,13 @@ void CRat::Attack(void)
 		{ // ブロックの情報が NULL じゃない場合
 
 			if (useful::RectangleCollisionXY(D3DXVECTOR3(pos.x + sinf(rot.y) * ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * ATTACK_DISTANCE), pObstacle->GetPos(),
-				GetFileData().vtxMax, pObstacle->GetFileData().vtxMax,
-				GetFileData().vtxMin, pObstacle->GetFileData().vtxMin) == true)
+				SIZE, pObstacle->GetFileData().vtxMax,
+				-SIZE, pObstacle->GetFileData().vtxMin) == true)
 			{ // XYの矩形に当たってたら
 
 				if (useful::RectangleCollisionXZ(D3DXVECTOR3(pos.x + sinf(rot.y) * ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * ATTACK_DISTANCE), pObstacle->GetPos(),
-					GetFileData().vtxMax, pObstacle->GetFileData().vtxMax,
-					GetFileData().vtxMin, pObstacle->GetFileData().vtxMin) == true)
+					SIZE, pObstacle->GetFileData().vtxMax,
+					-SIZE, pObstacle->GetFileData().vtxMin) == true)
 				{ // XZの矩形に当たってたら
 
 					// 障害物の終了処理
@@ -426,13 +488,13 @@ void CRat::Hit(void)
 		{ // ブロックの情報が NULL じゃない場合
 
 			if (useful::RectangleCollisionXY(pos, pObstacle->GetPos(),
-				GetFileData().vtxMax, pObstacle->GetFileData().vtxMax,
-				GetFileData().vtxMin, pObstacle->GetFileData().vtxMin) == true)
+				SIZE, pObstacle->GetFileData().vtxMax,
+				-SIZE, pObstacle->GetFileData().vtxMin) == true)
 			{ // XYの矩形に当たってたら
 
 				if (useful::RectangleCollisionXZ(pos, pObstacle->GetPos(),
-					GetFileData().vtxMax, pObstacle->GetFileData().vtxMax,
-					GetFileData().vtxMin, pObstacle->GetFileData().vtxMin) == true)
+					SIZE, pObstacle->GetFileData().vtxMax,
+					-SIZE, pObstacle->GetFileData().vtxMin) == true)
 				{ // XZの矩形に当たってたら
 
 					m_nLife--;		// 寿命減らす

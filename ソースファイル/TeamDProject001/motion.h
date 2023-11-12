@@ -78,7 +78,6 @@ public:			// 誰でもアクセスできる
 	void SetInfo(Info info);							// モーションの情報の設定処理
 	void SetModel(CHierarchy **ppHier, int nNumModel);	// モデルの設定処理
 	void Load(STYLE type);								// モーションのロード処理
-	void LoadPlayer(void);								// プレイヤーのモーションのロード処理
 	void LoadMotion(const char *pFilename);				// 指定されたファイルのモーションのロード処理
 
 	// 静的メンバ関数
