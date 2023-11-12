@@ -24,6 +24,7 @@ public:			// 誰でもアクセスできる
 	{
 		TYPE_CARDBOARD = 0,		// 段ボール
 		TYPE_TISSUE,			// ティッシュ箱
+		TYPE_PENHOLDER,			// ペン立て
 		TYPE_MAX				// この列挙型の総数
 	};
 

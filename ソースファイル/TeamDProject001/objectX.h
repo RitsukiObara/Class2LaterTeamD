@@ -38,6 +38,7 @@ public:			// 誰でもアクセスできる
 		TYPE_HONEYBOTTLE,		// 蜂蜜のボトル
 		TYPE_TISSUEBOX,			// ティッシュ箱
 		TYPE_CARDBOARD,			// 段ボール
+		TYPE_PENHOLDER,			// ペン立て
 
 		//マップモデル
 		TYPE_KITCHEN,			//キッチン

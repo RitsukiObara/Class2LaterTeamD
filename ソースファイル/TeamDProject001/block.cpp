@@ -162,6 +162,13 @@ void CBlock::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE 
 		SetFileData(CXFile::TYPE_TISSUEBOX);
 
 		break;
+		
+	case CBlock::TYPE_PENHOLDER:
+
+		// ƒyƒ“—§‚Ä
+		SetFileData(CXFile::TYPE_PENHOLDER);
+
+		break;
 
 	default:
 
