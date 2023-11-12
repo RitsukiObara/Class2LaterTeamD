@@ -294,7 +294,7 @@ void CGame::Update(void)
 	}
 
 #endif
-
+		
 	CManager::Get()->GetDebugProc()->Print("ó‘ÔF%d", m_GameState);
 }
 
