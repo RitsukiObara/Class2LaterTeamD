@@ -286,6 +286,15 @@ int CObject2D::GetTexIdx(void) const
 }
 
 //===========================================
+// テクスチャのインデックスの取得処理
+//===========================================
+char *CObject2D::GetTexName(void)
+{
+	// テクスチャのインデックスを返す
+	return CManager::Get()->GetTexture()->GetTexName(m_nTexIdx);
+}
+
+//===========================================
 // 頂点情報の設定
 //===========================================
 void CObject2D::SetVertex(void)

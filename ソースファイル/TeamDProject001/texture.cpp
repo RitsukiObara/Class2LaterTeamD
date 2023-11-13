@@ -168,6 +168,20 @@ LPDIRECT3DTEXTURE9 CTexture::GetAddress(const int nIdx) const
 }
 
 //--------------------------------------------
+// テクスチャの取得処理
+//--------------------------------------------
+char *CTexture::GetTexName(const int nIdx)
+{
+	if (nIdx > NONE_TEXIDX)
+	{ // テクスチャの番号が -1 以上の場合
+
+	  // テクスチャの情報を返す
+		return &m_aTextureName[nIdx][0];
+	}
+	return NULL;
+}
+
+//--------------------------------------------
 // ロード処理
 //--------------------------------------------
 HRESULT CTexture::Load(void)
