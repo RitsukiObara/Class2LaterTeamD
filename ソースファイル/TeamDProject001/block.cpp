@@ -152,7 +152,7 @@ void CBlock::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE 
 	case CBlock::TYPE_CARDBOARD:
 
 		// íiÉ{Å[Éã
-		SetFileData(CXFile::TYPE_WOODBLOCK);
+		SetFileData(CXFile::TYPE_CARDBOARD);
 
 		break;
 
