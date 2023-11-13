@@ -197,6 +197,9 @@ void CRat::Update(void)
 	// 障害物との当たり判定
 	ObstacleCollision();
 
+	// 状態更新処理
+	UpdateState();
+
 	if (m_pMotion != nullptr)
 	{ // モーションが NULL じゃない場合
 
@@ -518,6 +521,38 @@ void CRat::Attack(void)
 }
 
 //=======================================
+// 状態更新処理
+//=======================================
+void CRat::UpdateState(void)
+{
+	switch (m_State)
+	{
+	case CRat::STATE_NONE:		// 何でもない状態
+		break;
+	case CRat::STATE_WAIT:		// 待機状態
+		break;
+	case CRat::STATE_RUN:		// 走行状態
+		break;
+	case CRat::STATE_ATTACK:	// 攻撃状態
+		break;
+	case CRat::STATE_MUTEKI:	// 無敵状態
+		break;
+	case CRat::STATE_DAMAGE:	// ダメージ状態
+		break;
+	case CRat::STATE_DEATH:		// 死亡状態
+
+		break;
+
+	default:
+
+		// 停止
+		assert(false);
+
+		break;
+	}
+}
+
+//=======================================
 // ヒット処理
 //=======================================
 bool CRat::Hit(void)
@@ -532,9 +567,9 @@ bool CRat::Hit(void)
 		while (pObstacle != nullptr)
 		{ // ブロックの情報が NULL じゃない場合
 
-			if (useful::RectangleCollisionXY(pos, pObstacle->GetPos(),
+			/*if (useful::RectangleCollisionXY(pos, pObstacle->GetPos(),
 				SIZE, pObstacle->GetFileData().vtxMax,
-				-SIZE, pObstacle->GetFileData().vtxMin) == true)
+				-SIZE, pObstacle->GetFileData().vtxMin) == true)*/
 			{ // XYの矩形に当たってたら
 
 				if (useful::RectangleCollisionXZ(pos, pObstacle->GetPos(),
@@ -550,8 +585,10 @@ bool CRat::Hit(void)
 					if (m_nLife <= 0)
 					{ // 寿命が無いとき
 
+						m_State = STATE_DEATH;		// 死亡状態にする
+
 						// 終了処理
-						Uninit();
+						//Uninit();
 
 						// 死を返す
 						return true;
