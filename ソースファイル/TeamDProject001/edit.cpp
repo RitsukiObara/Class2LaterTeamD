@@ -10,6 +10,7 @@
 #include "main.h"
 #include "edit.h"
 #include "manager.h"
+#include "debugproc.h"
 #include "input.h"
 #include "useful.h"
 
@@ -21,6 +22,7 @@
 //-------------------------------------------
 #define ADJUST_MOVE		(2.0f)		// 微調整状態の移動量
 #define NORMAL_MOVE		(16.0f)		// 通常状態の移動量
+#define ROTMOVE			(0.01f)		// 向きの移動量
 
 //==============================
 // コンストラクタ
@@ -78,6 +80,8 @@ void CEdit::Update(void)
 	{
 	case CEdit::TYPE_OBSTACLE:		// 障害物
 
+		// 障害物の処理
+		ObstacleProcess();
 
 		break;
 
@@ -95,11 +99,17 @@ void CEdit::Update(void)
 	// 微調整移動処理
 	Adjust();
 
+	// 向きの移動処理
+	RotMove();
+
 	// 消去処理
 	Delete();
 
 	// 設置処理
 	Set();
+
+	// デバッグ表示
+	CManager::Get()->GetDebugProc()->Print("位置：%f %f %f\n", GetPos().x, GetPos().y, GetPos().z);
 }
 
 //=====================================
@@ -187,8 +197,9 @@ CEdit* CEdit::Create(void)
 //=======================================
 void CEdit::Move(void)
 {
-	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LSHIFT) == true)
-	{ // 左SHIFTキーを押していた場合
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LSHIFT) == true ||
+		CManager::Get()->GetInputKeyboard()->GetPress(DIK_LCONTROL) == true)
+	{ // 左SHIFTまたは、左CTRLキーを押していた場合
 
 		// この先の処理を行わない
 		return;
@@ -234,6 +245,13 @@ void CEdit::Move(void)
 //=======================================
 void CEdit::Adjust(void)
 {
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LCONTROL) == true)
+	{ // 左CTRLキーを押している場合
+
+		// この先の処理を行わない
+		return;
+	}
+
 	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LSHIFT) == true)
 	{ // 左SHIFTキーを押していた場合
 
@@ -274,10 +292,53 @@ void CEdit::Adjust(void)
 }
 
 //=======================================
+// 向きの移動処理
+//=======================================
+void CEdit::RotMove(void)
+{
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LCONTROL) == true)
+	{ // 左CTRLキーを押している場合
+
+		// この先の処理を行わない
+		return;
+	}
+
+	// 向きを取得する
+	D3DXVECTOR3 rot = GetRot();
+
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_RIGHT) == true)
+	{ // 右キーを押している場合
+
+		// 向きを減算する
+		rot.y -= ROTMOVE;
+	}
+
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LEFT) == true)
+	{ // 左キーを押している場合
+
+		// 向きを加算する
+		rot.y += ROTMOVE;
+	}
+
+	// 向きの正規化
+	useful::RotNormalize(&rot.y);
+
+	// 向きを設定する
+	SetRot(rot);
+}
+
+//=======================================
 // 設置処理
 //=======================================
 void CEdit::Set(void)
 {
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LCONTROL) == true)
+	{ // 左CTRLキーを押している場合
+
+		// この先の処理を行わない
+		return;
+	}
+
 	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_0) == true)
 	{ // 0キーを押した場合
 
@@ -301,10 +362,68 @@ void CEdit::Set(void)
 }
 
 //=======================================
+// 障害物の設定処理
+//=======================================
+void CEdit::ObstacleProcess(void)
+{
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LCONTROL) == true)
+	{ // 左CTRLキーを押している場合
+
+		// この先の処理を行わない
+		return;
+	}
+
+	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_1) == true)
+	{ // 1キーを押した場合
+
+		// 障害物の種類を設定する
+		m_obstacleType = (CObstacle::TYPE)((m_obstacleType + 1) % CObstacle::TYPE_MAX);
+
+		switch (m_obstacleType)
+		{
+		case CObstacle::TYPE_HONEY:
+
+			// 蜂蜜を設定する
+			SetFileData(CXFile::TYPE_HONEY);
+
+			break;
+
+		case CObstacle::TYPE_SLIME:
+
+			// スライムを設定する
+			SetFileData(CXFile::TYPE_SLIME);
+
+			break;
+
+		case CObstacle::TYPE_HAIRBALL:
+
+			// 毬を設定する
+			SetFileData(CXFile::TYPE_HAIRBALL);
+
+			break;
+
+		default:
+
+			// 停止
+			assert(false);
+
+			break;
+		}
+	}
+}
+
+//=======================================
 // 消去処理
 //=======================================
 void CEdit::Delete(void)
 {
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LCONTROL) == true)
+	{ // 左CTRLキーを押している場合
+
+		// この先の処理を行わない
+		return;
+	}
+
 	switch (m_type)
 	{
 	case CEdit::TYPE_OBSTACLE:		// 障害物
