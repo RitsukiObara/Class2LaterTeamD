@@ -25,6 +25,7 @@ public:			// 誰でもアクセスできる
 		TYPE_HONEY = 0,		// 蜂蜜
 		TYPE_SLIME,			// スライム
 		TYPE_HAIRBALL,		// 毬
+		TYPE_FLOWERVASE,	// 花瓶
 		TYPE_MAX			// この列挙型の総数
 	};
 

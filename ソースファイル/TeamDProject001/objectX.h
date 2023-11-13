@@ -40,6 +40,7 @@ public:			// 誰でもアクセスできる
 		TYPE_CARDBOARD,			// 段ボール
 		TYPE_PENHOLDER,			// ペン立て
 		TYPE_REMOCON,			// リモコン
+		TYPE_FLOWERVASE,
 
 		//マップモデル
 		TYPE_KITCHEN,			//キッチン

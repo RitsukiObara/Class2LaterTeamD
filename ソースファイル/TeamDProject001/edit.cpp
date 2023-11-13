@@ -433,6 +433,13 @@ void CEdit::ObstacleProcess(void)
 
 		break;
 
+	case CObstacle::TYPE_FLOWERVASE:
+
+		// â‘ïrÇê›íËÇ∑ÇÈ
+		SetFileData(CXFile::TYPE_FLOWERVASE);
+
+		break;
+
 	default:
 
 		// í‚é~
