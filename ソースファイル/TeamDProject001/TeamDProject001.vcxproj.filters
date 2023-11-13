@@ -330,6 +330,9 @@
     <ClCompile Include="player_idUI.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="flowervase.cpp">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -583,6 +586,9 @@
     </ClInclude>
     <ClInclude Include="player_idUI.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="flowervase.h">
+      <Filter>Gimmick\Obstacle</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
