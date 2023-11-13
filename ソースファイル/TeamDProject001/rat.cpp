@@ -166,8 +166,12 @@ void CRat::Update(void)
 	// 攻撃処理
 	Attack();
 
-	// ヒット処理
-	Hit();
+	if (Hit() == true)
+	{ // ヒット処理で死んだ場合
+
+		// この先の処理を行わない
+		return;
+	}
 
 	// 起伏地面の当たり判定
 	Elevation();
@@ -475,7 +479,7 @@ void CRat::Attack(void)
 //=======================================
 // ヒット処理
 //=======================================
-void CRat::Hit(void)
+bool CRat::Hit(void)
 {
 	// ローカル変数宣言
 	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を取得する
@@ -507,6 +511,9 @@ void CRat::Hit(void)
 
 						// 終了処理
 						Uninit();
+
+						// 死を返す
+						return true;
 					}
 				}
 			}
@@ -520,6 +527,9 @@ void CRat::Hit(void)
 
 		m_nDamageCounter++;		// ダメージ食らうまでの時間加算
 	}
+
+	// 生を返す
+	return false;
 }
 
 //=======================================

@@ -81,7 +81,7 @@ private:		// 自分だけアクセスできる
 	void Attack(void);				// 攻撃処理
 	void Elevation(void);			// 起伏地面の当たり判定
 	void ObstacleCollision(void);	// 障害物との当たり判定
-	void Hit(void);					// ヒット処理
+	bool Hit(void);					// ヒット処理
 
 	// メンバ変数
 	CMotion* m_pMotion;			// モーションの情報
