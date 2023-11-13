@@ -10,17 +10,19 @@
 #include "main.h"
 #include "edit.h"
 #include "manager.h"
+#include "debugproc.h"
 #include "input.h"
 #include "useful.h"
 
-#include "obstacle.h"
 #include "obstacle_manager.h"
+#include "block_manager.h"
 
 //-------------------------------------------
 // マクロ定義
 //-------------------------------------------
 #define ADJUST_MOVE		(2.0f)		// 微調整状態の移動量
 #define NORMAL_MOVE		(16.0f)		// 通常状態の移動量
+#define ROTMOVE			(0.01f)		// 向きの移動量
 
 //==============================
 // コンストラクタ
@@ -28,8 +30,9 @@
 CEdit::CEdit() : CModel(CObject::TYPE_EDIT, CObject::PRIORITY_UI)
 {
 	// 全ての値をクリアする
-	m_type = TYPE::TYPE_OBSTACLE;			// 種類
-	m_obstacleType = CObstacle::TYPE_HONEY;	// 障害物の種類
+	m_type = TYPE::TYPE_OBSTACLE;				// 種類
+	m_obstacleType = CObstacle::TYPE_HONEY;		// 障害物の種類
+	m_blockType = CBlock::TYPE_CARDBOARD;		// ブロックの種類
 }
 
 //==============================
@@ -55,6 +58,7 @@ HRESULT CEdit::Init(void)
 	// 全ての値を初期化する
 	m_type = TYPE::TYPE_OBSTACLE;			// 種類
 	m_obstacleType = CObstacle::TYPE_HONEY;	// 障害物の種類
+	m_blockType = CBlock::TYPE_CARDBOARD;	// ブロックの種類
 
 	// 値を返す
 	return S_OK;
@@ -74,20 +78,11 @@ void CEdit::Uninit(void)
 //=====================================
 void CEdit::Update(void)
 {
-	switch (m_type)
-	{
-	case CEdit::TYPE_OBSTACLE:		// 障害物
+	// 種類ごとの処理
+	TypeProcess();
 
-
-		break;
-
-	default:						// 上記以外
-
-		// 停止
-		assert(false);
-
-		break;
-	}
+	// 種類の設定処理 
+	Type();
 
 	// 移動処理
 	Move();
@@ -95,11 +90,17 @@ void CEdit::Update(void)
 	// 微調整移動処理
 	Adjust();
 
+	// 向きの移動処理
+	RotMove();
+
 	// 消去処理
 	Delete();
 
 	// 設置処理
 	Set();
+
+	// デバッグ表示
+	CManager::Get()->GetDebugProc()->Print("位置：%f %f %f\n", GetPos().x, GetPos().y, GetPos().z);
 }
 
 //=====================================
@@ -121,10 +122,12 @@ void CEdit::SetData(void)
 	SetPosOld(NONE_D3DXVECTOR3);			// 前回の位置
 	SetRot(NONE_D3DXVECTOR3);				// 向き
 	SetScale(NONE_SCALE);					// 拡大率
-	SetFileData(CXFile::TYPE_WOODBLOCK);	// モデルの情報設定
+	SetFileData(CXFile::TYPE_HONEY);		// モデルの情報設定
 
 	// 全ての値をクリアする
-	m_type = TYPE::TYPE_OBSTACLE;		// 種類
+	m_type = TYPE::TYPE_OBSTACLE;			// 種類
+	m_obstacleType = CObstacle::TYPE_HONEY;	// 障害物の種類
+	m_blockType = CBlock::TYPE_CARDBOARD;	// ブロックの種類
 }
 
 //=======================================
@@ -183,12 +186,50 @@ CEdit* CEdit::Create(void)
 }
 
 //=======================================
+// 種類ごとの処理
+//=======================================
+void CEdit::TypeProcess(void)
+{
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LCONTROL) == true)
+	{ // 左CTRLキーを押している場合
+
+		// この先の処理を行わない
+		return;
+	}
+
+	switch (m_type)
+	{
+	case CEdit::TYPE_OBSTACLE:		// 障害物
+
+		// 障害物の処理
+		ObstacleProcess();
+
+		break;
+
+	case CEdit::TYPE_BLOCK:			// ブロック
+
+		// ブロックの処理
+		BlockProcess();
+
+		break;
+
+	default:						// 上記以外
+
+		// 停止
+		assert(false);
+
+		break;
+	}
+}
+
+//=======================================
 // 移動処理
 //=======================================
 void CEdit::Move(void)
 {
-	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LSHIFT) == true)
-	{ // 左SHIFTキーを押していた場合
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LSHIFT) == true ||
+		CManager::Get()->GetInputKeyboard()->GetPress(DIK_LCONTROL) == true)
+	{ // 左SHIFTまたは、左CTRLキーを押していた場合
 
 		// この先の処理を行わない
 		return;
@@ -234,6 +275,13 @@ void CEdit::Move(void)
 //=======================================
 void CEdit::Adjust(void)
 {
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LCONTROL) == true)
+	{ // 左CTRLキーを押している場合
+
+		// この先の処理を行わない
+		return;
+	}
+
 	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LSHIFT) == true)
 	{ // 左SHIFTキーを押していた場合
 
@@ -274,10 +322,53 @@ void CEdit::Adjust(void)
 }
 
 //=======================================
+// 向きの移動処理
+//=======================================
+void CEdit::RotMove(void)
+{
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LCONTROL) == true)
+	{ // 左CTRLキーを押している場合
+
+		// この先の処理を行わない
+		return;
+	}
+
+	// 向きを取得する
+	D3DXVECTOR3 rot = GetRot();
+
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_RIGHT) == true)
+	{ // 右キーを押している場合
+
+		// 向きを減算する
+		rot.y -= ROTMOVE;
+	}
+
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LEFT) == true)
+	{ // 左キーを押している場合
+
+		// 向きを加算する
+		rot.y += ROTMOVE;
+	}
+
+	// 向きの正規化
+	useful::RotNormalize(&rot.y);
+
+	// 向きを設定する
+	SetRot(rot);
+}
+
+//=======================================
 // 設置処理
 //=======================================
 void CEdit::Set(void)
 {
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LCONTROL) == true)
+	{ // 左CTRLキーを押している場合
+
+		// この先の処理を行わない
+		return;
+	}
+
 	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_0) == true)
 	{ // 0キーを押した場合
 
@@ -287,6 +378,13 @@ void CEdit::Set(void)
 
 			// 障害物の生成処理
 			CObstacle::Create(GetPos(), m_obstacleType);
+
+			break;
+
+		case CEdit::TYPE_BLOCK:
+
+			// ブロックの生成処理
+			CBlock::Create(GetPos(), GetRot(), m_blockType);
 
 			break;
 
@@ -301,16 +399,138 @@ void CEdit::Set(void)
 }
 
 //=======================================
+// 障害物の設定処理
+//=======================================
+void CEdit::ObstacleProcess(void)
+{
+	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_1) == true)
+	{ // 1キーを押した場合
+
+		// 障害物の種類を設定する
+		m_obstacleType = (CObstacle::TYPE)((m_obstacleType + 1) % CObstacle::TYPE_MAX);
+	}
+
+	switch (m_obstacleType)
+	{
+	case CObstacle::TYPE_HONEY:
+
+		// 蜂蜜を設定する
+		SetFileData(CXFile::TYPE_HONEY);
+
+		break;
+
+	case CObstacle::TYPE_SLIME:
+
+		// スライムを設定する
+		SetFileData(CXFile::TYPE_SLIME);
+
+		break;
+
+	case CObstacle::TYPE_HAIRBALL:
+
+		// 毬を設定する
+		SetFileData(CXFile::TYPE_HAIRBALL);
+
+		break;
+
+	default:
+
+		// 停止
+		assert(false);
+
+		break;
+	}
+}
+
+//=======================================
+// ブロックの処理
+//=======================================
+void CEdit::BlockProcess(void)
+{
+	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_1) == true)
+	{ // 1キーを押した場合
+
+		// ブロックの種類を設定する
+		m_blockType = (CBlock::TYPE)((m_blockType + 1) % CBlock::TYPE_MAX);
+	}
+
+	switch (m_blockType)
+	{
+	case CBlock::TYPE_CARDBOARD:
+
+		// 段ボールを設定する
+		SetFileData(CXFile::TYPE_CARDBOARD);
+
+		break;
+
+	case CBlock::TYPE_TISSUE:
+
+		// ティッシュ箱を設定する
+		SetFileData(CXFile::TYPE_TISSUEBOX);
+
+		break;
+
+	case CBlock::TYPE_PENHOLDER:
+
+		// ペン立てを設定する
+		SetFileData(CXFile::TYPE_PENHOLDER);
+
+		break;
+
+	default:
+
+		// 停止
+		assert(false);
+
+		break;
+	}
+}
+
+//=======================================
+// 種類の変更処理
+//=======================================
+void CEdit::Type(void)
+{
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LCONTROL) == true)
+	{ // 左CTRLキーを押している場合
+
+		// この先の処理を行わない
+		return;
+	}
+
+	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_SPACE) == true)
+	{ // SPACEキーを押した場合
+
+		// 種類を変更する
+		m_type = (CEdit::TYPE)((m_type + 1) % CEdit::TYPE_MAX);
+	}
+}
+
+//=======================================
 // 消去処理
 //=======================================
 void CEdit::Delete(void)
 {
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LCONTROL) == true)
+	{ // 左CTRLキーを押している場合
+
+		// この先の処理を行わない
+		return;
+	}
+
 	switch (m_type)
 	{
 	case CEdit::TYPE_OBSTACLE:		// 障害物
 
 		// 障害物の消去処理
 		DeleteObstacle();
+
+		break;
+
+	case CEdit::TYPE_BLOCK:			// ブロック
+
+		// ブロックの消去処理
+		DeleteBlock();
 
 		break;
 
@@ -350,5 +570,35 @@ void CEdit::DeleteObstacle(void)
 
 		// 次の障害物のポインタを代入する
 		pObstacle = pObstacleNext;
+	}
+}
+
+//=======================================
+// ブロックの消去処理
+//=======================================
+void CEdit::DeleteBlock(void)
+{
+	// ローカル変数宣言
+	CBlock* pBlock = CBlockManager::Get()->GetTop();		// 先頭のブロックを取得する
+	CBlock* pBlockNext = nullptr;							// 次のブロック
+
+	while (pBlock != nullptr)
+	{ // ブロックが NULL じゃない場合
+
+		// 次のブロックを設定する
+		pBlockNext = pBlock->GetNext();
+
+		if (useful::RectangleCollisionXY(GetPos(), pBlock->GetPos(), GetFileData().vtxMax, pBlock->GetFileData().vtxMax, GetFileData().vtxMin, pBlock->GetFileData().vtxMin) == true &&
+			useful::RectangleCollisionXZ(GetPos(), pBlock->GetPos(), GetFileData().vtxMax, pBlock->GetFileData().vtxMax, GetFileData().vtxMin, pBlock->GetFileData().vtxMin) == true &&
+			useful::RectangleCollisionYZ(GetPos(), pBlock->GetPos(), GetFileData().vtxMax, pBlock->GetFileData().vtxMax, GetFileData().vtxMin, pBlock->GetFileData().vtxMin) == true &&
+			CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_9) == true)
+		{ // オブジェクトの中に入っている場合
+
+			// 終了処理
+			pBlock->Uninit();
+		}
+
+		// 次のブロックのポインタを代入する
+		pBlock = pBlockNext;
 	}
 }
