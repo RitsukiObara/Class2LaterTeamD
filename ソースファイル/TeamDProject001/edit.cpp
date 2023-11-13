@@ -477,6 +477,13 @@ void CEdit::BlockProcess(void)
 
 		break;
 
+	case CBlock::TYPE_REMOCON:
+
+		// ƒŠƒ‚ƒRƒ“‚ğİ’è‚·‚é
+		SetFileData(CXFile::TYPE_REMOCON);
+
+		break;
+
 	default:
 
 		// ’â~

@@ -39,6 +39,7 @@ public:			// 誰でもアクセスできる
 		TYPE_TISSUEBOX,			// ティッシュ箱
 		TYPE_CARDBOARD,			// 段ボール
 		TYPE_PENHOLDER,			// ペン立て
+		TYPE_REMOCON,			// リモコン
 
 		//マップモデル
 		TYPE_KITCHEN,			//キッチン
