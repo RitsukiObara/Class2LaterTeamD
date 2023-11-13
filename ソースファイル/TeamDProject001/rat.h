@@ -79,6 +79,7 @@ private:		// 自分だけアクセスできる
 	void Move(void);				// 移動処理
 	void Jump(void);				// ジャンプ処理
 	void Attack(void);				// 攻撃処理
+	void UpdateState(void);			// 状態更新処理
 	void Elevation(void);			// 起伏地面の当たり判定
 	void ObstacleCollision(void);	// 障害物との当たり判定
 	bool Hit(void);					// ヒット処理
