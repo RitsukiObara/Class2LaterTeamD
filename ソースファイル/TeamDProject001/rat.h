@@ -17,6 +17,7 @@
 // 前方宣言
 //--------------------------------------------
 class CMotion;				// モーション
+class CPlayerID;			// プレイヤーのID
 
 //--------------------------------------------
 // クラス(ネズミクラス)
@@ -58,20 +59,19 @@ public:			// 誰でもアクセスできる
 	void Update(void);		// 更新処理
 	void Draw(void);		// 描画処理
 
-	void SetData(const D3DXVECTOR3& pos);				// 情報の設定処理
+	void SetData(const D3DXVECTOR3& pos, const int nID);				// 情報の設定処理
 
 	// セット・ゲット関係
 	void SetMove(const D3DXVECTOR3& move);	// 移動量の設定処理
 	D3DXVECTOR3 GetMove(void) const;		// 移動量の取得処理
 	void SetSpeed(const float fSpeed);		// 速度の設定処理
 	float GetSpeed(void) const;				// 速度の取得処理
-	void SetRatIdx(const int nIdx);			// ネズミの番号の設定処理
 	int GetRatIdx(void) const;				// ネズミの番号の取得処理
 	void SetState(STATE state);				// ネズミの状態の設定処理
 	STATE GetState(void);					// ネズミの状態の取得処理
 
 	// 静的メンバ関数
-	static CRat* Create(const D3DXVECTOR3& pos);		// 生成処理
+	static CRat* Create(const D3DXVECTOR3& pos, const int nID);		// 生成処理
 
 private:		// 自分だけアクセスできる
 
@@ -85,6 +85,7 @@ private:		// 自分だけアクセスできる
 
 	// メンバ変数
 	CMotion* m_pMotion;			// モーションの情報
+	CPlayerID* m_pPlayerID;		// プレイヤーのID
 	D3DXVECTOR3 m_move;			// 移動量
 	int m_nRatIdx;				// ネズミの番号
 	int m_nLife;				// 寿命

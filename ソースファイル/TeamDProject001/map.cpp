@@ -39,6 +39,9 @@ void CMap::Uninit(void)
 			m_Model[nCnt] = NULL;
 		}
 	}
+
+	// –{‘Ì‚ÌI—¹ˆ—
+	Release();
 }
 void CMap::Update(void)
 {

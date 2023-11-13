@@ -117,8 +117,7 @@ HRESULT CGame::Init(void)
 	// ネズミの生成
 	for (int nCntRat = 0; nCntRat < MAX_RAT; nCntRat++)
 	{
-		m_apRat[nCntRat] = CRat::Create(D3DXVECTOR3(500.0f * nCntRat, 0.0f, 0.0f));		// ネズミの情報
-		m_apRat[nCntRat]->SetRatIdx(nCntRat);											// ネズミの番号を設定する
+		m_apRat[nCntRat] = CRat::Create(D3DXVECTOR3(500.0f * nCntRat, 0.0f, 0.0f), nCntRat);		// ネズミの情報
 	}
 
 	//猫の生成
@@ -401,6 +400,28 @@ CGame::STATE CGame::GetState(void)
 {
 	// ゲームの進行状態を返す
 	return m_GameState;
+}
+
+//======================================
+// ネズミの取得処理
+//======================================
+CRat* CGame::GetRat(const int nID)
+{
+	if (nID > MAX_RAT)
+	{ // インデックスが一定未満の場合
+
+		// ネズミの情報を取得する
+		return m_apRat[nID];
+	}
+	else
+	{ // 上記以外
+
+		// 停止
+		assert(false);
+
+		// NULL を返す
+		return nullptr;
+	}
 }
 
 //======================================

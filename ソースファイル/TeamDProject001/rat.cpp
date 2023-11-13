@@ -9,7 +9,6 @@
 //*******************************************
 #include "main.h"
 #include "rat.h"
-#include "motion.h"
 #include "game.h"
 #include "input.h"
 #include "manager.h"
@@ -17,6 +16,8 @@
 #include "debugproc.h"
 #include "useful.h"
 
+#include "motion.h"
+#include "player_idUI.h"
 #include "collision.h"
 #include "elevation_manager.h"
 #include "objectElevation.h"
@@ -43,6 +44,7 @@ CRat::CRat() : CCharacter(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 {
 	// 全ての値をクリアする
 	m_pMotion = nullptr;				// モーションの情報
+	m_pPlayerID = nullptr;				// プレイヤーのID表示
 	m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_nRatIdx = NONE_RATIDX;			// ネズミの番号
 	m_nLife = 0;						// 寿命
@@ -51,8 +53,7 @@ CRat::CRat() : CCharacter(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 	m_bJump = false;					// ジャンプしたか
 	m_bLand = true;						// 着地したか
 	m_bAttack = false;					// 攻撃したか
-	m_State = STATE_NONE;
-
+	m_State = STATE_NONE;				// 状態
 }
 
 //==============================
@@ -117,11 +118,16 @@ HRESULT CRat::Init(void)
 	m_pMotion->Set(MOTIONTYPE_NEUTRAL);
 
 	// 全ての値を初期化する
+	m_pPlayerID = nullptr;				// プレイヤーのID表示
 	m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_nRatIdx = NONE_RATIDX;			// ネズミの番号
 	m_fSpeed = 0.0f;					// 速度
 	m_nLife = MAX_LIFE;					// 寿命
 	m_nDamageCounter = TIME_DAMAGE;		// ダメージ食らうまでのカウンター
+	m_bJump = false;					// ジャンプしたか
+	m_bLand = true;						// 着地したか
+	m_bAttack = false;					// 攻撃したか
+	m_State = STATE_NONE;				// 状態
 
 	// 値を返す
 	return S_OK;
@@ -132,9 +138,21 @@ HRESULT CRat::Init(void)
 //========================================
 void CRat::Uninit(void)
 {
-	// モーションのメモリを開放する
-	delete m_pMotion;
-	m_pMotion = nullptr;
+	if (m_pMotion != nullptr)
+	{ // モーションが NULL じゃない場合
+
+		// モーションのメモリを開放する
+		delete m_pMotion;
+		m_pMotion = nullptr;
+	}
+
+	if (m_pPlayerID != nullptr)
+	{ // プレイヤーのID表示が NULL じゃない場合
+
+		// プレイヤーのID表示の終了処理
+		m_pPlayerID->Uninit();
+		m_pPlayerID = nullptr;
+	}
 
 	// ネズミを消去する
 	CGame::DeleteRat(m_nRatIdx);
@@ -179,8 +197,22 @@ void CRat::Update(void)
 	// 障害物との当たり判定
 	ObstacleCollision();
 
-	// モーションの更新処理
-	m_pMotion->Update();
+	if (m_pMotion != nullptr)
+	{ // モーションが NULL じゃない場合
+
+		// モーションの更新処理
+		m_pMotion->Update();
+	}
+
+	if (m_pPlayerID != nullptr)
+	{ // プレイヤーのID表示が NULL じゃない場合
+
+		// 位置を取得する
+		D3DXVECTOR3 pos = GetPos();
+
+		// 位置を設定する
+		m_pPlayerID->SetPos(D3DXVECTOR3(pos.x, pos.y + 90.0f, pos.z));
+	}
 
 	// デバッグ表示
 	CManager::Get()->GetDebugProc()->Print("位置：%f %f %f\n向き：%f %f %f\nジャンプ状況：%d\n寿命：%d\n", GetPos().x, GetPos().y, GetPos().z, GetRot().x, GetRot().y, GetRot().z, m_bJump, m_nLife);
@@ -198,13 +230,24 @@ void CRat::Draw(void)
 //=====================================
 // 情報の設定処理
 //=====================================
-void CRat::SetData(const D3DXVECTOR3& pos)
+void CRat::SetData(const D3DXVECTOR3& pos, const int nID)
 {
 	// 情報の設定処理
 	SetPos(pos);							// 位置
 	SetPosOld(pos);							// 前回の位置
 	SetRot(NONE_D3DXVECTOR3);				// 向き
 	SetScale(NONE_SCALE);					// 拡大率
+
+	// 情報を設定する
+	m_nRatIdx = nID;					// ネズミの番号
+	m_move = NONE_D3DXVECTOR3;			// 移動量
+	m_fSpeed = 0.0f;					// 速度
+	m_nLife = MAX_LIFE;					// 寿命
+	m_nDamageCounter = TIME_DAMAGE;		// ダメージ食らうまでのカウンター
+	m_bJump = false;					// ジャンプしたか
+	m_bLand = true;						// 着地したか
+	m_bAttack = false;					// 攻撃したか
+	m_State = STATE_NONE;				// 状態
 
 	for (int nCntData = 0; nCntData < GetNumModel(); nCntData++)
 	{
@@ -218,6 +261,13 @@ void CRat::SetData(const D3DXVECTOR3& pos)
 
 	// モーションの設定処理
 	m_pMotion->Set(MOTIONTYPE_NEUTRAL);
+
+	if (m_pPlayerID == nullptr)
+	{ // プレイヤーのID表示が NULL の場合
+
+		// プレイヤーのID表示の生成処理
+		m_pPlayerID = CPlayerID::Create(D3DXVECTOR3(pos.x, pos.y + 90.0f, pos.z), m_nRatIdx);
+	}
 }
 
 //=======================================
@@ -257,15 +307,6 @@ float CRat::GetSpeed(void) const
 }
 
 //=======================================
-// ネズミの番号の設定処理
-//=======================================
-void CRat::SetRatIdx(const int nIdx)
-{
-	// ネズミの番号を設定する
-	m_nRatIdx = nIdx;
-}
-
-//=======================================
 // ネズミの番号の取得処理
 //=======================================
 int CRat::GetRatIdx(void) const
@@ -277,7 +318,7 @@ int CRat::GetRatIdx(void) const
 //=======================================
 // 生成処理
 //=======================================
-CRat* CRat::Create(const D3DXVECTOR3& pos)
+CRat* CRat::Create(const D3DXVECTOR3& pos, const int nID)
 {
 	// ネズミのポインタ
 	CRat* pRat = nullptr;
@@ -313,7 +354,7 @@ CRat* CRat::Create(const D3DXVECTOR3& pos)
 		}
 
 		// 情報の設定処理
-		pRat->SetData(pos);
+		pRat->SetData(pos, nID);
 	}
 	else
 	{ // オブジェクトが NULL の場合

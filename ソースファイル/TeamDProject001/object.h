@@ -56,6 +56,7 @@ public:			// 誰でもアクセスできる
 		TYPE_BLOCK,				// ブロック
 		TYPE_MAP,				// マップ
 		TYPE_SLASH,				// 斬撃演出
+		TYPE_PLAYERID,			// プレイヤーのID
 		TYPE_MAX				// この列挙型の総数
 	};
 
