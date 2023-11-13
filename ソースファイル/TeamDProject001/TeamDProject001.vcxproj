@@ -157,6 +157,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="2DUI_edit.cpp" />
     <ClCompile Include="block.cpp" />
     <ClCompile Include="block_manager.cpp" />
     <ClCompile Include="camera.cpp" />
@@ -244,6 +245,7 @@
     <ClCompile Include="weapon_selectUI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="2DUI_edit.h" />
     <ClInclude Include="block.h" />
     <ClInclude Include="block_manager.h" />
     <ClInclude Include="camera.h" />
