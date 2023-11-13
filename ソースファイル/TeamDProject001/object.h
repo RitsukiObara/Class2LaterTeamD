@@ -24,6 +24,8 @@ public:			// 誰でもアクセスできる
 	{
 		TYPE_NONE = 0,			// 無し
 		TYPE_TITLELOGO,			// タイトル
+		TYPE_EDITUI,			// エディットUI
+		TYPE_2DUI,				// 2DUI
 		TYPE_TIME,				// タイム
 		TYPE_STUN,				// 気絶
 		TYPE_SKYBOX,			// スカイボックス
