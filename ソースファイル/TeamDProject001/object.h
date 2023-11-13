@@ -24,6 +24,8 @@ public:			// 誰でもアクセスできる
 	{
 		TYPE_NONE = 0,			// 無し
 		TYPE_TITLELOGO,			// タイトル
+		TYPE_EDITUI,			// エディットUI
+		TYPE_2DUI,				// 2DUI
 		TYPE_TIME,				// タイム
 		TYPE_STUN,				// 気絶
 		TYPE_SKYBOX,			// スカイボックス
@@ -56,6 +58,7 @@ public:			// 誰でもアクセスできる
 		TYPE_BLOCK,				// ブロック
 		TYPE_MAP,				// マップ
 		TYPE_SLASH,				// 斬撃演出
+		TYPE_PLAYERID,			// プレイヤーのID
 		TYPE_MAX				// この列挙型の総数
 	};
 

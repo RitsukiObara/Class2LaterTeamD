@@ -75,6 +75,7 @@ public:			// 誰でもアクセスできる
 	float GetAngle(void) const;				// 方向設定処理
 
 	int GetTexIdx(void) const;				// テクスチャのインデックスの取得処理
+	char *GetTexName(void);					// テクスチャの名前の取得処理
 
 	// 静的メンバ関数
 	static CObject2D* Create(const TYPE type2D, const CObject::TYPE type, const PRIORITY priority);		// 生成処理

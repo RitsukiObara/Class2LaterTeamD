@@ -58,6 +58,8 @@ public:						// 誰でもアクセスできる
 	static void SetState(const STATE state);		// ゲームの進行状態の設定処理
 	static STATE GetState(void);					// ゲームの進行状態の取得処理
 
+	static CRat* GetRat(const int nID);				// ネズミの取得処理
+
 	// NULL化処理
 	static void DeletePause(void);		// ポーズのNULL化処理
 	static void DeleteRat(int nIdx);	// ネズミのNULL化処理
