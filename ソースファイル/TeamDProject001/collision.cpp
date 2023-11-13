@@ -248,118 +248,74 @@ void collision::BlockCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, cons
 	// 先頭のブロックの情報を取得する
 	CBlock* pBlock = CBlockManager::Get()->GetTop();
 
-	// それぞれの位置
-	D3DXVECTOR3 vtxLeftUp;		// 左上の位置
-	D3DXVECTOR3 vtxLeftDown;	// 左下の位置
-	D3DXVECTOR3 vtxRightUp;		// 右上の位置
-	D3DXVECTOR3 vtxRightDown;	// 右下の位置
-	float fAngle, fLength;		// 方向と長さ
-
 	while (pBlock != nullptr)
-	{ // ブロックの情報がある場合回す
+	{ // ブロックが NULL の場合
 
-		// 対角線の角度を算出する
-		fAngle = atan2f((pBlock->GetFileData().vtxMax.x * 2), (pBlock->GetFileData().vtxMax.z * 2));
+		if (pBlock->GetPos().y + pBlock->GetFileData().vtxMax.y >= pos.y &&
+			pBlock->GetPos().y + pBlock->GetFileData().vtxMin.y <= pos.y + fHeight &&
+			pBlock->GetPos().z + pBlock->GetFileData().vtxMax.z >= pos.z - fDepth&&
+			pBlock->GetPos().z + pBlock->GetFileData().vtxMin.z <= pos.z + fDepth)
+		{ // X軸の判定に入れる場合
 
-		//対角線の長さを算出する
-		fLength = sqrtf((pBlock->GetFileData().vtxMax.x * 2) * (pBlock->GetFileData().vtxMax.x * 2) + (pBlock->GetFileData().vtxMax.z * 2) * (pBlock->GetFileData().vtxMax.z * 2)) * 0.5f;
+			if (pBlock->GetPosOld().x + pBlock->GetFileData().vtxMax.x <= posOld.x - fWidth &&
+				pBlock->GetPos().x + pBlock->GetFileData().vtxMax.x >= pos.x - fWidth)
+			{ // 右にぶつかった場合
 
-		// 左上の位置を設定する
-		vtxLeftUp.x = pBlock->GetPos().x + sinf(pBlock->GetRot().y - fAngle) * fLength;
-		vtxLeftUp.y = pBlock->GetPos().y + pBlock->GetFileData().vtxMin.y;
-		vtxLeftUp.z = pBlock->GetPos().z + cosf(pBlock->GetRot().y - fAngle) * fLength;
+				// 位置を設定する
+				pos.x = pBlock->GetPos().x + +pBlock->GetFileData().vtxMax.x + (fWidth + COLLISION_ADD_DIFF_LENGTH);
+			}
+			else if (pBlock->GetPosOld().x + pBlock->GetFileData().vtxMin.x >= posOld.x + fWidth &&
+				pBlock->GetPos().x + pBlock->GetFileData().vtxMin.x <= pos.x + fWidth)
+			{ // 左にぶつかった場合
 
-		// 右上の位置を設定する
-		vtxRightUp.x = pBlock->GetPos().x + sinf(pBlock->GetRot().y + fAngle) * fLength;
-		vtxRightUp.y = pBlock->GetPos().y + pBlock->GetFileData().vtxMin.y;
-		vtxRightUp.z = pBlock->GetPos().z + cosf(pBlock->GetRot().y + fAngle) * fLength;
-
-		// 左下の位置を設定する
-		vtxLeftDown.x = pBlock->GetPos().x + sinf(pBlock->GetRot().y + D3DX_PI + fAngle) * fLength;
-		vtxLeftDown.y = pBlock->GetPos().y + pBlock->GetFileData().vtxMin.y;
-		vtxLeftDown.z = pBlock->GetPos().z + cosf(pBlock->GetRot().y - D3DX_PI + fAngle) * fLength;
-
-		// 右下の位置を設定する
-		vtxRightDown.x = pBlock->GetPos().x + sinf(pBlock->GetRot().y - D3DX_PI - fAngle) * fLength;
-		vtxRightDown.y = pBlock->GetPos().y + pBlock->GetFileData().vtxMin.y;
-		vtxRightDown.z = pBlock->GetPos().z + cosf(pBlock->GetRot().y + D3DX_PI - fAngle) * fLength;
-
-		if (useful::LineOuterProductXZ(vtxLeftUp, vtxRightUp, pos) >= 0.0f &&
-			useful::LineOuterProductXZ(vtxRightUp, vtxRightDown, pos) >= 0.0f &&
-			useful::LineOuterProductXZ(vtxRightDown, vtxLeftDown, pos) >= 0.0f &&
-			useful::LineOuterProductXZ(vtxLeftDown, vtxLeftUp, pos) >= 0.0f)
-		{ // 真ん中の境界線より左側に居た場合
-
-			// 前回の位置に補正する
-			pos.x = posOld.x;
-			pos.z = posOld.z;
+				// 位置を設定する
+				pos.x = pBlock->GetPos().x + +pBlock->GetFileData().vtxMin.x - (fWidth + COLLISION_ADD_DIFF_LENGTH);
+			}
 		}
 
-		//if (pBlock->GetPos().y + pBlock->GetFileData().vtxMax.y >= pos.y &&
-		//	pBlock->GetPos().y + pBlock->GetFileData().vtxMin.y <= pos.y + fHeight &&
-		//	pBlock->GetPos().z + pBlock->GetFileData().vtxMax.z >= pos.z - fDepth&&
-		//	pBlock->GetPos().z + pBlock->GetFileData().vtxMin.z <= pos.z + fDepth)
-		//{ // X軸の判定に入れる場合
+		if (pBlock->GetPos().x + pBlock->GetFileData().vtxMax.x >= pos.x - fWidth &&
+			pBlock->GetPos().x + pBlock->GetFileData().vtxMin.x <= pos.x + fWidth &&
+			pBlock->GetPos().y + pBlock->GetFileData().vtxMax.y >= pos.y &&
+			pBlock->GetPos().y + pBlock->GetFileData().vtxMin.y <= pos.y + fHeight)
+		{ // Z軸の判定に入れる場合
 
-		//	if (pBlock->GetPosOld().x + pBlock->GetFileData().vtxMax.x <= posOld.x - fWidth &&
-		//		pBlock->GetPos().x + pBlock->GetFileData().vtxMax.x >= pos.x - fWidth)
-		//	{ // 右にぶつかった場合
+			if (pBlock->GetPosOld().z + pBlock->GetFileData().vtxMax.z <= posOld.z - fDepth &&
+				pBlock->GetPos().z + pBlock->GetFileData().vtxMax.z >= pos.z - fDepth)
+			{ // 奥にぶつかった場合
 
-		//		// 位置を設定する
-		//		pos.x = pBlock->GetPos().x + +pBlock->GetFileData().vtxMax.x + (fWidth + COLLISION_ADD_DIFF_LENGTH);
-		//	}
-		//	else if (pBlock->GetPosOld().x + pBlock->GetFileData().vtxMin.x >= posOld.x + fWidth &&
-		//		pBlock->GetPos().x + pBlock->GetFileData().vtxMin.x <= pos.x + fWidth)
-		//	{ // 左にぶつかった場合
+				// 位置を設定する
+				pos.z = pBlock->GetPos().z + +pBlock->GetFileData().vtxMax.z + (fDepth + COLLISION_ADD_DIFF_LENGTH);
+			}
+			else if (pBlock->GetPosOld().z + pBlock->GetFileData().vtxMin.z >= posOld.z + fDepth &&
+				pBlock->GetPos().z + pBlock->GetFileData().vtxMin.z <= pos.z + fDepth)
+			{ // 手前にぶつかった場合
 
-		//		// 位置を設定する
-		//		pos.x = pBlock->GetPos().x + +pBlock->GetFileData().vtxMin.x - (fWidth + COLLISION_ADD_DIFF_LENGTH);
-		//	}
-		//}
+				// 位置を設定する
+				pos.z = pBlock->GetPos().z + +pBlock->GetFileData().vtxMin.z - (fDepth + COLLISION_ADD_DIFF_LENGTH);
+			}
+		}
 
-		//if (pBlock->GetPos().x + pBlock->GetFileData().vtxMax.x >= pos.x - fWidth &&
-		//	pBlock->GetPos().x + pBlock->GetFileData().vtxMin.x <= pos.x + fWidth &&
-		//	pBlock->GetPos().y + pBlock->GetFileData().vtxMax.y >= pos.y &&
-		//	pBlock->GetPos().y + pBlock->GetFileData().vtxMin.y <= pos.y + fHeight)
-		//{ // Z軸の判定に入れる場合
+		if (pBlock->GetPos().x + pBlock->GetFileData().vtxMax.x >= pos.x - fWidth &&
+			pBlock->GetPos().x + pBlock->GetFileData().vtxMin.x <= pos.x + fWidth &&
+			pBlock->GetPos().z + pBlock->GetFileData().vtxMax.z >= pos.z &&
+			pBlock->GetPos().z + pBlock->GetFileData().vtxMin.z <= pos.z + fDepth)
+		{ // Y軸の判定に入れる場合
 
-		//	if (pBlock->GetPosOld().z + pBlock->GetFileData().vtxMax.z <= posOld.z - fDepth &&
-		//		pBlock->GetPos().z + pBlock->GetFileData().vtxMax.z >= pos.z - fDepth)
-		//	{ // 奥にぶつかった場合
+			if (pBlock->GetPosOld().y + pBlock->GetFileData().vtxMax.y <= posOld.y &&
+				pBlock->GetPos().y + pBlock->GetFileData().vtxMax.y >= pos.y)
+			{ // 上にぶつかった場合
 
-		//		// 位置を設定する
-		//		pos.z = pBlock->GetPos().z + +pBlock->GetFileData().vtxMax.z + (fDepth + COLLISION_ADD_DIFF_LENGTH);
-		//	}
-		//	else if (pBlock->GetPosOld().z + pBlock->GetFileData().vtxMin.z >= posOld.z + fDepth &&
-		//		pBlock->GetPos().z + pBlock->GetFileData().vtxMin.z <= pos.z + fDepth)
-		//	{ // 手前にぶつかった場合
+				// 位置を設定する
+				pos.y = pBlock->GetPos().y + +pBlock->GetFileData().vtxMax.y + COLLISION_ADD_DIFF_LENGTH;
+			}
+			else if (pBlock->GetPosOld().y + pBlock->GetFileData().vtxMin.y >= posOld.y + fHeight &&
+				pBlock->GetPos().y + pBlock->GetFileData().vtxMin.y <= pos.y + fHeight)
+			{ // 下にぶつかった場合
 
-		//		// 位置を設定する
-		//		pos.z = pBlock->GetPos().z + +pBlock->GetFileData().vtxMin.z - (fDepth + COLLISION_ADD_DIFF_LENGTH);
-		//	}
-		//}
-
-		//if (pBlock->GetPos().x + pBlock->GetFileData().vtxMax.x >= pos.x - fWidth &&
-		//	pBlock->GetPos().x + pBlock->GetFileData().vtxMin.x <= pos.x + fWidth &&
-		//	pBlock->GetPos().z + pBlock->GetFileData().vtxMax.z >= pos.z &&
-		//	pBlock->GetPos().z + pBlock->GetFileData().vtxMin.z <= pos.z + fDepth)
-		//{ // Y軸の判定に入れる場合
-
-		//	if (pBlock->GetPosOld().y + pBlock->GetFileData().vtxMax.y <= posOld.y &&
-		//		pBlock->GetPos().y + pBlock->GetFileData().vtxMax.y >= pos.y)
-		//	{ // 上にぶつかった場合
-
-		//		// 位置を設定する
-		//		pos.y = pBlock->GetPos().y + +pBlock->GetFileData().vtxMax.y + COLLISION_ADD_DIFF_LENGTH;
-		//	}
-		//	else if (pBlock->GetPosOld().y + pBlock->GetFileData().vtxMin.y >= posOld.y + fHeight &&
-		//		pBlock->GetPos().y + pBlock->GetFileData().vtxMin.y <= pos.y + fHeight)
-		//	{ // 下にぶつかった場合
-
-		//		// 位置を設定する
-		//		pos.y = pBlock->GetPos().y + +pBlock->GetFileData().vtxMin.y - (fHeight + COLLISION_ADD_DIFF_LENGTH);
-		//	}
-		//}
+				// 位置を設定する
+				pos.y = pBlock->GetPos().y + +pBlock->GetFileData().vtxMin.y - (fHeight + COLLISION_ADD_DIFF_LENGTH);
+			}
+		}
 
 		// 次のブロックの情報を取得する
 		pBlock = pBlock->GetNext();

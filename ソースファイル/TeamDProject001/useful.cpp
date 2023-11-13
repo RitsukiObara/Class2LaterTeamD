@@ -266,7 +266,7 @@ float useful::InnerProduct(const D3DXVECTOR3 VecMove, const D3DXVECTOR3 VecNor)
 //======================
 // 外積の当たり判定処理(XZ軸版)
 //======================
-bool useful::CollisionOuterProductXZ(D3DXVECTOR3& Targetpos, const D3DXVECTOR3& TargetposOld, const D3DXVECTOR3 posRight, const D3DXVECTOR3 posLeft)
+bool useful::CollisionOuterProductXZ(const D3DXVECTOR3& Targetpos, const D3DXVECTOR3& TargetposOld, const D3DXVECTOR3 posRight, const D3DXVECTOR3 posLeft, D3DXVECTOR3& cross)
 {
 	// ローカル変数宣言
 	D3DXVECTOR3 vecMove, vecLine, vecTopos, posCross;	// 外積の変数
@@ -291,20 +291,20 @@ bool useful::CollisionOuterProductXZ(D3DXVECTOR3& Targetpos, const D3DXVECTOR3& 
 	fRate = ((vecTopos.z * vecMove.x) - (vecTopos.x * vecMove.z)) / ((vecLine.z * vecMove.x) - (vecLine.x * vecMove.z));
 
 	// 交点を求める
-	posCross.x = vecLine.x * fRate - posLeft.x;
-	posCross.y = vecLine.y * fRate - posLeft.y;
-	posCross.z = vecLine.z * fRate - posLeft.z;
+	posCross.x = vecLine.x * fRate + posLeft.x;
+	posCross.y = vecLine.y * fRate + posLeft.y;
+	posCross.z = vecLine.z * fRate + posLeft.z;
 
-	if ((vecLine.z * vecTopos.x) - (vecLine.x * vecTopos.z) < 0.0f)
+	if ((vecLine.z * vecTopos.x) - (vecLine.x * vecTopos.z) >= 0.0f)
 	{ // 境界線を超えた場合
 
 		if (fRate >= 0.0f && fRate <= 1.0f)
 		{ // 割合が0.0f～1.0fの間だった(境界線を超えた)場合
 
-			// 位置を設定する
-			Targetpos = posCross;
+			// 交点を代入する
+			cross = posCross;
 
-			// true を返す
+			// 成功 を返す
 			return true;
 		}
 		else
@@ -325,7 +325,7 @@ bool useful::CollisionOuterProductXZ(D3DXVECTOR3& Targetpos, const D3DXVECTOR3& 
 //======================
 // 外積の当たり判定処理(XY軸版)
 //======================
-bool useful::CollisionOuterProductXY(D3DXVECTOR3& Targetpos, const D3DXVECTOR3& TargetposOld, const D3DXVECTOR3 posRight, const D3DXVECTOR3 posLeft)
+bool useful::CollisionOuterProductXY(const D3DXVECTOR3& Targetpos, const D3DXVECTOR3& TargetposOld, const D3DXVECTOR3 posRight, const D3DXVECTOR3 posLeft, D3DXVECTOR3& cross)
 {
 	// ローカル変数宣言
 	D3DXVECTOR3 vecMove, vecLine, vecTopos, posCross;	// 外積の変数
@@ -360,10 +360,10 @@ bool useful::CollisionOuterProductXY(D3DXVECTOR3& Targetpos, const D3DXVECTOR3& 
 		if (fRate >= 0.0f && fRate <= 1.0f)
 		{ // 割合が0.0f～1.0fの間だった(境界線を超えた)場合
 
-			// 位置を設定する
-			Targetpos = posCross;
+			// 交点を代入する
+			cross = posCross;
 
-			// true を返す
+			// 成功 を返す
 			return true;
 		}
 		else

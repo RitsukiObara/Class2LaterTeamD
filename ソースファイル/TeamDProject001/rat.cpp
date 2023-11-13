@@ -381,16 +381,19 @@ void CRat::Move(void)
 	// ƒ[ƒJƒ‹•Ï”éŒ¾
 	D3DXVECTOR3 rot = GetRot();
 
-	if (CManager::Get()->GetInputGamePad()->GetGameStickLXPress(m_nRatIdx) > 0)
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_D) == true ||
+		CManager::Get()->GetInputGamePad()->GetGameStickLXPress(m_nRatIdx) > 0)
 	{ // ‰E‚ð‰Ÿ‚µ‚½ê‡
 
-		if (CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) > 0)
+		if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_W) == true ||
+			CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) > 0)
 		{ // ã‚ð‰Ÿ‚µ‚½ê‡
 
 			// Œü‚«‚ðÝ’è‚·‚é
 			rot.y = D3DX_PI * 0.25f;
 		}
-		else if (CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) < 0)
+		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true ||
+			CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) < 0)
 		{ // ‰º‚ð‰Ÿ‚µ‚½ê‡
 
 			// Œü‚«‚ðÝ’è‚·‚é
@@ -403,16 +406,19 @@ void CRat::Move(void)
 			rot.y = D3DX_PI * 0.5f;
 		}
 	}
-	else if (CManager::Get()->GetInputGamePad()->GetGameStickLXPress(m_nRatIdx) < 0)
+	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_A) == true ||
+		CManager::Get()->GetInputGamePad()->GetGameStickLXPress(m_nRatIdx) < 0)
 	{ // ¶‚ð‰Ÿ‚µ‚½ê‡
 
-		if (CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) > 0)
+		if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_W) == true ||
+			CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) > 0)
 		{ // ã‚ð‰Ÿ‚µ‚½ê‡
 
 			// Œü‚«‚ðÝ’è‚·‚é
 			rot.y = D3DX_PI * -0.25f;
 		}
-		else if (CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) < 0)
+		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true ||
+			CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) < 0)
 		{ // ‰º‚ð‰Ÿ‚µ‚½ê‡
 
 			// Œü‚«‚ðÝ’è‚·‚é
@@ -425,13 +431,15 @@ void CRat::Move(void)
 			rot.y = D3DX_PI * -0.5f;
 		}
 	}
-	else if (CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) > 0)
+	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_W) == true ||
+		CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) > 0)
 	{ // ã‚ð‰Ÿ‚µ‚½ê‡
 
 		// Œü‚«‚ðÝ’è‚·‚é
 		rot.y = 0.0f;
 	}
-	else if (CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) < 0)
+	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true ||
+		CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) < 0)
 	{ // ‰º‚ð‰Ÿ‚µ‚½ê‡
 
 		// Œü‚«‚ðÝ’è‚·‚é
