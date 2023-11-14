@@ -11,6 +11,7 @@ TEXTURE = data\TEXTURE\Dstr001.png			# 撃破(トゲトゲ)
 TEXTURE = data\TEXTURE\Dstr002.png			# 撃破(フワフワ)
 TEXTURE = data\TEXTURE\Dstr003.png			# 撃破(爆発)
 TEXTURE = data\TEXTURE\explosion000.png		# 爆発
+TEXTURE = data\TEXTURE\HelpMessage.png		# 救助メッセージ
 TEXTURE = data\TEXTURE\NewRecord.png		# 新記録
 TEXTURE = data\TEXTURE\Number.png			# 番号
 TEXTURE = data\TEXTURE\Obalab.png			# オバラボマーク
