@@ -18,6 +18,7 @@
 #include "slime.h"
 #include "hairball.h"
 #include "flowervase.h"
+#include "petbottle.h"
 
 //==============================
 // コンストラクタ
@@ -208,6 +209,13 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const TYPE type)
 
 			// 毬を生成する
 			pObstacle = new CFlowerVase;
+
+			break;
+
+		case CObstacle::TYPE::TYPE_PETBOTTLE:
+
+			//ペットボトルを生成する
+			pObstacle = new CPetbottle;
 
 			break;
 
