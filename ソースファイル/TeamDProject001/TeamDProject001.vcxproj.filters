@@ -342,6 +342,9 @@
     <ClCompile Include="rat_ghost.cpp">
       <Filter>Rat</Filter>
     </ClCompile>
+    <ClCompile Include="speech_message.cpp">
+      <Filter>Staging</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -607,6 +610,9 @@
     </ClInclude>
     <ClInclude Include="rat_ghost.h">
       <Filter>Rat</Filter>
+    </ClInclude>
+    <ClInclude Include="speech_message.h">
+      <Filter>Staging</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
