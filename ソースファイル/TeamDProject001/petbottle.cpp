@@ -72,6 +72,17 @@ void CPetbottle::Uninit(void)
 //=====================================
 void CPetbottle::Update(void)
 {
+	//ペットボトルが周る処理
+	D3DXVECTOR3 rot = GetRot();
+	rot.z += 0.01f;
+	SetRot(rot);
+
+	D3DXVECTOR3 pos = GetPos();
+	pos.x += m_move.x;
+	SetPos(pos);
+
+	m_move.x = - 10.0f;
+
 	// 重力処理
 	Gravity();
 
