@@ -24,6 +24,7 @@
 #define DELETE_WIGHT (45.0f)				//削除処理の横の削除範囲
 #define DELETE_HEIGHT (45.0f)				//削除処理の縦の削除範囲
 #define SIDE_PRESSCOUNT (30)				//横に素早く移動するまでのカウント
+#define MOVE_POS (10.0f)					//移動距離
 
 // 静的メンバ変数宣言
 C2DUIEdit::UIINFO C2DUIEdit::m_aTextureInfo[UI_LABEL_MAX] =
@@ -104,20 +105,20 @@ void C2DUIEdit::Update(void)
 	//エディットの位置を動かす----------------------------------------------------------
 	if (pInputKeyboard->GetTrigger(DIK_W) == true)
 	{
-		m_EditPos.y -= 10.0f;
+		m_EditPos.y -= MOVE_POS;
 	}
 	if (pInputKeyboard->GetTrigger(DIK_S) == true)
 	{
-		m_EditPos.y += 10.0f;
+		m_EditPos.y += MOVE_POS;
 	}
 
 	if (pInputKeyboard->GetTrigger(DIK_A) == true)
 	{
-		m_EditPos.x -= 10.0f;
+		m_EditPos.x -= MOVE_POS;
 	}
 	if (pInputKeyboard->GetTrigger(DIK_D) == true)
 	{
-		m_EditPos.x += 10.0f;
+		m_EditPos.x += MOVE_POS;
 	}
 
 	//長押し移動----------------------------------------------------------------------
@@ -125,7 +126,7 @@ void C2DUIEdit::Update(void)
 	{
 		if (m_nSideCount > SIDE_PRESSCOUNT && m_nSideCount % 2 == 0)
 		{
-			m_EditPos.y -= 10.0f;
+			m_EditPos.y -= MOVE_POS * 2.0f;
 		}
 		m_nSideCount++;
 	}
@@ -133,7 +134,7 @@ void C2DUIEdit::Update(void)
 	{
 		if (m_nSideCount > SIDE_PRESSCOUNT && m_nSideCount % 2 == 0)
 		{
-			m_EditPos.y += 10.0f;
+			m_EditPos.y += MOVE_POS * 2.0f;
 		}
 		m_nSideCount++;
 	}
@@ -141,7 +142,7 @@ void C2DUIEdit::Update(void)
 	{
 		if (m_nSideCount > SIDE_PRESSCOUNT && m_nSideCount % 2 == 0)
 		{
-			m_EditPos.x -= 10.0f;
+			m_EditPos.x -= MOVE_POS * 2.0f;
 		}
 		m_nSideCount++;
 	}
@@ -149,15 +150,15 @@ void C2DUIEdit::Update(void)
 	{
 		if (m_nSideCount > SIDE_PRESSCOUNT && m_nSideCount % 2 == 0)
 		{
-			m_EditPos.x += 10.0f;
+			m_EditPos.x += MOVE_POS * 2.0f;
 		}
 		m_nSideCount++;
 	}
 
-	if (pInputKeyboard->GetRelease(DIK_A) == true ||
-		pInputKeyboard->GetRelease(DIK_D) == true ||
-		pInputKeyboard->GetRelease(DIK_W) == true ||
-		pInputKeyboard->GetRelease(DIK_S) == true)
+	if (pInputKeyboard->GetPress(DIK_A) == false &&
+		pInputKeyboard->GetPress(DIK_D) == false &&
+		pInputKeyboard->GetPress(DIK_W) == false &&
+		pInputKeyboard->GetPress(DIK_S) == false)
 	{
 		m_nSideCount = 0;
 	}

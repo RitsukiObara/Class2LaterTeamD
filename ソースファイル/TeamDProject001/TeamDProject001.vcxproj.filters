@@ -345,6 +345,15 @@
     <ClCompile Include="speech_message.cpp">
       <Filter>Staging</Filter>
     </ClCompile>
+    <ClCompile Include="ground.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="wall.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="toycar.cpp">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -613,6 +622,15 @@
     </ClInclude>
     <ClInclude Include="speech_message.h">
       <Filter>Staging</Filter>
+    </ClInclude>
+    <ClInclude Include="ground.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="wall.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="toycar.h">
+      <Filter>Gimmick\Obstacle</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
