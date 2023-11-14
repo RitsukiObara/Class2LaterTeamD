@@ -19,7 +19,15 @@ class CSpeechMessage : public CBillboard
 {
 public:
 
-	// 種類
+	// 列挙型定義(状態)
+	enum STATE
+	{
+		STATE_EXTEND = 0,	// 伸び状態
+		STATE_SHRINK,		// 縮み状態
+		STATE_MAX			// この先の処理を行わない
+	};
+
+	// 列挙型定義(種類)
 	enum TYPE
 	{
 		TYPE_HELP = 0,		// 救助要請
@@ -43,8 +51,12 @@ public:
 private:
 
 	// メンバ変数
-	TYPE m_type;		// 種類
-	int m_nLife;		// 寿命
+	D3DXVECTOR3 m_sizeDest;	// 目的のサイズ
+	D3DXVECTOR3 m_sizeCopy;	// 最初のサイズ
+	STATE m_state;			// 状態
+	TYPE m_type;			// 種類
+	int m_nLife;			// 寿命
+	int m_nStateCount;		// 状態のカウント
 };
 
 #endif

@@ -15,6 +15,10 @@
 //=======================================
 #define HELP_TEXTURE		"data\\TEXTURE\\HelpMessage.png"		// 救助要請のテクスチャ
 #define MESSAGE_NONE_LIFE	(-1)		// 寿命無し(無限)の値
+#define EXTEND_COUNT		(50)		// 伸び状態のカウント数
+#define SHRINK_COUNT		(15)		// 縮み状態のカウント数
+#define EXTEND_MAGNI		(D3DXVECTOR3(0.8f, 1.2f, 0.0f))			// 伸び状態の倍率
+#define SHRINK_MAGNI		(D3DXVECTOR3(1.2f, 0.8f, 0.0f))			// 縮み状態の倍率
 
 //=========================
 // コンストラクタ
@@ -22,8 +26,12 @@
 CSpeechMessage::CSpeechMessage() : CBillboard(CObject::TYPE_EFFECT, CObject::PRIORITY_EFFECT)
 {
 	// 全ての値をクリアする
-	m_nLife = 0;			// 寿命
-	m_type = TYPE_HELP;		// 種類
+	m_sizeDest = NONE_D3DXVECTOR3;	// 目的のサイズ
+	m_sizeCopy = NONE_D3DXVECTOR3;	// 最初のサイズ
+	m_state = STATE_EXTEND;			// 状態
+	m_type = TYPE_HELP;				// 種類
+	m_nLife = 0;					// 寿命
+	m_nStateCount = 0;				// 状態のカウント
 }
 
 //=========================
@@ -47,8 +55,12 @@ HRESULT CSpeechMessage::Init(void)
 	}
 
 	// 全ての値を初期化する
-	m_nLife = 0;			// 寿命
-	m_type = TYPE_HELP;		// 種類
+	m_sizeDest = NONE_D3DXVECTOR3;	// 目的のサイズ
+	m_sizeCopy = NONE_D3DXVECTOR3;	// 最初のサイズ
+	m_state = STATE_EXTEND;			// 状態
+	m_type = TYPE_HELP;				// 種類
+	m_nLife = 0;					// 寿命
+	m_nStateCount = 0;				// 状態のカウント
 
 	// 成功を返す
 	return S_OK;
@@ -68,7 +80,81 @@ void CSpeechMessage::Uninit(void)
 //=========================
 void CSpeechMessage::Update(void)
 {
-	
+	D3DXVECTOR3 size = GetSize();
+
+	// 状態カウントを加算する
+	m_nStateCount++;
+
+	switch (m_state)
+	{
+	case CSpeechMessage::STATE_EXTEND:
+
+		// サイズを設定する
+		useful::FrameCorrect(m_sizeDest.x, &size.x, (m_sizeDest.x - m_sizeCopy.x) / EXTEND_COUNT);
+		useful::FrameCorrect(m_sizeDest.y, &size.y, (m_sizeDest.y - m_sizeCopy.y) / EXTEND_COUNT);
+
+		if (m_nStateCount % EXTEND_COUNT == 0)
+		{ // 状態カウントが一定数になった場合
+
+			// 状態カウントを初期化する
+			m_nStateCount = 0;
+
+			// 縮小状態にする
+			m_state = STATE_SHRINK;
+
+			// 目的のサイズを設定する
+			m_sizeDest = D3DXVECTOR3(m_sizeCopy.x * SHRINK_MAGNI.x, m_sizeCopy.y * SHRINK_MAGNI.y, 0.0f);
+		}
+
+		break;
+
+	case CSpeechMessage::STATE_SHRINK:
+
+		// サイズを設定する
+		useful::FrameCorrect(m_sizeDest.x, &size.x, (m_sizeDest.x - m_sizeCopy.x) / SHRINK_COUNT);
+		useful::FrameCorrect(m_sizeDest.y, &size.y, (m_sizeDest.y - m_sizeCopy.y) / SHRINK_COUNT);
+
+		if (m_nStateCount % SHRINK_COUNT == 0)
+		{ // 状態カウントが一定数になった場合
+
+			// 状態カウントを初期化する
+			m_nStateCount = 0;
+
+			// 拡大状態にする
+			m_state = STATE_EXTEND;
+
+			// 目的のサイズを設定する
+			m_sizeDest = D3DXVECTOR3(m_sizeCopy.x * EXTEND_MAGNI.x, m_sizeCopy.y * EXTEND_MAGNI.y, 0.0f);
+		}
+
+		break;
+
+	default:
+
+		// 停止
+		assert(false);
+
+		break;
+	}
+
+	// 寿命を減算する
+	m_nLife--;
+
+	if (m_nLife == 0)
+	{ // 寿命が0になった場合
+
+		// 終了処理
+		Uninit();
+
+		// この先の処理を行わない
+		return;
+	}
+
+	// サイズの設定処理
+	SetSize(size);
+
+	// 頂点座標の設定処理
+	SetVertex();
 }
 
 //=========================
@@ -90,8 +176,12 @@ void CSpeechMessage::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, co
 	SetSize(size);			// サイズ設定
 
 	// 全ての値を初期化する
-	m_type = type;			// 種類
-	m_nLife = nLife;		// 寿命
+	m_sizeDest = D3DXVECTOR3(size.x * EXTEND_MAGNI.x, size.y * EXTEND_MAGNI.y, 0.0f);	// 目的のサイズ
+	m_sizeCopy = size;			// 最初のサイズ
+	m_state = STATE_EXTEND;		// 状態
+	m_type = type;				// 種類
+	m_nLife = nLife;			// 寿命
+	m_nStateCount = 0;			// 状態のカウント
 
 	// 頂点情報の初期化
 	SetVertex();
