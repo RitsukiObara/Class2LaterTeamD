@@ -30,6 +30,7 @@ CTitle::CTitle() : CScene(TYPE_NONE, PRIORITY_BG)
 	// 全ての値をクリアする
 	m_pUIEdit = NULL;
 	m_nTransCount = 0;
+	m_bEdit = false;
 }
 
 //=========================================
@@ -92,7 +93,7 @@ void CTitle::Uninit(void)
 void CTitle::Update(void)
 {
 	//エディットモードのオンオフ
-	if (true)
+	if (m_bEdit)
 	{
 		//エディットモードの更新処理
 		m_pUIEdit->Update();
@@ -125,6 +126,15 @@ void CTitle::Update(void)
 			return;
 		}
 	}
+
+#ifdef _DEBUG
+
+	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_F2) == true)
+	{
+		m_bEdit = m_bEdit ? false : true;
+	}
+
+#endif // _DEBUG
 
 	// レンダラーの更新
 	CManager::Get()->GetRenderer()->Update();
