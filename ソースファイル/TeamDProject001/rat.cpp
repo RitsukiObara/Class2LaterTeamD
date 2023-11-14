@@ -24,6 +24,7 @@
 #include "obstacle_manager.h"
 #include "obstacle.h"
 #include "Particle.h"
+#include "rat_ghost.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -175,20 +176,24 @@ void CRat::Update(void)
 	// 障害物との当たり判定
 	collision::ObstacleHit(this, SIZE.x, SIZE.y, SIZE.z);
 
-	// 移動処理
-	Move();
+	if (m_State != STATE_DEATH)
+	{ // 死亡状態以外のとき
 
-	// ジャンプ処理
-	Jump();
+		// 移動処理
+		Move();
 
-	// 攻撃処理
-	Attack();
+		// ジャンプ処理
+		Jump();
 
-	if (Hit() == true)
-	{ // ヒット処理で死んだ場合
+		// 攻撃処理
+		Attack();
 
-		// この先の処理を行わない
-		return;
+		if (Hit() == true)
+		{ // ヒット処理で死んだ場合
+
+			// この先の処理を行わない
+			return;
+		}
 	}
 
 	// 起伏地面の当たり判定
@@ -548,6 +553,9 @@ void CRat::UpdateState(void)
 	case CRat::STATE_DAMAGE:	// ダメージ状態
 		break;
 	case CRat::STATE_DEATH:		// 死亡状態
+
+		// ネズミの幽霊の生成
+		CRatGhost::Create(GetPos());
 
 		break;
 
