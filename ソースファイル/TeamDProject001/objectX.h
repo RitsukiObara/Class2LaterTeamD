@@ -32,13 +32,21 @@ public:			// 誰でもアクセスできる
 		TYPE_KARIPLAYER,		// 仮プレイヤー
 		TYPE_WOODBLOCK,			// 木箱
 		TYPE_WEAPONCAGE,		// 武器小屋
-		TYPE_HONEY,				// 蜂蜜
-		TYPE_SLIME,				// スライム
-		TYPE_HAIRBALL,			// 毬
-		TYPE_HONEYBOTTLE,		// 蜂蜜のボトル
 		TYPE_TISSUEBOX,			// ティッシュ箱
 		TYPE_CARDBOARD,			// 段ボール
 		TYPE_PENHOLDER,			// ペン立て
+		TYPE_REMOCON,			// リモコン
+		TYPE_FLOWERFRAC,		// 花瓶の破片
+		TYPE_PLASTICFRAC,		// プラスチックケース破片
+
+		// 障害物モデル
+		TYPE_HONEYBOTTLE,		// 蜂蜜のボトル
+		TYPE_HONEY,				// 蜂蜜
+		TYPE_SLIME,				// スライム
+		TYPE_HAIRBALL,			// 毬
+		TYPE_FLOWERVASE,		// 花瓶
+		TYPE_PLASTICCASE,		// プラスチックケース
+		TYPE_PETBOTTLE,			// ペットボトル
 
 		//マップモデル
 		TYPE_KITCHEN,			//キッチン
@@ -53,6 +61,9 @@ public:			// 誰でもアクセスできる
 		TYPE_CAT_RHAND,			// 右手
 		TYPE_CAT_LLEG,			// 左足
 		TYPE_CAT_RLEG,			// 右足
+
+		// ネズミモデル
+		TYPE_RAT_GHOST,			// 幽霊モデル
 
 		// エディットモデル
 		TYPE_MAX,				// 全モデルの総数

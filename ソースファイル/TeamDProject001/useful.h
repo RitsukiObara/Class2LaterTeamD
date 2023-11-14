@@ -30,8 +30,8 @@ namespace useful
 	float LineOuterProductYZ(D3DXVECTOR3 posUp, D3DXVECTOR3 posDown, D3DXVECTOR3 pos);											// 外積の左右判断処理(YZ平面)
 	void NormalizeVector(D3DXVECTOR3& nor, const D3DXVECTOR3& posRight, const D3DXVECTOR3& posLeft, const D3DXVECTOR3& pos);	// 法線の計算(正規化)
 	float InnerProduct(const D3DXVECTOR3 VecMove, const D3DXVECTOR3 VecNor);		// 内積の判定処理
-	bool CollisionOuterProductXZ(D3DXVECTOR3& Targetpos, const D3DXVECTOR3& TargetposOld, const D3DXVECTOR3 posRight, const D3DXVECTOR3 posLeft);		// 外積の当たり判定処理(XZ軸版)
-	bool CollisionOuterProductXY(D3DXVECTOR3& Targetpos, const D3DXVECTOR3& TargetposOld, const D3DXVECTOR3 posRight, const D3DXVECTOR3 posLeft);		// 外積の当たり判定処理(XY軸版)
+	bool CollisionOuterProductXZ(const D3DXVECTOR3& Targetpos, const D3DXVECTOR3& TargetposOld, const D3DXVECTOR3 posRight, const D3DXVECTOR3 posLeft, D3DXVECTOR3& cross);		// 外積の当たり判定処理(XZ軸版)
+	bool CollisionOuterProductXY(const D3DXVECTOR3& Targetpos, const D3DXVECTOR3& TargetposOld, const D3DXVECTOR3 posRight, const D3DXVECTOR3 posLeft, D3DXVECTOR3& cross);		// 外積の当たり判定処理(XY軸版)
 	bool RectangleCollisionXY(const D3DXVECTOR3& pos0, const D3DXVECTOR3& pos1, const D3DXVECTOR3& VtxMax0, const D3DXVECTOR3& VtxMax1, const D3DXVECTOR3& VtxMin0, const D3DXVECTOR3& VtxMin1);		// XY座標の矩形の当たり判定
 	bool RectangleCollisionXZ(const D3DXVECTOR3& pos0, const D3DXVECTOR3& pos1, const D3DXVECTOR3& VtxMax0, const D3DXVECTOR3& VtxMax1, const D3DXVECTOR3& VtxMin0, const D3DXVECTOR3& VtxMin1);		// XZ座標の矩形の当たり判定
 	bool RectangleCollisionYZ(const D3DXVECTOR3& pos0, const D3DXVECTOR3& pos1, const D3DXVECTOR3& VtxMax0, const D3DXVECTOR3& VtxMax1, const D3DXVECTOR3& VtxMin0, const D3DXVECTOR3& VtxMin1);		// YZ座標の矩形の当たり判定

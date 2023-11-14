@@ -330,6 +330,21 @@
     <ClCompile Include="player_idUI.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="flowervase.cpp">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="petbottle.cpp">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="plastic_case.cpp">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="rat_ghost.cpp">
+      <Filter>Rat</Filter>
+    </ClCompile>
+    <ClCompile Include="speech_message.cpp">
+      <Filter>Staging</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -583,6 +598,21 @@
     </ClInclude>
     <ClInclude Include="player_idUI.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="flowervase.h">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="petbottle.h">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="plastic_case.h">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="rat_ghost.h">
+      <Filter>Rat</Filter>
+    </ClInclude>
+    <ClInclude Include="speech_message.h">
+      <Filter>Staging</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

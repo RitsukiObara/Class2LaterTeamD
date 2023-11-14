@@ -170,6 +170,13 @@ void CBlock::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE 
 
 		break;
 
+	case CBlock::TYPE_REMOCON:
+
+		// ƒŠƒ‚ƒRƒ“
+		SetFileData(CXFile::TYPE_REMOCON);
+
+		break;
+
 	default:
 
 		// ’âŽ~

@@ -433,6 +433,20 @@ void CEdit::ObstacleProcess(void)
 
 		break;
 
+	case CObstacle::TYPE_FLOWERVASE:
+
+		// 花瓶を設定する
+		SetFileData(CXFile::TYPE_FLOWERVASE);
+
+		break;
+
+	case CObstacle::TYPE_PLASTICCASE:
+
+		// プラスチックケースを設定する
+		SetFileData(CXFile::TYPE_PLASTICCASE);
+
+		break;
+
 	default:
 
 		// 停止
@@ -474,6 +488,13 @@ void CEdit::BlockProcess(void)
 
 		// ペン立てを設定する
 		SetFileData(CXFile::TYPE_PENHOLDER);
+
+		break;
+
+	case CBlock::TYPE_REMOCON:
+
+		// リモコンを設定する
+		SetFileData(CXFile::TYPE_REMOCON);
 
 		break;
 

@@ -24,6 +24,7 @@
 #include "obstacle_manager.h"
 #include "obstacle.h"
 #include "Particle.h"
+#include "rat_ghost.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -175,20 +176,24 @@ void CRat::Update(void)
 	// 障害物との当たり判定
 	collision::ObstacleHit(this, SIZE.x, SIZE.y, SIZE.z);
 
-	// 移動処理
-	Move();
+	if (m_State != STATE_DEATH)
+	{ // 死亡状態以外のとき
 
-	// ジャンプ処理
-	Jump();
+		// 移動処理
+		Move();
 
-	// 攻撃処理
-	Attack();
+		// ジャンプ処理
+		Jump();
 
-	if (Hit() == true)
-	{ // ヒット処理で死んだ場合
+		// 攻撃処理
+		Attack();
 
-		// この先の処理を行わない
-		return;
+		if (Hit() == true)
+		{ // ヒット処理で死んだ場合
+
+			// この先の処理を行わない
+			return;
+		}
 	}
 
 	// 起伏地面の当たり判定
@@ -196,6 +201,9 @@ void CRat::Update(void)
 
 	// 障害物との当たり判定
 	ObstacleCollision();
+
+	// 状態更新処理
+	UpdateState();
 
 	if (m_pMotion != nullptr)
 	{ // モーションが NULL じゃない場合
@@ -378,16 +386,19 @@ void CRat::Move(void)
 	// ローカル変数宣言
 	D3DXVECTOR3 rot = GetRot();
 
-	if (CManager::Get()->GetInputGamePad()->GetGameStickLXPress(m_nRatIdx) > 0)
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_D) == true ||
+		CManager::Get()->GetInputGamePad()->GetGameStickLXPress(m_nRatIdx) > 0)
 	{ // 右を押した場合
 
-		if (CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) > 0)
+		if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_W) == true ||
+			CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) > 0)
 		{ // 上を押した場合
 
 			// 向きを設定する
 			rot.y = D3DX_PI * 0.25f;
 		}
-		else if (CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) < 0)
+		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true ||
+			CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) < 0)
 		{ // 下を押した場合
 
 			// 向きを設定する
@@ -400,16 +411,19 @@ void CRat::Move(void)
 			rot.y = D3DX_PI * 0.5f;
 		}
 	}
-	else if (CManager::Get()->GetInputGamePad()->GetGameStickLXPress(m_nRatIdx) < 0)
+	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_A) == true ||
+		CManager::Get()->GetInputGamePad()->GetGameStickLXPress(m_nRatIdx) < 0)
 	{ // 左を押した場合
 
-		if (CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) > 0)
+		if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_W) == true ||
+			CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) > 0)
 		{ // 上を押した場合
 
 			// 向きを設定する
 			rot.y = D3DX_PI * -0.25f;
 		}
-		else if (CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) < 0)
+		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true ||
+			CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) < 0)
 		{ // 下を押した場合
 
 			// 向きを設定する
@@ -422,13 +436,15 @@ void CRat::Move(void)
 			rot.y = D3DX_PI * -0.5f;
 		}
 	}
-	else if (CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) > 0)
+	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_W) == true ||
+		CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) > 0)
 	{ // 上を押した場合
 
 		// 向きを設定する
 		rot.y = 0.0f;
 	}
-	else if (CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) < 0)
+	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true ||
+		CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) < 0)
 	{ // 下を押した場合
 
 		// 向きを設定する
@@ -518,6 +534,41 @@ void CRat::Attack(void)
 }
 
 //=======================================
+// 状態更新処理
+//=======================================
+void CRat::UpdateState(void)
+{
+	switch (m_State)
+	{
+	case CRat::STATE_NONE:		// 何でもない状態
+		break;
+	case CRat::STATE_WAIT:		// 待機状態
+		break;
+	case CRat::STATE_RUN:		// 走行状態
+		break;
+	case CRat::STATE_ATTACK:	// 攻撃状態
+		break;
+	case CRat::STATE_MUTEKI:	// 無敵状態
+		break;
+	case CRat::STATE_DAMAGE:	// ダメージ状態
+		break;
+	case CRat::STATE_DEATH:		// 死亡状態
+
+		// ネズミの幽霊の生成
+		CRatGhost::Create(GetPos());
+
+		break;
+
+	default:
+
+		// 停止
+		assert(false);
+
+		break;
+	}
+}
+
+//=======================================
 // ヒット処理
 //=======================================
 bool CRat::Hit(void)
@@ -532,9 +583,9 @@ bool CRat::Hit(void)
 		while (pObstacle != nullptr)
 		{ // ブロックの情報が NULL じゃない場合
 
-			if (useful::RectangleCollisionXY(pos, pObstacle->GetPos(),
+			/*if (useful::RectangleCollisionXY(pos, pObstacle->GetPos(),
 				SIZE, pObstacle->GetFileData().vtxMax,
-				-SIZE, pObstacle->GetFileData().vtxMin) == true)
+				-SIZE, pObstacle->GetFileData().vtxMin) == true)*/
 			{ // XYの矩形に当たってたら
 
 				if (useful::RectangleCollisionXZ(pos, pObstacle->GetPos(),
@@ -550,8 +601,10 @@ bool CRat::Hit(void)
 					if (m_nLife <= 0)
 					{ // 寿命が無いとき
 
+						m_State = STATE_DEATH;		// 死亡状態にする
+
 						// 終了処理
-						Uninit();
+						//Uninit();
 
 						// 死を返す
 						return true;

@@ -174,6 +174,7 @@
     <ClCompile Include="elevation_manager.cpp" />
     <ClCompile Include="fade.cpp" />
     <ClCompile Include="file.cpp" />
+    <ClCompile Include="flowervase.cpp" />
     <ClCompile Include="fraction.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="game_timer.cpp" />
@@ -213,6 +214,8 @@
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="particle2D.cpp" />
     <ClCompile Include="pause.cpp" />
+    <ClCompile Include="petbottle.cpp" />
+    <ClCompile Include="plastic_case.cpp" />
     <ClCompile Include="player_idUI.cpp" />
     <ClCompile Include="rat.cpp" />
     <ClCompile Include="precompile.cpp">
@@ -223,6 +226,7 @@
     <ClCompile Include="ranking_precedence.cpp" />
     <ClCompile Include="ranking_table.cpp" />
     <ClCompile Include="ranking_word.cpp" />
+    <ClCompile Include="rat_ghost.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="result.cpp" />
     <ClCompile Include="ripple.cpp" />
@@ -235,6 +239,7 @@
     <ClCompile Include="skybox.cpp" />
     <ClCompile Include="slime.cpp" />
     <ClCompile Include="sound.cpp" />
+    <ClCompile Include="speech_message.cpp" />
     <ClCompile Include="stun.cpp" />
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="time.cpp" />
@@ -263,6 +268,7 @@
     <ClInclude Include="elevation_manager.h" />
     <ClInclude Include="fade.h" />
     <ClInclude Include="file.h" />
+    <ClInclude Include="flowervase.h" />
     <ClInclude Include="fraction.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="game_timer.h" />
@@ -302,6 +308,8 @@
     <ClInclude Include="Particle.h" />
     <ClInclude Include="particle2D.h" />
     <ClInclude Include="pause.h" />
+    <ClInclude Include="petbottle.h" />
+    <ClInclude Include="plastic_case.h" />
     <ClInclude Include="player_idUI.h" />
     <ClInclude Include="rat.h" />
     <ClInclude Include="precompile.h" />
@@ -309,6 +317,7 @@
     <ClInclude Include="ranking_precedence.h" />
     <ClInclude Include="ranking_table.h" />
     <ClInclude Include="ranking_word.h" />
+    <ClInclude Include="rat_ghost.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="result.h" />
     <ClInclude Include="ripple.h" />
@@ -321,6 +330,7 @@
     <ClInclude Include="skybox.h" />
     <ClInclude Include="slime.h" />
     <ClInclude Include="sound.h" />
+    <ClInclude Include="speech_message.h" />
     <ClInclude Include="stun.h" />
     <ClInclude Include="texture.h" />
     <ClInclude Include="time.h" />
