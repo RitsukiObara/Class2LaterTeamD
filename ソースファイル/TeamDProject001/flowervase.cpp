@@ -105,7 +105,7 @@ bool CFlowerVase::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fH
 
 	for (int nCnt = 0; nCnt < 20; nCnt++)
 	{
-		fFracHeight = (rand() % (int)(GetFileData().vtxMax.y) - (int)(GetFileData().vtxMin.y));
+		fFracHeight = (float)(rand() % (int)(GetFileData().vtxMax.y) - (int)(GetFileData().vtxMin.y));
 
 		// ”j•Ð‚ð¶¬
 		CFraction::Create(D3DXVECTOR3(GetPos().x, GetPos().y + fFracHeight, GetPos().z), CFraction::TYPE::TYPE_FLOWERVASE);

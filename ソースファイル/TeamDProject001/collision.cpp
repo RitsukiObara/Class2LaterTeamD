@@ -122,15 +122,21 @@ void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight,
 
 				break;
 
-			case CObstacle::TYPE::TYPE_HAIRBALL:
+			case CObstacle::TYPE_HAIRBALL:
 
 				// “Á‚É‚È‚µ
 
 				break;
 
-			case CObstacle::TYPE::TYPE_FLOWERVASE:
+			case CObstacle::TYPE_FLOWERVASE:
 
+				// “Á‚É‚È‚µ
 
+				break;
+
+			case CObstacle::TYPE_PLASTICCASE:
+
+				// “Á‚É‚È‚µ
 
 				break;
 
