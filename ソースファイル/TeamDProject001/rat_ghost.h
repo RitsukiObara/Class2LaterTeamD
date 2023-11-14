@@ -12,10 +12,15 @@
 //***********************************
 #include "model.h"
 
+//--------------------------------------------
+// 前方宣言
+//--------------------------------------------
+class CRat;				// ネズミ
+
 //-----------------------------------
-// クラス定義(サンプル)
+// クラス(ネズミの幽霊クラス)
 //-----------------------------------
-class CRatGhost : public CObject/*親クラス*/
+class CRatGhost : public CModel
 {
 public:			// 誰でもアクセスできる
 
@@ -28,10 +33,10 @@ public:			// 誰でもアクセスできる
 	void Update(void);		// 更新処理
 	void Draw(void);		// 描画処理
 
-	void SetData(void/*引数*/);		// 情報の設定処理
+	void SetData(const D3DXVECTOR3& pos);		// 情報の設定処理
 
 	// 静的メンバ関数
-	static CRatGhost* Create(void/*引数*/);		// 生成処理
+	static CRatGhost* Create(const D3DXVECTOR3& pos);		// 生成処理
 
 private:		// 自分だけアクセスできる
 

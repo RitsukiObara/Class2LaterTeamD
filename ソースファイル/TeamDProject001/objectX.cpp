@@ -36,6 +36,7 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\HairBall.x",			// 毬
 	"data\\MODEL\\flowervase.x",		// 花瓶
 	"data\\MODEL\\plastic_case.x",		// プラスチックケース
+	"data\\MODEL\\Pettobotoru.x",		// ペットボトル
 
 	//マップモデル
 	"data\\MODEL\\Kitchen002.x",		//キッチン本体
@@ -50,6 +51,9 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\rat\\03_rat_Rhand.x",	// 右手
 	"data\\MODEL\\rat\\04_rat_Lleg.x",	// 左足
 	"data\\MODEL\\rat\\05_rat_Rleg.x",	// 右足
+
+	// ネズミモデル
+	"data\\MODEL\\rat\\rat_Ghost.x",	// 幽霊の姿
 };
 
 //------------------------------------------------------------

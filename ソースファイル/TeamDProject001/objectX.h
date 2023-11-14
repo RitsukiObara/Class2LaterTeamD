@@ -45,6 +45,7 @@ public:			// 誰でもアクセスできる
 		TYPE_HAIRBALL,			// 毬
 		TYPE_FLOWERVASE,		// 花瓶
 		TYPE_PLASTICCASE,		// プラスチックケース
+		TYPE_PETBOTTLE,			// ペットボトル
 
 		//マップモデル
 		TYPE_KITCHEN,			//キッチン
@@ -59,6 +60,9 @@ public:			// 誰でもアクセスできる
 		TYPE_CAT_RHAND,			// 右手
 		TYPE_CAT_LLEG,			// 左足
 		TYPE_CAT_RLEG,			// 右足
+
+		// ネズミモデル
+		TYPE_RAT_GHOST,			// 幽霊モデル
 
 		// エディットモデル
 		TYPE_MAX,				// 全モデルの総数
