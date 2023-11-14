@@ -191,6 +191,13 @@ void CFraction::SetData(const D3DXVECTOR3& pos, const TYPE type)
 
 		break;
 
+	case TYPE_PRASTICRVASE:		// プラスチックケース
+
+		// モデル情報を設定する
+		SetFileData(CXFile::TYPE_PLASTICFRAC);
+
+		break;
+
 	default:
 
 		// 停止

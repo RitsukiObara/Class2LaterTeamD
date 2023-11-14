@@ -18,6 +18,7 @@
 // マクロ定義
 //-------------------------------------------
 #define GRAVITY		(0.5f)		// 重力
+#define NUM_FRAC	(4)			// 破片の数
 
 //==============================
 // コンストラクタ
@@ -99,13 +100,17 @@ bool CPlasticCase::Hit(const D3DXVECTOR3& pos, const float fWidth, const float f
 	// 破片の出る高さ
 	float fFracHeight;
 
-	for (int nCnt = 0; nCnt < 10; nCnt++)
+	for (int nCnt = 0; nCnt < NUM_FRAC; nCnt++)
 	{
 		fFracHeight = (rand() % (int)(GetFileData().vtxMax.y) - (int)(GetFileData().vtxMin.y));
 
 		// 破片を生成
-		CFraction::Create(D3DXVECTOR3(GetPos().x, GetPos().y + fFracHeight, GetPos().z), CFraction::TYPE::TYPE_FLOWERVASE);
+		CFraction::Create(D3DXVECTOR3(GetPos().x, GetPos().y + fFracHeight, GetPos().z), CFraction::TYPE::TYPE_PRASTICRVASE);
+
 	}
+
+	// 終了処理
+	Uninit();
 
 	// false を返す
 	return false;

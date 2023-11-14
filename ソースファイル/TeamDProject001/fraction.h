@@ -31,7 +31,7 @@ public:			// 誰でもアクセスできる
 	enum TYPE
 	{
 		TYPE_FLOWERVASE = 0,	// 花瓶
-		TYPE_PRASTICRVASE = 0,	// プラスチックケース
+		TYPE_PRASTICRVASE,		// プラスチックケース
 
 		TYPE_MAX				// この列挙型の総数
 	};
