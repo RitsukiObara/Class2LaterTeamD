@@ -47,6 +47,8 @@ public:			// 誰でもアクセスできる
 		TYPE_FLOWERVASE,		// 花瓶
 		TYPE_PLASTICCASE,		// プラスチックケース
 		TYPE_PETBOTTLE,			// ペットボトル
+		TYPE_TOYCARBODY,		// おもちゃの車(本体)
+		TYPE_TOYCARSCREW,		// おもちゃの車(ネジ)
 
 		//マップモデル
 		TYPE_KITCHEN,			//キッチン
