@@ -333,6 +333,12 @@
     <ClCompile Include="flowervase.cpp">
       <Filter>Gimmick\Obstacle</Filter>
     </ClCompile>
+    <ClCompile Include="petbottle.cpp">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="plastic_case.cpp">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -588,6 +594,12 @@
       <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="flowervase.h">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="petbottle.h">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="plastic_case.h">
       <Filter>Gimmick\Obstacle</Filter>
     </ClInclude>
   </ItemGroup>

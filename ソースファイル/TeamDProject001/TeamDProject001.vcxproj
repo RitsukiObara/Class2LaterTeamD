@@ -214,6 +214,8 @@
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="particle2D.cpp" />
     <ClCompile Include="pause.cpp" />
+    <ClCompile Include="petbottle.cpp" />
+    <ClCompile Include="plastic_case.cpp" />
     <ClCompile Include="player_idUI.cpp" />
     <ClCompile Include="rat.cpp" />
     <ClCompile Include="precompile.cpp">
@@ -304,6 +306,8 @@
     <ClInclude Include="Particle.h" />
     <ClInclude Include="particle2D.h" />
     <ClInclude Include="pause.h" />
+    <ClInclude Include="petbottle.h" />
+    <ClInclude Include="plastic_case.h" />
     <ClInclude Include="player_idUI.h" />
     <ClInclude Include="rat.h" />
     <ClInclude Include="precompile.h" />

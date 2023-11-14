@@ -440,6 +440,13 @@ void CEdit::ObstacleProcess(void)
 
 		break;
 
+	case CObstacle::TYPE_PLASTICCASE:
+
+		// プラスチックケースを設定する
+		SetFileData(CXFile::TYPE_PLASTICCASE);
+
+		break;
+
 	default:
 
 		// 停止
