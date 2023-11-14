@@ -19,6 +19,8 @@
 #include "hairball.h"
 #include "flowervase.h"
 #include "plastic_case.h"
+#include "petbottle.h"
+
 
 //==============================
 // コンストラクタ
@@ -211,11 +213,18 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const TYPE type)
 			pObstacle = new CFlowerVase;
 
 			break;
-
+			
 		case CObstacle::TYPE_PLASTICCASE:
 
 			// プラスチックケースを生成する
 			pObstacle = new CPlasticCase;
+
+			break;
+
+		case CObstacle::TYPE::TYPE_PETBOTTLE:
+
+			//ペットボトルを生成する
+			pObstacle = new CPetbottle;
 
 			break;
 
