@@ -226,6 +226,7 @@
     <ClCompile Include="ranking_precedence.cpp" />
     <ClCompile Include="ranking_table.cpp" />
     <ClCompile Include="ranking_word.cpp" />
+    <ClCompile Include="rat_ghost.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="result.cpp" />
     <ClCompile Include="ripple.cpp" />
@@ -315,6 +316,7 @@
     <ClInclude Include="ranking_precedence.h" />
     <ClInclude Include="ranking_table.h" />
     <ClInclude Include="ranking_word.h" />
+    <ClInclude Include="rat_ghost.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="result.h" />
     <ClInclude Include="ripple.h" />

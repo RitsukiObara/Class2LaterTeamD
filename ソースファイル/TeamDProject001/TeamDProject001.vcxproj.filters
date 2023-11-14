@@ -339,6 +339,9 @@
     <ClCompile Include="plastic_case.cpp">
       <Filter>Gimmick\Obstacle</Filter>
     </ClCompile>
+    <ClCompile Include="rat_ghost.cpp">
+      <Filter>Rat</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -601,6 +604,9 @@
     </ClInclude>
     <ClInclude Include="plastic_case.h">
       <Filter>Gimmick\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="rat_ghost.h">
+      <Filter>Rat</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
