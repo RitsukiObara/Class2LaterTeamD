@@ -10,7 +10,8 @@
 #include "main.h"
 #include "manager.h"
 #include "rat_ghost.h"
-//#include "sample_manager.h"
+#include "rat.h"
+#include "objectX.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -23,7 +24,7 @@
 //==============================
 // コンストラクタ
 //==============================
-CRatGhost::CRatGhost() : CObject/*親クラス*/(/*ここにタイプを入れる*/CObject::TYPE_NONE, /*ここに優先順位を入れる*/CObject::PRIORITY_BG)
+CRatGhost::CRatGhost() : CModel(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 {
 	// 全ての値をクリアする
 }
@@ -41,12 +42,12 @@ CRatGhost::~CRatGhost()
 //==============================
 HRESULT CRatGhost::Init(void)
 {
-	//if (FAILED(親クラス::Init()))
-	//{ // 初期化処理に失敗した場合
+	if (FAILED(CModel::Init()))
+	{ // 初期化処理に失敗した場合
 
-	//	// 失敗を返す
-	//	return E_FAIL;
-	//}
+		// 失敗を返す
+		return E_FAIL;
+	}
 
 	// 全ての値を初期化する
 
@@ -59,8 +60,8 @@ HRESULT CRatGhost::Init(void)
 //========================================
 void CRatGhost::Uninit(void)
 {
-	//// 終了処理
-	//親クラス::Uninit();
+	// 終了処理
+	CModel::Uninit();
 }
 
 //=====================================
@@ -76,14 +77,14 @@ void CRatGhost::Update(void)
 //=====================================
 void CRatGhost::Draw(void)
 {
-	//// 描画処理
-	//親クラス::Draw();
+	// 描画処理
+	CModel::Draw();
 }
 
 //=====================================
 // 情報の設定処理
 //=====================================
-void CRatGhost::SetData(void/*基本Createと同じ引数を入れる*/)
+void CRatGhost::SetData(const D3DXVECTOR3& pos)
 {
 	// 設定処理に便利なマクロ定義
 	//NONE_D3DXVECTOR3					// 向きを傾けない時とかに使用する
@@ -150,17 +151,17 @@ void CRatGhost::SetData(void/*基本Createと同じ引数を入れる*/)
 	//==========================================================================
 	// モデル
 	//==========================================================================
-	//SetPos(位置を入れる);					// 位置
-	//SetPosOld(位置を入れる);				// 前回の位置
-	//SetRot(向きを入れる);					// 向き
-	//SetScale(拡大率を入れる);				// 拡大率
-	//SetFileData(モデルの種類を入れる);	// モデルの情報
+	SetPos(pos);			// 位置
+	SetPosOld(GetPos());							// 前回の位置
+	SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));			// 向き
+	SetScale(NONE_SCALE);							// 拡大率
+	SetFileData(CXFile::TYPE_RAT_GHOST);			// モデルの情報
 }
 
 //=======================================
 // 生成処理
 //=======================================
-CRatGhost* CRatGhost::Create(void/*引数を入れる*/)
+CRatGhost* CRatGhost::Create(const D3DXVECTOR3& pos)
 {
 	// ローカルオブジェクトを生成
 	CRatGhost* pRatGhost = nullptr;	// サンプルのインスタンスを生成
@@ -196,7 +197,7 @@ CRatGhost* CRatGhost::Create(void/*引数を入れる*/)
 		}
 
 		// 情報の設定処理
-		pRatGhost->SetData(/*引数*/);
+		pRatGhost->SetData(pos);
 	}
 	else
 	{ // オブジェクトが NULL の場合

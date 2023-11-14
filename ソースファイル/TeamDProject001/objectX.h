@@ -60,6 +60,9 @@ public:			// 誰でもアクセスできる
 		TYPE_CAT_LLEG,			// 左足
 		TYPE_CAT_RLEG,			// 右足
 
+		// ネズミモデル
+		TYPE_RAT_GHOST,			// 幽霊モデル
+
 		// エディットモデル
 		TYPE_MAX,				// 全モデルの総数
 	};

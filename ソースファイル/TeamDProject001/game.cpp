@@ -22,6 +22,7 @@
 #include "map.h"
 #include "skybox.h"
 #include "rat.h"
+#include "rat_ghost.h"
 #include "Cat.h"
 #include "game_timer.h"
 #include "edit.h"
@@ -119,6 +120,9 @@ HRESULT CGame::Init(void)
 	{
 		m_apRat[nCntRat] = CRat::Create(D3DXVECTOR3(500.0f * nCntRat, 0.0f, 0.0f), nCntRat);		// ネズミの情報
 	}
+
+	// ネズミの幽霊の生成
+	CRatGhost::Create(D3DXVECTOR3(0.0f, 0.0f, -500.0f));
 
 	//猫の生成
 	CCat::Create(D3DXVECTOR3(400.0f, 0.0f, 400.0f));
