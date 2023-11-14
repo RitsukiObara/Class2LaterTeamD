@@ -50,9 +50,8 @@ public:			// 誰でもアクセスできる
 
 		//マップモデル
 		TYPE_KITCHEN,			//キッチン
-		TYPE_TAP,				//蛇口部分
-		TYPE_IH_OFF,			//IH（off）
-		TYPE_IH_ON,				//IH（on）
+		TYPE_REIZOUKO,			//冷蔵庫
+		TYPE_TABLE,				//テーブル
 
 		// 猫モデル
 		TYPE_CAT_BODY,			// 体
