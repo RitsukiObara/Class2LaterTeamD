@@ -97,7 +97,7 @@ void CPetbottle::SetData(const D3DXVECTOR3& pos, const TYPE type)
 	CObstacle::SetData(pos, type);
 
 	// ƒ‚ƒfƒ‹‚Ìî•ñ‚ğİ’è‚·‚é
-	SetFileData(CXFile::TYPE_HAIRBALL);
+	SetFileData(CXFile::TYPE_PETBOTTLE);
 }
 
 //=====================================
