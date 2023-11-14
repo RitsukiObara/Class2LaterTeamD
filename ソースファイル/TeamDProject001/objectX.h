@@ -37,6 +37,7 @@ public:			// 誰でもアクセスできる
 		TYPE_PENHOLDER,			// ペン立て
 		TYPE_REMOCON,			// リモコン
 		TYPE_FLOWERFRAC,		// 花瓶の破片
+		TYPE_PLASTICFRAC,		// プラスチックケース破片
 
 		// 障害物モデル
 		TYPE_HONEYBOTTLE,		// 蜂蜜のボトル
