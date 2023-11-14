@@ -133,6 +133,9 @@ HRESULT CGame::Init(void)
 	CBlock::Create(D3DXVECTOR3(400.0f, 0.0f, -400.0f), NONE_D3DXVECTOR3, CBlock::TYPE::TYPE_TISSUE);
 	CBlock::Create(D3DXVECTOR3(-1200.0f, 0.0f, -800.0f), NONE_D3DXVECTOR3, CBlock::TYPE::TYPE_PENHOLDER);
 
+	CObstacle::Create(D3DXVECTOR3(500.0f, 0.0f, 700.0f), CObstacle::TYPE::TYPE_FLOWERVASE);
+	CObstacle::Create(D3DXVECTOR3(800.0f, 0.0f, 0.0f), CObstacle::TYPE::TYPE_PLASTICCASE);
+
 	// 情報の初期化
 	m_nFinishCount = 0;				// 終了カウント
 	m_GameState = STATE_START;		// 状態

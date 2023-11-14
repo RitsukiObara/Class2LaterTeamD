@@ -23,15 +23,19 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\Kari001.x",			// 仮プレイヤー
 	"data\\MODEL\\WoodBlock.x",			// 木箱
 	"data\\MODEL\\Cage.x",				// 武器小屋
-	"data\\MODEL\\Honey.x",				// 蜂蜜
-	"data\\MODEL\\Slime.x",				// スライム
-	"data\\MODEL\\HairBall.x",			// 毬
-	"data\\MODEL\\HoneyBottle.x",		// 蜂蜜のボトル
 	"data\\MODEL\\TissueBox.x",			// ティッシュ箱
 	"data\\MODEL\\cardboard.x",			// 段ボール
 	"data\\MODEL\\PenHolder.x",			// ペン立て
 	"data\\MODEL\\RemoCon.x",			// リモコン
-	"data\\MODEL\\flowervase.x",
+	"data\\MODEL\\flowerFrac.x",		// 花瓶の破片
+
+	// 障害物モデル
+	"data\\MODEL\\HoneyBottle.x",		// 蜂蜜のボトル
+	"data\\MODEL\\Honey.x",				// 蜂蜜
+	"data\\MODEL\\Slime.x",				// スライム
+	"data\\MODEL\\HairBall.x",			// 毬
+	"data\\MODEL\\flowervase.x",		// 花瓶
+	"data\\MODEL\\plastic_case.x",		// プラスチックケース
 
 	//マップモデル
 	"data\\MODEL\\Kitchen002.x",		//キッチン本体
