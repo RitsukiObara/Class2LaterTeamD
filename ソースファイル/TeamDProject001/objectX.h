@@ -40,7 +40,8 @@ public:			// 誰でもアクセスできる
 		TYPE_CARDBOARD,			// 段ボール
 		TYPE_PENHOLDER,			// ペン立て
 		TYPE_REMOCON,			// リモコン
-		TYPE_FLOWERVASE,
+		TYPE_FLOWERVASE,		// 花瓶
+		TYPE_FLOWERFRAC,		// 花瓶の破片
 
 		//マップモデル
 		TYPE_KITCHEN,			//キッチン

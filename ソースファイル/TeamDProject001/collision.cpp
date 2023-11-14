@@ -128,6 +128,12 @@ void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight,
 
 				break;
 
+			case CObstacle::TYPE::TYPE_FLOWERVASE:
+
+
+
+				break;
+
 			default:
 
 				// í‚é~

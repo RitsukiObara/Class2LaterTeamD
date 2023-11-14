@@ -15,6 +15,7 @@
 
 #include "objectElevation.h"
 #include "elevation_manager.h"
+#include "fraction.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -99,6 +100,20 @@ void CFlowerVase::SetData(const D3DXVECTOR3& pos, const TYPE type)
 //=====================================
 bool CFlowerVase::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth)
 {
+	// 破片の出る高さ
+	float fFracHeight;
+
+	for (int nCnt = 0; nCnt < 20; nCnt++)
+	{
+		fFracHeight = (rand() % (int)(GetFileData().vtxMax.y) - (int)(GetFileData().vtxMin.y));
+
+		// 破片を生成
+		CFraction::Create(D3DXVECTOR3(GetPos().x, GetPos().y + fFracHeight, GetPos().z), CFraction::TYPE::TYPE_FLOWERVASE);
+	}
+
+	// 終了処理
+	Uninit();
+
 	// false を返す
 	return false;
 }

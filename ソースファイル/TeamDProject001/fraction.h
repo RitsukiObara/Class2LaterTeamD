@@ -30,7 +30,8 @@ public:			// 誰でもアクセスできる
 	// 列挙型定義(種類)
 	enum TYPE
 	{
-		TYPE_MAX			// この列挙型の総数
+		TYPE_FLOWERVASE = 0,	// 花瓶
+		TYPE_MAX				// この列挙型の総数
 	};
 
 	CFraction();			// コンストラクタ
