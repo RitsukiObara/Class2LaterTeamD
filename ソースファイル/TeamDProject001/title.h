@@ -36,6 +36,7 @@ private:					// 自分だけアクセスできる
 	// メンバ変数
 	C2DUIEdit *m_pUIEdit;
 	int m_nTransCount;		// 遷移カウント
+	bool m_bEdit;
 };
 
 #endif
