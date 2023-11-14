@@ -32,16 +32,19 @@ public:			// 誰でもアクセスできる
 		TYPE_KARIPLAYER,		// 仮プレイヤー
 		TYPE_WOODBLOCK,			// 木箱
 		TYPE_WEAPONCAGE,		// 武器小屋
-		TYPE_HONEY,				// 蜂蜜
-		TYPE_SLIME,				// スライム
-		TYPE_HAIRBALL,			// 毬
-		TYPE_HONEYBOTTLE,		// 蜂蜜のボトル
 		TYPE_TISSUEBOX,			// ティッシュ箱
 		TYPE_CARDBOARD,			// 段ボール
 		TYPE_PENHOLDER,			// ペン立て
 		TYPE_REMOCON,			// リモコン
-		TYPE_FLOWERVASE,		// 花瓶
 		TYPE_FLOWERFRAC,		// 花瓶の破片
+
+		// 障害物モデル
+		TYPE_HONEYBOTTLE,		// 蜂蜜のボトル
+		TYPE_HONEY,				// 蜂蜜
+		TYPE_SLIME,				// スライム
+		TYPE_HAIRBALL,			// 毬
+		TYPE_FLOWERVASE,		// 花瓶
+		TYPE_PLASTICCASE,		// プラスチックケース
 
 		//マップモデル
 		TYPE_KITCHEN,			//キッチン
