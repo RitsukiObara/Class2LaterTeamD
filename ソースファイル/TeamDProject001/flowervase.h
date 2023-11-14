@@ -22,7 +22,7 @@ public:			// 誰でもアクセスできる
 	CFlowerVase();			// コンストラクタ
 	~CFlowerVase();			// デストラクタ
 
-							// メンバ関数
+	// メンバ関数
 	HRESULT Init(void);		// 初期化処理
 	void Uninit(void);		// 終了処理
 	void Update(void);		// 更新処理
@@ -34,12 +34,8 @@ public:			// 誰でもアクセスできる
 
 private:		// 自分だけアクセスできる
 
-				// メンバ関数
-	void Gravity(void);			// 重力処理
+	// メンバ関数
 	void Elevation(void);		// 起伏地面の当たり判定
-
-								// メンバ変数
-	D3DXVECTOR3 m_move;			// 移動量
 };
 
 #endif

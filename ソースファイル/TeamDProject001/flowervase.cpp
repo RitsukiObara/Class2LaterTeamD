@@ -1,6 +1,6 @@
 //===========================================
 //
-// 花瓶のメイン処理[hairball.cpp]
+// 花瓶のメイン処理[flowervase.cpp]
 // Author 小原立暉
 //
 //===========================================
@@ -27,7 +27,6 @@
 CFlowerVase::CFlowerVase() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 {
 	// 全ての値をクリアする
-	m_move = NONE_D3DXVECTOR3;
 }
 
 //==============================
@@ -51,7 +50,6 @@ HRESULT CFlowerVase::Init(void)
 	}
 
 	// 全ての値を初期化する
-	m_move = NONE_D3DXVECTOR3;
 
 	// 値を返す
 	return S_OK;
@@ -71,9 +69,6 @@ void CFlowerVase::Uninit(void)
 //=====================================
 void CFlowerVase::Update(void)
 {
-	// 重力処理
-	Gravity();
-
 	// 起伏地面との当たり判定
 	Elevation();
 }
@@ -109,21 +104,6 @@ bool CFlowerVase::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fH
 }
 
 //=====================================
-// 重力処理
-//=====================================
-void CFlowerVase::Gravity(void)
-{
-	// 位置を取得する
-	D3DXVECTOR3 pos = GetPos();
-
-	// 重力処理
-	useful::Gravity(&m_move.y, pos, GRAVITY);
-
-	// 位置を設定する
-	SetPos(pos);
-}
-
-//=====================================
 // 起伏地面の当たり判定
 //=====================================
 void CFlowerVase::Elevation(void)
@@ -136,17 +116,14 @@ void CFlowerVase::Elevation(void)
 	while (pMesh != nullptr)
 	{ // 地面の情報がある限り回す
 
-	  // 当たり判定を取る
+		// 当たり判定を取る
 		fHeight = pMesh->ElevationCollision(pos);
 
 		if (pos.y + GetFileData().vtxMin.y <= fHeight)
 		{ // 当たり判定の位置が高かった場合
 
-		  // 高さを設定する
+			// 高さを設定する
 			pos.y = fHeight - GetFileData().vtxMin.y;
-
-			// 移動量を減算する
-			m_move.y *= -0.6f;
 		}
 
 		// 次のポインタを取得する
