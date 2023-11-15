@@ -20,7 +20,7 @@
 #include "flowervase.h"
 #include "plastic_case.h"
 #include "petbottle.h"
-
+#include "toycar.h"
 
 //==============================
 // コンストラクタ
@@ -225,6 +225,13 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const TYPE type)
 
 			//ペットボトルを生成する
 			pObstacle = new CPetbottle;
+
+			break;
+
+		case CObstacle::TYPE_TOYCAR:
+
+			// おもちゃの車を生成する
+			pObstacle = new CToyCar;
 
 			break;
 

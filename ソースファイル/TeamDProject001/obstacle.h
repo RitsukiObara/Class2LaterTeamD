@@ -27,7 +27,8 @@ public:			// 誰でもアクセスできる
 		TYPE_HAIRBALL,		// 毬
 		TYPE_FLOWERVASE,	// 花瓶
 		TYPE_PLASTICCASE,	// プラスチックケース
-		TYPE_PETBOTTLE,		//ペットボトル
+		TYPE_PETBOTTLE,		// ペットボトル
+		TYPE_TOYCAR,		// おもちゃの車
 		TYPE_MAX			// この列挙型の総数
 	};
 

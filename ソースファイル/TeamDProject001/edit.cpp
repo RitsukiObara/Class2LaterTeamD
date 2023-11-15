@@ -447,6 +447,20 @@ void CEdit::ObstacleProcess(void)
 
 		break;
 
+	case CObstacle::TYPE_PETBOTTLE:
+
+		// ペットボトルを設定する
+		SetFileData(CXFile::TYPE_PETBOTTLE);
+
+		break;
+
+	case CObstacle::TYPE_TOYCAR:
+
+		// おもちゃの車を設定する
+		SetFileData(CXFile::TYPE_TOYCARBODY);
+
+		break;
+
 	default:
 
 		// 停止

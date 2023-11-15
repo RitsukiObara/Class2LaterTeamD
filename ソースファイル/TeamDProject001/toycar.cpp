@@ -11,14 +11,23 @@
 #include "manager.h"
 #include "toycar.h"
 #include "renderer.h"
+#include "input.h"
 #include "useful.h"
+
+#include "car_gear.h"
+
+//-------------------------------------------
+// マクロ定義
+//-------------------------------------------
+#define CAR_GEAR_SHIFT		(D3DXVECTOR3(0.0f, 200.0f, 0.0f))		// 車の歯車のずらす幅
 
 //==============================
 // コンストラクタ
 //==============================
 CToyCar::CToyCar() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 {
-
+	// 全ての値をクリアする
+	m_pGear = nullptr;			// 歯車の情報
 }
 
 //==============================
@@ -41,6 +50,9 @@ HRESULT CToyCar::Init(void)
 		return E_FAIL;
 	}
 
+	// 全ての値を初期化する
+	m_pGear = nullptr;		// 歯車の値
+
 	// 値を返す
 	return S_OK;
 }
@@ -50,6 +62,14 @@ HRESULT CToyCar::Init(void)
 //========================================
 void CToyCar::Uninit(void)
 {
+	if (m_pGear != nullptr)
+	{ // 歯車の情報が NULL じゃない場合
+
+		// 終了処理
+		m_pGear->Uninit();
+		m_pGear = nullptr;
+	}
+
 	// 終了処理
 	CObstacle::Uninit();
 }
@@ -59,7 +79,28 @@ void CToyCar::Uninit(void)
 //=====================================
 void CToyCar::Update(void)
 {
+	// 位置を取得する
+	D3DXVECTOR3 pos = GetPos();
+	D3DXVECTOR3 rot = GetRot();
 
+	pos.x -= sinf(rot.y) * 10.0f;
+	pos.z -= cosf(rot.y) * 10.0f;
+
+	rot.y -= 0.02f;
+
+	// 位置を適用する
+	SetPos(pos);
+	SetRot(rot);
+
+	if (m_pGear != nullptr)
+	{ // 歯車が NULL じゃない場合
+
+		// 位置を決定する
+		m_pGear->SetPos(GetPos() + CAR_GEAR_SHIFT);
+
+		// 更新処理
+		m_pGear->Update();
+	}
 }
 
 //=====================================
@@ -69,6 +110,13 @@ void CToyCar::Draw(void)
 {
 	// 描画処理
 	CObstacle::Draw();
+
+	if (m_pGear != nullptr)
+	{ // 歯車が NULL じゃない場合
+
+		// 描画処理
+		m_pGear->Draw();
+	}
 }
 
 //=====================================
@@ -81,6 +129,13 @@ void CToyCar::SetData(const D3DXVECTOR3& pos, const TYPE type)
 
 	// モデルの情報を設定する
 	SetFileData(CXFile::TYPE_TOYCARBODY);
+
+	if (m_pGear == nullptr)
+	{ // 歯車の情報が NULL の場合
+
+		// 歯車の生成
+		m_pGear = CCarGear::Create(GetPos() + CAR_GEAR_SHIFT);
+	}
 }
 
 //=====================================
@@ -88,22 +143,6 @@ void CToyCar::SetData(const D3DXVECTOR3& pos, const TYPE type)
 //=====================================
 bool CToyCar::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth)
 {
-	// ローカル変数宣言
-	D3DXVECTOR3 max = D3DXVECTOR3(fWidth, fHeight, fDepth);		// サイズの最大値
-	D3DXVECTOR3 min = D3DXVECTOR3(-fWidth, 0.0f, -fDepth);		// サイズの最小値
-
-	if (useful::RectangleCollisionXY(GetPos(), pos, GetFileData().vtxMax, max, GetFileData().vtxMin, min) == true &&
-		useful::RectangleCollisionXZ(GetPos(), pos, GetFileData().vtxMax, max, GetFileData().vtxMin, min) == true &&
-		useful::RectangleCollisionYZ(GetPos(), pos, GetFileData().vtxMax, max, GetFileData().vtxMin, min) == true)
-	{ // 四角の当たり判定の中に入っていた場合
-
-		// true を返す
-		return true;
-	}
-	else
-	{ // 上記以外
-
-		// false を返す
-		return false;
-	}
+	// false を返す
+	return false;
 }
