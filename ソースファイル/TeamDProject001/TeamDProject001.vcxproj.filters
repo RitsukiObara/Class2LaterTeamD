@@ -354,6 +354,9 @@
     <ClCompile Include="2DUI_edit.cpp">
       <Filter>Edit</Filter>
     </ClCompile>
+    <ClCompile Include="car_gear.cpp">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -631,6 +634,9 @@
     </ClInclude>
     <ClInclude Include="2DUI_edit.h">
       <Filter>Edit</Filter>
+    </ClInclude>
+    <ClInclude Include="car_gear.h">
+      <Filter>Gimmick\Obstacle</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
