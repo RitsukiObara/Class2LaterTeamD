@@ -77,7 +77,7 @@ HRESULT CCat::Init(void)
 	}
 
 	// ベタ打ち
-	SetNumModel(6);
+	SetNumModel(10);
 
 	// データの設定処理
 	CCharacter::SetData();

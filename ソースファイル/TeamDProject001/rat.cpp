@@ -261,7 +261,7 @@ void CRat::SetData(const D3DXVECTOR3& pos, const int nID)
 		GetHierarchy(nCntData)->SetPosOld(pos);										// 前回の位置
 		GetHierarchy(nCntData)->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));				// 向き
 		GetHierarchy(nCntData)->SetScale(NONE_SCALE);								// 拡大率
-		GetHierarchy(nCntData)->SetFileData(CXFile::TYPE(INIT_CAT + nCntData));		// データの設定処理
+		GetHierarchy(nCntData)->SetFileData(CXFile::TYPE(INIT_RAT + nCntData));		// データの設定処理
 	}
 
 	// モーションの設定処理
