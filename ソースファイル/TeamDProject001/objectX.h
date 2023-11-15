@@ -49,6 +49,7 @@ public:			// 誰でもアクセスできる
 		TYPE_OBAPHONE,			// オバフォン
 		TYPE_WII,				// Wii
 		TYPE_DS,				// DS
+		TYPE_HEADPHONE,			// ヘッドフォン
 
 		// 障害物モデル
 		TYPE_HONEYBOTTLE,		// 蜂蜜のボトル

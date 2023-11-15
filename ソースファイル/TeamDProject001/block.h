@@ -34,6 +34,7 @@ public:			// 誰でもアクセスできる
 		TYPE_OBAPHONE,			// オバフォン
 		TYPE_WII,				// Wii
 		TYPE_DS,				// DS
+		TYPE_HEADPHONE,			// ヘッドフォン
 		TYPE_MAX				// この列挙型の総数
 	};
 
