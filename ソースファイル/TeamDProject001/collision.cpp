@@ -140,6 +140,14 @@ void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight,
 
 				break;
 
+			case CObstacle::TYPE_PETBOTTLE:
+
+				break;
+
+			case CObstacle::TYPE_TOYCAR:
+
+				break;
+
 			default:
 
 				// í‚é~

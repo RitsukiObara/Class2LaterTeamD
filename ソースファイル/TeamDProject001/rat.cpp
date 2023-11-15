@@ -52,7 +52,6 @@ CRat::CRat() : CCharacter(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 	m_nDamageCounter = TIME_DAMAGE;		// ダメージ食らうまでのカウンター
 	m_fSpeed = 0.0f;					// 速度
 	m_bJump = false;					// ジャンプしたか
-	m_bLand = true;						// 着地したか
 	m_bAttack = false;					// 攻撃したか
 	m_State = STATE_NONE;				// 状態
 }
@@ -126,7 +125,6 @@ HRESULT CRat::Init(void)
 	m_nLife = MAX_LIFE;					// 寿命
 	m_nDamageCounter = TIME_DAMAGE;		// ダメージ食らうまでのカウンター
 	m_bJump = false;					// ジャンプしたか
-	m_bLand = true;						// 着地したか
 	m_bAttack = false;					// 攻撃したか
 	m_State = STATE_NONE;				// 状態
 
@@ -253,7 +251,6 @@ void CRat::SetData(const D3DXVECTOR3& pos, const int nID)
 	m_nLife = MAX_LIFE;					// 寿命
 	m_nDamageCounter = TIME_DAMAGE;		// ダメージ食らうまでのカウンター
 	m_bJump = false;					// ジャンプしたか
-	m_bLand = true;						// 着地したか
 	m_bAttack = false;					// 攻撃したか
 	m_State = STATE_NONE;				// 状態
 
@@ -475,13 +472,12 @@ void CRat::Jump(void)
 	D3DXVECTOR3 rot = GetRot();
 
 	if (CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_A, m_nRatIdx) == true &&
-		m_bJump == false && m_bLand == true)
+		m_bJump == false)
 	{ // Aボタンを押した場合
 
 		m_move.y = ADD_MOVE_Y;	// 浮力代入
 
 		m_bJump = true;		// ジャンプしてる状態にする
-		m_bLand = false;	// 着地してない状態にする
 	}
 
 	m_move.y -= GRAVITY;		// 重力加算
@@ -648,8 +644,9 @@ void CRat::Elevation(void)
 		  // 高さを設定する
 			pos.y = fHeight;
 
+			m_move.y = 0.0f;
+
 			m_bJump = false;		// ジャンプしてない状態にする
-			m_bLand = true;			// 着地した状態にする
 		}
 
 		// 次のポインタを取得する

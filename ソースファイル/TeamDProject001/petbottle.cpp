@@ -20,7 +20,8 @@
 //-------------------------------------------
 // マクロ定義
 //-------------------------------------------
-#define GRAVITY		(0.5f)		// 重力
+#define STAND_ROT	(D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f))		// 直立状態の向き
+#define GRAVITY		(0.5f)											// 重力
 
 //==============================
 // コンストラクタ
@@ -29,6 +30,7 @@ CPetbottle::CPetbottle() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_B
 {
 	// 全ての値をクリアする
 	m_move = NONE_D3DXVECTOR3;
+	m_state = STATE_STAND;
 }
 
 //==============================
@@ -53,6 +55,7 @@ HRESULT CPetbottle::Init(void)
 
 	// 全ての値を初期化する
 	m_move = NONE_D3DXVECTOR3;
+	m_state = STATE_STAND;
 
 	// 値を返す
 	return S_OK;
@@ -72,16 +75,31 @@ void CPetbottle::Uninit(void)
 //=====================================
 void CPetbottle::Update(void)
 {
-	//ペットボトルが周る処理
-	D3DXVECTOR3 rot = GetRot();
-	rot.z += 0.01f;
-	SetRot(rot);
+	switch (m_state)
+	{
+	case CPetbottle::STATE_STAND:
 
-	D3DXVECTOR3 pos = GetPos();
-	pos.x += m_move.x;
-	SetPos(pos);
+		// 向きを設定する
+		SetRot(STAND_ROT);
 
-	m_move.x = - 10.0f;
+		break;
+
+	case CPetbottle::STATE_COLLAPSE:
+
+
+
+		break;
+
+	default:
+
+		// 停止
+		assert(false);
+
+		break;
+	}
+
+	// 回転処理
+	Cycle();
 
 	// 重力処理
 	Gravity();
@@ -107,6 +125,13 @@ void CPetbottle::SetData(const D3DXVECTOR3& pos, const TYPE type)
 	// 情報の設定処理
 	CObstacle::SetData(pos, type);
 
+	// 向きを設定する
+	SetRot(STAND_ROT);
+
+	// 全ての値をクリアする
+	m_move = NONE_D3DXVECTOR3;		// 移動量
+	m_state = STATE_STAND;			// 状態
+
 	// モデルの情報を設定する
 	SetFileData(CXFile::TYPE_PETBOTTLE);
 }
@@ -118,6 +143,29 @@ bool CPetbottle::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHe
 {
 	// false を返す
 	return false;
+}
+
+//=====================================
+// 回転処理
+//=====================================
+void CPetbottle::Cycle(void)
+{
+	// 移動量を設定する
+	m_move.x = -10.0f;
+
+	// 情報を取得する
+	D3DXVECTOR3 pos = GetPos();		// 位置
+	D3DXVECTOR3 rot = GetRot();		// 向き
+
+	// 向きを加算する
+	rot.z += 0.01f;
+
+	// 位置を移動する
+	pos.x += m_move.x;
+
+	// 情報を適用する
+	SetPos(pos);		// 位置
+	SetRot(rot);		// 向き
 }
 
 //=====================================
@@ -156,9 +204,6 @@ void CPetbottle::Elevation(void)
 
 			// 高さを設定する
 			pos.y = fHeight - GetFileData().vtxMin.y;
-
-			// 移動量を減算する
-			m_move.y *= -0.6f;
 		}
 
 		// 次のポインタを取得する

@@ -130,24 +130,6 @@ void CMotion::Set(int nType)
 	// 全モデルの初期設定
 	switch (m_style)
 	{
-	case TYPE_PLAYER:		// プレイヤー
-
-		for (int nCntModel = 0; nCntModel < m_nNumModel; nCntModel++)
-		{
-			// 位置と向きを取得
-			rot = m_ppModel[nCntModel]->GetRot();
-
-			// パーツの位置・向きを設定
-			m_posPast[nCntModel].x = m_aInfo[m_nType].aKeyInfo[m_nKey].aKey[nCntModel].fPosX;
-			m_posPast[nCntModel].y = m_aInfo[m_nType].aKeyInfo[m_nKey].aKey[nCntModel].fPosY;
-			m_posPast[nCntModel].z = m_aInfo[m_nType].aKeyInfo[m_nKey].aKey[nCntModel].fPosZ;
-			m_rotPast[nCntModel].x = rot.x;
-			m_rotPast[nCntModel].y = rot.y;
-			m_rotPast[nCntModel].z = rot.z;
-		}
-
-		break;
-
 	case TYPE_CAT:			// 猫
 
 		for (int nCntModel = 0; nCntModel < m_nNumModel; nCntModel++)
@@ -270,13 +252,6 @@ void CMotion::Update(void)
 
 					switch (m_style)
 					{
-					case TYPE_PLAYER:		// プレイヤー
-
-						// 終了状態にする
-						m_bFinish = true;
-
-						break;
-
 					case TYPE_CAT:			// 猫
 
 						// 終了状態にする
@@ -355,13 +330,6 @@ void CMotion::Load(STYLE type)
 
 	switch (type)
 	{
-	case TYPE_PLAYER:		// プレイヤー
-
-		// プレイヤーのモーションのロード処理
-		LoadMotion("data/TXT/PlayerMotion.txt");
-
-		break;
-
 	case TYPE_CAT:			// 猫
 					
 		// 猫のモーションのロード処理
