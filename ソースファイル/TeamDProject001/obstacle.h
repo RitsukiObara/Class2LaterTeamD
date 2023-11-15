@@ -51,7 +51,8 @@ public:			// 誰でもアクセスできる
 
 	virtual void SetData(const D3DXVECTOR3& pos, const TYPE type);			// 情報の設定処理
 
-	virtual bool Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth) = 0;		// ヒット処理
+	virtual bool Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth) = 0;	// 当たり判定処理
+	virtual bool Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth) = 0;								// ヒット処理
 
 	// セット・ゲット関係
 	void SetType(const TYPE type);		// 種類の設定処理

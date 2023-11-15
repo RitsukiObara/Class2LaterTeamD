@@ -93,6 +93,15 @@ void CPlasticCase::SetData(const D3DXVECTOR3& pos, const TYPE type)
 }
 
 //=====================================
+// “–‚½‚è”»’èˆ—
+//=====================================
+bool CPlasticCase::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth)
+{
+	// false ‚ğ•Ô‚·
+	return false;
+}
+
+//=====================================
 // ƒqƒbƒgˆ—
 //=====================================
 bool CPlasticCase::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth)
@@ -102,7 +111,7 @@ bool CPlasticCase::Hit(const D3DXVECTOR3& pos, const float fWidth, const float f
 
 	for (int nCnt = 0; nCnt < NUM_FRAC; nCnt++)
 	{
-		fFracHeight = (rand() % (int)(GetFileData().vtxMax.y) - (int)(GetFileData().vtxMin.y));
+		fFracHeight = (float)(rand() % (int)(GetFileData().vtxMax.y) - (int)(GetFileData().vtxMin.y));
 
 		// ”j•Ğ‚ğ¶¬
 		CFraction::Create(D3DXVECTOR3(GetPos().x, GetPos().y + fFracHeight, GetPos().z), CFraction::TYPE::TYPE_PRASTICRVASE);

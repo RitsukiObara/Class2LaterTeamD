@@ -100,6 +100,15 @@ void CHairBall::SetData(const D3DXVECTOR3& pos, const TYPE type)
 }
 
 //=====================================
+// “–‚½‚è”»’èˆ—
+//=====================================
+bool CHairBall::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth)
+{
+	// false ‚ğ•Ô‚·
+	return false;
+}
+
+//=====================================
 // ƒqƒbƒgˆ—
 //=====================================
 bool CHairBall::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth)
