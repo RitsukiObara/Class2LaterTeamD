@@ -161,6 +161,7 @@
     <ClCompile Include="block.cpp" />
     <ClCompile Include="block_manager.cpp" />
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="car_gear.cpp" />
     <ClCompile Include="Cat.cpp" />
     <ClCompile Include="character.cpp" />
     <ClCompile Include="collision.cpp" />
@@ -258,6 +259,7 @@
     <ClInclude Include="block.h" />
     <ClInclude Include="block_manager.h" />
     <ClInclude Include="camera.h" />
+    <ClInclude Include="car_gear.h" />
     <ClInclude Include="Cat.h" />
     <ClInclude Include="character.h" />
     <ClInclude Include="collision.h" />
