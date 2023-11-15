@@ -52,6 +52,7 @@
 #define CHASE_SHIFT_X				(400.0f)			// 追跡カメラの前にずらす距離(X軸)
 #define POSR_SHIFT_Y				(190.0f)			// 注視点のずらす幅(Y軸)
 #define POSV_SHIFT_Y				(220.0f)			// 視点のずらす幅(Y軸)
+#define INIT_POSV					(D3DXVECTOR3(0.0f,1000.0f,-1000.0f))			// 視点の初期位置
 
 //=======================
 // コンストラクタ
@@ -875,9 +876,7 @@ void CCamera::NoneCamera(void)
 	m_posRDest.z = 0.0f;
 
 	// 目的の視点を設定する
-	m_posVDest.x = 0.0f;
-	m_posVDest.y = 2000.0f;
-	m_posVDest.z = -2000.0f;
+	m_posVDest = INIT_POSV;
 
 	// 注視点を補正
 	m_posR.x += (m_posRDest.x - m_posR.x) * CORRECT_POSR;

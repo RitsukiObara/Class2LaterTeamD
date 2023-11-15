@@ -161,25 +161,20 @@ void CBlock::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE 
 		SetFileData((CXFile::TYPE)(INIT_BLOCK + m_type));
 	}
 
-	if (m_type == TYPE::TYPE_BEAR || 
-		m_type == TYPE::TYPE_CARDBOARD ||
-		m_type == TYPE::TYPE_CLOCK ||
-		m_type == TYPE::TYPE_DS ||
-		m_type == TYPE::TYPE_MILKPACK ||
-		m_type == TYPE::TYPE_OBAPHONE ||
-		m_type == TYPE::TYPE_REMOCON ||
-		m_type == TYPE::TYPE_TISSUE ||
-		m_type == TYPE::TYPE_WII)
+	if (m_type == TYPE_PENHOLDER ||
+		m_type == TYPE_RUBBISH ||
+		m_type == TYPE_CUP ||
+		m_type == TYPE_HEADPHONE)
 	{ // 一定の数値の場合
 
-		// 四角の当たり判定を設定する
-		m_collision = COLLISION_SQUARE;
+		// 円の当たり判定を設定する
+		m_collision = COLLISION_CIRCLE;
 	}
 	else
 	{ // 上記以外
 
-		// 円の当たり判定を設定する
-		m_collision = COLLISION_CIRCLE;
+		// 四角の当たり判定を設定する
+		m_collision = COLLISION_SQUARE;
 	}
 }
 
