@@ -161,6 +161,7 @@
     <ClCompile Include="block.cpp" />
     <ClCompile Include="block_manager.cpp" />
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="car_gear.cpp" />
     <ClCompile Include="Cat.cpp" />
     <ClCompile Include="character.cpp" />
     <ClCompile Include="collision.cpp" />
@@ -246,6 +247,7 @@
     <ClCompile Include="time.cpp" />
     <ClCompile Include="title.cpp" />
     <ClCompile Include="title_logo.cpp" />
+    <ClCompile Include="toycar.cpp" />
     <ClCompile Include="useful.cpp" />
     <ClCompile Include="wall.cpp" />
     <ClCompile Include="weapon_balloon.cpp" />
@@ -257,6 +259,7 @@
     <ClInclude Include="block.h" />
     <ClInclude Include="block_manager.h" />
     <ClInclude Include="camera.h" />
+    <ClInclude Include="car_gear.h" />
     <ClInclude Include="Cat.h" />
     <ClInclude Include="character.h" />
     <ClInclude Include="collision.h" />
@@ -339,6 +342,7 @@
     <ClInclude Include="time.h" />
     <ClInclude Include="title.h" />
     <ClInclude Include="title_logo.h" />
+    <ClInclude Include="toycar.h" />
     <ClInclude Include="useful.h" />
     <ClInclude Include="wall.h" />
     <ClInclude Include="weapon_balloon.h" />

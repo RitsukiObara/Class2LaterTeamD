@@ -14,6 +14,7 @@
 #define INIT_VTX_MAX	(D3DXVECTOR3(-9999.0f, -9999.0f, -9999.0f))		// モデルの最大の頂点座標の初期値
 #define INIT_SIZE		(D3DXVECTOR3(0.0f, 0.0f, 0.0f))					// モデルサイズの初期値
 #define INIT_CAT		(CXFile::TYPE_CAT_BODY)							// 猫モデルの開始位置
+#define INIT_BLOCK		(CXFile::TYPE_CARDBOARD)						// ブロックモデルの開始位置
 
 //------------------------------------------------------------
 // クラス定義(Xファイル)
@@ -32,12 +33,23 @@ public:			// 誰でもアクセスできる
 		TYPE_KARIPLAYER,		// 仮プレイヤー
 		TYPE_WOODBLOCK,			// 木箱
 		TYPE_WEAPONCAGE,		// 武器小屋
-		TYPE_TISSUEBOX,			// ティッシュ箱
-		TYPE_CARDBOARD,			// 段ボール
-		TYPE_PENHOLDER,			// ペン立て
-		TYPE_REMOCON,			// リモコン
 		TYPE_FLOWERFRAC,		// 花瓶の破片
 		TYPE_PLASTICFRAC,		// プラスチックケース破片
+
+		// ブロックモデル
+		TYPE_CARDBOARD,			// 段ボール
+		TYPE_TISSUEBOX,			// ティッシュ箱
+		TYPE_PENHOLDER,			// ペン立て
+		TYPE_REMOCON,			// リモコン
+		TYPE_BEAR,				// ブロック
+		TYPE_CLOCK,				// 時計
+		TYPE_RUBBISH,			// チリ紙
+		TYPE_MILKPACK,			// 牛乳パック
+		TYPE_CUP,				// コップ
+		TYPE_OBAPHONE,			// オバフォン
+		TYPE_WII,				// Wii
+		TYPE_DS,				// DS
+		TYPE_HEADPHONE,			// ヘッドフォン
 
 		// 障害物モデル
 		TYPE_HONEYBOTTLE,		// 蜂蜜のボトル
@@ -47,6 +59,8 @@ public:			// 誰でもアクセスできる
 		TYPE_FLOWERVASE,		// 花瓶
 		TYPE_PLASTICCASE,		// プラスチックケース
 		TYPE_PETBOTTLE,			// ペットボトル
+		TYPE_TOYCARBODY,		// おもちゃの車(本体)
+		TYPE_TOYCARSCREW,		// おもちゃの車(ネジ)
 
 		//マップモデル
 		TYPE_KITCHEN,			//キッチン

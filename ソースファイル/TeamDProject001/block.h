@@ -26,6 +26,15 @@ public:			// 誰でもアクセスできる
 		TYPE_TISSUE,			// ティッシュ箱
 		TYPE_PENHOLDER,			// ペン立て
 		TYPE_REMOCON,			// リモコン
+		TYPE_BEAR,				// テディベア
+		TYPE_CLOCK,				// 時計
+		TYPE_RUBBISH,			// チリ紙
+		TYPE_MILKPACK,			// 牛乳パック
+		TYPE_CUP,				// コップ
+		TYPE_OBAPHONE,			// オバフォン
+		TYPE_WII,				// Wii
+		TYPE_DS,				// DS
+		TYPE_HEADPHONE,			// ヘッドフォン
 		TYPE_MAX				// この列挙型の総数
 	};
 
