@@ -19,6 +19,13 @@ class CHoney : public CObstacle
 {
 public:			// 誰でもアクセスできる
 
+	enum State
+	{
+		STATE_HONEYBOTTLE = 0,	// ボトル
+		STATE_HONEY,			// 液体
+		STATE_MAX				// この列挙型の総数
+	};
+
 	CHoney();				// コンストラクタ
 	~CHoney();				// デストラクタ
 
@@ -33,6 +40,10 @@ public:			// 誰でもアクセスできる
 	bool Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth);		// ヒット処理
 
 private:		// 自分だけアクセスできる
+	void Break(void);
+	void StateManager(void);
+
+	State m_State;
 };
 
 #endif
