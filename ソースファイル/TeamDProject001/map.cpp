@@ -69,6 +69,20 @@ void CMap::Uninit(void)
 			m_Model[nCnt] = NULL;
 		}
 	}
+	//================================
+	//•Ç‚ÌI—¹
+	//================================
+	for (int nCnt = 0; nCnt < WALL_NUM; nCnt++)
+	{
+		if (m_Wall[nCnt] != nullptr)
+		{
+			m_Wall[nCnt]->Uninit();
+			m_Wall[nCnt] = nullptr;
+		}
+	}
+
+	// –{‘Ì‚ÌI—¹ˆ—
+	Release();
 }
 void CMap::Update(void)
 {

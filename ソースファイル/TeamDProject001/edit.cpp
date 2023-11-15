@@ -468,42 +468,17 @@ void CEdit::BlockProcess(void)
 		m_blockType = (CBlock::TYPE)((m_blockType + 1) % CBlock::TYPE_MAX);
 	}
 
-	switch (m_blockType)
-	{
-	case CBlock::TYPE_CARDBOARD:
-
-		// 段ボールを設定する
-		SetFileData(CXFile::TYPE_CARDBOARD);
-
-		break;
-
-	case CBlock::TYPE_TISSUE:
-
-		// ティッシュ箱を設定する
-		SetFileData(CXFile::TYPE_TISSUEBOX);
-
-		break;
-
-	case CBlock::TYPE_PENHOLDER:
-
-		// ペン立てを設定する
-		SetFileData(CXFile::TYPE_PENHOLDER);
-
-		break;
-
-	case CBlock::TYPE_REMOCON:
-
-		// リモコンを設定する
-		SetFileData(CXFile::TYPE_REMOCON);
-
-		break;
-
-	default:
+	if (m_blockType >= TYPE_MAX)
+	{ // タイプにある場合
 
 		// 停止
 		assert(false);
+	}
+	else
+	{ // 上記以外
 
-		break;
+		// ブロックの種類を設定する
+		SetFileData((CXFile::TYPE)(INIT_BLOCK + m_blockType));
 	}
 }
 
