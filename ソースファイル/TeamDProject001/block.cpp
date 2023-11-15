@@ -146,43 +146,17 @@ void CBlock::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE 
 	// 全ての値を初期化する
 	m_type = type;			// 種類
 
-	// 種類によるモデル情報の設定
-	switch (m_type)
-	{
-	case CBlock::TYPE_CARDBOARD:
-
-		// 段ボール
-		SetFileData(CXFile::TYPE_CARDBOARD);
-
-		break;
-
-	case CBlock::TYPE_TISSUE:
-
-		// ティッシュ箱
-		SetFileData(CXFile::TYPE_TISSUEBOX);
-
-		break;
-		
-	case CBlock::TYPE_PENHOLDER:
-
-		// ペン立て
-		SetFileData(CXFile::TYPE_PENHOLDER);
-
-		break;
-
-	case CBlock::TYPE_REMOCON:
-
-		// リモコン
-		SetFileData(CXFile::TYPE_REMOCON);
-
-		break;
-
-	default:
+	if (m_type >= TYPE_MAX)
+	{ // タイプにある場合
 
 		// 停止
 		assert(false);
+	}
+	else
+	{ // 上記以外
 
-		break;
+		// ブロックの種類を設定する
+		SetFileData((CXFile::TYPE)(INIT_BLOCK + m_type));
 	}
 }
 
