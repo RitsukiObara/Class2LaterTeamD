@@ -80,6 +80,7 @@ private:		// 自分だけアクセスできる
 	void Jump(void);				// ジャンプ処理
 	void Attack(void);				// 攻撃処理
 	void UpdateState(void);			// 状態更新処理
+	void MotionManager(void);		// モーションの管理
 	void Elevation(void);			// 起伏地面の当たり判定
 	void ObstacleCollision(void);	// 障害物との当たり判定
 	bool Hit(void);					// ヒット処理
@@ -94,6 +95,7 @@ private:		// 自分だけアクセスできる
 	float m_fSpeed;				// 速度
 	bool m_bJump;				// ジャンプしたか
 	bool m_bAttack;				// 攻撃したか
+	MOTIONTYPE MotionType;		// モーションの状態
 	STATE m_State;				// ネズミの状態
 };
 
