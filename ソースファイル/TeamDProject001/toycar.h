@@ -40,8 +40,17 @@ public:			// 誰でもアクセスできる
 
 private:		// 自分だけアクセスできる
 
+	// メンバ関数
+	void CarDrive(void);		// 走行処理
+	void Check(void);			// 位置の確認処理
+	void RotCalc(void);			// 方向の設定処理
+
 	// メンバ変数
-	CCarGear* m_pGear;		// 歯車の情報
+	D3DXVECTOR3 m_pPosInit;		// 初期位置
+	CCarGear* m_pGear;			// 歯車の情報
+	D3DXVECTOR3* m_pPosDest;	// 目的の位置
+	int m_nPosDestNum;			// 目的の位置の総数
+	int m_nPosDestIdx;			// 目的の位置の番号
 };
 
 #endif

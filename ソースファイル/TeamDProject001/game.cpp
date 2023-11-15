@@ -91,6 +91,7 @@ HRESULT CGame::Init(void)
 
 	// マップの情報をロードする
 	CManager::Get()->GetFile()->Load(CFile::TYPE_OBSTACLE);
+	CManager::Get()->GetFile()->Load(CFile::TYPE_CARROUTE);
 
 	// マップの設定処理
 	CManager::Get()->GetFile()->SetMap();
@@ -135,7 +136,7 @@ HRESULT CGame::Init(void)
 
 	CObstacle::Create(D3DXVECTOR3(500.0f, 0.0f, 700.0f), CObstacle::TYPE::TYPE_FLOWERVASE);
 	CObstacle::Create(D3DXVECTOR3(800.0f, 0.0f, 0.0f), CObstacle::TYPE::TYPE_PLASTICCASE);
-	CObstacle::Create(D3DXVECTOR3(1000.0f, 0.0f, -1000.0f), CObstacle::TYPE::TYPE_PETBOTTLE);
+	CObstacle::Create(D3DXVECTOR3(-1500.0f, 0.0f, -1500.0f), CObstacle::TYPE::TYPE_TOYCAR);
 
 	// 情報の初期化
 	m_nFinishCount = 0;				// 終了カウント
