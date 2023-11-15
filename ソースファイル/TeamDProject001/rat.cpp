@@ -187,7 +187,7 @@ void CRat::Update(void)
 		// 攻撃処理
 		Attack();
 
-		//// モーションの設定処理
+		// モーションの設定処理
 		MotionManager();
 
 		if (Hit() == true)
