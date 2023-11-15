@@ -20,9 +20,10 @@
 CBlock::CBlock() : CModel(CObject::TYPE_BLOCK, CObject::PRIORITY_BLOCK)
 {
 	// 全ての値をクリアする
-	m_type = TYPE_CARDBOARD;	// 種類
-	m_pPrev = nullptr;			// 前のへのポインタ
-	m_pNext = nullptr;			// 次のへのポインタ
+	m_collision = COLLISION_SQUARE;	// 当たり判定の種類
+	m_type = TYPE_CARDBOARD;		// 種類
+	m_pPrev = nullptr;				// 前のへのポインタ
+	m_pNext = nullptr;				// 次のへのポインタ
 
 	if (CBlockManager::Get() != nullptr)
 	{ // マネージャーが存在していた場合
@@ -89,6 +90,7 @@ HRESULT CBlock::Init(void)
 	}
 
 	// 全ての値を初期化する
+	m_collision = COLLISION_SQUARE;	// 当たり判定の種類
 	m_type = TYPE_CARDBOARD;		// 種類
 
 	// 値を返す
@@ -158,6 +160,27 @@ void CBlock::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE 
 		// ブロックの種類を設定する
 		SetFileData((CXFile::TYPE)(INIT_BLOCK + m_type));
 	}
+
+	if (m_type == TYPE::TYPE_BEAR || 
+		m_type == TYPE::TYPE_CARDBOARD ||
+		m_type == TYPE::TYPE_CLOCK ||
+		m_type == TYPE::TYPE_DS ||
+		m_type == TYPE::TYPE_MILKPACK ||
+		m_type == TYPE::TYPE_OBAPHONE ||
+		m_type == TYPE::TYPE_REMOCON ||
+		m_type == TYPE::TYPE_TISSUE ||
+		m_type == TYPE::TYPE_WII)
+	{ // 一定の数値の場合
+
+		// 四角の当たり判定を設定する
+		m_collision = COLLISION_SQUARE;
+	}
+	else
+	{ // 上記以外
+
+		// 円の当たり判定を設定する
+		m_collision = COLLISION_CIRCLE;
+	}
 }
 
 //=====================================
@@ -213,4 +236,22 @@ CBlock* CBlock::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYP
 
 	// ブロックのポインタを返す
 	return pBlock;
+}
+
+//=====================================
+// 当たり判定の種類の設定処理
+//=====================================
+void CBlock::SetCollision(const COLLISION collsion)
+{
+	// 当たり判定を設定する
+	m_collision = collsion;
+}
+
+//=====================================
+// 当たり判定の種類の取得処理
+//=====================================
+CBlock::COLLISION CBlock::GetCollision(void) const
+{
+	// 当たり判定を返す
+	return m_collision;
 }
