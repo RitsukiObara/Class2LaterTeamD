@@ -43,6 +43,7 @@ public:			// 誰でもアクセスできる
 		TYPE_WII,				// Wii
 		TYPE_DS,				// DS
 		TYPE_HEADPHONE,			// ヘッドフォン
+		TYPE_PEN,				// ペン
 		TYPE_MAX				// この列挙型の総数
 	};
 
