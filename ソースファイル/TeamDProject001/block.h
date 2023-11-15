@@ -19,6 +19,14 @@ class CBlock : public CModel
 {
 public:			// 誰でもアクセスできる
 
+	// 列挙型定義(当たり判定の種類)
+	enum COLLISION
+	{
+		COLLISION_SQUARE = 0,		// 四角
+		COLLISION_CIRCLE,			// 円
+		COLLISION_MAX				// この列挙型の総数
+	};
+
 	// 列挙型定義(種類)
 	enum TYPE
 	{
@@ -55,13 +63,18 @@ public:			// 誰でもアクセスできる
 
 	void SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type);			// 情報の設定処理
 
+	// セット・ゲット関係
+	void SetCollision(const COLLISION collsion);	// 当たり判定の種類の設定処理
+	COLLISION GetCollision(void) const;				// 当たり判定の種類の取得処理
+
 	// 静的メンバ関数
 	static CBlock* Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type);	// 生成処理
 
 private:		// 自分だけアクセスできる
 
 	// メンバ変数
-	TYPE m_type;		// 種類
+	COLLISION m_collision;	// 当たり判定の種類
+	TYPE m_type;			// 種類
 
 	// リスト構造関係
 	CBlock* m_pPrev;	// 前へのポインタ

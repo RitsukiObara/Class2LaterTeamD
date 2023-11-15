@@ -50,7 +50,5 @@ private:		// 自分だけアクセスできる
 	// メンバ変数
 	D3DXVECTOR3 m_move;			// 移動量
 	STATE m_state;				// 状態
-	
-
 };
 #endif
