@@ -86,7 +86,11 @@ void CPetbottle::Update(void)
 
 	case CPetbottle::STATE_COLLAPSE:
 
+		// 回転処理
+		Cycle();
 
+		// 重力処理
+		Gravity();
 
 		break;
 
@@ -97,12 +101,6 @@ void CPetbottle::Update(void)
 
 		break;
 	}
-
-	// 回転処理
-	Cycle();
-
-	// 重力処理
-	Gravity();
 
 	// 起伏地面との当たり判定
 	Elevation();

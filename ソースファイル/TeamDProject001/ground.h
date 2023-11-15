@@ -17,9 +17,6 @@ public:
 	static CGround* Create(void);
 private:
 
-	static LPDIRECT3DTEXTURE9 m_pTexturePlayer;
-	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuffPlayer;	//頂点バッファへのポインタ
-
 	D3DXVECTOR3 m_pos;
 	D3DXVECTOR3 m_size;
 

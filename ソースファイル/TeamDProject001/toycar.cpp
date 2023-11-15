@@ -20,6 +20,7 @@
 // マクロ定義
 //-------------------------------------------
 #define CAR_GEAR_SHIFT		(D3DXVECTOR3(0.0f, 200.0f, 0.0f))		// 車の歯車のずらす幅
+#define CAR_SPEED			(-6.0f)									// 車の速度
 
 //==============================
 // コンストラクタ
@@ -92,6 +93,13 @@ void CToyCar::Update(void)
 
 	// 走行処理
 	CarDrive();
+
+	if (m_pPosDest != nullptr)
+	{ // 位置が NULL じゃない場合
+
+		// 位置の確認処理
+		Check();
+	}
 
 	if (m_pGear != nullptr)
 	{ // 歯車が NULL じゃない場合
@@ -179,18 +187,11 @@ void CToyCar::CarDrive(void)
 	D3DXVECTOR3 rot = GetRot();		// 向き
 
 	// 移動させる
-	pos.x += sinf(rot.y) * -6.0f;
-	pos.z += cosf(rot.y) * -6.0f;
+	pos.x += sinf(rot.y) * CAR_SPEED;
+	pos.z += cosf(rot.y) * CAR_SPEED;
 
 	// 位置を適用する
 	SetPos(pos);
-
-	if (m_pPosDest != nullptr)
-	{ // 位置が NULL じゃない場合
-
-		// 位置の確認処理
-		Check();
-	}
 }
 
 //=====================================
