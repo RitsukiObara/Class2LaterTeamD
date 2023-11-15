@@ -19,6 +19,14 @@ class CPetbottle : public CObstacle
 {
 public:			// 誰でもアクセスできる
 
+	// 列挙型定義(状態)
+	enum STATE
+	{
+		STATE_STAND = 0,	// 通常状態
+		STATE_COLLAPSE,		// 倒れ状態
+		STATE_MAX			// この列挙型の総数
+	};
+
 	CPetbottle();			// コンストラクタ
 	~CPetbottle();			// デストラクタ
 
@@ -35,9 +43,13 @@ public:			// 誰でもアクセスできる
 private:		// 自分だけアクセスできる
 
 	// メンバ関数
+	void Cycle(void);			// 回転処理
+	void Gravity(void);			// 重力処理
 	void Elevation(void);		// 起伏地面の当たり判定
-	void Gravity(void);			//重力処理
-	D3DXVECTOR3 m_move;			//移動量
+
+	// メンバ変数
+	D3DXVECTOR3 m_move;			// 移動量
+	STATE m_state;				// 状態
 	
 
 };

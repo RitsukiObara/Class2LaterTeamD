@@ -93,7 +93,6 @@ private:		// 自分だけアクセスできる
 	int m_nDamageCounter;		// ダメージ食らうまでのカウンター
 	float m_fSpeed;				// 速度
 	bool m_bJump;				// ジャンプしたか
-	bool m_bLand;				// 着地したか
 	bool m_bAttack;				// 攻撃したか
 	STATE m_State;				// ネズミの状態
 };
