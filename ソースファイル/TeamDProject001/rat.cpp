@@ -53,6 +53,7 @@ CRat::CRat() : CCharacter(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 	m_fSpeed = 0.0f;					// 速度
 	m_bJump = false;					// ジャンプしたか
 	m_bAttack = false;					// 攻撃したか
+	MotionType = MOTIONTYPE_NEUTRAL;	// モーションの状態
 	m_State = STATE_NONE;				// 状態
 }
 
@@ -115,7 +116,7 @@ HRESULT CRat::Init(void)
 	}
 
 	// モーションの設定処理
-	m_pMotion->Set(MOTIONTYPE_NEUTRAL);
+	m_pMotion->Set(MotionType);
 
 	// 全ての値を初期化する
 	m_pPlayerID = nullptr;				// プレイヤーのID表示
@@ -186,6 +187,9 @@ void CRat::Update(void)
 		// 攻撃処理
 		Attack();
 
+		// モーションの設定処理
+		MotionManager();
+
 		if (Hit() == true)
 		{ // ヒット処理で死んだ場合
 
@@ -193,9 +197,6 @@ void CRat::Update(void)
 			return;
 		}
 	}
-
-	//// モーションの設定処理
-	//m_pMotion->Set(MOTIONTYPE_NEUTRAL);
 
 	// 起伏地面の当たり判定
 	Elevation();
@@ -239,6 +240,44 @@ void CRat::Draw(void)
 //=====================================
 // 情報の設定処理
 //=====================================
+void CRat::MotionManager(void)
+{
+	if (m_bJump == true)
+	{
+		if (MotionType != MOTIONTYPE_JUMP)
+		{
+			MotionType = MOTIONTYPE_JUMP;
+
+			// モーションの設定処理
+			m_pMotion->Set(MotionType);
+		}
+	}
+	else if (m_move.x > 0.05f || m_move.x < -0.05f ||
+			m_move.z > 0.05f || m_move.z < -0.05f)
+	{
+		if (MotionType != MOTIONTYPE_MOVE)
+		{
+			MotionType = MOTIONTYPE_MOVE;
+
+			// モーションの設定処理
+			m_pMotion->Set(MotionType);
+		}
+	}
+	else
+	{
+		if (MotionType != MOTIONTYPE_NEUTRAL)
+		{
+			MotionType = MOTIONTYPE_NEUTRAL;
+
+			// モーションの設定処理
+			m_pMotion->Set(MotionType);
+		}
+	}
+}
+
+//=====================================
+// 情報の設定処理
+//=====================================
 void CRat::SetData(const D3DXVECTOR3& pos, const int nID)
 {
 	// 情報の設定処理
@@ -270,12 +309,12 @@ void CRat::SetData(const D3DXVECTOR3& pos, const int nID)
 	// モーションの設定処理
 	m_pMotion->Set(MOTIONTYPE_NEUTRAL);
 
-	if (m_pPlayerID == nullptr)
-	{ // プレイヤーのID表示が NULL の場合
+	//if (m_pPlayerID == nullptr)
+	//{ // プレイヤーのID表示が NULL の場合
 
-		// プレイヤーのID表示の生成処理
-		m_pPlayerID = CPlayerID::Create(D3DXVECTOR3(pos.x, pos.y + 90.0f, pos.z), m_nRatIdx);
-	}
+	//	// プレイヤーのID表示の生成処理
+	//	m_pPlayerID = CPlayerID::Create(D3DXVECTOR3(pos.x, pos.y + 90.0f, pos.z), m_nRatIdx);
+	//}
 }
 
 //=======================================
@@ -395,20 +434,20 @@ void CRat::Move(void)
 		{ // 上を押した場合
 
 			// 向きを設定する
-			rot.y = D3DX_PI * 0.25f;
+			rot.y = D3DX_PI * -0.75f;
 		}
 		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true ||
 			CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) < 0)
 		{ // 下を押した場合
 
 			// 向きを設定する
-			rot.y = D3DX_PI * 0.75f;
+			rot.y = D3DX_PI * -0.25f;
 		}
 		else
 		{ // 上記以外
 
 			// 向きを設定する
-			rot.y = D3DX_PI * 0.5f;
+			rot.y = D3DX_PI * -0.5f;
 		}
 	}
 	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_A) == true ||
@@ -420,20 +459,20 @@ void CRat::Move(void)
 		{ // 上を押した場合
 
 			// 向きを設定する
-			rot.y = D3DX_PI * -0.25f;
+			rot.y = D3DX_PI * 0.75f;
 		}
 		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true ||
 			CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) < 0)
 		{ // 下を押した場合
 
 			// 向きを設定する
-			rot.y = D3DX_PI * -0.75f;
+			rot.y = D3DX_PI * 0.25f;
 		}
 		else
 		{ // 上記以外
 
 			// 向きを設定する
-			rot.y = D3DX_PI * -0.5f;
+			rot.y = D3DX_PI * 0.5f;
 		}
 	}
 	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_W) == true ||
@@ -441,14 +480,14 @@ void CRat::Move(void)
 	{ // 上を押した場合
 
 		// 向きを設定する
-		rot.y = 0.0f;
+		rot.y = D3DX_PI;
 	}
 	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true ||
 		CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) < 0)
 	{ // 下を押した場合
 
 		// 向きを設定する
-		rot.y = D3DX_PI;
+		rot.y = 0.0f;
 	}
 	else
 	{ // 上記以外
@@ -458,8 +497,8 @@ void CRat::Move(void)
 	}
 
 	// 移動量を設定する
-	m_move.x = sinf(rot.y) * m_fSpeed;
-	m_move.z = cosf(rot.y) * m_fSpeed;
+	m_move.x = -sinf(rot.y) * m_fSpeed;
+	m_move.z = -cosf(rot.y) * m_fSpeed;
 
 	// 向きを適用する
 	SetRot(rot);
@@ -473,6 +512,19 @@ void CRat::Jump(void)
 	// ローカル変数宣言
 	D3DXVECTOR3 pos = GetPos();
 	D3DXVECTOR3 rot = GetRot();
+
+#ifdef _DEBUG
+
+	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_SPACE) == true &&
+		m_bJump == false)
+	{ // Aボタンを押した場合
+
+		m_move.y = ADD_MOVE_Y;	// 浮力代入
+
+		m_bJump = true;		// ジャンプしてる状態にする
+	}
+
+#endif // _DEBUG
 
 	if (CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_A, m_nRatIdx) == true &&
 		m_bJump == false)
