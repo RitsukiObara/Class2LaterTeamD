@@ -57,13 +57,25 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\Reizouko.x",			//冷蔵庫
 	"data\\MODEL\\Table000.x",			//テーブル
 
-	// 猫モデル
+	// ネズミモデル
 	"data\\MODEL\\rat\\00_rat_body.x",	// 体
 	"data\\MODEL\\rat\\01_rat_head.x",	// 頭
 	"data\\MODEL\\rat\\02_rat_Lhand.x",	// 左手
 	"data\\MODEL\\rat\\03_rat_Rhand.x",	// 右手
 	"data\\MODEL\\rat\\04_rat_Lleg.x",	// 左足
 	"data\\MODEL\\rat\\05_rat_Rleg.x",	// 右足
+
+	//猫モデル
+	"data\\MODEL\\cat\\00_cat_body.x",	//体
+	"data\\MODEL\\cat\\01_cat_head.x",	//頭
+	"data\\MODEL\\cat\\02_cat_Larm.x",	//左腕
+	"data\\MODEL\\cat\\03_cat_Lhand.x",	//左手
+	"data\\MODEL\\cat\\04_cat_Rarm.x",	//右腕
+	"data\\MODEL\\cat\\05_cat_Rhand.x",	//右手
+	"data\\MODEL\\cat\\06_cat_Lfoot.x",	//左腿
+	"data\\MODEL\\cat\\07_cat_Lleg.x",	//左足
+	"data\\MODEL\\cat\\08_cat_Rfoot.x",	//右腿
+	"data\\MODEL\\cat\\09_cat_Rleg.x",	//右足
 
 	// ネズミモデル
 	"data\\MODEL\\rat\\rat_Ghost.x",	// 幽霊の姿

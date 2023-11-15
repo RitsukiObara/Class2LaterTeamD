@@ -13,6 +13,7 @@
 #define INIT_VTX_MIN	(D3DXVECTOR3( 9999.0f,  9999.0f,  9999.0f))		// モデルの最小の頂点座標の初期値
 #define INIT_VTX_MAX	(D3DXVECTOR3(-9999.0f, -9999.0f, -9999.0f))		// モデルの最大の頂点座標の初期値
 #define INIT_SIZE		(D3DXVECTOR3(0.0f, 0.0f, 0.0f))					// モデルサイズの初期値
+#define INIT_RAT		(CXFile::TYPE_RAT_BODY)							// ネズミモデルの開始位置
 #define INIT_CAT		(CXFile::TYPE_CAT_BODY)							// 猫モデルの開始位置
 #define INIT_BLOCK		(CXFile::TYPE_CARDBOARD)						// ブロックモデルの開始位置
 
@@ -67,13 +68,25 @@ public:			// 誰でもアクセスできる
 		TYPE_REIZOUKO,			//冷蔵庫
 		TYPE_TABLE,				//テーブル
 
-		// 猫モデル
-		TYPE_CAT_BODY,			// 体
-		TYPE_CAT_HEAD,			// 頭
-		TYPE_CAT_LHAND,			// 左手
-		TYPE_CAT_RHAND,			// 右手
-		TYPE_CAT_LLEG,			// 左足
-		TYPE_CAT_RLEG,			// 右足
+		//ネズミモデル
+		TYPE_RAT_BODY,			// 体
+		TYPE_RAT_HEAD,			// 頭
+		TYPE_RAT_LHAND,			// 左手
+		TYPE_RAT_RHAND,			// 右手
+		TYPE_RAT_LLEG,			// 左足
+		TYPE_RAT_RLEG,			// 右足
+
+		//猫モデル
+		TYPE_CAT_BODY,			//体
+		TYPE_CAT_HEAD,			//頭
+		TYPE_CAT_LARM,			//左腕
+		TYPE_CAT_LHAND,			//左手
+		TYPE_CAT_RAEM,			//右腕
+		TYPE_CAT_RHAND,			//右手
+		TYPE_CAT_LFOOT,			//左腿
+		TYPE_CAT_LLEG,			//左足
+		TYPE_CAT_RFOOT,			//右腿
+		TYPE_CAT_RLEG,			//右足
 
 		// ネズミモデル
 		TYPE_RAT_GHOST,			// 幽霊モデル
