@@ -96,6 +96,15 @@ void CFlowerVase::SetData(const D3DXVECTOR3& pos, const TYPE type)
 }
 
 //=====================================
+// “–‚½‚è”»’èˆ—
+//=====================================
+bool CFlowerVase::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth)
+{
+	// false ‚ğ•Ô‚·
+	return false;
+}
+
+//=====================================
 // ƒqƒbƒgˆ—
 //=====================================
 bool CFlowerVase::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth)

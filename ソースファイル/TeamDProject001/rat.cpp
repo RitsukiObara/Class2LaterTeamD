@@ -194,6 +194,9 @@ void CRat::Update(void)
 		}
 	}
 
+	//// モーションの設定処理
+	//m_pMotion->Set(MOTIONTYPE_NEUTRAL);
+
 	// 起伏地面の当たり判定
 	Elevation();
 
