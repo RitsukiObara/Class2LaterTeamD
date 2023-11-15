@@ -328,7 +328,7 @@ void CXFile::SetCollision(void)
 		m_apModel[nCntModel].collsize = m_apModel[nCntModel].vtxMax - m_apModel[nCntModel].vtxMin;
 
 		// ƒ‚ƒfƒ‹‚Ì‰~‚Ì“–‚½‚è”»’è‚ğì¬
-		m_apModel[nCntModel].fRadius = ((m_apModel[nCntModel].collsize.x * 0.5f) + (m_apModel[nCntModel].collsize.y * 0.5f));
+		m_apModel[nCntModel].fRadius = ((m_apModel[nCntModel].collsize.x * 0.5f) + (m_apModel[nCntModel].collsize.z * 0.5f)) * 0.5f;
 	}
 }
 

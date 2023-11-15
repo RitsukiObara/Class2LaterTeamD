@@ -87,7 +87,7 @@ void collision::HairBallCollision(CObstacle& obstacle, D3DXVECTOR3& pos, const f
 	{ // 毬と衝突した場合
 
 		// 円柱の当たり判定処理
-		useful::CylinderCollision(&pos, obstacle.GetPos(), obstacle.GetFileData().vtxMax.x + fWidth);
+		useful::CylinderCollision(&pos, obstacle.GetPos(), obstacle.GetFileData().fRadius + fWidth);
 	}
 }
 
@@ -271,74 +271,107 @@ void collision::BlockCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, cons
 	while (pBlock != nullptr)
 	{ // ブロックが NULL の場合
 
-		if (pBlock->GetPos().y + pBlock->GetFileData().vtxMax.y >= pos.y &&
-			pBlock->GetPos().y + pBlock->GetFileData().vtxMin.y <= pos.y + fHeight &&
-			pBlock->GetPos().z + pBlock->GetFileData().vtxMax.z >= pos.z - fDepth&&
-			pBlock->GetPos().z + pBlock->GetFileData().vtxMin.z <= pos.z + fDepth)
-		{ // X軸の判定に入れる場合
+		if (pBlock->GetCollision() == CBlock::COLLISION_SQUARE)
+		{ // 矩形の当たり判定の場合
 
-			if (pBlock->GetPosOld().x + pBlock->GetFileData().vtxMax.x <= posOld.x - fWidth &&
-				pBlock->GetPos().x + pBlock->GetFileData().vtxMax.x >= pos.x - fWidth)
-			{ // 右にぶつかった場合
-
-				// 位置を設定する
-				pos.x = pBlock->GetPos().x + +pBlock->GetFileData().vtxMax.x + (fWidth + COLLISION_ADD_DIFF_LENGTH);
-			}
-			else if (pBlock->GetPosOld().x + pBlock->GetFileData().vtxMin.x >= posOld.x + fWidth &&
-				pBlock->GetPos().x + pBlock->GetFileData().vtxMin.x <= pos.x + fWidth)
-			{ // 左にぶつかった場合
-
-				// 位置を設定する
-				pos.x = pBlock->GetPos().x + +pBlock->GetFileData().vtxMin.x - (fWidth + COLLISION_ADD_DIFF_LENGTH);
-			}
+			// 矩形の当たり判定
+			BlockRectangleCollision(*pBlock, pos, posOld, fWidth, fHeight, fDepth);
 		}
+		else
+		{ // 上記以外
 
-		if (pBlock->GetPos().x + pBlock->GetFileData().vtxMax.x >= pos.x - fWidth &&
-			pBlock->GetPos().x + pBlock->GetFileData().vtxMin.x <= pos.x + fWidth &&
-			pBlock->GetPos().y + pBlock->GetFileData().vtxMax.y >= pos.y &&
-			pBlock->GetPos().y + pBlock->GetFileData().vtxMin.y <= pos.y + fHeight)
-		{ // Z軸の判定に入れる場合
-
-			if (pBlock->GetPosOld().z + pBlock->GetFileData().vtxMax.z <= posOld.z - fDepth &&
-				pBlock->GetPos().z + pBlock->GetFileData().vtxMax.z >= pos.z - fDepth)
-			{ // 奥にぶつかった場合
-
-				// 位置を設定する
-				pos.z = pBlock->GetPos().z + +pBlock->GetFileData().vtxMax.z + (fDepth + COLLISION_ADD_DIFF_LENGTH);
-			}
-			else if (pBlock->GetPosOld().z + pBlock->GetFileData().vtxMin.z >= posOld.z + fDepth &&
-				pBlock->GetPos().z + pBlock->GetFileData().vtxMin.z <= pos.z + fDepth)
-			{ // 手前にぶつかった場合
-
-				// 位置を設定する
-				pos.z = pBlock->GetPos().z + +pBlock->GetFileData().vtxMin.z - (fDepth + COLLISION_ADD_DIFF_LENGTH);
-			}
-		}
-
-		if (pBlock->GetPos().x + pBlock->GetFileData().vtxMax.x >= pos.x - fWidth &&
-			pBlock->GetPos().x + pBlock->GetFileData().vtxMin.x <= pos.x + fWidth &&
-			pBlock->GetPos().z + pBlock->GetFileData().vtxMax.z >= pos.z &&
-			pBlock->GetPos().z + pBlock->GetFileData().vtxMin.z <= pos.z + fDepth)
-		{ // Y軸の判定に入れる場合
-
-			if (pBlock->GetPosOld().y + pBlock->GetFileData().vtxMax.y <= posOld.y &&
-				pBlock->GetPos().y + pBlock->GetFileData().vtxMax.y >= pos.y)
-			{ // 上にぶつかった場合
-
-				// 位置を設定する
-				pos.y = pBlock->GetPos().y + +pBlock->GetFileData().vtxMax.y + COLLISION_ADD_DIFF_LENGTH;
-			}
-			else if (pBlock->GetPosOld().y + pBlock->GetFileData().vtxMin.y >= posOld.y + fHeight &&
-				pBlock->GetPos().y + pBlock->GetFileData().vtxMin.y <= pos.y + fHeight)
-			{ // 下にぶつかった場合
-
-				// 位置を設定する
-				pos.y = pBlock->GetPos().y + +pBlock->GetFileData().vtxMin.y - (fHeight + COLLISION_ADD_DIFF_LENGTH);
-			}
+			// 円の当たり判定
+			BlockCircleCollision(*pBlock, pos, fWidth, fHeight);
 		}
 
 		// 次のブロックの情報を取得する
 		pBlock = pBlock->GetNext();
+	}
+}
+
+//===============================
+// ブロックの矩形の当たり判定
+//===============================
+void collision::BlockRectangleCollision(CBlock& block, D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth)
+{
+	if (block.GetPos().y + block.GetFileData().vtxMax.y >= pos.y &&
+		block.GetPos().y + block.GetFileData().vtxMin.y <= pos.y + fHeight &&
+		block.GetPos().z + block.GetFileData().vtxMax.z >= pos.z - fDepth&&
+		block.GetPos().z + block.GetFileData().vtxMin.z <= pos.z + fDepth)
+	{ // X軸の判定に入れる場合
+
+		if (block.GetPosOld().x + block.GetFileData().vtxMax.x <= posOld.x - fWidth &&
+			block.GetPos().x + block.GetFileData().vtxMax.x >= pos.x - fWidth)
+		{ // 右にぶつかった場合
+
+			// 位置を設定する
+			pos.x = block.GetPos().x + +block.GetFileData().vtxMax.x + (fWidth + COLLISION_ADD_DIFF_LENGTH);
+		}
+		else if (block.GetPosOld().x + block.GetFileData().vtxMin.x >= posOld.x + fWidth &&
+			block.GetPos().x + block.GetFileData().vtxMin.x <= pos.x + fWidth)
+		{ // 左にぶつかった場合
+
+			// 位置を設定する
+			pos.x = block.GetPos().x + +block.GetFileData().vtxMin.x - (fWidth + COLLISION_ADD_DIFF_LENGTH);
+		}
+	}
+
+	if (block.GetPos().x + block.GetFileData().vtxMax.x >= pos.x - fWidth &&
+		block.GetPos().x + block.GetFileData().vtxMin.x <= pos.x + fWidth &&
+		block.GetPos().y + block.GetFileData().vtxMax.y >= pos.y &&
+		block.GetPos().y + block.GetFileData().vtxMin.y <= pos.y + fHeight)
+	{ // Z軸の判定に入れる場合
+
+		if (block.GetPosOld().z + block.GetFileData().vtxMax.z <= posOld.z - fDepth &&
+			block.GetPos().z + block.GetFileData().vtxMax.z >= pos.z - fDepth)
+		{ // 奥にぶつかった場合
+
+			// 位置を設定する
+			pos.z = block.GetPos().z + +block.GetFileData().vtxMax.z + (fDepth + COLLISION_ADD_DIFF_LENGTH);
+		}
+		else if (block.GetPosOld().z + block.GetFileData().vtxMin.z >= posOld.z + fDepth &&
+			block.GetPos().z + block.GetFileData().vtxMin.z <= pos.z + fDepth)
+		{ // 手前にぶつかった場合
+
+			// 位置を設定する
+			pos.z = block.GetPos().z + +block.GetFileData().vtxMin.z - (fDepth + COLLISION_ADD_DIFF_LENGTH);
+		}
+	}
+
+	if (block.GetPos().x + block.GetFileData().vtxMax.x >= pos.x - fWidth &&
+		block.GetPos().x + block.GetFileData().vtxMin.x <= pos.x + fWidth &&
+		block.GetPos().z + block.GetFileData().vtxMax.z >= pos.z &&
+		block.GetPos().z + block.GetFileData().vtxMin.z <= pos.z + fDepth)
+	{ // Y軸の判定に入れる場合
+
+		if (block.GetPosOld().y + block.GetFileData().vtxMax.y <= posOld.y &&
+			block.GetPos().y + block.GetFileData().vtxMax.y >= pos.y)
+		{ // 上にぶつかった場合
+
+			// 位置を設定する
+			pos.y = block.GetPos().y + +block.GetFileData().vtxMax.y + COLLISION_ADD_DIFF_LENGTH;
+		}
+		else if (block.GetPosOld().y + block.GetFileData().vtxMin.y >= posOld.y + fHeight &&
+			block.GetPos().y + block.GetFileData().vtxMin.y <= pos.y + fHeight)
+		{ // 下にぶつかった場合
+
+			// 位置を設定する
+			pos.y = block.GetPos().y + +block.GetFileData().vtxMin.y - (fHeight + COLLISION_ADD_DIFF_LENGTH);
+		}
+	}
+}
+
+//===============================
+// ブロックの円形の当たり判定
+//===============================
+void collision::BlockCircleCollision(CBlock& block, D3DXVECTOR3& pos, const float fRadius, const float fHeight)
+{
+	if (pos.y <= block.GetPos().y + block.GetFileData().vtxMax.y ||
+		pos.y + fHeight >= block.GetPos().y + block.GetFileData().vtxMin.y)
+	{ // 毬と衝突した場合
+
+		// 円柱の当たり判定処理
+		useful::CylinderCollision(&pos, block.GetPos(), block.GetFileData().fRadius + fRadius);
 	}
 }
 
