@@ -11,9 +11,9 @@
 
 #include "logo.h"
 #include "title.h"
+#include "entry.h"
 #include "game.h"
 #include "result.h"
-#include "ranking.h"
 #include "sound.h"
 
 #include "manager.h"
@@ -113,6 +113,13 @@ void CScene::SetData(const MODE mode)
 
 			break;
 
+		case MODE_ENTRY:
+
+			// ランキングBGMを流す
+			CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_BGM_RANKING);
+
+			break;
+
 		case MODE_GAME:
 
 			// ゲームBGMを流す
@@ -124,13 +131,6 @@ void CScene::SetData(const MODE mode)
 
 			// リザルトBGMを流す
 			CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_BGM_RESULT);
-
-			break;
-
-		case MODE_RANKING:
-
-			// ランキングBGMを流す
-			CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_BGM_RANKING);
 
 			break;
 
@@ -177,36 +177,36 @@ CScene* CScene::Create(const MODE mode)
 		{
 		case MODE_LOGO:			// ロゴ画面
 
-			// メモリを確保する
+			// ロゴ画面を生成する
 			pScene = new CLogo;
 
 			break;
 
 		case MODE_TITLE:		// タイトル画面
 
-			// メモリを確保する
+			// タイトル画面を生成する
 			pScene = new CTitle;
+
+			break;
+
+		case MODE_ENTRY:
+
+			// エントリー画面を生成する
+			pScene = new CEntry;
 
 			break;
 
 		case MODE_GAME:			// ゲーム画面
 
-			// メモリを確保する
+			// ゲーム画面を生成する
 			pScene = new CGame;
 
 			break;
 
 		case MODE_RESULT:		// リザルト画面
 
-			// メモリを確保する
+			// リザルト画面を生成する
 			pScene = new CResult;
-
-			break;
-
-		case MODE_RANKING:		// ランキング画面
-
-			// メモリを確保する
-			pScene = new CRanking;
 
 			break;
 

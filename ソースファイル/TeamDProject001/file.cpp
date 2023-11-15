@@ -47,17 +47,11 @@ CFile::CFile()
 		m_CarRouteInfo.nNumPos[nCntInfo] = 0;							// 位置の数
 	}
 
-	for (int nCntRank = 0; nCntRank < MAX_RANKING; nCntRank++)
-	{
-		m_RankingInfo.aRank[nCntRank] = 0;				// ランキングの値
-	}
-
 	// 総数をクリアする
 	m_ObstacleInfo.nNum = 0;			// 障害物
 	m_CarRouteInfo.nNum = 0;			// 車の経路
 
 	// 成功状況をクリアする
-	m_RankingInfo.bSuccess = false;		// ランキング
 	m_ObstacleInfo.bSuccess = false;	// 障害物
 	m_CarRouteInfo.bSuccess = false;	// 車の経路
 }
@@ -77,18 +71,6 @@ HRESULT CFile::Save(const TYPE type)
 {
 	switch (type)
 	{
-	case TYPE_RANKING:
-
-		// ランキングのセーブ処理
-		if (FAILED(SaveRanking()))
-		{ // 失敗した場合
-
-			// 失敗を返す
-			return E_FAIL;
-		}
-
-		break;
-
 	case TYPE_OBSTACLE:
 
 		// 障害物のセーブ処理
@@ -120,18 +102,6 @@ HRESULT CFile::Load(const TYPE type)
 {
 	switch (type)
 	{
-	case TYPE_RANKING:
-
-		// ランキングのロード処理
-		if (FAILED(LoadRanking()))
-		{ // 失敗した場合
-
-			// 失敗を返す
-			return E_FAIL;
-		}
-
-		break;
-
 	case TYPE_OBSTACLE:
 
 		// 障害物のロード処理
@@ -166,27 +136,6 @@ HRESULT CFile::Load(const TYPE type)
 
 	// 結果を返す
 	return S_OK;
-}
-
-//===========================================
-// ランキングの設定処理
-//===========================================
-void CFile::SetRankingInfo(int* pRank)
-{
-	for (int nCnt = 0; nCnt < MAX_RANKING; nCnt++, pRank++)
-	{
-		// ランキングの情報を設定する
-		m_RankingInfo.aRank[nCnt] = *pRank;
-	}
-}
-
-//===========================================
-// ランキングの取得処理
-//===========================================
-CFile::SRankingInfo CFile::GetRankingInfo(void)
-{
-	// ランキングの情報を返す
-	return m_RankingInfo;
 }
 
 //===========================================
@@ -249,17 +198,11 @@ HRESULT CFile::Init(void)
 		m_CarRouteInfo.nNumPos[nCntInfo] = 0;							// 位置の数
 	}
 
-	for (int nCntRank = 0; nCntRank < MAX_RANKING; nCntRank++)
-	{
-		m_RankingInfo.aRank[nCntRank] = 0;				// ランキングの値
-	}
-
 	// 総数をクリアする
 	m_ObstacleInfo.nNum = 0;			// 障害物
 	m_CarRouteInfo.nNum = 0;			// 車の経路
 
 	// 成功状況をクリアする
-	m_RankingInfo.bSuccess = false;		// ランキング
 	m_ObstacleInfo.bSuccess = false;	// 障害物
 	m_CarRouteInfo.bSuccess = false;	// 車の経路
 
@@ -272,45 +215,7 @@ HRESULT CFile::Init(void)
 //===========================================
 void CFile::Uninit(void)
 {
-	
-}
 
-//===========================================
-// ランキングのセーブ処理
-//===========================================
-HRESULT CFile::SaveRanking(void)
-{
-	FILE *pFile;												// ファイルポインタを宣言
-	m_RankingInfo.bSuccess = false;								// 成功状況
-
-	// ファイルを開く
-	pFile = fopen(RANKING_BIN, "wb");			// バイナリファイルに書き込むために開く
-
-	// ファイルを比較する
-	if (pFile != NULL)
-	{ // ファイルが開けた場合
-
-		// ファイルから数値を書き出す
-		fwrite(&m_RankingInfo.aRank[0], sizeof(int), MAX_RANKING, pFile);
-
-		// ファイルを閉じる
-		fclose(pFile);
-
-		// 成功状況を true にする
-		m_RankingInfo.bSuccess = true;
-
-		// 成功を返す
-		return S_OK;
-	}
-	else
-	{ // ファイルが開けなかった場合
-
-		// 停止
-		assert(false);
-
-		// 失敗を返す
-		return E_FAIL;
-	}
 }
 
 //===========================================
@@ -364,50 +269,6 @@ HRESULT CFile::SaveObstacle(void)
 
 	// 成功を返す
 	return S_OK;
-}
-
-//===========================================
-// ランキングのロード処理
-//===========================================
-HRESULT CFile::LoadRanking(void)
-{
-	FILE *pFile;						// ファイルポインタを宣言
-	m_RankingInfo.bSuccess = false;		// 成功状況
-
-	// ファイルを開く
-	pFile = fopen(RANKING_BIN, "rb");			// バイナリファイルから読み込むために開く
-
-	// ファイルを比較する
-	if (pFile != NULL)
-	{ // ファイルが開けた場合
-
-		// ファイルから数値を読み込む
-		fread(&m_RankingInfo.aRank[0], sizeof(int), MAX_RANKING, pFile);
-
-		// ファイルを閉じる
-		fclose(pFile);
-
-		// 成功状況を true にする
-		m_RankingInfo.bSuccess = true;
-
-		// 成功を返す
-		return S_OK;
-	}
-	else
-	{ // ファイルが開けなかった場合
-
-		// 停止
-		assert(false);
-
-		for (int nCntRank = 0; nCntRank < MAX_RANKING; nCntRank++)
-		{
-			// 数値を設定する
-			m_RankingInfo.aRank[0] = 0;
-		}
-
-		// 失敗を返す
-		return E_FAIL;
-	}
 }
 
 //===========================================

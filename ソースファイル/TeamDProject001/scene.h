@@ -24,9 +24,9 @@ public:
 	{
 		MODE_LOGO = 0,			// ロゴ画面
 		MODE_TITLE,				// タイトル画面
+		MODE_ENTRY,				// エントリー画面
 		MODE_GAME,				// ゲーム画面
 		MODE_RESULT,			// リザルト画面
-		MODE_RANKING,			// ランキング画面
 		MODE_MAX				// この列挙型の総数
 	};
 

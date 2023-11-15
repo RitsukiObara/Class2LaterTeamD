@@ -148,19 +148,6 @@ void CCamera::Update(void)
 
 		break;
 
-	case CScene::MODE_RANKING:	// ランキング
-
-		if (m_posV.x <= RANKING_STOP ||
-			m_posV.x <= RANKING_STOP)
-		{ // 位置が一定数以下だった場合
-
-			// カメラを移動させる
-			m_posV.x += RANKING_MOVE;
-			m_posR.x += RANKING_MOVE;
-		}
-
-		break;
-
 	default:					// 上記以外
 
 		// 情報のリセット処理

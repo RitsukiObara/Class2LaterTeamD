@@ -305,14 +305,14 @@ void collision::BlockRectangleCollision(CBlock& block, D3DXVECTOR3& pos, const D
 		{ // 右にぶつかった場合
 
 			// 位置を設定する
-			pos.x = block.GetPos().x + +block.GetFileData().vtxMax.x + (fWidth + COLLISION_ADD_DIFF_LENGTH);
+			pos.x = block.GetPos().x + block.GetFileData().vtxMax.x + (fWidth + COLLISION_ADD_DIFF_LENGTH);
 		}
 		else if (block.GetPosOld().x + block.GetFileData().vtxMin.x >= posOld.x + fWidth &&
 			block.GetPos().x + block.GetFileData().vtxMin.x <= pos.x + fWidth)
 		{ // 左にぶつかった場合
 
 			// 位置を設定する
-			pos.x = block.GetPos().x + +block.GetFileData().vtxMin.x - (fWidth + COLLISION_ADD_DIFF_LENGTH);
+			pos.x = block.GetPos().x + block.GetFileData().vtxMin.x - (fWidth + COLLISION_ADD_DIFF_LENGTH);
 		}
 	}
 
@@ -327,14 +327,14 @@ void collision::BlockRectangleCollision(CBlock& block, D3DXVECTOR3& pos, const D
 		{ // 奥にぶつかった場合
 
 			// 位置を設定する
-			pos.z = block.GetPos().z + +block.GetFileData().vtxMax.z + (fDepth + COLLISION_ADD_DIFF_LENGTH);
+			pos.z = block.GetPos().z + block.GetFileData().vtxMax.z + (fDepth + COLLISION_ADD_DIFF_LENGTH);
 		}
 		else if (block.GetPosOld().z + block.GetFileData().vtxMin.z >= posOld.z + fDepth &&
 			block.GetPos().z + block.GetFileData().vtxMin.z <= pos.z + fDepth)
 		{ // 手前にぶつかった場合
 
 			// 位置を設定する
-			pos.z = block.GetPos().z + +block.GetFileData().vtxMin.z - (fDepth + COLLISION_ADD_DIFF_LENGTH);
+			pos.z = block.GetPos().z + block.GetFileData().vtxMin.z - (fDepth + COLLISION_ADD_DIFF_LENGTH);
 		}
 	}
 
@@ -349,14 +349,14 @@ void collision::BlockRectangleCollision(CBlock& block, D3DXVECTOR3& pos, const D
 		{ // 上にぶつかった場合
 
 			// 位置を設定する
-			pos.y = block.GetPos().y + +block.GetFileData().vtxMax.y + COLLISION_ADD_DIFF_LENGTH;
+			pos.y = block.GetPos().y + block.GetFileData().vtxMax.y + COLLISION_ADD_DIFF_LENGTH;
 		}
 		else if (block.GetPosOld().y + block.GetFileData().vtxMin.y >= posOld.y + fHeight &&
 			block.GetPos().y + block.GetFileData().vtxMin.y <= pos.y + fHeight)
 		{ // 下にぶつかった場合
 
 			// 位置を設定する
-			pos.y = block.GetPos().y + +block.GetFileData().vtxMin.y - (fHeight + COLLISION_ADD_DIFF_LENGTH);
+			pos.y = block.GetPos().y + block.GetFileData().vtxMin.y - (fHeight + COLLISION_ADD_DIFF_LENGTH);
 		}
 	}
 }

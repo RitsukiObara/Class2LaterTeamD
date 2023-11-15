@@ -108,7 +108,7 @@ void CTitle::Update(void)
 		{ // 遷移カウントが一定数に達した場合
 
 			// ランキングに遷移する
-			CManager::Get()->GetFade()->SetFade(CScene::MODE_RANKING);
+			CManager::Get()->GetFade()->SetFade(CScene::MODE_ENTRY);
 
 			// この先の処理を行わない
 			return;

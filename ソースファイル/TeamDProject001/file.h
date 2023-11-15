@@ -11,7 +11,6 @@
 // インクルードファイル
 //********************************************
 #include "main.h"
-#include "ranking.h"
 #include "obstacle.h"
 
 //--------------------------------------------
@@ -30,17 +29,9 @@ public:			// 誰でもアクセスできる
 	// 列挙型定義(種類)
 	enum TYPE
 	{
-		TYPE_RANKING = 0,	// ランキング
-		TYPE_OBSTACLE,		// 障害物
+		TYPE_OBSTACLE = 0,	// 障害物
 		TYPE_CARROUTE,		// 車の経路
 		TYPE_MAX			// この列挙型の総数
-	};
-
-	// ランキングの情報
-	struct SRankingInfo
-	{
-		int aRank[MAX_RANKING];					// ランキングのデータ
-		bool bSuccess;							// 成功状況
 	};
 
 	// 障害物の情報
@@ -71,9 +62,6 @@ public:			// 誰でもアクセスできる
 	HRESULT Save(const TYPE type);	// セーブ処理
 	HRESULT Load(const TYPE type);	// ロード処理
 
-	void SetRankingInfo(int* pRank);		// ランキングの設定処理
-	SRankingInfo GetRankingInfo(void);		// ランキングの取得処理
-
 	D3DXVECTOR3* GetCarRoute(const int nType);		// 車の経路の取得処理
 	int GetCarRouteNum(void) const;					// 車の経路の総数取得処理
 	int GetCarRouteNumPos(const int nType) const;	// 車の経路の位置の総数の取得処理
@@ -83,16 +71,13 @@ public:			// 誰でもアクセスできる
 private:		// 自分のみアクセスできる
 
 	// メンバ関数(セーブ関係)
-	HRESULT SaveRanking(void);		// ランキングのセーブ処理
 	HRESULT SaveObstacle(void);		// 障害物のセーブ処理
 
 	// メンバ関数(ロード関係)
-	HRESULT LoadRanking(void);		// ランキングのロード処理
 	HRESULT LoadObstacle(void);		// 障害物のロード処理
 	HRESULT LoadCarRoute(void);		// 車の経路のロード処理
 
 	// メンバ変数
-	SRankingInfo m_RankingInfo;		// ランキングの情報
 	SObstacleInfo m_ObstacleInfo;	// 障害物の情報
 	SCarRouteInfo m_CarRouteInfo;	// 車のルートの情報
 

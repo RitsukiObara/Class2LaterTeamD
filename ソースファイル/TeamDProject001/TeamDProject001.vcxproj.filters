@@ -37,9 +37,6 @@
     <Filter Include="Scene\Result">
       <UniqueIdentifier>{48091c9d-e44f-4651-a764-9c124b2dd1f3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scene\Ranking">
-      <UniqueIdentifier>{a0b48465-3191-4a1b-a561-3d2f7f3778e3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Scene\Logo">
       <UniqueIdentifier>{5435744e-d7a3-4d9e-b059-36b2dc34a33c}</UniqueIdentifier>
     </Filter>
@@ -75,6 +72,9 @@
     </Filter>
     <Filter Include="Gimmick\Obstacle">
       <UniqueIdentifier>{c2ffa712-7635-4505-a018-0be269887b9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\Entry">
+      <UniqueIdentifier>{45c434ef-81fc-4384-a4ab-acf532d6198f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -152,21 +152,6 @@
     </ClCompile>
     <ClCompile Include="logo_mark.cpp">
       <Filter>Scene\Logo</Filter>
-    </ClCompile>
-    <ClCompile Include="new_record.cpp">
-      <Filter>Scene\Ranking</Filter>
-    </ClCompile>
-    <ClCompile Include="ranking.cpp">
-      <Filter>Scene\Ranking</Filter>
-    </ClCompile>
-    <ClCompile Include="ranking_precedence.cpp">
-      <Filter>Scene\Ranking</Filter>
-    </ClCompile>
-    <ClCompile Include="ranking_table.cpp">
-      <Filter>Scene\Ranking</Filter>
-    </ClCompile>
-    <ClCompile Include="ranking_word.cpp">
-      <Filter>Scene\Ranking</Filter>
     </ClCompile>
     <ClCompile Include="result.cpp">
       <Filter>Scene\Result</Filter>
@@ -357,6 +342,9 @@
     <ClCompile Include="car_gear.cpp">
       <Filter>Gimmick\Obstacle</Filter>
     </ClCompile>
+    <ClCompile Include="entry.cpp">
+      <Filter>Scene\Entry</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -433,21 +421,6 @@
     </ClInclude>
     <ClInclude Include="logo_mark.h">
       <Filter>Scene\Logo</Filter>
-    </ClInclude>
-    <ClInclude Include="new_record.h">
-      <Filter>Scene\Ranking</Filter>
-    </ClInclude>
-    <ClInclude Include="ranking.h">
-      <Filter>Scene\Ranking</Filter>
-    </ClInclude>
-    <ClInclude Include="ranking_precedence.h">
-      <Filter>Scene\Ranking</Filter>
-    </ClInclude>
-    <ClInclude Include="ranking_table.h">
-      <Filter>Scene\Ranking</Filter>
-    </ClInclude>
-    <ClInclude Include="ranking_word.h">
-      <Filter>Scene\Ranking</Filter>
     </ClInclude>
     <ClInclude Include="result.h">
       <Filter>Scene\Result</Filter>
@@ -637,6 +610,9 @@
     </ClInclude>
     <ClInclude Include="car_gear.h">
       <Filter>Gimmick\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="entry.h">
+      <Filter>Scene\Entry</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
