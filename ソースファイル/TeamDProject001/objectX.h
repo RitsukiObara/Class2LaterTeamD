@@ -47,12 +47,13 @@ public:			// 誰でもアクセスできる
 		TYPE_FLOWERVASE,		// 花瓶
 		TYPE_PLASTICCASE,		// プラスチックケース
 		TYPE_PETBOTTLE,			// ペットボトル
+		TYPE_TOYCARBODY,		// おもちゃの車(本体)
+		TYPE_TOYCARSCREW,		// おもちゃの車(ネジ)
 
 		//マップモデル
 		TYPE_KITCHEN,			//キッチン
-		TYPE_TAP,				//蛇口部分
-		TYPE_IH_OFF,			//IH（off）
-		TYPE_IH_ON,				//IH（on）
+		TYPE_REIZOUKO,			//冷蔵庫
+		TYPE_TABLE,				//テーブル
 
 		// 猫モデル
 		TYPE_CAT_BODY,			// 体

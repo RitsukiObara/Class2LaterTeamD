@@ -178,6 +178,7 @@
     <ClCompile Include="fraction.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="game_timer.cpp" />
+    <ClCompile Include="ground.cpp" />
     <ClCompile Include="hairball.cpp" />
     <ClCompile Include="honey.cpp" />
     <ClCompile Include="input.cpp" />
@@ -245,7 +246,9 @@
     <ClCompile Include="time.cpp" />
     <ClCompile Include="title.cpp" />
     <ClCompile Include="title_logo.cpp" />
+    <ClCompile Include="toycar.cpp" />
     <ClCompile Include="useful.cpp" />
+    <ClCompile Include="wall.cpp" />
     <ClCompile Include="weapon_balloon.cpp" />
     <ClCompile Include="weapon_cage.cpp" />
     <ClCompile Include="weapon_selectUI.cpp" />
@@ -272,6 +275,7 @@
     <ClInclude Include="fraction.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="game_timer.h" />
+    <ClInclude Include="ground.h" />
     <ClInclude Include="hairball.h" />
     <ClInclude Include="honey.h" />
     <ClInclude Include="input.h" />
@@ -336,7 +340,9 @@
     <ClInclude Include="time.h" />
     <ClInclude Include="title.h" />
     <ClInclude Include="title_logo.h" />
+    <ClInclude Include="toycar.h" />
     <ClInclude Include="useful.h" />
+    <ClInclude Include="wall.h" />
     <ClInclude Include="weapon_balloon.h" />
     <ClInclude Include="weapon_cage.h" />
     <ClInclude Include="weapon_selectUI.h" />

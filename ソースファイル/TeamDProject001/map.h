@@ -3,6 +3,11 @@
 
 #include "main.h"
 #include "model.h"
+#include "ground.h"
+#include "wall.h"
+
+#define MAX_MAPMODEL (3)
+#define WALL_NUM (4)
 
 class CMap :public CObject
 {
@@ -23,6 +28,8 @@ private:
 	D3DXVECTOR3 m_pos;
 	int m_partsNum;
 
-	CModel* m_Model[4];
+	CModel* m_Model[MAX_MAPMODEL];
+	CGround* m_Ground;
+	CWall* m_Wall[WALL_NUM];
 };
 #endif // !_MAP_H_

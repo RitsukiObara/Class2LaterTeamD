@@ -146,7 +146,7 @@ void CObstacle::Uninit(void)
 //=====================================
 void CObstacle::Update(void)
 {
-	
+
 }
 
 //=====================================
