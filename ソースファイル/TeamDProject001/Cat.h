@@ -67,7 +67,7 @@ public:			// 誰でもアクセスできる
 private:		// 自分だけアクセスできる
 
 	// メンバ関数
-	void MoveAttackPos();
+	void Move();
 	void Attack();
 	void AttackStateManager();
 	void CollisionMagicWall();

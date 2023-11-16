@@ -145,8 +145,10 @@ void CCat::Uninit(void)
 //===========================================
 void CCat::Update(void)
 {
+	D3DXVECTOR3 pos = GetPos();
+
 	// 前回の位置の設定処理
-	SetPosOld(GetPos());
+	SetPosOld(pos);
 
 	// モーションの更新処理
 	m_pMotion->Update();
@@ -155,7 +157,7 @@ void CCat::Update(void)
 	{// 移動状態の時
 
 		// 攻撃位置の移動入力処理
-		MoveAttackPos();
+		Move();
 
 		// 攻撃入力の処理
 		Attack();
@@ -164,8 +166,13 @@ void CCat::Update(void)
 	// 攻撃状態の管理
 	AttackStateManager();
 
+	//位置更新
+	pos += m_move;
+
 	 // 影の位置向きの設定処理
-	CShadowCircle::SetPosRot(m_nShadowIdx, GetPos(), GetRot());
+	CShadowCircle::SetPosRot(m_nShadowIdx, pos, GetRot());
+
+	SetPos(pos);
 
 	// デバッグ表示
 	DebugMessage();
@@ -197,35 +204,57 @@ void CCat::Draw(void)
 //===========================================
 // 攻撃位置の移動処理
 //===========================================
-void CCat::MoveAttackPos(void)
+void CCat::Move(void)
 {
+	D3DXVECTOR3 InputMove = NONE_D3DXVECTOR3;
+
+	m_move.x = m_move.x * 0.5f;
+	m_move.z = m_move.z * 0.5f;
+
+	if (InputMove.x < 0.001f && InputMove.x > -0.001f)
+	{
+		InputMove.x = 0.0f;
+	}
+	if (InputMove.z < 0.001f && InputMove.z > -0.001f)
+	{
+		InputMove.z = 0.0f;
+	}
+
 	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_I) == true)
 	{ // Wキーを押していた場合
 
 	  // 位置を加算する
-		m_AttackPos.z += MOVE_SPEED;
+		InputMove.z += MOVE_SPEED;
 	}
 
 	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_K) == true)
 	{ // Sキーを押していた場合
 
 	  // 位置を加算する
-		m_AttackPos.z -= MOVE_SPEED;
+		InputMove.z -= MOVE_SPEED;
 	}
 
 	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_L) == true)
 	{ // Dキーを押していた場合
 
 	  // 位置を加算する
-		m_AttackPos.x += MOVE_SPEED;
+		InputMove.x += MOVE_SPEED;
 	}
 
 	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_J) == true)
 	{ // Aキーを押していた場合
 
 	  // 位置を加算する
-		m_AttackPos.x -= MOVE_SPEED;
+		InputMove.x -= MOVE_SPEED;
 	}
+
+	//正規化する
+	D3DXVec3Normalize(&InputMove, &InputMove);
+
+	m_move = InputMove;
+
+	m_move.x *= MOVE_SPEED;
+	m_move.z *= MOVE_SPEED;
 }
 
 //===========================================
