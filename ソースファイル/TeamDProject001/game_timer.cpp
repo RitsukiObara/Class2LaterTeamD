@@ -31,7 +31,7 @@ CGameTime* CGameTime::m_pGameTimer = nullptr;		// ゲームタイマーの情報
 #define TIME_CORON_POS		(D3DXVECTOR3(540.0f, 50.0f, 0.0f))		// ゲームタイマーのコロンの位置
 #define TIME_CORON_SIZE		(D3DXVECTOR3(20.0f, 40.0f, 0.0f))		// ゲームタイマーのコロンのサイズ
 #define TIME_WIDTH_SHIFT	(50.0f)									// ゲームタイマーのずらす横幅
-#define NUMBER_TEXTURE		"data\\TEXTURE\\TimeNumber.png"			// 数字のテクスチャ
+#define NUMBER_TEXTURE		"data\\TEXTURE\\Number.png"				// 数字のテクスチャ
 #define CORON_TEXTURE		"data\\TEXTURE\\TimeCoron.png"			// コロンのテクスチャ
 
 //========================

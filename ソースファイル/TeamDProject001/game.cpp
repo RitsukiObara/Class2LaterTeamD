@@ -27,6 +27,7 @@
 #include "edit.h"
 #include "weapon_selectUI.h"
 #include "block.h"
+#include "countdown.h"
 
 //--------------------------------------------
 // マクロ定義
@@ -94,6 +95,9 @@ HRESULT CGame::Init(void)
 
 	// マップの設定処理
 	CManager::Get()->GetFile()->SetMap();
+
+	// カウントダウンの生成処理
+	CCountdown::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f), D3DXVECTOR3(150.0f, 250.0f, 0.0f));
 
 	// メッシュのテキスト読み込み
 	//CMesh::TxtSet();

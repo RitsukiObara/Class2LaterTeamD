@@ -19,6 +19,7 @@ TEXTURE = data\TEXTURE\PauseContinue.png	# コンティニュー
 TEXTURE = data\TEXTURE\PauseMenu.png		# ポーズメニュー
 TEXTURE = data\TEXTURE\PauseReset.png		# リセット
 TEXTURE = data\TEXTURE\PauseTitle.png		# タイトル
+TEXTURE = data\TEXTURE\PlayerID.png			# プレイヤーのID
 TEXTURE = data\TEXTURE\Rank.png				# 順位
 TEXTURE = data\TEXTURE\RankingWord.png		# ランキングの文字
 TEXTURE = data\TEXTURE\SkyBox.jpg			# スカイボックス

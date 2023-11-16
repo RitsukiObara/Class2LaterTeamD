@@ -59,6 +59,7 @@ public:			// 誰でもアクセスできる
 		TYPE_MAP,				// マップ
 		TYPE_SLASH,				// 斬撃演出
 		TYPE_PLAYERID,			// プレイヤーのID
+		TYPE_COUNTDOWN,			// カウントダウン
 		TYPE_MAX				// この列挙型の総数
 	};
 
