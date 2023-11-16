@@ -27,12 +27,12 @@
 #include "edit.h"
 #include "weapon_selectUI.h"
 #include "block.h"
+#include "countdown.h"
 
 //--------------------------------------------
 // マクロ定義
 //--------------------------------------------
-#define SUCCESS_TRANS_COUNT		(80)		// 成功時の遷移カウント
-#define FAILED_TRANS_COUNT		(200)		// 失敗時の遷移カウント
+#define TRANS_COUNT		(80)	// 遷移カウント
 
 //--------------------------------------------
 // 静的メンバ変数宣言
@@ -96,6 +96,9 @@ HRESULT CGame::Init(void)
 	// マップの設定処理
 	CManager::Get()->GetFile()->SetMap();
 
+	// カウントダウンの生成処理
+	CCountdown::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f), D3DXVECTOR3(150.0f, 250.0f, 0.0f));
+
 	// メッシュのテキスト読み込み
 	//CMesh::TxtSet();
 
@@ -158,9 +161,6 @@ void CGame::Uninit(void)
 	{
 		m_apRat[nCntRat] = nullptr;		// ネズミの情報
 	}
-
-	// 情報を初期化する
-	m_GameState = STATE_START;	// ゲームの進行状態
 
 	// 終了カウントを初期化する
 	m_nFinishCount = 0;
@@ -231,14 +231,14 @@ void CGame::Update(void)
 
 		break;
 
-	case CGame::STATE_GOAL:
+	case CGame::STATE_RAT_WIN:
 
 		// 遷移処理
 		Transition();
 
 		break;
 
-	case CGame::STATE_FINISH:
+	case CGame::STATE_CAT_WIN:
 
 		// 遷移処理
 		Transition();
@@ -327,7 +327,7 @@ void CGame::SetData(const MODE mode)
 	}
 
 	// スタート状態にする
-	m_GameState = STATE_PLAY;
+	m_GameState = STATE_START;
 
 	// 情報の初期化
 	m_nFinishCount = 0;				// 終了カウント
@@ -372,7 +372,7 @@ void CGame::Transition(void)
 	// 終了カウントを加算する
 	m_nFinishCount++;
 
-	if (m_nFinishCount % SUCCESS_TRANS_COUNT == 0)
+	if (m_nFinishCount % TRANS_COUNT == 0)
 	{ // 終了カウントが一定数を超えた場合
 
 		// リザルトに遷移する

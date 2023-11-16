@@ -397,11 +397,10 @@ void CObject::UpdateGame(void)
 			// 次のオブジェクトを代入する
 			pObjNext = pObj->m_pNext;
 
-			if ((pObj->GetType() == TYPE_PAUSE ||
-				pObj->GetType() == TYPE_TIME) &&
+			if (pObj->GetType() == TYPE_PAUSE &&
 				pObj->GetType() != TYPE_NONE &&
 				pObj->m_bDeath == false)
-			{ // オブジェクトの種類が PAUSE、TIME かつ、死亡フラグがfalseの場合
+			{ // オブジェクトの種類が PAUSEかTIMEかCOUNTDOWN かつ、死亡フラグがfalseの場合
 
 				// オブジェクトの更新
 				pObj->Update();

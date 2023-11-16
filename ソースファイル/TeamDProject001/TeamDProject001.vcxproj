@@ -167,6 +167,7 @@
     <ClCompile Include="collision.cpp" />
     <ClCompile Include="collpolygon.cpp" />
     <ClCompile Include="confetti.cpp" />
+    <ClCompile Include="countdown.cpp" />
     <ClCompile Include="debugproc.cpp" />
     <ClCompile Include="destruction.cpp" />
     <ClCompile Include="edit.cpp" />
@@ -261,6 +262,7 @@
     <ClInclude Include="collision.h" />
     <ClInclude Include="collpolygon.h" />
     <ClInclude Include="confetti.h" />
+    <ClInclude Include="countdown.h" />
     <ClInclude Include="debugproc.h" />
     <ClInclude Include="destruction.h" />
     <ClInclude Include="edit.h" />

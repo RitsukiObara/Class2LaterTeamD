@@ -17,6 +17,7 @@
 #include "file.h"
 #include "camera.h"
 #include "skybox.h"
+#include "game.h"
 
 //--------------------------------------------
 // マクロ定義
@@ -51,6 +52,9 @@ HRESULT CResult::Init(void)
 
 	// テキスト読み込み処理
 	CMesh::TxtSet();
+
+	// ゲームの状態を取得する
+	CGame::GetState();
 
 	// 成功を返す
 	return S_OK;
