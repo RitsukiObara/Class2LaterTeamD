@@ -24,7 +24,7 @@ CGameTime* CGameTime::m_pGameTimer = nullptr;		// ゲームタイマーの情報
 //--------------------------------------------------
 // マクロ定義
 //--------------------------------------------------
-#define TIME_COUNTDOWN		(180)	// 秒数
+#define TIME_COUNTDOWN		(60)	// 秒数
 #define ONE_SECOND			(60)	// 1秒のフレーム数
 #define TIME_POS			(D3DXVECTOR3(500.0f, 50.0f, 0.0f))		// ゲームタイマーの位置
 #define TIME_SIZE			(D3DXVECTOR3(25.0f, 40.0f, 0.0f))		// ゲームタイマーのサイズ
@@ -345,6 +345,9 @@ void CGameTime::Calculate(void)
 
 			// 時間を補正する
 			m_nSeconds = 0;
+
+			// ネズミの勝利を設定する
+			CGame::SetState(CGame::STATE_RAT_WIN);
 		}
 
 		// 値の計算
