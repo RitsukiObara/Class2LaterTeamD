@@ -37,6 +37,7 @@ private:		// 自分だけアクセスできる
 
 	// メンバ関数
 	void Calculate(void);		// 計算処理
+	void Cycle(void);			// 回転処理
 
 	// メンバ変数
 	int m_nFrame;				// 経過フレーム数

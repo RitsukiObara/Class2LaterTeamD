@@ -146,6 +146,22 @@ void CMotion::Set(int nType)
 			m_rotPast[nCntModel].z = rot.z;
 		}
 
+	case TYPE_RAT:			// ネズミ
+
+		for (int nCntModel = 0; nCntModel < m_nNumModel; nCntModel++)
+		{
+			// 位置と向きを取得
+			rot = m_ppModel[nCntModel]->GetRot();
+
+			// パーツの位置・向きを設定
+			m_posPast[nCntModel].x = m_aInfo[m_nType].aKeyInfo[m_nKey].aKey[nCntModel].fPosX;
+			m_posPast[nCntModel].y = m_aInfo[m_nType].aKeyInfo[m_nKey].aKey[nCntModel].fPosY;
+			m_posPast[nCntModel].z = m_aInfo[m_nType].aKeyInfo[m_nKey].aKey[nCntModel].fPosZ;
+			m_rotPast[nCntModel].x = rot.x;
+			m_rotPast[nCntModel].y = rot.y;
+			m_rotPast[nCntModel].z = rot.z;
+		}
+
 		break;
 	}
 }
@@ -259,6 +275,13 @@ void CMotion::Update(void)
 
 						break;
 
+					case TYPE_RAT:			// ネズミ
+
+						// 終了状態にする
+						m_bFinish = true;
+
+						break;
+
 					default:
 
 						// 停止
@@ -333,6 +356,13 @@ void CMotion::Load(STYLE type)
 	case TYPE_CAT:			// 猫
 					
 		// 猫のモーションのロード処理
+		LoadMotion("data/TXT/motion_cat.txt");
+
+		break;
+
+	case TYPE_RAT:			// ネズミ
+
+		// ネズミのモーションのロード処理
 		LoadMotion("data/TXT/motion_rat.txt");
 
 		break;

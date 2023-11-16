@@ -112,7 +112,7 @@ HRESULT CRat::Init(void)
 		m_pMotion->SetModel(GetHierarchy(), GetNumModel());
 
 		// ロード処理
-		m_pMotion->Load(CMotion::TYPE_CAT);
+		m_pMotion->Load(CMotion::TYPE_RAT);
 	}
 	else
 	{ // ポインタが NULL じゃない場合

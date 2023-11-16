@@ -15,9 +15,10 @@
 //=======================================
 // マクロ定義
 //=======================================
-#define COUNTDOWN_TIME		(5)								// カウントダウンの時間
-#define COUNT_FRAME			(50)							// 1カウントごとのフレーム数
-#define COUNTDOWN_TEXTURE	"data\\TEXTURE\\Number.png"		// カウントダウンのテクスチャ
+#define COUNTDOWN_INIT_ROT	(D3DXVECTOR3(0.0f, 0.0f, -0.5f))		// カウントダウンの初期の向き
+#define COUNTDOWN_TIME		(5)										// カウントダウンの時間
+#define COUNT_FRAME			(50)									// 1カウントごとのフレーム数
+#define COUNTDOWN_TEXTURE	"data\\TEXTURE\\Number.png"				// カウントダウンのテクスチャ
 
 //=========================
 // コンストラクタ
@@ -89,9 +90,15 @@ void CCountdown::Update(void)
 		// この先の処理を行わない
 		return;
 	}
+	
+	// 回転処理
+	Cycle();
 
-	// 頂点情報の初期化
+	// 頂点座標の設定処理
 	SetVertexRot();
+
+	// テクスチャの設定処理(アニメーションバージョン)
+	SetVtxTextureAnim(NUMBER_TEXTURE_PATTERN, m_nSecond);
 }
 
 //=========================
@@ -111,7 +118,7 @@ void CCountdown::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size)
 	// 数字の設定処理
 	SetPos(pos);				// 位置
 	SetPosOld(pos);				// 前回の位置
-	SetRot(NONE_D3DXVECTOR3);	// 向き
+	SetRot(COUNTDOWN_INIT_ROT);	// 向き
 	SetSize(size);				// サイズ
 	SetLength();				// 長さ
 	SetAngle();					// 方向
@@ -122,7 +129,7 @@ void CCountdown::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size)
 	m_nFrame = 0;				// 経過フレーム数
 	m_nSecond = COUNTDOWN_TIME;	// 秒数
 
-	// 頂点情報の初期化
+	// 頂点座標の設定処理
 	SetVertexRot();
 
 	// テクスチャの設定処理(アニメーションバージョン)
@@ -201,10 +208,25 @@ void CCountdown::Calculate(void)
 		// 1秒減らす
 		m_nSecond--;
 
+		// 向きを設定する
+		SetRot(COUNTDOWN_INIT_ROT);
+
 		// 数字の設定処理
 		SetNumber(m_nSecond);
-
-		// テクスチャの設定処理(アニメーションバージョン)
-		SetVtxTextureAnim(NUMBER_TEXTURE_PATTERN, m_nSecond);
 	}
+}
+
+//=========================
+// 回転処理
+//=========================
+void CCountdown::Cycle(void)
+{
+	// 向きを取得する
+	D3DXVECTOR3 rot = GetRot();
+
+	// 向きの補正処理
+	useful::RotCorrect(0.0f, &rot.z, 0.1f);
+
+	// 向きを適用する
+	SetRot(rot);
 }

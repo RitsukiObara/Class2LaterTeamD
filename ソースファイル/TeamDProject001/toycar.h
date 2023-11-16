@@ -24,6 +24,14 @@ class CToyCar : public CObstacle
 {
 public:			// 誰でもアクセスできる
 
+	// 列挙型定義(状態)
+	enum STATE
+	{
+		STATE_DRIVE = 0,	// ドライブ状態
+		STATE_CURVE,		// カーブ状態
+		STATE_MAX			// この列挙型の総数
+	};
+
 	CToyCar();				// コンストラクタ
 	~CToyCar();				// デストラクタ
 
@@ -41,7 +49,8 @@ public:			// 誰でもアクセスできる
 private:		// 自分だけアクセスできる
 
 	// メンバ関数
-	void CarDrive(void);		// 走行処理
+	void Drive(void);			// 走行処理
+	void Curve(void);			// カービング処理
 	void Check(void);			// 位置の確認処理
 	void RotCalc(void);			// 方向の設定処理
 
@@ -49,8 +58,11 @@ private:		// 自分だけアクセスできる
 	D3DXVECTOR3 m_pPosInit;		// 初期位置
 	CCarGear* m_pGear;			// 歯車の情報
 	D3DXVECTOR3* m_pPosDest;	// 目的の位置
+	STATE m_state;				// 状態
 	int m_nPosDestNum;			// 目的の位置の総数
 	int m_nPosDestIdx;			// 目的の位置の番号
+	float m_fRotDest;			// 目的の向き
+	bool m_bRight;				// 右向き状況
 };
 
 #endif
