@@ -52,6 +52,11 @@ public:			// 誰でもアクセスできる
 		TYPE_DS,				// DS
 		TYPE_HEADPHONE,			// ヘッドフォン
 		TYPE_PEN,				// ペン
+		TYPE_ACADAPTER,			// ACアダプター
+		TYPE_BUILDINGBLOCK,		// 積み木
+		TYPE_GLASSES,			// 眼鏡ケース
+		TYPE_PENCIL,			// 鉛筆
+		TYPE_PICTUREFRAME,		// 写真立て
 
 		// 障害物モデル
 		TYPE_HONEYBOTTLE,		// 蜂蜜のボトル

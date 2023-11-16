@@ -482,7 +482,7 @@ void CEdit::BlockProcess(void)
 		m_blockType = (CBlock::TYPE)((m_blockType + 1) % CBlock::TYPE_MAX);
 	}
 
-	if (m_blockType >= TYPE_MAX)
+	if (m_blockType >= CBlock::TYPE_MAX)
 	{ // ƒ^ƒCƒv‚É‚ ‚éê‡
 
 		// ’âŽ~
