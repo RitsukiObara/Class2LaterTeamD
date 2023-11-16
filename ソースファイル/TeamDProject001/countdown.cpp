@@ -10,11 +10,14 @@
 #include "texture.h"
 #include "useful.h"
 
+#include "game.h"
+
 //=======================================
 // マクロ定義
 //=======================================
-#define COUNTDOWN_TIME		(5)		// カウントダウンの時間
-#define COUNT_FRAME			(50)	// 1カウントごとのフレーム数
+#define COUNTDOWN_TIME		(5)								// カウントダウンの時間
+#define COUNT_FRAME			(50)							// 1カウントごとのフレーム数
+#define COUNTDOWN_TEXTURE	"data\\TEXTURE\\Number.png"		// カウントダウンのテクスチャ
 
 //=========================
 // コンストラクタ
@@ -71,6 +74,22 @@ void CCountdown::Update(void)
 	// 計算処理
 	Calculate();
 
+	if (m_nSecond <= 0)
+	{ // 時間が0を超えた場合
+
+		// 時間を補正する
+		m_nSecond = 0;
+
+		// プレイ状態にする
+		CGame::SetState(CGame::STATE_PLAY);
+
+		// 終了処理
+		Uninit();
+
+		// この先の処理を行わない
+		return;
+	}
+
 	// 頂点情報の初期化
 	SetVertexRot();
 }
@@ -110,7 +129,7 @@ void CCountdown::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size)
 	SetVtxTextureAnim(NUMBER_TEXTURE_PATTERN, m_nSecond);
 
 	// テクスチャの割り当て処理
-	BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\Number.png"));
+	BindTexture(CManager::Get()->GetTexture()->Regist(COUNTDOWN_TEXTURE));
 }
 
 //=========================
@@ -181,13 +200,6 @@ void CCountdown::Calculate(void)
 
 		// 1秒減らす
 		m_nSecond--;
-
-		if (m_nSecond <= 0)
-		{ // 時間が0を超えた場合
-
-			// 時間を補正する
-			m_nSecond = 0;
-		}
 
 		// 数字の設定処理
 		SetNumber(m_nSecond);

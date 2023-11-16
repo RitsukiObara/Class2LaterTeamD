@@ -29,7 +29,6 @@ namespace collision
 
 	// áŠQ•¨‚Ì“–‚½‚è”»’è
 	void ObstacleCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth);			// áŠQ•¨‚ÌÕ“Ë”»’è
-	void HairBallCollision(CObstacle& obstacle, D3DXVECTOR3& pos, const float fWidth, const float fHeight);			// Ÿ{‚ÌÕ“Ëˆ—
 	void ObstacleHit(CRat* pRat, const float fWidth, const float fHeight, const float fDepth);						// áŠQ•¨‚Ì“–‚½‚è”»’è
 	void ObstacleRectCollision(D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth);		// áŠQ•¨‚Ì‹éŒ`‚Ì“–‚½‚è”»’è
 

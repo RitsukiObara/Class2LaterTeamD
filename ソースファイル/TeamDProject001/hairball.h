@@ -19,6 +19,14 @@ class CHairBall : public CObstacle
 {
 public:			// 誰でもアクセスできる
 
+	// 列挙型定義(状態)
+	enum STATE
+	{
+		STATE_STOP = 0,		// 停止状態
+		STATE_BOUND,		// バウンド状態
+		STATE_MAX			// この列挙型の総数
+	};
+
 	CHairBall();			// コンストラクタ
 	~CHairBall();			// デストラクタ
 
@@ -41,6 +49,7 @@ private:		// 自分だけアクセスできる
 
 	// メンバ変数
 	D3DXVECTOR3 m_move;			// 移動量
+	STATE m_state;				// 状態
 };
 
 #endif
