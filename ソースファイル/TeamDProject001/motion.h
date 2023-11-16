@@ -27,6 +27,7 @@ public:			// 誰でもアクセスできる
 	enum STYLE
 	{
 		TYPE_CAT = 0,				// 猫
+		TYPE_RAT,					// ネズミ
 		TYPE_MAX					// この列挙型の総数
 	};
 
