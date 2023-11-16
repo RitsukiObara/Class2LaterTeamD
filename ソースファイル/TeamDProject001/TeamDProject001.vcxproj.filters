@@ -348,6 +348,9 @@
     <ClCompile Include="countdown.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="roomba.cpp">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -619,6 +622,9 @@
     </ClInclude>
     <ClInclude Include="countdown.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="roomba.h">
+      <Filter>Gimmick\Obstacle</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -229,6 +229,7 @@
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="result.cpp" />
     <ClCompile Include="ripple.cpp" />
+    <ClCompile Include="roomba.cpp" />
     <ClCompile Include="sample.cpp" />
     <ClCompile Include="sample_manager.cpp" />
     <ClCompile Include="scene.cpp" />
@@ -321,6 +322,7 @@
     <ClInclude Include="renderer.h" />
     <ClInclude Include="result.h" />
     <ClInclude Include="ripple.h" />
+    <ClInclude Include="roomba.h" />
     <ClInclude Include="sample.h" />
     <ClInclude Include="sample_manager.h" />
     <ClInclude Include="scene.h" />
