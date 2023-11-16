@@ -13,13 +13,14 @@
 #include "object.h"
 
 #include "obstacle_manager.h"
+#include "block_manager.h"
 
 //--------------------------------------------
 // マクロ定義
 //--------------------------------------------
-#define RANKING_BIN			"data\\BIN\\Ranking.bin"		// ランキングのテキスト
 #define OBSTACLE_TXT		"data\\TXT\\Obstacle.txt"		// 障害物のテキスト
 #define CARROUTE_TXT		"data\\TXT\\CarRoute.txt"		// 車の経路のテキスト
+#define BLOCK_TXT			"data\\TXT\\Block.txt"			// ブロックのテキスト
 
 //--------------------------------------------
 // 静的メンバ変数宣言
@@ -45,15 +46,21 @@ CFile::CFile()
 			m_CarRouteInfo.pos[nCntInfo][nCntCar];						// 車のルートの情報
 		}
 		m_CarRouteInfo.nNumPos[nCntInfo] = 0;							// 位置の数
+
+		m_BlockInfo.pos[nCntInfo] = NONE_D3DXVECTOR3;			// 位置
+		m_BlockInfo.rot[nCntInfo] = NONE_D3DXVECTOR3;			// 向き
+		m_BlockInfo.type[nCntInfo] = CBlock::TYPE_CARDBOARD;	// 種類
 	}
 
 	// 総数をクリアする
 	m_ObstacleInfo.nNum = 0;			// 障害物
 	m_CarRouteInfo.nNum = 0;			// 車の経路
+	m_BlockInfo.nNum = 0;				// ブロック
 
 	// 成功状況をクリアする
 	m_ObstacleInfo.bSuccess = false;	// 障害物
 	m_CarRouteInfo.bSuccess = false;	// 車の経路
+	m_BlockInfo.bSuccess = false;		// ブロック
 }
 
 //===========================================
@@ -75,6 +82,18 @@ HRESULT CFile::Save(const TYPE type)
 
 		// 障害物のセーブ処理
 		if (FAILED(SaveObstacle()))
+		{ // 失敗した場合
+
+			// 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
+	case TYPE_BLOCK:
+
+		// ブロックのセーブ処理
+		if (FAILED(SaveBlock()))
 		{ // 失敗した場合
 
 			// 失敗を返す
@@ -118,6 +137,18 @@ HRESULT CFile::Load(const TYPE type)
 
 		// 車のロード処理
 		if (FAILED(LoadCarRoute()))
+		{ // 失敗した場合
+
+			// 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
+	case TYPE_BLOCK:
+
+		// ブロックのロード処理
+		if (FAILED(LoadBlock()))
 		{ // 失敗した場合
 
 			// 失敗を返す
@@ -179,6 +210,16 @@ void CFile::SetMap(void)
 			CObstacle::Create(m_ObstacleInfo.pos[nCntObst], m_ObstacleInfo.type[nCntObst]);
 		}
 	}
+
+	if (m_BlockInfo.bSuccess == true)
+	{ // 成功状況が true の場合
+
+		for (int nCntBlock = 0; nCntBlock < m_BlockInfo.nNum; nCntBlock++)
+		{
+			// ブロックの生成処理
+			CBlock::Create(m_BlockInfo.pos[nCntBlock], m_BlockInfo.rot[nCntBlock], m_BlockInfo.type[nCntBlock]);
+		}
+	}
 }
 
 //===========================================
@@ -196,15 +237,21 @@ HRESULT CFile::Init(void)
 			m_CarRouteInfo.pos[nCntInfo][nCntCar];						// 車のルートの情報
 		}
 		m_CarRouteInfo.nNumPos[nCntInfo] = 0;							// 位置の数
+
+		m_BlockInfo.pos[nCntInfo] = NONE_D3DXVECTOR3;			// 位置
+		m_BlockInfo.rot[nCntInfo] = NONE_D3DXVECTOR3;			// 向き
+		m_BlockInfo.type[nCntInfo] = CBlock::TYPE_CARDBOARD;	// 種類
 	}
 
 	// 総数をクリアする
 	m_ObstacleInfo.nNum = 0;			// 障害物
 	m_CarRouteInfo.nNum = 0;			// 車の経路
+	m_BlockInfo.nNum = 0;				// ブロック
 
 	// 成功状況をクリアする
 	m_ObstacleInfo.bSuccess = false;	// 障害物
 	m_CarRouteInfo.bSuccess = false;	// 車の経路
+	m_BlockInfo.bSuccess = false;		// ブロック
 
 	// 成功を返す
 	return S_OK;
@@ -252,6 +299,62 @@ HRESULT CFile::SaveObstacle(void)
 
 			// 次のオブジェクトを代入する
 			pObstacle = pObstacle->GetNext();
+		}
+
+		// ファイルを閉じる
+		fclose(pFile);
+	}
+	else
+	{ // ファイルが開けなかった場合
+
+		// 停止
+		assert(false);
+
+		// 失敗を返す
+		return E_FAIL;
+	}
+
+	// 成功を返す
+	return S_OK;
+}
+
+//===========================================
+// ブロックのセーブ処理
+//===========================================
+HRESULT CFile::SaveBlock(void)
+{
+	// ローカル変数宣言
+	CBlock* pBlock = CBlockManager::Get()->GetTop();		// 先頭のブロックを代入する
+
+	// ポインタを宣言
+	FILE *pFile;				// ファイルポインタ
+
+	// ファイルを読み込み形式で開く
+	pFile = fopen(BLOCK_TXT, "w");
+
+	if (pFile != nullptr)
+	{ // ファイルが開けた場合
+
+		while (pBlock != nullptr)
+		{ // オブジェクトへのポインタが NULL じゃなかった場合
+
+			// 文字列を書き込む
+			fprintf(pFile, "SET_BLOCK\n");		// ブロックの設定を書き込む
+
+			fprintf(pFile, "\tPOS = ");			// 位置の設定を書き込む
+			fprintf(pFile, "%.1f %.1f %.1f\n", pBlock->GetPos().x, pBlock->GetPos().y, pBlock->GetPos().z);			// 位置を書き込む
+
+			fprintf(pFile, "\tROT = ");			// 向きの設定を書き込む
+			fprintf(pFile, "%.1f %.1f %.1f\n", pBlock->GetRot().x, pBlock->GetRot().y, pBlock->GetRot().z);			// 向きを書き込む
+
+			fprintf(pFile, "\tTYPE = ");		// 種類の設定を書き込む
+			fprintf(pFile, "%d\n", pBlock->GetType());			// 種類を書き込む
+
+			// 文字列を書き込む
+			fprintf(pFile, "END_SET_BLOCK\n\n");	// ブロックの設定の終了を書き込む
+
+			// 次のオブジェクトを代入する
+			pBlock = pBlock->GetNext();
 		}
 
 		// ファイルを閉じる
@@ -424,6 +527,94 @@ HRESULT CFile::LoadCarRoute(void)
 
 		// 成功状況を true にする
 		m_CarRouteInfo.bSuccess = true;
+	}
+	else
+	{ // ファイルが開けなかった場合
+
+		// 停止
+		assert(false);
+
+		// 失敗を返す
+		return E_FAIL;
+	}
+
+	// 成功を返す
+	return S_OK;
+}
+
+//===========================================
+// ブロックのロード処理
+//===========================================
+HRESULT CFile::LoadBlock(void)
+{
+	// 変数を宣言
+	int nEnd;							// テキスト読み込み終了の確認用
+	char aString[MAX_STRING];			// テキストの文字列の代入用
+	m_BlockInfo.nNum = 0;				// 総数
+	m_BlockInfo.bSuccess = false;		// 成功状況
+
+	// ポインタを宣言
+	FILE *pFile;						// ファイルポインタ
+
+	// ファイルを読み込み形式で開く
+	pFile = fopen(BLOCK_TXT, "r");
+
+	if (pFile != nullptr)
+	{ // ファイルが開けた場合
+
+		do
+		{ // 読み込んだ文字列が EOF ではない場合ループ
+
+			// ファイルから文字列を読み込む
+			nEnd = fscanf(pFile, "%s", &aString[0]);	// テキストを読み込みきったら EOF を返す
+
+			if (strcmp(&aString[0], "SET_BLOCK") == 0)
+			{ // 読み込んだ文字列が SET_BLOCK の場合
+
+				do
+				{ // 読み込んだ文字列が END_SET_BLOCK ではない場合ループ
+
+				  // ファイルから文字列を読み込む
+					fscanf(pFile, "%s", &aString[0]);
+
+					if (strcmp(&aString[0], "POS") == 0)
+					{ // 読み込んだ文字列が POS の場合
+
+						fscanf(pFile, "%s", &aString[0]);				// = を読み込む (不要)
+						fscanf(pFile, "%f%f%f",
+							&m_BlockInfo.pos[m_BlockInfo.nNum].x,
+							&m_BlockInfo.pos[m_BlockInfo.nNum].y,
+							&m_BlockInfo.pos[m_BlockInfo.nNum].z);		// 位置を読み込む
+					}
+					else if (strcmp(&aString[0], "ROT") == 0)
+					{ // 読み込んだ文字列が ROT の場合
+
+						fscanf(pFile, "%s", &aString[0]);				// = を読み込む (不要)
+						fscanf(pFile, "%f%f%f",
+							&m_BlockInfo.rot[m_BlockInfo.nNum].x,
+							&m_BlockInfo.rot[m_BlockInfo.nNum].y,
+							&m_BlockInfo.rot[m_BlockInfo.nNum].z);		// 向きを読み込む
+					}
+					else if (strcmp(&aString[0], "TYPE") == 0)
+					{ // 読み込んだ文字列が TYPE の場合
+
+						fscanf(pFile, "%s", &aString[0]);				// = を読み込む (不要)
+						fscanf(pFile, "%d",
+							&m_BlockInfo.type[m_BlockInfo.nNum]);		// 位置を読み込む
+					}
+
+				} while (strcmp(&aString[0], "END_SET_BLOCK") != 0);		// 読み込んだ文字列が END_SET_BLOCK ではない場合ループ
+
+				// データの総数を増やす
+				m_BlockInfo.nNum++;
+			}
+		} while (nEnd != EOF);				// 読み込んだ文字列が EOF ではない場合ループ
+
+		// ファイルを閉じる
+		fclose(pFile);
+
+		// 成功状況を true にする
+		m_BlockInfo.bSuccess = true;
 	}
 	else
 	{ // ファイルが開けなかった場合
