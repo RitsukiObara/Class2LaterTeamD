@@ -345,6 +345,9 @@
     <ClCompile Include="entry.cpp">
       <Filter>Scene\Entry</Filter>
     </ClCompile>
+    <ClCompile Include="countdown.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -613,6 +616,9 @@
     </ClInclude>
     <ClInclude Include="entry.h">
       <Filter>Scene\Entry</Filter>
+    </ClInclude>
+    <ClInclude Include="countdown.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

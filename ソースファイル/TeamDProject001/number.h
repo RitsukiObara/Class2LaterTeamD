@@ -35,14 +35,14 @@ public:				// 誰でもアクセスできる
 
 	CNumber();							// コンストラクタ
 	CNumber(CObject::TYPE type, CObject::PRIORITY priority);		// オーバーロードコンストラクタ
-	~CNumber();							// デストラクタ
+	virtual ~CNumber();					// デストラクタ
 	void Box(void);						// コンストラクタの箱
 
 	// メンバ関数
-	HRESULT Init(void);		// 初期化処理
-	void Uninit(void);		// 終了処理
-	void Update(void);		// 更新処理
-	void Draw(void);		// 描画処理
+	virtual HRESULT Init(void);		// 初期化処理
+	virtual void Uninit(void);		// 終了処理
+	virtual void Update(void);		// 更新処理
+	virtual void Draw(void);		// 描画処理
 
 	static CNumber* Create(void);		// 生成処理
 
