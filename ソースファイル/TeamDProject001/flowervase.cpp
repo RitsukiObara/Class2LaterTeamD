@@ -109,19 +109,19 @@ bool CFlowerVase::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const f
 //=====================================
 bool CFlowerVase::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth)
 {
-	// îjï–ÇÃèoÇÈçÇÇ≥
-	float fFracHeight;
+	//// îjï–ÇÃèoÇÈçÇÇ≥
+	//float fFracHeight;
 
-	for (int nCnt = 0; nCnt < 20; nCnt++)
-	{
-		fFracHeight = (float)(rand() % (int)(GetFileData().vtxMax.y) - (int)(GetFileData().vtxMin.y));
+	//for (int nCnt = 0; nCnt < 20; nCnt++)
+	//{
+	//	fFracHeight = (float)(rand() % (int)(GetFileData().vtxMax.y) - (int)(GetFileData().vtxMin.y));
 
-		// îjï–Çê∂ê¨
-		CFraction::Create(D3DXVECTOR3(GetPos().x, GetPos().y + fFracHeight, GetPos().z), CFraction::TYPE::TYPE_FLOWERVASE);
-	}
+	//	// îjï–Çê∂ê¨
+	//	CFraction::Create(D3DXVECTOR3(GetPos().x, GetPos().y + fFracHeight, GetPos().z), CFraction::TYPE::TYPE_FLOWERVASE);
+	//}
 
-	// èIóπèàóù
-	Uninit();
+	//// èIóπèàóù
+	//Uninit();
 
 	// false Çï‘Ç∑
 	return false;

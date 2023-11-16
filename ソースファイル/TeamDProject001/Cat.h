@@ -72,13 +72,16 @@ private:		// 自分だけアクセスできる
 	void AttackStateManager();
 	void CollisionMagicWall();
 	void DebugMessage();
+	void MotionManager(void);		// モーションの管理
 
 	// メンバ変数
 	CMotion* m_pMotion;				// モーションの情報
+	MOTIONTYPE MotionType;			// モーションの状態
 
 	D3DXVECTOR3 m_AttackPos;		// 攻撃の位置
 	D3DXVECTOR3 m_posDest;			// 目的の位置
 	D3DXVECTOR3 m_move;				// 移動量
+	float m_fSpeed;					// 速度
 	D3DXVECTOR3 m_rotDest;			// 目的の向き
 	int m_nShadowIdx;				// 影のインデックス
 
