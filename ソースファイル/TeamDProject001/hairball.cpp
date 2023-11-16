@@ -27,7 +27,8 @@
 CHairBall::CHairBall() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 {
 	// 全ての値をクリアする
-	m_move = NONE_D3DXVECTOR3;
+	m_move = NONE_D3DXVECTOR3;		// 移動量
+	m_state = STATE_STOP;			// 状態
 }
 
 //==============================
@@ -51,7 +52,8 @@ HRESULT CHairBall::Init(void)
 	}
 
 	// 全ての値を初期化する
-	m_move = NONE_D3DXVECTOR3;
+	m_move = NONE_D3DXVECTOR3;		// 移動量
+	m_state = STATE_STOP;			// 状態
 
 	// 値を返す
 	return S_OK;
@@ -97,6 +99,10 @@ void CHairBall::SetData(const D3DXVECTOR3& pos, const TYPE type)
 
 	// モデルの情報を設定する
 	SetFileData(CXFile::TYPE_HAIRBALL);
+
+	// 全ての値を設定する
+	m_move = NONE_D3DXVECTOR3;		// 移動量
+	m_state = STATE_STOP;			// 状態
 }
 
 //=====================================
@@ -104,7 +110,15 @@ void CHairBall::SetData(const D3DXVECTOR3& pos, const TYPE type)
 //=====================================
 bool CHairBall::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth)
 {
-	// false を返す
+	if (pos.y <= GetPos().y + GetFileData().vtxMax.y ||
+		pos.y + fHeight >= GetPos().y + GetFileData().vtxMin.y)
+	{ // 毬と衝突した場合
+
+		// 円柱の当たり判定処理
+		useful::CylinderCollision(&pos, GetPos(), GetFileData().fRadius + fWidth);
+	}
+
+	// false の場合
 	return false;
 }
 

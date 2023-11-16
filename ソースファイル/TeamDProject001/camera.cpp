@@ -690,6 +690,9 @@ void CCamera::GameCamera(void)
 	{
 	case CGame::STATE_START:		// スタート時
 
+		// 通常カメラ処理
+		NoneCamera();
+
 		break;
 
 	case CGame::STATE_PLAY:			// プレイ状態
@@ -779,6 +782,7 @@ void CCamera::TypeProcess(void)
 		// 追跡処理
 		//Chase();
 
+		// 通常カメラ処理
 		NoneCamera();
 
 		break;
