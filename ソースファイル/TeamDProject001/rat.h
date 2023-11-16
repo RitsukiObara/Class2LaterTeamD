@@ -53,6 +53,7 @@ public:			// 誰でもアクセスできる
 		STATE_MUTEKI,	// 無敵状態
 		STATE_DAMAGE,	// ダメージ状態
 		STATE_DEATH,    // 死亡状態
+		STATE_GHOST,	// 幽霊状態
 		STATE_MAX
 	};
 
@@ -100,6 +101,10 @@ private:		// 自分だけアクセスできる
 	bool m_bAttack;				// 攻撃したか
 	MOTIONTYPE MotionType;		// モーションの状態
 	STATE m_State;				// ネズミの状態
+
+	// 静的メンバ関数
+	static int m_nNumAll;		// ネズミの総数
+
 };
 
 #endif

@@ -38,6 +38,11 @@
 #define SPEED			(20.0f)			// 速度
 #define SIZE			(D3DXVECTOR3(30.0f, 50.0f, 30.0f))		// サイズ
 
+//--------------------------------------------
+// 静的メンバ変数宣言
+//--------------------------------------------
+int CRat::m_nNumAll = 0;				// ネズミの総数
+
 //==============================
 // コンストラクタ
 //==============================
@@ -55,6 +60,7 @@ CRat::CRat() : CCharacter(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 	m_bAttack = false;					// 攻撃したか
 	MotionType = MOTIONTYPE_NEUTRAL;	// モーションの状態
 	m_State = STATE_NONE;				// 状態
+	m_nNumAll++;						// ネズミの総数加算
 }
 
 //==============================
@@ -62,7 +68,7 @@ CRat::CRat() : CCharacter(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 //==============================
 CRat::~CRat()
 {
-
+	//m_nNumAll--;						// ネズミの総数減算
 }
 
 //==============================
@@ -73,7 +79,7 @@ HRESULT CRat::Init(void)
 	if (FAILED(CCharacter::Init()))
 	{ // 初期化処理に失敗した場合
 
-	  // 停止
+		// 停止
 		assert(false);
 
 		// 失敗を返す
@@ -89,7 +95,7 @@ HRESULT CRat::Init(void)
 	if (m_pMotion == nullptr)
 	{ // モーションが NULL だった場合
 
-	  // モーションの生成処理
+		// モーションの生成処理
 		m_pMotion = CMotion::Create();
 	}
 	else
@@ -175,8 +181,8 @@ void CRat::Update(void)
 	// 障害物との当たり判定
 	collision::ObstacleHit(this, SIZE.x, SIZE.y, SIZE.z);
 
-	if (m_State != STATE_DEATH)
-	{ // 死亡状態以外のとき
+	if (m_State != STATE_GHOST)
+	{ // 幽霊状態以外のとき
 
 		// 移動処理
 		Move();
@@ -226,6 +232,7 @@ void CRat::Update(void)
 
 	// デバッグ表示
 	CManager::Get()->GetDebugProc()->Print("位置：%f %f %f\n向き：%f %f %f\nジャンプ状況：%d\n寿命：%d\n", GetPos().x, GetPos().y, GetPos().z, GetRot().x, GetRot().y, GetRot().z, m_bJump, m_nLife);
+	CManager::Get()->GetDebugProc()->Print("\nネズミの総数:%d\n", m_nNumAll);
 }
 
 //=====================================
@@ -591,22 +598,43 @@ void CRat::UpdateState(void)
 {
 	switch (m_State)
 	{
-	case CRat::STATE_NONE:		// 何でもない状態
+	case STATE_NONE:		// 何でもない状態
 		break;
-	case CRat::STATE_WAIT:		// 待機状態
+	case STATE_WAIT:		// 待機状態
 		break;
-	case CRat::STATE_RUN:		// 走行状態
+	case STATE_RUN:			// 走行状態
 		break;
-	case CRat::STATE_ATTACK:	// 攻撃状態
+	case STATE_ATTACK:		// 攻撃状態
 		break;
-	case CRat::STATE_MUTEKI:	// 無敵状態
+	case STATE_MUTEKI:		// 無敵状態
 		break;
-	case CRat::STATE_DAMAGE:	// ダメージ状態
+	case STATE_DAMAGE:		// ダメージ状態
 		break;
-	case CRat::STATE_DEATH:		// 死亡状態
+	case STATE_DEATH:		// 死亡状態
 
 		// ネズミの幽霊の生成
 		CRatGhost::Create(GetPos());
+
+		m_State = STATE_GHOST;		// 幽霊状態にする
+
+#if 1	// デバッグの為の処理↓
+
+		m_nNumAll--;						// ネズミの総数減算
+
+		// 終了状態にする
+		Uninit();
+
+		if (m_nNumAll <= 0)
+		{ // ネズミが全滅したら
+
+			// ネコが勝利した状態にする
+			CGame::SetState(CGame::STATE_CAT_WIN);
+		}
+#endif
+
+		break;
+
+	case STATE_GHOST:		// 幽霊状態
 
 		break;
 
@@ -628,7 +656,7 @@ bool CRat::Hit(void)
 	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を取得する
 	D3DXVECTOR3 pos = GetPos();
 
-	if (m_nDamageCounter >= TIME_DAMAGE)
+	if (m_nDamageCounter >= TIME_DAMAGE && m_State != STATE_GHOST)
 	{ // ダメージ食らう時間になったら
 
 		while (pObstacle != nullptr)
@@ -653,9 +681,6 @@ bool CRat::Hit(void)
 					{ // 寿命が無いとき
 
 						m_State = STATE_DEATH;		// 死亡状態にする
-
-						// 終了処理
-						//Uninit();
 
 						// 死を返す
 						return true;
