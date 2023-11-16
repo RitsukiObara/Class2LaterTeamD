@@ -73,8 +73,28 @@ void CHairBall::Uninit(void)
 //=====================================
 void CHairBall::Update(void)
 {
-	// 重力処理
-	Gravity();
+	switch (m_state)
+	{
+	case CHairBall::STATE_STOP:
+
+
+
+		break;
+
+	case CHairBall::STATE_BOUND:
+
+		// 重力処理
+		Gravity();
+
+		break;
+
+	default:
+
+		// 停止
+		assert(false);
+
+		break;
+	}
 
 	// 起伏地面との当たり判定
 	Elevation();
@@ -155,6 +175,7 @@ void CHairBall::Elevation(void)
 	CElevation* pMesh = CElevationManager::Get()->GetTop();		// 起伏の先頭のオブジェクトを取得する
 	D3DXVECTOR3 pos = D3DXVECTOR3(GetPos().x, GetPos().y, GetPos().z);		// 位置を取得する
 	float fHeight = 0.0f;					// 高さ
+	bool bLand = false;						// 着地状況
 
 	while (pMesh != nullptr)
 	{ // 地面の情報がある限り回す
@@ -170,10 +191,33 @@ void CHairBall::Elevation(void)
 
 			// 移動量を減算する
 			m_move.y *= -0.6f;
+
+			if (m_move.y <= 5.0f)
+			{ // 移動量が一定以下の場合
+
+				// 重力を補正する
+				m_move.y = 0.0f;
+
+				// 着地する
+				bLand = true;
+			}
 		}
 
 		// 次のポインタを取得する
 		pMesh = pMesh->GetNext();
+	}
+
+	if (bLand == true)
+	{ // 着地状況を true にする
+
+		// 停止状態にする
+		m_state = STATE_STOP;
+	}
+	else
+	{ // 上記以外
+
+		// バウンド状態にする
+		m_state = STATE_BOUND;
 	}
 
 	// 位置を更新する
