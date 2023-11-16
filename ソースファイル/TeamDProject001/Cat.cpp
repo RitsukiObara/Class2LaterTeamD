@@ -155,12 +155,20 @@ void CCat::Update(void)
 
 	if (m_AttackState == ATTACKSTATE_MOVE)
 	{// 移動状態の時
+		m_fSpeed = MOVE_SPEED;
 
 		// 攻撃位置の移動入力処理
 		Move();
 
 		// 攻撃入力の処理
 		Attack();
+
+		// モーション状態の管理
+		MotionManager();
+	}
+	else
+	{
+		m_move = NONE_D3DXVECTOR3;
 	}
 
 	// 攻撃状態の管理
@@ -206,55 +214,78 @@ void CCat::Draw(void)
 //===========================================
 void CCat::Move(void)
 {
-	D3DXVECTOR3 InputMove = NONE_D3DXVECTOR3;
-
-	m_move.x = m_move.x * 0.5f;
-	m_move.z = m_move.z * 0.5f;
-
-	if (InputMove.x < 0.001f && InputMove.x > -0.001f)
-	{
-		InputMove.x = 0.0f;
-	}
-	if (InputMove.z < 0.001f && InputMove.z > -0.001f)
-	{
-		InputMove.z = 0.0f;
-	}
-
-	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_I) == true)
-	{ // Wキーを押していた場合
-
-	  // 位置を加算する
-		InputMove.z += MOVE_SPEED;
-	}
-
-	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_K) == true)
-	{ // Sキーを押していた場合
-
-	  // 位置を加算する
-		InputMove.z -= MOVE_SPEED;
-	}
+	// ローカル変数宣言
+	D3DXVECTOR3 rot = GetRot();
 
 	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_L) == true)
-	{ // Dキーを押していた場合
+	{ // 右を押した場合
 
-	  // 位置を加算する
-		InputMove.x += MOVE_SPEED;
+		if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_I) == true)
+		{ // 上を押した場合
+
+		  // 向きを設定する
+			rot.y = D3DX_PI * -0.75f;
+		}
+		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_K) == true)
+		{ // 下を押した場合
+
+		  // 向きを設定する
+			rot.y = D3DX_PI * -0.25f;
+		}
+		else
+		{ // 上記以外
+
+		  // 向きを設定する
+			rot.y = D3DX_PI * -0.5f;
+		}
+	}
+	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_J) == true)
+	{ // 左を押した場合
+
+		if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_I) == true)
+		{ // 上を押した場合
+
+		  // 向きを設定する
+			rot.y = D3DX_PI * 0.75f;
+		}
+		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_K) == true)
+		{ // 下を押した場合
+
+		  // 向きを設定する
+			rot.y = D3DX_PI * 0.25f;
+		}
+		else
+		{ // 上記以外
+
+		  // 向きを設定する
+			rot.y = D3DX_PI * 0.5f;
+		}
+	}
+	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_I) == true)
+	{ // 上を押した場合
+
+	  // 向きを設定する
+		rot.y = D3DX_PI;
+	}
+	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_K) == true)
+	{ // 下を押した場合
+
+	  // 向きを設定する
+		rot.y = 0.0f;
+	}
+	else
+	{ // 上記以外
+
+	  // 速度を設定する
+		m_fSpeed = 0.0f;
 	}
 
-	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_J) == true)
-	{ // Aキーを押していた場合
+	// 移動量を設定する
+	m_move.x = -sinf(rot.y) * m_fSpeed;
+	m_move.z = -cosf(rot.y) * m_fSpeed;
 
-	  // 位置を加算する
-		InputMove.x -= MOVE_SPEED;
-	}
-
-	//正規化する
-	D3DXVec3Normalize(&InputMove, &InputMove);
-
-	m_move = InputMove;
-
-	m_move.x *= MOVE_SPEED;
-	m_move.z *= MOVE_SPEED;
+	// 向きを適用する
+	SetRot(rot);
 }
 
 //===========================================
@@ -262,7 +293,7 @@ void CCat::Move(void)
 //===========================================
 void CCat::Attack(void)
 {
-	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_RETURN) == true)
+	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_RETURN) == true)
 	{ // Wキーを押していた場合
 
 		// 状態を攻撃準備にする
@@ -280,13 +311,13 @@ void CCat::AttackStateManager(void)
 	{
 	case ATTACKSTATE_MOVE:
 
-		CEffect::Create(m_AttackPos, NONE_D3DXVECTOR3, 1, 400.0f, CEffect::TYPE::TYPE_NONE, D3DXCOLOR(0.0f, 0.0f, 1.0f, 0.8f), true);
+		//CEffect::Create(m_AttackPos, NONE_D3DXVECTOR3, 1, 400.0f, CEffect::TYPE::TYPE_NONE, D3DXCOLOR(0.0f, 0.0f, 1.0f, 0.8f), true);
 
 		break;
 
 	case ATTACKSTATE_STANDBY:
 
-		CEffect::Create(m_AttackPos, NONE_D3DXVECTOR3, 1, 400.0f, CEffect::TYPE::TYPE_NONE, D3DXCOLOR(1.0f, 1.0f, 0.0f, 0.5f), true);
+		//CEffect::Create(m_AttackPos, NONE_D3DXVECTOR3, 1, 400.0f, CEffect::TYPE::TYPE_NONE, D3DXCOLOR(1.0f, 1.0f, 0.0f, 0.5f), true);
 
 		if (m_nAtkStateCount <= 0)
 		{//状態カウントが０になった時
@@ -297,7 +328,7 @@ void CCat::AttackStateManager(void)
 
 	case ATTACKSTATE_ATTACK:
 
-		CEffect::Create(m_AttackPos, NONE_D3DXVECTOR3, 1, 400.0f, CEffect::TYPE::TYPE_NONE, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f), true);
+		//CEffect::Create(m_AttackPos, NONE_D3DXVECTOR3, 1, 400.0f, CEffect::TYPE::TYPE_NONE, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f), true);
 
 		if (useful::CircleCollisionXZ(m_AttackPos, m_AttackPos,10.0f,10.0f) == true)
 		{
@@ -456,4 +487,42 @@ void CCat::SetData(const D3DXVECTOR3& pos)
 
 	// モーションの設定処理
 	m_pMotion->Set(MOTIONTYPE_NEUTRAL);
+}
+
+//=====================================
+// 情報の設定処理
+//=====================================
+void CCat::MotionManager(void)
+{
+	if (m_AttackState == ATTACKSTATE_STANDBY)
+	{
+		if (MotionType != MOTIONTYPE_JUMP)
+		{
+			MotionType = MOTIONTYPE_JUMP;
+
+			// モーションの設定処理
+			m_pMotion->Set(MotionType);
+		}
+	}
+	else if (m_move.x > 0.05f || m_move.x < -0.05f ||
+		m_move.z > 0.05f || m_move.z < -0.05f)
+	{
+		if (MotionType != MOTIONTYPE_MOVE)
+		{
+			MotionType = MOTIONTYPE_MOVE;
+
+			// モーションの設定処理
+			m_pMotion->Set(MotionType);
+		}
+	}
+	else
+	{
+		if (MotionType != MOTIONTYPE_NEUTRAL)
+		{
+			MotionType = MOTIONTYPE_NEUTRAL;
+
+			// モーションの設定処理
+			m_pMotion->Set(MotionType);
+		}
+	}
 }
