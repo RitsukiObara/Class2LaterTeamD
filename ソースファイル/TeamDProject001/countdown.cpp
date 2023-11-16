@@ -14,6 +14,7 @@
 // マクロ定義
 //=======================================
 #define COUNTDOWN_TIME		(5)		// カウントダウンの時間
+#define COUNT_FRAME			(50)	// 1カウントごとのフレーム数
 
 //=========================
 // コンストラクタ
@@ -21,6 +22,8 @@
 CCountdown::CCountdown() : CNumber(CObject::TYPE_COUNTDOWN, CObject::PRIORITY_UI)
 {
 	// 全ての値をクリアする
+	m_nFrame = 0;			// 経過フレーム数
+	m_nSecond = 0;			// 秒数
 }
 
 //=========================
@@ -44,6 +47,8 @@ HRESULT CCountdown::Init(void)
 	}
 
 	// 全ての値を初期化する
+	m_nFrame = 0;			// 経過フレーム数
+	m_nSecond = 0;			// 秒数
 
 	// 成功を返す
 	return S_OK;
@@ -63,6 +68,9 @@ void CCountdown::Uninit(void)
 //=========================
 void CCountdown::Update(void)
 {
+	// 計算処理
+	Calculate();
+
 	// 頂点情報の初期化
 	SetVertexRot();
 }
@@ -91,8 +99,15 @@ void CCountdown::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size)
 	SetNumber(COUNTDOWN_TIME);	// 数字
 	SetType(TYPE_DECIMAL);		// 種類
 
+	// 全ての値を初期化する
+	m_nFrame = 0;				// 経過フレーム数
+	m_nSecond = COUNTDOWN_TIME;	// 秒数
+
 	// 頂点情報の初期化
 	SetVertexRot();
+
+	// テクスチャの設定処理(アニメーションバージョン)
+	SetVtxTextureAnim(NUMBER_TEXTURE_PATTERN, m_nSecond);
 
 	// テクスチャの割り当て処理
 	BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\Number.png"));
@@ -151,4 +166,33 @@ CCountdown* CCountdown::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& size)
 
 	// カウントダウンのポインタを返す
 	return pCountdown;
+}
+
+//=========================
+// 計算処理
+//=========================
+void CCountdown::Calculate(void)
+{
+	// 時間の経過を加算する
+	m_nFrame++;
+
+	if ((m_nFrame % COUNT_FRAME) == 0)
+	{ // 1秒経ったら
+
+		// 1秒減らす
+		m_nSecond--;
+
+		if (m_nSecond <= 0)
+		{ // 時間が0を超えた場合
+
+			// 時間を補正する
+			m_nSecond = 0;
+		}
+
+		// 数字の設定処理
+		SetNumber(m_nSecond);
+
+		// テクスチャの設定処理(アニメーションバージョン)
+		SetVtxTextureAnim(NUMBER_TEXTURE_PATTERN, m_nSecond);
+	}
 }

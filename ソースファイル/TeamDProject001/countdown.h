@@ -35,7 +35,12 @@ public:			// 誰でもアクセスできる
 
 private:		// 自分だけアクセスできる
 
+	// メンバ関数
+	void Calculate(void);		// 計算処理
+
 	// メンバ変数
+	int m_nFrame;				// 経過フレーム数
+	int m_nSecond;				// 秒数
 };
 
 #endif
