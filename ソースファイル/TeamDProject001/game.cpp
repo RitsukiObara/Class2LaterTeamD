@@ -412,7 +412,7 @@ CGame::STATE CGame::GetState(void)
 //======================================
 CRat* CGame::GetRat(const int nID)
 {
-	if (nID > MAX_RAT)
+	if (nID < MAX_RAT)
 	{ // インデックスが一定未満の場合
 
 		// ネズミの情報を取得する
