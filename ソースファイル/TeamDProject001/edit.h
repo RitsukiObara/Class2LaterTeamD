@@ -51,6 +51,7 @@ private:		// 自分だけアクセスできる
 	void Adjust(void);		// 微調整処理
 	void RotMove(void);		// 向きの移動処理
 	void Set(void);			// 設置処理
+	void Reset(void);		// リセット処理
 	void Delete(void);		// 消去処理
 	void Type(void);		// 種類の変更処理
 

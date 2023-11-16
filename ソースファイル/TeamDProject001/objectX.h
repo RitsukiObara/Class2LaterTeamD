@@ -16,6 +16,7 @@
 #define INIT_RAT		(CXFile::TYPE_RAT_BODY)							// ネズミモデルの開始位置
 #define INIT_CAT		(CXFile::TYPE_CAT_BODY)							// 猫モデルの開始位置
 #define INIT_BLOCK		(CXFile::TYPE_CARDBOARD)						// ブロックモデルの開始位置
+#define INIT_OBSTACLE	(CXFile::TYPE_HONEYBOTTLE)						// 障害物モデルの開始位置
 
 //------------------------------------------------------------
 // クラス定義(Xファイル)
@@ -36,6 +37,8 @@ public:			// 誰でもアクセスできる
 		TYPE_WEAPONCAGE,		// 武器小屋
 		TYPE_FLOWERFRAC,		// 花瓶の破片
 		TYPE_PLASTICFRAC,		// プラスチックケース破片
+		TYPE_HONEY,				// 蜂蜜
+		TYPE_TOYCARSCREW,		// おもちゃの車(ネジ)
 
 		// ブロックモデル
 		TYPE_CARDBOARD,			// 段ボール
@@ -60,14 +63,12 @@ public:			// 誰でもアクセスできる
 
 		// 障害物モデル
 		TYPE_HONEYBOTTLE,		// 蜂蜜のボトル
-		TYPE_HONEY,				// 蜂蜜
 		TYPE_SLIME,				// スライム
 		TYPE_HAIRBALL,			// 毬
 		TYPE_FLOWERVASE,		// 花瓶
 		TYPE_PLASTICCASE,		// プラスチックケース
 		TYPE_PETBOTTLE,			// ペットボトル
 		TYPE_TOYCARBODY,		// おもちゃの車(本体)
-		TYPE_TOYCARSCREW,		// おもちゃの車(ネジ)
 
 		//マップモデル
 		TYPE_KITCHEN,			//キッチン

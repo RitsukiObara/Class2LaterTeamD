@@ -80,9 +80,6 @@ void CRoomba::SetData(const D3DXVECTOR3& pos, const TYPE type)
 {
 	// î•ñ‚Ìİ’èˆ—
 	CObstacle::SetData(pos, type);
-
-	//// ƒ‚ƒfƒ‹‚Ìî•ñ‚ğİ’è‚·‚é
-	//SetFileData(CXFile::TYPE_PLASTICCASE);
 }
 
 //=====================================

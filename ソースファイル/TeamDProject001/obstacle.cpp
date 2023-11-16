@@ -168,6 +168,7 @@ void CObstacle::SetData(const D3DXVECTOR3& pos, const TYPE type)
 	SetPosOld(pos);							// 前回の位置
 	SetRot(NONE_D3DXVECTOR3);				// 向き
 	SetScale(NONE_SCALE);					// 拡大率
+	SetFileData((CXFile::TYPE)(INIT_OBSTACLE + type));	// モデル情報
 
 	// 全ての値を初期化する
 	m_type = type;		// 種類
