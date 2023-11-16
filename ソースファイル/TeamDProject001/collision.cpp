@@ -56,12 +56,12 @@ void collision::ObstacleCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, c
 	while (pObstacle != nullptr)
 	{ // ブロックの情報が NULL じゃない場合
 
+		// 当たり判定処理
+		pObstacle->Collision(pos, posOld, fWidth, fHeight, fDepth);
+
 		switch (pObstacle->GetType())
 		{
 		case CObstacle::TYPE::TYPE_HAIRBALL:		// 毬
-
-			// 毬の衝突判定
-			HairBallCollision(*pObstacle, pos, fWidth, fHeight);
 
 			break;
 
@@ -74,20 +74,6 @@ void collision::ObstacleCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, c
 
 		// 次のオブジェクトを代入する
 		pObstacle = pObstacle->GetNext();
-	}
-}
-
-//===============================
-// 毬の衝突処理
-//===============================
-void collision::HairBallCollision(CObstacle& obstacle, D3DXVECTOR3& pos, const float fWidth, const float fHeight)
-{
-	if (pos.y <= obstacle.GetPos().y + obstacle.GetFileData().vtxMax.y || 
-		pos.y + fHeight >= obstacle.GetPos().y + obstacle.GetFileData().vtxMin.y)
-	{ // 毬と衝突した場合
-
-		// 円柱の当たり判定処理
-		useful::CylinderCollision(&pos, obstacle.GetPos(), obstacle.GetFileData().fRadius + fWidth);
 	}
 }
 

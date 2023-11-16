@@ -327,7 +327,7 @@ void CGame::SetData(const MODE mode)
 	}
 
 	// スタート状態にする
-	m_GameState = STATE_PLAY;
+	m_GameState = STATE_START;
 
 	// 情報の初期化
 	m_nFinishCount = 0;				// 終了カウント

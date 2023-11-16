@@ -31,8 +31,11 @@ CToyCar::CToyCar() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 	m_pPosInit = NONE_D3DXVECTOR3;	// 初期位置
 	m_pGear = nullptr;				// 歯車の情報
 	m_pPosDest = nullptr;			// 目的の位置
+	m_state = STATE_DRIVE;			// 状態
 	m_nPosDestNum = 0;				// 目的の位置の総数
 	m_nPosDestIdx = 0;				// 目的の位置の番号
+	m_fRotDest = 0.0f;				// 目的の向き
+	m_bRight = false;				// 右向き状況
 }
 
 //==============================
@@ -59,8 +62,11 @@ HRESULT CToyCar::Init(void)
 	m_pPosInit = NONE_D3DXVECTOR3;	// 初期位置
 	m_pGear = nullptr;				// 歯車の値
 	m_pPosDest = nullptr;			// 目的の位置
+	m_state = STATE_DRIVE;			// 状態
 	m_nPosDestNum = 0;				// 目的の位置の総数
 	m_nPosDestIdx = 0;				// 目的の位置の番号
+	m_fRotDest = 0.0f;				// 目的の向き
+	m_bRight = false;				// 右向き状況
 
 	// 値を返す
 	return S_OK;
@@ -91,8 +97,29 @@ void CToyCar::Update(void)
 	// 前回の位置を設定する
 	SetPosOld(GetPos());
 
-	// 走行処理
-	CarDrive();
+	switch (m_state)
+	{
+	case CToyCar::STATE_DRIVE:
+
+		// 走行処理
+		Drive();
+
+		break;
+
+	case CToyCar::STATE_CURVE:
+
+		// カービング処理
+		Curve();
+
+		break;
+
+	default:
+
+		// 停止
+		assert(false);
+
+		break;
+	}
 
 	if (m_pPosDest != nullptr)
 	{ // 位置が NULL じゃない場合
@@ -150,10 +177,12 @@ void CToyCar::SetData(const D3DXVECTOR3& pos, const TYPE type)
 	}
 
 	// 全ての値を設定する
-	m_pPosInit = pos;		// 初期位置
-	m_nPosDestIdx = 0;		// 目的の位置の番号
+	m_pPosInit = pos;				// 初期位置
+	m_nPosDestIdx = 0;				// 目的の位置の番号
 	m_nPosDestNum = CManager::Get()->GetFile()->GetCarRouteNumPos(nType);		// 目的の位置の総数
 	m_pPosDest = CManager::Get()->GetFile()->GetCarRoute(nType);				// 目的の位置のポインタ
+	m_state = STATE_CURVE;			// 状態
+	m_bRight = false;				// 右向き状況
 
 	// 目的地への向きの計算処理
 	RotCalc();
@@ -180,7 +209,7 @@ bool CToyCar::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeigh
 //=====================================
 // 走行処理
 //=====================================
-void CToyCar::CarDrive(void)
+void CToyCar::Drive(void)
 {
 	// 情報を取得する
 	D3DXVECTOR3 pos = GetPos();		// 位置
@@ -192,6 +221,44 @@ void CToyCar::CarDrive(void)
 
 	// 位置を適用する
 	SetPos(pos);
+}
+
+//=====================================
+// カービング処理
+//=====================================
+void CToyCar::Curve(void)
+{
+	// 向きを取得する
+	D3DXVECTOR3 rot = GetRot();		
+
+	if (m_bRight == true)
+	{ // 右向きの場合
+
+		// 向きを加算する
+		rot.y += 0.05f;
+	}
+	else
+	{ // 上記以外
+
+		// 向きを減算する
+		rot.y -= 0.05f;
+	}
+
+	// 向きの正規化
+	useful::RotNormalize(&rot.y);
+
+	if (fabsf(m_fRotDest - rot.y) <= 0.1f)
+	{ // 向きが一定まで行った場合
+
+		// 向きを補正する
+		rot.y = m_fRotDest;
+
+		// ドライブ状態にする
+		m_state = STATE_DRIVE;
+	}
+
+	// 向きを適用する
+	SetRot(rot);
 }
 
 //=====================================
@@ -217,6 +284,9 @@ void CToyCar::Check(void)
 
 		// 向きの設定処理
 		RotCalc();
+
+		// カーブ状態を設定する
+		m_state = STATE_CURVE;
 	}
 }
 
@@ -228,10 +298,27 @@ void CToyCar::RotCalc(void)
 	// 情報を取得する
 	D3DXVECTOR3 pos = GetPos();		// 位置
 	D3DXVECTOR3 rot = GetRot();		// 向き
+	float fRotDiff;					// 向きの差分
 
-	// 向きを設定する
-	rot.y = atan2f(pos.x - (m_pPosInit.x + m_pPosDest[m_nPosDestIdx].x), pos.z - (m_pPosInit.z + m_pPosDest[m_nPosDestIdx].z));
+	// 目的の向きを設定する
+	m_fRotDest = atan2f(pos.x - (m_pPosInit.x + m_pPosDest[m_nPosDestIdx].x), pos.z - (m_pPosInit.z + m_pPosDest[m_nPosDestIdx].z));
 
-	// 向きを設定する
-	SetRot(rot);
+	// 向きの差分を求める
+	fRotDiff = m_fRotDest - rot.y;
+
+	// 向きを正規化する
+	useful::RotNormalize(&fRotDiff);
+
+	if (fRotDiff >= 0.0f)
+	{ // 向きの差分がプラスの値の場合
+
+		// 右向きにする
+		m_bRight = true;
+	}
+	else
+	{ // 上記以外
+
+		// 左向きにする
+		m_bRight = false;
+	}
 }
