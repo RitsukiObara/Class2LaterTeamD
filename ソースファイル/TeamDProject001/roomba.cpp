@@ -1,6 +1,6 @@
 //===========================================
 //
-// プラスチックケースのメイン処理[plastic_case.cpp]
+// ルンバのメイン処理[roomba.cpp]
 // Author 小原立暉
 //
 //===========================================
@@ -10,20 +10,13 @@
 #include "main.h"
 #include "manager.h"
 #include "renderer.h"
-#include "plastic_case.h"
+#include "roomba.h"
 #include "useful.h"
-#include "fraction.h"
-
-//-------------------------------------------
-// マクロ定義
-//-------------------------------------------
-#define GRAVITY		(0.5f)		// 重力
-#define NUM_FRAC	(4)			// 破片の数
 
 //==============================
 // コンストラクタ
 //==============================
-CPlasticCase::CPlasticCase() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
+CRoomba::CRoomba() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 {
 	// 全ての値をクリアする
 }
@@ -31,7 +24,7 @@ CPlasticCase::CPlasticCase() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORI
 //==============================
 // デストラクタ
 //==============================
-CPlasticCase::~CPlasticCase()
+CRoomba::~CRoomba()
 {
 
 }
@@ -39,7 +32,7 @@ CPlasticCase::~CPlasticCase()
 //==============================
 // 破片の初期化処理
 //==============================
-HRESULT CPlasticCase::Init(void)
+HRESULT CRoomba::Init(void)
 {
 	if (FAILED(CObstacle::Init()))
 	{ // 初期化処理に失敗した場合
@@ -57,7 +50,7 @@ HRESULT CPlasticCase::Init(void)
 //========================================
 // 破片の終了処理
 //========================================
-void CPlasticCase::Uninit(void)
+void CRoomba::Uninit(void)
 {
 	// 終了処理
 	CObstacle::Uninit();
@@ -66,7 +59,7 @@ void CPlasticCase::Uninit(void)
 //=====================================
 // 破片の更新処理
 //=====================================
-void CPlasticCase::Update(void)
+void CRoomba::Update(void)
 {
 
 }
@@ -74,7 +67,7 @@ void CPlasticCase::Update(void)
 //=====================================
 // 破片の描画処理
 //=====================================
-void CPlasticCase::Draw(void)
+void CRoomba::Draw(void)
 {
 	// 描画処理
 	CObstacle::Draw();
@@ -83,19 +76,19 @@ void CPlasticCase::Draw(void)
 //=====================================
 // 情報の設定処理
 //=====================================
-void CPlasticCase::SetData(const D3DXVECTOR3& pos, const TYPE type)
+void CRoomba::SetData(const D3DXVECTOR3& pos, const TYPE type)
 {
 	// 情報の設定処理
 	CObstacle::SetData(pos, type);
 
-	// モデルの情報を設定する
-	SetFileData(CXFile::TYPE_PLASTICCASE);
+	//// モデルの情報を設定する
+	//SetFileData(CXFile::TYPE_PLASTICCASE);
 }
 
 //=====================================
 // 当たり判定処理
 //=====================================
-bool CPlasticCase::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth)
+bool CRoomba::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth)
 {
 	// false を返す
 	return false;
@@ -104,7 +97,7 @@ bool CPlasticCase::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const 
 //=====================================
 // ヒット処理
 //=====================================
-bool CPlasticCase::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth)
+bool CRoomba::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth)
 {
 	//// 破片の出る高さ
 	//float fFracHeight;

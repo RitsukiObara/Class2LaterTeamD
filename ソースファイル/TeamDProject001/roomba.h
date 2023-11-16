@@ -1,11 +1,11 @@
 //===================================
 //
-// 花瓶ヘッダー[hairball.h]
+// ルンバヘッダー[roomba.h]
 // Author 堀川萩大
 //
 //===================================
-#ifndef _FLOWERVASE_H_
-#define _FLOWERVASE_H_
+#ifndef _ROOMBA_H_
+#define _ROOMBA_H_
 
 //***********************************
 // インクルードファイル
@@ -13,14 +13,14 @@
 #include "obstacle.h"
 
 //-----------------------------------
-// クラス定義(毬)
+// クラス定義(ルンバ)
 //-----------------------------------
-class CFlowerVase : public CObstacle
+class CRoomba : public CObstacle
 {
 public:			// 誰でもアクセスできる
 
-	CFlowerVase();			// コンストラクタ
-	~CFlowerVase();			// デストラクタ
+	CRoomba();				// コンストラクタ
+	~CRoomba();				// デストラクタ
 
 	// メンバ関数
 	HRESULT Init(void);		// 初期化処理
@@ -35,8 +35,6 @@ public:			// 誰でもアクセスできる
 
 private:		// 自分だけアクセスできる
 
-	// メンバ関数
-	void Elevation(void);		// 起伏地面の当たり判定
 };
 
 #endif
