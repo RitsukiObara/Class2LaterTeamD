@@ -129,9 +129,6 @@ void CPetbottle::SetData(const D3DXVECTOR3& pos, const TYPE type)
 	// 全ての値をクリアする
 	m_move = NONE_D3DXVECTOR3;		// 移動量
 	m_state = STATE_STAND;			// 状態
-
-	// モデルの情報を設定する
-	SetFileData(CXFile::TYPE_PETBOTTLE);
 }
 
 //=====================================

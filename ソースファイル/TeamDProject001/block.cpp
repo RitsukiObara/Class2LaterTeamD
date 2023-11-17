@@ -250,3 +250,12 @@ CBlock::COLLISION CBlock::GetCollision(void) const
 	// “–‚½‚è”»’è‚ğ•Ô‚·
 	return m_collision;
 }
+
+//=====================================
+// í—Ş‚Ìæ“¾ˆ—
+//=====================================
+CBlock::TYPE CBlock::GetType(void) const
+{
+	// í—Ş‚ğ•Ô‚·
+	return m_type;
+}

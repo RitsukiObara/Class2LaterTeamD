@@ -26,8 +26,10 @@
 CCountdown::CCountdown() : CNumber(CObject::TYPE_COUNTDOWN, CObject::PRIORITY_UI)
 {
 	// 全ての値をクリアする
-	m_nFrame = 0;			// 経過フレーム数
-	m_nSecond = 0;			// 秒数
+	m_sizeDest = NONE_D3DXVECTOR3;		// 目的のサイズ
+	m_sizeInit = NONE_D3DXVECTOR3;		// 初期サイズ
+	m_nFrame = 0;						// 経過フレーム数
+	m_nSecond = 0;						// 秒数
 }
 
 //=========================
@@ -51,8 +53,10 @@ HRESULT CCountdown::Init(void)
 	}
 
 	// 全ての値を初期化する
-	m_nFrame = 0;			// 経過フレーム数
-	m_nSecond = 0;			// 秒数
+	m_sizeDest = NONE_D3DXVECTOR3;		// 目的のサイズ
+	m_sizeInit = NONE_D3DXVECTOR3;		// 初期サイズ
+	m_nFrame = 0;						// 経過フレーム数
+	m_nSecond = 0;						// 秒数
 
 	// 成功を返す
 	return S_OK;
@@ -94,6 +98,9 @@ void CCountdown::Update(void)
 	// 回転処理
 	Cycle();
 
+	// 拡大処理
+	Scaling();
+
 	// 頂点座標の設定処理
 	SetVertexRot();
 
@@ -119,13 +126,15 @@ void CCountdown::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size)
 	SetPos(pos);				// 位置
 	SetPosOld(pos);				// 前回の位置
 	SetRot(COUNTDOWN_INIT_ROT);	// 向き
-	SetSize(size);				// サイズ
+	SetSize(size * 0.6f);		// サイズ
 	SetLength();				// 長さ
 	SetAngle();					// 方向
 	SetNumber(COUNTDOWN_TIME);	// 数字
 	SetType(TYPE_DECIMAL);		// 種類
 
 	// 全ての値を初期化する
+	m_sizeDest = size;			// 目的のサイズ
+	m_sizeInit = size * 0.6f;	// 初期サイズ
 	m_nFrame = 0;				// 経過フレーム数
 	m_nSecond = COUNTDOWN_TIME;	// 秒数
 
@@ -211,6 +220,9 @@ void CCountdown::Calculate(void)
 		// 向きを設定する
 		SetRot(COUNTDOWN_INIT_ROT);
 
+		// サイズを設定する
+		SetSize(m_sizeInit);
+
 		// 数字の設定処理
 		SetNumber(m_nSecond);
 	}
@@ -229,4 +241,27 @@ void CCountdown::Cycle(void)
 
 	// 向きを適用する
 	SetRot(rot);
+}
+
+//=========================
+// 拡大処理
+//=========================
+void CCountdown::Scaling(void)
+{
+	// サイズを取得する
+	D3DXVECTOR3 size = GetSize();
+
+	// サイズの補正処理
+	useful::Correct(m_sizeDest.x, &size.x, 0.2f);
+	useful::Correct(m_sizeDest.y, &size.y, 0.2f);
+	useful::Correct(m_sizeDest.z, &size.z, 0.2f);
+
+	// サイズの設定処理
+	SetSize(size);
+
+	// 方向の設定処理
+	SetAngle();
+
+	// 長さの設定処理
+	SetLength();
 }

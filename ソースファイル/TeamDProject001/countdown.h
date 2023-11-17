@@ -38,8 +38,11 @@ private:		// 自分だけアクセスできる
 	// メンバ関数
 	void Calculate(void);		// 計算処理
 	void Cycle(void);			// 回転処理
+	void Scaling(void);			// 拡大処理
 
 	// メンバ変数
+	D3DXVECTOR3 m_sizeDest;		// 目的のサイズ
+	D3DXVECTOR3 m_sizeInit;		// 初期サイズ
 	int m_nFrame;				// 経過フレーム数
 	int m_nSecond;				// 秒数
 };

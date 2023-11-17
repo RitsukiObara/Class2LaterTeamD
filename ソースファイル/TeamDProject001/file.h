@@ -12,6 +12,7 @@
 //********************************************
 #include "main.h"
 #include "obstacle.h"
+#include "block.h"
 
 //--------------------------------------------
 // マクロ定義
@@ -31,6 +32,7 @@ public:			// 誰でもアクセスできる
 	{
 		TYPE_OBSTACLE = 0,	// 障害物
 		TYPE_CARROUTE,		// 車の経路
+		TYPE_BLOCK,			// ブロック
 		TYPE_MAX			// この列挙型の総数
 	};
 
@@ -50,6 +52,16 @@ public:			// 誰でもアクセスできる
 		int nNumPos[MAX_FILE_DATA];						// 位置の数
 		int nNum;										// 総数
 		bool bSuccess;									// 成功状況
+	};
+
+	// ブロックの情報
+	struct SBlockInfo
+	{
+		D3DXVECTOR3 pos[MAX_FILE_DATA];			// 位置
+		D3DXVECTOR3 rot[MAX_FILE_DATA];			// 向き
+		CBlock::TYPE type[MAX_FILE_DATA];		// 種類
+		int nNum;								// 総数
+		bool bSuccess;							// 成功状況
 	};
 
 	CFile();					// コンストラクタ
@@ -72,14 +84,17 @@ private:		// 自分のみアクセスできる
 
 	// メンバ関数(セーブ関係)
 	HRESULT SaveObstacle(void);		// 障害物のセーブ処理
+	HRESULT SaveBlock(void);		// ブロックのセーブ処理
 
 	// メンバ関数(ロード関係)
 	HRESULT LoadObstacle(void);		// 障害物のロード処理
 	HRESULT LoadCarRoute(void);		// 車の経路のロード処理
+	HRESULT LoadBlock(void);		// ブロックのロード処理
 
 	// メンバ変数
 	SObstacleInfo m_ObstacleInfo;	// 障害物の情報
 	SCarRouteInfo m_CarRouteInfo;	// 車のルートの情報
+	SBlockInfo m_BlockInfo;			// ブロックの情報
 
 	// 静的メンバ変数
 	static const char* c_apBooleanDisp[2];			// bool型の表示

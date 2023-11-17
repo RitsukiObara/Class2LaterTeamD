@@ -83,6 +83,9 @@ CGame::~CGame()
 //=========================================
 HRESULT CGame::Init(void)
 {
+	// シーンの初期化
+	CScene::Init();
+
 	// テキスト読み込み処理
 	CElevation::TxtSet();
 
@@ -92,28 +95,19 @@ HRESULT CGame::Init(void)
 	// マップの情報をロードする
 	CManager::Get()->GetFile()->Load(CFile::TYPE_OBSTACLE);
 	CManager::Get()->GetFile()->Load(CFile::TYPE_CARROUTE);
+	CManager::Get()->GetFile()->Load(CFile::TYPE_BLOCK);
 
 	// マップの設定処理
 	CManager::Get()->GetFile()->SetMap();
 
 	// カウントダウンの生成処理
-	CCountdown::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f), D3DXVECTOR3(150.0f, 250.0f, 0.0f));
+	CCountdown::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f), D3DXVECTOR3(200.0f, 250.0f, 0.0f));
 
 	// メッシュのテキスト読み込み
 	//CMesh::TxtSet();
 
-	//if (m_pField == NULL)
-	//{ // フィールドへのポインタが NULL の場合
-
-	//	// フィールドの設定処理
-	//	m_pField = CField::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1000.0f, 0.0f, 1000.0f));
-	//}
-
 	// スカイボックスの生成処理
 	CSkyBox::Create();
-
-	// シーンの初期化
-	CScene::Init();
 
 	//マップの生成
 	CMap::Create();
@@ -121,7 +115,7 @@ HRESULT CGame::Init(void)
 	// ネズミの生成
 	for (int nCntRat = 0; nCntRat < MAX_RAT; nCntRat++)
 	{
-		m_apRat[nCntRat] = CRat::Create(D3DXVECTOR3(500.0f * nCntRat, 0.0f, 0.0f), nCntRat);		// ネズミの情報
+		m_apRat[nCntRat] = CRat::Create(D3DXVECTOR3(500.0f * nCntRat, 0.0f, 0.0f), nCntRat);
 	}
 
 	//猫の生成
@@ -132,14 +126,6 @@ HRESULT CGame::Init(void)
 
 	// 武器選択UIを生成
 	CWeaponSelectUI::Create();
-
-	// ブロックの設置
-	CBlock::Create(D3DXVECTOR3(400.0f, 0.0f, -400.0f), NONE_D3DXVECTOR3, CBlock::TYPE::TYPE_TISSUE);
-	CBlock::Create(D3DXVECTOR3(-1200.0f, 0.0f, -800.0f), NONE_D3DXVECTOR3, CBlock::TYPE::TYPE_PENHOLDER);
-
-	CObstacle::Create(D3DXVECTOR3(500.0f, 0.0f, 700.0f), CObstacle::TYPE::TYPE_FLOWERVASE);
-	CObstacle::Create(D3DXVECTOR3(800.0f, 0.0f, 0.0f), CObstacle::TYPE::TYPE_PLASTICCASE);
-	CObstacle::Create(D3DXVECTOR3(-1500.0f, 0.0f, -1500.0f), CObstacle::TYPE::TYPE_TOYCAR);
 
 	// 情報の初期化
 	m_nFinishCount = 0;				// 終了カウント
@@ -275,7 +261,8 @@ void CGame::Update(void)
 		{ // F9キーを押した場合
 
 			// 情報をセーブする
-			CManager::Get()->GetFile()->Save(CFile::TYPE_OBSTACLE);
+			CManager::Get()->GetFile()->Save(CFile::TYPE_OBSTACLE);		// 障害物
+			CManager::Get()->GetFile()->Save(CFile::TYPE_BLOCK);		// ブロック
 		}
 	}
 	else
@@ -412,7 +399,7 @@ CGame::STATE CGame::GetState(void)
 //======================================
 CRat* CGame::GetRat(const int nID)
 {
-	if (nID > MAX_RAT)
+	if (nID < MAX_RAT)
 	{ // インデックスが一定未満の場合
 
 		// ネズミの情報を取得する

@@ -28,11 +28,14 @@
 #include "shadowCircle.h"
 #include "destruction.h"
 #include "ripple.h"
+#include "obstacle_manager.h"
+#include "rat.h"
 
 //--------------------------------------------
 // マクロ定義
 //--------------------------------------------
 #define MOVE_SPEED				(20.0f)			// 体力の最大数
+#define ATTACK_DISTANCE	(200.0f)		// 攻撃範囲までの距離
 
 //--------------------------------------------
 // 静的メンバ変数宣言
@@ -293,13 +296,44 @@ void CCat::Move(void)
 //===========================================
 void CCat::Attack(void)
 {
+	// ローカル変数宣言
+	CRat *pRat[3];
+	D3DXVECTOR3 pos = GetPos();
+	D3DXVECTOR3 rot = GetRot();
 	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_RETURN) == true)
 	{ // Wキーを押していた場合
 
 		// 状態を攻撃準備にする
 		m_AttackState = ATTACKSTATE_STANDBY;
 		m_nAtkStateCount = 20;
+		for (int nCnt = 0; nCnt < 3; nCnt++)
+
+		{
+			pRat[nCnt] = CGame::GetRat(nCnt);
+			while (pRat[nCnt] != nullptr)
+			{ // ブロックの情報が NULL じゃない場合
+
+				if (useful::RectangleCollisionXY(D3DXVECTOR3(pos.x + sinf(rot.y) * ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * ATTACK_DISTANCE), pRat[nCnt]->GetPos(),
+					D3DXVECTOR3(30.0f, 50.0f, 30.0f), D3DXVECTOR3(30.0f, 50.0f, 30.0f),
+					-D3DXVECTOR3(30.0f, 50.0f, 30.0f), -D3DXVECTOR3(30.0f, 50.0f, 30.0f)) == true)
+				{ // XYの矩形に当たってたら
+
+					if (useful::RectangleCollisionXZ(D3DXVECTOR3(pos.x + sinf(rot.y) * ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * ATTACK_DISTANCE), pRat[nCnt]->GetPos(),
+						D3DXVECTOR3(30.0f, 50.0f, 30.0f), D3DXVECTOR3(30.0f, 50.0f, 30.0f),
+						-D3DXVECTOR3(30.0f, 50.0f, 30.0f), -D3DXVECTOR3(30.0f, 50.0f, 30.0f)) == true)
+					{ // XZの矩形に当たってたら
+					}
+				}
+				break;
+			}
+		}
 	}
+
+
+
+	
+
+	//m_bAttack = true;		// 攻撃した状態にする
 }
 
 //===========================================

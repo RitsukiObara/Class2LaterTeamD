@@ -90,8 +90,8 @@ void CEdit::Update(void)
 	// 微調整移動処理
 	Adjust();
 
-	// 向きの移動処理
-	RotMove();
+	// リセット処理
+	Reset();
 
 	// 消去処理
 	Delete();
@@ -100,7 +100,7 @@ void CEdit::Update(void)
 	Set();
 
 	// デバッグ表示
-	CManager::Get()->GetDebugProc()->Print("位置：%f %f %f\n", GetPos().x, GetPos().y, GetPos().z);
+	CManager::Get()->GetDebugProc()->Print("位置：%f %f %f\n向き：%f %f %f\nLSHIFTキー：微調整キー\nW/A/S/Dキー：移動\n右キー：右回転\n左キー：左回転\n下キー：向きの初期化\n9キー：消去\n0キー：設置\nSPACEキー：種類変更\n", GetPos().x, GetPos().y, GetPos().z, GetRot().x, GetRot().y, GetRot().z);
 }
 
 //=====================================
@@ -326,13 +326,6 @@ void CEdit::Adjust(void)
 //=======================================
 void CEdit::RotMove(void)
 {
-	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LCONTROL) == true)
-	{ // 左CTRLキーを押している場合
-
-		// この先の処理を行わない
-		return;
-	}
-
 	// 向きを取得する
 	D3DXVECTOR3 rot = GetRot();
 
@@ -399,6 +392,19 @@ void CEdit::Set(void)
 }
 
 //=======================================
+// リセット処理
+//=======================================
+void CEdit::Reset(void)
+{
+	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_DOWN) == true)
+	{ // 下キーを押した場合
+
+		// 向きを正規化する
+		SetRot(NONE_D3DXVECTOR3);
+	}
+}
+
+//=======================================
 // 障害物の設定処理
 //=======================================
 void CEdit::ObstacleProcess(void)
@@ -410,64 +416,24 @@ void CEdit::ObstacleProcess(void)
 		m_obstacleType = (CObstacle::TYPE)((m_obstacleType + 1) % CObstacle::TYPE_MAX);
 	}
 
-	switch (m_obstacleType)
-	{
-	case CObstacle::TYPE_HONEY:
-
-		// 蜂蜜を設定する
-		SetFileData(CXFile::TYPE_HONEY);
-
-		break;
-
-	case CObstacle::TYPE_SLIME:
-
-		// スライムを設定する
-		SetFileData(CXFile::TYPE_SLIME);
-
-		break;
-
-	case CObstacle::TYPE_HAIRBALL:
-
-		// 毬を設定する
-		SetFileData(CXFile::TYPE_HAIRBALL);
-
-		break;
-
-	case CObstacle::TYPE_FLOWERVASE:
-
-		// 花瓶を設定する
-		SetFileData(CXFile::TYPE_FLOWERVASE);
-
-		break;
-
-	case CObstacle::TYPE_PLASTICCASE:
-
-		// プラスチックケースを設定する
-		SetFileData(CXFile::TYPE_PLASTICCASE);
-
-		break;
-
-	case CObstacle::TYPE_PETBOTTLE:
-
-		// ペットボトルを設定する
-		SetFileData(CXFile::TYPE_PETBOTTLE);
-
-		break;
-
-	case CObstacle::TYPE_TOYCAR:
-
-		// おもちゃの車を設定する
-		SetFileData(CXFile::TYPE_TOYCARBODY);
-
-		break;
-
-	default:
+	if (m_obstacleType >= CObstacle::TYPE_MAX)
+	{ // タイプにある場合
 
 		// 停止
 		assert(false);
-
-		break;
 	}
+	else
+	{ // 上記以外
+
+		// 障害物の種類を設定する
+		SetFileData((CXFile::TYPE)(INIT_OBSTACLE + m_obstacleType));
+	}
+
+	// 向きを設定する
+	SetRot(NONE_D3DXVECTOR3);
+
+	// デバッグ表示
+	CManager::Get()->GetDebugProc()->Print("1キー：障害物の種類変更\n");
 }
 
 //=======================================
@@ -482,7 +448,7 @@ void CEdit::BlockProcess(void)
 		m_blockType = (CBlock::TYPE)((m_blockType + 1) % CBlock::TYPE_MAX);
 	}
 
-	if (m_blockType >= TYPE_MAX)
+	if (m_blockType >= CBlock::TYPE_MAX)
 	{ // タイプにある場合
 
 		// 停止
@@ -494,6 +460,12 @@ void CEdit::BlockProcess(void)
 		// ブロックの種類を設定する
 		SetFileData((CXFile::TYPE)(INIT_BLOCK + m_blockType));
 	}
+
+	// 向きの移動処理
+	RotMove();
+
+	// デバッグ表示
+	CManager::Get()->GetDebugProc()->Print("1キー：ブロックの種類変更\n");
 }
 
 //=======================================

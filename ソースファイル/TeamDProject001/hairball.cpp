@@ -117,9 +117,6 @@ void CHairBall::SetData(const D3DXVECTOR3& pos, const TYPE type)
 	// î•ñ‚Ìİ’èˆ—
 	CObstacle::SetData(pos, type);
 
-	// ƒ‚ƒfƒ‹‚Ìî•ñ‚ğİ’è‚·‚é
-	SetFileData(CXFile::TYPE_HAIRBALL);
-
 	// ‘S‚Ä‚Ì’l‚ğİ’è‚·‚é
 	m_move = NONE_D3DXVECTOR3;		// ˆÚ“®—Ê
 	m_state = STATE_STOP;			// ó‘Ô

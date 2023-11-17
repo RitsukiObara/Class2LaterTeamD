@@ -44,6 +44,11 @@ public:			// 誰でもアクセスできる
 		TYPE_DS,				// DS
 		TYPE_HEADPHONE,			// ヘッドフォン
 		TYPE_PEN,				// ペン
+		TYPE_ACADAPTER,			// ACアダプター
+		TYPE_BUILDINGBLOCK,		// 積み木
+		TYPE_GLASSES,			// 眼鏡ケース
+		TYPE_PENCIL,			// 鉛筆
+		TYPE_PICTUREFRAME,		// 写真立て
 		TYPE_MAX				// この列挙型の総数
 	};
 
@@ -67,6 +72,7 @@ public:			// 誰でもアクセスできる
 	// セット・ゲット関係
 	void SetCollision(const COLLISION collsion);	// 当たり判定の種類の設定処理
 	COLLISION GetCollision(void) const;				// 当たり判定の種類の取得処理
+	TYPE GetType(void) const;						// 種類の取得処理
 
 	// 静的メンバ関数
 	static CBlock* Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type);	// 生成処理
