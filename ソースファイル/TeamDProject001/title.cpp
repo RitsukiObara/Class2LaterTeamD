@@ -17,6 +17,7 @@
 
 #include "2DUI_edit.h"
 #include "skybox.h"
+#include "title_logo.h"
 
 // マクロ定義
 #define SET_RANKING_TIMER		(600)		// ランキング画面に遷移するカウント数
@@ -28,7 +29,8 @@ CTitle::CTitle() : CScene(TYPE_NONE, PRIORITY_BG)
 {
 	// 全ての値をクリアする
 	m_pUIEdit = NULL;
-	m_nTransCount = 0;
+	m_state = STATE_TITLE_APPEAR;			// 状態
+	m_nTransCount = 0;						// 遷移カウント
 	m_bEdit = false;
 }
 
@@ -54,12 +56,16 @@ HRESULT CTitle::Init(void)
 	// スカイボックスの生成処理
 	CSkyBox::Create();
 
+	// タイトルロゴの生成処理
+	CTitleLogo::Create();
+
 	//UIエディターの生成
 	m_pUIEdit = C2DUIEdit::Create();
 	m_pUIEdit->LoadData(LOADUI_NAME,NONE_D3DXVECTOR3);
 
 	// 全ての値を初期化する
-	m_nTransCount = 0;
+	m_state = STATE_TITLE_APPEAR;	// 状態
+	m_nTransCount = 0;				// 遷移カウント
 
 	// 成功を返す
 	return S_OK;

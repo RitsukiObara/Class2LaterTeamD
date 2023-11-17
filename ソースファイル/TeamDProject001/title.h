@@ -22,6 +22,14 @@ class CTitle : public CScene
 {
 public:				// 誰でもアクセスできる
 
+	// 列挙型定義(状態)
+	enum STATE
+	{
+		STATE_TITLE_APPEAR = 0,		// タイトルの出現状態
+		STATE_WAIT,					// 進行待機状態
+		STATE_MAX					// この列挙型の総数
+	};
+
 	CTitle();		// コンストラクタ
 	~CTitle();		// デストラクタ
 
@@ -35,6 +43,7 @@ private:					// 自分だけアクセスできる
 
 	// メンバ変数
 	C2DUIEdit *m_pUIEdit;
+	STATE m_state;			// 状態
 	int m_nTransCount;		// 遷移カウント
 	bool m_bEdit;
 };
