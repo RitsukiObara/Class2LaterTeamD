@@ -124,8 +124,8 @@ HRESULT CGame::Init(void)
 	// 生成処理
 	CGameTime::Create();
 
-	// 武器選択UIを生成
-	CWeaponSelectUI::Create();
+	//// 武器選択UIを生成
+	//CWeaponSelectUI::Create();
 
 	// 情報の初期化
 	m_nFinishCount = 0;				// 終了カウント

@@ -351,6 +351,9 @@
     <ClCompile Include="roomba.cpp">
       <Filter>Gimmick\Obstacle</Filter>
     </ClCompile>
+    <ClCompile Include="objectmesh2D.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -625,6 +628,9 @@
     </ClInclude>
     <ClInclude Include="roomba.h">
       <Filter>Gimmick\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="objectmesh2D.h">
+      <Filter>Object</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -667,25 +667,25 @@ bool CRat::Hit(void)
 				-SIZE, pObstacle->GetFileData().vtxMin) == true)*/
 			{ // XYの矩形に当たってたら
 
-				if (useful::RectangleCollisionXZ(pos, pObstacle->GetPos(),
-					SIZE, pObstacle->GetFileData().vtxMax,
-					-SIZE, pObstacle->GetFileData().vtxMin) == true)
-				{ // XZの矩形に当たってたら
+				//if (useful::RectangleCollisionXZ(pos, pObstacle->GetPos(),
+				//	SIZE, pObstacle->GetFileData().vtxMax,
+				//	-SIZE, pObstacle->GetFileData().vtxMin) == true)
+				//{ // XZの矩形に当たってたら
 
-					m_nLife--;		// 寿命減らす
-					m_nDamageCounter = 0;		// ダメージ食らうまでの時間リセット
+				//	m_nLife--;		// 寿命減らす
+				//	m_nDamageCounter = 0;		// ダメージ食らうまでの時間リセット
 
-					CParticle::Create(pos, CParticle::TYPE_ENEMYDEATH); //パーティクル
+				//	CParticle::Create(pos, CParticle::TYPE_ENEMYDEATH); //パーティクル
 
-					if (m_nLife <= 0)
-					{ // 寿命が無いとき
+				//	if (m_nLife <= 0)
+				//	{ // 寿命が無いとき
 
-						m_State = STATE_DEATH;		// 死亡状態にする
+				//		m_State = STATE_DEATH;		// 死亡状態にする
 
-						// 死を返す
-						return true;
-					}
-				}
+				//		// 死を返す
+				//		return true;
+				//	}
+				//}
 			}
 
 			// 次のオブジェクトを代入する

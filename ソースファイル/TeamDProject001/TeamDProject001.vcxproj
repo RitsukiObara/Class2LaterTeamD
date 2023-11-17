@@ -209,6 +209,7 @@
     <ClCompile Include="objectDonut2D.cpp" />
     <ClCompile Include="objectElevation.cpp" />
     <ClCompile Include="Objectmesh.cpp" />
+    <ClCompile Include="objectmesh2D.cpp" />
     <ClCompile Include="objectScroll.cpp" />
     <ClCompile Include="objectX.cpp" />
     <ClCompile Include="obstacle.cpp" />
@@ -305,6 +306,7 @@
     <ClInclude Include="objectDonut2D.h" />
     <ClInclude Include="objectElevation.h" />
     <ClInclude Include="Objectmesh.h" />
+    <ClInclude Include="objectmesh2D.h" />
     <ClInclude Include="objectScroll.h" />
     <ClInclude Include="objectX.h" />
     <ClInclude Include="obstacle.h" />
