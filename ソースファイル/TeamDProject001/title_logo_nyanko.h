@@ -13,22 +13,14 @@
 #include "object2D.h"
 
 //-----------------------------------
-// クラス定義(タイトルロゴ)
+// クラス定義(タイトルロゴ(にゃんこ))
 //-----------------------------------
-class CTitleLogo : public CObject2D
+class CTitleLogoNyanko : public CObject2D
 {
 public:			// 誰でもアクセスできる
 
-	// 列挙型定義(STATE)
-	enum STATE
-	{
-		STATE_MOVE = 0,		// 移動状態
-		STATE_STOP,			// 停止状態
-		STATE_MAX			// この列挙型の総数
-	};
-
-	CTitleLogo();			// コンストラクタ
-	~CTitleLogo();			// デストラクタ
+	CTitleLogoNyanko();			// コンストラクタ
+	~CTitleLogoNyanko();			// デストラクタ
 
 	// メンバ関数
 	HRESULT Init(void);		// 初期化処理
@@ -39,16 +31,11 @@ public:			// 誰でもアクセスできる
 	void SetData(void);		// 情報の設定処理
 
 	// 静的メンバ関数
-	static CTitleLogo* Get(void);		// 取得処理
-	static CTitleLogo* Create(void);	// 生成処理
+	static CTitleLogoNyanko* Create(void);	// 生成処理
 
 private:		// 自分だけアクセスできる
 
 	// メンバ変数
-	STATE m_state;		// 状態
-
-	// 静的メンバ変数
-	static CTitleLogo* m_pTitleLogo;	// タイトルロゴのポインタ
 };
 
 #endif

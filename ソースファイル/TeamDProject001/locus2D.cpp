@@ -91,7 +91,7 @@ void CLocus2D::Update(void)
 	}
 
 	// 頂点情報の初期化
-	SetVertex();
+	SetVertexRot();
 
 	// 頂点カラーの設定処理
 	SetVtxColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, m_fAlpha));
@@ -108,11 +108,11 @@ void CLocus2D::Draw(void)
 //=========================
 // 情報の設定処理
 //=========================
-void CLocus2D::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const float fAlpha, const int nLife, const int nTexIdx)
+void CLocus2D::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const D3DXVECTOR3& size, const float fAlpha, const int nLife, const int nTexIdx)
 {
 	// スクロールの設定処理
 	SetPos(pos);			// 位置設定
-	SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));			// 向き設定
+	SetRot(rot);			// 向き設定
 	SetSize(size);			// サイズ設定
 	SetLength();			// 長さ設定
 	SetAngle();				// 方向設定
@@ -123,7 +123,7 @@ void CLocus2D::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const fl
 	m_fAlpha = fAlpha;		// 透明度
 
 	// 頂点情報の初期化
-	SetVertex();
+	SetVertexRot();
 
 	// テクスチャ情報の設定処理
 	SetVtxTexture();
@@ -135,7 +135,7 @@ void CLocus2D::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const fl
 //=========================
 // 生成処理
 //=========================
-CLocus2D* CLocus2D::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const float fAlpha, const int nLife, const int nTexIdx)
+CLocus2D* CLocus2D::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const D3DXVECTOR3& size, const float fAlpha, const int nLife, const int nTexIdx)
 {
 	// ローカルオブジェクトを生成
 	CLocus2D* pLocus2D = nullptr;	// プレイヤーのインスタンスを生成
@@ -171,7 +171,7 @@ CLocus2D* CLocus2D::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, cons
 		}
 
 		// 情報の設定処理
-		pLocus2D->SetData(pos, size, fAlpha, nLife, nTexIdx);
+		pLocus2D->SetData(pos, rot, size, fAlpha, nLife, nTexIdx);
 	}
 	else
 	{ // オブジェクトが NULL の場合

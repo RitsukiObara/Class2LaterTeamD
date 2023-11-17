@@ -28,10 +28,10 @@ public:			// 誰でもアクセスできる
 	void Update(void);		// 更新処理
 	void Draw(void);		// 描画処理
 
-	void SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const float fAlpha, const int nLife, const int nTexIdx);				// 情報の設定処理
+	void SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const D3DXVECTOR3& size, const float fAlpha, const int nLife, const int nTexIdx);				// 情報の設定処理
 
 	// 静的メンバ関数
-	static CLocus2D* Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const float fAlpha, const int nLife, const int nTexIdx);	// 生成処理
+	static CLocus2D* Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const D3DXVECTOR3& size, const float fAlpha, const int nLife, const int nTexIdx);	// 生成処理
 
 private:		// 自分だけアクセスできる
 

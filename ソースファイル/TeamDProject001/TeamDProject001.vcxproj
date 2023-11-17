@@ -245,7 +245,7 @@
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="time.cpp" />
     <ClCompile Include="title.cpp" />
-    <ClCompile Include="title_logo.cpp" />
+    <ClCompile Include="title_logo_nyanko.cpp" />
     <ClCompile Include="toycar.cpp" />
     <ClCompile Include="useful.cpp" />
     <ClCompile Include="wall.cpp" />
@@ -339,7 +339,7 @@
     <ClInclude Include="texture.h" />
     <ClInclude Include="time.h" />
     <ClInclude Include="title.h" />
-    <ClInclude Include="title_logo.h" />
+    <ClInclude Include="title_logo_nyanko.h" />
     <ClInclude Include="toycar.h" />
     <ClInclude Include="useful.h" />
     <ClInclude Include="wall.h" />

@@ -159,9 +159,6 @@
     <ClCompile Include="title.cpp">
       <Filter>Scene\Title</Filter>
     </ClCompile>
-    <ClCompile Include="title_logo.cpp">
-      <Filter>Scene\Title</Filter>
-    </ClCompile>
     <ClCompile Include="scene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
@@ -354,6 +351,9 @@
     <ClCompile Include="objectmesh2D.cpp">
       <Filter>Object</Filter>
     </ClCompile>
+    <ClCompile Include="title_logo_nyanko.cpp">
+      <Filter>Scene\Title</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -435,9 +435,6 @@
       <Filter>Scene\Result</Filter>
     </ClInclude>
     <ClInclude Include="title.h">
-      <Filter>Scene\Title</Filter>
-    </ClInclude>
-    <ClInclude Include="title_logo.h">
       <Filter>Scene\Title</Filter>
     </ClInclude>
     <ClInclude Include="scene.h">
@@ -631,6 +628,9 @@
     </ClInclude>
     <ClInclude Include="objectmesh2D.h">
       <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="title_logo_nyanko.h">
+      <Filter>Scene\Title</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

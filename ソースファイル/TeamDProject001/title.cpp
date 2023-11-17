@@ -16,7 +16,6 @@
 #include "Objectmesh.h"
 
 #include "2DUI_edit.h"
-#include "title_logo.h"
 #include "skybox.h"
 
 // マクロ定義
@@ -54,9 +53,6 @@ HRESULT CTitle::Init(void)
 
 	// スカイボックスの生成処理
 	CSkyBox::Create();
-
-	// タイトルロゴの生成
-	CTitleLogo::Create();
 
 	//UIエディターの生成
 	m_pUIEdit = C2DUIEdit::Create();
