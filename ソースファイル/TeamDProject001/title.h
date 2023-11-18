@@ -27,6 +27,7 @@ public:				// 誰でもアクセスできる
 	{
 		STATE_TITLE_APPEAR = 0,		// タイトルの出現状態
 		STATE_WAIT,					// 進行待機状態
+		STATE_TRANS,				// 遷移状態
 		STATE_MAX					// この列挙型の総数
 	};
 

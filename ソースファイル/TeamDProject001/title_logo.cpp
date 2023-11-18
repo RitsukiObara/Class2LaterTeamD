@@ -18,21 +18,29 @@
 //--------------------------------------------
 // マクロ定義
 //--------------------------------------------
-#define RAT_TEXTURE			"data/TEXTURE/KariChuChu.png"			// タイトルロゴ(ネズミ)のテクスチャ
-#define CAT_TEXTURE			"data/TEXTURE/KariNyanko.png"			// タイトルロゴ(ネコ)のテクスチャ
-#define AND_TEXTURE			"data/TEXTURE/KariAnd.png"				// タイトルロゴ(＆)のテクスチャ
-#define RAT_POS				(D3DXVECTOR3(-360.0f, 330.0f, 0.0f))		// ネズミの位置
-#define CAT_POS				(D3DXVECTOR3(-240.0f, 270.0f, 0.0f))		// ネコの位置
-#define AND_POS				(D3DXVECTOR3(530.0f, 300.0f, 0.0f))			// ＆の位置
-#define RAT_SIZE			(D3DXVECTOR3(360.0f, 60.0f, 0.0f))		// ネズミのサイズ
-#define CAT_SIZE			(D3DXVECTOR3(240.0f, 60.0f, 0.0f))		// ネコのサイズ
-#define AND_SIZE			(NONE_D3DXVECTOR3)						// ＆のサイズ
-#define MOVE_SPEED			(60.0f)			// 移動量の速度
-#define CAT_APPEAR_RAT_POS	(780.0f)		// ネコが移動しだすネズミの位置
-#define RAT_STOP_POS		(930.0f)		// ネズミの止まる位置
-#define CAT_STOP_POS		(250.0f)		// ネコの止まる位置
-#define AND_DEST_SIZE		(D3DXVECTOR3(50.0f, 50.0f, 0.0f))		// アンドの目的のサイズ
-#define AND_ADD_SIZE		(5.0f)			// アンドのサイズの追加量
+#define RAT_TEXTURE				"data/TEXTURE/KariChuChu.png"			// タイトルロゴ(ネズミ)のテクスチャ
+#define CAT_TEXTURE				"data/TEXTURE/KariNyanko.png"			// タイトルロゴ(ネコ)のテクスチャ
+#define AND_TEXTURE				"data/TEXTURE/KariAnd.png"				// タイトルロゴ(＆)のテクスチャ
+#define RAT_POS					(D3DXVECTOR3(-360.0f, 330.0f, 0.0f))		// ネズミの位置
+#define CAT_POS					(D3DXVECTOR3(-240.0f, 270.0f, 0.0f))		// ネコの位置
+#define AND_POS					(D3DXVECTOR3(530.0f, 300.0f, 0.0f))			// ＆の位置
+#define RAT_SIZE				(D3DXVECTOR3(360.0f, 60.0f, 0.0f))		// ネズミのサイズ
+#define CAT_SIZE				(D3DXVECTOR3(240.0f, 60.0f, 0.0f))		// ネコのサイズ
+#define AND_SIZE				(NONE_D3DXVECTOR3)						// ＆のサイズ
+#define ESCAPE_MOVE_SPEED		(60.0f)			// 逃走状態の移動量の速度
+#define CAT_APPEAR_RAT_POS		(780.0f)		// ネコが移動しだすネズミの位置
+#define RAT_ESCAPE_STOP_POS		(930.0f)		// ネズミの止まる位置
+#define CAT_ESCAPE_STOP_POS		(250.0f)		// ネコの止まる位置
+#define LOCUS_COUNT				(5)				// 残像の出るカウント数
+#define AND_ADD_SIZE			(5.0f)			// アンドのサイズの追加量
+#define AND_APPEAR_COUNT		(10)			// アンド出現状態のカウント数
+#define AND_DEST_SIZE			(D3DXVECTOR3(AND_ADD_SIZE * AND_APPEAR_COUNT, AND_ADD_SIZE * AND_APPEAR_COUNT, 0.0f))	// アンドの目的のサイズ
+#define CAT_FRAMEOUT_RAT_POS	(SCREEN_WIDTH)					// ネコが画面外に移動しだすネズミの位置
+#define RAT_FRAMEOUT_STOP_POS	(SCREEN_WIDTH + RAT_SIZE.x)		// ネズミの止まる位置
+#define CAT_FRAMEOUT_STOP_POS	(SCREEN_WIDTH + CAT_SIZE.x)		// ネコの止まる位置
+#define SHAKEOFF_MOVE_SPEED		(-60.0f)		// 逃げ切り状態の移動量の速度
+#define SHAKEOFF_RAT_POS_Y		(600.0f)		// 逃げ切り状態の縦の位置
+#define SHAKEOFF_RAT_STOP_POS	(SCREEN_WIDTH * 0.5f)			// 逃げ切り状態のネズミの停止する位置
 
 //============================
 // コンストラクタ
@@ -121,7 +129,7 @@ void CTitleLogo::Update(void)
 {
 	switch (CTitle::GetState())
 	{
-	case CTitle::STATE_TITLE_APPEAR:		// 出現状態
+	case CTitle::STATE_TITLE_APPEAR:	// 出現状態
 
 		switch (m_state)
 		{
@@ -149,7 +157,42 @@ void CTitleLogo::Update(void)
 
 		break;
 
-	case CTitle::STATE_WAIT:				// 待機状態
+	case CTitle::STATE_WAIT:			// 待機状態
+
+		break;
+
+	case CTitle::STATE_TRANS:			// 遷移状態
+
+		switch (m_state)
+		{
+		case STATE_WAIT:
+
+			// 画面外状態にする
+			m_state = STATE_FRAMEOUT;
+
+			break;
+
+		case CTitleLogo::STATE_FRAMEOUT:
+
+			// 画面外状態の処理
+			FrameOutProcess();
+
+			break;
+
+		case CTitleLogo::STATE_SHAKEOFF:
+
+			// 逃げ切り状態の処理
+			ShakeOffProcess();
+
+			break;
+
+		default:
+
+			// 停止
+			assert(false);
+
+			break;
+		}
 
 		break;
 
@@ -212,7 +255,7 @@ void CTitleLogo::SetData(void)
 				m_aTitle[nCnt].pLogo->BindTexture(CManager::Get()->GetTexture()->Regist(RAT_TEXTURE));
 
 				// 情報を設定する
-				m_aTitle[nCnt].move.x = MOVE_SPEED;			// 移動量
+				m_aTitle[nCnt].move.x = ESCAPE_MOVE_SPEED;	// 移動量
 				m_aTitle[nCnt].bDisp = true;				// 表示状況
 				m_aTitle[nCnt].bMove = true;				// 移動状況
 
@@ -230,7 +273,7 @@ void CTitleLogo::SetData(void)
 				// 情報を設定する
 				m_aTitle[nCnt].move = NONE_D3DXVECTOR3;		// 移動量
 				m_aTitle[nCnt].bDisp = false;				// 表示状況
-				m_aTitle[nCnt].bMove = false;			// 移動状況
+				m_aTitle[nCnt].bMove = false;				// 移動状況
 
 				break;
 
@@ -244,9 +287,9 @@ void CTitleLogo::SetData(void)
 				m_aTitle[nCnt].pLogo->BindTexture(CManager::Get()->GetTexture()->Regist(CAT_TEXTURE));
 
 				// 情報を設定する
-				m_aTitle[nCnt].move.x = MOVE_SPEED;			// 移動量
+				m_aTitle[nCnt].move.x = ESCAPE_MOVE_SPEED;	// 移動量
 				m_aTitle[nCnt].bDisp = true;				// 表示状況
-				m_aTitle[nCnt].bMove = false;			// 移動状況
+				m_aTitle[nCnt].bMove = false;				// 移動状況
 
 				break;
 			}
@@ -340,7 +383,7 @@ void CTitleLogo::EscapeProcess(void)
 	// ネコの位置の設定処理
 	EscapeCatPosSet();
 
-	if (m_nStateCount % 5 == 0)
+	if (m_nStateCount % LOCUS_COUNT == 0)
 	{ // 一定時間ごとに
 
 		// 残像の発生処理
@@ -369,7 +412,7 @@ void CTitleLogo::AndProcess(void)
 	size.y = AND_ADD_SIZE * m_nStateCount;
 
 	// 向きを減算する
-	rot.z -= (D3DX_PI * 2) / 10;
+	rot.z -= (D3DX_PI * 2) / AND_APPEAR_COUNT;
 
 	// 向きの正規化
 	useful::RotNormalize(&rot.z);
@@ -389,11 +432,71 @@ void CTitleLogo::AndProcess(void)
 
 		// タイトルを待機状態にする
 		CTitle::SetState(CTitle::STATE_WAIT);
+
+		// 移動状況を true にする(いつ次に動くタイミングに入るか分からないため対策しておく)
+		m_aTitle[TYPE_RAT].bMove = true;
+		m_aTitle[TYPE_CAT].bMove = true;
 	}
 
 	// 向きとサイズを適用する
 	m_aTitle[TYPE_AND].pLogo->SetRot(rot);
 	m_aTitle[TYPE_AND].pLogo->SetSize(size);
+}
+
+//============================
+// 画面外状態の処理
+//============================
+void CTitleLogo::FrameOutProcess(void)
+{
+	// 移動状況を true にする
+	m_aTitle[TYPE_RAT].bMove = true;
+	m_aTitle[TYPE_CAT].bMove = true;
+
+	// 移動処理
+	Move(TYPE::TYPE_RAT);		// ネズミ
+	Move(TYPE::TYPE_CAT);		// ネコ
+
+	// 画面外状態のネズミの位置関係処理
+	FrameOutRatPosSet();
+
+	// 画面外状態のネコの位置関係処理
+	FrameOutCatPosSet();
+
+	if (m_nStateCount % LOCUS_COUNT == 0)
+	{ // 一定時間ごとに
+
+		// 残像の発生処理
+		Locus(TYPE_RAT);
+		Locus(TYPE_CAT);
+	}
+
+	// 残像の発生カウントを加算する
+	m_nStateCount++;
+}
+
+//============================
+// 逃げ切り状態の処理
+//============================
+void CTitleLogo::ShakeOffProcess(void)
+{
+	// 移動状況を true にする
+	m_aTitle[TYPE_RAT].bMove = true;
+
+	// 移動処理
+	Move(TYPE::TYPE_RAT);		// ネズミ
+
+	// 逃げ切り状態のネズミの位置関係処理
+	ShakeOffRatPosSet();
+
+	if (m_nStateCount % LOCUS_COUNT == 0)
+	{ // 一定時間ごとに
+
+		// 残像の発生処理
+		Locus(TYPE_RAT);
+	}
+
+	// 残像の発生カウントを加算する
+	m_nStateCount++;
 }
 
 //============================
@@ -451,11 +554,11 @@ void CTitleLogo::EscapeRatPosSet(void)
 		m_aTitle[TYPE_CAT].bMove = true;
 	}
 
-	if (pos.x >= RAT_STOP_POS)
+	if (pos.x >= RAT_ESCAPE_STOP_POS)
 	{ // ネズミの位置が一定の位置に達した場合
 
 		// ネズミの位置を補正する
-		pos.x = RAT_STOP_POS;
+		pos.x = RAT_ESCAPE_STOP_POS;
 
 		// 移動状況を false にする
 		m_aTitle[TYPE_RAT].bMove = false;
@@ -473,11 +576,11 @@ void CTitleLogo::EscapeCatPosSet(void)
 	// 位置を取得する
 	D3DXVECTOR3 pos = m_aTitle[TYPE_CAT].pLogo->GetPos();
 
-	if (pos.x >= CAT_STOP_POS)
+	if (pos.x >= CAT_ESCAPE_STOP_POS)
 	{ // ネコの位置が一定の位置に達した場合
 
 		// ネコの位置を補正する
-		pos.x = CAT_STOP_POS;
+		pos.x = CAT_ESCAPE_STOP_POS;
 
 		// 移動状況を false にする
 		m_aTitle[TYPE_CAT].bMove = false;
@@ -494,4 +597,107 @@ void CTitleLogo::EscapeCatPosSet(void)
 
 	// 位置を適用する
 	m_aTitle[TYPE_CAT].pLogo->SetPos(pos);
+}
+
+//============================
+// 画面外状態のネズミの位置関係処理
+//============================
+void CTitleLogo::FrameOutRatPosSet(void)
+{
+	// 位置を取得する
+	D3DXVECTOR3 pos = m_aTitle[TYPE_RAT].pLogo->GetPos();
+
+	if (pos.x >= CAT_FRAMEOUT_RAT_POS)
+	{ // ネズミの位置が一定位置を超えた場合
+
+		// 移動状況を true にする
+		m_aTitle[TYPE_CAT].bMove = true;
+	}
+
+	if (pos.x >= RAT_FRAMEOUT_STOP_POS)
+	{ // ネズミの位置が一定の位置に達した場合
+
+		// ネズミの位置を補正する
+		pos.x = RAT_FRAMEOUT_STOP_POS;
+
+		// 移動状況を false にする
+		m_aTitle[TYPE_RAT].bMove = false;
+	}
+
+	// 位置を適用する
+	m_aTitle[TYPE_RAT].pLogo->SetPos(pos);
+}
+
+//============================
+// 画面外状態のネコの位置関係処理
+//============================
+void CTitleLogo::FrameOutCatPosSet(void)
+{
+	// 位置を取得する
+	D3DXVECTOR3 pos = m_aTitle[TYPE_CAT].pLogo->GetPos();
+
+	if (pos.x >= CAT_FRAMEOUT_STOP_POS)
+	{ // ネコの位置が一定の位置に達した場合
+
+		// ネコの位置を補正する
+		pos.x = CAT_FRAMEOUT_STOP_POS;
+
+		// 移動状況を false にする
+		m_aTitle[TYPE_CAT].bMove = false;
+
+		// ネコを表示させなくする
+		m_aTitle[TYPE_CAT].bDisp = false;
+
+		// 状態カウントを初期化する
+		m_nStateCount = 0;
+
+		// 逃げ切り状態にする
+		m_state = STATE_SHAKEOFF;
+
+		// 画面外時のネズミの設定処理
+		FrameOutSetRat();
+	}
+
+	// 位置を適用する
+	m_aTitle[TYPE_CAT].pLogo->SetPos(pos);
+}
+
+//============================
+// 画面外時のネズミの設定処理
+//============================
+void CTitleLogo::FrameOutSetRat(void)
+{
+	// 位置を取得する
+	D3DXVECTOR3 pos = m_aTitle[TYPE_RAT].pLogo->GetPos();
+
+	// ネズミの移動量を設定する
+	m_aTitle[TYPE_RAT].move.x = SHAKEOFF_MOVE_SPEED;
+
+	// 位置を設定する
+	pos.y = SHAKEOFF_RAT_POS_Y;
+
+	// 位置を適用する
+	m_aTitle[TYPE_RAT].pLogo->SetPos(pos);
+}
+
+//============================
+// 逃げ切り状態のネズミの位置関係処理
+//============================
+void CTitleLogo::ShakeOffRatPosSet(void)
+{
+	// 位置を取得する
+	D3DXVECTOR3 pos = m_aTitle[TYPE_RAT].pLogo->GetPos();
+
+	if (pos.x <= SHAKEOFF_RAT_STOP_POS)
+	{ // ネズミの位置が一定の位置に達した場合
+
+		// ネズミの位置を補正する
+		pos.x = SHAKEOFF_RAT_STOP_POS;
+
+		// 移動状況を false にする
+		m_aTitle[TYPE_RAT].bMove = false;
+	}
+
+	// 位置を適用する
+	m_aTitle[TYPE_RAT].pLogo->SetPos(pos);
 }

@@ -39,6 +39,8 @@ public:			// 誰でもアクセスできる
 		STATE_ESCAPE = 0,		// 逃走状態
 		STATE_AND,				// ＆出現状態
 		STATE_WAIT,				// 待機状態
+		STATE_FRAMEOUT,			// 画面外状態
+		STATE_SHAKEOFF,			// 逃げ切り状態
 		STATE_MAX				// この列挙型の総数
 	};
 
@@ -70,12 +72,20 @@ private:		// 自分だけアクセスできる
 	// メンバ関数
 	void EscapeProcess(void);			// 逃走状態の処理
 	void AndProcess(void);				// ＆出現状態の処理
+	void FrameOutProcess(void);			// 画面外状態の処理
+	void ShakeOffProcess(void);			// 逃げ切り状態の処理
 
 	void Move(const TYPE type);			// 移動処理
 	void Locus(const TYPE type);		// 残像発生処理
 
 	void EscapeRatPosSet(void);			// 逃走状態のネズミの位置関係処理
 	void EscapeCatPosSet(void);			// 逃走状態のネコの位置関係処理
+
+	void FrameOutRatPosSet(void);		// 画面外状態のネズミの位置関係処理
+	void FrameOutCatPosSet(void);		// 画面外状態のネコの位置関係処理
+	void FrameOutSetRat(void);			// 画面外時のネズミの設定処理
+
+	void ShakeOffRatPosSet(void);		// 逃げ切り状態のネズミの位置関係処理
 
 	// メンバ変数
 	STitleLogo m_aTitle[TYPE_MAX];		// タイトルのポリゴン

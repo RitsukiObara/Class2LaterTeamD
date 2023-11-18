@@ -126,8 +126,11 @@ void CTitle::Update(void)
 			CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_A, 0) == true)
 		{ // ENTERキーを押した場合
 
-			// チュートリアルに遷移する
-			CManager::Get()->GetFade()->SetFade(CScene::MODE_GAME);
+			// 遷移状態に設定する
+			m_state = STATE_TRANS;
+
+			//// チュートリアルに遷移する
+			//CManager::Get()->GetFade()->SetFade(CScene::MODE_GAME);
 
 			// この先の処理を行わない
 			return;
