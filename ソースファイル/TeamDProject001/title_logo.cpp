@@ -11,24 +11,28 @@
 #include "title_logo.h"
 #include "object2D.h"
 #include "title.h"
+#include "locus2D.h"
 #include "texture.h"
+#include "useful.h"
 
 //--------------------------------------------
 // マクロ定義
 //--------------------------------------------
-#define RAT_TEXTURE			"data/TEXTURE/TitleRat.png"				// タイトルロゴ(ネズミ)のテクスチャ
-#define CAT_TEXTURE			"data/TEXTURE/TitleCat.png"				// タイトルロゴ(ネコ)のテクスチャ
-#define AND_TEXTURE			"data/TEXTURE/TitleAnd.png"				// タイトルロゴ(＆)のテクスチャ
-#define RAT_POS				(D3DXVECTOR3(-250.0f, SCREEN_HEIGHT * 0.5f + 30.0f, 0.0f))		// ネズミの位置
-#define CAT_POS				(D3DXVECTOR3(-400.0f, SCREEN_HEIGHT * 0.5f - 30.0f, 0.0f))		// ネコの位置
-#define AND_POS				(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f))	// ＆の位置
-#define RAT_SIZE			(D3DXVECTOR3(150.0f, 60.0f, 0.0f))								// ネズミの位置
-#define CAT_SIZE			(D3DXVECTOR3(240.0f, 60.0f, 0.0f))								// ネコの位置
-#define AND_SIZE			(D3DXVECTOR3(50.0f, 50.0f, 0.0f))								// ＆の位置
-#define MOVE_SPEED			(21.0f)			// 移動量の速度
-#define CAT_APPEAR_RAT_POS	(500.0f)		// ネコが移動しだすネズミの位置
-#define RAT_STOP_POS		(900.0f)		// ネズミの止まる位置
-#define CAT_STOP_POS		()
+#define RAT_TEXTURE			"data/TEXTURE/KariChuChu.png"			// タイトルロゴ(ネズミ)のテクスチャ
+#define CAT_TEXTURE			"data/TEXTURE/KariNyanko.png"			// タイトルロゴ(ネコ)のテクスチャ
+#define AND_TEXTURE			"data/TEXTURE/KariAnd.png"				// タイトルロゴ(＆)のテクスチャ
+#define RAT_POS				(D3DXVECTOR3(-360.0f, 330.0f, 0.0f))		// ネズミの位置
+#define CAT_POS				(D3DXVECTOR3(-240.0f, 270.0f, 0.0f))		// ネコの位置
+#define AND_POS				(D3DXVECTOR3(530.0f, 300.0f, 0.0f))			// ＆の位置
+#define RAT_SIZE			(D3DXVECTOR3(360.0f, 60.0f, 0.0f))		// ネズミのサイズ
+#define CAT_SIZE			(D3DXVECTOR3(240.0f, 60.0f, 0.0f))		// ネコのサイズ
+#define AND_SIZE			(NONE_D3DXVECTOR3)						// ＆のサイズ
+#define MOVE_SPEED			(60.0f)			// 移動量の速度
+#define CAT_APPEAR_RAT_POS	(780.0f)		// ネコが移動しだすネズミの位置
+#define RAT_STOP_POS		(930.0f)		// ネズミの止まる位置
+#define CAT_STOP_POS		(250.0f)		// ネコの止まる位置
+#define AND_DEST_SIZE		(D3DXVECTOR3(50.0f, 50.0f, 0.0f))		// アンドの目的のサイズ
+#define AND_ADD_SIZE		(5.0f)			// アンドのサイズの追加量
 
 //============================
 // コンストラクタ
@@ -44,7 +48,8 @@ CTitleLogo::CTitleLogo() : CObject(CObject::TYPE_TITLELOGO, PRIORITY_UI)
 		m_aTitle[nCnt].bMove = false;			// 移動状況
 	}
 
-	m_state = STATE_ESCAPE;						// 状態
+	m_state = STATE_ESCAPE;		// 状態
+	m_nStateCount = 0;			// 状態カウント
 }
 
 //============================
@@ -81,7 +86,8 @@ HRESULT CTitleLogo::Init(void)
 		m_aTitle[nCnt].bMove = false;				// 移動状況
 	}
 
-	m_state = STATE_ESCAPE;						// 状態
+	m_state = STATE_ESCAPE;		// 状態
+	m_nStateCount = 0;			// 状態カウント
 
 	// 成功を返す
 	return S_OK;
@@ -117,8 +123,29 @@ void CTitleLogo::Update(void)
 	{
 	case CTitle::STATE_TITLE_APPEAR:		// 出現状態
 
-		// 逃走状態の処理
-		EscapeProcess();
+		switch (m_state)
+		{
+		case STATE_ESCAPE:
+
+			// 逃走状態の処理
+			EscapeProcess();
+
+			break;
+
+		case STATE_AND:
+
+			// ＆出現状態の処理
+			AndProcess();
+
+			break;
+
+		default:
+
+			// 停止
+			assert(false);
+
+			break;
+		}
 
 		break;
 
@@ -134,29 +161,12 @@ void CTitleLogo::Update(void)
 		break;
 	}
 
-	switch (m_state)
-	{
-	case STATE_ESCAPE:
-
-		// 逃走状態の処理
-		EscapeProcess();
-
-		break;
-
-	case STATE_WAIT:
-
-		break;
-
-	default:
-		
-		// 停止
-		assert(false);
-
-		break;
-	}
-
 	for (int nCnt = 0; nCnt < TYPE_MAX; nCnt++)
 	{
+		// 方向と長さを設定する
+		m_aTitle[nCnt].pLogo->SetAngle();
+		m_aTitle[nCnt].pLogo->SetLength();
+
 		// 頂点座標の設定処理
 		m_aTitle[nCnt].pLogo->SetVertexRot();
 	}
@@ -256,7 +266,8 @@ void CTitleLogo::SetData(void)
 		}
 	}
 
-	m_state = STATE_ESCAPE;						// 状態
+	m_state = STATE_ESCAPE;		// 状態
+	m_nStateCount = 0;			// 状態カウント
 }
 
 //============================
@@ -328,6 +339,61 @@ void CTitleLogo::EscapeProcess(void)
 
 	// ネコの位置の設定処理
 	EscapeCatPosSet();
+
+	if (m_nStateCount % 5 == 0)
+	{ // 一定時間ごとに
+
+		// 残像の発生処理
+		Locus(TYPE_RAT);
+		Locus(TYPE_CAT);
+	}
+
+	// 残像の発生カウントを加算する
+	m_nStateCount++;
+}
+
+//============================
+// ＆出現状態の処理
+//============================
+void CTitleLogo::AndProcess(void)
+{
+	// 状態カウントを加算する
+	m_nStateCount++;
+
+	// サイズを取得する
+	D3DXVECTOR3 rot = m_aTitle[TYPE_AND].pLogo->GetRot();
+	D3DXVECTOR3 size = m_aTitle[TYPE_AND].pLogo->GetSize();
+
+	// サイズを加算する
+	size.x = AND_ADD_SIZE * m_nStateCount;
+	size.y = AND_ADD_SIZE * m_nStateCount;
+
+	// 向きを減算する
+	rot.z -= (D3DX_PI * 2) / 10;
+
+	// 向きの正規化
+	useful::RotNormalize(&rot.z);
+
+	if (size.x >= AND_DEST_SIZE.x ||
+		size.y >= AND_DEST_SIZE.y)
+	{ // サイズが一定以上になった場合
+
+		// サイズを補正する
+		size = AND_DEST_SIZE;
+
+		// 向きをまっすぐに補正する
+		rot.z = 0.0f;
+
+		// 待機状態にする
+		m_state = STATE_WAIT;
+
+		// タイトルを待機状態にする
+		CTitle::SetState(CTitle::STATE_WAIT);
+	}
+
+	// 向きとサイズを適用する
+	m_aTitle[TYPE_AND].pLogo->SetRot(rot);
+	m_aTitle[TYPE_AND].pLogo->SetSize(size);
 }
 
 //============================
@@ -346,6 +412,27 @@ void CTitleLogo::Move(const TYPE type)
 
 		// 位置を適用する
 		m_aTitle[type].pLogo->SetPos(pos);
+	}
+}
+
+//============================
+// 残像発生処理
+//============================
+void CTitleLogo::Locus(const TYPE type)
+{
+	if (m_aTitle[type].bMove == true)
+	{ // 移動状況が true の場合
+
+		// 残像の生成処理
+		CLocus2D::Create
+		(
+			m_aTitle[type].pLogo->GetPos(),		// 位置
+			NONE_D3DXVECTOR3,					// 向き
+			m_aTitle[type].pLogo->GetSize(),	// サイズ
+			0.2f,								// 透明度
+			40,									// 寿命
+			m_aTitle[type].pLogo->GetTexIdx()	// テクスチャのインデックス
+		);
 	}
 }
 
@@ -386,20 +473,23 @@ void CTitleLogo::EscapeCatPosSet(void)
 	// 位置を取得する
 	D3DXVECTOR3 pos = m_aTitle[TYPE_CAT].pLogo->GetPos();
 
-	if (pos.x >= RAT_STOP_POS)
+	if (pos.x >= CAT_STOP_POS)
 	{ // ネコの位置が一定の位置に達した場合
 
 		// ネコの位置を補正する
-		pos.x = RAT_STOP_POS;
+		pos.x = CAT_STOP_POS;
 
 		// 移動状況を false にする
 		m_aTitle[TYPE_CAT].bMove = false;
 
-		// 待機状態にする
-		m_state = STATE_WAIT;
+		// アンドの表示状況を true にする
+		m_aTitle[TYPE_AND].bDisp = true;
 
-		// タイトルを待機状態にする
-		CTitle::SetState(CTitle::STATE_WAIT);
+		// 待機状態にする
+		m_state = STATE_AND;
+
+		// 状態カウントを初期化する
+		m_nStateCount = 0;
 	}
 
 	// 位置を適用する
