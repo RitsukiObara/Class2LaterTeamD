@@ -22,6 +22,11 @@
 // マクロ定義
 #define SET_RANKING_TIMER		(600)		// ランキング画面に遷移するカウント数
 
+//--------------------------------------------
+// 静的メンバ変数宣言
+//--------------------------------------------
+CTitle::STATE CTitle::m_state = STATE_TITLE_APPEAR;			// 状態
+
 //=========================================
 // コンストラクタ
 //=========================================
@@ -106,15 +111,15 @@ void CTitle::Update(void)
 		// 遷移カウントを加算する
 		m_nTransCount++;
 
-		if (m_nTransCount % SET_RANKING_TIMER == 0)
-		{ // 遷移カウントが一定数に達した場合
+		//if (m_nTransCount % SET_RANKING_TIMER == 0)
+		//{ // 遷移カウントが一定数に達した場合
 
-			// ランキングに遷移する
-			CManager::Get()->GetFade()->SetFade(CScene::MODE_ENTRY);
+		//	// ランキングに遷移する
+		//	CManager::Get()->GetFade()->SetFade(CScene::MODE_ENTRY);
 
-			// この先の処理を行わない
-			return;
-		}
+		//	// この先の処理を行わない
+		//	return;
+		//}
 
 		if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_RETURN) == true ||
 			CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_START, 0) == true ||
@@ -148,4 +153,22 @@ void CTitle::Update(void)
 void CTitle::Draw(void)
 {
 
+}
+
+//======================================
+// 状態の設定処理
+//======================================
+void CTitle::SetState(const STATE state)
+{
+	// 状態を設定する
+	m_state = state;
+}
+
+//======================================
+// 状態の取得処理
+//======================================
+CTitle::STATE CTitle::GetState(void)
+{
+	// 状態を返す
+	return m_state;
 }

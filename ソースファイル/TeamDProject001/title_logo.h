@@ -33,6 +33,23 @@ public:			// 誰でもアクセスできる
 		TYPE_MAX	 // この列挙型の総数
 	};
 
+	// 列挙型定義(状態)
+	enum STATE
+	{
+		STATE_ESCAPE = 0,		// 逃走状態
+		STATE_WAIT,				// 待機状態
+		STATE_MAX				// この列挙型の総数
+	};
+
+	// 構造体定義(タイトルロゴ)
+	struct STitleLogo
+	{
+		D3DXVECTOR3 move;		// 移動量
+		CObject2D* pLogo;		// タイトルのポリゴン
+		bool bDisp;				// 表示状況
+		bool bMove;				// 移動状況
+	};
+
 	CTitleLogo();			// コンストラクタ
 	~CTitleLogo();			// デストラクタ
 
@@ -49,8 +66,16 @@ public:			// 誰でもアクセスできる
 
 private:		// 自分だけアクセスできる
 
+	// メンバ関数
+	void EscapeProcess(void);			// 逃走状態の処理
+
+	void Move(const TYPE type);			// 移動処理
+	void EscapeRatPosSet(void);			// 逃走状態のネズミの位置関係処理
+	void EscapeCatPosSet(void);			// 逃走状態のネコの位置関係処理
+
 	// メンバ変数
-	CObject2D* m_apTitle[TYPE_MAX];		// タイトルのポリゴン
+	STitleLogo m_aTitle[TYPE_MAX];		// タイトルのポリゴン
+	STATE m_state;						// 状態
 };
 
 #endif

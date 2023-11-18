@@ -39,13 +39,19 @@ public:				// 誰でもアクセスできる
 	void Update(void);				// 更新処理
 	void Draw(void);				// 描画処理
 
+	// 静的メンバ関数
+	static void SetState(const STATE state);		// 状態の設定処理
+	static STATE GetState(void);					// 状態の取得処理
+
 private:					// 自分だけアクセスできる
 
 	// メンバ変数
 	C2DUIEdit *m_pUIEdit;
-	STATE m_state;			// 状態
 	int m_nTransCount;		// 遷移カウント
 	bool m_bEdit;
+
+	// 静的メンバ変数
+	static STATE m_state;			// 状態
 };
 
 #endif
