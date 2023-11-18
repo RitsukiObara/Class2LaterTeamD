@@ -68,6 +68,9 @@ private:		// 自分だけアクセス出来る
 	void Control(void);				// 操作処理
 	void PosSet(void);				// 位置の設定処理
 
+	// タイトル関係
+	void TitleCamera(void);			// タイトル画面のカメラ処理
+
 	// ゲーム関係
 	void GameCamera(void);			// ゲーム画面のカメラ処理
 	void PlayCamera(void);			// プレイ時のカメラ処理

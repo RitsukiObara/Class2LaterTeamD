@@ -18,6 +18,7 @@
 #include "2DUI_edit.h"
 #include "skybox.h"
 #include "title_logo.h"
+#include "title_wall.h"
 
 // マクロ定義
 #define SET_RANKING_TIMER		(600)		// ランキング画面に遷移するカウント数
@@ -55,14 +56,11 @@ HRESULT CTitle::Init(void)
 	//　シーンの初期化
 	CScene::Init();
 
-	// テキスト読み込み処理
-	CMesh::TxtSet();
-
-	// スカイボックスの生成処理
-	CSkyBox::Create();
-
 	// タイトルロゴの生成処理
 	CTitleLogo::Create();
+
+	// タイトルの壁の生成処理
+	CTitleWall::Create();
 
 	//UIエディターの生成
 	m_pUIEdit = C2DUIEdit::Create();

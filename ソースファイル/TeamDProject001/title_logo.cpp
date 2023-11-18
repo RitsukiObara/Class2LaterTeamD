@@ -21,9 +21,9 @@
 #define RAT_TEXTURE				"data/TEXTURE/KariChuChu.png"			// タイトルロゴ(ネズミ)のテクスチャ
 #define CAT_TEXTURE				"data/TEXTURE/KariNyanko.png"			// タイトルロゴ(ネコ)のテクスチャ
 #define AND_TEXTURE				"data/TEXTURE/KariAnd.png"				// タイトルロゴ(＆)のテクスチャ
-#define RAT_POS					(D3DXVECTOR3(-360.0f, 330.0f, 0.0f))		// ネズミの位置
-#define CAT_POS					(D3DXVECTOR3(-240.0f, 270.0f, 0.0f))		// ネコの位置
-#define AND_POS					(D3DXVECTOR3(530.0f, 300.0f, 0.0f))			// ＆の位置
+#define RAT_POS					(D3DXVECTOR3(-360.0f, 330.0f, 0.0f))	// ネズミの位置
+#define CAT_POS					(D3DXVECTOR3(-240.0f, 270.0f, 0.0f))	// ネコの位置
+#define AND_POS					(D3DXVECTOR3(530.0f, 300.0f, 0.0f))		// ＆の位置
 #define RAT_SIZE				(D3DXVECTOR3(360.0f, 60.0f, 0.0f))		// ネズミのサイズ
 #define CAT_SIZE				(D3DXVECTOR3(240.0f, 60.0f, 0.0f))		// ネコのサイズ
 #define AND_SIZE				(NONE_D3DXVECTOR3)						// ＆のサイズ
@@ -35,12 +35,15 @@
 #define AND_ADD_SIZE			(5.0f)			// アンドのサイズの追加量
 #define AND_APPEAR_COUNT		(10)			// アンド出現状態のカウント数
 #define AND_DEST_SIZE			(D3DXVECTOR3(AND_ADD_SIZE * AND_APPEAR_COUNT, AND_ADD_SIZE * AND_APPEAR_COUNT, 0.0f))	// アンドの目的のサイズ
-#define CAT_FRAMEOUT_RAT_POS	(SCREEN_WIDTH)					// ネコが画面外に移動しだすネズミの位置
-#define RAT_FRAMEOUT_STOP_POS	(SCREEN_WIDTH + RAT_SIZE.x)		// ネズミの止まる位置
-#define CAT_FRAMEOUT_STOP_POS	(SCREEN_WIDTH + CAT_SIZE.x)		// ネコの止まる位置
-#define SHAKEOFF_MOVE_SPEED		(-60.0f)		// 逃げ切り状態の移動量の速度
-#define SHAKEOFF_RAT_POS_Y		(600.0f)		// 逃げ切り状態の縦の位置
-#define SHAKEOFF_RAT_STOP_POS	(SCREEN_WIDTH * 0.5f)			// 逃げ切り状態のネズミの停止する位置
+#define CAT_FRAMEOUT_RAT_POS	(SCREEN_WIDTH)							// ネコが画面外に移動しだすネズミの位置
+#define RAT_FRAMEOUT_STOP_POS	(SCREEN_WIDTH + RAT_SIZE.x)				// ネズミの止まる位置
+#define CAT_FRAMEOUT_STOP_POS	(SCREEN_WIDTH + CAT_SIZE.x)				// ネコの止まる位置
+#define AND_FRAMEOUT_MOVE		(D3DXVECTOR3(-32.0f, -10.0f, 0.0f))		// 画面外のアンドの移動量
+#define SHAKEOFF_MOVE_SPEED		(-60.0f)								// 逃げ切り状態の移動量の速度
+#define SHAKEOFF_RAT_POS_Y		(600.0f)								// 逃げ切り状態の縦の位置
+#define SHAKEOFF_RAT_STOP_POS	(SCREEN_WIDTH * 0.5f)					// 逃げ切り状態のネズミの停止する位置
+#define HOLEIN_RAT_SIZE_FRAME	(40)									// 穴入り状態のネズミのサイズの縮小フレーム数
+#define HOLEIN_RAT_SUB_POS		(1.2f)									// 穴入り状態のネズミの位置の減算量
 
 //============================
 // コンストラクタ
@@ -170,6 +173,9 @@ void CTitleLogo::Update(void)
 			// 画面外状態にする
 			m_state = STATE_FRAMEOUT;
 
+			// アンドの移動量を設定する
+			m_aTitle[TYPE_AND].move = AND_FRAMEOUT_MOVE;
+
 			break;
 
 		case CTitleLogo::STATE_FRAMEOUT:
@@ -183,6 +189,19 @@ void CTitleLogo::Update(void)
 
 			// 逃げ切り状態の処理
 			ShakeOffProcess();
+
+			break;
+
+		case CTitleLogo::STATE_HOLEIN:
+
+			// 穴入り状態の処理
+			HoleInProcess();
+
+			break;
+
+		case STATE_STOP:
+
+			// 停止しているので特に処理は無し
 
 			break;
 
@@ -462,6 +481,9 @@ void CTitleLogo::FrameOutProcess(void)
 	// 画面外状態のネコの位置関係処理
 	FrameOutCatPosSet();
 
+	// 画面外状態のアンドの処理
+	FrameOutAnd();
+
 	if (m_nStateCount % LOCUS_COUNT == 0)
 	{ // 一定時間ごとに
 
@@ -497,6 +519,41 @@ void CTitleLogo::ShakeOffProcess(void)
 
 	// 残像の発生カウントを加算する
 	m_nStateCount++;
+}
+
+//============================
+// 穴入り状態の処理
+//============================
+void CTitleLogo::HoleInProcess(void)
+{
+	// ネズミの情報を取得する
+	D3DXVECTOR3 pos = m_aTitle[TYPE_RAT].pLogo->GetPos();		// 位置
+	D3DXVECTOR3 size = m_aTitle[TYPE_RAT].pLogo->GetSize();		// サイズ
+
+	// サイズを減算する
+	size.x -= RAT_SIZE.x / HOLEIN_RAT_SIZE_FRAME;
+	size.y -= RAT_SIZE.y / HOLEIN_RAT_SIZE_FRAME;
+
+	// 上に移動させる(穴の中に入っていく感じを演出)
+	pos.y -= HOLEIN_RAT_SUB_POS;
+
+	if (size.x <= 0.0f ||
+		size.y <= 0.0f)
+	{ // サイズが0.0f以下になった場合
+
+		// サイズを補正する
+		size = NONE_D3DXVECTOR3;
+
+		// ネズミを描画しないようにする
+		m_aTitle[TYPE_RAT].bDisp = false;
+
+		// 停止状態にする
+		m_state = STATE_STOP;
+	}
+
+	// ネズミの情報を適用する
+	m_aTitle[TYPE_RAT].pLogo->SetPos(pos);		// 位置
+	m_aTitle[TYPE_RAT].pLogo->SetSize(size);	// サイズ
 }
 
 //============================
@@ -681,6 +738,42 @@ void CTitleLogo::FrameOutSetRat(void)
 }
 
 //============================
+// 画面外状態のアンドの処理
+//============================
+void CTitleLogo::FrameOutAnd(void)
+{
+	// 位置とサイズを取得する
+	D3DXVECTOR3 pos = m_aTitle[TYPE_AND].pLogo->GetPos();
+	D3DXVECTOR3 rot = m_aTitle[TYPE_AND].pLogo->GetRot();
+
+	// 位置を加算する
+	pos += m_aTitle[TYPE_AND].move;
+
+	// 重力をかける
+	m_aTitle[TYPE_AND].move.y += 0.3f;
+
+	// 向きを減算する
+	rot.z += 0.02f;
+
+	// 向きの正規化
+	useful::RotNormalize(&rot.z);
+
+	if (m_state == STATE_SHAKEOFF)
+	{ // サイズが一定以上になった場合
+
+		// 向きをまっすぐに補正する
+		rot.z = 0.0f;
+
+		// アンドの描画をしないようにする
+		m_aTitle[TYPE_AND].bDisp = false;
+	}
+
+	// 位置とサイズを適用する
+	m_aTitle[TYPE_AND].pLogo->SetPos(pos);
+	m_aTitle[TYPE_AND].pLogo->SetRot(rot);
+}
+
+//============================
 // 逃げ切り状態のネズミの位置関係処理
 //============================
 void CTitleLogo::ShakeOffRatPosSet(void)
@@ -696,6 +789,9 @@ void CTitleLogo::ShakeOffRatPosSet(void)
 
 		// 移動状況を false にする
 		m_aTitle[TYPE_RAT].bMove = false;
+
+		// 穴入り状態にする
+		m_state = STATE_HOLEIN;
 	}
 
 	// 位置を適用する

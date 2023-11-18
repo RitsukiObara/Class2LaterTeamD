@@ -118,6 +118,13 @@ void CCamera::Update(void)
 {
 	switch (CManager::Get()->GetMode())
 	{
+	case CScene::MODE_TITLE:	// タイトルモード
+
+		// タイトル画面のカメラ処理
+		TitleCamera();
+
+		break;
+
 	case CScene::MODE_GAME:		// ゲームモード
 
 		if (CGame::GetPause() != nullptr &&
@@ -682,6 +689,18 @@ void CCamera::PosSet(void)
 }
 
 //=======================
+// タイトル画面のカメラ処理
+//=======================
+void CCamera::TitleCamera(void)
+{
+	// 注視点を設定する
+	m_posR = D3DXVECTOR3(0.0f, 300.0f, 0.0f);
+
+	// 視点を設定する
+	m_posV = D3DXVECTOR3(0.0f, 300.0f, -500.0f);
+}
+
+//=======================
 // ゲーム画面のカメラ処理
 //=======================
 void CCamera::GameCamera(void)
@@ -853,8 +872,6 @@ void CCamera::Chase(void)
 void CCamera::NoneCamera(void)
 {
 	// ローカル変数宣言
-	D3DXVECTOR3 pos;					// 位置
-	D3DXVECTOR3 rot;					// 向き
 	m_DisDest = CAMERA_DISTANCE;		// 目的の距離
 
 	// 距離の補正処理
