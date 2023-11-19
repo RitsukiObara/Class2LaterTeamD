@@ -9,10 +9,12 @@
 #include "texture.h"
 
 #include "entry_frame.h"
+#include "entry_team.h"
 
 //=======================================
 // マクロ定義
 //=======================================
+#define TEAM_SHIFT			(200.0f)		// チームのずらす高さ
 
 //=========================
 // コンストラクタ
@@ -21,6 +23,7 @@ CEntryUI::CEntryUI() : CObject(CObject::TYPE_ENTRYUI, CObject::PRIORITY_BG)
 {
 	// 全ての値をクリアする
 	m_pFrame = nullptr;			// 枠の情報
+	m_pTeam = nullptr;			// チームの情報
 }
 
 //=========================
@@ -38,6 +41,7 @@ HRESULT CEntryUI::Init(void)
 {
 	// 全ての値をクリアする
 	m_pFrame = nullptr;			// 枠の情報
+	m_pTeam = nullptr;			// チームの情報
 
 	// 成功を返す
 	return S_OK;
@@ -56,6 +60,14 @@ void CEntryUI::Uninit(void)
 		m_pFrame = nullptr;
 	}
 
+	if (m_pTeam != nullptr)
+	{ // チームの情報が NULL じゃない場合
+
+		// チームの終了処理
+		m_pTeam->Uninit();
+		m_pTeam = nullptr;
+	}
+
 	// 本体の終了処理
 	Release();
 }
@@ -65,7 +77,19 @@ void CEntryUI::Uninit(void)
 //=========================
 void CEntryUI::Update(void)
 {
-	// 特になし
+	if (m_pFrame != nullptr)
+	{ // 枠の情報が NULL じゃない場合
+
+		// 枠の更新処理
+		m_pFrame->Update();
+	}
+
+	if (m_pTeam != nullptr)
+	{ // チームの情報が NULL じゃない場合
+
+		// チームの更新処理
+		m_pTeam->Update();
+	}
 }
 
 //=========================
@@ -73,7 +97,19 @@ void CEntryUI::Update(void)
 //=========================
 void CEntryUI::Draw(void)
 {
-	// 描画するものがないため特に無し
+	if (m_pFrame != nullptr)
+	{ // 枠の情報が NULL じゃない場合
+
+		// 枠の描画処理
+		m_pFrame->Draw();
+	}
+
+	if (m_pTeam != nullptr)
+	{ // チームの情報が NULL じゃない場合
+
+		// チームの描画処理
+		m_pTeam->Draw();
+	}
 }
 
 //=========================
@@ -86,6 +122,19 @@ void CEntryUI::SetData(const D3DXVECTOR3& pos)
 
 		// 枠を生成する
 		m_pFrame = CEntryFrame::Create(pos);
+	}
+	else
+	{ // 上記以外
+
+		// 停止
+		assert(false);
+	}
+
+	if (m_pTeam == nullptr)
+	{ // チームの情報が NULL の場合
+
+		// チームを生成する
+		m_pTeam = CEntryTeam::Create(D3DXVECTOR3(pos.x, pos.y - TEAM_SHIFT, 0.0f));
 	}
 	else
 	{ // 上記以外

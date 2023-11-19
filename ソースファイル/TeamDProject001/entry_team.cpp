@@ -1,23 +1,23 @@
 //=======================================
 //
-// エントリーの枠のメイン処理[entry_frame.cpp]
+// エントリーチーム処理[entry_team.cpp]
 // Author 小原立暉
 //
 //=======================================
 #include "manager.h"
-#include "entry_frame.h"
+#include "entry_team.h"
 #include "texture.h"
 
 //=======================================
 // マクロ定義
 //=======================================
-#define FRAME_SIZE		(D3DXVECTOR3(120.0f, 300.0f, 0.0f))		// 枠のサイズ
-#define FRAME_TEXTURE	"data\\TEXTURE\\Entry_Frame.png"		// 枠のテクスチャ
+#define TEAM_SIZE		(D3DXVECTOR3(80.0f, 40.0f, 0.0f))		// 枠のサイズ
+#define TEAM_TEXTURE	"data\\TEXTURE\\Entry_Team.png"			// 枠のテクスチャ
 
 //=========================
 // コンストラクタ
 //=========================
-CEntryFrame::CEntryFrame() : CObject2D(CObject::TYPE_NONE, CObject::PRIORITY_ENTITY)
+CEntryTeam::CEntryTeam() : CObject2D(CObject::TYPE_NONE, CObject::PRIORITY_ENTITY)
 {
 
 }
@@ -25,7 +25,7 @@ CEntryFrame::CEntryFrame() : CObject2D(CObject::TYPE_NONE, CObject::PRIORITY_ENT
 //=========================
 // デストラクタ
 //=========================
-CEntryFrame::~CEntryFrame()
+CEntryTeam::~CEntryTeam()
 {
 
 }
@@ -33,7 +33,7 @@ CEntryFrame::~CEntryFrame()
 //=========================
 // 初期化処理
 //=========================
-HRESULT CEntryFrame::Init(void)
+HRESULT CEntryTeam::Init(void)
 {
 	if (FAILED(CObject2D::Init()))
 	{ // 初期化に失敗した場合
@@ -49,7 +49,7 @@ HRESULT CEntryFrame::Init(void)
 //=========================
 // 終了処理
 //=========================
-void CEntryFrame::Uninit(void)
+void CEntryTeam::Uninit(void)
 {
 	// 終了
 	CObject2D::Uninit();
@@ -58,7 +58,7 @@ void CEntryFrame::Uninit(void)
 //=========================
 // 更新処理
 //=========================
-void CEntryFrame::Update(void)
+void CEntryTeam::Update(void)
 {
 
 }
@@ -66,7 +66,7 @@ void CEntryFrame::Update(void)
 //=========================
 // 描画処理
 //=========================
-void CEntryFrame::Draw(void)
+void CEntryTeam::Draw(void)
 {
 	// 描画処理
 	CObject2D::Draw();
@@ -75,35 +75,38 @@ void CEntryFrame::Draw(void)
 //=========================
 // 情報の設定処理
 //=========================
-void CEntryFrame::SetData(const D3DXVECTOR3& pos)
+void CEntryTeam::SetData(const D3DXVECTOR3& pos)
 {
 	// スクロールの設定処理
 	SetPos(pos);				// 位置設定
 	SetRot(NONE_D3DXVECTOR3);	// 向き設定
-	SetSize(FRAME_SIZE);		// サイズ設定
+	SetSize(TEAM_SIZE);			// サイズ設定
 	SetLength();				// 長さ設定
 	SetAngle();					// 方向設定
 
 	// テクスチャの読み込み処理
-	BindTexture(CManager::Get()->GetTexture()->Regist(FRAME_TEXTURE));
+	BindTexture(CManager::Get()->GetTexture()->Regist(TEAM_TEXTURE));
 
 	// 頂点情報の初期化
 	SetVertex();
+
+	// 頂点カラーの設定処理
+	SetVtxColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
 }
 
 //=========================
 // 生成処理
 //=========================
-CEntryFrame* CEntryFrame::Create(const D3DXVECTOR3& pos)
+CEntryTeam* CEntryTeam::Create(const D3DXVECTOR3& pos)
 {
 	// ローカルオブジェクトを生成
-	CEntryFrame* pEntryFrame = nullptr;	// プレイヤーのインスタンスを生成
+	CEntryTeam* pEntryTeam = nullptr;	// プレイヤーのインスタンスを生成
 
-	if (pEntryFrame == nullptr)
+	if (pEntryTeam == nullptr)
 	{ // オブジェクトが NULL の場合
 
 		// オブジェクトを生成
-		pEntryFrame = new CEntryFrame;
+		pEntryTeam = new CEntryTeam;
 	}
 	else
 	{ // オブジェクトが NULL じゃない場合
@@ -115,11 +118,11 @@ CEntryFrame* CEntryFrame::Create(const D3DXVECTOR3& pos)
 		return nullptr;
 	}
 
-	if (pEntryFrame != nullptr)
+	if (pEntryTeam != nullptr)
 	{ // オブジェクトが NULL じゃない場合
 
 		// 初期化処理
-		if (FAILED(pEntryFrame->Init()))
+		if (FAILED(pEntryTeam->Init()))
 		{ // 初期化に失敗した場合
 
 			// 停止
@@ -130,7 +133,7 @@ CEntryFrame* CEntryFrame::Create(const D3DXVECTOR3& pos)
 		}
 
 		// 情報の設定処理
-		pEntryFrame->SetData(pos);
+		pEntryTeam->SetData(pos);
 	}
 	else
 	{ // オブジェクトが NULL の場合
@@ -142,6 +145,6 @@ CEntryFrame* CEntryFrame::Create(const D3DXVECTOR3& pos)
 		return nullptr;
 	}
 
-	// エントリーの枠のポインタを返す
-	return pEntryFrame;
+	// エントリーチームのポインタを返す
+	return pEntryTeam;
 }

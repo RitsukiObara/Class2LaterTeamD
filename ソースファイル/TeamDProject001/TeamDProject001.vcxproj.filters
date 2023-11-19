@@ -369,6 +369,9 @@
     <ClCompile Include="entry_UI.cpp">
       <Filter>Scene\Entry</Filter>
     </ClCompile>
+    <ClCompile Include="entry_team.cpp">
+      <Filter>Scene\Entry</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -660,6 +663,9 @@
       <Filter>Scene\Entry</Filter>
     </ClInclude>
     <ClInclude Include="entry_frame.h">
+      <Filter>Scene\Entry</Filter>
+    </ClInclude>
+    <ClInclude Include="entry_team.h">
       <Filter>Scene\Entry</Filter>
     </ClInclude>
   </ItemGroup>

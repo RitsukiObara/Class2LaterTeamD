@@ -16,6 +16,7 @@
 // 前方宣言
 //-----------------------------------
 class CEntryFrame;			// エントリーの枠
+class CEntryTeam;			// エントリーチーム
 
 //-----------------------------------
 // クラス定義(CEntryUI)
@@ -42,6 +43,7 @@ private:
 
 	// メンバ変数
 	CEntryFrame* m_pFrame;			// 枠の情報
+	CEntryTeam* m_pTeam;			// チームの情報
 };
 
 #endif
