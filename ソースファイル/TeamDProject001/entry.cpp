@@ -47,7 +47,10 @@ HRESULT CEntry::Init(void)
 	CSkyBox::Create();
 
 	// ÉGÉìÉgÉäÅ[UIÇÃê∂ê¨èàóù
-	CEntryUI::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f));
+	CEntryUI::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 375.0f, SCREEN_HEIGHT * 0.5f, 0.0f), 0);
+	CEntryUI::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 125.0f, SCREEN_HEIGHT * 0.5f, 0.0f), 1);
+	CEntryUI::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f + 125.0f, SCREEN_HEIGHT * 0.5f, 0.0f), 2);
+	CEntryUI::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f + 375.0f, SCREEN_HEIGHT * 0.5f, 0.0f), 3);
 
 	// ê¨å˜Çï‘Ç∑
 	return S_OK;

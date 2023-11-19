@@ -443,6 +443,26 @@ void CObject2D::SetVtxTexture(void)
 }
 
 //===========================================
+// 反転テクスチャの設定
+//===========================================
+void CObject2D::SetVtxTextureRev(void)
+{
+	VERTEX_2D * pVtx;											//頂点情報へのポインタ
+
+	//頂点バッファをロックし、頂点情報へのポインタを取得
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	//テクスチャ座標の設定
+	pVtx[0].tex = D3DXVECTOR2(1.0f, 0.0f);
+	pVtx[1].tex = D3DXVECTOR2(0.0f, 0.0f);
+	pVtx[2].tex = D3DXVECTOR2(1.0f, 1.0f);
+	pVtx[3].tex = D3DXVECTOR2(0.0f, 1.0f);
+
+	//頂点バッファをアンロックする
+	m_pVtxBuff->Unlock();
+}
+
+//===========================================
 // テクスチャの設定(アニメーションバージョン)
 //===========================================
 void CObject2D::SetVtxTextureAnim(float fTexPattern,int nPattern)

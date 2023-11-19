@@ -175,7 +175,9 @@
     <ClCompile Include="effect2D.cpp" />
     <ClCompile Include="elevation_manager.cpp" />
     <ClCompile Include="entry.cpp" />
+    <ClCompile Include="entry_arrow.cpp" />
     <ClCompile Include="entry_frame.cpp" />
+    <ClCompile Include="entry_ID.cpp" />
     <ClCompile Include="entry_team.cpp" />
     <ClCompile Include="entry_UI.cpp" />
     <ClCompile Include="fade.cpp" />
@@ -278,7 +280,9 @@
     <ClInclude Include="effect2D.h" />
     <ClInclude Include="elevation_manager.h" />
     <ClInclude Include="entry.h" />
+    <ClInclude Include="entry_arrow.h" />
     <ClInclude Include="entry_frame.h" />
+    <ClInclude Include="entry_ID.h" />
     <ClInclude Include="entry_team.h" />
     <ClInclude Include="entry_UI.h" />
     <ClInclude Include="fade.h" />
