@@ -105,33 +105,56 @@ void CTitle::Update(void)
 	}
 	else
 	{
+		switch (m_state)
+		{
+		case CTitle::STATE_TITLE_APPEAR:
 
-		// 遷移カウントを加算する
-		m_nTransCount++;
 
-		//if (m_nTransCount % SET_RANKING_TIMER == 0)
-		//{ // 遷移カウントが一定数に達した場合
+			break;
 
-		//	// ランキングに遷移する
-		//	CManager::Get()->GetFade()->SetFade(CScene::MODE_ENTRY);
+		case CTitle::STATE_WAIT:
 
-		//	// この先の処理を行わない
-		//	return;
-		//}
+			if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_RETURN) == true ||
+				CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_START, 0) == true ||
+				CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_A, 0) == true)
+			{ // ENTERキーを押した場合
 
-		if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_RETURN) == true ||
-			CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_START, 0) == true ||
-			CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_A, 0) == true)
-		{ // ENTERキーを押した場合
+				// 遷移状態に設定する
+				m_state = STATE_TRANS;
 
-			// 遷移状態に設定する
-			m_state = STATE_TRANS;
+				// この先の処理を行わない
+				return;
+			}
 
-			//// チュートリアルに遷移する
-			//CManager::Get()->GetFade()->SetFade(CScene::MODE_GAME);
+			break;
 
-			// この先の処理を行わない
-			return;
+		case CTitle::STATE_TRANS:
+
+			// 遷移カウントを加算する
+			m_nTransCount++;
+
+			break;
+
+		case STATE_HOLEIN:
+
+			// 遷移カウントを加算する
+			m_nTransCount++;
+
+			if (m_nTransCount % 240 == 0)
+			{ // 遷移カウントが一定時間
+
+				// チュートリアルに遷移する
+				CManager::Get()->GetFade()->SetFade(CScene::MODE_GAME);
+			}
+
+			break;
+
+		default:
+
+			// 停止
+			assert(false);
+
+			break;
 		}
 	}
 

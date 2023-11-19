@@ -40,10 +40,10 @@
 #define CAT_FRAMEOUT_STOP_POS	(SCREEN_WIDTH + CAT_SIZE.x)				// ネコの止まる位置
 #define AND_FRAMEOUT_MOVE		(D3DXVECTOR3(-32.0f, -10.0f, 0.0f))		// 画面外のアンドの移動量
 #define SHAKEOFF_MOVE_SPEED		(-60.0f)								// 逃げ切り状態の移動量の速度
-#define SHAKEOFF_RAT_POS_Y		(600.0f)								// 逃げ切り状態の縦の位置
+#define SHAKEOFF_RAT_POS_Y		(650.0f)								// 逃げ切り状態のネズミの縦の位置
 #define SHAKEOFF_RAT_STOP_POS	(SCREEN_WIDTH * 0.5f)					// 逃げ切り状態のネズミの停止する位置
 #define HOLEIN_RAT_SIZE_FRAME	(40)									// 穴入り状態のネズミのサイズの縮小フレーム数
-#define HOLEIN_RAT_SUB_POS		(1.2f)									// 穴入り状態のネズミの位置の減算量
+#define HOLEIN_RAT_SUB_POS		(2.6f)									// 穴入り状態のネズミの位置の減算量
 
 //============================
 // コンストラクタ
@@ -212,6 +212,10 @@ void CTitleLogo::Update(void)
 
 			break;
 		}
+
+		break;
+
+	case CTitle::STATE_HOLEIN:			// 穴の中に入る状態
 
 		break;
 
@@ -549,6 +553,9 @@ void CTitleLogo::HoleInProcess(void)
 
 		// 停止状態にする
 		m_state = STATE_STOP;
+
+		// タイトルを穴の中に入った状態にする
+		CTitle::SetState(CTitle::STATE_HOLEIN);
 	}
 
 	// ネズミの情報を適用する

@@ -70,6 +70,8 @@ private:		// 自分だけアクセス出来る
 
 	// タイトル関係
 	void TitleCamera(void);			// タイトル画面のカメラ処理
+	void TitleNoneCamera(void);		// タイトル画面の通常処理
+	void TitleHoleInCamera(void);	// タイトル画面の穴入り処理
 
 	// ゲーム関係
 	void GameCamera(void);			// ゲーム画面のカメラ処理
