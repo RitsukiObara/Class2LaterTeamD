@@ -175,6 +175,7 @@
     <ClCompile Include="effect2D.cpp" />
     <ClCompile Include="elevation_manager.cpp" />
     <ClCompile Include="entry.cpp" />
+    <ClCompile Include="entry_UI.cpp" />
     <ClCompile Include="fade.cpp" />
     <ClCompile Include="file.cpp" />
     <ClCompile Include="flowervase.cpp" />
@@ -275,6 +276,7 @@
     <ClInclude Include="effect2D.h" />
     <ClInclude Include="elevation_manager.h" />
     <ClInclude Include="entry.h" />
+    <ClInclude Include="entry_UI.h" />
     <ClInclude Include="fade.h" />
     <ClInclude Include="file.h" />
     <ClInclude Include="flowervase.h" />

@@ -363,6 +363,9 @@
     <ClCompile Include="title_back.cpp">
       <Filter>Scene\Title</Filter>
     </ClCompile>
+    <ClCompile Include="entry_UI.cpp">
+      <Filter>Scene\Entry</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -649,6 +652,9 @@
     </ClInclude>
     <ClInclude Include="title_back.h">
       <Filter>Scene\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="entry_UI.h">
+      <Filter>Scene\Entry</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
