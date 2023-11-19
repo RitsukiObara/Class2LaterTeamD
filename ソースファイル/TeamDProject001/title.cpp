@@ -21,7 +21,7 @@
 #include "title_wall.h"
 
 // マクロ定義
-#define SET_RANKING_TIMER		(600)		// ランキング画面に遷移するカウント数
+#define ENTRY_TRANS_TIMER		(180)		// ランキング画面に遷移するカウント数
 
 //--------------------------------------------
 // 静的メンバ変数宣言
@@ -140,7 +140,7 @@ void CTitle::Update(void)
 			// 遷移カウントを加算する
 			m_nTransCount++;
 
-			if (m_nTransCount % 240 == 0)
+			if (m_nTransCount % ENTRY_TRANS_TIMER == 0)
 			{ // 遷移カウントが一定時間
 
 				// チュートリアルに遷移する
