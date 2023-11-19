@@ -363,6 +363,9 @@
     <ClCompile Include="title_back.cpp">
       <Filter>Scene\Title</Filter>
     </ClCompile>
+    <ClCompile Include="entry_frame.cpp">
+      <Filter>Scene\Entry</Filter>
+    </ClCompile>
     <ClCompile Include="entry_UI.cpp">
       <Filter>Scene\Entry</Filter>
     </ClCompile>
@@ -654,6 +657,9 @@
       <Filter>Scene\Title</Filter>
     </ClInclude>
     <ClInclude Include="entry_UI.h">
+      <Filter>Scene\Entry</Filter>
+    </ClInclude>
+    <ClInclude Include="entry_frame.h">
       <Filter>Scene\Entry</Filter>
     </ClInclude>
   </ItemGroup>

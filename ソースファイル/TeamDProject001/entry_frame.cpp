@@ -1,32 +1,31 @@
 //=======================================
 //
-// エントリーUI処理[entry_UI.cpp]
+// エントリーの枠のメイン処理[entry_frame.cpp]
 // Author 小原立暉
 //
 //=======================================
 #include "manager.h"
-#include "entry_UI.h"
-#include "texture.h"
-
 #include "entry_frame.h"
+#include "texture.h"
 
 //=======================================
 // マクロ定義
 //=======================================
+#define FRAME_SIZE		(D3DXVECTOR3(100.0f, 200.0f, 0.0f))		// 枠のサイズ
+#define FRAME_TEXTURE	"data\\TEXTURE\\Entry_Frame.png"		// 枠のテクスチャ
 
 //=========================
 // コンストラクタ
 //=========================
-CEntryUI::CEntryUI() : CObject(CObject::TYPE_ENTRYUI, CObject::PRIORITY_BG)
+CEntryFrame::CEntryFrame() : CObject2D(CObject::TYPE_ENTRYUI, CObject::PRIORITY_ENTITY)
 {
-	// 全ての値をクリアする
-	m_pFrame = nullptr;			// 枠の情報
+
 }
 
 //=========================
 // デストラクタ
 //=========================
-CEntryUI::~CEntryUI()
+CEntryFrame::~CEntryFrame()
 {
 
 }
@@ -34,10 +33,14 @@ CEntryUI::~CEntryUI()
 //=========================
 // 初期化処理
 //=========================
-HRESULT CEntryUI::Init(void)
+HRESULT CEntryFrame::Init(void)
 {
-	// 全ての値をクリアする
-	m_pFrame = nullptr;			// 枠の情報
+	if (FAILED(CObject2D::Init()))
+	{ // 初期化に失敗した場合
+
+		// 失敗を返す
+		return E_FAIL;
+	}
 
 	// 成功を返す
 	return S_OK;
@@ -46,68 +49,61 @@ HRESULT CEntryUI::Init(void)
 //=========================
 // 終了処理
 //=========================
-void CEntryUI::Uninit(void)
+void CEntryFrame::Uninit(void)
 {
-	if (m_pFrame != nullptr)
-	{ // 枠の情報が NULL じゃない場合
-
-		// 枠の終了処理
-		m_pFrame->Uninit();
-		m_pFrame = nullptr;
-	}
-
-	// 本体の終了処理
-	Release();
+	// 終了
+	CObject2D::Uninit();
 }
 
 //=========================
 // 更新処理
 //=========================
-void CEntryUI::Update(void)
+void CEntryFrame::Update(void)
 {
-	// 特になし
+
 }
 
 //=========================
 // 描画処理
 //=========================
-void CEntryUI::Draw(void)
+void CEntryFrame::Draw(void)
 {
-	// 描画するものがないため特に無し
+	// 描画処理
+	CObject2D::Draw();
 }
 
 //=========================
 // 情報の設定処理
 //=========================
-void CEntryUI::SetData(const D3DXVECTOR3& pos)
+void CEntryFrame::SetData(const D3DXVECTOR3& pos)
 {
-	if (m_pFrame == nullptr)
-	{ // 枠の情報が NULL の場合
+	// スクロールの設定処理
+	SetPos(pos);				// 位置設定
+	SetRot(NONE_D3DXVECTOR3);	// 向き設定
+	SetSize(FRAME_SIZE);		// サイズ設定
+	SetLength();				// 長さ設定
+	SetAngle();					// 方向設定
 
-		// 枠を生成する
-		m_pFrame = CEntryFrame::Create(pos);
-	}
-	else
-	{ // 上記以外
+	// テクスチャの読み込み処理
+	BindTexture(CManager::Get()->GetTexture()->Regist(FRAME_TEXTURE));
 
-		// 停止
-		assert(false);
-	}
+	// 頂点情報の初期化
+	SetVertex();
 }
 
 //=========================
 // 生成処理
 //=========================
-CEntryUI* CEntryUI::Create(const D3DXVECTOR3& pos)
+CEntryFrame* CEntryFrame::Create(const D3DXVECTOR3& pos)
 {
 	// ローカルオブジェクトを生成
-	CEntryUI* pEntry = nullptr;	// プレイヤーのインスタンスを生成
+	CEntryFrame* pEntryFrame = nullptr;	// プレイヤーのインスタンスを生成
 
-	if (pEntry == nullptr)
+	if (pEntryFrame == nullptr)
 	{ // オブジェクトが NULL の場合
 
 		// オブジェクトを生成
-		pEntry = new CEntryUI;
+		pEntryFrame = new CEntryFrame;
 	}
 	else
 	{ // オブジェクトが NULL じゃない場合
@@ -119,11 +115,11 @@ CEntryUI* CEntryUI::Create(const D3DXVECTOR3& pos)
 		return nullptr;
 	}
 
-	if (pEntry != nullptr)
+	if (pEntryFrame != nullptr)
 	{ // オブジェクトが NULL じゃない場合
 
 		// 初期化処理
-		if (FAILED(pEntry->Init()))
+		if (FAILED(pEntryFrame->Init()))
 		{ // 初期化に失敗した場合
 
 			// 停止
@@ -134,7 +130,7 @@ CEntryUI* CEntryUI::Create(const D3DXVECTOR3& pos)
 		}
 
 		// 情報の設定処理
-		pEntry->SetData(pos);
+		pEntryFrame->SetData(pos);
 	}
 	else
 	{ // オブジェクトが NULL の場合
@@ -146,6 +142,6 @@ CEntryUI* CEntryUI::Create(const D3DXVECTOR3& pos)
 		return nullptr;
 	}
 
-	// エントリーUIのポインタを返す
-	return pEntry;
+	// エントリーの枠のポインタを返す
+	return pEntryFrame;
 }

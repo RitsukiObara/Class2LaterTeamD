@@ -14,6 +14,7 @@
 #include "Objectmesh.h"
 
 #include "skybox.h"
+#include "entry_UI.h"
 
 //=========================================
 // コンストラクタ
@@ -44,6 +45,9 @@ HRESULT CEntry::Init(void)
 
 	// スカイボックスの生成処理
 	CSkyBox::Create();
+
+	// エントリーUIの生成処理
+	CEntryUI::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f));
 
 	// 成功を返す
 	return S_OK;

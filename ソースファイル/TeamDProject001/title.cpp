@@ -154,8 +154,8 @@ void CTitle::Update(void)
 			if (m_nTransCount % ENTRY_TRANS_TIMER == 0)
 			{ // 遷移カウントが一定時間
 
-				// チュートリアルに遷移する
-				CManager::Get()->GetFade()->SetFade(CScene::MODE_GAME);
+				// エントリーに遷移する
+				CManager::Get()->GetFade()->SetFade(CScene::MODE_ENTRY);
 			}
 
 			break;

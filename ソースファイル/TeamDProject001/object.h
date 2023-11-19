@@ -61,6 +61,7 @@ public:			// 誰でもアクセスできる
 		TYPE_PLAYERID,			// プレイヤーのID
 		TYPE_COUNTDOWN,			// カウントダウン
 		TYPE_TITLEWALL,			// タイトルの壁
+		TYPE_ENTRYUI,			// エントリーUI
 		TYPE_MAX				// この列挙型の総数
 	};
 
