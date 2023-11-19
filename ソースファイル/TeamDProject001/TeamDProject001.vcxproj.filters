@@ -357,6 +357,12 @@
     <ClCompile Include="title_wall.cpp">
       <Filter>Scene\Title</Filter>
     </ClCompile>
+    <ClCompile Include="title_floor.cpp">
+      <Filter>Scene\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="title_back.cpp">
+      <Filter>Scene\Title</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -636,6 +642,12 @@
       <Filter>Scene\Title</Filter>
     </ClInclude>
     <ClInclude Include="title_wall.h">
+      <Filter>Scene\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="title_floor.h">
+      <Filter>Scene\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="title_back.h">
       <Filter>Scene\Title</Filter>
     </ClInclude>
   </ItemGroup>

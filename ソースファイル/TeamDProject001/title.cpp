@@ -19,9 +19,14 @@
 #include "skybox.h"
 #include "title_logo.h"
 #include "title_wall.h"
+#include "title_floor.h"
+#include "title_back.h"
 
 // マクロ定義
-#define ENTRY_TRANS_TIMER		(180)		// ランキング画面に遷移するカウント数
+#define ENTRY_TRANS_TIMER		(180)										// ランキング画面に遷移するカウント数
+#define WALL_POS				(D3DXVECTOR3(0.0f, 300.0f, 600.0f))			// 壁の位置
+#define WALL_ROT				(D3DXVECTOR3(-D3DX_PI * 0.5f, 0.0f, 0.0f))	// 壁の向き
+#define WALL_SIZE				(D3DXVECTOR3(800.0f, 0.0f, 600.0f))			// 壁のサイズ
 
 //--------------------------------------------
 // 静的メンバ変数宣言
@@ -61,6 +66,12 @@ HRESULT CTitle::Init(void)
 
 	// タイトルの壁の生成処理
 	CTitleWall::Create();
+
+	// タイトルの床の生成処理
+	CTitleFloor::Create();
+
+	// タイトルの背景の生成処理
+	CTitleBack::Create();
 
 	//UIエディターの生成
 	m_pUIEdit = C2DUIEdit::Create();

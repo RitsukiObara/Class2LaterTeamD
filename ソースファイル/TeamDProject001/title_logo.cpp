@@ -43,7 +43,7 @@
 #define SHAKEOFF_RAT_POS_Y		(650.0f)								// 逃げ切り状態のネズミの縦の位置
 #define SHAKEOFF_RAT_STOP_POS	(SCREEN_WIDTH * 0.5f)					// 逃げ切り状態のネズミの停止する位置
 #define HOLEIN_RAT_SIZE_FRAME	(40)									// 穴入り状態のネズミのサイズの縮小フレーム数
-#define HOLEIN_RAT_SUB_POS		(2.6f)									// 穴入り状態のネズミの位置の減算量
+#define HOLEIN_RAT_SUB_POS		(2.8f)									// 穴入り状態のネズミの位置の減算量
 
 //============================
 // コンストラクタ
