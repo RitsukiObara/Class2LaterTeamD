@@ -18,7 +18,6 @@
 #include "elevation_manager.h"
 #include "block.h"
 #include "block_manager.h"
-#include "input.h"
 
 //-------------------------------------------
 // ƒ}ƒNƒ’è‹`

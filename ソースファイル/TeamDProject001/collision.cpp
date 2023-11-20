@@ -158,6 +158,9 @@ void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight,
 
 			case CObstacle::TYPE_TOYCAR:
 
+				// ヒット処理
+				pRat->Hit();
+
 				break;
 
 			default:
@@ -194,7 +197,7 @@ void collision::BlockCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, cons
 		{ // 上記以外
 
 			// 円の当たり判定
-			BlockCircleCollision(*pBlock, pos, fWidth, fHeight);
+			BlockCircleCollision(*pBlock, pos, posOld, fWidth, fHeight);
 		}
 
 		// 次のブロックの情報を取得する
@@ -429,11 +432,30 @@ void collision::BlockRectangleCollision(CBlock& block, D3DXVECTOR3& pos, const D
 //===============================
 // ブロックの円形の当たり判定
 //===============================
-void collision::BlockCircleCollision(CBlock& block, D3DXVECTOR3& pos, const float fRadius, const float fHeight)
+void collision::BlockCircleCollision(CBlock& block, D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fRadius, const float fHeight)
 {
-	if (pos.y <= block.GetPos().y + block.GetFileData().vtxMax.y ||
+	if (pos.y <= block.GetPos().y + block.GetFileData().vtxMax.y &&
 		pos.y + fHeight >= block.GetPos().y + block.GetFileData().vtxMin.y)
 	{ // 毬と衝突した場合
+
+		if (useful::CylinderInner(&pos, block.GetPos(), block.GetFileData().fRadius + fRadius) == true)
+		{ // 円柱の内側にいた場合
+
+			if (posOld.y >= block.GetPos().y + block.GetFileData().vtxMax.y &&
+				pos.y <= block.GetPos().y + block.GetFileData().vtxMax.y)
+			{ // 上からの当たり判定
+
+				// 位置を設定する
+				pos.y = block.GetPos().y + block.GetFileData().vtxMax.y;
+			}
+			else if (posOld.y + fHeight <= block.GetPos().y + block.GetFileData().vtxMin.y &&
+				pos.y + fHeight >= block.GetPos().y + block.GetFileData().vtxMin.y)
+			{ // 下からの当たり判定
+
+				// 位置を設定する
+				pos.y = block.GetPos().y + block.GetFileData().vtxMin.y - fHeight;
+			}
+		}
 
 		// 円柱の当たり判定処理
 		useful::CylinderCollision(&pos, block.GetPos(), block.GetFileData().fRadius + fRadius);

@@ -16,7 +16,6 @@
 
 #include "objectElevation.h"
 #include "elevation_manager.h"
-#include "input.h"
 
 //-------------------------------------------
 // ƒ}ƒNƒ’è‹`
