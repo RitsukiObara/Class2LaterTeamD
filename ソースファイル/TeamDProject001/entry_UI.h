@@ -48,6 +48,7 @@ private:
 	CEntryTeam* m_pTeam;			// チームの情報
 	CEntryID* m_pID;				// プレイヤーIDの情報
 	CEntryArrow* m_apArrow[2];		// 矢印の情報
+	int m_nID;						// インデックス
 };
 
 #endif

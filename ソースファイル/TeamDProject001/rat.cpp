@@ -196,12 +196,8 @@ void CRat::Update(void)
 		// モーションの設定処理
 		MotionManager();
 
-		if (Hit() == true)
-		{ // ヒット処理で死んだ場合
+		m_nDamageCounter++;		// ダメージ食らうまでの時間加算
 
-			// この先の処理を行わない
-			return;
-		}
 	}
 
 	// 起伏地面の当たり判定
@@ -653,44 +649,24 @@ void CRat::UpdateState(void)
 bool CRat::Hit(void)
 {
 	// ローカル変数宣言
-	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を取得する
 	D3DXVECTOR3 pos = GetPos();
 
 	if (m_nDamageCounter >= TIME_DAMAGE && m_State != STATE_GHOST)
 	{ // ダメージ食らう時間になったら
+		m_nLife--;		// 寿命減らす
+		m_nDamageCounter = 0;		// ダメージ食らうまでの時間リセット
 
-		while (pObstacle != nullptr)
-		{ // ブロックの情報が NULL じゃない場合
+		CParticle::Create(pos, CParticle::TYPE_ENEMYDEATH); //パーティクル
 
-			/*if (useful::RectangleCollisionXY(pos, pObstacle->GetPos(),
-				SIZE, pObstacle->GetFileData().vtxMax,
-				-SIZE, pObstacle->GetFileData().vtxMin) == true)*/
-			{ // XYの矩形に当たってたら
+		if (m_nLife <= 0)
+		{ // 寿命が無いとき
 
-				//if (useful::RectangleCollisionXZ(pos, pObstacle->GetPos(),
-				//	SIZE, pObstacle->GetFileData().vtxMax,
-				//	-SIZE, pObstacle->GetFileData().vtxMin) == true)
-				//{ // XZの矩形に当たってたら
+			m_State = STATE_DEATH;		// 死亡状態にする
 
-				//	m_nLife--;		// 寿命減らす
-				//	m_nDamageCounter = 0;		// ダメージ食らうまでの時間リセット
-
-				//	CParticle::Create(pos, CParticle::TYPE_ENEMYDEATH); //パーティクル
-
-				//	if (m_nLife <= 0)
-				//	{ // 寿命が無いとき
-
-				//		m_State = STATE_DEATH;		// 死亡状態にする
-
-				//		// 死を返す
-				//		return true;
-				//	}
-				//}
-			}
-
-			// 次のオブジェクトを代入する
-			pObstacle = pObstacle->GetNext();
+			// 死を返す
+			return true;
 		}
+		return true;
 	}
 	else
 	{ // ダメージ食らう時間じゃなかったら
