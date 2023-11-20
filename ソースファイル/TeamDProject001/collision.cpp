@@ -83,10 +83,6 @@ void collision::ObstacleCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, c
 
 				break;
 
-			case CObstacle::TYPE::TYPE_PLASTICCASE:
-
-				break;
-
 			case CObstacle::TYPE::TYPE_PETBOTTLE:
 
 				break;
@@ -153,12 +149,6 @@ void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight,
 
 				break;
 
-			case CObstacle::TYPE_PLASTICCASE:
-
-				// 特になし
-
-				break;
-
 			case CObstacle::TYPE_PETBOTTLE:
 
 				break;
@@ -190,8 +180,7 @@ void collision::BlockCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, cons
 	CBlock* pBlock = CBlockManager::Get()->GetTop();
 
 	while (pBlock != nullptr)
-	{ // ブロックが NULL の場合
-
+	{ // ブロックが NULL の場合	
 		if (pBlock->GetCollision() == CBlock::COLLISION_SQUARE)
 		{ // 矩形の当たり判定の場合
 
