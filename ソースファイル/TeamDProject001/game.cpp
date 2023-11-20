@@ -119,6 +119,9 @@ HRESULT CGame::Init(void)
 	// ルンバの生成処理
 	CObstacle::Create(D3DXVECTOR3(-600.0f, 0.0f, -400.0f), CObstacle::TYPE_ROOMBA);
 
+	// ひもの生成処理
+	CObstacle::Create(D3DXVECTOR3(-600.0f, 650.0f, 0.0f), CObstacle::TYPE_HIMO);
+
 #endif // _DEBUG
 
 	// ネズミの生成

@@ -1,16 +1,18 @@
 //===================================
 //
-// ひもヘッダー[tarai.h]
+// ひもヘッダー[Himo.h]
 // Author 坂本翔唯
 //
 //===================================
-#ifndef _TARAI_H_
-#define _TARAI_H_
+#ifndef _HIMO_H_
+#define _HIMO_H_
 
 //***********************************
 // インクルードファイル
 //***********************************
 #include "obstacle.h"
+
+#define MAX_TARAI		(5)	// たらいの落下最大数
 
 class CModel;
 
@@ -36,8 +38,10 @@ public:			// 誰でもアクセスできる
 	bool Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth);		// ヒット処理
 
 private:		// 自分だけアクセスできる
+	void ActionDown(void);
 
-
+	CModel *m_apSub[MAX_TARAI];
+	bool m_bAction;
 };
 
 #endif

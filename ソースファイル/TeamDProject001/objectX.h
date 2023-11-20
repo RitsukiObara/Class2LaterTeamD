@@ -40,6 +40,8 @@ public:			// 誰でもアクセスできる
 		TYPE_HONEY,				// 蜂蜜
 		TYPE_TOYCARSCREW,		// おもちゃの車(ネジ)
 		TYPE_TITLEWALL,			// タイトルの壁
+		TYPE_ROOMBA_SUB,		// ルンバのプロペラ
+		TYPE_TARAI,				// たらい
 
 		// ブロックモデル
 		TYPE_CARDBOARD,			// 段ボール
@@ -71,8 +73,6 @@ public:			// 誰でもアクセスできる
 		TYPE_PETBOTTLE,			// ペットボトル
 		TYPE_TOYCARBODY,		// おもちゃの車(本体)
 		TYPE_ROOMBA_MAIN,		// ルンバの本体
-		TYPE_ROOMBA_SUB,		// ルンバのプロペラ
-		TYPE_TARAI,				// たらい
 		TYPE_HIMO,				// ひも
 
 		//マップモデル
