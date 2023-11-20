@@ -39,6 +39,7 @@ public:			// 誰でもアクセスできる
 		TYPE_PLASTICFRAC,		// プラスチックケース破片
 		TYPE_HONEY,				// 蜂蜜
 		TYPE_TOYCARSCREW,		// おもちゃの車(ネジ)
+		TYPE_TITLEWALL,			// タイトルの壁
 
 		// ブロックモデル
 		TYPE_CARDBOARD,			// 段ボール

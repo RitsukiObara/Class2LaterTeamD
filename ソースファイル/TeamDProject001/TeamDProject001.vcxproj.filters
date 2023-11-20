@@ -159,9 +159,6 @@
     <ClCompile Include="title.cpp">
       <Filter>Scene\Title</Filter>
     </ClCompile>
-    <ClCompile Include="title_logo.cpp">
-      <Filter>Scene\Title</Filter>
-    </ClCompile>
     <ClCompile Include="scene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
@@ -351,6 +348,36 @@
     <ClCompile Include="roomba.cpp">
       <Filter>Gimmick\Obstacle</Filter>
     </ClCompile>
+    <ClCompile Include="objectmesh2D.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="title_logo.cpp">
+      <Filter>Scene\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="title_wall.cpp">
+      <Filter>Scene\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="title_floor.cpp">
+      <Filter>Scene\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="title_back.cpp">
+      <Filter>Scene\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="entry_frame.cpp">
+      <Filter>Scene\Entry</Filter>
+    </ClCompile>
+    <ClCompile Include="entry_UI.cpp">
+      <Filter>Scene\Entry</Filter>
+    </ClCompile>
+    <ClCompile Include="entry_team.cpp">
+      <Filter>Scene\Entry</Filter>
+    </ClCompile>
+    <ClCompile Include="entry_ID.cpp">
+      <Filter>Scene\Entry</Filter>
+    </ClCompile>
+    <ClCompile Include="entry_arrow.cpp">
+      <Filter>Scene\Entry</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -432,9 +459,6 @@
       <Filter>Scene\Result</Filter>
     </ClInclude>
     <ClInclude Include="title.h">
-      <Filter>Scene\Title</Filter>
-    </ClInclude>
-    <ClInclude Include="title_logo.h">
       <Filter>Scene\Title</Filter>
     </ClInclude>
     <ClInclude Include="scene.h">
@@ -625,6 +649,36 @@
     </ClInclude>
     <ClInclude Include="roomba.h">
       <Filter>Gimmick\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="objectmesh2D.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="title_logo.h">
+      <Filter>Scene\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="title_wall.h">
+      <Filter>Scene\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="title_floor.h">
+      <Filter>Scene\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="title_back.h">
+      <Filter>Scene\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="entry_UI.h">
+      <Filter>Scene\Entry</Filter>
+    </ClInclude>
+    <ClInclude Include="entry_frame.h">
+      <Filter>Scene\Entry</Filter>
+    </ClInclude>
+    <ClInclude Include="entry_team.h">
+      <Filter>Scene\Entry</Filter>
+    </ClInclude>
+    <ClInclude Include="entry_ID.h">
+      <Filter>Scene\Entry</Filter>
+    </ClInclude>
+    <ClInclude Include="entry_arrow.h">
+      <Filter>Scene\Entry</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

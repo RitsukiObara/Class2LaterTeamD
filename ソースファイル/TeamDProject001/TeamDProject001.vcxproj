@@ -175,6 +175,11 @@
     <ClCompile Include="effect2D.cpp" />
     <ClCompile Include="elevation_manager.cpp" />
     <ClCompile Include="entry.cpp" />
+    <ClCompile Include="entry_arrow.cpp" />
+    <ClCompile Include="entry_frame.cpp" />
+    <ClCompile Include="entry_ID.cpp" />
+    <ClCompile Include="entry_team.cpp" />
+    <ClCompile Include="entry_UI.cpp" />
     <ClCompile Include="fade.cpp" />
     <ClCompile Include="file.cpp" />
     <ClCompile Include="flowervase.cpp" />
@@ -209,6 +214,7 @@
     <ClCompile Include="objectDonut2D.cpp" />
     <ClCompile Include="objectElevation.cpp" />
     <ClCompile Include="Objectmesh.cpp" />
+    <ClCompile Include="objectmesh2D.cpp" />
     <ClCompile Include="objectScroll.cpp" />
     <ClCompile Include="objectX.cpp" />
     <ClCompile Include="obstacle.cpp" />
@@ -244,7 +250,10 @@
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="time.cpp" />
     <ClCompile Include="title.cpp" />
+    <ClCompile Include="title_back.cpp" />
+    <ClCompile Include="title_floor.cpp" />
     <ClCompile Include="title_logo.cpp" />
+    <ClCompile Include="title_wall.cpp" />
     <ClCompile Include="toycar.cpp" />
     <ClCompile Include="useful.cpp" />
     <ClCompile Include="wall.cpp" />
@@ -271,6 +280,11 @@
     <ClInclude Include="effect2D.h" />
     <ClInclude Include="elevation_manager.h" />
     <ClInclude Include="entry.h" />
+    <ClInclude Include="entry_arrow.h" />
+    <ClInclude Include="entry_frame.h" />
+    <ClInclude Include="entry_ID.h" />
+    <ClInclude Include="entry_team.h" />
+    <ClInclude Include="entry_UI.h" />
     <ClInclude Include="fade.h" />
     <ClInclude Include="file.h" />
     <ClInclude Include="flowervase.h" />
@@ -305,6 +319,7 @@
     <ClInclude Include="objectDonut2D.h" />
     <ClInclude Include="objectElevation.h" />
     <ClInclude Include="Objectmesh.h" />
+    <ClInclude Include="objectmesh2D.h" />
     <ClInclude Include="objectScroll.h" />
     <ClInclude Include="objectX.h" />
     <ClInclude Include="obstacle.h" />
@@ -337,7 +352,10 @@
     <ClInclude Include="texture.h" />
     <ClInclude Include="time.h" />
     <ClInclude Include="title.h" />
+    <ClInclude Include="title_back.h" />
+    <ClInclude Include="title_floor.h" />
     <ClInclude Include="title_logo.h" />
+    <ClInclude Include="title_wall.h" />
     <ClInclude Include="toycar.h" />
     <ClInclude Include="useful.h" />
     <ClInclude Include="wall.h" />

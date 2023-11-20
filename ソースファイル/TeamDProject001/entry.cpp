@@ -13,7 +13,7 @@
 #include "fade.h"
 #include "Objectmesh.h"
 
-#include "skybox.h"
+#include "entry_UI.h"
 
 //=========================================
 // コンストラクタ
@@ -42,8 +42,11 @@ HRESULT CEntry::Init(void)
 	// テキスト読み込み処理
 	CMesh::TxtSet();
 
-	// スカイボックスの生成処理
-	CSkyBox::Create();
+	// エントリーUIの生成処理
+	CEntryUI::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 375.0f, SCREEN_HEIGHT * 0.5f, 0.0f), 0);
+	CEntryUI::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 125.0f, SCREEN_HEIGHT * 0.5f, 0.0f), 1);
+	CEntryUI::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f + 125.0f, SCREEN_HEIGHT * 0.5f, 0.0f), 2);
+	CEntryUI::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f + 375.0f, SCREEN_HEIGHT * 0.5f, 0.0f), 3);
 
 	// 成功を返す
 	return S_OK;

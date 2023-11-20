@@ -49,6 +49,7 @@ public:			// 誰でもアクセスできる
 	void SetVtxHardCoding(const D3DXVECTOR3& LeftUp, const D3DXVECTOR3& RightUp, const D3DXVECTOR3& LeftDown, const D3DXVECTOR3& RightDown);	// 頂点情報の設定(ベタ打ち)
 	void SetVtxColor(const D3DXCOLOR& col);						// 頂点の色設定処理
 	void SetVtxTexture(void);									// テクスチャの設定
+	void SetVtxTextureRev(void);								// 反転テクスチャの設定
 	void SetVtxTextureAnim(float fTexPattern, int nPattern);	// テクスチャの設定(アニメーションバージョン)
 	void SetVtxTextureScroll(D3DXVECTOR2& tex);					// テクスチャの設定(スクロールバージョン)
 	void SetVtxTextureWidth(const float tex);					// テクスチャの設定(横のテクスチャ任意設定)

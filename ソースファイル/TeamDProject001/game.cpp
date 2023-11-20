@@ -92,7 +92,7 @@ HRESULT CGame::Init(void)
 	CElevation::TxtSet();
 
 	// メッシュの読み込み処理
-	CMesh::TxtSet();
+	//CMesh::TxtSet();
 
 	// マップの情報をロードする
 	CManager::Get()->GetFile()->Load(CFile::TYPE_OBSTACLE);
@@ -133,8 +133,8 @@ HRESULT CGame::Init(void)
 	// 生成処理
 	CGameTime::Create();
 
-	// 武器選択UIを生成
-	CWeaponSelectUI::Create();
+	//// 武器選択UIを生成
+	//CWeaponSelectUI::Create();
 
 	// 情報の初期化
 	m_nFinishCount = 0;				// 終了カウント

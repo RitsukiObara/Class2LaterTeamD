@@ -16,11 +16,22 @@
 #include "Objectmesh.h"
 
 #include "2DUI_edit.h"
-#include "title_logo.h"
 #include "skybox.h"
+#include "title_logo.h"
+#include "title_wall.h"
+#include "title_floor.h"
+#include "title_back.h"
 
 // マクロ定義
-#define SET_RANKING_TIMER		(600)		// ランキング画面に遷移するカウント数
+#define ENTRY_TRANS_TIMER		(180)										// ランキング画面に遷移するカウント数
+#define WALL_POS				(D3DXVECTOR3(0.0f, 300.0f, 600.0f))			// 壁の位置
+#define WALL_ROT				(D3DXVECTOR3(-D3DX_PI * 0.5f, 0.0f, 0.0f))	// 壁の向き
+#define WALL_SIZE				(D3DXVECTOR3(800.0f, 0.0f, 600.0f))			// 壁のサイズ
+
+//--------------------------------------------
+// 静的メンバ変数宣言
+//--------------------------------------------
+CTitle::STATE CTitle::m_state = STATE_TITLE_APPEAR;			// 状態
 
 //=========================================
 // コンストラクタ
@@ -29,7 +40,8 @@ CTitle::CTitle() : CScene(TYPE_NONE, PRIORITY_BG)
 {
 	// 全ての値をクリアする
 	m_pUIEdit = NULL;
-	m_nTransCount = 0;
+	m_state = STATE_TITLE_APPEAR;			// 状態
+	m_nTransCount = 0;						// 遷移カウント
 	m_bEdit = false;
 }
 
@@ -49,21 +61,25 @@ HRESULT CTitle::Init(void)
 	//　シーンの初期化
 	CScene::Init();
 
-	// テキスト読み込み処理
-	CMesh::TxtSet();
-
-	// スカイボックスの生成処理
-	CSkyBox::Create();
-
-	// タイトルロゴの生成
+	// タイトルロゴの生成処理
 	CTitleLogo::Create();
+
+	// タイトルの壁の生成処理
+	CTitleWall::Create();
+
+	// タイトルの床の生成処理
+	CTitleFloor::Create();
+
+	// タイトルの背景の生成処理
+	CTitleBack::Create();
 
 	//UIエディターの生成
 	m_pUIEdit = C2DUIEdit::Create();
 	m_pUIEdit->LoadData(LOADUI_NAME,NONE_D3DXVECTOR3);
 
 	// 全ての値を初期化する
-	m_nTransCount = 0;
+	m_state = STATE_TITLE_APPEAR;	// 状態
+	m_nTransCount = 0;				// 遷移カウント
 
 	// 成功を返す
 	return S_OK;
@@ -100,30 +116,56 @@ void CTitle::Update(void)
 	}
 	else
 	{
+		switch (m_state)
+		{
+		case CTitle::STATE_TITLE_APPEAR:
 
-		// 遷移カウントを加算する
-		m_nTransCount++;
 
-		if (m_nTransCount % SET_RANKING_TIMER == 0)
-		{ // 遷移カウントが一定数に達した場合
+			break;
 
-			// ランキングに遷移する
-			CManager::Get()->GetFade()->SetFade(CScene::MODE_ENTRY);
+		case CTitle::STATE_WAIT:
 
-			// この先の処理を行わない
-			return;
-		}
+			if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_RETURN) == true ||
+				CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_START, 0) == true ||
+				CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_A, 0) == true)
+			{ // ENTERキーを押した場合
 
-		if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_RETURN) == true ||
-			CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_START, 0) == true ||
-			CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_A, 0) == true)
-		{ // ENTERキーを押した場合
+				// 遷移状態に設定する
+				m_state = STATE_TRANS;
 
-			// チュートリアルに遷移する
-			CManager::Get()->GetFade()->SetFade(CScene::MODE_GAME);
+				// この先の処理を行わない
+				return;
+			}
 
-			// この先の処理を行わない
-			return;
+			break;
+
+		case CTitle::STATE_TRANS:
+
+			// 遷移カウントを加算する
+			m_nTransCount++;
+
+			break;
+
+		case STATE_HOLEIN:
+
+			// 遷移カウントを加算する
+			m_nTransCount++;
+
+			if (m_nTransCount % ENTRY_TRANS_TIMER == 0)
+			{ // 遷移カウントが一定時間
+
+				// エントリーに遷移する
+				CManager::Get()->GetFade()->SetFade(CScene::MODE_ENTRY);
+			}
+
+			break;
+
+		default:
+
+			// 停止
+			assert(false);
+
+			break;
 		}
 	}
 
@@ -146,4 +188,22 @@ void CTitle::Update(void)
 void CTitle::Draw(void)
 {
 
+}
+
+//======================================
+// 状態の設定処理
+//======================================
+void CTitle::SetState(const STATE state)
+{
+	// 状態を設定する
+	m_state = state;
+}
+
+//======================================
+// 状態の取得処理
+//======================================
+CTitle::STATE CTitle::GetState(void)
+{
+	// 状態を返す
+	return m_state;
 }
