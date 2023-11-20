@@ -20,6 +20,8 @@ public:
 	void Update(void);
 	void Draw(void);
 	static CMap* Create(void);
+
+	static CWall* GetWall(void);
 private:
 
 	D3DXVECTOR3 m_pos;
@@ -27,6 +29,6 @@ private:
 
 	CModel* m_Model[MAX_MAPMODEL];
 	CGround* m_Ground;
-	CWall* m_Wall[WALL_NUM];
+	static CWall* m_Wall[WALL_NUM];
 };
 #endif // !_MAP_H_

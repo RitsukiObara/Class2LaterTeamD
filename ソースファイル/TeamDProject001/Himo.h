@@ -1,19 +1,20 @@
 //===================================
 //
-// ひもヘッダー[tarai.h]
+// ひもヘッダー[Himo.h]
 // Author 坂本翔唯
 //
 //===================================
-#ifndef _TARAI_H_
-#define _TARAI_H_
+#ifndef _HIMO_H_
+#define _HIMO_H_
 
 //***********************************
 // インクルードファイル
 //***********************************
 #include "obstacle.h"
 
-class CModel;
+#define MAX_TARAI (5)
 
+class CTarai;
 //-----------------------------------
 // クラス定義(ひも)
 //-----------------------------------
@@ -32,12 +33,20 @@ public:			// 誰でもアクセスできる
 
 	void SetData(const D3DXVECTOR3& pos, const TYPE type);			// 情報の設定処理
 
-	bool Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth);	// 当たり判定処理
-	bool Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth);		// ヒット処理
+	bool Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type);	// 当たり判定処理
+	bool Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type);		// ヒット処理
+
+	static void NULLTarai(int Idx) { m_pTarai[Idx] = NULL; }
 
 private:		// 自分だけアクセスできる
+	void ActionDown(void);
+	void SetTarai(void);
 
-
+	static CTarai *m_pTarai[MAX_TARAI];
+	int m_nTaraiCount;
+	bool m_bAction;
+	float m_fDownPosY;
+	float m_fUpPosY;
 };
 
 #endif

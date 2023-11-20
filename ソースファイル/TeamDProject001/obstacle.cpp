@@ -21,6 +21,7 @@
 #include "petbottle.h"
 #include "toycar.h"
 #include "roomba.h"
+#include "Himo.h"
 
 //==============================
 // コンストラクタ
@@ -236,12 +237,12 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const TYPE type)
 			
 			break;
 
-		//case CObstacle::TYPE_TARAI:
+		case CObstacle::TYPE_HIMO:
 
-		//	// たらいを生成する
-		//	pObstacle = new CTarai;
+			// たらいを生成する
+			pObstacle = new CHimo;
 
-		//	break;
+			break;
 
 		default:
 

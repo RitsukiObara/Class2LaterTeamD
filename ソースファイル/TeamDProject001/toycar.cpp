@@ -110,7 +110,7 @@ void CToyCar::Update(void)
 
 		// カービング処理
 		Curve();
-
+		
 		break;
 
 	default:
