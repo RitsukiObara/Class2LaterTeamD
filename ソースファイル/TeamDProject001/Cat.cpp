@@ -35,7 +35,7 @@
 // マクロ定義
 //--------------------------------------------
 #define MOVE_SPEED				(20.0f)			// 体力の最大数
-#define ATTACK_DISTANCE	(200.0f)		// 攻撃範囲までの距離
+#define ATTACK_DISTANCE	(160.0f)		// 攻撃範囲までの距離
 
 //--------------------------------------------
 // 静的メンバ変数宣言
@@ -313,15 +313,19 @@ void CCat::Attack(void)
 			while (pRat[nCnt] != nullptr)
 			{ // ブロックの情報が NULL じゃない場合
 
-				if (useful::RectangleCollisionXY(D3DXVECTOR3(pos.x + sinf(rot.y) * ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * ATTACK_DISTANCE), pRat[nCnt]->GetPos(),
-					D3DXVECTOR3(30.0f, 50.0f, 30.0f), D3DXVECTOR3(30.0f, 50.0f, 30.0f),
-					-D3DXVECTOR3(30.0f, 50.0f, 30.0f), -D3DXVECTOR3(30.0f, 50.0f, 30.0f)) == true)
+				if (useful::RectangleCollisionXY(D3DXVECTOR3(pos.x + sinf(rot.y) * -ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * ATTACK_DISTANCE),
+					pRat[nCnt]->GetPos(),
+					D3DXVECTOR3(30.0f, 50.0f, 30.0f), 
+					D3DXVECTOR3(30.0f, 50.0f, 30.0f),
+					D3DXVECTOR3(-30.0f, -50.0f, -30.0f), 
+					D3DXVECTOR3(-30.0f, -50.0f, -30.0f)) == true)
 				{ // XYの矩形に当たってたら
 
-					if (useful::RectangleCollisionXZ(D3DXVECTOR3(pos.x + sinf(rot.y) * ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * ATTACK_DISTANCE), pRat[nCnt]->GetPos(),
+					if (useful::RectangleCollisionXZ(D3DXVECTOR3(pos.x + sinf(rot.y) * -ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * ATTACK_DISTANCE), pRat[nCnt]->GetPos(),
 						D3DXVECTOR3(30.0f, 50.0f, 30.0f), D3DXVECTOR3(30.0f, 50.0f, 30.0f),
-						-D3DXVECTOR3(30.0f, 50.0f, 30.0f), -D3DXVECTOR3(30.0f, 50.0f, 30.0f)) == true)
+						D3DXVECTOR3(-30.0f, -50.0f, -30.0f), D3DXVECTOR3(-30.0f, -50.0f, -30.0f)) == true)
 					{ // XZの矩形に当たってたら
+						pRat[nCnt]->Hit();
 					}
 				}
 				break;

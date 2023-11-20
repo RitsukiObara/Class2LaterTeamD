@@ -18,9 +18,9 @@
 //--------------------------------------------
 // マクロ定義
 //--------------------------------------------
-#define RAT_TEXTURE				"data/TEXTURE/KariChuChu.png"			// タイトルロゴ(ネズミ)のテクスチャ
-#define CAT_TEXTURE				"data/TEXTURE/KariNyanko.png"			// タイトルロゴ(ネコ)のテクスチャ
-#define AND_TEXTURE				"data/TEXTURE/KariAnd.png"				// タイトルロゴ(＆)のテクスチャ
+#define RAT_TEXTURE				"data/TEXTURE/title.3.png"			// タイトルロゴ(ネズミ)のテクスチャ
+#define CAT_TEXTURE				"data/TEXTURE/title.1.png"			// タイトルロゴ(ネコ)のテクスチャ
+#define AND_TEXTURE				"data/TEXTURE/title.2.png"				// タイトルロゴ(＆)のテクスチャ
 #define RAT_POS					(D3DXVECTOR3(-360.0f, 330.0f, 0.0f))	// ネズミの位置
 #define CAT_POS					(D3DXVECTOR3(-240.0f, 270.0f, 0.0f))	// ネコの位置
 #define AND_POS					(D3DXVECTOR3(530.0f, 300.0f, 0.0f))		// ＆の位置

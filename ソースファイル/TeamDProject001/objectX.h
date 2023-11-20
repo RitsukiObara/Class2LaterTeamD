@@ -70,6 +70,10 @@ public:			// 誰でもアクセスできる
 		TYPE_PLASTICCASE,		// プラスチックケース
 		TYPE_PETBOTTLE,			// ペットボトル
 		TYPE_TOYCARBODY,		// おもちゃの車(本体)
+		TYPE_ROOMBA_MAIN,		// ルンバの本体
+		TYPE_ROOMBA_SUB,		// ルンバのプロペラ
+		TYPE_TARAI,				// たらい
+		TYPE_HIMO,				// ひも
 
 		//マップモデル
 		TYPE_KITCHEN,			//キッチン
