@@ -63,6 +63,8 @@ public:			// 誰でもアクセスできる
 		TYPE_GLASSES,			// 眼鏡ケース
 		TYPE_PENCIL,			// 鉛筆
 		TYPE_PICTUREFRAME,		// 写真立て
+		TYPE_SHELF,				// 戸棚
+		TYPE_PULLSHELF,			// 引き出し棚
 
 		// 障害物モデル
 		TYPE_HONEYBOTTLE,		// 蜂蜜のボトル
