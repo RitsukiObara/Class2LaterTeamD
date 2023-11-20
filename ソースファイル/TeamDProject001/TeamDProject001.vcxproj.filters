@@ -379,9 +379,6 @@
       <Filter>Gimmick\Obstacle</Filter>
     </ClCompile>
     <ClCompile Include="tarai.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="break_vase.cpp">
       <Filter>Gimmick\Obstacle</Filter>
     </ClCompile>
   </ItemGroup>
@@ -687,9 +684,6 @@
       <Filter>Gimmick\Obstacle</Filter>
     </ClInclude>
     <ClInclude Include="tarai.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="break_vase.h">
       <Filter>Gimmick\Obstacle</Filter>
     </ClInclude>
   </ItemGroup>
