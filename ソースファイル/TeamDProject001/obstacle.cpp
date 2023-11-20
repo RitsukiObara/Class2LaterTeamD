@@ -250,7 +250,7 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const TYPE type)
 			// ÇΩÇÁÇ¢Çê∂ê¨Ç∑ÇÈ
 			pObstacle = new CHimo;
 
-		//	break;
+			break;
 
 		default:
 
