@@ -179,7 +179,7 @@ void CRat::Update(void)
 	m_fSpeed = SPEED;
 
 	// 障害物との当たり判定
-	collision::ObstacleHit(this, SIZE.x, SIZE.y, SIZE.z);
+	collision::ObstacleHit(this, SIZE.x, SIZE.y, SIZE.z, CObstacle::COLLTYPE_RAT);
 
 	if (m_State != STATE_GHOST)
 	{ // 幽霊状態以外のとき
@@ -722,7 +722,7 @@ void CRat::ObstacleCollision(void)
 	D3DXVECTOR3 pos = GetPos();
 
 	// 障害物との衝突判定
-	collision::ObstacleCollision(pos, GetPosOld(), SIZE.x, SIZE.y, SIZE.z);
+	collision::ObstacleCollision(pos, GetPosOld(), SIZE.x, SIZE.y, SIZE.z, CObstacle::COLLTYPE_RAT);
 
 	// ブロックとの当たり判定
 	collision::BlockCollision(pos, GetPosOld(), SIZE.x, SIZE.y, SIZE.z);

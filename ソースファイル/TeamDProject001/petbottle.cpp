@@ -134,7 +134,7 @@ void CPetbottle::SetData(const D3DXVECTOR3& pos, const TYPE type)
 //=====================================
 // ìñÇΩÇËîªíËèàóù
 //=====================================
-bool CPetbottle::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth)
+bool CPetbottle::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
 {
 	// false Çï‘Ç∑
 	return false;
@@ -143,7 +143,7 @@ bool CPetbottle::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const fl
 //=====================================
 // ÉqÉbÉgèàóù
 //=====================================
-bool CPetbottle::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth)
+bool CPetbottle::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
 {
 	// false Çï‘Ç∑
 	return false;
