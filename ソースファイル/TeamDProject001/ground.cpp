@@ -26,7 +26,7 @@ HRESULT CGround::Init(void)
 	CObject3D::Init();
 
 	CObject3D::BindTexture(CManager::Get()->GetTexture()->Regist(MAP_INDOOR_TEXTURE));
-	CObject3D::SetSize(D3DXVECTOR3(800, 0, 600));
+	CObject3D::SetSize(MAP_SIZE);
 
 	return S_OK;
 }
@@ -36,6 +36,8 @@ void CGround::Uninit(void)
 }
 void CGround::Update(void)
 {
+
+
 	CObject3D::Update();
 }
 void CGround::Draw(void)

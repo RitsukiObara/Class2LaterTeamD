@@ -203,6 +203,9 @@ void CRat::Update(void)
 	// ‹N•š’n–Ê‚Ì“–‚½‚è”»’è
 	Elevation();
 
+	//•Ç‚Æ‚Ì“–‚½‚è”»’è
+	SetPos(collision::WallCollision(GetPosOld(), GetPos()));
+
 	// áŠQ•¨‚Æ‚Ì“–‚½‚è”»’è
 	ObstacleCollision();
 
