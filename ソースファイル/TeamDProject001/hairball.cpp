@@ -155,6 +155,12 @@ bool CHairBall::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHei
 		// true ‚ğ•Ô‚·
 		return true;
 	}
+	else
+	{ // ã‹LˆÈŠO
+
+		// false ‚ğ•Ô‚·
+		return false;
+	}
 }
 
 //=====================================

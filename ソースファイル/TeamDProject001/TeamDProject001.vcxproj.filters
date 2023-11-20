@@ -378,8 +378,8 @@
     <ClCompile Include="entry_arrow.cpp">
       <Filter>Scene\Entry</Filter>
     </ClCompile>
-    <ClCompile Include="tarai.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Himo.cpp">
+      <Filter>Gimmick\Obstacle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -683,8 +683,8 @@
     <ClInclude Include="entry_arrow.h">
       <Filter>Scene\Entry</Filter>
     </ClInclude>
-    <ClInclude Include="tarai.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Himo.h">
+      <Filter>Gimmick\Obstacle</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
