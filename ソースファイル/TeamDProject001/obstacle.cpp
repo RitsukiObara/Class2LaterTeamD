@@ -242,7 +242,7 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const TYPE type)
 
 			// ƒ‹ƒ“ƒo‚ğ¶¬‚·‚é
 			pObstacle = new CRoomba;
-
+			
 			break;
 
 		case CObstacle::TYPE_HIMO:
@@ -250,7 +250,7 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const TYPE type)
 			// ‚½‚ç‚¢‚ğ¶¬‚·‚é
 			pObstacle = new CHimo;
 
-			break;
+		//	break;
 
 		default:
 

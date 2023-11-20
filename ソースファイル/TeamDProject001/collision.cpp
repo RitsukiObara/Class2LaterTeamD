@@ -137,7 +137,8 @@ void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight,
 
 			case CObstacle::TYPE_HAIRBALL:
 
-				// “Á‚É‚È‚µ
+				// ƒqƒbƒgˆ—
+				pRat->Hit();
 
 				break;
 

@@ -313,7 +313,7 @@ void CCat::Attack(void)
 			while (pRat[nCnt] != nullptr)
 			{ // ブロックの情報が NULL じゃない場合
 
-				if (useful::RectangleCollisionXY(D3DXVECTOR3(pos.x + sinf(rot.y) * -ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * ATTACK_DISTANCE),
+				if (useful::RectangleCollisionXY(D3DXVECTOR3(pos.x + sinf(rot.y) * -ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * -ATTACK_DISTANCE),
 					pRat[nCnt]->GetPos(),
 					D3DXVECTOR3(30.0f, 50.0f, 30.0f), 
 					D3DXVECTOR3(30.0f, 50.0f, 30.0f),
@@ -321,7 +321,7 @@ void CCat::Attack(void)
 					D3DXVECTOR3(-30.0f, -50.0f, -30.0f)) == true)
 				{ // XYの矩形に当たってたら
 
-					if (useful::RectangleCollisionXZ(D3DXVECTOR3(pos.x + sinf(rot.y) * -ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * ATTACK_DISTANCE), pRat[nCnt]->GetPos(),
+					if (useful::RectangleCollisionXZ(D3DXVECTOR3(pos.x + sinf(rot.y) * -ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * -ATTACK_DISTANCE), pRat[nCnt]->GetPos(),
 						D3DXVECTOR3(30.0f, 50.0f, 30.0f), D3DXVECTOR3(30.0f, 50.0f, 30.0f),
 						D3DXVECTOR3(-30.0f, -50.0f, -30.0f), D3DXVECTOR3(-30.0f, -50.0f, -30.0f)) == true)
 					{ // XZの矩形に当たってたら

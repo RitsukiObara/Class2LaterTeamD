@@ -37,7 +37,7 @@ CHARACTERSET
 	PARTSSET
 		INDEX = 0					# 体
 		PARENT = -1					# (親)NULL
-		POS = 0.0 117.0 0.0
+		POS = 0.0 123.0 0.0
 		ROT = 0.0 0.0 0.0
 	END_PARTSSET
 
@@ -86,7 +86,7 @@ CHARACTERSET
 		PARTSSET
 		INDEX = 7					# 左足
 		PARENT = 6					# (親)左腿
-		POS = 0.0 -45.0 0.0
+		POS = 0.0 -51.0 0.0
 		ROT = 0.0 0.0 0.0
 	END_PARTSSET
 	
@@ -100,7 +100,7 @@ CHARACTERSET
 		PARTSSET
 		INDEX = 9					# 右足
 		PARENT = 8					# (親)右腿
-		POS = 0.0 -45.0 0.0
+		POS = 0.0 -51.0 0.0
 		ROT = 0.0 0.0 0.0
 	END_PARTSSET
 
@@ -119,7 +119,7 @@ MOTIONSET
 	KEYSET			# --- << KEY: 0 / 2 >> ---
 		FRAME = 50
 		KEY	# ----- [ 0 ] -----
-			POS = 0.00 0.00 0.00
+			POS = 0.00 0.00 0.50
 			ROT = 0.00 0.00 0.00
 		END_KEY
 
@@ -172,7 +172,7 @@ MOTIONSET
 	KEYSET			# --- << KEY: 1 / 2 >> ---
 		FRAME = 50
 		KEY	# ----- [ 0 ] -----
-			POS = 0.00 -0.60 6.10
+			POS = 0.00 -1.10 12.00
 			ROT = -0.02 0.00 0.00
 		END_KEY
 
@@ -451,7 +451,7 @@ MOTIONSET
 	NUM_KEY = 3		# キー数
 
 	KEYSET			# --- << KEY: 0 / 3 >> ---
-		FRAME = 10
+		FRAME = 13
 		KEY	# ----- [ 0 ] -----
 			POS = 0.00 0.00 0.00
 			ROT = 0.00 0.00 0.00
@@ -504,7 +504,7 @@ MOTIONSET
 	END_KEYSET
 
 	KEYSET			# --- << KEY: 1 / 3 >> ---
-		FRAME = 5
+		FRAME = 7
 		KEY	# ----- [ 0 ] -----
 			POS = 0.00 0.00 0.00
 			ROT = 0.25 0.00 0.00
@@ -559,8 +559,8 @@ MOTIONSET
 	KEYSET			# --- << KEY: 2 / 3 >> ---
 		FRAME = 10
 		KEY	# ----- [ 0 ] -----
-			POS = 0.00 -30.90 -38.80
-			ROT = -0.94 0.00 0.00
+			POS = 0.00 -46.30 -38.80
+			ROT = -1.22 0.00 0.00
 		END_KEY
 
 		KEY	# ----- [ 1 ] -----
@@ -570,7 +570,7 @@ MOTIONSET
 
 		KEY	# ----- [ 2 ] -----
 			POS = 0.00 0.00 0.00
-			ROT = 2.10 -0.13 -1.85
+			ROT = 1.28 -0.13 -1.85
 		END_KEY
 
 		KEY	# ----- [ 3 ] -----
@@ -580,7 +580,7 @@ MOTIONSET
 
 		KEY	# ----- [ 4 ] -----
 			POS = 0.00 0.00 0.00
-			ROT = 2.10 -0.13 1.85
+			ROT = 1.60 -0.13 1.85
 		END_KEY
 
 		KEY	# ----- [ 5 ] -----
@@ -590,22 +590,22 @@ MOTIONSET
 
 		KEY	# ----- [ 6 ] -----
 			POS = 0.00 0.00 0.00
-			ROT = 2.45 0.00 0.00
+			ROT = 2.61 0.00 0.00
 		END_KEY
 
 		KEY	# ----- [ 7 ] -----
 			POS = 0.00 0.00 0.00
-			ROT = -1.54 0.00 0.00
+			ROT = -1.38 0.00 0.00
 		END_KEY
 
 		KEY	# ----- [ 8 ] -----
 			POS = 0.00 0.00 0.00
-			ROT = 0.47 0.00 0.00
+			ROT = 0.12 0.00 0.00
 		END_KEY
 
 		KEY	# ----- [ 9 ] -----
 			POS = 0.00 0.00 0.00
-			ROT = -1.54 0.00 0.00
+			ROT = -1.95 0.00 0.00
 		END_KEY
 	END_KEYSET
 END_MOTIONSET
