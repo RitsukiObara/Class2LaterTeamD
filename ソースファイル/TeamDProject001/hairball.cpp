@@ -111,17 +111,6 @@ void CHairBall::Update(void)
 
 	// ブロックとの当たり判定
 	Block();
-
-	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_0) == true)
-	{
-		// 吹き飛ばし状態にする
-		m_state = STATE_SMASH;
-
-		// 移動量を設定する
-		m_move.x = -3.0f;
-		m_move.y = 15.0f;
-		m_move.z = 3.0f;
-	}
 }
 
 //=====================================
@@ -151,12 +140,29 @@ void CHairBall::SetData(const D3DXVECTOR3& pos, const TYPE type)
 //=====================================
 bool CHairBall::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
 {
-	if (pos.y <= GetPos().y + GetFileData().vtxMax.y ||
+	if (pos.y <= GetPos().y + GetFileData().vtxMax.y &&
 		pos.y + fHeight >= GetPos().y + GetFileData().vtxMin.y)
 	{ // 毬と衝突した場合
 
 		// 円柱の当たり判定処理
-		useful::CylinderCollision(&pos, GetPos(), GetFileData().fRadius + fWidth);
+		if (useful::CylinderCollision(&pos, GetPos(), GetFileData().fRadius + fWidth) == true)
+		{ // 当たり判定が false の場合
+
+			if (posOld.y >= GetPos().y + GetFileData().vtxMax.y &&
+				pos.y <= GetPos().y + GetFileData().vtxMax.y)
+			{ // 上からの当たり判定
+
+				// 縦の位置を設定する
+				pos.y = GetPos().y + GetFileData().vtxMax.y + 0.01f;
+			}
+			else if (posOld.y + fHeight <= GetPos().y + GetFileData().vtxMin.y &&
+				pos.y + fHeight >= GetPos().y + GetFileData().vtxMin.y)
+			{ // 下からの当たり判定
+
+				// 縦の位置を設定する
+				pos.y = GetPos().y + GetFileData().vtxMin.y - fHeight - 0.01f;
+			}
+		}
 	}
 
 	// false の場合
@@ -171,8 +177,10 @@ bool CHairBall::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHei
 	// ターゲットの位置を設定する
 	D3DXVECTOR3 Targetpos = pos;
 
-	if ((pos.y <= GetPos().y + GetFileData().vtxMax.y ||
-		pos.y + fHeight >= GetPos().y + GetFileData().vtxMin.y) &&
+	if (m_state == STATE_SMASH &&
+		type == COLLTYPE_RAT &&
+		pos.y <= GetPos().y + GetFileData().vtxMax.y &&
+		pos.y + fHeight >= GetPos().y + GetFileData().vtxMin.y &&
 		useful::CylinderCollision(&Targetpos, GetPos(), GetFileData().fRadius + fWidth) == true)
 	{ // 毬と衝突した場合
 
