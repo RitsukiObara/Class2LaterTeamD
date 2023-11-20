@@ -381,6 +381,9 @@
     <ClCompile Include="Himo.cpp">
       <Filter>Gimmick\Obstacle</Filter>
     </ClCompile>
+    <ClCompile Include="break_vase.cpp">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -684,6 +687,9 @@
       <Filter>Scene\Entry</Filter>
     </ClInclude>
     <ClInclude Include="Himo.h">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="break_vase.h">
       <Filter>Gimmick\Obstacle</Filter>
     </ClInclude>
   </ItemGroup>

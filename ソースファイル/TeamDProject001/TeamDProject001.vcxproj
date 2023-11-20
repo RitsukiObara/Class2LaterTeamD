@@ -160,6 +160,7 @@
     <ClCompile Include="2DUI_edit.cpp" />
     <ClCompile Include="block.cpp" />
     <ClCompile Include="block_manager.cpp" />
+    <ClCompile Include="break_vase.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="car_gear.cpp" />
     <ClCompile Include="Cat.cpp" />
@@ -266,6 +267,7 @@
     <ClInclude Include="2DUI_edit.h" />
     <ClInclude Include="block.h" />
     <ClInclude Include="block_manager.h" />
+    <ClInclude Include="break_vase.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="car_gear.h" />
     <ClInclude Include="Cat.h" />
