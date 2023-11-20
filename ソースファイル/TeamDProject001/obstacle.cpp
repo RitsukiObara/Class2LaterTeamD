@@ -22,6 +22,7 @@
 #include "petbottle.h"
 #include "toycar.h"
 #include "roomba.h"
+//#include "tarai.h"
 
 //==============================
 // コンストラクタ
@@ -241,8 +242,15 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const TYPE type)
 
 			// ルンバを生成する
 			pObstacle = new CRoomba;
-
+			
 			break;
+
+		//case CObstacle::TYPE_TARAI:
+
+		//	// たらいを生成する
+		//	pObstacle = new CTarai;
+
+		//	break;
 
 		default:
 

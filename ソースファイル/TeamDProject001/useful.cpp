@@ -450,7 +450,7 @@ bool useful::RectangleCollisionYZ(const D3DXVECTOR3& pos0, const D3DXVECTOR3& po
 //======================
 // 円柱の当たり判定
 //======================
-void useful::CylinderCollision(D3DXVECTOR3* TargetPos, const D3DXVECTOR3& ObjectPos, const float fObjectRadius)
+bool useful::CylinderCollision(D3DXVECTOR3* TargetPos, const D3DXVECTOR3& ObjectPos, const float fObjectRadius)
 {
 	// ローカル変数宣言
 	float fLength = 0.0f;			// 距離
@@ -468,6 +468,15 @@ void useful::CylinderCollision(D3DXVECTOR3* TargetPos, const D3DXVECTOR3& Object
 		// 位置を設定する
 		TargetPos->x = ObjectPos.x + sinf(fAngle) * fObjectRadius;
 		TargetPos->z = ObjectPos.z + cosf(fAngle) * fObjectRadius;
+
+		// true を返す
+		return true;
+	}
+	else
+	{ // 上記以外
+
+		// false を返す
+		return false;
 	}
 }
 

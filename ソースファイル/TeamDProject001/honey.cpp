@@ -9,6 +9,7 @@
 //*******************************************
 #include "main.h"
 #include "manager.h"
+#include "collision.h"
 #include "input.h"
 #include "fraction.h"
 #include "renderer.h"
@@ -139,26 +140,81 @@ void CHoney::SetData(const D3DXVECTOR3& pos, const TYPE type)
 //=====================================
 // 当たり判定処理
 //=====================================
-bool CHoney::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth)
+bool CHoney::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
 {
-	// false を返す
-	return false;
+	// 最大値と最小値を設定する
+	D3DXVECTOR3 vtxMax = D3DXVECTOR3(fWidth, fHeight, fDepth);
+	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-fWidth, 0.0f, -fDepth);
+
+	if (m_State == STATE_HONEYBOTTLE)
+	{ // 蜂蜜ボトル状態の場合
+
+		if (collision::HexahedronCollision(pos, GetPos(), posOld, GetPosOld(), vtxMin, GetFileData().vtxMin, vtxMax, GetFileData().vtxMax) == true)
+		{ // 六面体の当たり判定が true の場合
+
+			// true を返す
+			return true;
+		}
+		else
+		{ // 上記以外
+
+			// false を返す
+			return false;
+		}
+	}
+	else
+	{ // 上記以外
+
+		// false を返す
+		return false;
+	}
 }
 
 //=====================================
 // ヒット処理
 //=====================================
-bool CHoney::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth)
+bool CHoney::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
 {
-	if (m_State == STATE_HONEY)
-	{
-		// ローカル変数宣言
-		D3DXVECTOR3 max = D3DXVECTOR3(fWidth, fHeight, fDepth);		// サイズの最大値
-		D3DXVECTOR3 min = D3DXVECTOR3(-fWidth, 0.0f, -fDepth);		// サイズの最小値
+	// ローカル変数宣言
+	D3DXVECTOR3 vtxMax = D3DXVECTOR3(fWidth, fHeight, fDepth);		// サイズの最大値
+	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-fWidth, 0.0f, -fDepth);		// サイズの最小値
 
-		if (useful::RectangleCollisionXY(GetPos(), pos, GetFileData().vtxMax, max, GetFileData().vtxMin, min) == true &&
-			useful::RectangleCollisionXZ(GetPos(), pos, GetFileData().vtxMax, max, GetFileData().vtxMin, min) == true &&
-			useful::RectangleCollisionYZ(GetPos(), pos, GetFileData().vtxMax, max, GetFileData().vtxMin, min) == true)
+	if (m_State == STATE_HONEYBOTTLE)
+	{ // 蜂蜜ボトル状態の場合
+
+		if (type == COLLTYPE_CAT)
+		{ // ネコの場合
+
+			if (useful::RectangleCollisionXY(pos, GetPos(), vtxMax, GetFileData().vtxMax, vtxMin, GetFileData().vtxMin) == true &&
+				useful::RectangleCollisionYZ(pos, GetPos(), vtxMax, GetFileData().vtxMax, vtxMin, GetFileData().vtxMin) == true)
+			{ // 矩形の当たり判定に通った場合
+
+				// 破壊時処理
+				Break();
+
+				// true を返す
+				return false;
+			}
+			else
+			{ // 上記以外
+
+				// false を返す
+				return false;
+			}
+		}
+		else
+		{ // 上記以外
+
+			// false を返す
+			return false;
+		}
+	}
+	else if (m_State == STATE_HONEY)
+	{ // 蜂蜜状態の場合
+
+		if (useful::RectangleCollisionXY(GetPos(), pos, GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true &&
+			useful::RectangleCollisionXZ(GetPos(), pos, GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true &&
+			useful::RectangleCollisionYZ(GetPos(), pos, GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true)
 		{ // 四角の当たり判定の中に入っていた場合
 
 			// true を返す
@@ -172,7 +228,12 @@ bool CHoney::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight
 		}
 	}
 	else
-	{
+	{ // 上記以外
+
+		// 停止
+		assert(false);
+
+		// false を返す
 		return false;
 	}
 }

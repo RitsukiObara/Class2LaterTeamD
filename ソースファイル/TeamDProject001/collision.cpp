@@ -13,7 +13,6 @@
 #include "rat.h"
 #include "objectElevation.h"
 #include "elevation_manager.h"
-#include "obstacle.h"
 #include "obstacle_manager.h"
 #include "block.h"
 #include "block_manager.h"
@@ -48,7 +47,7 @@ void collision::ShadowCollision(const D3DXVECTOR3& pos, int nIdx)
 //===============================
 // 障害物の当たり判定
 //===============================
-void collision::ObstacleCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth)
+void collision::ObstacleCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
 {
 	// ローカル変数宣言
 	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を取得する
@@ -57,19 +56,47 @@ void collision::ObstacleCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, c
 	{ // ブロックの情報が NULL じゃない場合
 
 		// 当たり判定処理
-		pObstacle->Collision(pos, posOld, fWidth, fHeight, fDepth);
-
-		switch (pObstacle->GetType())
+		if (pObstacle->Collision(pos, posOld, fWidth, fHeight, fDepth, type) == true)
 		{
-		case CObstacle::TYPE::TYPE_HAIRBALL:		// 毬
+			switch (pObstacle->GetType())
+			{
+			case CObstacle::TYPE::TYPE_HONEY:		// 蜂蜜
 
-			break;
+				// 特に無し
 
-		default:
+				break;
 
-			// 例外が発生しても問題ないためassert無し
+			case CObstacle::TYPE::TYPE_SLIME:
 
-			break;
+				break;
+
+			case CObstacle::TYPE::TYPE_HAIRBALL:
+
+				break;
+
+			case CObstacle::TYPE::TYPE_FLOWERVASE:
+
+				break;
+
+			case CObstacle::TYPE::TYPE_PLASTICCASE:
+
+				break;
+
+			case CObstacle::TYPE::TYPE_PETBOTTLE:
+
+				break;
+
+			case CObstacle::TYPE::TYPE_TOYCAR:
+
+				break;
+
+			default:			// 上記以外
+
+				// 停止
+				assert(false);
+
+				break;
+			}
 		}
 
 		// 次のオブジェクトを代入する
@@ -80,7 +107,7 @@ void collision::ObstacleCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, c
 //===============================
 // 障害物の当たり判定
 //===============================
-void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight, const float fDepth)
+void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
 {
 	// ローカル変数宣言
 	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を取得する
@@ -89,7 +116,7 @@ void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight,
 	while (pObstacle != nullptr)
 	{ // ブロックの情報が NULL じゃない場合
 
-		if (pObstacle->Hit(pos, fWidth, fHeight, fDepth) == true)
+		if (pObstacle->Hit(pos, fWidth, fHeight, fDepth, type) == true)
 		{ // 障害物の当たり判定が通った場合
 
 			switch (pObstacle->GetType())
@@ -110,7 +137,8 @@ void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight,
 
 			case CObstacle::TYPE_HAIRBALL:
 
-				// 特になし
+				// ヒット処理
+				pRat->Hit();
 
 				break;
 
@@ -145,104 +173,6 @@ void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight,
 
 		// 次のオブジェクトを代入する
 		pObstacle = pObstacle->GetNext();
-	}
-}
-
-//===============================
-// 障害物の矩形当たり判定
-//===============================
-void collision::ObstacleRectCollision(D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth)
-{
-	// ローカル変数宣言
-	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を取得する
-	bool bHit = false;		// 当たったか
-
-	while (pObstacle != nullptr)
-	{ // ブロックの情報が NULL じゃない場合
-
-		if (pObstacle->GetPos().y + pObstacle->GetFileData().vtxMax.y >= pos.y &&
-			pObstacle->GetPos().y + pObstacle->GetFileData().vtxMin.y <= pos.y + fHeight &&
-			pObstacle->GetPos().z + pObstacle->GetFileData().vtxMax.z >= pos.z - fDepth&&
-			pObstacle->GetPos().z + pObstacle->GetFileData().vtxMin.z <= pos.z + fDepth)
-		{ // X軸の判定に入れる場合
-
-			if (/*pObstacle->GetPosOld().x + pObstacle->GetFileData().vtxMax.x <= posOld.x - fWidth &&*/
-				pObstacle->GetPos().x + pObstacle->GetFileData().vtxMax.x >= pos.x - fWidth)
-			{ // 右にぶつかった場合
-
-			  // 位置を設定する
-				//pos.x = pObstacle->GetPos().x + +pObstacle->GetFileData().vtxMax.x + (fWidth + COLLISION_ADD_DIFF_LENGTH);
-				bHit = true;		// 当たった状態にする
-			}
-			else if (/*pObstacle->GetPosOld().x + pObstacle->GetFileData().vtxMin.x >= posOld.x + fWidth &&*/
-				pObstacle->GetPos().x + pObstacle->GetFileData().vtxMin.x <= pos.x + fWidth)
-			{ // 左にぶつかった場合
-
-			  // 位置を設定する
-				//pos.x = pObstacle->GetPos().x + +pObstacle->GetFileData().vtxMin.x - (fWidth + COLLISION_ADD_DIFF_LENGTH);
-				bHit = true;		// 当たった状態にする
-			}
-		}
-
-		if (pObstacle->GetPos().x + pObstacle->GetFileData().vtxMax.x >= pos.x - fWidth &&
-			pObstacle->GetPos().x + pObstacle->GetFileData().vtxMin.x <= pos.x + fWidth &&
-			pObstacle->GetPos().y + pObstacle->GetFileData().vtxMax.y >= pos.y &&
-			pObstacle->GetPos().y + pObstacle->GetFileData().vtxMin.y <= pos.y + fHeight)
-		{ // Z軸の判定に入れる場合
-
-			if (/*pObstacle->GetPosOld().z + pObstacle->GetFileData().vtxMax.z <= posOld.z - fDepth &&*/
-				pObstacle->GetPos().z + pObstacle->GetFileData().vtxMax.z >= pos.z - fDepth)
-			{ // 奥にぶつかった場合
-
-			  // 位置を設定する
-				//pos.z = pObstacle->GetPos().z + +pObstacle->GetFileData().vtxMax.z + (fDepth + COLLISION_ADD_DIFF_LENGTH);
-				bHit = true;		// 当たった状態にする
-			}
-			else if (/*pObstacle->GetPosOld().z + pObstacle->GetFileData().vtxMin.z >= posOld.z + fDepth &&*/
-				pObstacle->GetPos().z + pObstacle->GetFileData().vtxMin.z <= pos.z + fDepth)
-			{ // 手前にぶつかった場合
-
-			  // 位置を設定する
-				//pos.z = pObstacle->GetPos().z + +pObstacle->GetFileData().vtxMin.z - (fDepth + COLLISION_ADD_DIFF_LENGTH);
-				bHit = true;		// 当たった状態にする
-			}
-		}
-
-		if (pObstacle->GetPos().x + pObstacle->GetFileData().vtxMax.x >= pos.x - fWidth &&
-			pObstacle->GetPos().x + pObstacle->GetFileData().vtxMin.x <= pos.x + fWidth &&
-			pObstacle->GetPos().z + pObstacle->GetFileData().vtxMax.z >= pos.z &&
-			pObstacle->GetPos().z + pObstacle->GetFileData().vtxMin.z <= pos.z + fDepth)
-		{ // Y軸の判定に入れる場合
-
-			if (/*pObstacle->GetPosOld().y + pObstacle->GetFileData().vtxMax.y <= posOld.y &&*/
-				pObstacle->GetPos().y + pObstacle->GetFileData().vtxMax.y >= pos.y)
-			{ // 上にぶつかった場合
-
-			  // 位置を設定する
-				//pos.y = pObstacle->GetPos().y + +pObstacle->GetFileData().vtxMax.y + COLLISION_ADD_DIFF_LENGTH;
-				bHit = true;		// 当たった状態にする
-			}
-			else if (/*pObstacle->GetPosOld().y + pObstacle->GetFileData().vtxMin.y >= posOld.y + fHeight &&*/
-				pObstacle->GetPos().y + pObstacle->GetFileData().vtxMin.y <= pos.y + fHeight)
-			{ // 下にぶつかった場合
-
-			  // 位置を設定する
-				//pos.y = pObstacle->GetPos().y + +pObstacle->GetFileData().vtxMin.y - (fHeight + COLLISION_ADD_DIFF_LENGTH);
-				bHit = true;		// 当たった状態にする
-			}
-		}
-
-		if (bHit == true)
-		{//当たってたら
-
-			// 障害物の終了処理
-			pObstacle->Uninit();
-		}
-
-		// 次のオブジェクトを代入する
-		pObstacle = pObstacle->GetNext();
-		bHit = false;		// 当たってない状態にする
-
 	}
 }
 
@@ -406,4 +336,97 @@ bool collision::ElevOutRangeCollision(D3DXVECTOR3* pPos, const D3DXVECTOR3& posO
 
 	// 当たり判定状況を返す
 	return bCollision;
+}
+
+//======================
+// 六面体の当たり判定
+//======================
+bool collision::HexahedronCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posBlock, const D3DXVECTOR3& posOld, const D3DXVECTOR3& posOldBlock, const D3DXVECTOR3& min, const D3DXVECTOR3& minBlock, const D3DXVECTOR3& max, const D3DXVECTOR3& maxBlock)
+{
+	if (posBlock.y + maxBlock.y >= pos.y + min.y &&
+		posBlock.y + minBlock.y <= pos.y + max.y &&
+		posBlock.z + maxBlock.z >= pos.z + min.z &&
+		posBlock.z + minBlock.z <= pos.z + max.z)
+	{ // X軸の判定に入れる場合
+
+		if (posOldBlock.x + maxBlock.x <= posOld.x + min.x &&
+			posBlock.x + maxBlock.x >= pos.x + min.x)
+		{ // 右にぶつかった場合
+
+			// 位置を設定する
+			pos.x = posBlock.x + maxBlock.x - (min.x - COLLISION_ADD_DIFF_LENGTH);
+
+			// true を返す
+			return true;
+		}
+		else if (posOldBlock.x + minBlock.x >= posOld.x + max.x &&
+			posBlock.x + minBlock.x <= pos.x + max.x)
+		{ // 左にぶつかった場合
+
+			// 位置を設定する
+			pos.x = posBlock.x + minBlock.x - (max.x + COLLISION_ADD_DIFF_LENGTH);
+
+			// true を返す
+			return true;
+		}
+	}
+
+	if (posBlock.x + maxBlock.x >= pos.x + min.x &&
+		posBlock.x + minBlock.x <= pos.x + max.x &&
+		posBlock.y + maxBlock.y >= pos.y + min.y &&
+		posBlock.y + minBlock.y <= pos.y + max.y)
+	{ // Z軸の判定に入れる場合
+
+		if (posOldBlock.z + maxBlock.z <= posOld.z + min.z &&
+			posBlock.z + maxBlock.z >= pos.z + min.z)
+		{ // 奥にぶつかった場合
+
+			// 位置を設定する
+			pos.z = posBlock.z + maxBlock.z - (min.z - COLLISION_ADD_DIFF_LENGTH);
+
+			// true を返す
+			return true;
+		}
+		else if (posOldBlock.z + minBlock.z >= posOld.z + max.z &&
+			posBlock.z + minBlock.z <= pos.z + max.z)
+		{ // 手前にぶつかった場合
+
+			// 位置を設定する
+			pos.z = posBlock.z + minBlock.z - (max.z + COLLISION_ADD_DIFF_LENGTH);
+
+			// true を返す
+			return true;
+		}
+	}
+
+	if (posBlock.x + maxBlock.x >= pos.x + min.x &&
+		posBlock.x + minBlock.x <= pos.x + max.x &&
+		posBlock.z + maxBlock.z >= pos.z + min.z &&
+		posBlock.z + minBlock.z <= pos.z + max.z)
+	{ // Y軸の判定に入れる場合
+
+		if (posOldBlock.y + maxBlock.y <= posOld.y + min.y &&
+			posBlock.y + maxBlock.y >= pos.y + min.y)
+		{ // 上にぶつかった場合
+
+			// 位置を設定する
+			pos.y = posBlock.y + maxBlock.y - (min.y - COLLISION_ADD_DIFF_LENGTH);
+
+			// true を返す
+			return true;
+		}
+		else if (posOldBlock.y + minBlock.y >= posOld.y + max.y &&
+			posBlock.y + minBlock.y <= pos.y + max.y)
+		{ // 下にぶつかった場合
+
+			// 位置を設定する
+			pos.y = posBlock.y + minBlock.y - (max.y + COLLISION_ADD_DIFF_LENGTH);
+
+			// true を返す
+			return true;
+		}
+	}
+
+	// false を返す
+	return false;
 }

@@ -188,6 +188,7 @@
     <ClCompile Include="game_timer.cpp" />
     <ClCompile Include="ground.cpp" />
     <ClCompile Include="hairball.cpp" />
+    <ClCompile Include="Himo.cpp" />
     <ClCompile Include="honey.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="light.cpp" />
@@ -293,6 +294,7 @@
     <ClInclude Include="game_timer.h" />
     <ClInclude Include="ground.h" />
     <ClInclude Include="hairball.h" />
+    <ClInclude Include="Himo.h" />
     <ClInclude Include="honey.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="light.h" />
