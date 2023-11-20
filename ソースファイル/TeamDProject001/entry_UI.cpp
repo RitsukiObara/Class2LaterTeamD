@@ -6,6 +6,8 @@
 //=======================================
 #include "manager.h"
 #include "entry_UI.h"
+#include "manager.h"
+#include "input.h"
 #include "texture.h"
 
 #include "entry_frame.h"
@@ -19,6 +21,7 @@
 #define TEAM_SHIFT			(200.0f)		// チームのずらす高さ
 #define ID_SHIFT			(200.0f)		// IDのずらす高さ
 #define ARROW_SHIFT			(D3DXVECTOR3(95.0f, -200.0f, 0.0f))		// 矢印のずらす高さ
+#define NONE_ID				(-1)			// インデックスの初期数
 
 //=========================
 // コンストラクタ
@@ -33,6 +36,7 @@ CEntryUI::CEntryUI() : CObject(CObject::TYPE_ENTRYUI, CObject::PRIORITY_BG)
 	{
 		m_apArrow[nCnt] = nullptr;		// 矢印の情報
 	}
+	m_nID = NONE_ID;			// インデックス
 }
 
 //=========================
@@ -56,6 +60,7 @@ HRESULT CEntryUI::Init(void)
 	{
 		m_apArrow[nCnt] = nullptr;		// 矢印の情報
 	}
+	m_nID = NONE_ID;			// インデックス
 
 	// 成功を返す
 	return S_OK;
@@ -110,6 +115,11 @@ void CEntryUI::Uninit(void)
 //=========================
 void CEntryUI::Update(void)
 {
+	if (CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_LEFT, m_nID) == true)
+	{ // Dキーを押した場合
+
+	}
+
 	if (m_pFrame != nullptr)
 	{ // 枠の情報が NULL じゃない場合
 

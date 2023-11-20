@@ -90,7 +90,7 @@ HRESULT CGame::Init(void)
 	CElevation::TxtSet();
 
 	// メッシュの読み込み処理
-	CMesh::TxtSet();
+	//CMesh::TxtSet();
 
 	// マップの情報をロードする
 	CManager::Get()->GetFile()->Load(CFile::TYPE_OBSTACLE);
