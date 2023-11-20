@@ -12,10 +12,9 @@
 //***********************************
 #include "obstacle.h"
 
-#define MAX_TARAI		(5)	// たらいの落下最大数
+#define MAX_TARAI (5)
 
-class CModel;
-
+class CTarai;
 //-----------------------------------
 // クラス定義(ひも)
 //-----------------------------------
@@ -34,14 +33,20 @@ public:			// 誰でもアクセスできる
 
 	void SetData(const D3DXVECTOR3& pos, const TYPE type);			// 情報の設定処理
 
-	bool Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth);	// 当たり判定処理
-	bool Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth);		// ヒット処理
+	bool Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type);	// 当たり判定処理
+	bool Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type);		// ヒット処理
+
+	static void NULLTarai(int Idx) { m_pTarai[Idx] = NULL; }
 
 private:		// 自分だけアクセスできる
 	void ActionDown(void);
+	void SetTarai(void);
 
-	CModel *m_apSub[MAX_TARAI];
+	static CTarai *m_pTarai[MAX_TARAI];
+	int m_nTaraiCount;
 	bool m_bAction;
+	float m_fDownPosY;
+	float m_fUpPosY;
 };
 
 #endif
