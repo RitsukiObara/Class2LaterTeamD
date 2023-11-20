@@ -92,7 +92,7 @@ void CPlasticCase::SetData(const D3DXVECTOR3& pos, const TYPE type)
 //=====================================
 // ìñÇΩÇËîªíËèàóù
 //=====================================
-bool CPlasticCase::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth)
+bool CPlasticCase::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
 {
 	// false Çï‘Ç∑
 	return false;
@@ -101,7 +101,7 @@ bool CPlasticCase::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const 
 //=====================================
 // ÉqÉbÉgèàóù
 //=====================================
-bool CPlasticCase::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth)
+bool CPlasticCase::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
 {
 	//// îjï–ÇÃèoÇÈçÇÇ≥
 	//float fFracHeight;

@@ -32,6 +32,14 @@ public:			// 誰でもアクセスできる
 		TYPE_MAX			// この列挙型の総数
 	};
 
+	// 列挙型定義(当たり判定の種類)
+	enum COLLTYPE
+	{
+		COLLTYPE_CAT = 0,
+		COLLTYPE_RAT,
+		COLLTYPE_MAX
+	};
+
 	CObstacle();			// コンストラクタ
 	CObstacle(CObject::TYPE type, PRIORITY priority = PRIORITY_BLOCK);			// コンストラクタ
 	virtual ~CObstacle();	// デストラクタ
@@ -51,8 +59,8 @@ public:			// 誰でもアクセスできる
 
 	virtual void SetData(const D3DXVECTOR3& pos, const TYPE type);			// 情報の設定処理
 
-	virtual bool Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth) = 0;	// 当たり判定処理
-	virtual bool Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth) = 0;								// ヒット処理
+	virtual bool Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type) = 0;	// 当たり判定処理
+	virtual bool Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type) = 0;								// ヒット処理
 
 	// セット・ゲット関係
 	void SetType(const TYPE type);		// 種類の設定処理

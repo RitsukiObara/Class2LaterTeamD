@@ -125,7 +125,7 @@ void CHairBall::SetData(const D3DXVECTOR3& pos, const TYPE type)
 //=====================================
 // ìñÇΩÇËîªíËèàóù
 //=====================================
-bool CHairBall::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth)
+bool CHairBall::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
 {
 	if (pos.y <= GetPos().y + GetFileData().vtxMax.y ||
 		pos.y + fHeight >= GetPos().y + GetFileData().vtxMin.y)
@@ -142,7 +142,7 @@ bool CHairBall::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const flo
 //=====================================
 // ÉqÉbÉgèàóù
 //=====================================
-bool CHairBall::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth)
+bool CHairBall::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
 {
 	// false Çï‘Ç∑
 	return false;
