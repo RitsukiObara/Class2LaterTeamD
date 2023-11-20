@@ -62,6 +62,7 @@ public:			// 誰でもアクセスできる
 	void Uninit(void);		// 終了処理
 	void Update(void);		// 更新処理
 	void Draw(void);		// 描画処理
+	bool Hit(void);			// ヒット処理
 
 	void SetData(const D3DXVECTOR3& pos, const int nID);				// 情報の設定処理
 
@@ -87,7 +88,6 @@ private:		// 自分だけアクセスできる
 	void MotionManager(void);		// モーションの管理
 	void Elevation(void);			// 起伏地面の当たり判定
 	void ObstacleCollision(void);	// 障害物との当たり判定
-	bool Hit(void);					// ヒット処理
 
 	// メンバ変数
 	CMotion* m_pMotion;			// モーションの情報
