@@ -29,6 +29,8 @@
 #include "block.h"
 #include "countdown.h"
 
+#include "obstacle_manager.h"
+
 //--------------------------------------------
 // マクロ定義
 //--------------------------------------------
@@ -90,7 +92,7 @@ HRESULT CGame::Init(void)
 	CElevation::TxtSet();
 
 	// メッシュの読み込み処理
-	CMesh::TxtSet();
+	//CMesh::TxtSet();
 
 	// マップの情報をロードする
 	CManager::Get()->GetFile()->Load(CFile::TYPE_OBSTACLE);
@@ -111,6 +113,13 @@ HRESULT CGame::Init(void)
 
 	//マップの生成
 	CMap::Create();
+
+#ifdef _DEBUG	//障害物テスト用
+
+	// ルンバの生成処理
+	CObstacle::Create(D3DXVECTOR3(-600.0f, 0.0f, -400.0f), CObstacle::TYPE_ROOMBA);
+
+#endif // _DEBUG
 
 	// ネズミの生成
 	for (int nCntRat = 0; nCntRat < MAX_RAT; nCntRat++)

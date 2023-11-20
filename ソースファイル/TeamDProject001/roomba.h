@@ -12,6 +12,8 @@
 //***********************************
 #include "obstacle.h"
 
+class CModel;
+
 //-----------------------------------
 // クラス定義(ルンバ)
 //-----------------------------------
@@ -34,6 +36,12 @@ public:			// 誰でもアクセスできる
 	bool Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth);		// ヒット処理
 
 private:		// 自分だけアクセスできる
+
+	void SubUpdate(void);	// プロペラの更新の処理
+	void Move(D3DXVECTOR3 rot);		// 移動処理
+
+	CModel *m_apSub[2];
+	D3DXVECTOR3 m_move;
 
 };
 

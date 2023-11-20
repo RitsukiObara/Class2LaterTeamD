@@ -21,6 +21,7 @@
 #include "plastic_case.h"
 #include "petbottle.h"
 #include "toycar.h"
+#include "roomba.h"
 
 //==============================
 // コンストラクタ
@@ -233,6 +234,13 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const TYPE type)
 
 			// おもちゃの車を生成する
 			pObstacle = new CToyCar;
+
+			break;
+
+		case CObstacle::TYPE_ROOMBA:
+
+			// ルンバを生成する
+			pObstacle = new CRoomba;
 
 			break;
 
