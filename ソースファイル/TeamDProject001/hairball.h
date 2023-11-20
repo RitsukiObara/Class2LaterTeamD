@@ -23,7 +23,7 @@ public:			// 誰でもアクセスできる
 	enum STATE
 	{
 		STATE_STOP = 0,		// 停止状態
-		STATE_BOUND,		// バウンド状態
+		STATE_SMASH,		// 吹き飛ばし状態
 		STATE_MAX			// この列挙型の総数
 	};
 
@@ -44,8 +44,10 @@ public:			// 誰でもアクセスできる
 private:		// 自分だけアクセスできる
 
 	// メンバ関数
+	void Move(void);			// 移動処理
 	void Gravity(void);			// 重力処理
 	void Elevation(void);		// 起伏地面の当たり判定
+	void Block(void);			// ブロックの当たり判定
 
 	// メンバ変数
 	D3DXVECTOR3 m_move;			// 移動量

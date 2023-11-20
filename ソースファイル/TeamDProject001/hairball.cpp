@@ -11,10 +11,14 @@
 #include "manager.h"
 #include "renderer.h"
 #include "hairball.h"
+#include "collision.h"
 #include "useful.h"
 
 #include "objectElevation.h"
 #include "elevation_manager.h"
+#include "block.h"
+#include "block_manager.h"
+#include "input.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -73,18 +77,21 @@ void CHairBall::Uninit(void)
 //=====================================
 void CHairBall::Update(void)
 {
+	// 前回の位置を設定する
+	SetPosOld(GetPos());
+
 	switch (m_state)
 	{
-	case CHairBall::STATE_STOP:
+	case STATE_STOP:
 
-
+		// 特になし
 
 		break;
 
-	case CHairBall::STATE_BOUND:
+	case STATE_SMASH:
 
-		// 重力処理
-		Gravity();
+		// 移動処理
+		Move();
 
 		break;
 
@@ -96,8 +103,25 @@ void CHairBall::Update(void)
 		break;
 	}
 
+	// 重力処理
+	Gravity();
+
 	// 起伏地面との当たり判定
 	Elevation();
+
+	// ブロックとの当たり判定
+	Block();
+
+	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_0) == true)
+	{
+		// 吹き飛ばし状態にする
+		m_state = STATE_SMASH;
+
+		// 移動量を設定する
+		m_move.x = -3.0f;
+		m_move.y = 15.0f;
+		m_move.z = 3.0f;
+	}
 }
 
 //=====================================
@@ -164,6 +188,22 @@ bool CHairBall::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHei
 }
 
 //=====================================
+// 移動処理
+//=====================================
+void CHairBall::Move(void)
+{
+	// 位置を取得する
+	D3DXVECTOR3 pos = GetPos();
+
+	// 位置を移動する
+	pos.x += m_move.x;
+	pos.z += m_move.z;
+
+	// 位置を適用する
+	SetPos(pos);
+}
+
+//=====================================
 // 重力処理
 //=====================================
 void CHairBall::Gravity(void)
@@ -185,7 +225,7 @@ void CHairBall::Elevation(void)
 {
 	// ローカル変数宣言
 	CElevation* pMesh = CElevationManager::Get()->GetTop();		// 起伏の先頭のオブジェクトを取得する
-	D3DXVECTOR3 pos = D3DXVECTOR3(GetPos().x, GetPos().y, GetPos().z);		// 位置を取得する
+	D3DXVECTOR3 pos = GetPos();				// 位置を取得する
 	float fHeight = 0.0f;					// 高さ
 	bool bLand = false;						// 着地状況
 
@@ -202,7 +242,9 @@ void CHairBall::Elevation(void)
 			pos.y = fHeight - GetFileData().vtxMin.y;
 
 			// 移動量を減算する
+			m_move.x *= 0.6f;
 			m_move.y *= -0.6f;
+			m_move.z *= 0.6f;
 
 			if (m_move.y <= 5.0f)
 			{ // 移動量が一定以下の場合
@@ -228,8 +270,34 @@ void CHairBall::Elevation(void)
 	else
 	{ // 上記以外
 
-		// バウンド状態にする
-		m_state = STATE_BOUND;
+		// 吹き飛ばし状態にする
+		m_state = STATE_SMASH;
+	}
+
+	// 位置を更新する
+	SetPos(pos);
+}
+
+//=====================================
+// ブロックの当たり判定
+//=====================================
+void CHairBall::Block(void)
+{
+	// ローカル変数宣言
+	CBlock* pBlock = CBlockManager::Get()->GetTop();		// ブロックの先頭のオブジェクトを取得する
+	D3DXVECTOR3 pos = GetPos();				// 位置を取得する
+	bool bLand = false;						// 着地状況
+
+	while (pBlock != nullptr)
+	{ // 地面の情報がある限り回す
+
+		if (collision::HexahedronCollision(pos, pBlock->GetPos(), GetPosOld(), pBlock->GetPosOld(), GetFileData().vtxMin, pBlock->GetFileData().vtxMin, GetFileData().vtxMax, pBlock->GetFileData().vtxMax) == true)
+		{ // 当たり判定が true の場合
+
+		}
+
+		// 次のポインタを取得する
+		pBlock = pBlock->GetNext();
 	}
 
 	// 位置を更新する
