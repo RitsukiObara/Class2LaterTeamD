@@ -40,8 +40,11 @@ public:			// 誰でもアクセスできる
 
 private:		// 自分だけアクセスできる
 
+	// メンバ関数
+	void IronPosSet(void);		// 鉄部分の位置の設定処理
+
 	// メンバ変数
-	CTrapIron* m_pIron;		// 鉄部分
+	CTrapIron* m_pIron;			// 鉄部分
 };
 
 #endif
