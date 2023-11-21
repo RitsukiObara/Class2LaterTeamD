@@ -176,6 +176,11 @@ void CGame::Update(void)
 // デバッグ版
 #ifdef _DEBUG
 
+	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_RETURN) == true)
+	{
+		m_GameState = STATE_RAT_WIN;
+	}
+
 	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_F7) == true)
 	{ // F7キーを押した場合
 
