@@ -234,6 +234,7 @@
     <ClCompile Include="rat_ghost.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="result.cpp" />
+    <ClCompile Include="result_letter.cpp" />
     <ClCompile Include="ripple.cpp" />
     <ClCompile Include="roomba.cpp" />
     <ClCompile Include="sample.cpp" />
@@ -337,6 +338,7 @@
     <ClInclude Include="rat_ghost.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="result.h" />
+    <ClInclude Include="result_letter.h" />
     <ClInclude Include="ripple.h" />
     <ClInclude Include="roomba.h" />
     <ClInclude Include="sample.h" />

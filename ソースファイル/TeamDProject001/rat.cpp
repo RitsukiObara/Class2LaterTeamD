@@ -181,11 +181,15 @@ void CRat::Update(void)
 	// 障害物との当たり判定
 	collision::ObstacleHit(this, SIZE.x, SIZE.y, SIZE.z, CObstacle::COLLTYPE_RAT);
 
-	if (m_State != STATE_GHOST)
+	if (m_State != STATE_DEATH)
 	{ // 幽霊状態以外のとき
 
-		// 移動処理
-		Move();
+		if (m_State != STATE_SMASH)
+		{ // 吹き飛び状態の場合
+
+			// 移動処理
+			Move();
+		}
 
 		// ジャンプ処理
 		Jump();
@@ -605,35 +609,16 @@ void CRat::UpdateState(void)
 		break;
 	case STATE_ATTACK:		// 攻撃状態
 		break;
-	case STATE_MUTEKI:		// 無敵状態
+	case STATE_INVINCIBLE:	// 無敵状態
 		break;
 	case STATE_DAMAGE:		// ダメージ状態
 		break;
-	case STATE_DEATH:		// 死亡状態
 
-		// ネズミの幽霊の生成
-		CRatGhost::Create(GetPos());
-
-		m_State = STATE_GHOST;		// 幽霊状態にする
-
-#if 1	// デバッグの為の処理↓
-
-		m_nNumAll--;						// ネズミの総数減算
-
-		// 終了状態にする
-		Uninit();
-
-		if (m_nNumAll <= 0)
-		{ // ネズミが全滅したら
-
-			// ネコが勝利した状態にする
-			CGame::SetState(CGame::STATE_CAT_WIN);
-		}
-#endif
+	case STATE_SMASH:		// 吹き飛び状態
 
 		break;
 
-	case STATE_GHOST:		// 幽霊状態
+	case STATE_DEATH:		// 死亡状態
 
 		break;
 
@@ -654,7 +639,7 @@ bool CRat::Hit(void)
 	// ローカル変数宣言
 	D3DXVECTOR3 pos = GetPos();
 
-	if (m_nDamageCounter >= TIME_DAMAGE && m_State != STATE_GHOST)
+	if (m_nDamageCounter >= TIME_DAMAGE && m_State != STATE_DEATH)
 	{ // ダメージ食らう時間になったら
 		m_nLife--;		// 寿命減らす
 		m_nDamageCounter = 0;		// ダメージ食らうまでの時間リセット
@@ -665,6 +650,24 @@ bool CRat::Hit(void)
 		{ // 寿命が無いとき
 
 			m_State = STATE_DEATH;		// 死亡状態にする
+
+			// ネズミの幽霊の生成
+			CRatGhost::Create(GetPos());
+
+#if 1	// デバッグの為の処理↓
+
+			m_nNumAll--;						// ネズミの総数減算
+
+			// 終了状態にする
+			Uninit();
+
+			if (m_nNumAll <= 0)
+			{ // ネズミが全滅したら
+
+				// ネコが勝利した状態にする
+				CGame::SetState(CGame::STATE_CAT_WIN);
+			}
+#endif
 
 			// 死を返す
 			return true;
@@ -679,6 +682,61 @@ bool CRat::Hit(void)
 
 	// 生を返す
 	return false;
+}
+
+//=======================================
+// 吹き飛び状態
+//=======================================
+void CRat::Smash(const float fAngle)
+{
+	// ローカル変数宣言
+	D3DXVECTOR3 pos = GetPos();
+
+	if (m_nDamageCounter >= TIME_DAMAGE && m_State != STATE_DEATH && m_State != STATE_SMASH)
+	{ // ダメージ食らう時間になったら
+
+		// 移動量を算出する
+		m_move.x = sinf(fAngle) * 20.0f;
+		m_move.y = 10.0f;
+		m_move.z = cosf(fAngle) * 20.0f;
+
+		m_nLife--;		// 寿命減らす
+		m_nDamageCounter = 0;		// ダメージ食らうまでの時間リセット
+
+		CParticle::Create(pos, CParticle::TYPE_ENEMYDEATH); //パーティクル
+
+		if (m_nLife <= 0)
+		{ // 寿命が無いとき
+
+			m_State = STATE_DEATH;		// 死亡状態にする
+
+#if 1	// デバッグの為の処理↓
+
+			m_nNumAll--;						// ネズミの総数減算
+
+			// 終了状態にする
+			Uninit();
+
+			if (m_nNumAll <= 0)
+			{ // ネズミが全滅したら
+
+				// ネコが勝利した状態にする
+				CGame::SetState(CGame::STATE_CAT_WIN);
+			}
+#endif
+		}
+		else
+		{ // 上記以外
+
+			// 吹き飛び状態にする
+			m_State = STATE_SMASH;
+		}
+	}
+	else
+	{ // ダメージ食らう時間じゃなかったら
+
+		m_nDamageCounter++;		// ダメージ食らうまでの時間加算
+	}
 }
 
 //=======================================
