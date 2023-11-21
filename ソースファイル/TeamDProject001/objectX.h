@@ -45,6 +45,7 @@ public:			// 誰でもアクセスできる
 		TYPE_NOTE4,				// 4分音符
 		TYPE_NOTE8,				// 8分音符
 		TYPE_NOTE16,			// 16分音符
+		TYPE_TRAPIRON,			// ネズミ捕りの鉄部分
 
 		// ブロックモデル
 		TYPE_CARDBOARD,			// 段ボール
@@ -79,6 +80,7 @@ public:			// 誰でもアクセスできる
 		TYPE_ROOMBA_MAIN,		// ルンバの本体
 		TYPE_HIMO,				// ひも
 		TYPE_SPEAKER,			// スピーカー
+		TYPE_MOUSETRAP,			// ネズミ捕り
 
 		//マップモデル
 		TYPE_KITCHEN,			//キッチン

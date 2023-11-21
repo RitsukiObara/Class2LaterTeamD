@@ -1,7 +1,7 @@
 //===========================================
 //
-// 結果の文字の処理[result_letter.h]
-// Author 佐藤根詩音
+// ネズミ捕りの鉄部分のメイン処理[mousetrap_iron.cpp]
+// Author 小原立暉
 //
 //===========================================
 //*******************************************
@@ -9,28 +9,26 @@
 //*******************************************
 #include "main.h"
 #include "manager.h"
-#include "result_letter.h"
+#include "mousetrap_iron.h"
+#include "renderer.h"
+#include "useful.h"
 
 //-------------------------------------------
 // マクロ定義
 //-------------------------------------------
 
-//-------------------------------------------
-// 静的メンバ変数宣言
-//-------------------------------------------
-
 //==============================
 // コンストラクタ
 //==============================
-CResultLetter::CResultLetter() : CModel(CObject::TYPE_3DTEXT, CObject::PRIORITY_BLOCK)
+CTrapIron::CTrapIron() : CModel(CObject::TYPE_NONE, CObject::PRIORITY_BLOCK)
 {
-	// 全ての値をクリアする
+
 }
 
 //==============================
 // デストラクタ
 //==============================
-CResultLetter::~CResultLetter()
+CTrapIron::~CTrapIron()
 {
 
 }
@@ -38,7 +36,7 @@ CResultLetter::~CResultLetter()
 //==============================
 // 破片の初期化処理
 //==============================
-HRESULT CResultLetter::Init(void)
+HRESULT CTrapIron::Init(void)
 {
 	if (FAILED(CModel::Init()))
 	{ // 初期化処理に失敗した場合
@@ -47,8 +45,6 @@ HRESULT CResultLetter::Init(void)
 		return E_FAIL;
 	}
 
-	// 全ての値を初期化する
-
 	// 値を返す
 	return S_OK;
 }
@@ -56,7 +52,7 @@ HRESULT CResultLetter::Init(void)
 //========================================
 // 破片の終了処理
 //========================================
-void CResultLetter::Uninit(void)
+void CTrapIron::Uninit(void)
 {
 	// 終了処理
 	CModel::Uninit();
@@ -65,7 +61,7 @@ void CResultLetter::Uninit(void)
 //=====================================
 // 破片の更新処理
 //=====================================
-void CResultLetter::Update(void)
+void CTrapIron::Update(void)
 {
 
 }
@@ -73,7 +69,7 @@ void CResultLetter::Update(void)
 //=====================================
 // 破片の描画処理
 //=====================================
-void CResultLetter::Draw(void)
+void CTrapIron::Draw(void)
 {
 	// 描画処理
 	CModel::Draw();
@@ -82,36 +78,29 @@ void CResultLetter::Draw(void)
 //=====================================
 // 情報の設定処理
 //=====================================
-void CResultLetter::SetData(const D3DXVECTOR3& pos, const CXFile::TYPE& type)
+void CTrapIron::SetData(const D3DXVECTOR3& pos)
 {
-	// 設定処理に便利なマクロ定義
-	//NONE_D3DXVECTOR3					// 向きを傾けない時とかに使用する
-	//NONE_SCALE						// 拡大率を変更しないときとかに使う
 	// 情報の設定処理
-
-	//==========================================================================
-	// モデル
-	//==========================================================================
-	SetPos(pos);					// 位置
-	SetPosOld(GetPos());			// 前回の位置
-	SetRot(NONE_D3DXVECTOR3);		// 向き
-	SetScale(NONE_SCALE);			// 拡大率
-	SetFileData(type);				// モデルの情報
+	SetPos(pos);								// 位置
+	SetPosOld(pos);								// 前回の位置
+	SetRot(NONE_D3DXVECTOR3);					// 向き
+	SetScale(NONE_SCALE);						// 拡大率
+	SetFileData(CXFile::TYPE_TRAPIRON);			// モデル情報
 }
 
 //=======================================
 // 生成処理
 //=======================================
-CResultLetter* CResultLetter::Create(const D3DXVECTOR3& pos, const CXFile::TYPE& type)
+CTrapIron* CTrapIron::Create(const D3DXVECTOR3& pos)
 {
 	// ローカルオブジェクトを生成
-	CResultLetter* pResultLetter = nullptr;	// サンプルのインスタンスを生成
+	CTrapIron* pIron = nullptr;	// インスタンスを生成
 
-	if (pResultLetter == nullptr)
+	if (pIron == nullptr)
 	{ // オブジェクトが NULL の場合
 
 		// インスタンスを生成
-		pResultLetter = new CResultLetter;
+		pIron = new CTrapIron;
 	}
 	else
 	{ // オブジェクトが NULL じゃない場合
@@ -123,11 +112,11 @@ CResultLetter* CResultLetter::Create(const D3DXVECTOR3& pos, const CXFile::TYPE&
 		return nullptr;
 	}
 
-	if (pResultLetter != nullptr)
+	if (pIron != nullptr)
 	{ // オブジェクトが NULL じゃない場合
 
 		// 初期化処理
-		if (FAILED(pResultLetter->Init()))
+		if (FAILED(pIron->Init()))
 		{ // 初期化に失敗した場合
 
 			// 停止
@@ -138,7 +127,7 @@ CResultLetter* CResultLetter::Create(const D3DXVECTOR3& pos, const CXFile::TYPE&
 		}
 
 		// 情報の設定処理
-		pResultLetter->SetData(pos, type);
+		pIron->SetData(pos);
 	}
 	else
 	{ // オブジェクトが NULL の場合
@@ -150,6 +139,6 @@ CResultLetter* CResultLetter::Create(const D3DXVECTOR3& pos, const CXFile::TYPE&
 		return nullptr;
 	}
 
-	// サンプルのポインタを返す
-	return pResultLetter;
+	// ネズミ捕りの鉄部分のポインタを返す
+	return pIron;
 }
