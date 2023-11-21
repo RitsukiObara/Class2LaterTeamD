@@ -22,6 +22,7 @@
 #include "toycar.h"
 #include "roomba.h"
 #include "Himo.h"
+#include "speaker.h"
 
 //==============================
 // コンストラクタ
@@ -239,8 +240,15 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const TYPE type)
 
 		case CObstacle::TYPE_HIMO:
 
-			// たらいを生成する
+			// ひもを生成する
 			pObstacle = new CHimo;
+
+			break;
+
+		case CObstacle::TYPE_SPEAKER:
+
+			// スピーカーを生成する
+			pObstacle = new CSpeaker;
 
 			break;
 

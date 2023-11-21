@@ -36,13 +36,13 @@ public:			// 誰でもアクセスできる
 	bool Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type);	// 当たり判定処理
 	bool Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type);		// ヒット処理
 
-	static void NULLTarai(int Idx) { m_pTarai[Idx] = NULL; }
+	static void NULLTarai(int Idx) { m_apTarai[Idx] = NULL; }
 
 private:		// 自分だけアクセスできる
-	void ActionDown(void);
+	void Action(void);
 	void SetTarai(void);
 
-	static CTarai *m_pTarai[MAX_TARAI];
+	static CTarai *m_apTarai[MAX_TARAI];
 	int m_nTaraiCount;
 	bool m_bAction;
 	float m_fDownPosY;

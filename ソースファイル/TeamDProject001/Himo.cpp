@@ -16,7 +16,7 @@
 #include "tarai.h"
 #include "input.h"
 
-CTarai* CHimo::m_pTarai[MAX_TARAI] = {};							// たらいの情報
+CTarai* CHimo::m_apTarai[MAX_TARAI] = {};							// たらいの情報
 //==============================
 // コンストラクタ
 //==============================
@@ -25,7 +25,7 @@ CHimo::CHimo() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 	// 全ての値をクリアする
 	for(int nCnt = 0; nCnt < MAX_TARAI; nCnt++)
 	{
-		m_pTarai[nCnt] = NULL;
+		m_apTarai[nCnt] = NULL;
 	}
 	m_nTaraiCount = 0;
 	m_bAction = false;
@@ -92,9 +92,9 @@ void CHimo::Update(void)
 
 	for (int nCnt = 0; nCnt < MAX_TARAI; nCnt++)
 	{
-		if (m_pTarai[nCnt] != NULL)
+		if (m_apTarai[nCnt] != NULL)
 		{
-			m_pTarai[nCnt]->Update();
+			m_apTarai[nCnt]->Update();
 		}
 	}
 
@@ -116,9 +116,9 @@ void CHimo::Draw(void)
 
 	for (int nCnt = 0; nCnt < MAX_TARAI; nCnt++)
 	{
-		if (m_pTarai[nCnt] != NULL)
+		if (m_apTarai[nCnt] != NULL)
 		{
-			m_pTarai[nCnt]->Draw();
+			m_apTarai[nCnt]->Draw();
 		}
 	}
 }
@@ -134,13 +134,13 @@ void CHimo::SetTarai(void)
 	{
 		for (int nCnt = 0; nCnt < MAX_TARAI; nCnt++)
 		{
-			if (m_pTarai[nCnt] == NULL)
+			if (m_apTarai[nCnt] == NULL)
 			{
 				int nRandX = rand() % 1001;
 				int nRandY = rand() % 1001;
 
-				m_pTarai[nCnt] = CTarai::Create(D3DXVECTOR3((float)nRandX - 500.0f, 1000.0f, (float)nRandY - 500.0f));
-				m_pTarai[nCnt]->SetIndex(nCnt);
+				m_apTarai[nCnt] = CTarai::Create(D3DXVECTOR3((float)nRandX - 500.0f, 1000.0f, (float)nRandY - 500.0f));
+				m_apTarai[nCnt]->SetIndex(nCnt);
 
 				break;
 			}
@@ -151,7 +151,7 @@ void CHimo::SetTarai(void)
 //=====================================
 // 紐を引っ張られた時の処理
 //=====================================
-void CHimo::ActionDown(void)
+void CHimo::Action(void)
 {
 	m_bAction = true;
 }
