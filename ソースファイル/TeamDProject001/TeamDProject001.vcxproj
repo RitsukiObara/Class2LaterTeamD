@@ -205,6 +205,7 @@
     <ClCompile Include="mesh_wall.cpp" />
     <ClCompile Include="model.cpp" />
     <ClCompile Include="motion.cpp" />
+    <ClCompile Include="mousetrap.cpp" />
     <ClCompile Include="note.cpp" />
     <ClCompile Include="number.cpp" />
     <ClCompile Include="object.cpp" />
@@ -233,6 +234,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="rat_ghost.cpp" />
+    <ClCompile Include="rat_state.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="result.cpp" />
     <ClCompile Include="result_letter.cpp" />
@@ -314,6 +316,7 @@
     <ClInclude Include="mesh_wall.h" />
     <ClInclude Include="model.h" />
     <ClInclude Include="motion.h" />
+    <ClInclude Include="mousetrap.h" />
     <ClInclude Include="note.h" />
     <ClInclude Include="number.h" />
     <ClInclude Include="object.h" />
@@ -339,6 +342,7 @@
     <ClInclude Include="rat.h" />
     <ClInclude Include="precompile.h" />
     <ClInclude Include="rat_ghost.h" />
+    <ClInclude Include="rat_state.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="result.h" />
     <ClInclude Include="result_letter.h" />

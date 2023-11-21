@@ -20,8 +20,10 @@
 //-------------------------------------------
 // マクロ定義
 //-------------------------------------------
-#define CAR_GEAR_SHIFT		(D3DXVECTOR3(0.0f, 200.0f, 0.0f))		// 車の歯車のずらす幅
-#define CAR_SPEED			(-6.0f)									// 車の速度
+#define CAR_GEAR_SHIFT		(D3DXVECTOR3(0.0f, 40.0f, 0.0f))		// 車の歯車のずらす幅
+#define CAR_SPEED			(-4.0f)									// 車の速度
+#define CAR_CURVE_SPEED		(0.03f)									// 車の曲がる速度
+#define CAR_DEST_ROT_SHIFT	(0.05f)									// 車が状態遷移する向きの差分の許容値
 
 //==============================
 // コンストラクタ
@@ -264,19 +266,19 @@ void CToyCar::Curve(void)
 	{ // 右向きの場合
 
 		// 向きを加算する
-		rot.y += 0.05f;
+		rot.y += CAR_CURVE_SPEED;
 	}
 	else
 	{ // 上記以外
 
 		// 向きを減算する
-		rot.y -= 0.05f;
+		rot.y -= CAR_CURVE_SPEED;
 	}
 
 	// 向きの正規化
 	useful::RotNormalize(&rot.y);
 
-	if (fabsf(m_fRotDest - rot.y) <= 0.1f)
+	if (fabsf(m_fRotDest - rot.y) <= CAR_DEST_ROT_SHIFT)
 	{ // 向きが一定まで行った場合
 
 		// 向きを補正する
