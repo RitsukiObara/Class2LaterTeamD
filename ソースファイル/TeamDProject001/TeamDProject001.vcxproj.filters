@@ -408,6 +408,9 @@
     <ClCompile Include="item.cpp">
       <Filter>Gimmick\Item</Filter>
     </ClCompile>
+    <ClCompile Include="item_manager.cpp">
+      <Filter>Gimmick\Item</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -735,6 +738,9 @@
       <Filter>Staging</Filter>
     </ClInclude>
     <ClInclude Include="item.h">
+      <Filter>Gimmick\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="item_manager.h">
       <Filter>Gimmick\Item</Filter>
     </ClInclude>
   </ItemGroup>
