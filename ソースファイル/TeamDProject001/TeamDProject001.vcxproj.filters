@@ -399,6 +399,9 @@
     <ClCompile Include="mousetrap_iron.cpp">
       <Filter>Gimmick\Obstacle</Filter>
     </ClCompile>
+    <ClCompile Include="danger_mark.cpp">
+      <Filter>Staging</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -721,6 +724,9 @@
     </ClInclude>
     <ClInclude Include="mousetrap_iron.h">
       <Filter>Gimmick\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="danger_mark.h">
+      <Filter>Staging</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -533,16 +533,30 @@ void CCat::SetData(const D3DXVECTOR3& pos)
 //=====================================
 void CCat::MotionManager(void)
 {
-	if (CManager::Get()->GetMode() == CScene::MODE_RESULT && 
-		CResult::GetState() == CGame::STATE_CAT_WIN)
+	if (CManager::Get()->GetMode() == CScene::MODE_RESULT)
 	{ // リザルト && ねこのかち
 
-		if (MotionType != MOTIONTYPE_MOVE)
-		{
-			MotionType = MOTIONTYPE_MOVE;
+		if (CResult::GetState() == CGame::STATE_RAT_WIN)
+		{ // ねずみのかち
 
-			// モーションの設定処理
-			m_pMotion->Set(MotionType);
+			if (MotionType != MOTIONTYPE_NEUTRAL)
+			{
+				MotionType = MOTIONTYPE_NEUTRAL;
+
+				// モーションの設定処理
+				m_pMotion->Set(MotionType);
+			}
+		}
+		else if (CResult::GetState() == CGame::STATE_CAT_WIN)
+		{ // ねこのかち
+
+			if (MotionType != MOTIONTYPE_MOVE)
+			{
+				MotionType = MOTIONTYPE_MOVE;
+
+				// モーションの設定処理
+				m_pMotion->Set(MotionType);
+			}
 		}
 	}
 	else

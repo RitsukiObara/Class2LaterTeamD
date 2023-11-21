@@ -9,17 +9,25 @@
 //*******************************************
 #include "main.h"
 #include "mousetrap.h"
+#include "obstacle.h"
+#include "mousetrap_iron.h"
+#include "useful.h"
 
 //-------------------------------------------
 // ƒ}ƒNƒ’è‹`
 //-------------------------------------------
+#define IRON_SHIFT			(10.0f)								// “S•”•ª‚Ì‚¸‚ç‚·ˆÊ’u
+#define EXTEND_SCALE_DEST	(D3DXVECTOR3(1.1f, 0.9f, 1.1f))		// Šg‘åó‘Ô‚Ì–Ú“I‚ÌŠg‘å—¦
+#define SHRINK_SCALE_DEST	(D3DXVECTOR3(0.9f, 1.1f, 0.9f))		// k¬ó‘Ô‚Ì–Ú“I‚ÌŠg‘å—¦
+#define ADD_SCALE			(0.003f)							// ’Ç‰Á‚ÌŠg‘å—¦
 
 //==============================
 // ƒRƒ“ƒXƒgƒ‰ƒNƒ^
 //==============================
 CMouseTrap::CMouseTrap() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 {
-
+	// ‘S‚Ä‚Ì’l‚ðƒNƒŠƒA‚·‚é
+	m_pIron = nullptr;			// “S•”•ª
 }
 
 //==============================
@@ -42,6 +50,9 @@ HRESULT CMouseTrap::Init(void)
 		return E_FAIL;
 	}
 
+	// ‘S‚Ä‚Ì’l‚ðƒNƒŠƒA‚·‚é
+	m_pIron = nullptr;			// “S•”•ª
+
 	// ’l‚ð•Ô‚·
 	return S_OK;
 }
@@ -51,6 +62,14 @@ HRESULT CMouseTrap::Init(void)
 //========================================
 void CMouseTrap::Uninit(void)
 {
+	if (m_pIron != nullptr)
+	{ // “S•”•ª‚ª NULL ‚¶‚á‚È‚¢ê‡
+
+		// “S•”•ª‚ÌI—¹ˆ—
+		m_pIron->Uninit();
+		m_pIron = nullptr;
+	}
+
 	// I—¹ˆ—
 	CObstacle::Uninit();
 }
@@ -60,7 +79,15 @@ void CMouseTrap::Uninit(void)
 //=====================================
 void CMouseTrap::Update(void)
 {
+	if (m_pIron != nullptr)
+	{ // “S•”•ª‚ª NULL ‚¶‚á‚È‚¢ê‡
 
+		// “S•”•ª‚ÌˆÊ’uÝ’èˆ—
+		IronPosSet();
+
+		// “S•”•ª‚ÌXVˆ—
+		m_pIron->Update();
+	}
 }
 
 //=====================================
@@ -70,6 +97,13 @@ void CMouseTrap::Draw(void)
 {
 	// •`‰æˆ—
 	CObstacle::Draw();
+
+	if (m_pIron != nullptr)
+	{ // “S•”•ª‚ª NULL ‚¶‚á‚È‚¢ê‡
+
+		// “S•”•ª‚Ì•`‰æˆ—
+		m_pIron->Draw();
+	}
 }
 
 //=====================================
@@ -79,6 +113,14 @@ void CMouseTrap::SetData(const D3DXVECTOR3& pos, const TYPE type)
 {
 	// î•ñ‚ÌÝ’èˆ—
 	CObstacle::SetData(pos, type);
+
+	// ‘S‚Ä‚Ì’l‚ðÝ’è‚·‚é
+	if (m_pIron == nullptr)
+	{ // “S•”•ª‚ª NULL ‚Ìê‡
+
+		// “S•”•ª‚ð¶¬
+		m_pIron = CTrapIron::Create(D3DXVECTOR3(pos.x, pos.y + IRON_SHIFT, pos.z));
+	}
 }
 
 //=====================================
@@ -97,4 +139,22 @@ bool CMouseTrap::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHe
 {
 	// false ‚ð•Ô‚·
 	return false;
+}
+
+//=====================================
+// “S•”•ª‚ÌˆÊ’u‚ÌÝ’èˆ—
+//=====================================
+void CMouseTrap::IronPosSet(void)
+{
+	// ƒ[ƒJƒ‹•Ï”éŒ¾
+	D3DXVECTOR3 pos = GetPos();					// ˆÊ’u‚ðŽæ“¾‚·‚é
+	D3DXVECTOR3 posIron = NONE_D3DXVECTOR3;		// “S‚Ì•”•ª
+
+	// “S‚Ì•”•ª‚ÌˆÊ’u‚ðÝ’è‚·‚é
+	posIron.x = pos.x;
+	posIron.y = pos.y + IRON_SHIFT;
+	posIron.z = pos.z;
+
+	// ˆÊ’u‚ð“K—p‚·‚é
+	m_pIron->SetPos(posIron);
 }
