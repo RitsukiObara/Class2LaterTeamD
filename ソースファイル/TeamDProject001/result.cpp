@@ -18,6 +18,7 @@
 #include "camera.h"
 #include "skybox.h"
 #include "game.h"
+#include "result_letter.h"
 
 //--------------------------------------------
 // マクロ定義
@@ -55,6 +56,9 @@ HRESULT CResult::Init(void)
 
 	// ゲームの状態を取得する
 	CGame::GetState();
+
+	// 3Dテキスト生成
+	CResultLetter::Create(D3DXVECTOR3(0.0f, 300.0f, 0.0f), CXFile::TYPE_WINCAT_TEXT);
 
 	// 成功を返す
 	return S_OK;

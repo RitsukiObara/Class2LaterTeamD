@@ -91,6 +91,9 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 
 	// ネズミモデル
 	"data\\MODEL\\rat\\rat_Ghost.x",	// 幽霊の姿
+
+	// 3Dテキストモデル
+	"data\\MODEL\\cat_win.x",			// ねこのかちテキスト
 };
 
 //------------------------------------------------------------
