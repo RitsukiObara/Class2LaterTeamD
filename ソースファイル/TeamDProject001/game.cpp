@@ -179,9 +179,13 @@ void CGame::Update(void)
 // デバッグ版
 #ifdef _DEBUG
 
-	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_RETURN) == true)
-	{
-		m_GameState = STATE_CAT_WIN;
+	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_8) == true)
+	{ // 8キーを押したとき
+		m_GameState = STATE_CAT_WIN;		// ねこのかち
+	}
+	else if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_9) == true)
+	{ // 9キーを押したとき
+		m_GameState = STATE_RAT_WIN;		// ねずみのかち
 	}
 
 	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_F7) == true)
