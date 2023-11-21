@@ -765,11 +765,11 @@ void CRat::ObstacleCollision(void)
 	// 位置を設定する
 	SetPos(pos);
 }
+
 //=======================================
 // ネズミの移動状態の取得処理
 //=======================================
 bool CRat::IsMove(void)
 {
 	return m_bMove;
-}
 }
