@@ -11,11 +11,12 @@
 // インクルードファイル
 //***********************************
 #include "model.h"
+#include "objectX.h"
 
 //-----------------------------------
-// クラス定義(サンプル)
+// クラス(リザルトの3Dテキストクラス)
 //-----------------------------------
-class CResultLetter : public CObject/*親クラス*/
+class CResultLetter : public CModel
 {
 public:			// 誰でもアクセスできる
 
@@ -28,10 +29,10 @@ public:			// 誰でもアクセスできる
 	void Update(void);		// 更新処理
 	void Draw(void);		// 描画処理
 
-	void SetData(void/*引数*/);		// 情報の設定処理
+	void SetData(const D3DXVECTOR3& pos, const CXFile::TYPE& type);		// 情報の設定処理
 
 	// 静的メンバ関数
-	static CResultLetter* Create(void/*引数*/);		// 生成処理
+	static CResultLetter* Create(const D3DXVECTOR3& pos, const CXFile::TYPE& type);		// 生成処理
 
 private:		// 自分だけアクセスできる
 

@@ -62,6 +62,7 @@ public:			// 誰でもアクセスできる
 		TYPE_COUNTDOWN,			// カウントダウン
 		TYPE_TITLEWALL,			// タイトルの壁
 		TYPE_ENTRYUI,			// エントリーUI
+		TYPE_3DTEXT,			// 3Dテキスト
 		TYPE_MAX				// この列挙型の総数
 	};
 

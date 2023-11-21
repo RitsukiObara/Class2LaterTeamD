@@ -23,7 +23,7 @@
 //==============================
 // コンストラクタ
 //==============================
-CResultLetter::CResultLetter() : CObject/*親クラス*/(/*ここにタイプを入れる*/CObject::TYPE_NONE, /*ここに優先順位を入れる*/CObject::PRIORITY_BG)
+CResultLetter::CResultLetter() : CModel(CObject::TYPE_3DTEXT, CObject::PRIORITY_BLOCK)
 {
 	// 全ての値をクリアする
 }
@@ -41,12 +41,12 @@ CResultLetter::~CResultLetter()
 //==============================
 HRESULT CResultLetter::Init(void)
 {
-	//if (FAILED(親クラス::Init()))
-	//{ // 初期化処理に失敗した場合
+	if (FAILED(CModel::Init()))
+	{ // 初期化処理に失敗した場合
 
-	//	// 失敗を返す
-	//	return E_FAIL;
-	//}
+		// 失敗を返す
+		return E_FAIL;
+	}
 
 	// 全ての値を初期化する
 
@@ -59,8 +59,8 @@ HRESULT CResultLetter::Init(void)
 //========================================
 void CResultLetter::Uninit(void)
 {
-	//// 終了処理
-	//親クラス::Uninit();
+	// 終了処理
+	CModel::Uninit();
 }
 
 //=====================================
@@ -76,14 +76,14 @@ void CResultLetter::Update(void)
 //=====================================
 void CResultLetter::Draw(void)
 {
-	//// 描画処理
-	//親クラス::Draw();
+	// 描画処理
+	CModel::Draw();
 }
 
 //=====================================
 // 情報の設定処理
 //=====================================
-void CResultLetter::SetData(void/*基本Createと同じ引数を入れる*/)
+void CResultLetter::SetData(const D3DXVECTOR3& pos, const CXFile::TYPE& type)
 {
 	// 設定処理に便利なマクロ定義
 	//NONE_D3DXVECTOR3					// 向きを傾けない時とかに使用する
@@ -91,76 +91,19 @@ void CResultLetter::SetData(void/*基本Createと同じ引数を入れる*/)
 	// 情報の設定処理
 
 	//==========================================================================
-	// 2Dポリゴン
-	//==========================================================================
-	//SetPos(位置を入れる);			// 位置
-	//SetPosOld(位置を入れる);		// 前回の位置
-	//SetRot(向きを入れる);			// 向き
-	//SetSize(サイズを入れる);		// サイズ
-	//SetLength(引数無し);			// 長さ
-	//SetAngle(引数無し);			// 方向
-	//BindTexture(CManager::Get()->GetTexture()->Regist(テクスチャの名前));		// テクスチャの割り当て処理
-
-	//// 頂点座標の設定処理
-	//SetVertex();
-
-	//==========================================================================
-	// 3Dポリゴン
-	//==========================================================================
-	//SetPos(位置を入れる);			// 位置
-	//SetPosOld(位置を入れる);		// 前回の位置
-	//SetRot(向きを入れる);			// 向き
-	//SetSize(サイズを入れる);		// サイズ
-	//BindTexture(CManager::Get()->GetTexture()->Regist(テクスチャの名前));		// テクスチャの割り当て処理
-
-	//// 頂点座標の設定処理
-	//SetVertex();
-
-	//==========================================================================
-	// ビルボード
-	//==========================================================================
-	//SetPos(位置を入れる);			// 位置
-	//SetPosOld(位置を入れる);		// 前回の位置
-	//SetSize(サイズを入れる);		// サイズ
-	//BindTexture(CManager::Get()->GetTexture()->Regist(テクスチャの名前));		// テクスチャの割り当て処理
-
-	//// 頂点座標の設定処理
-	//SetVertex();
-
-	//==========================================================================
-	// アニメーション系
-	//==========================================================================
-	//SetPos(位置を入れる);			// 位置
-	//SetPosOld(位置を入れる);		// 前回の位置
-	//SetRot(向きを入れる);			// 向き
-	//SetSize(サイズを入れる);		// サイズ
-	//SetLength(引数無し);			// 長さ
-	//SetAngle(引数無し);			// 方向
-	//BindTexture(CManager::Get()->GetTexture()->Regist(テクスチャの名前));		// テクスチャの割り当て処理
-
-	// アニメーションの設定処理
-	//SetAnim(カウントを入れる, パターン数を入れる);
-
-	//// 頂点座標の設定処理
-	//SetVertex();
-
-	// テクスチャの設定(アニメーションバージョン)
-	//SetVtxTextureAnim(アニメーションの総パターン数を入れる, 0);
-
-	//==========================================================================
 	// モデル
 	//==========================================================================
-	//SetPos(位置を入れる);					// 位置
-	//SetPosOld(位置を入れる);				// 前回の位置
-	//SetRot(向きを入れる);					// 向き
-	//SetScale(拡大率を入れる);				// 拡大率
-	//SetFileData(モデルの種類を入れる);	// モデルの情報
+	SetPos(pos);					// 位置
+	SetPosOld(GetPos());			// 前回の位置
+	SetRot(NONE_D3DXVECTOR3);		// 向き
+	SetScale(NONE_SCALE);			// 拡大率
+	SetFileData(type);				// モデルの情報
 }
 
 //=======================================
 // 生成処理
 //=======================================
-CResultLetter* CResultLetter::Create(void/*引数を入れる*/)
+CResultLetter* CResultLetter::Create(const D3DXVECTOR3& pos, const CXFile::TYPE& type)
 {
 	// ローカルオブジェクトを生成
 	CResultLetter* pResultLetter = nullptr;	// サンプルのインスタンスを生成
@@ -196,7 +139,7 @@ CResultLetter* CResultLetter::Create(void/*引数を入れる*/)
 		}
 
 		// 情報の設定処理
-		pResultLetter->SetData(/*引数*/);
+		pResultLetter->SetData(pos, type);
 	}
 	else
 	{ // オブジェクトが NULL の場合
