@@ -476,6 +476,7 @@ void CRat::Move(void)
 			// 向きを設定する
 			rot.y = D3DX_PI * -0.5f;
 		}
+		m_bMove = true;
 	}
 	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_A) == true ||
 		CManager::Get()->GetInputGamePad()->GetGameStickLXPress(m_nRatIdx) < 0)
@@ -501,6 +502,7 @@ void CRat::Move(void)
 			// 向きを設定する
 			rot.y = D3DX_PI * 0.5f;
 		}
+		m_bMove = true;
 	}
 	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_W) == true ||
 		CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) > 0)
@@ -508,6 +510,7 @@ void CRat::Move(void)
 
 		// 向きを設定する
 		rot.y = D3DX_PI;
+		m_bMove = true;
 	}
 	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true ||
 		CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) < 0)
@@ -515,10 +518,11 @@ void CRat::Move(void)
 
 		// 向きを設定する
 		rot.y = 0.0f;
+		m_bMove = true;
 	}
 	else
 	{ // 上記以外
-
+		m_bMove = false;
 		// 速度を設定する
 		m_fSpeed = 0.0f;
 	}
@@ -760,4 +764,12 @@ void CRat::ObstacleCollision(void)
 
 	// 位置を設定する
 	SetPos(pos);
+}
+//=======================================
+// ネズミの移動状態の取得処理
+//=======================================
+bool CRat::IsMove(void)
+{
+	return m_bMove;
+}
 }
