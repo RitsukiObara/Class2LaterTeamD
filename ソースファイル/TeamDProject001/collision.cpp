@@ -158,8 +158,17 @@ void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight,
 
 			case CObstacle::TYPE_TOYCAR:
 
-				// ヒット処理
-				pRat->Hit();
+			{ // プレイヤーを飛ばす処理
+
+				// 方向を宣言
+				float fAngle;
+
+				// 向きを算出する
+				fAngle = atan2f(pos.x - pObstacle->GetPos().x, pos.z - pObstacle->GetPos().z);
+
+				// 吹き飛び処理
+				pRat->Smash(fAngle);
+			}
 
 				break;
 
