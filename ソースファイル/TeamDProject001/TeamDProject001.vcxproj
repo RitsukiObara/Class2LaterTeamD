@@ -233,6 +233,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="rat_ghost.cpp" />
+    <ClCompile Include="rat_state.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="result.cpp" />
     <ClCompile Include="result_letter.cpp" />
@@ -339,6 +340,7 @@
     <ClInclude Include="rat.h" />
     <ClInclude Include="precompile.h" />
     <ClInclude Include="rat_ghost.h" />
+    <ClInclude Include="rat_state.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="result.h" />
     <ClInclude Include="result_letter.h" />
