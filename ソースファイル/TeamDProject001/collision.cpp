@@ -175,6 +175,25 @@ void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight,
 
 				break;
 
+			case CObstacle::TYPE_ROOMBA:
+
+				break;
+
+			case CObstacle::TYPE_HIMO:
+
+				break;
+
+			case CObstacle::TYPE_SPEAKER:
+
+				// ƒqƒbƒgˆ—
+				pRat->Hit();
+
+				break;
+
+			case CObstacle::TYPE_MOUSETRAP:
+
+				break;
+
 			default:
 
 				// ’âŽ~
@@ -450,7 +469,7 @@ void collision::BlockCircleCollision(CBlock& block, D3DXVECTOR3& pos, const D3DX
 		pos.y + fHeight >= block.GetPos().y + block.GetFileData().vtxMin.y)
 	{ // Ÿ{‚ÆÕ“Ë‚µ‚½ê‡
 
-		if (useful::CylinderInner(&pos, block.GetPos(), block.GetFileData().fRadius + fRadius) == true)
+		if (useful::CylinderInner(pos, block.GetPos(), block.GetFileData().fRadius + fRadius) == true)
 		{ // ‰~’Œ‚Ì“à‘¤‚É‚¢‚½ê‡
 
 			if (posOld.y >= block.GetPos().y + block.GetFileData().vtxMax.y &&

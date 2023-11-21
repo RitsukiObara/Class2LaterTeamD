@@ -691,6 +691,8 @@ bool CRat::Hit(void)
 			// Ž€‚ð•Ô‚·
 			return true;
 		}
+
+		// Ž€‚ð•Ô‚·
 		return true;
 	}
 

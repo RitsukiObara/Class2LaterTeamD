@@ -483,17 +483,17 @@ bool useful::CylinderCollision(D3DXVECTOR3* TargetPos, const D3DXVECTOR3& Object
 //======================
 // 円柱の内側判定処理
 //======================
-bool useful::CylinderInner(const D3DXVECTOR3* TargetPos, const D3DXVECTOR3& ObjectPos, const float fObjectRadius)
+bool useful::CylinderInner(const D3DXVECTOR3& TargetPos, const D3DXVECTOR3& ObjectPos, const float fObjectRadius)
 {
 	// ローカル変数宣言
 	float fLength = 0.0f;			// 距離
 	float fAngle = 0.0f;			// 向き
 
 	// 向きを取る
-	fAngle = atan2f((TargetPos->x - ObjectPos.x), (TargetPos->z - ObjectPos.z));
+	fAngle = atan2f((TargetPos.x - ObjectPos.x), (TargetPos.z - ObjectPos.z));
 
 	// 半径を測る
-	fLength = sqrtf((TargetPos->x - ObjectPos.x) * (TargetPos->x - ObjectPos.x) + (TargetPos->z - ObjectPos.z) * (TargetPos->z - ObjectPos.z));
+	fLength = sqrtf((TargetPos.x - ObjectPos.x) * (TargetPos.x - ObjectPos.x) + (TargetPos.z - ObjectPos.z) * (TargetPos.z - ObjectPos.z));
 
 	if (fLength <= fObjectRadius)
 	{ // 対象との距離がオブジェクトの半径以下の場合
