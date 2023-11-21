@@ -1,7 +1,7 @@
 //===========================================
 //
-// 歯車のメイン処理[tarai.cpp]
-// Author 小原立暉
+// たらいメイン処理[tarai.cpp]
+// Author 坂本翔唯
 //
 //===========================================
 //*******************************************
@@ -66,10 +66,10 @@ void CTarai::Uninit(void)
 //=====================================
 void CTarai::Update(void)
 {
-	// 向きを取得する
+	// 位置を取得する
 	D3DXVECTOR3 pos = GetPos();
 
-	// 向きを加算する
+	// 位置を加算する
 	m_move.y -= 0.98f;
 
 	if (pos.y < 0.0f)
@@ -82,9 +82,10 @@ void CTarai::Update(void)
 		return;
 	}
 
+	// 位置更新
 	pos.y += m_move.y;
 
-	// 向きを設定する
+	// 位置を設定する
 	SetPos(pos);
 }
 
@@ -107,7 +108,7 @@ void CTarai::SetData(const D3DXVECTOR3& pos)
 	SetPosOld(pos);								// 前回の位置
 	SetRot(NONE_D3DXVECTOR3);					// 向き
 	SetScale(NONE_SCALE);						// 拡大率
-	SetFileData(CXFile::TYPE_TARAI);		// モデル情報
+	SetFileData(CXFile::TYPE_TARAI);			// モデル情報
 }
 
 //=======================================

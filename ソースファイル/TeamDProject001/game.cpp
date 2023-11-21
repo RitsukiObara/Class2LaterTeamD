@@ -122,6 +122,9 @@ HRESULT CGame::Init(void)
 	// ひもの生成処理
 	CObstacle::Create(D3DXVECTOR3(-600.0f, 650.0f, 0.0f), CObstacle::TYPE_HIMO);
 
+	// スピーカーの生成処理
+	CObstacle::Create(D3DXVECTOR3(-250.0f, 200.0f, 900), CObstacle::TYPE_SPEAKER);
+
 #endif // _DEBUG
 
 	// ネズミの生成
@@ -178,7 +181,7 @@ void CGame::Update(void)
 
 	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_RETURN) == true)
 	{
-		m_GameState = STATE_RAT_WIN;
+		m_GameState = STATE_CAT_WIN;
 	}
 
 	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_F7) == true)

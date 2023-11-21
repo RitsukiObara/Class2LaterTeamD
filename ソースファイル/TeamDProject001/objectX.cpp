@@ -30,6 +30,9 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\TitleWall.x",			// タイトルの壁
 	"data\\MODEL\\Roomba_Sub.x",		// ルンバのプロペラ
 	"data\\MODEL\\Tarai.x",				// たらい
+	"data\\MODEL\\note4.x",				// 4分音符
+	"data\\MODEL\\note8.x",				// 8分音符
+	"data\\MODEL\\note16.x",			// 16分音符
 
 	// ブロックモデル
 	"data\\MODEL\\cardboard.x",			// 段ボール
@@ -63,6 +66,7 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\ToyCarBody.x",		// おもちゃの車(本体)
 	"data\\MODEL\\Roomba_Main.x",		// ルンバの本体
 	"data\\MODEL\\Himo.x",				// ひも
+	"data\\MODEL\\speaker.x",			// スピーカー
 
 	//マップモデル
 	"data\\MODEL\\Kitchen.x",			//キッチン

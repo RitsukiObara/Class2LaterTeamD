@@ -42,6 +42,9 @@ public:			// 誰でもアクセスできる
 		TYPE_TITLEWALL,			// タイトルの壁
 		TYPE_ROOMBA_SUB,		// ルンバのプロペラ
 		TYPE_TARAI,				// たらい
+		TYPE_NOTE4,				// 4分音符
+		TYPE_NOTE8,				// 8分音符
+		TYPE_NOTE16,			// 16分音符
 
 		// ブロックモデル
 		TYPE_CARDBOARD,			// 段ボール
@@ -75,6 +78,7 @@ public:			// 誰でもアクセスできる
 		TYPE_TOYCARBODY,		// おもちゃの車(本体)
 		TYPE_ROOMBA_MAIN,		// ルンバの本体
 		TYPE_HIMO,				// ひも
+		TYPE_SPEAKER,			// スピーカー
 
 		//マップモデル
 		TYPE_KITCHEN,			//キッチン
