@@ -524,7 +524,7 @@ void useful::DecimalCalculation(const int nDigit, const int nValue, int* aAnswer
 //======================
 // 均等な数値の補正
 //======================
-void useful::FrameCorrect(const float fDest, float *fTarget, const float fCorrect)
+bool useful::FrameCorrect(const float fDest, float *fTarget, const float fCorrect)
 {
 	if (*fTarget > fDest)
 	{ // サイズが目標超過だった場合
@@ -537,6 +537,15 @@ void useful::FrameCorrect(const float fDest, float *fTarget, const float fCorrec
 
 			// サイズを補正する
 			*fTarget = fDest;
+
+			// true を返す
+			return true;
+		}
+		else
+		{ // 上記以外
+
+			// false を返す
+			return false;
 		}
 	}
 
@@ -551,6 +560,18 @@ void useful::FrameCorrect(const float fDest, float *fTarget, const float fCorrec
 
 			// サイズを補正する
 			*fTarget = fDest;
+
+			// true を返す
+			return true;
+		}
+		else
+		{ // 上記以外
+
+			// false を返す
+			return false;
 		}
 	}
+
+	// false を返す
+	return false;
 }

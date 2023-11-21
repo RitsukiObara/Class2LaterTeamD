@@ -8,10 +8,14 @@
 #include "danger_mark.h"
 #include "renderer.h"
 #include "texture.h"
+#include "useful.h"
 
 //=======================================
 // マクロ定義
 //=======================================
+#define LIGHT_FLASH_MAX_ALPHA		(0.5f)		// 軽点滅の透明度の最大値
+#define LIGHT_FLASH_MIN_ALPHA		(0.2f)		// 軽点滅の透明度の最小値
+#define LIGHT_FLASH_ADD_ALPHA		(0.01f)		// 軽点滅の透明度の加算数
 
 //=========================
 // コンストラクタ
@@ -19,9 +23,9 @@
 CDangerMark::CDangerMark() : CBillboard(CObject::TYPE_DANGERMARK, CObject::PRIORITY_BLOCK)
 {
 	// 全ての値をクリアする
-	m_move = NONE_D3DXVECTOR3;		// 移動量
-	m_col = NONE_D3DXCOLOR;			// 色
-	m_bDisp = true;					// 描画状況
+	m_col = NONE_D3DXCOLOR;		// 色
+	m_fAlphaDest = 0.0f;		// 目的の透明度
+	m_bDisp = true;				// 描画状況
 }
 
 //=========================
@@ -45,9 +49,9 @@ HRESULT CDangerMark::Init(void)
 	}
 
 	// 全ての値を初期化する
-	m_move = NONE_D3DXVECTOR3;		// 移動量
-	m_col = NONE_D3DXCOLOR;			// 色
-	m_bDisp = true;					// 描画状況
+	m_col = NONE_D3DXCOLOR;		// 色
+	m_fAlphaDest = 0.0f;		// 目的の透明度
+	m_bDisp = true;				// 描画状況
 
 	// 成功を返す
 	return S_OK;
@@ -67,7 +71,18 @@ void CDangerMark::Uninit(void)
 //=========================
 void CDangerMark::Update(void)
 {
-	
+	if (useful::FrameCorrect(m_fAlphaDest, &m_col.a, LIGHT_FLASH_ADD_ALPHA) == true)
+	{ // 目的の値に達した場合
+
+		// 目的の透明度を設定する
+		m_fAlphaDest = (m_fAlphaDest >= LIGHT_FLASH_MAX_ALPHA) ? LIGHT_FLASH_MIN_ALPHA : LIGHT_FLASH_MAX_ALPHA;
+	}
+
+	// 頂点情報の初期化
+	SetVertex();
+
+	// 色の設定処理
+	SetVtxColor(m_col);
 }
 
 //=========================
@@ -107,9 +122,9 @@ void CDangerMark::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const
 	SetSize(size);	// サイズ
 
 	// 全ての値を設定する
-	m_move = NONE_D3DXVECTOR3;		// 移動量
-	m_col = col;					// 色
-	m_bDisp = true;					// 描画状況
+	m_col = col;							// 色
+	m_fAlphaDest = LIGHT_FLASH_MIN_ALPHA;	// 目的の透明度
+	m_bDisp = true;							// 描画状況
 
 	// テクスチャの割り当て処理
 	BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\danger001.png"));

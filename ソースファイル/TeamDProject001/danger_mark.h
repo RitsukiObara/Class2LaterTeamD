@@ -36,8 +36,8 @@ public:
 private:
 
 	// メンバ変数
-	D3DXVECTOR3 m_move;		// 移動量
 	D3DXCOLOR m_col;		// 色
+	float m_fAlphaDest;		// 目的の透明度
 	bool m_bDisp;			// 描画状況
 };
 

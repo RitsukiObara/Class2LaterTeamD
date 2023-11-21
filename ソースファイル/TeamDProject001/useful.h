@@ -38,7 +38,7 @@ namespace useful
 	bool CylinderCollision(D3DXVECTOR3* TargetPos, const D3DXVECTOR3& ObjectPos, const float fObjectRadius);					// ‰~’Œ‚Ì“–‚½‚è”»’è
 	bool CylinderInner(const D3DXVECTOR3* TargetPos, const D3DXVECTOR3& ObjectPos, const float fObjectRadius);					// ‰~’Œ‚Ì“à‘¤”»’èˆ—
 	void DecimalCalculation(const int nDigit, const int nValue, int* aAnswer);		// 10i”‚Ö‚Ì•ÏŠ·ˆ—
-	void FrameCorrect(const float fDest, float *fTarget, const float fCorrect);		// ‹Ï“™‚È”’l‚Ì•â³
+	bool FrameCorrect(const float fDest, float *fTarget, const float fCorrect);		// ‹Ï“™‚È”’l‚Ì•â³
 }
 
 #endif
