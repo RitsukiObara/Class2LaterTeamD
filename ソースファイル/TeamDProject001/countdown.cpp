@@ -17,8 +17,18 @@
 //=======================================
 #define COUNTDOWN_INIT_ROT	(D3DXVECTOR3(0.0f, 0.0f, -0.5f))		// カウントダウンの初期の向き
 #define COUNTDOWN_TIME		(5)										// カウントダウンの時間
-#define COUNT_FRAME			(50)									// 1カウントごとのフレーム数
 #define COUNTDOWN_TEXTURE	"data\\TEXTURE\\Number.png"				// カウントダウンのテクスチャ
+
+// デバッグ版
+#ifdef _DEBUG
+
+#define COUNT_FRAME			(1)										// 1カウントごとのフレーム数
+
+#else
+
+#define COUNT_FRAME			(50)									// 1カウントごとのフレーム数
+
+#endif // _DEBUG
 
 //=========================
 // コンストラクタ

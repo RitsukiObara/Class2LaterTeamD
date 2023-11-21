@@ -63,13 +63,14 @@ public:			// 誰でもアクセスできる
 		TYPE_GLASSES,			// 眼鏡ケース
 		TYPE_PENCIL,			// 鉛筆
 		TYPE_PICTUREFRAME,		// 写真立て
+		TYPE_SHELF,				// 戸棚
+		TYPE_PULLSHELF,			// 引き出し棚
 
 		// 障害物モデル
 		TYPE_HONEYBOTTLE,		// 蜂蜜のボトル
 		TYPE_SLIME,				// スライム
 		TYPE_HAIRBALL,			// 毬
 		TYPE_FLOWERVASE,		// 花瓶
-		TYPE_PLASTICCASE,		// プラスチックケース
 		TYPE_PETBOTTLE,			// ペットボトル
 		TYPE_TOYCARBODY,		// おもちゃの車(本体)
 		TYPE_ROOMBA_MAIN,		// ルンバの本体

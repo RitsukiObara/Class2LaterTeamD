@@ -42,7 +42,7 @@ CPetbottle::~CPetbottle()
 }
 
 //==============================
-// 転がるの初期化処理
+// ペットボトルの初期化処理
 //==============================
 HRESULT CPetbottle::Init(void)
 {
@@ -62,7 +62,7 @@ HRESULT CPetbottle::Init(void)
 }
 
 //========================================
-// 転がるの終了処理
+// ペットボトルの終了処理
 //========================================
 void CPetbottle::Uninit(void)
 {
@@ -71,7 +71,7 @@ void CPetbottle::Uninit(void)
 }
 
 //=====================================
-// 転がるの更新処理
+// ペットボトルの更新処理
 //=====================================
 void CPetbottle::Update(void)
 {
@@ -107,7 +107,7 @@ void CPetbottle::Update(void)
 }
 
 //=====================================
-// 転がるの描画処理
+// ペットボトルの描画処理
 //=====================================
 void CPetbottle::Draw(void)
 {
@@ -136,6 +136,35 @@ void CPetbottle::SetData(const D3DXVECTOR3& pos, const TYPE type)
 //=====================================
 bool CPetbottle::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
 {
+	if (m_state == STATE_STAND)
+	{ // 直立状態の場合
+
+		if (pos.y <= GetPos().y + GetFileData().vtxMax.y &&
+			pos.y + fHeight >= GetPos().y + GetFileData().vtxMin.y)
+		{ // ペットボトルと衝突した場合
+
+			// 円柱の当たり判定処理
+			if (useful::CylinderCollision(&pos, GetPos(), GetFileData().vtxMax.x + fWidth) == true)
+			{ // 当たり判定が false の場合
+
+				if (posOld.y >= GetPos().y + GetFileData().vtxMax.y &&
+					pos.y <= GetPos().y + GetFileData().vtxMax.y)
+				{ // 上からの当たり判定
+
+					// 縦の位置を設定する
+					pos.y = GetPos().y + GetFileData().vtxMax.y + 0.01f;
+				}
+				else if (posOld.y + fHeight <= GetPos().y + GetFileData().vtxMin.y &&
+					pos.y + fHeight >= GetPos().y + GetFileData().vtxMin.y)
+				{ // 下からの当たり判定
+
+					// 縦の位置を設定する
+					pos.y = GetPos().y + GetFileData().vtxMin.y - fHeight - 0.01f;
+				}
+			}
+		}
+	}
+
 	// false を返す
 	return false;
 }
@@ -145,6 +174,24 @@ bool CPetbottle::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const fl
 //=====================================
 bool CPetbottle::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
 {
+	// 最大値と最小値を設定する
+	D3DXVECTOR3 vtxMax = D3DXVECTOR3(fWidth, fHeight, fDepth);
+	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-fWidth, 0.0f, -fDepth);
+
+	if (m_state == STATE_COLLAPSE &&
+		type == COLLTYPE_RAT)
+	{ // 倒れ状態の場合
+
+		if (useful::RectangleCollisionXY(GetPos(), pos, GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true &&
+			useful::RectangleCollisionXZ(GetPos(), pos, GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true &&
+			useful::RectangleCollisionYZ(GetPos(), pos, GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true)
+		{ // 当たり判定が true の場合
+
+			// true を返す
+			return true;
+		}
+	}
+
 	// false を返す
 	return false;
 }

@@ -15,6 +15,7 @@
 #include "useful.h"
 
 #include "car_gear.h"
+#include "collision.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -190,6 +191,16 @@ void CToyCar::SetData(const D3DXVECTOR3& pos, const TYPE type)
 //=====================================
 bool CToyCar::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
 {
+	// 最小値と最大値を宣言
+	D3DXVECTOR3 vtxMin, vtxMax;
+
+	// 最小値と最大値を設定する
+	vtxMax = D3DXVECTOR3(fWidth, fHeight, fDepth);
+	vtxMin = D3DXVECTOR3(-fWidth, 0.0f, -fDepth);
+
+	// 六面体の当たり判定
+	collision::HexahedronCollision(pos, GetPos(), posOld, GetPosOld(), vtxMin, GetFileData().vtxMin, vtxMax, GetFileData().vtxMax);
+
 	// false を返す
 	return false;
 }
@@ -199,6 +210,27 @@ bool CToyCar::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float
 //=====================================
 bool CToyCar::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
 {
+	// 最小値と最大値を宣言
+	D3DXVECTOR3 vtxMin, vtxMax;
+
+	// 最小値と最大値を設定する
+	vtxMax = D3DXVECTOR3(fWidth, fHeight, fDepth);
+	vtxMin = D3DXVECTOR3(-fWidth, 0.0f, -fDepth);
+
+	if (type == COLLTYPE_RAT &&
+		m_state == STATE_DRIVE)
+	{ // ネズミかつ、ドライブ状態の場合
+
+		if (useful::RectangleCollisionXY(GetPos(), pos, GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true &&
+			useful::RectangleCollisionXZ(GetPos(), pos, GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true &&
+			useful::RectangleCollisionYZ(GetPos(), pos, GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true)
+		{ // 中にいる場合
+
+			// true を返す
+			return true;
+		}
+	}
+
 	// false を返す
 	return false;
 }

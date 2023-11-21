@@ -36,6 +36,7 @@ namespace useful
 	bool RectangleCollisionXZ(const D3DXVECTOR3& pos0, const D3DXVECTOR3& pos1, const D3DXVECTOR3& VtxMax0, const D3DXVECTOR3& VtxMax1, const D3DXVECTOR3& VtxMin0, const D3DXVECTOR3& VtxMin1);		// XZ座標の矩形の当たり判定
 	bool RectangleCollisionYZ(const D3DXVECTOR3& pos0, const D3DXVECTOR3& pos1, const D3DXVECTOR3& VtxMax0, const D3DXVECTOR3& VtxMax1, const D3DXVECTOR3& VtxMin0, const D3DXVECTOR3& VtxMin1);		// YZ座標の矩形の当たり判定
 	bool CylinderCollision(D3DXVECTOR3* TargetPos, const D3DXVECTOR3& ObjectPos, const float fObjectRadius);					// 円柱の当たり判定
+	bool CylinderInner(const D3DXVECTOR3* TargetPos, const D3DXVECTOR3& ObjectPos, const float fObjectRadius);					// 円柱の内側判定処理
 	void DecimalCalculation(const int nDigit, const int nValue, int* aAnswer);		// 10進数への変換処理
 	void FrameCorrect(const float fDest, float *fTarget, const float fCorrect);		// 均等な数値の補正
 }

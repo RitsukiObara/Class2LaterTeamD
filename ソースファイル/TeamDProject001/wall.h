@@ -15,6 +15,7 @@ public:
 	void Update(void);
 	void Draw(void);
 	static CWall* Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size);
+
 private:
 
 	D3DXVECTOR3 m_pos;

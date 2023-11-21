@@ -315,9 +315,6 @@
     <ClCompile Include="petbottle.cpp">
       <Filter>Gimmick\Obstacle</Filter>
     </ClCompile>
-    <ClCompile Include="plastic_case.cpp">
-      <Filter>Gimmick\Obstacle</Filter>
-    </ClCompile>
     <ClCompile Include="rat_ghost.cpp">
       <Filter>Rat</Filter>
     </ClCompile>
@@ -382,9 +379,6 @@
       <Filter>Gimmick\Obstacle</Filter>
     </ClCompile>
     <ClCompile Include="tarai.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="break_vase.cpp">
       <Filter>Gimmick\Obstacle</Filter>
     </ClCompile>
   </ItemGroup>
@@ -626,9 +620,6 @@
     <ClInclude Include="petbottle.h">
       <Filter>Gimmick\Obstacle</Filter>
     </ClInclude>
-    <ClInclude Include="plastic_case.h">
-      <Filter>Gimmick\Obstacle</Filter>
-    </ClInclude>
     <ClInclude Include="rat_ghost.h">
       <Filter>Rat</Filter>
     </ClInclude>
@@ -693,9 +684,6 @@
       <Filter>Gimmick\Obstacle</Filter>
     </ClInclude>
     <ClInclude Include="tarai.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="break_vase.h">
       <Filter>Gimmick\Obstacle</Filter>
     </ClInclude>
   </ItemGroup>

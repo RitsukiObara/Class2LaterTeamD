@@ -11,10 +11,13 @@
 #include "manager.h"
 #include "renderer.h"
 #include "hairball.h"
+#include "collision.h"
 #include "useful.h"
 
 #include "objectElevation.h"
 #include "elevation_manager.h"
+#include "block.h"
+#include "block_manager.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -73,18 +76,21 @@ void CHairBall::Uninit(void)
 //=====================================
 void CHairBall::Update(void)
 {
+	// 前回の位置を設定する
+	SetPosOld(GetPos());
+
 	switch (m_state)
 	{
-	case CHairBall::STATE_STOP:
+	case STATE_STOP:
 
-
+		// 特になし
 
 		break;
 
-	case CHairBall::STATE_BOUND:
+	case STATE_SMASH:
 
-		// 重力処理
-		Gravity();
+		// 移動処理
+		Move();
 
 		break;
 
@@ -96,8 +102,14 @@ void CHairBall::Update(void)
 		break;
 	}
 
+	// 重力処理
+	Gravity();
+
 	// 起伏地面との当たり判定
 	Elevation();
+
+	// ブロックとの当たり判定
+	Block();
 }
 
 //=====================================
@@ -127,12 +139,29 @@ void CHairBall::SetData(const D3DXVECTOR3& pos, const TYPE type)
 //=====================================
 bool CHairBall::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
 {
-	if (pos.y <= GetPos().y + GetFileData().vtxMax.y ||
+	if (pos.y <= GetPos().y + GetFileData().vtxMax.y &&
 		pos.y + fHeight >= GetPos().y + GetFileData().vtxMin.y)
 	{ // 毬と衝突した場合
 
 		// 円柱の当たり判定処理
-		useful::CylinderCollision(&pos, GetPos(), GetFileData().fRadius + fWidth);
+		if (useful::CylinderCollision(&pos, GetPos(), GetFileData().fRadius + fWidth) == true)
+		{ // 当たり判定が false の場合
+
+			if (posOld.y >= GetPos().y + GetFileData().vtxMax.y &&
+				pos.y <= GetPos().y + GetFileData().vtxMax.y)
+			{ // 上からの当たり判定
+
+				// 縦の位置を設定する
+				pos.y = GetPos().y + GetFileData().vtxMax.y + 0.01f;
+			}
+			else if (posOld.y + fHeight <= GetPos().y + GetFileData().vtxMin.y &&
+				pos.y + fHeight >= GetPos().y + GetFileData().vtxMin.y)
+			{ // 下からの当たり判定
+
+				// 縦の位置を設定する
+				pos.y = GetPos().y + GetFileData().vtxMin.y - fHeight - 0.01f;
+			}
+		}
 	}
 
 	// false の場合
@@ -147,8 +176,10 @@ bool CHairBall::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHei
 	// ターゲットの位置を設定する
 	D3DXVECTOR3 Targetpos = pos;
 
-	if ((pos.y <= GetPos().y + GetFileData().vtxMax.y ||
-		pos.y + fHeight >= GetPos().y + GetFileData().vtxMin.y) &&
+	if (m_state == STATE_SMASH &&
+		type == COLLTYPE_RAT &&
+		pos.y <= GetPos().y + GetFileData().vtxMax.y &&
+		pos.y + fHeight >= GetPos().y + GetFileData().vtxMin.y &&
 		useful::CylinderCollision(&Targetpos, GetPos(), GetFileData().fRadius + fWidth) == true)
 	{ // 毬と衝突した場合
 
@@ -161,6 +192,22 @@ bool CHairBall::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHei
 		// false を返す
 		return false;
 	}
+}
+
+//=====================================
+// 移動処理
+//=====================================
+void CHairBall::Move(void)
+{
+	// 位置を取得する
+	D3DXVECTOR3 pos = GetPos();
+
+	// 位置を移動する
+	pos.x += m_move.x;
+	pos.z += m_move.z;
+
+	// 位置を適用する
+	SetPos(pos);
 }
 
 //=====================================
@@ -185,7 +232,7 @@ void CHairBall::Elevation(void)
 {
 	// ローカル変数宣言
 	CElevation* pMesh = CElevationManager::Get()->GetTop();		// 起伏の先頭のオブジェクトを取得する
-	D3DXVECTOR3 pos = D3DXVECTOR3(GetPos().x, GetPos().y, GetPos().z);		// 位置を取得する
+	D3DXVECTOR3 pos = GetPos();				// 位置を取得する
 	float fHeight = 0.0f;					// 高さ
 	bool bLand = false;						// 着地状況
 
@@ -202,7 +249,9 @@ void CHairBall::Elevation(void)
 			pos.y = fHeight - GetFileData().vtxMin.y;
 
 			// 移動量を減算する
+			m_move.x *= 0.6f;
 			m_move.y *= -0.6f;
+			m_move.z *= 0.6f;
 
 			if (m_move.y <= 5.0f)
 			{ // 移動量が一定以下の場合
@@ -228,8 +277,34 @@ void CHairBall::Elevation(void)
 	else
 	{ // 上記以外
 
-		// バウンド状態にする
-		m_state = STATE_BOUND;
+		// 吹き飛ばし状態にする
+		m_state = STATE_SMASH;
+	}
+
+	// 位置を更新する
+	SetPos(pos);
+}
+
+//=====================================
+// ブロックの当たり判定
+//=====================================
+void CHairBall::Block(void)
+{
+	// ローカル変数宣言
+	CBlock* pBlock = CBlockManager::Get()->GetTop();		// ブロックの先頭のオブジェクトを取得する
+	D3DXVECTOR3 pos = GetPos();				// 位置を取得する
+	bool bLand = false;						// 着地状況
+
+	while (pBlock != nullptr)
+	{ // 地面の情報がある限り回す
+
+		if (collision::HexahedronCollision(pos, pBlock->GetPos(), GetPosOld(), pBlock->GetPosOld(), GetFileData().vtxMin, pBlock->GetFileData().vtxMin, GetFileData().vtxMax, pBlock->GetFileData().vtxMax) == true)
+		{ // 当たり判定が true の場合
+
+		}
+
+		// 次のポインタを取得する
+		pBlock = pBlock->GetNext();
 	}
 
 	// 位置を更新する
