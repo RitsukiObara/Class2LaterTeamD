@@ -29,14 +29,18 @@
 //-------------------------------------------
 // マクロ定義
 //-------------------------------------------
-#define GRAVITY			(1.0f)			// 重力
-#define ADD_MOVE_Y		(30.0f)			// 浮力
-#define NONE_RATIDX		(-1)			// ネズミの番号の初期値
-#define ATTACK_DISTANCE	(200.0f)		// 攻撃範囲までの距離
-#define MAX_LIFE		(3)				// 寿命の最大値
-#define TIME_DAMAGE		(60 * 1)		// ダメージ食らうまでの時間
-#define SPEED			(20.0f)			// 速度
-#define SIZE			(D3DXVECTOR3(30.0f, 50.0f, 30.0f))		// サイズ
+#define GRAVITY				(1.0f)			// 重力
+#define ADD_MOVE_Y			(30.0f)			// 浮力
+#define NONE_RATIDX			(-1)			// ネズミの番号の初期値
+#define ATTACK_DISTANCE		(200.0f)		// 攻撃範囲までの距離
+#define MAX_LIFE			(3)				// 寿命の最大値
+#define SPEED				(20.0f)			// 速度
+#define SIZE				(D3DXVECTOR3(30.0f, 50.0f, 30.0f))		// 当たり判定でのサイズ
+
+// 状態関係のマクロ定義
+#define INVINCIBLE_COUNT	(60)			// 無敵状態のカウント数
+#define SMASH_COUNT			(40)			// 吹き飛び状態のカウント数
+#define DAMAGE_COUNT		(10)			// ダメージ状態のカウント数
 
 //--------------------------------------------
 // 静的メンバ変数宣言
@@ -54,11 +58,10 @@ CRat::CRat() : CCharacter(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 	m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_nRatIdx = NONE_RATIDX;			// ネズミの番号
 	m_nLife = 0;						// 寿命
-	m_nDamageCounter = TIME_DAMAGE;		// ダメージ食らうまでのカウンター
+	m_nStateCount = 0;					// 状態カウント
 	m_fSpeed = 0.0f;					// 速度
 	m_bJump = false;					// ジャンプしたか
 	m_bAttack = false;					// 攻撃したか
-	MotionType = MOTIONTYPE_NEUTRAL;	// モーションの状態
 	m_State = STATE_NONE;				// 状態
 	m_nNumAll++;						// ネズミの総数加算
 }
@@ -125,15 +128,15 @@ HRESULT CRat::Init(void)
 	m_pMotion->Set(MotionType);
 
 	// 全ての値を初期化する
-	m_pPlayerID = nullptr;				// プレイヤーのID表示
-	m_move = NONE_D3DXVECTOR3;			// 移動量
-	m_nRatIdx = NONE_RATIDX;			// ネズミの番号
-	m_fSpeed = 0.0f;					// 速度
-	m_nLife = MAX_LIFE;					// 寿命
-	m_nDamageCounter = TIME_DAMAGE;		// ダメージ食らうまでのカウンター
-	m_bJump = false;					// ジャンプしたか
-	m_bAttack = false;					// 攻撃したか
-	m_State = STATE_NONE;				// 状態
+	m_pPlayerID = nullptr;			// プレイヤーのID表示
+	m_move = NONE_D3DXVECTOR3;		// 移動量
+	m_nRatIdx = NONE_RATIDX;		// ネズミの番号
+	m_fSpeed = 0.0f;				// 速度
+	m_nLife = MAX_LIFE;				// 寿命
+	m_nStateCount = 0;				// ダメージ食らうまでのカウンター
+	m_bJump = false;				// ジャンプしたか
+	m_bAttack = false;				// 攻撃したか
+	m_State = STATE_NONE;			// 状態
 
 	// 値を返す
 	return S_OK;
@@ -199,9 +202,6 @@ void CRat::Update(void)
 
 		// モーションの設定処理
 		MotionManager();
-
-		m_nDamageCounter++;		// ダメージ食らうまでの時間加算
-
 	}
 
 	// 起伏地面の当たり判定
@@ -297,14 +297,14 @@ void CRat::SetData(const D3DXVECTOR3& pos, const int nID)
 	SetScale(NONE_SCALE);					// 拡大率
 
 	// 情報を設定する
-	m_nRatIdx = nID;					// ネズミの番号
-	m_move = NONE_D3DXVECTOR3;			// 移動量
-	m_fSpeed = 0.0f;					// 速度
-	m_nLife = MAX_LIFE;					// 寿命
-	m_nDamageCounter = TIME_DAMAGE;		// ダメージ食らうまでのカウンター
-	m_bJump = false;					// ジャンプしたか
-	m_bAttack = false;					// 攻撃したか
-	m_State = STATE_NONE;				// 状態
+	m_nRatIdx = nID;				// ネズミの番号
+	m_move = NONE_D3DXVECTOR3;		// 移動量
+	m_fSpeed = 0.0f;				// 速度
+	m_nLife = MAX_LIFE;				// 寿命
+	m_nStateCount = 0;				// ダメージ食らうまでのカウンター
+	m_bJump = false;				// ジャンプしたか
+	m_bAttack = false;				// 攻撃したか
+	m_State = STATE_NONE;			// 状態
 
 	for (int nCntData = 0; nCntData < GetNumModel(); nCntData++)
 	{
@@ -599,6 +599,9 @@ void CRat::Attack(void)
 //=======================================
 void CRat::UpdateState(void)
 {
+	// 状態カウントを加算する
+	m_nStateCount++;
+
 	switch (m_State)
 	{
 	case STATE_NONE:		// 何でもない状態
@@ -610,11 +613,44 @@ void CRat::UpdateState(void)
 	case STATE_ATTACK:		// 攻撃状態
 		break;
 	case STATE_INVINCIBLE:	// 無敵状態
+
+		if (m_nStateCount >= INVINCIBLE_COUNT)
+		{ // 状態カウントが一定以上になった場合
+
+			// 通常状態にする
+			m_State = STATE_NONE;
+
+			// 状態カウントを初期化する
+			m_nStateCount = 0;
+		}
+
 		break;
+
 	case STATE_DAMAGE:		// ダメージ状態
+
+		if (m_nStateCount >= DAMAGE_COUNT)
+		{ // 状態カウントが一定数に達した場合
+
+			// 無敵状態にする
+			m_State = STATE_INVINCIBLE;
+
+			// 状態カウントを初期化する
+			m_nStateCount = 0;
+		}
+
 		break;
 
 	case STATE_SMASH:		// 吹き飛び状態
+
+		if (m_nStateCount >= SMASH_COUNT)
+		{ // 状態カウントが一定以上になった場合
+
+			// 通常状態にする
+			m_State = STATE_NONE;
+
+			// 状態カウントを初期化する
+			m_nStateCount = 0;
+		}
 
 		break;
 
@@ -639,10 +675,13 @@ bool CRat::Hit(void)
 	// ローカル変数宣言
 	D3DXVECTOR3 pos = GetPos();
 
-	if (m_nDamageCounter >= TIME_DAMAGE && m_State != STATE_DEATH)
-	{ // ダメージ食らう時間になったら
-		m_nLife--;		// 寿命減らす
-		m_nDamageCounter = 0;		// ダメージ食らうまでの時間リセット
+	if (m_State != STATE_DAMAGE && 
+		m_State != STATE_INVINCIBLE &&
+		m_State != STATE_SMASH &&
+		m_State != STATE_DEATH)
+	{ // ダメージ受ける状態だった場合
+		m_nLife--;			// 寿命減らす
+		m_nStateCount = 0;	// 状態カウントをリセット
 
 		CParticle::Create(pos, CParticle::TYPE_ENEMYDEATH); //パーティクル
 
@@ -674,11 +713,6 @@ bool CRat::Hit(void)
 		}
 		return true;
 	}
-	else
-	{ // ダメージ食らう時間じゃなかったら
-
-		m_nDamageCounter++;		// ダメージ食らうまでの時間加算
-	}
 
 	// 生を返す
 	return false;
@@ -692,50 +726,21 @@ void CRat::Smash(const float fAngle)
 	// ローカル変数宣言
 	D3DXVECTOR3 pos = GetPos();
 
-	if (m_nDamageCounter >= TIME_DAMAGE && m_State != STATE_DEATH && m_State != STATE_SMASH)
-	{ // ダメージ食らう時間になったら
+	if (m_State != STATE_DAMAGE &&
+		m_State != STATE_INVINCIBLE &&
+		m_State != STATE_SMASH &&
+		m_State != STATE_DEATH)
+	{ // ダメージ受ける状態だった場合
 
 		// 移動量を算出する
 		m_move.x = sinf(fAngle) * 20.0f;
-		m_move.y = 10.0f;
+		m_move.y = 30.0f;
 		m_move.z = cosf(fAngle) * 20.0f;
 
-		m_nLife--;		// 寿命減らす
-		m_nDamageCounter = 0;		// ダメージ食らうまでの時間リセット
+		m_nStateCount = 0;	// ダメージ食らうまでの時間リセット
 
-		CParticle::Create(pos, CParticle::TYPE_ENEMYDEATH); //パーティクル
-
-		if (m_nLife <= 0)
-		{ // 寿命が無いとき
-
-			m_State = STATE_DEATH;		// 死亡状態にする
-
-#if 1	// デバッグの為の処理↓
-
-			m_nNumAll--;						// ネズミの総数減算
-
-			// 終了状態にする
-			Uninit();
-
-			if (m_nNumAll <= 0)
-			{ // ネズミが全滅したら
-
-				// ネコが勝利した状態にする
-				CGame::SetState(CGame::STATE_CAT_WIN);
-			}
-#endif
-		}
-		else
-		{ // 上記以外
-
-			// 吹き飛び状態にする
-			m_State = STATE_SMASH;
-		}
-	}
-	else
-	{ // ダメージ食らう時間じゃなかったら
-
-		m_nDamageCounter++;		// ダメージ食らうまでの時間加算
+		// 吹き飛び状態にする
+		m_State = STATE_SMASH;
 	}
 }
 

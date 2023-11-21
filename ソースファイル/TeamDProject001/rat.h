@@ -95,14 +95,14 @@ private:		// 自分だけアクセスできる
 	CMotion* m_pMotion;			// モーションの情報
 	CPlayerID* m_pPlayerID;		// プレイヤーのID
 	D3DXVECTOR3 m_move;			// 移動量
+	STATE m_State;				// ネズミの状態
 	int m_nRatIdx;				// ネズミの番号
 	int m_nLife;				// 寿命
-	int m_nDamageCounter;		// ダメージ食らうまでのカウンター
+	int m_nStateCount;			// 状態カウント
 	float m_fSpeed;				// 速度
 	bool m_bJump;				// ジャンプしたか
 	bool m_bAttack;				// 攻撃したか
 	MOTIONTYPE MotionType;		// モーションの状態
-	STATE m_State;				// ネズミの状態
 
 	// 静的メンバ関数
 	static int m_nNumAll;		// ネズミの総数
