@@ -1,6 +1,6 @@
 //===========================================
 //
-// たらいメイン処理[tarai.cpp]
+// 音符メイン処理[note.cpp]
 // Author 坂本翔唯
 //
 //===========================================
@@ -10,9 +10,9 @@
 #include "main.h"
 #include "manager.h"
 #include "renderer.h"
-#include "tarai.h"
+#include "note.h"
 #include "useful.h"
-#include "Himo.h"
+#include "speaker.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -22,16 +22,16 @@
 //==============================
 // コンストラクタ
 //==============================
-CTarai::CTarai() : CModel(CObject::TYPE_NONE, CObject::PRIORITY_BLOCK)
+CNote::CNote() : CModel(CObject::TYPE_NONE, CObject::PRIORITY_BLOCK)
 {
 	m_move = NONE_D3DXVECTOR3;
-	m_nIndex = -1;
+	m_nLife = 10;
 }
 
 //==============================
 // デストラクタ
 //==============================
-CTarai::~CTarai()
+CNote::~CNote()
 {
 
 }
@@ -39,7 +39,7 @@ CTarai::~CTarai()
 //==============================
 // 破片の初期化処理
 //==============================
-HRESULT CTarai::Init(void)
+HRESULT CNote::Init(void)
 {
 	if (FAILED(CModel::Init()))
 	{ // 初期化処理に失敗した場合
@@ -55,7 +55,7 @@ HRESULT CTarai::Init(void)
 //========================================
 // 破片の終了処理
 //========================================
-void CTarai::Uninit(void)
+void CNote::Uninit(void)
 {
 	// 終了処理
 	CModel::Uninit();
@@ -64,35 +64,37 @@ void CTarai::Uninit(void)
 //=====================================
 // 破片の更新処理
 //=====================================
-void CTarai::Update(void)
+void CNote::Update(void)
 {
-	// 位置を取得する
+	// 位置と向きをを取得する
 	D3DXVECTOR3 pos = GetPos();
+	D3DXVECTOR3 rot = GetRot();
 
 	// 位置を加算する
-	m_move.y -= 0.98f;
+	m_nLife--;
+	rot.y += 0.05f;
+	pos.y = m_StartPosY + sinf(m_nLife * 0.1f) * 50.0f;
 
-	if (pos.y < 0.0f)
+	if (m_nLife <= 0)
 	{
-		//m_move.y = 0.0f;
-		//m_move.y = -m_move.y * 0.5f;
+		CSpeaker::NULLNote(m_nIndex);
 
-		CHimo::NULLTarai(m_nIndex);
 		Uninit();
 		return;
 	}
 
 	// 位置更新
-	pos.y += m_move.y;
+	pos += m_move;
 
-	// 位置を設定する
+	// 位置と向きを設定する
 	SetPos(pos);
+	SetRot(rot);
 }
 
 //=====================================
 // 破片の描画処理
 //=====================================
-void CTarai::Draw(void)
+void CNote::Draw(void)
 {
 	// 描画処理
 	CModel::Draw();
@@ -101,29 +103,43 @@ void CTarai::Draw(void)
 //=====================================
 // 情報の設定処理
 //=====================================
-void CTarai::SetData(const D3DXVECTOR3& pos)
+void CNote::SetData(const D3DXVECTOR3& pos)
 {
 	// 情報の設定処理
 	SetPos(pos);								// 位置
 	SetPosOld(pos);								// 前回の位置
 	SetRot(NONE_D3DXVECTOR3);					// 向き
 	SetScale(NONE_SCALE);						// 拡大率
-	SetFileData(CXFile::TYPE_TARAI);			// モデル情報
+
+	int nRandNote = rand() % 3;
+	switch (nRandNote)
+	{
+	case 0:
+		SetFileData(CXFile::TYPE_NOTE4);			// モデル情報
+		break;
+	case 1:
+		SetFileData(CXFile::TYPE_NOTE8);			// モデル情報
+		break;
+	case 2:
+		SetFileData(CXFile::TYPE_NOTE16);			// モデル情報
+		break;
+	}
+	m_StartPosY = pos.y;
 }
 
 //=======================================
 // 生成処理
 //=======================================
-CTarai* CTarai::Create(const D3DXVECTOR3& pos)
+CNote* CNote::Create(const D3DXVECTOR3& pos)
 {
 	// ローカルオブジェクトを生成
-	CTarai* pTarai = nullptr;	// インスタンスを生成
+	CNote* pTarai = nullptr;	// インスタンスを生成
 
 	if (pTarai == nullptr)
 	{ // オブジェクトが NULL の場合
 
 	  // インスタンスを生成
-		pTarai = new CTarai;
+		pTarai = new CNote;
 	}
 	else
 	{ // オブジェクトが NULL じゃない場合

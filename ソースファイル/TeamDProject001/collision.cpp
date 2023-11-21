@@ -17,7 +17,7 @@
 #include "block.h"
 #include "block_manager.h"
 #include "useful.h"
-
+#include "Particle.h"
 #include "map.h"
 #include "wall.h"
 #include "ground.h"
@@ -133,7 +133,10 @@ void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight,
 
 				// ˆÚ“®—Ê‚ðÝ’è‚·‚é
 				pRat->SetSpeed(pRat->GetSpeed() * 0.7f);
-
+				if (pRat->IsMove() == true)
+				{
+					CParticle::Create(pos, CParticle::TYPE_SLIME);
+				}
 				break;
 
 			case CObstacle::TYPE_HAIRBALL:

@@ -1,29 +1,29 @@
 //===================================
 //
-// ひもヘッダー[Himo.h]
+// スピーカーヘッダー[Himo.h]
 // Author 坂本翔唯
 //
 //===================================
-#ifndef _HIMO_H_
-#define _HIMO_H_
+#ifndef _SPEAKER_H_
+#define _SPEAKER_H_
 
 //***********************************
 // インクルードファイル
 //***********************************
 #include "obstacle.h"
 
-#define MAX_TARAI (5)
+#define MAX_NOTE (32)
 
-class CTarai;
+class CNote;
 //-----------------------------------
-// クラス定義(ひも)
+// クラス定義(スピーカー)
 //-----------------------------------
-class CHimo : public CObstacle
+class CSpeaker : public CObstacle
 {
 public:			// 誰でもアクセスできる
 
-	CHimo();				// コンストラクタ
-	~CHimo();				// デストラクタ
+	CSpeaker();				// コンストラクタ
+	~CSpeaker();				// デストラクタ
 
 	// メンバ関数
 	HRESULT Init(void);		// 初期化処理
@@ -36,17 +36,15 @@ public:			// 誰でもアクセスできる
 	bool Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type);	// 当たり判定処理
 	bool Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type);		// ヒット処理
 
-	static void NULLTarai(int Idx) { m_apTarai[Idx] = NULL; }
+	static void NULLNote(int Idx) { m_apNote[Idx] = NULL; }
 
 private:		// 自分だけアクセスできる
 	void Action(void);
-	void SetTarai(void);
+	void SetNote(void);
 
-	static CTarai *m_apTarai[MAX_TARAI];
-	int m_nTaraiCount;
+	static CNote *m_apNote[MAX_NOTE];
 	bool m_bAction;
-	float m_fDownPosY;
-	float m_fUpPosY;
+	int m_nNoateCount;
 };
 
 #endif

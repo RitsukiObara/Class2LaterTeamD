@@ -30,6 +30,7 @@ public:			// 誰でもアクセスできる
 		TYPE_TOYCAR,		// おもちゃの車
 		TYPE_ROOMBA,		// ルンバ
 		TYPE_HIMO,			// ひも
+		TYPE_SPEAKER,		// スピーカー
 		TYPE_MAX			// この列挙型の総数
 	};
 
