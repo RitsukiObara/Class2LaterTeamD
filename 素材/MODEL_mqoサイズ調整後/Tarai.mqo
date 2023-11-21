@@ -4,11 +4,18 @@ Format Text Ver 1.0
 Scene {
 	pos 2.7186 -7.1200 2400.0005
 	lookat 0.0000 0.0000 0.0000
-	head -19.1106
-	pich 0.1808
+	head -18.8505
+	pich 0.1608
+	bank 0.0000
 	ortho 0
 	zoom2 3.1250
 	amb 0.250 0.250 0.250
+	dirlights 1 {
+		light {
+			dir 0.408 0.408 0.816
+			color 1.000 1.000 1.000
+		}
+	}
 }
 Material 2 {
 	"mat1" col(0.733 0.733 0.733 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.400) power(5.00)
