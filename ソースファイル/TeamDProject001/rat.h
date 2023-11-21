@@ -76,6 +76,7 @@ public:			// 誰でもアクセスできる
 	int GetRatIdx(void) const;				// ネズミの番号の取得処理
 	void SetState(STATE state);				// ネズミの状態の設定処理
 	STATE GetState(void);					// ネズミの状態の取得処理
+	bool IsMove(void);					
 
 	// 静的メンバ関数
 	static CRat* Create(const D3DXVECTOR3& pos, const int nID);		// 生成処理
@@ -102,6 +103,7 @@ private:		// 自分だけアクセスできる
 	float m_fSpeed;				// 速度
 	bool m_bJump;				// ジャンプしたか
 	bool m_bAttack;				// 攻撃したか
+	bool m_bMove;				// 移動しているか
 	MOTIONTYPE MotionType;		// モーションの状態
 
 	// 静的メンバ関数

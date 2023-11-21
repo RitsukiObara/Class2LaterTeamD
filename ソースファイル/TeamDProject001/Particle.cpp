@@ -103,6 +103,12 @@ void CParticle::Create(const D3DXVECTOR3& pos, const CParticle::TYPE type)
 
 			break;
 
+		case TYPE_SLIME:	// 粘着床
+
+			// 粘着床の初期化処理
+			pParticle->InitSlime(pos);
+
+			break;
 		default:			// 上記以外
 
 			// 停止
@@ -307,9 +313,9 @@ void CParticle::InitEnemyDeath(const D3DXVECTOR3& pos)
 }
 
 //===============================
-// 粘着床のエフェクト生成
+// スライム床のエフェクト生成
 //===============================
-void Initcohesion(const D3DXVECTOR3& pos)
+void CParticle::InitSlime(const D3DXVECTOR3& pos)
 {
 	// ローカル変数宣言
 	D3DXVECTOR3 EffectPos;		// エフェクトの位置
@@ -317,38 +323,32 @@ void Initcohesion(const D3DXVECTOR3& pos)
 	int nLife;					// 寿命
 	D3DXVECTOR3 randRot;		// ランダムの向き
 
-	for (int nCnt = 0; nCnt < 4; nCnt++)
-	{
 		// 向きを設定する
-		randRot.x = (float)((rand() % 629 - 314) * 0.01f);
-		EffectPos.x = pos.x + sinf(randRot.x) * 20.0f;
+	randRot.x = (float)((rand() % 629 - 314) * 0.01f);
+	EffectPos.x = pos.x + sinf(randRot.x) * 20.0f;
 
-		EffectPos.y = pos.y;
+	EffectPos.y = pos.y;
 
-		// 向きを設定する
-		randRot.z = (float)((rand() % 629 - 314) * 0.01f);
-		EffectPos.z = pos.z + cosf(randRot.z) * 20.0f;
+	// 向きを設定する
+	randRot.z = (float)((rand() % 629 - 314) * 0.01f);
+	EffectPos.z = pos.z + cosf(randRot.z) * 20.0f;
 
-		for (int nCntDust = 0; nCntDust < 4; nCntDust++)
-		{
-			EffectMove.x = sinf(randRot.x) * (rand() % 3 + 10);
-			EffectMove.y = (float)(rand() % 3 + 1);
-			EffectMove.z = cosf(randRot.z) * (rand() % 3 + 10);
+	EffectMove.x = sinf(randRot.x) * (rand() % 3 + 7);
+	EffectMove.y = (float)(rand() % 3 + 1);
+	EffectMove.z = cosf(randRot.z) * (rand() % 3 + 7);
 
-			// 寿命を設定する
-			nLife = rand() % 10 + 10;
+	// 寿命を設定する
+	nLife = rand() % 10 + 8;
 
-			// エフェクトの生成処理
-			CEffect::Create
-			(
-				EffectPos,
-				EffectMove,
-				nLife,
-				50.0f,
-				CEffect::TYPE_DUST,
-				D3DXCOLOR(0.4f, 1.0f, 0.4f, 1.0f),
-				false
-			);
-		}
-	}
+	// エフェクトの生成処理
+	CEffect::Create
+	(
+		EffectPos,
+		EffectMove,
+		nLife,
+		50.0f,
+		CEffect::TYPE_DUST,
+		D3DXCOLOR(0.4f, 1.0f, 0.4f, 1.0f),
+		false
+	);
 }
