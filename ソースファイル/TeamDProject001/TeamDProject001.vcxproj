@@ -168,6 +168,7 @@
     <ClCompile Include="collpolygon.cpp" />
     <ClCompile Include="confetti.cpp" />
     <ClCompile Include="countdown.cpp" />
+    <ClCompile Include="danger_mark.cpp" />
     <ClCompile Include="debugproc.cpp" />
     <ClCompile Include="destruction.cpp" />
     <ClCompile Include="edit.cpp" />
@@ -206,6 +207,7 @@
     <ClCompile Include="model.cpp" />
     <ClCompile Include="motion.cpp" />
     <ClCompile Include="mousetrap.cpp" />
+    <ClCompile Include="mousetrap_iron.cpp" />
     <ClCompile Include="note.cpp" />
     <ClCompile Include="number.cpp" />
     <ClCompile Include="object.cpp" />
@@ -279,6 +281,7 @@
     <ClInclude Include="collpolygon.h" />
     <ClInclude Include="confetti.h" />
     <ClInclude Include="countdown.h" />
+    <ClInclude Include="danger_mark.h" />
     <ClInclude Include="debugproc.h" />
     <ClInclude Include="destruction.h" />
     <ClInclude Include="edit.h" />
@@ -317,6 +320,7 @@
     <ClInclude Include="model.h" />
     <ClInclude Include="motion.h" />
     <ClInclude Include="mousetrap.h" />
+    <ClInclude Include="mousetrap_iron.h" />
     <ClInclude Include="note.h" />
     <ClInclude Include="number.h" />
     <ClInclude Include="object.h" />

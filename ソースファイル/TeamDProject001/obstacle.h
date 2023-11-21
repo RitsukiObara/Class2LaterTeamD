@@ -31,6 +31,7 @@ public:			// 誰でもアクセスできる
 		TYPE_ROOMBA,		// ルンバ
 		TYPE_HIMO,			// ひも
 		TYPE_SPEAKER,		// スピーカー
+		TYPE_MOUSETRAP,		// ネズミ捕り
 		TYPE_MAX			// この列挙型の総数
 	};
 

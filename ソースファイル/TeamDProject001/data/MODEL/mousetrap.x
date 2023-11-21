@@ -341,7 +341,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data\\TEXTURE\\coil000.png";
+    "data\\TEXTURE\\coil.png";
    }
   }
   Material {
