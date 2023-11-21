@@ -76,6 +76,9 @@
     <Filter Include="Scene\Entry">
       <UniqueIdentifier>{45c434ef-81fc-4384-a4ab-acf532d6198f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Gimmick\Item">
+      <UniqueIdentifier>{ed652417-c60d-4a5c-a649-e542429ff64c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="fade.cpp">
@@ -402,6 +405,9 @@
     <ClCompile Include="danger_mark.cpp">
       <Filter>Staging</Filter>
     </ClCompile>
+    <ClCompile Include="item.cpp">
+      <Filter>Gimmick\Item</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -727,6 +733,9 @@
     </ClInclude>
     <ClInclude Include="danger_mark.h">
       <Filter>Staging</Filter>
+    </ClInclude>
+    <ClInclude Include="item.h">
+      <Filter>Gimmick\Item</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
