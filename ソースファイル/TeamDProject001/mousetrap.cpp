@@ -158,6 +158,14 @@ bool CMouseTrap::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHe
 }
 
 //=====================================
+// ギミック起動処理
+//=====================================
+void CMouseTrap::Action(void)
+{
+
+}
+
+//=====================================
 // 鉄部分の位置の設定処理
 //=====================================
 void CMouseTrap::IronPosSet(void)
