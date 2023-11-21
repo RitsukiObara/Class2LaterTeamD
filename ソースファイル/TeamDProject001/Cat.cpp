@@ -10,6 +10,7 @@
 #include "Cat.h"
 #include "manager.h"
 #include "game.h"
+#include "result.h"
 #include "renderer.h"
 #include "debugproc.h"
 #include "input.h"
@@ -532,19 +533,10 @@ void CCat::SetData(const D3DXVECTOR3& pos)
 //=====================================
 void CCat::MotionManager(void)
 {
-	if (m_AttackState == ATTACKSTATE_STANDBY)
-	{
-		if (MotionType != MOTIONTYPE_JUMP)
-		{
-			MotionType = MOTIONTYPE_JUMP;
+	if (CManager::Get()->GetMode() == CScene::MODE_RESULT && 
+		CResult::GetState() == CGame::STATE_CAT_WIN)
+	{ // リザルト && ねこのかち
 
-			// モーションの設定処理
-			m_pMotion->Set(MotionType);
-		}
-	}
-	else if (m_move.x > 0.05f || m_move.x < -0.05f ||
-		m_move.z > 0.05f || m_move.z < -0.05f)
-	{
 		if (MotionType != MOTIONTYPE_MOVE)
 		{
 			MotionType = MOTIONTYPE_MOVE;
@@ -554,13 +546,38 @@ void CCat::MotionManager(void)
 		}
 	}
 	else
-	{
-		if (MotionType != MOTIONTYPE_NEUTRAL)
-		{
-			MotionType = MOTIONTYPE_NEUTRAL;
+	{ // リザルト以外のとき
 
-			// モーションの設定処理
-			m_pMotion->Set(MotionType);
+		if (m_AttackState == ATTACKSTATE_STANDBY)
+		{
+			if (MotionType != MOTIONTYPE_JUMP)
+			{
+				MotionType = MOTIONTYPE_JUMP;
+
+				// モーションの設定処理
+				m_pMotion->Set(MotionType);
+			}
+		}
+		else if (m_move.x > 0.05f || m_move.x < -0.05f ||
+			m_move.z > 0.05f || m_move.z < -0.05f)
+		{
+			if (MotionType != MOTIONTYPE_MOVE)
+			{
+				MotionType = MOTIONTYPE_MOVE;
+
+				// モーションの設定処理
+				m_pMotion->Set(MotionType);
+			}
+		}
+		else
+		{
+			if (MotionType != MOTIONTYPE_NEUTRAL)
+			{
+				MotionType = MOTIONTYPE_NEUTRAL;
+
+				// モーションの設定処理
+				m_pMotion->Set(MotionType);
+			}
 		}
 	}
 }

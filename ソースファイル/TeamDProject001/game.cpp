@@ -178,7 +178,7 @@ void CGame::Update(void)
 
 	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_RETURN) == true)
 	{
-		m_GameState = STATE_RAT_WIN;
+		m_GameState = STATE_CAT_WIN;
 	}
 
 	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_F7) == true)

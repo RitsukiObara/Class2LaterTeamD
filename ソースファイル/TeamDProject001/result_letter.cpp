@@ -10,7 +10,6 @@
 #include "main.h"
 #include "manager.h"
 #include "result_letter.h"
-//#include "sample_manager.h"
 
 //-------------------------------------------
 // ƒ}ƒNƒ’è‹`

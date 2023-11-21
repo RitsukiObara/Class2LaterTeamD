@@ -19,10 +19,19 @@
 #include "skybox.h"
 #include "game.h"
 #include "result_letter.h"
+#include "objectElevation.h"
+#include "rat.h"
+#include "Cat.h"
 
 //--------------------------------------------
 // マクロ定義
 //--------------------------------------------
+
+//--------------------------------------------
+// 静的メンバ変数宣言
+//--------------------------------------------
+CRat* CResult::m_apRat[MAX_RAT] = {};							// ネズミの情報
+int CResult::m_nGameState = 0;			// ゲームの情報
 
 //=========================================
 // コンストラクタ
@@ -54,11 +63,34 @@ HRESULT CResult::Init(void)
 	// テキスト読み込み処理
 	CMesh::TxtSet();
 
+	// テキスト読み込み処理
+	CElevation::TxtSet();
+
 	// ゲームの状態を取得する
-	CGame::GetState();
+	m_nGameState = CGame::GetState();
 
 	// 3Dテキスト生成
-	CResultLetter::Create(D3DXVECTOR3(0.0f, 300.0f, 0.0f), CXFile::TYPE_WINCAT_TEXT);
+	if (m_nGameState == CGame::STATE_CAT_WIN)
+	{ // ネコが勝ったら
+
+		CResultLetter::Create(D3DXVECTOR3(0.0f, 300.0f, 0.0f), CXFile::TYPE_WINCAT_TEXT);		// ねこのかち
+
+	}
+	else if (m_nGameState == CGame::STATE_RAT_WIN)
+	{ // ネズミが勝ったら
+
+		//CResultLetter::Create(D3DXVECTOR3(0.0f, 300.0f, 0.0f), CXFile::TYPE_WINCAT_TEXT);		// ねずみのかち
+
+	}
+
+	// ネズミの生成
+	for (int nCntRat = 0; nCntRat < MAX_RAT; nCntRat++)
+	{
+		m_apRat[nCntRat] = CRat::Create(D3DXVECTOR3(200.0f * nCntRat, 0.0f, 0.0f), nCntRat);
+	}
+
+	//猫の生成
+	CCat::Create(D3DXVECTOR3(-300.0f, 0.0f, 0.0f));
 
 	// 成功を返す
 	return S_OK;
@@ -104,4 +136,12 @@ void CResult::Update(void)
 void CResult::Draw(void)
 {
 
+}
+
+//======================================
+//ゲームの情報取得処理
+//======================================
+int CResult::GetState(void)
+{
+	return m_nGameState;
 }
