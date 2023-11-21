@@ -28,6 +28,7 @@
 #include "weapon_selectUI.h"
 #include "block.h"
 #include "countdown.h"
+#include "item.h"
 
 #include "obstacle_manager.h"
 
@@ -124,6 +125,9 @@ HRESULT CGame::Init(void)
 
 	// スピーカーの生成処理
 	CObstacle::Create(D3DXVECTOR3(-250.0f, 200.0f, 900), CObstacle::TYPE_SPEAKER);
+
+	// アイテムの生成処理
+	CItem::Create(D3DXVECTOR3(0.0f, 0.0f, -600.0f));
 
 #endif // _DEBUG
 

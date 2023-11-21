@@ -10,13 +10,22 @@
 #include "main.h"
 #include "item.h"
 #include "item_manager.h"
+#include "useful.h"
+
+//-------------------------------------------
+// ƒ}ƒNƒ’è‹`
+//-------------------------------------------
+#define ROT_MOVE		(0.01f)		// Œü‚«‚ÌˆÚ“®—Ê
+#define EXTEND_SCALE	(1.05f)		// Šg‘åŽž‚ÌŠg‘å—¦
+#define SHRINK_SCALE	(0.95f)		// ŠgkŽž‚ÌŠg‘å—¦
 
 //==============================
 // ƒRƒ“ƒXƒgƒ‰ƒNƒ^
 //==============================
-CItem::CItem() : CModel(CObject::TYPE_BLOCK, CObject::PRIORITY_BLOCK)
+CItem::CItem() : CModel(CObject::TYPE_ITEM, CObject::PRIORITY_ENTITY)
 {
 	// ‘S‚Ä‚Ì’l‚ðƒNƒŠƒA‚·‚é
+	m_fScaleDest = 0.0f;			// –Ú“I‚ÌŠg‘å—¦
 	m_pPrev = nullptr;				// ‘O‚Ì‚Ö‚Ìƒ|ƒCƒ“ƒ^
 	m_pNext = nullptr;				// ŽŸ‚Ì‚Ö‚Ìƒ|ƒCƒ“ƒ^
 
@@ -84,6 +93,9 @@ HRESULT CItem::Init(void)
 		return E_FAIL;
 	}
 
+	// ‘S‚Ä‚Ì’l‚ð‰Šú‰»‚·‚é
+	m_fScaleDest = 0.0f;	// –Ú“I‚ÌŠg‘å—¦
+
 	// ’l‚ð•Ô‚·
 	return S_OK;
 }
@@ -113,7 +125,11 @@ void CItem::Uninit(void)
 //=====================================
 void CItem::Update(void)
 {
+	// ‰ñ“]ˆ—
+	Cycle();
 
+	// Šgkˆ—
+	Scaling();
 }
 
 //=====================================
@@ -136,6 +152,9 @@ void CItem::SetData(const D3DXVECTOR3& pos)
 	SetRot(NONE_D3DXVECTOR3);				// Œü‚«
 	SetScale(NONE_SCALE);					// Šg‘å—¦
 	SetFileData(CXFile::TYPE_TRAPITEM);		// ƒ‚ƒfƒ‹‚Ìî•ñ
+
+	// ‘S‚Ä‚Ì’l‚ðÝ’è‚·‚é
+	m_fScaleDest = EXTEND_SCALE;			// –Ú“I‚ÌŠg‘å—¦
 }
 
 //=====================================
@@ -191,4 +210,41 @@ CItem* CItem::Create(const D3DXVECTOR3& pos)
 
 	// ƒAƒCƒeƒ€‚Ìƒ|ƒCƒ“ƒ^‚ð•Ô‚·
 	return pItem;
+}
+
+//=====================================
+// ‰ñ“]ˆ—
+//=====================================
+void CItem::Cycle(void)
+{
+	// Œü‚«‚ðŽæ“¾‚·‚é
+	D3DXVECTOR3 rot = GetRot();		// Œü‚«‚ðŽæ“¾‚·‚é
+
+	// Œü‚«‚ð‰ÁŽZ‚·‚é
+	rot.y += ROT_MOVE;
+
+	// Œü‚«‚ð“K—p‚·‚é
+	SetRot(rot);
+}
+
+//=====================================
+// Šgkˆ—
+//=====================================
+void CItem::Scaling(void)
+{
+	// Šg‘å—¦‚ðŽæ“¾‚·‚é
+	D3DXVECTOR3 scale = GetScale();
+
+	// Šg‘å—¦‚Ì•â³ˆ—
+	if (useful::FrameCorrect(m_fScaleDest, &scale.x, 0.002f) == true ||
+		useful::FrameCorrect(m_fScaleDest, &scale.y, 0.002f) == true ||
+		useful::FrameCorrect(m_fScaleDest, &scale.z, 0.002f) == true)
+	{ // –Ú“I‚Ì’l‚É‚È‚Á‚½ê‡
+
+		// –Ú“I‚ÌŠg‘å—¦‚ðÝ’è‚·‚é
+		m_fScaleDest = (m_fScaleDest >= EXTEND_SCALE) ? SHRINK_SCALE : EXTEND_SCALE;
+	}
+
+	// Šg‘å—¦‚ð“K—p‚·‚é
+	SetScale(scale);
 }

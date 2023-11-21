@@ -41,6 +41,13 @@ public:			// 誰でもアクセスできる
 
 private:		// 自分だけアクセスできる
 
+	// メンバ関数
+	void Cycle(void);		// 回転処理
+	void Scaling(void);		// 拡縮処理
+
+	// メンバ変数
+	float m_fScaleDest;		// 目的の拡大率
+
 	// リスト構造関係
 	CItem* m_pPrev;	// 前へのポインタ
 	CItem* m_pNext;	// 次へのポインタ
