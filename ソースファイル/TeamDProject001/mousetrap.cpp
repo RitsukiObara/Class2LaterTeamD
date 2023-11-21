@@ -9,6 +9,8 @@
 //*******************************************
 #include "main.h"
 #include "mousetrap.h"
+#include "obstacle.h"
+#include "mousetrap_iron.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -19,7 +21,8 @@
 //==============================
 CMouseTrap::CMouseTrap() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 {
-
+	// 全ての値をクリアする
+	m_pIron = nullptr;		// 鉄部分
 }
 
 //==============================
@@ -42,6 +45,9 @@ HRESULT CMouseTrap::Init(void)
 		return E_FAIL;
 	}
 
+	// 全ての値をクリアする
+	m_pIron = nullptr;		// 鉄部分
+
 	// 値を返す
 	return S_OK;
 }
@@ -51,6 +57,14 @@ HRESULT CMouseTrap::Init(void)
 //========================================
 void CMouseTrap::Uninit(void)
 {
+	if (m_pIron != nullptr)
+	{ // 鉄部分が NULL じゃない場合
+
+		// 鉄部分の終了処理
+		m_pIron->Uninit();
+		m_pIron = nullptr;
+	}
+
 	// 終了処理
 	CObstacle::Uninit();
 }
@@ -60,7 +74,12 @@ void CMouseTrap::Uninit(void)
 //=====================================
 void CMouseTrap::Update(void)
 {
+	if (m_pIron != nullptr)
+	{ // 鉄部分が NULL じゃない場合
 
+		// 鉄部分の更新処理
+		m_pIron->Update();
+	}
 }
 
 //=====================================
@@ -70,6 +89,13 @@ void CMouseTrap::Draw(void)
 {
 	// 描画処理
 	CObstacle::Draw();
+
+	if (m_pIron != nullptr)
+	{ // 鉄部分が NULL じゃない場合
+
+		// 鉄部分の描画処理
+		m_pIron->Draw();
+	}
 }
 
 //=====================================
@@ -79,6 +105,14 @@ void CMouseTrap::SetData(const D3DXVECTOR3& pos, const TYPE type)
 {
 	// 情報の設定処理
 	CObstacle::SetData(pos, type);
+
+	// 全ての値をクリアする
+	if (m_pIron == nullptr)
+	{ // 鉄部分が NULL の場合
+
+		// 鉄部分を生成
+		m_pIron = CTrapIron::Create(D3DXVECTOR3(pos.x, pos.y + 10.0f, pos.z));
+	}
 }
 
 //=====================================

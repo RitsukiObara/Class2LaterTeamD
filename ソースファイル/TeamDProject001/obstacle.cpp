@@ -23,6 +23,7 @@
 #include "roomba.h"
 #include "Himo.h"
 #include "speaker.h"
+#include "mousetrap.h"
 
 //==============================
 // コンストラクタ
@@ -249,6 +250,13 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const TYPE type)
 
 			// スピーカーを生成する
 			pObstacle = new CSpeaker;
+
+			break;
+
+		case CObstacle::TYPE_MOUSETRAP:
+
+			// ネズミ捕りを生成する
+			pObstacle = new CMouseTrap;
 
 			break;
 
