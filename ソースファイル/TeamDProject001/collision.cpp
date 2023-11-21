@@ -181,6 +181,9 @@ void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight,
 
 			case CObstacle::TYPE_HIMO:
 
+				// ƒqƒbƒgˆ—
+				pRat->Hit();
+
 				break;
 
 			case CObstacle::TYPE_SPEAKER:

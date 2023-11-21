@@ -182,8 +182,21 @@ bool CHimo::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float f
 //=====================================
 bool CHimo::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
 {
-	//// 終了処理
-	//Uninit();
+	for (int nCntTarai = 0; nCntTarai < MAX_TARAI; nCntTarai++)
+	{
+		if (m_apTarai[nCntTarai] != nullptr)
+		{ // タライが NULL じゃない場合
+
+			if (pos.y + fHeight <= m_apTarai[nCntTarai]->GetPosOld().y + m_apTarai[nCntTarai]->GetFileData().vtxMin.y &&
+				pos.y + fHeight >= m_apTarai[nCntTarai]->GetPos().y + m_apTarai[nCntTarai]->GetFileData().vtxMin.y &&
+				useful::CylinderInner(pos, m_apTarai[nCntTarai]->GetPos(), m_apTarai[nCntTarai]->GetFileData().fRadius + fWidth) == true)
+			{ // タライが頭上に落ちてきた場合
+
+				// true を返す
+				return true;
+			}
+		}
+	}
 
 	// false を返す
 	return false;

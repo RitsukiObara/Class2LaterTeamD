@@ -691,6 +691,11 @@ bool CRat::Hit(void)
 			// 死を返す
 			return true;
 		}
+		else
+		{ // 上記以外
+
+			m_pRatState->SetState(CRatState::STATE_DAMAGE);		// ダメージ状態にする
+		}
 
 		// 死を返す
 		return true;
