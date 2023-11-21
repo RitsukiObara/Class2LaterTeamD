@@ -53,6 +53,7 @@ public:			// 誰でもアクセスできる
 		STATE_INVINCIBLE,	// 無敵状態
 		STATE_DAMAGE,		// ダメージ状態
 		STATE_SMASH,		// 吹き飛び状態
+		STATE_STUN,			// 気絶状態
 		STATE_DEATH,		// 死亡状態
 		STATE_MAX
 	};
@@ -65,6 +66,7 @@ public:			// 誰でもアクセスできる
 
 	bool Hit(void);					// ヒット処理
 	void Smash(const float fAngle);	// 吹き飛び状態
+	void Stun(void);				// 気絶状態
 
 	void SetData(const D3DXVECTOR3& pos, const int nID);				// 情報の設定処理
 

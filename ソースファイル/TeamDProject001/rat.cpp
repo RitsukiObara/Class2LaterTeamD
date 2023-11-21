@@ -36,6 +36,7 @@
 #define MAX_LIFE			(3)				// 寿命の最大値
 #define SPEED				(20.0f)			// 速度
 #define SIZE				(D3DXVECTOR3(30.0f, 50.0f, 30.0f))		// 当たり判定でのサイズ
+#define SMASH_MOVE			(D3DXVECTOR3(10.0f, 20.0f, 10.0f))		// 吹き飛び状態の移動量
 
 // 状態関係のマクロ定義
 #define INVINCIBLE_COUNT	(60)			// 無敵状態のカウント数
@@ -658,6 +659,10 @@ void CRat::UpdateState(void)
 
 		break;
 
+	case STATE_STUN:		// 気絶状態
+
+		break;
+
 	case STATE_DEATH:		// 死亡状態
 
 		break;
@@ -682,7 +687,8 @@ bool CRat::Hit(void)
 	if (m_State != STATE_DAMAGE && 
 		m_State != STATE_INVINCIBLE &&
 		m_State != STATE_SMASH &&
-		m_State != STATE_DEATH)
+		m_State != STATE_DEATH &&
+		m_State != STATE_STUN)
 	{ // ダメージ受ける状態だった場合
 		m_nLife--;			// 寿命減らす
 		m_nStateCount = 0;	// 状態カウントをリセット
@@ -733,18 +739,38 @@ void CRat::Smash(const float fAngle)
 	if (m_State != STATE_DAMAGE &&
 		m_State != STATE_INVINCIBLE &&
 		m_State != STATE_SMASH &&
-		m_State != STATE_DEATH)
+		m_State != STATE_DEATH &&
+		m_State != STATE_STUN)
 	{ // ダメージ受ける状態だった場合
 
 		// 移動量を算出する
-		m_move.x = sinf(fAngle) * 20.0f;
-		m_move.y = 30.0f;
-		m_move.z = cosf(fAngle) * 20.0f;
+		m_move.x = sinf(fAngle) * SMASH_MOVE.x;
+		m_move.y = SMASH_MOVE.y;
+		m_move.z = cosf(fAngle) * SMASH_MOVE.z;
 
 		m_nStateCount = 0;	// ダメージ食らうまでの時間リセット
 
 		// 吹き飛び状態にする
 		m_State = STATE_SMASH;
+	}
+}
+
+//=======================================
+// 気絶状態
+//=======================================
+void CRat::Stun(void)
+{
+	if (m_State != STATE_DAMAGE &&
+		m_State != STATE_INVINCIBLE &&
+		m_State != STATE_SMASH &&
+		m_State != STATE_DEATH &&
+		m_State != STATE_STUN)
+	{ // ダメージ受ける状態だった場合
+
+		m_nStateCount = 0;	// ダメージ食らうまでの時間リセット
+
+		// 気絶状態にする
+		m_State = STATE_STUN;
 	}
 }
 
