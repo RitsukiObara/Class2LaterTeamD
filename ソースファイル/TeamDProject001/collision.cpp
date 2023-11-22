@@ -113,6 +113,7 @@ void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight,
 	// ローカル変数宣言
 	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を取得する
 	D3DXVECTOR3 pos = pRat->GetPos();			// 位置を取得する
+	float fAngle;								// 吹き飛ぶ方向
 
 	while (pObstacle != nullptr)
 	{ // ブロックの情報が NULL じゃない場合
@@ -141,8 +142,11 @@ void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight,
 
 			case CObstacle::TYPE_HAIRBALL:
 
+				// 向きを算出する
+				fAngle = atan2f(pos.x - pObstacle->GetPos().x, pos.z - pObstacle->GetPos().z);
+
 				// ヒット処理
-				pRat->Hit();
+				pRat->Smash(fAngle);
 
 				break;
 
@@ -154,17 +158,17 @@ void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight,
 
 			case CObstacle::TYPE_PETBOTTLE:
 
+				// 向きを算出する
+				fAngle = atan2f(pos.x - pObstacle->GetPos().x, pos.z - pObstacle->GetPos().z);
+
 				// ヒット処理
-				pRat->Hit();
+				pRat->Smash(fAngle);
 
 				break;
 
 			case CObstacle::TYPE_TOYCAR:
 
 			{ // プレイヤーを飛ばす処理
-
-				// 方向を宣言
-				float fAngle;
 
 				// 向きを算出する
 				fAngle = atan2f(pos.x - pObstacle->GetPos().x, pos.z - pObstacle->GetPos().z);
@@ -181,15 +185,21 @@ void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight,
 
 			case CObstacle::TYPE_HIMO:
 
+				// 向きを算出する
+				fAngle = atan2f(pos.x - pObstacle->GetPos().x, pos.z - pObstacle->GetPos().z);
+
 				// ヒット処理
-				pRat->Hit();
+				pRat->Smash(fAngle);
 
 				break;
 
 			case CObstacle::TYPE_SPEAKER:
 
+				// 向きを算出する
+				fAngle = atan2f(pos.x - pObstacle->GetPos().x, pos.z - pObstacle->GetPos().z);
+
 				// ヒット処理
-				pRat->Hit();
+				pRat->Smash(fAngle);
 
 				break;
 
