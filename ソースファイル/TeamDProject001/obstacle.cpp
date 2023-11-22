@@ -25,6 +25,7 @@
 #include "speaker.h"
 #include "mousetrap.h"
 #include "leash.h"
+#include "Pin.h"
 
 //==============================
 // コンストラクタ
@@ -265,6 +266,13 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const TYPE type)
 
 			// ネズミ捕りを生成する
 			pObstacle = new CLeash;
+
+			break;
+
+		case CObstacle::TYPE_PIN:
+
+			// ネズミ捕りを生成する
+			pObstacle = new CPin;
 
 			break;
 

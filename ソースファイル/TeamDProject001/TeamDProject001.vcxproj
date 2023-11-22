@@ -164,7 +164,8 @@
     <ClCompile Include="car_gear.cpp" />
     <ClCompile Include="Cat.cpp" />
     <ClCompile Include="character.cpp" />
-    <ClCompile Include="chara_image.cpp" />
+    <ClCompile Include="chara_icon.cpp" />
+    <ClCompile Include="chara_ID.cpp" />
     <ClCompile Include="chara_infoUI.cpp" />
     <ClCompile Include="collision.cpp" />
     <ClCompile Include="collpolygon.cpp" />
@@ -234,6 +235,7 @@
     <ClCompile Include="particle2D.cpp" />
     <ClCompile Include="pause.cpp" />
     <ClCompile Include="petbottle.cpp" />
+    <ClCompile Include="Pin.cpp" />
     <ClCompile Include="player_idUI.cpp" />
     <ClCompile Include="rat.cpp" />
     <ClCompile Include="precompile.cpp">
@@ -266,6 +268,7 @@
     <ClCompile Include="title_back.cpp" />
     <ClCompile Include="title_floor.cpp" />
     <ClCompile Include="title_logo.cpp" />
+    <ClCompile Include="title_press.cpp" />
     <ClCompile Include="title_wall.cpp" />
     <ClCompile Include="toycar.cpp" />
     <ClCompile Include="useful.cpp" />
@@ -282,7 +285,8 @@
     <ClInclude Include="car_gear.h" />
     <ClInclude Include="Cat.h" />
     <ClInclude Include="character.h" />
-    <ClInclude Include="chara_image.h" />
+    <ClInclude Include="chara_icon.h" />
+    <ClInclude Include="chara_ID.h" />
     <ClInclude Include="chara_infoUI.h" />
     <ClInclude Include="collision.h" />
     <ClInclude Include="collpolygon.h" />
@@ -352,6 +356,7 @@
     <ClInclude Include="particle2D.h" />
     <ClInclude Include="pause.h" />
     <ClInclude Include="petbottle.h" />
+    <ClInclude Include="Pin.h" />
     <ClInclude Include="player_idUI.h" />
     <ClInclude Include="rat.h" />
     <ClInclude Include="precompile.h" />
@@ -381,6 +386,7 @@
     <ClInclude Include="title_back.h" />
     <ClInclude Include="title_floor.h" />
     <ClInclude Include="title_logo.h" />
+    <ClInclude Include="title_press.h" />
     <ClInclude Include="title_wall.h" />
     <ClInclude Include="toycar.h" />
     <ClInclude Include="useful.h" />
