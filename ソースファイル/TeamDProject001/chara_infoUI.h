@@ -11,6 +11,7 @@
 // インクルードファイル
 //********************************************
 #include "object.h"
+#include "chara_image.h"
 
 //--------------------------------------------
 // クラス定義(キャラクターの情報UI)
@@ -18,14 +19,6 @@
 class CCharaInfoUI : public CObject
 {
 public:				// 誰でもアクセスできる
-
-	// 列挙型定義(種類)
-	enum TYPE
-	{
-		TYPE_CAT = 0,		// ネコ
-		TYPE_RAT,			// ネズミ
-		TYPE_MAX			// この列挙型の総数
-	};
 
 	CCharaInfoUI();					// コンストラクタ
 	~CCharaInfoUI();				// デストラクタ
@@ -36,10 +29,10 @@ public:				// 誰でもアクセスできる
 	void Update(void);		// 更新処理
 	void Draw(void);		// 描画処理
 
-	void SetData(const D3DXVECTOR3& pos, const int nPlayerID, const TYPE type);						// 情報の設定処理
+	void SetData(const D3DXVECTOR3& pos, const int nPlayerID, const CCharaImage::TYPE type);						// 情報の設定処理
 
 	// 静的メンバ関数
-	static CCharaInfoUI* Create(const D3DXVECTOR3& pos, const int nPlayerID, const TYPE type);		// 生成処理
+	static CCharaInfoUI* Create(const D3DXVECTOR3& pos, const int nPlayerID, const CCharaImage::TYPE type);		// 生成処理
 
 private:			// 自分だけアクセスできる
 

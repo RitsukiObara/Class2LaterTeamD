@@ -65,7 +65,7 @@ void CCharaInfoUI::Draw(void)
 //========================
 // 情報の設定処理
 //========================
-void CCharaInfoUI::SetData(const D3DXVECTOR3& pos, const int nPlayerID, const TYPE type)
+void CCharaInfoUI::SetData(const D3DXVECTOR3& pos, const int nPlayerID, const CCharaImage::TYPE type)
 {
 
 }
@@ -73,7 +73,7 @@ void CCharaInfoUI::SetData(const D3DXVECTOR3& pos, const int nPlayerID, const TY
 //========================
 // 生成処理
 //========================
-CCharaInfoUI* CCharaInfoUI::Create(const D3DXVECTOR3& pos, const int nPlayerID, const TYPE type)
+CCharaInfoUI* CCharaInfoUI::Create(const D3DXVECTOR3& pos, const int nPlayerID, const CCharaImage::TYPE type)
 {
 	// ローカルオブジェクトを生成
 	CCharaInfoUI* pInfoUI = nullptr;		// キャラクター情報UIのインスタンスを生成
