@@ -113,6 +113,7 @@ public:			// 誰でもアクセスできる
 
 		// 3Dテキストモデル
 		TYPE_WINCAT_TEXT,		// ねこのかちテキスト
+		TYPE_WINRAT_TEXT,		// ねずみのかちテキスト
 
 		// エディットモデル
 		TYPE_MAX,				// 全モデルの総数
