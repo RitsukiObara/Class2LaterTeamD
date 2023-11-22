@@ -113,3 +113,11 @@ bool CSlime::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight
 		return false;
 	}
 }
+
+//=====================================
+// ギミック起動処理
+//=====================================
+void CSlime::Action(void)
+{
+
+}

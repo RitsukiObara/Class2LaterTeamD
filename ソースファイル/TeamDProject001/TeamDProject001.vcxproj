@@ -192,6 +192,8 @@
     <ClCompile Include="Himo.cpp" />
     <ClCompile Include="honey.cpp" />
     <ClCompile Include="input.cpp" />
+    <ClCompile Include="item.cpp" />
+    <ClCompile Include="item_manager.cpp" />
     <ClCompile Include="light.cpp" />
     <ClCompile Include="locus2D.cpp" />
     <ClCompile Include="logo.cpp" />
@@ -305,6 +307,8 @@
     <ClInclude Include="Himo.h" />
     <ClInclude Include="honey.h" />
     <ClInclude Include="input.h" />
+    <ClInclude Include="item.h" />
+    <ClInclude Include="item_manager.h" />
     <ClInclude Include="light.h" />
     <ClInclude Include="locus2D.h" />
     <ClInclude Include="logo.h" />

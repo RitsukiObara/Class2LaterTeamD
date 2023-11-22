@@ -11,15 +11,14 @@
 #include "mousetrap.h"
 #include "obstacle.h"
 #include "mousetrap_iron.h"
+#include "danger_mark.h"
 #include "useful.h"
 
 //-------------------------------------------
 // マクロ定義
 //-------------------------------------------
-#define IRON_SHIFT			(10.0f)								// 鉄部分のずらす位置
-#define EXTEND_SCALE_DEST	(D3DXVECTOR3(1.1f, 0.9f, 1.1f))		// 拡大状態の目的の拡大率
-#define SHRINK_SCALE_DEST	(D3DXVECTOR3(0.9f, 1.1f, 0.9f))		// 縮小状態の目的の拡大率
-#define ADD_SCALE			(0.003f)							// 追加の拡大率
+#define IRON_SHIFT			(10.0f)		// 鉄部分のずらす位置
+#define DANGER_SHIFT		(200.0f)	// 危険マークのずらす位置
 
 //==============================
 // コンストラクタ
@@ -28,6 +27,7 @@ CMouseTrap::CMouseTrap() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_B
 {
 	// 全ての値をクリアする
 	m_pIron = nullptr;			// 鉄部分
+	m_pMark = nullptr;			// 危険マークの情報
 }
 
 //==============================
@@ -52,6 +52,7 @@ HRESULT CMouseTrap::Init(void)
 
 	// 全ての値をクリアする
 	m_pIron = nullptr;			// 鉄部分
+	m_pMark = nullptr;			// 危険マークの情報
 
 	// 値を返す
 	return S_OK;
@@ -68,6 +69,14 @@ void CMouseTrap::Uninit(void)
 		// 鉄部分の終了処理
 		m_pIron->Uninit();
 		m_pIron = nullptr;
+	}
+
+	if (m_pMark != nullptr)
+	{ // マークが NULL じゃない場合
+
+		// マークの終了処理
+		m_pMark->Uninit();
+		m_pMark = nullptr;
 	}
 
 	// 終了処理
@@ -121,6 +130,13 @@ void CMouseTrap::SetData(const D3DXVECTOR3& pos, const TYPE type)
 		// 鉄部分を生成
 		m_pIron = CTrapIron::Create(D3DXVECTOR3(pos.x, pos.y + IRON_SHIFT, pos.z));
 	}
+
+	if (m_pMark == nullptr)
+	{ // マークが NULL の場合
+
+		// 危険マークの生成
+		m_pMark = CDangerMark::Create(D3DXVECTOR3(pos.x, pos.y + DANGER_SHIFT, pos.z), D3DXVECTOR3(50.0f, 50.0f, 0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
+	}
 }
 
 //=====================================
@@ -139,6 +155,14 @@ bool CMouseTrap::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHe
 {
 	// false を返す
 	return false;
+}
+
+//=====================================
+// ギミック起動処理
+//=====================================
+void CMouseTrap::Action(void)
+{
+
 }
 
 //=====================================

@@ -238,6 +238,14 @@ bool CToyCar::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeigh
 }
 
 //=====================================
+// ギミック起動処理
+//=====================================
+void CToyCar::Action(void)
+{
+
+}
+
+//=====================================
 // 走行処理
 //=====================================
 void CToyCar::Drive(void)

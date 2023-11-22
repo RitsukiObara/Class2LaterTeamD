@@ -16,6 +16,7 @@
 // 前方宣言
 //-----------------------------------
 class CTrapIron;		// ネズミ捕りの鉄部分
+class CDangerMark;		// 危険マーク
 
 //-----------------------------------
 // クラス定義(ネズミ捕り)
@@ -37,6 +38,7 @@ public:			// 誰でもアクセスできる
 
 	bool Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type);	// 当たり判定処理
 	bool Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type);		// ヒット処理
+	void Action(void) override;										// ギミック起動処理
 
 private:		// 自分だけアクセスできる
 
@@ -45,6 +47,7 @@ private:		// 自分だけアクセスできる
 
 	// メンバ変数
 	CTrapIron* m_pIron;			// 鉄部分
+	CDangerMark* m_pMark;		// 危険マークの情報
 };
 
 #endif
