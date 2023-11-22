@@ -20,7 +20,7 @@ class CPin : public CObstacle
 public:			// 誰でもアクセスできる
 
 	CPin();				// コンストラクタ
-	~CPin();				// デストラクタ
+	~CPin();			// デストラクタ
 
 	// メンバ関数
 	HRESULT Init(void);		// 初期化処理
