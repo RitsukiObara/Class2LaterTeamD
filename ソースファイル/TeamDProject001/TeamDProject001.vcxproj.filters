@@ -417,14 +417,17 @@
     <ClCompile Include="chara_infoUI.cpp">
       <Filter>UI\CharaInfoUI</Filter>
     </ClCompile>
-    <ClCompile Include="chara_image.cpp">
-      <Filter>UI\CharaInfoUI</Filter>
-    </ClCompile>
     <ClCompile Include="leash.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="chara_icon.cpp">
+      <Filter>UI\CharaInfoUI</Filter>
+    </ClCompile>
     <ClCompile Include="Pin.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="chara_ID.cpp">
+      <Filter>UI\CharaInfoUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -761,14 +764,17 @@
     <ClInclude Include="chara_infoUI.h">
       <Filter>UI\CharaInfoUI</Filter>
     </ClInclude>
-    <ClInclude Include="chara_image.h">
-      <Filter>UI\CharaInfoUI</Filter>
-    </ClInclude>
     <ClInclude Include="leash.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="chara_icon.h">
+      <Filter>UI\CharaInfoUI</Filter>
+    </ClInclude>
     <ClInclude Include="Pin.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="chara_ID.h">
+      <Filter>UI\CharaInfoUI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

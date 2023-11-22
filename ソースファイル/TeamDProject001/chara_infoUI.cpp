@@ -12,12 +12,16 @@
 #include "texture.h"
 #include "useful.h"
 
+#include "chara_ID.h"
+
 //========================
 // コンストラクタ
 //========================
 CCharaInfoUI::CCharaInfoUI() : CObject(TYPE_CHARAINFO, PRIORITY_UI)
 {
-
+	// 全ての値をクリアする
+	m_pIcon = nullptr;		// アイコンの情報
+	m_pID = nullptr;		// IDの情報
 }
 
 //========================
@@ -33,6 +37,10 @@ CCharaInfoUI::~CCharaInfoUI()
 //========================
 HRESULT CCharaInfoUI::Init(void)
 {
+	// 全ての値を初期化する
+	m_pIcon = nullptr;		// アイコンの情報
+	m_pID = nullptr;		// IDの情報
+
 	// 成功を返す
 	return S_OK;
 }
@@ -42,7 +50,23 @@ HRESULT CCharaInfoUI::Init(void)
 //========================
 void CCharaInfoUI::Uninit(void)
 {
-	// 数字の終了処理
+	if (m_pIcon != nullptr)
+	{ // アイコンが NULL じゃない場合
+
+		// アイコンの終了処理
+		m_pIcon->Uninit();
+		m_pIcon = nullptr;
+	}
+
+	if (m_pID != nullptr)
+	{ // IDが NULL じゃない場合
+
+		// IDの終了処理
+		m_pID->Uninit();
+		m_pID = nullptr;
+	}
+
+	// 本体の終了処理
 	Release();
 }
 
@@ -51,7 +75,19 @@ void CCharaInfoUI::Uninit(void)
 //========================
 void CCharaInfoUI::Update(void)
 {
+	if (m_pIcon != nullptr)
+	{ // アイコンが NULL じゃない場合
 
+		// アイコンの更新処理
+		m_pIcon->Update();
+	}
+
+	if (m_pID != nullptr)
+	{ // IDが NULL じゃない場合
+
+		// IDの更新処理
+		m_pID->Update();
+	}
 }
 
 //========================
@@ -59,21 +95,45 @@ void CCharaInfoUI::Update(void)
 //========================
 void CCharaInfoUI::Draw(void)
 {
+	if (m_pIcon != nullptr)
+	{ // アイコンが NULL じゃない場合
 
+		// アイコンの描画処理
+		m_pIcon->Draw();
+	}
+
+	if (m_pID != nullptr)
+	{ // IDが NULL じゃない場合
+
+		// IDの描画処理
+		m_pID->Draw();
+	}
 }
 
 //========================
 // 情報の設定処理
 //========================
-void CCharaInfoUI::SetData(const D3DXVECTOR3& pos, const int nPlayerID, const CCharaImage::TYPE type)
+void CCharaInfoUI::SetData(const D3DXVECTOR3& pos, const int nPlayerID, const CCharaIcon::TYPE type)
 {
+	if (m_pIcon == nullptr)
+	{ // アイコンが NULL の場合
 
+		// アイコンを生成する
+		m_pIcon = CCharaIcon::Create(pos, type);
+	}
+
+	if (m_pID == nullptr)
+	{ // IDが NULL の場合
+
+		// IDを生成する
+		m_pID = CCharaID::Create(pos, nPlayerID);
+	}
 }
 
 //========================
 // 生成処理
 //========================
-CCharaInfoUI* CCharaInfoUI::Create(const D3DXVECTOR3& pos, const int nPlayerID, const CCharaImage::TYPE type)
+CCharaInfoUI* CCharaInfoUI::Create(const D3DXVECTOR3& pos, const int nPlayerID, const CCharaIcon::TYPE type)
 {
 	// ローカルオブジェクトを生成
 	CCharaInfoUI* pInfoUI = nullptr;		// キャラクター情報UIのインスタンスを生成

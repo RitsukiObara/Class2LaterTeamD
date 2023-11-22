@@ -14,6 +14,7 @@
 #include "Objectmesh.h"
 
 #include "entry_UI.h"
+#include "input.h"
 
 //=========================================
 // コンストラクタ
@@ -66,6 +67,20 @@ void CEntry::Uninit(void)
 //======================================
 void CEntry::Update(void)
 {
+
+// デバッグ版
+#ifdef _DEBUG
+
+	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_RETURN) == true)
+	{ // ENTERキーを押した場合
+
+		// ゲームモードに遷移
+		CManager::Get()->GetFade()->SetFade(CScene::MODE_GAME);
+	}
+
+#endif // _DEBUG
+
+
 	// レンダラーの更新
 	CManager::Get()->GetRenderer()->Update();
 }

@@ -1,25 +1,25 @@
 //=======================================
 //
-// キャラクターの画像のメイン処理[chara_image.cpp]
+// キャラクターのIDのメイン処理[chara_ID.cpp]
 // Author 小原立暉
 //
 //=======================================
 #include "manager.h"
-#include "chara_image.h"
+#include "chara_ID.h"
 #include "texture.h"
 #include "useful.h"
 
 //=======================================
 // マクロ定義
 //=======================================
-#define ICON_SIZE			(D3DXVECTOR3(50.0f, 50.0f, 0.0f))		// アイコンのサイズ
-#define CAT_ICON_TEXTURE	"data\\TEXTURE\\Cat_Icon.png"			// ネコのアイコンのテクスチャ
-#define RAT_ICON_TEXTURE	"data\\TEXTURE\\Rat_Icon.png"			// ネズミのアイコンのテクスチャ
+#define ID_PATTERN		((float)(1.0f / 4.0f))					// IDの1面ごとのサイズ
+#define ID_SIZE			(D3DXVECTOR3(40.0f, 25.0f, 0.0f))		// IDのサイズ
+#define ID_TEXTURE		"data\\TEXTURE\\PlayerID.png"			// IDのテクスチャ
 
 //=========================
 // コンストラクタ
 //=========================
-CCharaImage::CCharaImage() : CObject2D(CObject::TYPE_NONE, CObject::PRIORITY_UI)
+CCharaID::CCharaID() : CObject2D(CObject::TYPE_NONE, CObject::PRIORITY_UI)
 {
 
 }
@@ -27,7 +27,7 @@ CCharaImage::CCharaImage() : CObject2D(CObject::TYPE_NONE, CObject::PRIORITY_UI)
 //=========================
 // デストラクタ
 //=========================
-CCharaImage::~CCharaImage()
+CCharaID::~CCharaID()
 {
 
 }
@@ -35,7 +35,7 @@ CCharaImage::~CCharaImage()
 //=========================
 // 初期化処理
 //=========================
-HRESULT CCharaImage::Init(void)
+HRESULT CCharaID::Init(void)
 {
 	if (FAILED(CObject2D::Init()))
 	{ // 初期化に失敗した場合
@@ -51,7 +51,7 @@ HRESULT CCharaImage::Init(void)
 //=========================
 // 終了処理
 //=========================
-void CCharaImage::Uninit(void)
+void CCharaID::Uninit(void)
 {
 	// 終了
 	CObject2D::Uninit();
@@ -60,7 +60,7 @@ void CCharaImage::Uninit(void)
 //=========================
 // 更新処理
 //=========================
-void CCharaImage::Update(void)
+void CCharaID::Update(void)
 {
 
 }
@@ -68,7 +68,7 @@ void CCharaImage::Update(void)
 //=========================
 // 描画処理
 //=========================
-void CCharaImage::Draw(void)
+void CCharaID::Draw(void)
 {
 	// 描画処理
 	CObject2D::Draw();
@@ -77,56 +77,38 @@ void CCharaImage::Draw(void)
 //=========================
 // 情報の設定処理
 //=========================
-void CCharaImage::SetData(const D3DXVECTOR3& pos, const TYPE type)
+void CCharaID::SetData(const D3DXVECTOR3& pos, const int nID)
 {
 	// スクロールの設定処理
 	SetPos(pos);				// 位置設定
 	SetRot(NONE_D3DXVECTOR3);	// 向き設定
-	SetSize(ICON_SIZE);			// サイズ設定
+	SetSize(ID_SIZE);			// サイズ設定
 	SetLength();				// 長さ設定
 	SetAngle();					// 方向設定
 
 	// 頂点情報の初期化
 	SetVertex();
 
-	switch (type)
-	{
-	case TYPE::TYPE_CAT:
+	// テクスチャの読み込み処理
+	BindTexture(CManager::Get()->GetTexture()->Regist(ID_TEXTURE));
 
-		// テクスチャの読み込み処理
-		BindTexture(CManager::Get()->GetTexture()->Regist(CAT_ICON_TEXTURE));
-
-		break;
-
-	case TYPE::TYPE_RAT:
-
-		// テクスチャの読み込み処理
-		BindTexture(CManager::Get()->GetTexture()->Regist(RAT_ICON_TEXTURE));
-
-		break;
-
-	default:
-
-		// 停止
-		assert(false);
-
-		break;
-	}
+	// テクスチャ座標の設定処理
+	SetVtxTextureAnim(ID_PATTERN, nID);
 }
 
 //=========================
 // 生成処理
 //=========================
-CCharaImage* CCharaImage::Create(const D3DXVECTOR3& pos, const TYPE type)
+CCharaID* CCharaID::Create(const D3DXVECTOR3& pos, const int nID)
 {
 	// ローカルオブジェクトを生成
-	CCharaImage* pCharaImage = nullptr;	// プレイヤーのインスタンスを生成
+	CCharaID* pCharaImage = nullptr;	// プレイヤーのインスタンスを生成
 
 	if (pCharaImage == nullptr)
 	{ // オブジェクトが NULL の場合
 
 		// オブジェクトを生成
-		pCharaImage = new CCharaImage;
+		pCharaImage = new CCharaID;
 	}
 	else
 	{ // オブジェクトが NULL じゃない場合
@@ -153,7 +135,7 @@ CCharaImage* CCharaImage::Create(const D3DXVECTOR3& pos, const TYPE type)
 		}
 
 		// 情報の設定処理
-		pCharaImage->SetData(pos, type);
+		pCharaImage->SetData(pos, nID);
 	}
 	else
 	{ // オブジェクトが NULL の場合

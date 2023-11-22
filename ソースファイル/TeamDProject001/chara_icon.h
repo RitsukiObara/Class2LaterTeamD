@@ -15,7 +15,7 @@
 //--------------------------------------------
 // クラス定義(キャラクターの画像)
 //--------------------------------------------
-class CCharaImage : public CObject2D
+class CCharaIcon : public CObject2D
 {
 public:				// 誰でもアクセスできる
 
@@ -27,8 +27,8 @@ public:				// 誰でもアクセスできる
 		TYPE_MAX			// この列挙型の総数
 	};
 
-	CCharaImage();						// コンストラクタ
-	~CCharaImage();						// デストラクタ
+	CCharaIcon();						// コンストラクタ
+	~CCharaIcon();						// デストラクタ
 
 	// メンバ関数
 	HRESULT Init(void);					// 初期化処理
@@ -39,7 +39,7 @@ public:				// 誰でもアクセスできる
 	void SetData(const D3DXVECTOR3& pos, const TYPE type);					// 情報の設定処理
 
 	// 静的メンバ関数
-	static CCharaImage* Create(const D3DXVECTOR3& pos, const TYPE type);	// 生成処理
+	static CCharaIcon* Create(const D3DXVECTOR3& pos, const TYPE type);		// 生成処理
 
 private:			// 自分だけアクセスできる
 

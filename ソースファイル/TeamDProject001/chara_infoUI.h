@@ -11,7 +11,12 @@
 // インクルードファイル
 //********************************************
 #include "object.h"
-#include "chara_image.h"
+#include "chara_icon.h"
+
+//--------------------------------------------
+// 前方宣言
+//--------------------------------------------
+class CCharaID;			// キャラクターのID
 
 //--------------------------------------------
 // クラス定義(キャラクターの情報UI)
@@ -29,13 +34,16 @@ public:				// 誰でもアクセスできる
 	void Update(void);		// 更新処理
 	void Draw(void);		// 描画処理
 
-	void SetData(const D3DXVECTOR3& pos, const int nPlayerID, const CCharaImage::TYPE type);						// 情報の設定処理
+	void SetData(const D3DXVECTOR3& pos, const int nPlayerID, const CCharaIcon::TYPE type);						// 情報の設定処理
 
 	// 静的メンバ関数
-	static CCharaInfoUI* Create(const D3DXVECTOR3& pos, const int nPlayerID, const CCharaImage::TYPE type);		// 生成処理
+	static CCharaInfoUI* Create(const D3DXVECTOR3& pos, const int nPlayerID, const CCharaIcon::TYPE type);		// 生成処理
 
 private:			// 自分だけアクセスできる
 
+	// メンバ変数
+	CCharaIcon* m_pIcon;	// アイコンの情報
+	CCharaID* m_pID;		// IDの情報
 };
 
 #endif
