@@ -198,6 +198,13 @@ void CFraction::SetData(const D3DXVECTOR3& pos, const TYPE type)
 
 		break;
 
+	case TYPE_PIN:		// プラスチックケース
+
+		// モデル情報を設定する
+		SetFileData(CXFile::TYPE_PINONE);
+
+		break;
+
 	default:
 
 		// 停止

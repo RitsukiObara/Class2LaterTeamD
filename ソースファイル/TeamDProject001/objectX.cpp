@@ -37,6 +37,7 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\TrapItem.x",			// ネズミ捕り(アイテム)
 	"data\\MODEL\\leashSet.x",			// 設置状態のリード
 	"data\\MODEL\\pin_floor.x",			// 設置状態の画鋲
+	"data\\MODEL\\pin_one.x",			// 破片用の画鋲
 
 	// ブロックモデル
 	"data\\MODEL\\cardboard.x",			// 段ボール
@@ -73,7 +74,7 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\speaker.x",			// スピーカー
 	"data\\MODEL\\mousetrap.x",			// ネズミ捕り
 	"data\\MODEL\\leash.x",				// リード
-	"data\\MODEL\\pin_box.x",				// 画鋲
+	"data\\MODEL\\pin_box.x",			// 画鋲
 
 	//マップモデル
 	"data\\MODEL\\Kitchen.x",			//キッチン
