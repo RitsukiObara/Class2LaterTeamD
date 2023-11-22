@@ -656,10 +656,7 @@ bool CRat::Hit(void)
 	CRatState::STATE state = m_pRatState->GetState();	// ó‘Ô‚ğæ“¾‚·‚é
 
 	if (state != CRatState::STATE_DAMAGE && 
-		state != CRatState::STATE_INVINCIBLE &&
-		state != CRatState::STATE_SMASH &&
-		state != CRatState::STATE_DEATH &&
-		state != CRatState::STATE_STUN)
+		state != CRatState::STATE_INVINCIBLE)
 	{ // ƒ_ƒ[ƒWó‚¯‚éó‘Ô‚¾‚Á‚½ê‡
 		m_nLife--;			// õ–½Œ¸‚ç‚·
 
