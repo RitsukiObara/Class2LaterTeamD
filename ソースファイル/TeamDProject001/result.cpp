@@ -79,7 +79,7 @@ HRESULT CResult::Init(void)
 	else if (m_nGameState == CGame::STATE_RAT_WIN)
 	{ // ÉlÉYÉ~Ç™èüÇ¡ÇΩÇÁ
 
-		//CResultLetter::Create(D3DXVECTOR3(0.0f, 300.0f, 0.0f), CXFile::TYPE_WINCAT_TEXT);		// ÇÀÇ∏Ç›ÇÃÇ©Çø
+		CResultLetter::Create(D3DXVECTOR3(0.0f, 300.0f, 0.0f), CXFile::TYPE_WINRAT_TEXT);		// ÇÀÇ∏Ç›ÇÃÇ©Çø
 
 	}
 
