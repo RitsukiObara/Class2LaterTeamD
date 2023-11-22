@@ -5,7 +5,7 @@
 //
 //=======================================
 #include "manager.h"
-#include "chara_image.h"
+#include "chara_icon.h"
 #include "texture.h"
 #include "useful.h"
 
@@ -19,7 +19,7 @@
 //=========================
 // コンストラクタ
 //=========================
-CCharaImage::CCharaImage() : CObject2D(CObject::TYPE_NONE, CObject::PRIORITY_UI)
+CCharaIcon::CCharaIcon() : CObject2D(CObject::TYPE_NONE, CObject::PRIORITY_UI)
 {
 
 }
@@ -27,7 +27,7 @@ CCharaImage::CCharaImage() : CObject2D(CObject::TYPE_NONE, CObject::PRIORITY_UI)
 //=========================
 // デストラクタ
 //=========================
-CCharaImage::~CCharaImage()
+CCharaIcon::~CCharaIcon()
 {
 
 }
@@ -35,7 +35,7 @@ CCharaImage::~CCharaImage()
 //=========================
 // 初期化処理
 //=========================
-HRESULT CCharaImage::Init(void)
+HRESULT CCharaIcon::Init(void)
 {
 	if (FAILED(CObject2D::Init()))
 	{ // 初期化に失敗した場合
@@ -51,7 +51,7 @@ HRESULT CCharaImage::Init(void)
 //=========================
 // 終了処理
 //=========================
-void CCharaImage::Uninit(void)
+void CCharaIcon::Uninit(void)
 {
 	// 終了
 	CObject2D::Uninit();
@@ -60,7 +60,7 @@ void CCharaImage::Uninit(void)
 //=========================
 // 更新処理
 //=========================
-void CCharaImage::Update(void)
+void CCharaIcon::Update(void)
 {
 
 }
@@ -68,7 +68,7 @@ void CCharaImage::Update(void)
 //=========================
 // 描画処理
 //=========================
-void CCharaImage::Draw(void)
+void CCharaIcon::Draw(void)
 {
 	// 描画処理
 	CObject2D::Draw();
@@ -77,7 +77,7 @@ void CCharaImage::Draw(void)
 //=========================
 // 情報の設定処理
 //=========================
-void CCharaImage::SetData(const D3DXVECTOR3& pos, const TYPE type)
+void CCharaIcon::SetData(const D3DXVECTOR3& pos, const TYPE type)
 {
 	// スクロールの設定処理
 	SetPos(pos);				// 位置設定
@@ -117,16 +117,16 @@ void CCharaImage::SetData(const D3DXVECTOR3& pos, const TYPE type)
 //=========================
 // 生成処理
 //=========================
-CCharaImage* CCharaImage::Create(const D3DXVECTOR3& pos, const TYPE type)
+CCharaIcon* CCharaIcon::Create(const D3DXVECTOR3& pos, const TYPE type)
 {
 	// ローカルオブジェクトを生成
-	CCharaImage* pCharaImage = nullptr;	// プレイヤーのインスタンスを生成
+	CCharaIcon* pCharaImage = nullptr;	// プレイヤーのインスタンスを生成
 
 	if (pCharaImage == nullptr)
 	{ // オブジェクトが NULL の場合
 
 		// オブジェクトを生成
-		pCharaImage = new CCharaImage;
+		pCharaImage = new CCharaIcon;
 	}
 	else
 	{ // オブジェクトが NULL じゃない場合

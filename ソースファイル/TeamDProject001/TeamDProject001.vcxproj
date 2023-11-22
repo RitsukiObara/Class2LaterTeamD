@@ -164,7 +164,7 @@
     <ClCompile Include="car_gear.cpp" />
     <ClCompile Include="Cat.cpp" />
     <ClCompile Include="character.cpp" />
-    <ClCompile Include="chara_image.cpp" />
+    <ClCompile Include="chara_icon.cpp" />
     <ClCompile Include="chara_infoUI.cpp" />
     <ClCompile Include="collision.cpp" />
     <ClCompile Include="collpolygon.cpp" />
@@ -283,7 +283,7 @@
     <ClInclude Include="car_gear.h" />
     <ClInclude Include="Cat.h" />
     <ClInclude Include="character.h" />
-    <ClInclude Include="chara_image.h" />
+    <ClInclude Include="chara_icon.h" />
     <ClInclude Include="chara_infoUI.h" />
     <ClInclude Include="collision.h" />
     <ClInclude Include="collpolygon.h" />
