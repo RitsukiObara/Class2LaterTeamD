@@ -426,6 +426,9 @@
     <ClCompile Include="Pin.cpp">
       <Filter>Gimmick\Obstacle</Filter>
     </ClCompile>
+    <ClCompile Include="chara_ID.cpp">
+      <Filter>UI\CharaInfoUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -769,6 +772,9 @@
     </ClInclude>
     <ClInclude Include="Pin.h">
       <Filter>Gimmick\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="chara_ID.h">
+      <Filter>UI\CharaInfoUI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
