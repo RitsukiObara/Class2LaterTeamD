@@ -36,7 +36,7 @@
 #define ADD_MOVE_Y			(30.0f)			// 浮力
 #define NONE_RATIDX			(-1)			// ネズミの番号の初期値
 #define ATTACK_DISTANCE		(200.0f)		// 攻撃範囲までの距離
-#define MAX_LIFE			(3)				// 寿命の最大値
+#define MAX_LIFE			(1)				// 寿命の最大値
 #define SPEED				(20.0f)			// 速度
 #define SIZE				(D3DXVECTOR3(30.0f, 50.0f, 30.0f))		// 当たり判定でのサイズ
 #define STUN_HEIGHT			(80.0f)			// 気絶演出が出てくる高さ
@@ -57,6 +57,7 @@ CRat::CRat() : CCharacter(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 	m_pPlayerID = nullptr;				// プレイヤーのID表示
 	m_pRatState = nullptr;				// ネズミの状態の情報
 	m_pStun = nullptr;					// 気絶の情報
+	m_pRatGhost = nullptr;				// 幽霊ネズミの情報
 	m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_nRatIdx = NONE_RATIDX;			// ネズミの番号
 	m_nLife = 0;						// 寿命
@@ -71,7 +72,7 @@ CRat::CRat() : CCharacter(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 //==============================
 CRat::~CRat()
 {
-	//m_nNumAll--;						// ネズミの総数減算
+
 }
 
 //==============================
@@ -191,6 +192,14 @@ void CRat::Uninit(void)
 		m_pStun = nullptr;
 	}
 
+	if (m_pRatGhost != nullptr)
+	{ // 幽霊ネズミが NULL じゃない場合
+
+		//幽霊ネズミの終了処理
+		m_pRatGhost->Uninit();
+		m_pRatGhost = nullptr;
+	}
+
 	// ネズミを消去する
 	CGame::DeleteRat(m_nRatIdx);
 
@@ -231,6 +240,9 @@ void CRat::Update(void)
 
 		// モーションの設定処理
 		MotionManager();
+
+		// 生き返りの当たり判定
+		ResurrectionCollision();
 	}
 
 	// 起伏地面の当たり判定
@@ -489,6 +501,28 @@ void CRat::DeleteStun(void)
 }
 
 //=======================================
+// 幽霊ネズミの取得処理
+//=======================================
+CRatGhost* CRat::GetRatGhost(void)
+{
+	return m_pRatGhost;
+}
+
+//=======================================
+// 幽霊ネズミの消去処理
+//=======================================
+void CRat::DeleteRatGhost(void)
+{
+	if (m_pRatGhost != nullptr)
+	{ // 幽霊ネズミが NULL じゃない場合
+
+		//幽霊ネズミの終了処理
+		m_pRatGhost->Uninit();
+		m_pRatGhost = nullptr;
+	}
+}
+
+//=======================================
 // 生成処理
 //=======================================
 CRat* CRat::Create(const D3DXVECTOR3& pos, const int nID)
@@ -738,14 +772,20 @@ bool CRat::Hit(void)
 			m_pRatState->SetState(CRatState::STATE_DEATH);		// 死亡状態にする
 
 			// ネズミの幽霊の生成
-			CRatGhost::Create(GetPos());
+			if (m_pRatGhost == nullptr)
+			{ // 幽霊ネズミが NULL のとき
 
-#if 1	// デバッグの為の処理↓
+				m_pRatGhost = CRatGhost::Create(GetPos());
+
+			}
 
 			m_nNumAll--;						// ネズミの総数減算
 
+#if 0	// デバッグの為の処理↓
+
 			// 終了状態にする
 			Uninit();
+#endif
 
 			if (m_nNumAll <= 0)
 			{ // ネズミが全滅したら
@@ -753,7 +793,6 @@ bool CRat::Hit(void)
 				// ネコが勝利した状態にする
 				CGame::SetState(CGame::STATE_CAT_WIN);
 			}
-#endif
 
 			// 死を返す
 			return true;
@@ -869,4 +908,51 @@ void CRat::ObstacleCollision(void)
 
 	// 位置を設定する
 	SetPos(pos);
+}
+
+//=======================================
+// 生き返りの当たり判定
+//=======================================
+void CRat::ResurrectionCollision(void)
+{
+	CRat *pRat;		// ネズミの情報
+
+	// 状態を取得する
+	CRatState::STATE state = m_pRatState->GetState();
+
+	for (int nCntRat = 0; nCntRat < MAX_RAT; nCntRat++)
+	{
+		if (m_nRatIdx != nCntRat)
+		{ // 操作してるネズミじゃないとき
+
+			// 他のネズミの情報取得
+			pRat = CGame::GetRat(nCntRat);
+
+			if (pRat->GetState()->GetState() == CRatState::STATE_DEATH && 
+				state != CRatState::STATE_STUN && state != CRatState::STATE_DEATH)
+			{ // 他のネズミが死亡状態 && 操作してるネズミが復活させれる状態の時
+
+				// 他のネズミとの当たり判定
+				if (useful::RectangleCollisionXY(GetPos(), pRat->GetPos(),
+					D3DXVECTOR3(30.0f, 50.0f, 30.0f), D3DXVECTOR3(30.0f, 50.0f, 30.0f),
+					D3DXVECTOR3(-30.0f, -50.0f, -30.0f), D3DXVECTOR3(-30.0f, -50.0f, -30.0f)) == true)
+				{ // XY座標の矩形の当たり判定
+
+					if (useful::RectangleCollisionXZ(GetPos(), pRat->GetPos(),
+						D3DXVECTOR3(30.0f, 50.0f, 30.0f), D3DXVECTOR3(30.0f, 50.0f, 30.0f),
+						D3DXVECTOR3(-30.0f, -50.0f, -30.0f), D3DXVECTOR3(-30.0f, -50.0f, -30.0f)) == true)
+					{ // XZの矩形に当たってたら
+
+						// 無敵状態にする
+						pRat->GetState()->SetState(CRatState::STATE_INVINCIBLE);
+
+						// 幽霊ネズミの破棄
+						pRat->DeleteRatGhost();
+
+						m_nNumAll++;		// 総数増やす
+					}
+				}
+			}
+		}
+	}
 }
