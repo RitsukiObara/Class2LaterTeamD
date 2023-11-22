@@ -46,6 +46,7 @@ public:			// 誰でもアクセスできる
 		TYPE_NOTE8,				// 8分音符
 		TYPE_NOTE16,			// 16分音符
 		TYPE_TRAPIRON,			// ネズミ捕りの鉄部分
+		TYPE_LEASHSET,			// 設置状態のリード
 
 		// ブロックモデル
 		TYPE_CARDBOARD,			// 段ボール
@@ -81,6 +82,7 @@ public:			// 誰でもアクセスできる
 		TYPE_HIMO,				// ひも
 		TYPE_SPEAKER,			// スピーカー
 		TYPE_MOUSETRAP,			// ネズミ捕り
+		TYPE_LEASH,				// リード
 
 		//マップモデル
 		TYPE_KITCHEN,			//キッチン

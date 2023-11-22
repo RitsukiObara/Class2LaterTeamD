@@ -34,6 +34,7 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\note8.x",				// 8分音符
 	"data\\MODEL\\note16.x",			// 16分音符
 	"data\\MODEL\\mousetrap_iron.x",	// ネズミ捕りの鉄部分
+	"data\\MODEL\\leashSet.x",			// 設置状態のリード
 
 	// ブロックモデル
 	"data\\MODEL\\cardboard.x",			// 段ボール
@@ -69,6 +70,7 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\Himo.x",				// ひも
 	"data\\MODEL\\speaker.x",			// スピーカー
 	"data\\MODEL\\mousetrap.x",			// ネズミ捕り
+	"data\\MODEL\\leash.x",				// リード
 
 	//マップモデル
 	"data\\MODEL\\Kitchen.x",			//キッチン

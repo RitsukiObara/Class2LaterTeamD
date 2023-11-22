@@ -28,10 +28,10 @@ public:			// 誰でもアクセスできる
 	void Update(void);		// 更新処理
 	void Draw(void);		// 描画処理
 
-	void SetData(const D3DXVECTOR3& pos);						// 情報の設定処理
-	void SetLife(int Life) { m_nLife = Life; }					// 寿命の設定処理
-	void SetIndex(int Idx) { m_nIndex = Idx; }					// 使用番号の設定
-	void SetMove(D3DXVECTOR3 move) { m_move = move; }	// 移動量の設定
+	void SetData(const D3DXVECTOR3& pos);					// 情報の設定処理
+	void SetLife(int Life) { m_nLife = Life; }				// 寿命の設定処理
+	void SetIndex(int Idx) { m_nIndex = Idx; }				// 使用番号の設定
+	void SetMove(D3DXVECTOR3 move) { m_move = move; }		// 移動量の設定
 
 	// 静的メンバ関数
 	static CNote* Create(const D3DXVECTOR3& pos);	// 生成処理

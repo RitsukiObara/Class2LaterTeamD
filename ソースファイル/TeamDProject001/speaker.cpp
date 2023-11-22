@@ -16,6 +16,10 @@
 #include "note.h"
 #include "input.h"
 
+#define NOTE_INTERVAL (20)	//音符の出現間隔(フレーム)
+#define NOTE_LIFE (120)		//音符の寿命
+#define NOTE_SPEED (15.0f)	//音符の速さ
+
 CNote* CSpeaker::m_apNote[MAX_NOTE] = {};							// 音符の情報
 //==============================
 // コンストラクタ
@@ -110,13 +114,13 @@ void CSpeaker::Draw(void)
 }
 
 //=====================================
-// スピーカーの生成処理
+// 音符の生成処理
 //=====================================
 void CSpeaker::SetNote(void)
 {
 	m_nNoateCount++;
 
-	if (m_nNoateCount % 20 == 0)
+	if (m_nNoateCount % NOTE_INTERVAL == 0)
 	{
 		for (int nCnt = 0; nCnt < MAX_NOTE; nCnt++)
 		{
@@ -127,11 +131,11 @@ void CSpeaker::SetNote(void)
 
 				m_apNote[nCnt] = CNote::Create(D3DXVECTOR3(pos.x, pos.y + 20.0f, pos.z));
 				m_apNote[nCnt]->SetIndex(nCnt);
-				m_apNote[nCnt]->SetLife(120);
+				m_apNote[nCnt]->SetLife(NOTE_LIFE);
 				m_apNote[nCnt]->SetMove(D3DXVECTOR3(
-					sinf(rot.y + (D3DX_PI * 1.0f)) * 15.0f,
+					sinf(rot.y + (D3DX_PI * 1.0f)) * NOTE_SPEED,
 					0.0f,
-					cosf(rot.y + (D3DX_PI * 1.0f)) * 15.0f));
+					cosf(rot.y + (D3DX_PI * 1.0f)) * NOTE_SPEED));
 				break;
 			}
 		}
