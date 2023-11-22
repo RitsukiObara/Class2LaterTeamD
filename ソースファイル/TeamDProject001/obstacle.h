@@ -33,6 +33,7 @@ public:			// 誰でもアクセスできる
 		TYPE_SPEAKER,		// スピーカー
 		TYPE_MOUSETRAP,		// ネズミ捕り
 		TYPE_LEASH,			// リード
+		TYPE_PIN,		// 画鋲
 		TYPE_MAX			// この列挙型の総数
 	};
 

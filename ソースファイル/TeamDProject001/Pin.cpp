@@ -25,7 +25,8 @@
 CPin::CPin() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 {
 	// 全ての値をクリアする
-
+	m_State = STATE_FALSE;
+	m_move = NONE_D3DXVECTOR3;
 }
 
 //==============================
@@ -69,30 +70,18 @@ void CPin::Update(void)
 	D3DXVECTOR3 pos = GetPos();
 	D3DXVECTOR3 rot = GetRot();
 
-	//ギミック起動時の処理
-	if (m_bAction == true)
-	{//起動していない時にネズミが両端を持ったら
-
-	}
-
-	//重力
-	m_move.y -= 1.0f;
+	StateManager(&pos,&rot);
 
 	//位置更新
-	pos.y += m_move.y;
-
-	//地面判定
-	if (pos.y < 0.0f)
-	{
-
-	}
+	pos += m_move;
 
 	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_0) == true)
-	{ // Aボタンを押した場合
-
+	{ // 0ボタンを押した場合
+		Action();
 	}
 
 	SetPos(pos);
+	SetRot(rot);
 }
 
 //=====================================
@@ -105,11 +94,47 @@ void CPin::Draw(void)
 }
 
 //=====================================
+// 状態管理
+//=====================================
+void CPin::StateManager(D3DXVECTOR3 *pos, D3DXVECTOR3 *rot)
+{
+	switch (m_State)
+	{
+	case CPin::STATE_FALSE:
+
+		break;
+
+	case CPin::STATE_FALLWAIT:	//ギミック起動から効果発動までの準備時間
+		rot->z += 0.1f;
+		m_move.y -= 0.75f;
+		m_move.x = sinf(rot->y + (D3DX_PI * -0.5f)) * 4.0f;
+		m_move.z = cosf(rot->y + (D3DX_PI * -0.5f)) * 4.0f;
+
+		if (pos->y < 0)
+		{
+			pos->y = 0.0f;
+			rot->z = 0.0f;
+			m_State = STATE_TRUE;
+			SetFileData(CXFile::TYPE_PINSET);
+		}
+		break;
+
+	case CPin::STATE_TRUE:	//ギミックの効果発動から停止までの処理
+		m_move = NONE_D3DXVECTOR3;
+		pos->y = 0.0f;
+		break;
+	}
+}
+
+//=====================================
 // 両端起動時の処理
 //=====================================
 void CPin::Action(void)
 {
-	m_bAction = true;
+	if (m_State == STATE_FALSE)
+	{
+		m_State = STATE_FALLWAIT;
+	}
 }
 
 //=====================================
