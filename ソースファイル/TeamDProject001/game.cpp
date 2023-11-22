@@ -54,7 +54,7 @@ bool CGame::m_bEdit = false;								// エディット状況
 //=========================================
 // コンストラクタ
 //=========================================
-CGame::CGame() : CScene(TYPE_NONE, PRIORITY_BG)
+CGame::CGame() : CScene(TYPE_SCENE, PRIORITY_BG)
 {
 	// 全ての値をクリアする
 	m_pPause = nullptr;			// ポーズ
@@ -124,7 +124,11 @@ HRESULT CGame::Init(void)
 	CObstacle::Create(D3DXVECTOR3(-600.0f, 650.0f, 0.0f), CObstacle::TYPE_HIMO);
 
 	// スピーカーの生成処理
-	CObstacle::Create(D3DXVECTOR3(-250.0f, 200.0f, 900), CObstacle::TYPE_SPEAKER);
+	CObstacle::Create(D3DXVECTOR3(-250.0f, 200.0f, 900.0f), CObstacle::TYPE_SPEAKER);
+
+	// リードの生成処理
+	CObstacle *pObstacle = CObstacle::Create(D3DXVECTOR3(400.0f, 0.0f, -600.0f), CObstacle::TYPE_LEASH);
+	pObstacle->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
 
 	// アイテムの生成処理
 	CItem::Create(D3DXVECTOR3(0.0f, 0.0f, -600.0f));

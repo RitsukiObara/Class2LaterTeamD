@@ -18,7 +18,7 @@
 //=========================================
 // コンストラクタ
 //=========================================
-CEntry::CEntry() : CScene(TYPE_NONE, PRIORITY_BG)
+CEntry::CEntry() : CScene(TYPE_SCENE, PRIORITY_BG)
 {
 
 }

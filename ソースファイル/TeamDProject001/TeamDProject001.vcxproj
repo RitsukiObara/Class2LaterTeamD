@@ -164,6 +164,7 @@
     <ClCompile Include="car_gear.cpp" />
     <ClCompile Include="Cat.cpp" />
     <ClCompile Include="character.cpp" />
+    <ClCompile Include="chara_infoUI.cpp" />
     <ClCompile Include="collision.cpp" />
     <ClCompile Include="collpolygon.cpp" />
     <ClCompile Include="confetti.cpp" />
@@ -194,6 +195,7 @@
     <ClCompile Include="input.cpp" />
     <ClCompile Include="item.cpp" />
     <ClCompile Include="item_manager.cpp" />
+    <ClCompile Include="leash.cpp" />
     <ClCompile Include="light.cpp" />
     <ClCompile Include="locus2D.cpp" />
     <ClCompile Include="logo.cpp" />
@@ -279,6 +281,7 @@
     <ClInclude Include="car_gear.h" />
     <ClInclude Include="Cat.h" />
     <ClInclude Include="character.h" />
+    <ClInclude Include="chara_infoUI.h" />
     <ClInclude Include="collision.h" />
     <ClInclude Include="collpolygon.h" />
     <ClInclude Include="confetti.h" />
@@ -309,6 +312,7 @@
     <ClInclude Include="input.h" />
     <ClInclude Include="item.h" />
     <ClInclude Include="item_manager.h" />
+    <ClInclude Include="leash.h" />
     <ClInclude Include="light.h" />
     <ClInclude Include="locus2D.h" />
     <ClInclude Include="logo.h" />
