@@ -25,7 +25,7 @@
 //========================
 // コンストラクタ
 //========================
-CStun::CStun() : CObject(CObject::TYPE_STUN, CObject::PRIORITY_ENTITY)
+CStun::CStun() : CObject(CObject::TYPE_STUN, CObject::PRIORITY_UI)
 {
 	// 全ての値をクリアする
 	m_pos = NONE_D3DXVECTOR3;		// 位置

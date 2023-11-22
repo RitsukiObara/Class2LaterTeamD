@@ -103,6 +103,7 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 
 	// 3Dテキストモデル
 	"data\\MODEL\\cat_win.x",			// ねこのかちテキスト
+	"data\\MODEL\\rat_win.x",			// ねずみのかちテキスト
 };
 
 //------------------------------------------------------------

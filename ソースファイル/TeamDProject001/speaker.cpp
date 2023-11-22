@@ -64,6 +64,17 @@ HRESULT CSpeaker::Init(void)
 //========================================
 void CSpeaker::Uninit(void)
 {
+	for (int nCnt = 0; nCnt < MAX_NOTE; nCnt++)
+	{
+		if (m_apNote[nCnt] != nullptr)
+		{ // âπïÑÇ™ NULL ÇÃèÍçá
+
+			// âπïÑÇÃèIóπèàóù
+			m_apNote[nCnt]->Uninit();
+			m_apNote[nCnt] = nullptr;
+		}
+	}
+
 	// èIóπèàóù
 	CObstacle::Uninit();
 }

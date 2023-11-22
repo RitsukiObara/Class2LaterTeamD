@@ -202,8 +202,12 @@ void CObject::ReleaseAll(void)
 			// 次のオブジェクトを代入する
 			pObjNext = pObj->m_pNext;
 
-			// 終了処理
-			pObj->Uninit();
+			if (pObj->GetType() != TYPE_NONE)
+			{ // 無種類以外の場合
+
+				// 終了処理
+				pObj->Uninit();
+			}
 
 			// 次のオブジェクトを設定する
 			pObj = pObjNext;
@@ -350,6 +354,7 @@ void CObject::UpdateNormal(void)
 
 			if (pObj->GetType() != TYPE_NONE &&
 				pObj->GetType() != TYPE_PAUSE &&
+				pObj->GetType() != TYPE_SCENE &&
 				pObj->m_bDeath == false)
 			{ // オブジェクトの種類が NONEとPAUSE以外かつ、死亡フラグがfalseの場合
 
@@ -399,6 +404,7 @@ void CObject::UpdateGame(void)
 
 			if (pObj->GetType() == TYPE_PAUSE &&
 				pObj->GetType() != TYPE_NONE &&
+				pObj->GetType() != TYPE_SCENE &&
 				pObj->m_bDeath == false)
 			{ // オブジェクトの種類が PAUSEかTIMEかCOUNTDOWN かつ、死亡フラグがfalseの場合
 
@@ -489,7 +495,8 @@ void CObject::DrawNormal(void)
 		{ // オブジェクトが NULL じゃない限り回す
 
 			if (pObj->GetType() != TYPE_NONE &&
-				pObj->GetType() != TYPE_PAUSE)
+				pObj->GetType() != TYPE_PAUSE &&
+				pObj->GetType() != TYPE_SCENE)
 			{ // 種類が 無し・ポーズ 以外の場合
 
 				// オブジェクトの描画
@@ -521,7 +528,8 @@ void CObject::DrawGame(void)
 		while (pObj != nullptr)
 		{ // オブジェクトが NULL じゃない限り回す
 
-			if (pObj->GetType() != TYPE_NONE)
+			if (pObj->GetType() != TYPE_NONE &&
+				pObj->GetType() != TYPE_SCENE)
 			{ // 種類が 無し 以外の場合
 
 				// オブジェクトの描画

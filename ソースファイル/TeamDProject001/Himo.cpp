@@ -62,6 +62,17 @@ HRESULT CHimo::Init(void)
 //========================================
 void CHimo::Uninit(void)
 {
+	for (int nCnt = 0; nCnt < MAX_TARAI; nCnt++)
+	{
+		if (m_apTarai[nCnt] != nullptr)
+		{ // タライが NULL じゃない場合
+
+			// タライの終了処理
+			m_apTarai[nCnt]->Uninit();
+			m_apTarai[nCnt] = nullptr;
+		}
+	}
+
 	// 終了処理
 	CObstacle::Uninit();
 }

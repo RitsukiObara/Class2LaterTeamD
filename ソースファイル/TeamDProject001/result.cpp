@@ -36,7 +36,7 @@ int CResult::m_nGameState = 0;			// ゲームの情報
 //=========================================
 // コンストラクタ
 //=========================================
-CResult::CResult() : CScene(TYPE_NONE, PRIORITY_BG)
+CResult::CResult() : CScene(TYPE_SCENE, PRIORITY_BG)
 {
 
 }
@@ -79,7 +79,7 @@ HRESULT CResult::Init(void)
 	else if (m_nGameState == CGame::STATE_RAT_WIN)
 	{ // ネズミが勝ったら
 
-		//CResultLetter::Create(D3DXVECTOR3(0.0f, 300.0f, 0.0f), CXFile::TYPE_WINCAT_TEXT);		// ねずみのかち
+		CResultLetter::Create(D3DXVECTOR3(0.0f, 300.0f, 0.0f), CXFile::TYPE_WINRAT_TEXT);		// ねずみのかち
 
 	}
 

@@ -186,6 +186,9 @@ void CCat::Update(void)
 
 	SetPos(pos);
 
+	// アイテムとの当たり判定処理
+	collision::ItemCollision(*this);
+
 	// デバッグ表示
 	DebugMessage();
 }

@@ -54,7 +54,7 @@ bool CGame::m_bEdit = false;								// エディット状況
 //=========================================
 // コンストラクタ
 //=========================================
-CGame::CGame() : CScene(TYPE_NONE, PRIORITY_BG)
+CGame::CGame() : CScene(TYPE_SCENE, PRIORITY_BG)
 {
 	// 全ての値をクリアする
 	m_pPause = nullptr;			// ポーズ

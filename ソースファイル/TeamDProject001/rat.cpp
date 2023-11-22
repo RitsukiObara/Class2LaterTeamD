@@ -20,6 +20,7 @@
 #include "motion.h"
 #include "player_idUI.h"
 #include "rat_state.h"
+#include "stun.h"
 #include "collision.h"
 #include "elevation_manager.h"
 #include "objectElevation.h"
@@ -38,6 +39,7 @@
 #define MAX_LIFE			(3)				// 寿命の最大値
 #define SPEED				(20.0f)			// 速度
 #define SIZE				(D3DXVECTOR3(30.0f, 50.0f, 30.0f))		// 当たり判定でのサイズ
+#define STUN_HEIGHT			(80.0f)			// 気絶演出が出てくる高さ
 #define SMASH_MOVE			(D3DXVECTOR3(10.0f, 20.0f, 10.0f))		// 吹き飛び状態の移動量
 
 //--------------------------------------------
@@ -54,6 +56,7 @@ CRat::CRat() : CCharacter(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 	m_pMotion = nullptr;				// モーションの情報
 	m_pPlayerID = nullptr;				// プレイヤーのID表示
 	m_pRatState = nullptr;				// ネズミの状態の情報
+	m_pStun = nullptr;					// 気絶の情報
 	m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_nRatIdx = NONE_RATIDX;			// ネズミの番号
 	m_nLife = 0;						// 寿命
@@ -139,6 +142,7 @@ HRESULT CRat::Init(void)
 
 	// 全ての値を初期化する
 	m_pPlayerID = nullptr;			// プレイヤーのID表示
+	m_pStun = nullptr;				// 気絶の情報
 	m_move = NONE_D3DXVECTOR3;		// 移動量
 	m_nRatIdx = NONE_RATIDX;		// ネズミの番号
 	m_fSpeed = 0.0f;				// 速度
@@ -179,6 +183,14 @@ void CRat::Uninit(void)
 		m_pRatState = nullptr;
 	}
 
+	if (m_pStun != nullptr)
+	{ // 気絶演出が NULL じゃない場合
+
+		// 気絶演出の終了処理
+		m_pStun->Uninit();
+		m_pStun = nullptr;
+	}
+
 	// ネズミを消去する
 	CGame::DeleteRat(m_nRatIdx);
 
@@ -200,8 +212,9 @@ void CRat::Update(void)
 	// 障害物との当たり判定
 	collision::ObstacleHit(this, SIZE.x, SIZE.y, SIZE.z, CObstacle::COLLTYPE_RAT);
 
-	if (m_pRatState->GetState() != CRatState::STATE_DEATH)
-	{ // 幽霊状態以外のとき
+	if (m_pRatState->GetState() != CRatState::STATE_DEATH &&
+		m_pRatState->GetState() != CRatState::STATE_STUN)
+	{ // 幽霊状態と気絶状態以外のとき
 
 		if (m_pRatState->GetState() != CRatState::STATE_SMASH)
 		{ // 吹き飛び状態の場合
@@ -341,12 +354,13 @@ void CRat::MotionManager(void)
 void CRat::SetData(const D3DXVECTOR3& pos, const int nID)
 {
 	// 情報の設定処理
-	SetPos(pos);							// 位置
-	SetPosOld(pos);							// 前回の位置
-	SetRot(NONE_D3DXVECTOR3);				// 向き
-	SetScale(NONE_SCALE);					// 拡大率
+	SetPos(pos);					// 位置
+	SetPosOld(pos);					// 前回の位置
+	SetRot(NONE_D3DXVECTOR3);		// 向き
+	SetScale(NONE_SCALE);			// 拡大率
 
 	// 情報を設定する
+	m_pStun = nullptr;				// 気絶の情報
 	m_nRatIdx = nID;				// ネズミの番号
 	m_move = NONE_D3DXVECTOR3;		// 移動量
 	m_fSpeed = 0.0f;				// 速度
@@ -418,6 +432,60 @@ int CRat::GetRatIdx(void) const
 {
 	// ネズミの番号を返す
 	return m_nRatIdx;
+}
+
+//=======================================
+// // 移動状況の取得処理
+//=======================================
+bool CRat::IsMove(void)
+{
+	// 移動状況を返す
+	return m_bMove;
+}
+
+//=======================================
+// ネズミの状態の取得処理
+//=======================================
+CRatState* CRat::GetState(void)
+{
+	// ネズミの状態を返す
+	return m_pRatState;
+}
+
+//=======================================
+// 気絶演出の設定処理
+//=======================================
+void CRat::SetStun(void)
+{
+	if (m_pStun == nullptr)
+	{ // 気絶の情報が NULL だった場合
+
+		// 気絶演出を生成する
+		m_pStun = CStun::Create(D3DXVECTOR3(GetPos().x, GetPos().y + STUN_HEIGHT, GetPos().z));
+	}
+}
+
+//=======================================
+// 気絶演出の取得処理
+//=======================================
+CStun* CRat::GetStun(void)
+{
+	// 気絶演出を返す
+	return m_pStun;
+}
+
+//=======================================
+// 気絶演出の消去処理
+//=======================================
+void CRat::DeleteStun(void)
+{
+	if (m_pStun != nullptr)
+	{ // 気絶演出が NULL じゃない場合
+
+		// 気絶演出の終了処理
+		m_pStun->Uninit();
+		m_pStun = nullptr;
+	}
 }
 
 //=======================================
@@ -578,6 +646,7 @@ void CRat::Jump(void)
 #ifdef _DEBUG
 
 	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_SPACE) == true &&
+		m_pRatState->GetState() != CRatState::STATE_SMASH &&
 		m_bJump == false)
 	{ // Aボタンを押した場合
 
@@ -589,6 +658,7 @@ void CRat::Jump(void)
 #endif // _DEBUG
 
 	if (CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_A, m_nRatIdx) == true &&
+		m_pRatState->GetState() != CRatState::STATE_SMASH &&
 		m_bJump == false)
 	{ // Aボタンを押した場合
 
@@ -799,12 +869,4 @@ void CRat::ObstacleCollision(void)
 
 	// 位置を設定する
 	SetPos(pos);
-}
-
-//=======================================
-// ネズミの移動状態の取得処理
-//=======================================
-bool CRat::IsMove(void)
-{
-	return m_bMove;
 }
