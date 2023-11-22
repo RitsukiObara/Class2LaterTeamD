@@ -15,6 +15,7 @@
 #include "objectX.h"
 #include "input.h"
 #include "effect.h"
+#include "fraction.h"
 
 #define ACTION_TIME (120)
 #define WAIT_TIME (20)
@@ -116,6 +117,11 @@ void CPin::StateManager(D3DXVECTOR3 *pos, D3DXVECTOR3 *rot)
 			rot->z = 0.0f;
 			m_State = STATE_TRUE;
 			SetFileData(CXFile::TYPE_PINSET);
+
+			for (int nCnt = 0; nCnt < 20; nCnt++)
+			{
+				CFraction::Create(GetPos(), CFraction::TYPE_PIN);
+			}
 		}
 		break;
 

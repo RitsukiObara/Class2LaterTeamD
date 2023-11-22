@@ -198,6 +198,13 @@ void CFraction::SetData(const D3DXVECTOR3& pos, const TYPE type)
 
 		break;
 
+	case TYPE_PIN:		// ‰æ•e
+
+		// ƒ‚ƒfƒ‹î•ñ‚ğİ’è‚·‚é
+		SetFileData(CXFile::TYPE_PINONE);
+
+		break;
+
 	default:
 
 		// ’â~
