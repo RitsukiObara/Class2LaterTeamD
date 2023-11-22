@@ -17,7 +17,8 @@
 //-------------------------------------------
 // マクロ定義
 //-------------------------------------------
-#define GEAR_CYCLE_SPEED		(0.1f)		// 回る速度
+#define NOTE_CYCLE_SPEED		(0.05f)		// 回る速度
+#define NOTE_UD_HEIGHT		(100.0f)		// 上下移動の幅
 
 //==============================
 // コンストラクタ
@@ -72,8 +73,8 @@ void CNote::Update(void)
 
 	// 位置を加算する
 	m_nLife--;
-	rot.y += 0.05f;
-	pos.y = m_StartPosY + sinf(m_nLife * 0.1f) * 50.0f;
+	rot.y += NOTE_CYCLE_SPEED;
+	pos.y = m_StartPosY + sinf(m_nLife * 0.1f) * NOTE_UD_HEIGHT;
 
 	if (m_nLife <= 0)
 	{

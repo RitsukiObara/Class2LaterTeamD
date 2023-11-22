@@ -31,6 +31,7 @@
 #include "item.h"
 
 #include "obstacle_manager.h"
+#include "chara_infoUI.h"
 
 //--------------------------------------------
 // マクロ定義
@@ -124,7 +125,14 @@ HRESULT CGame::Init(void)
 	CObstacle::Create(D3DXVECTOR3(-600.0f, 650.0f, 0.0f), CObstacle::TYPE_HIMO);
 
 	// スピーカーの生成処理
-	CObstacle::Create(D3DXVECTOR3(-250.0f, 200.0f, 900), CObstacle::TYPE_SPEAKER);
+	CObstacle::Create(D3DXVECTOR3(-250.0f, 200.0f, 900.0f), CObstacle::TYPE_SPEAKER);
+
+	// リードの生成処理
+	CObstacle *pObstacle = CObstacle::Create(D3DXVECTOR3(400.0f, 0.0f, -600.0f), CObstacle::TYPE_LEASH);
+	pObstacle->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
+
+	// 画鋲の生成処理
+	CObstacle::Create(D3DXVECTOR3(-200.0f, 200.0f, -120.0f), CObstacle::TYPE_PIN);
 
 	// アイテムの生成処理
 	CItem::Create(D3DXVECTOR3(0.0f, 0.0f, -600.0f));
@@ -142,6 +150,18 @@ HRESULT CGame::Init(void)
 
 	// 生成処理
 	CGameTime::Create();
+
+	for (int nCnt = 0; nCnt < 4; nCnt++)
+	{
+		if (nCnt == 0)
+		{
+			CCharaInfoUI::Create(D3DXVECTOR3(160.0f + (nCnt * 320.0f), 650.0f, 0.0f), nCnt, CCharaIcon::TYPE_CAT);
+		}
+		else
+		{
+			CCharaInfoUI::Create(D3DXVECTOR3(160.0f + (nCnt * 320.0f), 650.0f, 0.0f), nCnt, CCharaIcon::TYPE_RAT);
+		}
+	}
 
 	//// 武器選択UIを生成
 	//CWeaponSelectUI::Create();

@@ -11,6 +11,7 @@
 #include "collision.h"
 #include "shadowCircle.h"
 #include "rat.h"
+#include "Cat.h"
 #include "objectElevation.h"
 #include "elevation_manager.h"
 #include "obstacle_manager.h"
@@ -23,10 +24,14 @@
 #include "ground.h"
 #include <cmath>
 #include "objectX.h"
+#include "item.h"
+#include "item_manager.h"
+
 //===============================
 // マクロ定義
 //===============================
 #define COLLISION_ADD_DIFF_LENGTH		(0.01f)			// 僅かな誤差を埋めるためのマクロ定義(突っかかり防止)
+#define COLLISION_CAT_SIZE				(D3DXVECTOR3(70.0f,250.0f,70.0f))		// ネコの当たり判定のサイズ
 
 //===============================
 // 丸影の当たり判定処理
@@ -674,6 +679,39 @@ D3DXVECTOR3 collision::WallCollision(D3DXVECTOR3& objVec1, D3DXVECTOR3& objVec2)
 
 	return objVec2;
 }
+
+//======================
+// ネコとアイテムとの当たり判定
+//======================
+void collision::ItemCollision(CCat& pCat)
+{
+	// 処理に使う変数を宣言
+	CItem* pItem = CItemManager::Get()->GetTop();	// 最初のアイテムの情報を取得する
+	CItem* pItemNext;								// 次のアイテム
+	D3DXVECTOR3 pos = pCat.GetPos();				// 位置
+	D3DXVECTOR3 Max = COLLISION_CAT_SIZE;													// 最大値
+	D3DXVECTOR3 Min = D3DXVECTOR3(-COLLISION_CAT_SIZE.x, 0.0f, -COLLISION_CAT_SIZE.z);		// 最小値
+
+	while (pItem != nullptr)
+	{ // アイテムが NULL じゃない場合
+
+		// 次のアイテムを取得する
+		pItemNext = pItem->GetNext();
+
+		if (useful::RectangleCollisionXY(pos, pItem->GetPos(), Max, pItem->GetFileData().vtxMax, Min, pItem->GetFileData().vtxMin) == true &&
+			useful::RectangleCollisionXZ(pos, pItem->GetPos(), Max, pItem->GetFileData().vtxMax, Min, pItem->GetFileData().vtxMin) == true &&
+			useful::RectangleCollisionYZ(pos, pItem->GetPos(), Max, pItem->GetFileData().vtxMax, Min, pItem->GetFileData().vtxMin) == true)
+		{ // 判定内に入った場合
+
+			// 終了処理
+			pItem->Uninit();
+		}
+
+		// 次のアイテムを設定する
+		pItem = pItemNext;
+	}
+}
+
 //======================
 // 六面体の当たり判定
 //======================

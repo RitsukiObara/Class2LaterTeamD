@@ -164,6 +164,9 @@
     <ClCompile Include="car_gear.cpp" />
     <ClCompile Include="Cat.cpp" />
     <ClCompile Include="character.cpp" />
+    <ClCompile Include="chara_icon.cpp" />
+    <ClCompile Include="chara_ID.cpp" />
+    <ClCompile Include="chara_infoUI.cpp" />
     <ClCompile Include="collision.cpp" />
     <ClCompile Include="collpolygon.cpp" />
     <ClCompile Include="confetti.cpp" />
@@ -194,6 +197,7 @@
     <ClCompile Include="input.cpp" />
     <ClCompile Include="item.cpp" />
     <ClCompile Include="item_manager.cpp" />
+    <ClCompile Include="leash.cpp" />
     <ClCompile Include="light.cpp" />
     <ClCompile Include="locus2D.cpp" />
     <ClCompile Include="logo.cpp" />
@@ -231,6 +235,7 @@
     <ClCompile Include="particle2D.cpp" />
     <ClCompile Include="pause.cpp" />
     <ClCompile Include="petbottle.cpp" />
+    <ClCompile Include="Pin.cpp" />
     <ClCompile Include="player_idUI.cpp" />
     <ClCompile Include="rat.cpp" />
     <ClCompile Include="precompile.cpp">
@@ -242,6 +247,7 @@
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="result.cpp" />
     <ClCompile Include="result_letter.cpp" />
+    <ClCompile Include="resurrection_fan.cpp" />
     <ClCompile Include="ripple.cpp" />
     <ClCompile Include="roomba.cpp" />
     <ClCompile Include="sample.cpp" />
@@ -263,6 +269,7 @@
     <ClCompile Include="title_back.cpp" />
     <ClCompile Include="title_floor.cpp" />
     <ClCompile Include="title_logo.cpp" />
+    <ClCompile Include="title_press.cpp" />
     <ClCompile Include="title_wall.cpp" />
     <ClCompile Include="toycar.cpp" />
     <ClCompile Include="useful.cpp" />
@@ -279,6 +286,9 @@
     <ClInclude Include="car_gear.h" />
     <ClInclude Include="Cat.h" />
     <ClInclude Include="character.h" />
+    <ClInclude Include="chara_icon.h" />
+    <ClInclude Include="chara_ID.h" />
+    <ClInclude Include="chara_infoUI.h" />
     <ClInclude Include="collision.h" />
     <ClInclude Include="collpolygon.h" />
     <ClInclude Include="confetti.h" />
@@ -309,6 +319,7 @@
     <ClInclude Include="input.h" />
     <ClInclude Include="item.h" />
     <ClInclude Include="item_manager.h" />
+    <ClInclude Include="leash.h" />
     <ClInclude Include="light.h" />
     <ClInclude Include="locus2D.h" />
     <ClInclude Include="logo.h" />
@@ -346,6 +357,7 @@
     <ClInclude Include="particle2D.h" />
     <ClInclude Include="pause.h" />
     <ClInclude Include="petbottle.h" />
+    <ClInclude Include="Pin.h" />
     <ClInclude Include="player_idUI.h" />
     <ClInclude Include="rat.h" />
     <ClInclude Include="precompile.h" />
@@ -354,6 +366,7 @@
     <ClInclude Include="renderer.h" />
     <ClInclude Include="result.h" />
     <ClInclude Include="result_letter.h" />
+    <ClInclude Include="resurrection_fan.h" />
     <ClInclude Include="ripple.h" />
     <ClInclude Include="roomba.h" />
     <ClInclude Include="sample.h" />
@@ -375,6 +388,7 @@
     <ClInclude Include="title_back.h" />
     <ClInclude Include="title_floor.h" />
     <ClInclude Include="title_logo.h" />
+    <ClInclude Include="title_press.h" />
     <ClInclude Include="title_wall.h" />
     <ClInclude Include="toycar.h" />
     <ClInclude Include="useful.h" />

@@ -13,9 +13,9 @@
 //=======================================
 // マクロ定義
 //=======================================
-#define PLAYER_ID_PATTERN	((float)(1.0f / 3.0f))					// プレイヤーのIDの1面ごとのサイズ
-#define PLAYER_ID_SIZE		(D3DXVECTOR3(100.0f, 50.0f, 0.0f))		// プレイヤーのID表示のサイズ
-#define PLAYER_ID_TEXTURE	"data\\TEXTURE\\Rank.png"				// プレイヤーのID表示のテクスチャ
+#define PLAYER_ID_PATTERN	((float)(1.0f / 4.0f))					// プレイヤーのIDの1面ごとのサイズ
+#define PLAYER_ID_SIZE		(D3DXVECTOR3(80.0f, 50.0f, 0.0f))		// プレイヤーのID表示のサイズ
+#define PLAYER_ID_TEXTURE	"data\\TEXTURE\\PlayerID.png"			// プレイヤーのID表示のテクスチャ
 
 //=========================
 // コンストラクタ

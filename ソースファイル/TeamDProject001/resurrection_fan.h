@@ -1,26 +1,26 @@
 //===================================
 //
-// ネズミの幽霊の処理[rat_ghost.h]
+// 生き返りの円の範囲ヘッダー[resurrection_fan.h]
 // Author 佐藤根詩音
 //
 //===================================
-#ifndef _RAT_GHOST_H_
-#define _RAT_GHOST_H_
+#ifndef _RESURRECTION_FAN_H_
+#define _RESURRECTION_FAN_H_
 
 //***********************************
 // インクルードファイル
 //***********************************
-#include "model.h"
+#include "object3Dfan.h"
 
 //-----------------------------------
-// クラス(ネズミの幽霊クラス)
+// クラス定義(サンプル)
 //-----------------------------------
-class CRatGhost : public CModel
+class CRessrectionFan : public CObject3DFan
 {
 public:			// 誰でもアクセスできる
 
-	CRatGhost();			// コンストラクタ
-	~CRatGhost();			// デストラクタ
+	CRessrectionFan();			// コンストラクタ
+	~CRessrectionFan();			// デストラクタ
 
 	// メンバ関数
 	HRESULT Init(void);		// 初期化処理
@@ -28,10 +28,10 @@ public:			// 誰でもアクセスできる
 	void Update(void);		// 更新処理
 	void Draw(void);		// 描画処理
 
-	void SetData(const D3DXVECTOR3& pos);		// 情報の設定処理
+	void SetData(void/*引数*/);		// 情報の設定処理
 
 	// 静的メンバ関数
-	static CRatGhost* Create(const D3DXVECTOR3& pos);		// 生成処理
+	static CRessrectionFan* Create(void/*引数*/);		// 生成処理
 
 private:		// 自分だけアクセスできる
 

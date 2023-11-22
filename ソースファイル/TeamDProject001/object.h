@@ -66,6 +66,7 @@ public:			// 誰でもアクセスできる
 		TYPE_3DTEXT,			// 3Dテキスト
 		TYPE_DANGERMARK,		// 危険マーク
 		TYPE_ITEM,				// アイテム
+		TYPE_CHARAINFO,			// キャラクターの情報UI
 		TYPE_MAX				// この列挙型の総数
 	};
 

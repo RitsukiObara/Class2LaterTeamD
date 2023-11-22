@@ -79,6 +79,9 @@
     <Filter Include="Gimmick\Item">
       <UniqueIdentifier>{ed652417-c60d-4a5c-a649-e542429ff64c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI\CharaInfoUI">
+      <UniqueIdentifier>{8d7c9c9a-88dc-4db0-b314-c8f99b8b07c8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="fade.cpp">
@@ -411,6 +414,27 @@
     <ClCompile Include="item_manager.cpp">
       <Filter>Gimmick\Item</Filter>
     </ClCompile>
+    <ClCompile Include="chara_infoUI.cpp">
+      <Filter>UI\CharaInfoUI</Filter>
+    </ClCompile>
+    <ClCompile Include="leash.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="chara_icon.cpp">
+      <Filter>UI\CharaInfoUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Pin.cpp">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="chara_ID.cpp">
+      <Filter>UI\CharaInfoUI</Filter>
+    </ClCompile>
+    <ClCompile Include="title_press.cpp">
+      <Filter>Scene\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="resurrection_fan.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -742,6 +766,27 @@
     </ClInclude>
     <ClInclude Include="item_manager.h">
       <Filter>Gimmick\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="chara_infoUI.h">
+      <Filter>UI\CharaInfoUI</Filter>
+    </ClInclude>
+    <ClInclude Include="leash.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="chara_icon.h">
+      <Filter>UI\CharaInfoUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Pin.h">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="chara_ID.h">
+      <Filter>UI\CharaInfoUI</Filter>
+    </ClInclude>
+    <ClInclude Include="title_press.h">
+      <Filter>Scene\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="resurrection_fan.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
