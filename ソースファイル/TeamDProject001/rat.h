@@ -19,6 +19,7 @@ class CMotion;				// モーション
 class CPlayerID;			// プレイヤーのID
 class CRatState;			// ネズミの状態
 class CStun;				// 気絶
+class CRatGhost;			// 幽霊ネズミ
 
 //--------------------------------------------
 // クラス(ネズミクラス)
@@ -67,6 +68,8 @@ public:			// 誰でもアクセスできる
 	void SetStun(void);						// 気絶演出の設定処理
 	CStun* GetStun(void);					// 気絶演出の取得処理
 	void DeleteStun(void);					// 気絶演出の消去処理
+	CRatGhost* GetRatGhost(void);			// 幽霊ネズミの取得処理
+	void DeleteRatGhost(void);				// 幽霊ネズミの消去処理
 
 	// 静的メンバ関数
 	static CRat* Create(const D3DXVECTOR3& pos, const int nID);		// 生成処理
@@ -80,12 +83,14 @@ private:		// 自分だけアクセスできる
 	void MotionManager(void);		// モーションの管理
 	void Elevation(void);			// 起伏地面の当たり判定
 	void ObstacleCollision(void);	// 障害物との当たり判定
+	void ResurrectionCollision(void);		// 生き返りの当たり判定
 
 	// メンバ変数
 	CMotion* m_pMotion;			// モーションの情報
 	CPlayerID* m_pPlayerID;		// プレイヤーのID
 	CRatState* m_pRatState;		// ネズミの状態の情報
 	CStun* m_pStun;				// 気絶の情報
+	CRatGhost* m_pRatGhost;		// 幽霊ネズミの情報
 	D3DXVECTOR3 m_move;			// 移動量
 	int m_nRatIdx;				// ネズミの番号
 	int m_nLife;				// 寿命
