@@ -22,6 +22,15 @@ public:			// 誰でもアクセスできる
 	CPin();				// コンストラクタ
 	~CPin();			// デストラクタ
 
+	// 列挙型定義(状態)
+	enum STATE
+	{
+		STATE_FALSE = 0,	// 停止状態
+		STATE_FALLWAIT,		// 起動まで落下中に準備する
+		STATE_TRUE,			// 起動状態
+		STATE_MAX			// この列挙型の総数
+	};
+
 	// メンバ関数
 	HRESULT Init(void);		// 初期化処理
 	void Uninit(void);		// 終了処理
@@ -35,8 +44,10 @@ public:			// 誰でもアクセスできる
 	void Action(void) override;
 
 private:		// 自分だけアクセスできる
+	void StateManager(D3DXVECTOR3 *pos, D3DXVECTOR3 *rot);
+
 	D3DXVECTOR3 m_move;			//移動量
-	bool m_bAction;				//起動しているかどうか
+	STATE m_State;				//状態
 };
 
 #endif

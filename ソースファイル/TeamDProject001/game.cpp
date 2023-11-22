@@ -130,6 +130,9 @@ HRESULT CGame::Init(void)
 	CObstacle *pObstacle = CObstacle::Create(D3DXVECTOR3(400.0f, 0.0f, -600.0f), CObstacle::TYPE_LEASH);
 	pObstacle->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
 
+	// ‰æ•e‚Ì¶¬ˆ—
+	CObstacle::Create(D3DXVECTOR3(-200.0f, 200.0f, -120.0f), CObstacle::TYPE_PIN);
+
 	// ƒAƒCƒeƒ€‚Ì¶¬ˆ—
 	CItem::Create(D3DXVECTOR3(0.0f, 0.0f, -600.0f));
 

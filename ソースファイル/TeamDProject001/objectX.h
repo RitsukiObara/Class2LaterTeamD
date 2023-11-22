@@ -48,6 +48,7 @@ public:			// 誰でもアクセスできる
 		TYPE_TRAPIRON,			// ネズミ捕りの鉄部分
 		TYPE_TRAPITEM,			// ネズミ捕り(アイテム)
 		TYPE_LEASHSET,			// 設置状態のリード
+		TYPE_PINSET,			// 設置状態の画鋲
 
 		// ブロックモデル
 		TYPE_CARDBOARD,			// 段ボール
@@ -84,6 +85,7 @@ public:			// 誰でもアクセスできる
 		TYPE_SPEAKER,			// スピーカー
 		TYPE_MOUSETRAP,			// ネズミ捕り
 		TYPE_LEASH,				// リード
+		TYPE_PIN,				// 画鋲
 
 		//マップモデル
 		TYPE_KITCHEN,			//キッチン
