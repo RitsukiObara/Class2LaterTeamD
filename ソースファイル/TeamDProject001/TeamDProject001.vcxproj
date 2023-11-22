@@ -164,6 +164,7 @@
     <ClCompile Include="car_gear.cpp" />
     <ClCompile Include="Cat.cpp" />
     <ClCompile Include="character.cpp" />
+    <ClCompile Include="chara_image.cpp" />
     <ClCompile Include="chara_infoUI.cpp" />
     <ClCompile Include="collision.cpp" />
     <ClCompile Include="collpolygon.cpp" />
@@ -195,6 +196,7 @@
     <ClCompile Include="input.cpp" />
     <ClCompile Include="item.cpp" />
     <ClCompile Include="item_manager.cpp" />
+    <ClCompile Include="leash.cpp" />
     <ClCompile Include="light.cpp" />
     <ClCompile Include="locus2D.cpp" />
     <ClCompile Include="logo.cpp" />
@@ -232,6 +234,7 @@
     <ClCompile Include="particle2D.cpp" />
     <ClCompile Include="pause.cpp" />
     <ClCompile Include="petbottle.cpp" />
+    <ClCompile Include="Pin.cpp" />
     <ClCompile Include="player_idUI.cpp" />
     <ClCompile Include="rat.cpp" />
     <ClCompile Include="precompile.cpp">
@@ -280,6 +283,7 @@
     <ClInclude Include="car_gear.h" />
     <ClInclude Include="Cat.h" />
     <ClInclude Include="character.h" />
+    <ClInclude Include="chara_image.h" />
     <ClInclude Include="chara_infoUI.h" />
     <ClInclude Include="collision.h" />
     <ClInclude Include="collpolygon.h" />
@@ -311,6 +315,7 @@
     <ClInclude Include="input.h" />
     <ClInclude Include="item.h" />
     <ClInclude Include="item_manager.h" />
+    <ClInclude Include="leash.h" />
     <ClInclude Include="light.h" />
     <ClInclude Include="locus2D.h" />
     <ClInclude Include="logo.h" />
@@ -348,6 +353,7 @@
     <ClInclude Include="particle2D.h" />
     <ClInclude Include="pause.h" />
     <ClInclude Include="petbottle.h" />
+    <ClInclude Include="Pin.h" />
     <ClInclude Include="player_idUI.h" />
     <ClInclude Include="rat.h" />
     <ClInclude Include="precompile.h" />
