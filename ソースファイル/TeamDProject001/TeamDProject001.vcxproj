@@ -268,6 +268,7 @@
     <ClCompile Include="title_back.cpp" />
     <ClCompile Include="title_floor.cpp" />
     <ClCompile Include="title_logo.cpp" />
+    <ClCompile Include="title_press.cpp" />
     <ClCompile Include="title_wall.cpp" />
     <ClCompile Include="toycar.cpp" />
     <ClCompile Include="useful.cpp" />
@@ -385,6 +386,7 @@
     <ClInclude Include="title_back.h" />
     <ClInclude Include="title_floor.h" />
     <ClInclude Include="title_logo.h" />
+    <ClInclude Include="title_press.h" />
     <ClInclude Include="title_wall.h" />
     <ClInclude Include="toycar.h" />
     <ClInclude Include="useful.h" />

@@ -429,6 +429,9 @@
     <ClCompile Include="chara_ID.cpp">
       <Filter>UI\CharaInfoUI</Filter>
     </ClCompile>
+    <ClCompile Include="title_press.cpp">
+      <Filter>Scene\Title</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -775,6 +778,9 @@
     </ClInclude>
     <ClInclude Include="chara_ID.h">
       <Filter>UI\CharaInfoUI</Filter>
+    </ClInclude>
+    <ClInclude Include="title_press.h">
+      <Filter>Scene\Title</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
