@@ -411,6 +411,9 @@
     <ClCompile Include="item_manager.cpp">
       <Filter>Gimmick\Item</Filter>
     </ClCompile>
+    <ClCompile Include="chara_infoUI.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -742,6 +745,9 @@
     </ClInclude>
     <ClInclude Include="item_manager.h">
       <Filter>Gimmick\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="chara_infoUI.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
