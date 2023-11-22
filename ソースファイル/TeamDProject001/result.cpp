@@ -9,6 +9,7 @@
 //********************************************
 #include "manager.h"
 #include "renderer.h"
+#include "game.h"
 #include "result.h"
 #include "input.h"
 #include "fade.h"
@@ -17,15 +18,20 @@
 #include "file.h"
 #include "camera.h"
 #include "skybox.h"
-#include "game.h"
 #include "result_letter.h"
 #include "objectElevation.h"
 #include "rat.h"
 #include "Cat.h"
+#include "confetti.h"
 
 //--------------------------------------------
 // マクロ定義
 //--------------------------------------------
+#define MAX_CONFETTI_X		(10)		// 紙吹雪の最大数X
+#define MAX_CONFETTI_Y		(20)		// 紙吹雪の最大数Y
+#define GRAVITY_CONFETTI	(15 + 7)	// 紙吹雪の重力
+#define LIFE_CONFETTI		(100)		// 紙吹雪の寿命
+#define INTERVAL_CONFETTI	(120.0f)	// 紙吹雪の出現間隔
 
 //--------------------------------------------
 // 静的メンバ変数宣言
@@ -86,11 +92,14 @@ HRESULT CResult::Init(void)
 	// ネズミの生成
 	for (int nCntRat = 0; nCntRat < MAX_RAT; nCntRat++)
 	{
-		m_apRat[nCntRat] = CRat::Create(D3DXVECTOR3(200.0f * nCntRat, 0.0f, 0.0f), nCntRat);
+		m_apRat[nCntRat] = CRat::Create(D3DXVECTOR3(300.0f * nCntRat, 0.0f, 0.0f), nCntRat);
 	}
 
-	//猫の生成
-	CCat::Create(D3DXVECTOR3(-300.0f, 0.0f, 0.0f));
+	// 猫の生成
+	CCat::Create(D3DXVECTOR3(-500.0f, 0.0f, 0.0f));
+
+	// 紙吹雪の生成
+	CreateConfetti();
 
 	// 成功を返す
 	return S_OK;
@@ -110,6 +119,18 @@ void CResult::Uninit(void)
 //======================================
 void CResult::Update(void)
 {
+
+#ifdef _DEBUG	// 紙吹雪テスト用
+
+	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_M) == true)
+	{ // Mキーを押したとき
+
+		// 紙吹雪の生成
+		CreateConfetti();
+	}
+
+#endif
+
 	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_RETURN) == true ||
 		CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_A,0) == true ||
 		CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_START, 0) == true)
@@ -144,4 +165,74 @@ void CResult::Draw(void)
 int CResult::GetState(void)
 {
 	return m_nGameState;
+}
+
+//======================================
+//紙吹雪の生成処理
+//======================================
+void CResult::CreateConfetti(void)
+{
+	// ローカル変数
+	D3DXCOLOR color;		// 色
+	D3DXVECTOR3 rotMove;	// 向き
+	D3DXVECTOR3 size;		// サイズ
+	float fGravity;			// 重力
+	float fPosX = 0.0f;			// 初期値X
+
+	// 位置の設定
+	switch (m_nGameState)
+	{
+	case CGame::STATE_CAT_WIN:		// ねこのかち
+
+		fPosX = 0.0f;
+
+		break;
+
+	case CGame::STATE_RAT_WIN:		// ねずみのかち
+
+		fPosX = 1000.0f;
+
+		break;
+
+	default:
+
+		assert(false);
+
+		break;
+	}
+
+	for (int nCntConfettiX = 0; nCntConfettiX < MAX_CONFETTI_X; nCntConfettiX++)
+	{ // X軸
+		for (int nCntConfettiY = 0; nCntConfettiY < MAX_CONFETTI_Y; nCntConfettiY++)
+		{ // Y軸
+
+			// 向き
+			rotMove.x = rand() % 10 * 0.01f;
+			rotMove.y = rand() % 10 * 0.01f;
+			rotMove.z = rand() % 10 * 0.01f;
+
+			// 色
+			color.r = rand() % 10 * 0.1f;
+			color.g = rand() % 10 * 0.1f;
+			color.b = rand() % 10 * 0.1f;
+
+			// サイズ
+			size.x = float(rand() % 17 + 10);
+			size.y = float(rand() % 17 + 10);
+			size.z = float(rand() % 17 + 10);
+
+			// 重力
+			fGravity = float(rand() % GRAVITY_CONFETTI);
+
+			// 紙吹雪生成
+			CConfetti::Create(D3DXVECTOR3(fPosX + (nCntConfettiX * -INTERVAL_CONFETTI),
+				300.0f + (nCntConfettiY * INTERVAL_CONFETTI),
+				0.0f),
+				D3DXVECTOR3(size.x, size.y, size.z),		// サイズ
+				D3DXVECTOR3(rotMove.x, rotMove.y, rotMove.z),	// 向き
+				fGravity,							// 重力
+				D3DXCOLOR(color.r, color.g, color.b, 1.0f),	// 色
+				LIFE_CONFETTI + (LIFE_CONFETTI * nCntConfettiY));								// 寿命
+		}
+	}
 }

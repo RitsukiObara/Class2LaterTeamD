@@ -42,6 +42,8 @@ public:				// 誰でもアクセスできる
 
 private:					// 自分だけアクセスできる
 
+	void CreateConfetti(void);			// 紙吹雪の生成
+
 	// 静的メンバ変数(最初から必要な物を配置しておく)
 	static CRat* m_apRat[MAX_RAT];		// ネズミの情報
 	static int m_nGameState;			// ゲームの情報
