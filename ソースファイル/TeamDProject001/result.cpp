@@ -36,7 +36,7 @@ int CResult::m_nGameState = 0;			// ゲームの情報
 //=========================================
 // コンストラクタ
 //=========================================
-CResult::CResult() : CScene(TYPE_NONE, PRIORITY_BG)
+CResult::CResult() : CScene(TYPE_SCENE, PRIORITY_BG)
 {
 
 }

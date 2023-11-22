@@ -134,10 +134,12 @@ void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight,
 
 				// ˆÚ“®—Ê‚ðÝ’è‚·‚é
 				pRat->SetSpeed(pRat->GetSpeed() * 0.7f);
+
 				if (pRat->IsMove() == true)
 				{
 					CParticle::Create(pos, CParticle::TYPE_SLIME);
 				}
+
 				break;
 
 			case CObstacle::TYPE_HAIRBALL:

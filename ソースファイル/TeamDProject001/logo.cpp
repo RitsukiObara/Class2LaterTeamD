@@ -22,7 +22,7 @@
 //=========================================
 // コンストラクタ
 //=========================================
-CLogo::CLogo() : CScene(TYPE_NONE, PRIORITY_BG)
+CLogo::CLogo() : CScene(TYPE_SCENE, PRIORITY_BG)
 {
 	// 全ての情報をクリアする
 	m_nTransCount = 0;			// 遷移カウント

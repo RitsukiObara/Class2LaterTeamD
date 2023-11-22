@@ -23,6 +23,7 @@ public:			// 誰でもアクセスできる
 	enum TYPE
 	{
 		TYPE_NONE = 0,			// 無し
+		TYPE_SCENE,				// シーン
 		TYPE_TITLELOGO,			// タイトル
 		TYPE_EDITUI,			// エディットUI
 		TYPE_2DUI,				// 2DUI

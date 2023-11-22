@@ -22,7 +22,7 @@
 //======================================
 // コンストラクタ
 //======================================
-CScene::CScene() : CObject(TYPE_NONE, PRIORITY_BG)
+CScene::CScene() : CObject(TYPE_SCENE, PRIORITY_BG)
 {
 	// コンストラクタの箱
 	Box();

@@ -36,7 +36,7 @@ CTitle::STATE CTitle::m_state = STATE_TITLE_APPEAR;			// 状態
 //=========================================
 // コンストラクタ
 //=========================================
-CTitle::CTitle() : CScene(TYPE_NONE, PRIORITY_BG)
+CTitle::CTitle() : CScene(TYPE_SCENE, PRIORITY_BG)
 {
 	// 全ての値をクリアする
 	m_pUIEdit = NULL;

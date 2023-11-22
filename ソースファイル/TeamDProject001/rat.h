@@ -18,6 +18,7 @@
 class CMotion;				// モーション
 class CPlayerID;			// プレイヤーのID
 class CRatState;			// ネズミの状態
+class CStun;				// 気絶
 
 //--------------------------------------------
 // クラス(ネズミクラス)
@@ -61,7 +62,11 @@ public:			// 誰でもアクセスできる
 	void SetSpeed(const float fSpeed);		// 速度の設定処理
 	float GetSpeed(void) const;				// 速度の取得処理
 	int GetRatIdx(void) const;				// ネズミの番号の取得処理
-	bool IsMove(void);	
+	bool IsMove(void);						// 移動状況の取得処理
+	CRatState* GetState(void);				// ネズミの状態の取得処理
+	void SetStun(void);						// 気絶演出の設定処理
+	CStun* GetStun(void);					// 気絶演出の取得処理
+	void DeleteStun(void);					// 気絶演出の消去処理
 
 	// 静的メンバ関数
 	static CRat* Create(const D3DXVECTOR3& pos, const int nID);		// 生成処理
@@ -80,6 +85,7 @@ private:		// 自分だけアクセスできる
 	CMotion* m_pMotion;			// モーションの情報
 	CPlayerID* m_pPlayerID;		// プレイヤーのID
 	CRatState* m_pRatState;		// ネズミの状態の情報
+	CStun* m_pStun;				// 気絶の情報
 	D3DXVECTOR3 m_move;			// 移動量
 	int m_nRatIdx;				// ネズミの番号
 	int m_nLife;				// 寿命
