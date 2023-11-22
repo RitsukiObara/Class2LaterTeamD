@@ -79,6 +79,9 @@
     <Filter Include="Gimmick\Item">
       <UniqueIdentifier>{ed652417-c60d-4a5c-a649-e542429ff64c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI\CharaInfoUI">
+      <UniqueIdentifier>{8d7c9c9a-88dc-4db0-b314-c8f99b8b07c8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="fade.cpp">
@@ -412,7 +415,10 @@
       <Filter>Gimmick\Item</Filter>
     </ClCompile>
     <ClCompile Include="chara_infoUI.cpp">
-      <Filter>UI</Filter>
+      <Filter>UI\CharaInfoUI</Filter>
+    </ClCompile>
+    <ClCompile Include="chara_image.cpp">
+      <Filter>UI\CharaInfoUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -747,7 +753,10 @@
       <Filter>Gimmick\Item</Filter>
     </ClInclude>
     <ClInclude Include="chara_infoUI.h">
-      <Filter>UI</Filter>
+      <Filter>UI\CharaInfoUI</Filter>
+    </ClInclude>
+    <ClInclude Include="chara_image.h">
+      <Filter>UI\CharaInfoUI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
