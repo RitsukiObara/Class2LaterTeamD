@@ -34,6 +34,7 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\note8.x",				// 8分音符
 	"data\\MODEL\\note16.x",			// 16分音符
 	"data\\MODEL\\mousetrap_iron.x",	// ネズミ捕りの鉄部分
+	"data\\MODEL\\TrapItem.x",			// ネズミ捕り(アイテム)
 	"data\\MODEL\\leashSet.x",			// 設置状態のリード
 
 	// ブロックモデル

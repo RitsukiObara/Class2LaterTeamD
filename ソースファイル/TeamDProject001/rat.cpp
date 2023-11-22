@@ -10,6 +10,7 @@
 #include "main.h"
 #include "rat.h"
 #include "game.h"
+#include "result.h"
 #include "input.h"
 #include "manager.h"
 #include "renderer.h"
@@ -271,35 +272,65 @@ void CRat::Draw(void)
 //=====================================
 void CRat::MotionManager(void)
 {
-	if (m_bJump == true)
-	{
-		if (MotionType != MOTIONTYPE_JUMP)
-		{
-			MotionType = MOTIONTYPE_JUMP;
+	if (CManager::Get()->GetMode() == CScene::MODE_RESULT)
+	{ // リザルト
 
-			// モーションの設定処理
-			m_pMotion->Set(MotionType);
+		if (CResult::GetState() == CGame::STATE_RAT_WIN)
+		{ // ねずみのかち
+
+			if (MotionType != MOTIONTYPE_MOVE)
+			{
+				MotionType = MOTIONTYPE_MOVE;
+
+				// モーションの設定処理
+				m_pMotion->Set(MotionType);
+			}
 		}
-	}
-	else if (m_move.x > 0.05f || m_move.x < -0.05f ||
-			m_move.z > 0.05f || m_move.z < -0.05f)
-	{
-		if (MotionType != MOTIONTYPE_MOVE)
-		{
-			MotionType = MOTIONTYPE_MOVE;
+		else if (CResult::GetState() == CGame::STATE_CAT_WIN)
+		{ // ねこのかち
 
-			// モーションの設定処理
-			m_pMotion->Set(MotionType);
+			if (MotionType != MOTIONTYPE_NEUTRAL)
+			{
+				MotionType = MOTIONTYPE_NEUTRAL;
+
+				// モーションの設定処理
+				m_pMotion->Set(MotionType);
+			}
 		}
 	}
 	else
-	{
-		if (MotionType != MOTIONTYPE_NEUTRAL)
-		{
-			MotionType = MOTIONTYPE_NEUTRAL;
+	{ // リザルト以外のとき
 
-			// モーションの設定処理
-			m_pMotion->Set(MotionType);
+		if (m_bJump == true)
+		{
+			if (MotionType != MOTIONTYPE_JUMP)
+			{
+				MotionType = MOTIONTYPE_JUMP;
+
+				// モーションの設定処理
+				m_pMotion->Set(MotionType);
+			}
+		}
+		else if (m_move.x > 0.05f || m_move.x < -0.05f ||
+			m_move.z > 0.05f || m_move.z < -0.05f)
+		{
+			if (MotionType != MOTIONTYPE_MOVE)
+			{
+				MotionType = MOTIONTYPE_MOVE;
+
+				// モーションの設定処理
+				m_pMotion->Set(MotionType);
+			}
+		}
+		else
+		{
+			if (MotionType != MOTIONTYPE_NEUTRAL)
+			{
+				MotionType = MOTIONTYPE_NEUTRAL;
+
+				// モーションの設定処理
+				m_pMotion->Set(MotionType);
+			}
 		}
 	}
 }
@@ -660,6 +691,13 @@ bool CRat::Hit(void)
 			// 死を返す
 			return true;
 		}
+		else
+		{ // 上記以外
+
+			m_pRatState->SetState(CRatState::STATE_DAMAGE);		// ダメージ状態にする
+		}
+
+		// 死を返す
 		return true;
 	}
 

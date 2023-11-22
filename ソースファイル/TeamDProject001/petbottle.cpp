@@ -197,6 +197,14 @@ bool CPetbottle::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHe
 }
 
 //=====================================
+// ギミック起動処理
+//=====================================
+void CPetbottle::Action(void)
+{
+
+}
+
+//=====================================
 // 回転処理
 //=====================================
 void CPetbottle::Cycle(void)

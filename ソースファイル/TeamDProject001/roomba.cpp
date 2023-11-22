@@ -191,3 +191,11 @@ bool CRoomba::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeigh
 	// false を返す
 	return false;
 }
+
+//=====================================
+// ギミック起動処理
+//=====================================
+void CRoomba::Action(void)
+{
+
+}

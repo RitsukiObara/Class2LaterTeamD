@@ -125,6 +125,14 @@ bool CFlowerVase::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fH
 }
 
 //=====================================
+// ギミック起動処理
+//=====================================
+void CFlowerVase::Action(void)
+{
+
+}
+
+//=====================================
 // 起伏地面の当たり判定
 //=====================================
 void CFlowerVase::Elevation(void)

@@ -46,6 +46,7 @@ public:			// 誰でもアクセスできる
 		TYPE_NOTE8,				// 8分音符
 		TYPE_NOTE16,			// 16分音符
 		TYPE_TRAPIRON,			// ネズミ捕りの鉄部分
+		TYPE_TRAPITEM,			// ネズミ捕り(アイテム)
 		TYPE_LEASHSET,			// 設置状態のリード
 
 		// ブロックモデル

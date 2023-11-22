@@ -28,6 +28,7 @@
 #include "weapon_selectUI.h"
 #include "block.h"
 #include "countdown.h"
+#include "item.h"
 
 #include "obstacle_manager.h"
 
@@ -129,6 +130,9 @@ HRESULT CGame::Init(void)
 	CObstacle *pObstacle = CObstacle::Create(D3DXVECTOR3(400.0f, 0.0f, -600.0f), CObstacle::TYPE_LEASH);
 	pObstacle->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
 
+	// アイテムの生成処理
+	CItem::Create(D3DXVECTOR3(0.0f, 0.0f, -600.0f));
+
 #endif // _DEBUG
 
 	// ネズミの生成
@@ -183,9 +187,13 @@ void CGame::Update(void)
 // デバッグ版
 #ifdef _DEBUG
 
-	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_RETURN) == true)
-	{
-		m_GameState = STATE_CAT_WIN;
+	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_8) == true)
+	{ // 8キーを押したとき
+		m_GameState = STATE_CAT_WIN;		// ねこのかち
+	}
+	else if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_9) == true)
+	{ // 9キーを押したとき
+		m_GameState = STATE_RAT_WIN;		// ねずみのかち
 	}
 
 	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_F7) == true)

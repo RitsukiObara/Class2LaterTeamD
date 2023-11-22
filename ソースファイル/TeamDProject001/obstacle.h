@@ -65,6 +65,7 @@ public:			// 誰でもアクセスできる
 
 	virtual bool Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type) = 0;	// 当たり判定処理
 	virtual bool Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type) = 0;								// ヒット処理
+	virtual void Action(void) = 0;											// ギミック起動処理
 
 	// セット・ゲット関係
 	void SetType(const TYPE type);		// 種類の設定処理

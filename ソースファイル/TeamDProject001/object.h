@@ -63,6 +63,8 @@ public:			// 誰でもアクセスできる
 		TYPE_TITLEWALL,			// タイトルの壁
 		TYPE_ENTRYUI,			// エントリーUI
 		TYPE_3DTEXT,			// 3Dテキスト
+		TYPE_DANGERMARK,		// 危険マーク
+		TYPE_ITEM,				// アイテム
 		TYPE_MAX				// この列挙型の総数
 	};
 

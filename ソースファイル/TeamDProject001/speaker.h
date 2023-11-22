@@ -35,11 +35,11 @@ public:			// 誰でもアクセスできる
 
 	bool Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type);	// 当たり判定処理
 	bool Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type);		// ヒット処理
+	void Action(void) override;
 
 	static void NULLNote(int Idx) { m_apNote[Idx] = NULL; }
 
 private:		// 自分だけアクセスできる
-	void Action(void);
 	void SetNote(void);
 
 	static CNote *m_apNote[MAX_NOTE];

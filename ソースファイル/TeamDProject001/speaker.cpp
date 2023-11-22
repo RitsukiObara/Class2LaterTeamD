@@ -173,8 +173,21 @@ bool CSpeaker::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const floa
 //=====================================
 bool CSpeaker::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
 {
-	//// I—¹ˆ—
-	//Uninit();
+	for (int nCntNote = 0; nCntNote < MAX_NOTE; nCntNote++)
+	{
+		if (m_apNote[nCntNote] != nullptr)
+		{ // ‰¹•„‚ª NULL ‚¶‚á‚È‚¢ê‡
+
+			if (pos.y <= m_apNote[nCntNote]->GetPos().y + m_apNote[nCntNote]->GetFileData().vtxMax.y &&
+				pos.y + fHeight >= m_apNote[nCntNote]->GetPos().y + m_apNote[nCntNote]->GetFileData().vtxMin.y &&
+				useful::CylinderInner(pos,m_apNote[nCntNote]->GetPos(),m_apNote[nCntNote]->GetFileData().fRadius + fWidth) == true)
+			{ // “–‚½‚è”»’è‚Ì’†‚É“ü‚Á‚½ê‡
+
+				// true ‚ğ•Ô‚·
+				return true;
+			}
+		}
+	}
 
 	// false ‚ğ•Ô‚·
 	return false;

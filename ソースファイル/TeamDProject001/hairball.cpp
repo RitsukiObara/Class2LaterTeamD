@@ -195,6 +195,14 @@ bool CHairBall::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHei
 }
 
 //=====================================
+// ギミック起動処理
+//=====================================
+void CHairBall::Action(void)
+{
+
+}
+
+//=====================================
 // 移動処理
 //=====================================
 void CHairBall::Move(void)
