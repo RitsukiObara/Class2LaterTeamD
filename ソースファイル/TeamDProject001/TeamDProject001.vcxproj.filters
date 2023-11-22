@@ -432,6 +432,9 @@
     <ClCompile Include="title_press.cpp">
       <Filter>Scene\Title</Filter>
     </ClCompile>
+    <ClCompile Include="resurrection_fan.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -781,6 +784,9 @@
     </ClInclude>
     <ClInclude Include="title_press.h">
       <Filter>Scene\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="resurrection_fan.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
