@@ -36,6 +36,8 @@ public:				// 誰でもアクセスできる
 
 private:			// 自分だけアクセスできる
 
+	// メンバ変数
+	CCharaIcon* m_pIcon;	// アイコンの情報
 };
 
 #endif

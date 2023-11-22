@@ -17,7 +17,8 @@
 //========================
 CCharaInfoUI::CCharaInfoUI() : CObject(TYPE_CHARAINFO, PRIORITY_UI)
 {
-
+	// 全ての値をクリアする
+	m_pIcon = nullptr;		// アイコンの情報
 }
 
 //========================
@@ -33,6 +34,9 @@ CCharaInfoUI::~CCharaInfoUI()
 //========================
 HRESULT CCharaInfoUI::Init(void)
 {
+	// 全ての値を初期化する
+	m_pIcon = nullptr;		// アイコンの情報
+
 	// 成功を返す
 	return S_OK;
 }
@@ -42,7 +46,15 @@ HRESULT CCharaInfoUI::Init(void)
 //========================
 void CCharaInfoUI::Uninit(void)
 {
-	// 数字の終了処理
+	if (m_pIcon != nullptr)
+	{ // アイコンが NULL じゃない場合
+
+		// アイコンの終了処理
+		m_pIcon->Uninit();
+		m_pIcon = nullptr;
+	}
+
+	// 本体の終了処理
 	Release();
 }
 
@@ -51,7 +63,12 @@ void CCharaInfoUI::Uninit(void)
 //========================
 void CCharaInfoUI::Update(void)
 {
+	if (m_pIcon != nullptr)
+	{ // アイコンが NULL じゃない場合
 
+		// アイコンの更新処理
+		m_pIcon->Update();
+	}
 }
 
 //========================
@@ -59,7 +76,12 @@ void CCharaInfoUI::Update(void)
 //========================
 void CCharaInfoUI::Draw(void)
 {
+	if (m_pIcon != nullptr)
+	{ // アイコンが NULL じゃない場合
 
+		// アイコンの描画処理
+		m_pIcon->Draw();
+	}
 }
 
 //========================
@@ -67,7 +89,12 @@ void CCharaInfoUI::Draw(void)
 //========================
 void CCharaInfoUI::SetData(const D3DXVECTOR3& pos, const int nPlayerID, const CCharaIcon::TYPE type)
 {
+	if (m_pIcon == nullptr)
+	{ // アイコンが NULL の場合
 
+		// アイコンを生成する
+		m_pIcon = CCharaIcon::Create(pos, type);
+	}
 }
 
 //========================

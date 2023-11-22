@@ -46,10 +46,10 @@
 const char*CPause::c_apFilename[CPause::POLYGON_MAX] =	// テクスチャファイル名
 {
 	nullptr,								// 背景ポリゴン
-	"data\\TEXTURE\\PAUSE_menu.png",			// ポーズメニューのテクスチャ
+	"data\\TEXTURE\\PAUSE_menu.png",		// ポーズメニューのテクスチャ
 	"data\\TEXTURE\\PAUSE_return.png",		// コンティニューのテクスチャ
 	"data\\TEXTURE\\PAUSE_Reset.png",		// リセットのテクスチャ
-	"data\\TEXTURE\\PAUSE_taitle.png",		// タイトルのテクスチャ
+	"data\\TEXTURE\\PAUSE_title.png",		// タイトルのテクスチャ
 };
 
 const CPause::Info CPause::c_aPauseInfo[POLYGON_MAX] = 	// ポーズの情報
