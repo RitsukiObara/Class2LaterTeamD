@@ -16,17 +16,22 @@
 #include "input.h"
 #include "effect.h"
 
+#define ACTION_TIME (120)
+#define WAIT_TIME (20)
+
 //==============================
 // コンストラクタ
 //==============================
 CLeash::CLeash() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 {
 	// 全ての値をクリアする
-	m_bAction = false;
+	m_move = NONE_D3DXVECTOR3;
 	ActionPosHead = NONE_D3DXVECTOR3;
 	ActionPosToes = NONE_D3DXVECTOR3;
+	m_State = STATE_FALSE;
 	m_bSetHead = false;
 	m_bSetToes = false;
+	m_StateCount = 0;
 }
 
 //==============================
@@ -70,16 +75,32 @@ void CLeash::Update(void)
 	D3DXVECTOR3 pos = GetPos();
 	D3DXVECTOR3 rot = GetRot();
 
-	if (m_bSetHead == true && m_bSetToes == true)
+	//ギミック起動時の処理
+	if ((m_bSetHead == true && m_bSetToes == true) && m_State == STATE_FALSE)
+	{//起動していない時にネズミが両端を持ったら
+		Action();
+	}
+
+	StateManager(&pos);
+
+	//重力
+	m_move.y -= 1.0f;
+
+	//位置更新
+	pos.y += m_move.y;
+
+	//地面判定
+	if (pos.y < 0.0f)
 	{
-		m_bAction = true;
+		pos.y = 0.0f;
 	}
 
 	SetActionPos(pos, rot);
 
 	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_0) == true)
 	{ // Aボタンを押した場合
-		m_bAction = m_bAction ? false : true;
+		m_bSetHead = true;
+		m_bSetToes = true;
 	}
 
 	SetPos(pos);
@@ -92,6 +113,16 @@ void CLeash::Draw(void)
 {
 	// 描画処理
 	CObstacle::Draw();
+}
+
+//=====================================
+// 両端起動時の処理
+//=====================================
+void CLeash::Action(void)
+{
+	m_State = STATE_JUMPWAIT;
+	m_StateCount = WAIT_TIME;
+	m_move.y = 30.0f;
 }
 
 //=====================================
@@ -114,11 +145,44 @@ void CLeash::SetActionPos(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 }
 
 //=====================================
-// 紐を引っ張られた時の処理
+// 状態管理
 //=====================================
-void CLeash::Action(void)
+void CLeash::StateManager(D3DXVECTOR3 *pos)
 {
-	m_bAction = true;
+	switch (m_State)
+	{
+	case CLeash::STATE_FALSE:
+
+		break;
+
+	case CLeash::STATE_JUMPWAIT:	//ギミック起動から効果発動までの準備時間
+		m_StateCount--;
+		if (m_StateCount <= 0)
+		{
+			m_State = STATE_TRUE;
+			m_StateCount = ACTION_TIME;
+			SetFileData(CXFile::TYPE_LEASHSET);
+		}
+		break;
+
+	case CLeash::STATE_TRUE:	//ギミックの効果発動から停止までの処理
+		m_StateCount--;
+
+		if (pos->y < 200.0f)
+		{
+			pos->y = 200.0f;
+			m_move.y = 0.0f;
+		}
+
+		if (m_StateCount <= 0)
+		{
+			m_State = STATE_FALSE;
+			m_bSetHead = false;
+			m_bSetToes = false;
+			SetFileData(CXFile::TYPE_LEASH);
+		}
+		break;
+	}
 }
 
 //=====================================
