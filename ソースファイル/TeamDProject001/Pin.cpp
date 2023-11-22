@@ -117,7 +117,11 @@ void CPin::StateManager(D3DXVECTOR3 *pos, D3DXVECTOR3 *rot)
 			rot->z = 0.0f;
 			m_State = STATE_TRUE;
 			SetFileData(CXFile::TYPE_PINSET);
-			CFraction::Create(GetPos(), CFraction::TYPE_FLOWERVASE);
+
+			for (int nCnt = 0; nCnt < 20; nCnt++)
+			{
+				CFraction::Create(GetPos(), CFraction::TYPE_PIN);
+			}
 		}
 		break;
 
