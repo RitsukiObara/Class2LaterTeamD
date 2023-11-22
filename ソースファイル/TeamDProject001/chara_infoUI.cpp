@@ -12,6 +12,8 @@
 #include "texture.h"
 #include "useful.h"
 
+#include "chara_ID.h"
+
 //========================
 // コンストラクタ
 //========================
@@ -19,6 +21,7 @@ CCharaInfoUI::CCharaInfoUI() : CObject(TYPE_CHARAINFO, PRIORITY_UI)
 {
 	// 全ての値をクリアする
 	m_pIcon = nullptr;		// アイコンの情報
+	m_pID = nullptr;		// IDの情報
 }
 
 //========================
@@ -36,6 +39,7 @@ HRESULT CCharaInfoUI::Init(void)
 {
 	// 全ての値を初期化する
 	m_pIcon = nullptr;		// アイコンの情報
+	m_pID = nullptr;		// IDの情報
 
 	// 成功を返す
 	return S_OK;
@@ -54,6 +58,14 @@ void CCharaInfoUI::Uninit(void)
 		m_pIcon = nullptr;
 	}
 
+	if (m_pID != nullptr)
+	{ // IDが NULL じゃない場合
+
+		// IDの終了処理
+		m_pID->Uninit();
+		m_pID = nullptr;
+	}
+
 	// 本体の終了処理
 	Release();
 }
@@ -69,6 +81,13 @@ void CCharaInfoUI::Update(void)
 		// アイコンの更新処理
 		m_pIcon->Update();
 	}
+
+	if (m_pID != nullptr)
+	{ // IDが NULL じゃない場合
+
+		// IDの更新処理
+		m_pID->Update();
+	}
 }
 
 //========================
@@ -82,6 +101,13 @@ void CCharaInfoUI::Draw(void)
 		// アイコンの描画処理
 		m_pIcon->Draw();
 	}
+
+	if (m_pID != nullptr)
+	{ // IDが NULL じゃない場合
+
+		// IDの描画処理
+		m_pID->Draw();
+	}
 }
 
 //========================
@@ -94,6 +120,13 @@ void CCharaInfoUI::SetData(const D3DXVECTOR3& pos, const int nPlayerID, const CC
 
 		// アイコンを生成する
 		m_pIcon = CCharaIcon::Create(pos, type);
+	}
+
+	if (m_pID == nullptr)
+	{ // IDが NULL の場合
+
+		// IDを生成する
+		m_pID = CCharaID::Create(pos, nPlayerID);
 	}
 }
 
