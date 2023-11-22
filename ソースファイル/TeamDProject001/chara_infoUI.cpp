@@ -125,8 +125,11 @@ void CCharaInfoUI::SetData(const D3DXVECTOR3& pos, const int nPlayerID, const CC
 	if (m_pID == nullptr)
 	{ // ID‚ª NULL ‚Ìê‡
 
+		// ID‚ÌˆÊ’u‚ğİ’è
+		D3DXVECTOR3 posID = D3DXVECTOR3(pos.x + 40.0f, pos.y + 50.0f, pos.z);
+
 		// ID‚ğ¶¬‚·‚é
-		m_pID = CCharaID::Create(pos, nPlayerID);
+		m_pID = CCharaID::Create(posID, nPlayerID);
 	}
 }
 
