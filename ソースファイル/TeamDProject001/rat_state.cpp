@@ -103,14 +103,11 @@ void CRatState::Update(CRat& pRat)
 		if (m_nStateCount >= SMASH_COUNT)
 		{ // 状態カウントが一定以上になった場合
 
-			// 気絶状態にする
-			m_State = STATE_STUN;
-
 			// 状態カウントを初期化する
 			m_nStateCount = 0;
 
-			// 気絶演出の設定処理
-			pRat.SetStun();
+			// 気絶処理
+			pRat.Stun();
 		}
 
 		break;

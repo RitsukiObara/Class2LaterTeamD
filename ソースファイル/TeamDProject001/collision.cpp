@@ -192,11 +192,8 @@ void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight,
 
 			case CObstacle::TYPE_HIMO:
 
-				// 向きを算出する
-				fAngle = atan2f(pos.x - pObstacle->GetPos().x, pos.z - pObstacle->GetPos().z);
-
-				// ヒット処理
-				pRat->Smash(fAngle);
+				// 気絶処理
+				pRat->Stun();
 
 				break;
 
@@ -211,6 +208,17 @@ void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight,
 				break;
 
 			case CObstacle::TYPE_MOUSETRAP:
+
+				break;
+
+			case CObstacle::TYPE_LEASH:
+
+				break;
+
+			case CObstacle::TYPE_PIN:
+
+				// 気絶処理
+				pRat->Stun();
 
 				break;
 

@@ -465,19 +465,6 @@ CRatState* CRat::GetState(void)
 }
 
 //=======================================
-// 気絶演出の設定処理
-//=======================================
-void CRat::SetStun(void)
-{
-	if (m_pStun == nullptr)
-	{ // 気絶の情報が NULL だった場合
-
-		// 気絶演出を生成する
-		m_pStun = CStun::Create(D3DXVECTOR3(GetPos().x, GetPos().y + STUN_HEIGHT, GetPos().z));
-	}
-}
-
-//=======================================
 // 気絶演出の取得処理
 //=======================================
 CStun* CRat::GetStun(void)
@@ -846,13 +833,19 @@ void CRat::Stun(void)
 
 	if (state != CRatState::STATE_DAMAGE &&
 		state != CRatState::STATE_INVINCIBLE &&
-		state != CRatState::STATE_SMASH &&
 		state != CRatState::STATE_DEATH &&
 		state != CRatState::STATE_STUN)
 	{ // ダメージ受ける状態だった場合
 
 		// 気絶状態にする
 		m_pRatState->SetState(CRatState::STATE_STUN);
+
+		if (m_pStun == nullptr)
+		{ // 気絶の情報が NULL だった場合
+
+			// 気絶演出を生成する
+			m_pStun = CStun::Create(D3DXVECTOR3(GetPos().x, GetPos().y + STUN_HEIGHT, GetPos().z));
+		}
 	}
 }
 
