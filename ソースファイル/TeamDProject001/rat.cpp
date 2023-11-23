@@ -777,9 +777,8 @@ bool CRat::Hit(void)
 
 				m_pRatGhost = CRatGhost::Create(GetPos());
 
+				m_nNumAll--;						// ネズミの総数減算
 			}
-
-			m_nNumAll--;						// ネズミの総数減算
 
 #if 0	// デバッグの為の処理↓
 
