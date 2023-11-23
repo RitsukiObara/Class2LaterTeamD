@@ -27,23 +27,23 @@ public:			// 誰でもアクセスできる
 	// 列挙型定義(種類)
 	enum TYPE
 	{
-		TYPE_RAT = 0,// にゃんこ
-		TYPE_AND,	 // ＆
-		TYPE_CAT,	 // ちゅーちゅー
-		TYPE_MAX	 // この列挙型の総数
+		TYPE_RAT = 0,		// にゃんこ
+		TYPE_AND,			// ＆
+		TYPE_CAT,			// ちゅーちゅー
+		TYPE_MAX			// この列挙型の総数
 	};
 
 	// 列挙型定義(状態)
 	enum STATE
 	{
-		STATE_ESCAPE = 0,		// 逃走状態
-		STATE_AND,				// ＆出現状態
-		STATE_WAIT,				// 待機状態
-		STATE_FRAMEOUT,			// 画面外状態
-		STATE_SHAKEOFF,			// 逃げ切り状態
-		STATE_HOLEIN,			// 穴入り状態
-		STATE_STOP,				// 停止状態
-		STATE_MAX				// この列挙型の総数
+		STATE_ESCAPE = 0,	// 逃走状態
+		STATE_AND,			// ＆出現状態
+		STATE_WAIT,			// 待機状態
+		STATE_FRAMEOUT,		// 画面外状態
+		STATE_SHAKEOFF,		// 逃げ切り状態
+		STATE_HOLEIN,		// 穴入り状態
+		STATE_STOP,			// 停止状態
+		STATE_MAX			// この列挙型の総数
 	};
 
 	// 構造体定義(タイトルロゴ)

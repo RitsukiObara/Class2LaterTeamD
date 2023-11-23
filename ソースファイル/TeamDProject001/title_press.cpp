@@ -18,12 +18,15 @@
 //--------------------------------------------
 // マクロ定義
 //--------------------------------------------
-#define PRESS_TEXTURE		"data\\TEXTURE\\Press.png"				// プレスのテクスチャ
-#define BUTTON_TEXTURE		"data\\TEXTURE\\Button.png"				// ボタンのテクスチャ
-#define INIT_PRESS_POS		(D3DXVECTOR3(400.0f, 500.0f, 0.0f))		// 「PRESS」の初期位置
-#define INIT_BUTTON_POS		(D3DXVECTOR3(700.0f, 500.0f, 0.0f))		// 「ENTER」の初期位置
-#define PRESS_SIZE			(D3DXVECTOR3(100.0f, 25.0f, 0.0f))		// 「PRESS」のサイズ
-#define BUTTON_SIZE			(D3DXVECTOR3(100.0f, 25.0f, 0.0f))		// 「ENTER」のサイズ
+#define PRESS_TEXTURE		"data\\TEXTURE\\PRESS.png"				// プレスのテクスチャ
+#define BUTTON_TEXTURE		"data\\TEXTURE\\ENTER.png"				// ボタンのテクスチャ
+#define PRESS_SIZE			(D3DXVECTOR3(200.0f, 50.0f, 0.0f))		// 「PRESS」のサイズ
+#define BUTTON_SIZE			(D3DXVECTOR3(200.0f, 50.0f, 0.0f))		// 「ENTER」のサイズ
+#define INIT_PRESS_POS		(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - PRESS_SIZE.x, 500.0f, 0.0f))		// 「PRESS」の初期位置
+#define INIT_BUTTON_POS		(D3DXVECTOR3(SCREEN_WIDTH * 0.5f + BUTTON_SIZE.x, 500.0f, 0.0f))	// 「ENTER」の初期位置
+#define DEEP_DEST_ALPHA		(1.0f)									// 濃色の目的の透明度
+#define LIGHT_DEST_ALPHA	(0.3f)									// 薄色の目的の透明度
+#define ADD_ALPHA			(0.02f)									// 追加の透明度
 
 //============================
 // コンストラクタ
@@ -36,6 +39,7 @@ CTitlePress::CTitlePress() : CObject(CObject::TYPE_PRESSENTER, PRIORITY_UI)
 		m_aPress[nCnt].pPress = nullptr;			// プレスの情報
 		m_aPress[nCnt].posDest = NONE_D3DXVECTOR3;	// 目的の位置
 		m_aPress[nCnt].move = NONE_D3DXVECTOR3;		// 移動量
+		m_aPress[nCnt].fAlpha = 0.0f;				// 透明度
 		m_aPress[nCnt].fAlphaDest = 0.0f;			// 目的の透明度
 	}
 }
@@ -88,6 +92,7 @@ HRESULT CTitlePress::Init(void)
 
 		m_aPress[nCnt].posDest = NONE_D3DXVECTOR3;	// 目的の位置
 		m_aPress[nCnt].move = NONE_D3DXVECTOR3;		// 移動量
+		m_aPress[nCnt].fAlpha = 0.0f;				// 透明度
 		m_aPress[nCnt].fAlphaDest = 0.0f;			// 目的の透明度
 	}
 
@@ -129,9 +134,14 @@ void CTitlePress::Update(void)
 
 	case CTitle::STATE_WAIT:			// 待機状態
 
+		// 透明度処理
+		Alpha();
+
 		break;
 
 	case CTitle::STATE_TRANS:			// 遷移状態
+
+
 
 		break;
 
@@ -145,6 +155,15 @@ void CTitlePress::Update(void)
 		assert(false);
 
 		break;
+	}
+
+	for (int nCnt = 0; nCnt < TYPE_MAX; nCnt++)
+	{
+		// 頂点座標の設定処理
+		m_aPress[nCnt].pPress->SetVertex();
+
+		// 頂点カラーの設定処理
+		m_aPress[nCnt].pPress->SetVtxColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, m_aPress[nCnt].fAlpha));
 	}
 }
 
@@ -180,12 +199,20 @@ void CTitlePress::SetData(void)
 			case CTitlePress::TYPE_PRESS:
 
 				m_aPress[nCnt].pPress->SetPos(INIT_PRESS_POS);		// 位置
+				m_aPress[nCnt].pPress->SetSize(PRESS_SIZE);			// サイズ
+
+				// テクスチャの割り当て処理
+				m_aPress[nCnt].pPress->BindTexture(CManager::Get()->GetTexture()->Regist(PRESS_TEXTURE));
 
 				break;
 
 			case CTitlePress::TYPE_BUTTON:
 
 				m_aPress[nCnt].pPress->SetPos(INIT_BUTTON_POS);		// 位置
+				m_aPress[nCnt].pPress->SetSize(BUTTON_SIZE);		// サイズ
+
+				// テクスチャの割り当て処理
+				m_aPress[nCnt].pPress->BindTexture(CManager::Get()->GetTexture()->Regist(BUTTON_TEXTURE));
 
 				break;
 
@@ -202,7 +229,10 @@ void CTitlePress::SetData(void)
 			m_aPress[nCnt].pPress->SetLength();					// 長さ
 
 			// 頂点座標の設定処理
-			m_aPress[nCnt].pPress->SetVertexRot();
+			m_aPress[nCnt].pPress->SetVertex();
+
+			// 頂点カラーの設定処理
+			m_aPress[nCnt].pPress->SetVtxColor(NONE_D3DXCOLOR);
 		}
 		else
 		{ // 上記以外
@@ -211,9 +241,10 @@ void CTitlePress::SetData(void)
 			assert(false);
 		}
 
-		m_aPress[nCnt].posDest = NONE_D3DXVECTOR3;	// 目的の位置
-		m_aPress[nCnt].move = NONE_D3DXVECTOR3;		// 移動量
-		m_aPress[nCnt].fAlphaDest = 0.0f;			// 目的の透明度
+		m_aPress[nCnt].posDest = NONE_D3DXVECTOR3;		// 目的の位置
+		m_aPress[nCnt].move = NONE_D3DXVECTOR3;			// 移動量
+		m_aPress[nCnt].fAlpha = 1.0f;					// 透明度
+		m_aPress[nCnt].fAlphaDest = LIGHT_DEST_ALPHA;	// 目的の透明度
 	}
 }
 
@@ -270,4 +301,20 @@ CTitlePress* CTitlePress::Create(void)
 
 	// プレスエンターのポインタを返す
 	return pPress;
+}
+
+//============================
+// 透明度の処理
+//============================
+void CTitlePress::Alpha(void)
+{
+	for (int nCnt = 0; nCnt < TYPE_MAX; nCnt++)
+	{
+		if (useful::FrameCorrect(m_aPress[nCnt].fAlphaDest, &m_aPress[nCnt].fAlpha, ADD_ALPHA) == true)
+		{ // 目的の透明度に近づいた場合
+
+			// 目的の透明度を設定する
+			m_aPress[nCnt].fAlphaDest = (m_aPress[nCnt].fAlphaDest >= DEEP_DEST_ALPHA) ? LIGHT_DEST_ALPHA : DEEP_DEST_ALPHA;
+		}
+	}
 }

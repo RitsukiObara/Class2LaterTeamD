@@ -15,6 +15,8 @@
 #include "texture.h"
 #include "useful.h"
 
+#include "title_press.h"
+
 //--------------------------------------------
 // マクロ定義
 //--------------------------------------------
@@ -459,6 +461,9 @@ void CTitleLogo::AndProcess(void)
 		// 移動状況を true にする(いつ次に動くタイミングに入るか分からないため対策しておく)
 		m_aTitle[TYPE_RAT].bMove = true;
 		m_aTitle[TYPE_CAT].bMove = true;
+
+		// タイトルのプレスを生成
+		CTitlePress::Create();
 	}
 
 	// 向きとサイズを適用する

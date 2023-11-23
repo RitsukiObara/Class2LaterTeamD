@@ -38,6 +38,7 @@ public:			// 誰でもアクセスできる
 		D3DXVECTOR3 posDest;	// 目的の位置
 		D3DXVECTOR3 move;		// 移動量
 		CObject2D* pPress;		// ポリゴンの情報
+		float fAlpha;			// 透明度
 		float fAlphaDest;		// 目的の透明度
 	};
 
@@ -56,6 +57,9 @@ public:			// 誰でもアクセスできる
 	static CTitlePress* Create(void);	// 生成処理
 
 private:		// 自分だけアクセスできる
+
+	// メンバ関数
+	void Alpha(void);		// 透明度の処理
 
 	// メンバ変数
 	SPress m_aPress[TYPE_MAX];		// プレスの情報構造体
