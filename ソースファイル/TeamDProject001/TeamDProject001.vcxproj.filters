@@ -435,6 +435,9 @@
     <ClCompile Include="resurrection_fan.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="chara_state.cpp">
+      <Filter>UI\CharaInfoUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -787,6 +790,9 @@
     </ClInclude>
     <ClInclude Include="resurrection_fan.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="chara_state.h">
+      <Filter>UI\CharaInfoUI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
