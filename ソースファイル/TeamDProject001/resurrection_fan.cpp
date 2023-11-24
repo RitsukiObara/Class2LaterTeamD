@@ -17,6 +17,8 @@
 //-------------------------------------------
 // マクロ定義
 //-------------------------------------------
+#define NUM_ANGLE		(16)		// 角度の数
+#define RADIUS			(100.0f)	// 半径
 
 //-------------------------------------------
 // 静的メンバ変数宣言
@@ -100,8 +102,9 @@ void CRessrectionFan::SetData(const D3DXVECTOR3& pos, const D3DXCOLOR& col)
 	SetPosOld(GetPos());			// 前回の位置
 	SetRot(NONE_D3DXVECTOR3);		// 向き
 	SetSize(NONE_SCALE);			// サイズ
-	SetNumAngle(16);				// 角度の総数
-	SetRadius(100.0f);				// 半径
+	SetNumAngle(NUM_ANGLE);			// 角度の総数
+	SetRadius(RADIUS);				// 半径
+	SetColor(col);					// 色
 	BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\cheese.jpg"));		// テクスチャの割り当て処理
 
 	//==========================================================================

@@ -29,6 +29,7 @@
 #include "Particle.h"
 #include "rat_ghost.h"
 #include "resurrection_fan.h"
+#include "object3Dfan.h"
 
 //-------------------------------------------
 // ƒ}ƒNƒ’è‹`
@@ -61,6 +62,7 @@ CRat::CRat() : CCharacter(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 	m_pRatState = nullptr;				// ƒlƒYƒ~‚Ìó‘Ô‚Ìî•ñ
 	m_pStun = nullptr;					// ‹Câ‚Ìî•ñ
 	m_pRatGhost = nullptr;				// —H—ìƒlƒYƒ~‚Ìî•ñ
+	m_pRessrectionFan = nullptr;		// ‰~‚Ì”ÍˆÍ‚Ìî•ñ
 	m_move = NONE_D3DXVECTOR3;			// ˆÚ“®—Ê
 	m_nRatIdx = NONE_RATIDX;			// ƒlƒYƒ~‚Ì”Ô†
 	m_nLife = 0;						// Žõ–½
@@ -203,6 +205,14 @@ void CRat::Uninit(void)
 		m_pRatGhost = nullptr;
 	}
 
+	if (m_pRessrectionFan != nullptr)
+	{ // ‰~‚Ì”ÍˆÍ‚ª NULL ‚¶‚á‚È‚¢ê‡
+
+		//‰~‚Ì”ÍˆÍ‚ÌI—¹ˆ—
+		//m_pRessrectionFan->Uninit();
+		m_pRessrectionFan = nullptr;
+	}
+
 	// ƒlƒYƒ~‚ðÁ‹Ž‚·‚é
 	CGame::DeleteRat(m_nRatIdx);
 
@@ -279,7 +289,7 @@ void CRat::Update(void)
 	if (m_pPlayerID != nullptr)
 	{ // ƒvƒŒƒCƒ„[‚ÌID•\Ž¦‚ª NULL ‚¶‚á‚È‚¢ê‡
 
-		// ˆÊ’u‚ðŽæ“¾‚·‚é
+		// ˆÊ’uî•ñ‚ÌŽæ“¾
 		D3DXVECTOR3 pos = GetPos();
 
 		// ˆÊ’u‚ðÝ’è‚·‚é
@@ -496,15 +506,16 @@ void CRat::DeleteStun(void)
 }
 
 //=======================================
-// —H—ìƒlƒYƒ~‚ÌŽæ“¾ˆ—
+// —H—ìƒlƒYƒ~‚Ìî•ñŽæ“¾ˆ—
 //=======================================
 CRatGhost* CRat::GetRatGhost(void)
 {
+	// —H—ìƒlƒYƒ~‚Ìî•ñ‚ð•Ô‚·
 	return m_pRatGhost;
 }
 
 //=======================================
-// —H—ìƒlƒYƒ~‚ÌÁ‹Žˆ—
+// —H—ìƒlƒYƒ~‚Ìî•ñÁ‹Žˆ—
 //=======================================
 void CRat::DeleteRatGhost(void)
 {
@@ -514,6 +525,28 @@ void CRat::DeleteRatGhost(void)
 		//—H—ìƒlƒYƒ~‚ÌI—¹ˆ—
 		m_pRatGhost->Uninit();
 		m_pRatGhost = nullptr;
+	}
+}
+//=======================================
+// ‰~‚Ì”ÍˆÍ‚Ìî•ñŽæ“¾ˆ—
+//=======================================
+CRessrectionFan* CRat::GetRessrectionFan(void)
+{
+	// ‰~‚Ì”ÍˆÍ‚Ìî•ñ‚ð•Ô‚·
+	return m_pRessrectionFan;
+}
+
+//=======================================
+// ‰~‚Ì”ÍˆÍ‚Ìî•ñÁ‹Žˆ—
+//=======================================
+void CRat::DeleteRessrectionFan(void)
+{
+	if (m_pRessrectionFan != nullptr)
+	{ // ‰~‚Ì”ÍˆÍ‚ª NULL ‚¶‚á‚È‚¢ê‡
+
+		//‰~‚Ì”ÍˆÍ‚ÌI—¹ˆ—
+		m_pRessrectionFan->Uninit();
+		m_pRessrectionFan = nullptr;
 	}
 }
 
@@ -767,13 +800,17 @@ bool CRat::Hit(void)
 			m_pRatState->SetState(CRatState::STATE_DEATH);		// Ž€–Só‘Ô‚É‚·‚é
 
 			// ¶‚«•Ô‚è‚Ì‰~‚Ì”ÍˆÍ¶¬
-			CRessrectionFan::Create(GetPos(), D3DXCOLOR(1.0f,1.0f,1.0f,1.0f));
+			if (m_pRessrectionFan == nullptr)
+			{ // ‰~‚Ì”ÍˆÍ‚ª NULL ‚Ì‚Æ‚«
+
+				m_pRessrectionFan = CRessrectionFan::Create(D3DXVECTOR3(pos.x, pos.y + 10.0f, pos.z), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+			}
 
 			// ƒlƒYƒ~‚Ì—H—ì‚Ì¶¬
 			if (m_pRatGhost == nullptr)
 			{ // —H—ìƒlƒYƒ~‚ª NULL ‚Ì‚Æ‚«
 
-				m_pRatGhost = CRatGhost::Create(GetPos());
+				m_pRatGhost = CRatGhost::Create(pos);
 
 				m_nNumAll--;						// ƒlƒYƒ~‚Ì‘”Œ¸ŽZ
 			}
@@ -954,6 +991,9 @@ void CRat::ResurrectionCollision(void)
 
 							// –³“Gó‘Ô‚É‚·‚é
 							pRat->GetState()->SetState(CRatState::STATE_INVINCIBLE);
+
+							// ‰~‚Ì”ÍˆÍ‚Ì”jŠü
+							pRat->DeleteRessrectionFan();
 
 							// —H—ìƒlƒYƒ~‚Ì”jŠü
 							pRat->DeleteRatGhost();
