@@ -9071,7 +9071,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "pin_ikon.jpg";
+    "data\\TEXTURE\\pin_ikon.jpg";
    }
   }
   Material {

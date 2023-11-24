@@ -167,6 +167,7 @@
     <ClCompile Include="chara_icon.cpp" />
     <ClCompile Include="chara_ID.cpp" />
     <ClCompile Include="chara_infoUI.cpp" />
+    <ClCompile Include="chara_state.cpp" />
     <ClCompile Include="collision.cpp" />
     <ClCompile Include="collpolygon.cpp" />
     <ClCompile Include="confetti.cpp" />
@@ -289,6 +290,7 @@
     <ClInclude Include="chara_icon.h" />
     <ClInclude Include="chara_ID.h" />
     <ClInclude Include="chara_infoUI.h" />
+    <ClInclude Include="chara_state.h" />
     <ClInclude Include="collision.h" />
     <ClInclude Include="collpolygon.h" />
     <ClInclude Include="confetti.h" />

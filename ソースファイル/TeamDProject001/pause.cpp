@@ -27,10 +27,11 @@
 
 // サイズ関係
 #define BACK_SIZE				(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f))		// 背景のサイズ
-#define MENU_SIZE				(D3DXVECTOR3(SCREEN_WIDTH * 0.45f, SCREEN_HEIGHT * 0.45f, 0.0f))	// メニューのサイズ
+#define MENU_SIZE				(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f))		// メニューのサイズ
 #define CONTINUE_SIZE			(D3DXVECTOR3(360.0f, 64.0f, 0.0f))			// コンティニューのサイズ
 #define RESET_SIZE				(D3DXVECTOR3(220.0f, 64.0f, 0.0f))			// リセットのサイズ
 #define TITLE_SIZE				(D3DXVECTOR3(200.0f, 64.0f, 0.0f))			// タイトルのサイズ
+#define CURSOR_SIZE				(D3DXVECTOR3(50.0f, 50.0f, 0.0f))			// カーソルのサイズ
 
 // その他
 #define PAUSE_BACK_COL			(D3DXCOLOR(0.2f, 0.2f, 0.2f, 0.4f))			// 背景の色
@@ -50,6 +51,8 @@ const char*CPause::c_apFilename[CPause::POLYGON_MAX] =	// テクスチャファイル名
 	"data\\TEXTURE\\PAUSE_return.png",		// コンティニューのテクスチャ
 	"data\\TEXTURE\\PAUSE_Reset.png",		// リセットのテクスチャ
 	"data\\TEXTURE\\PAUSE_title.png",		// タイトルのテクスチャ
+	"data\\TEXTURE\\PAUSE_Choicebar.png",	// 右カーソルのテクスチャ
+	"data\\TEXTURE\\PAUSE_Choicebar.png",	// 左カーソルのテクスチャ
 };
 
 const CPause::Info CPause::c_aPauseInfo[POLYGON_MAX] = 	// ポーズの情報
@@ -59,6 +62,8 @@ const CPause::Info CPause::c_aPauseInfo[POLYGON_MAX] = 	// ポーズの情報
 	{ CONTINUE_POS ,CONTINUE_SIZE },	// コンティニュー
 	{ RESET_POS ,RESET_SIZE },			// リトライ
 	{ TITLE_POS ,TITLE_SIZE },			// タイトル
+	{ NONE_D3DXVECTOR3,CURSOR_SIZE },	// 右カーソル
+	{ NONE_D3DXVECTOR3,CURSOR_SIZE },	// 左カーソル
 };
 
 //==========================================
@@ -69,16 +74,16 @@ CPause::CPause() : CObject(TYPE_PAUSE, PRIORITY_PAUSE)
 	// 全ての値をクリアする
 	for (int nCnt = 0; nCnt < POLYGON_MAX; nCnt++)
 	{
-		m_apObject[nCnt] = nullptr;						// ポリゴンの情報
+		m_apObject[nCnt] = nullptr;		// ポリゴンの情報
 	}
 
-	m_PauseColor = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);	// 選択中の選択肢の色
-	sizeDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// 目標のサイズ
-	m_PauseMenu = MENU_CONTINUE;;						// ポーズメニュー
-	m_nPauseCounter = 0;								// カウンター
-	m_fPauseAlpha = 0.0f;								// 透明度を変化させる変数
-	m_bPause = false;									// ポーズ状況
-	m_bDisp = true;										// 描画状況
+	m_PauseColor = NONE_D3DXCOLOR;		// 選択中の選択肢の色
+	m_sizeDest = NONE_D3DXVECTOR3;		// 目標のサイズ
+	m_PauseMenu = MENU_CONTINUE;;		// ポーズメニュー
+	m_nPauseCounter = 0;				// カウンター
+	m_fPauseAlpha = 0.0f;				// 透明度を変化させる変数
+	m_bPause = false;					// ポーズ状況
+	m_bDisp = true;						// 描画状況
 }
 
 //==========================================
@@ -125,13 +130,16 @@ HRESULT CPause::Init(void)
 	}
 
 	// 全ての値を初期化する
-	m_PauseMenu = MENU_CONTINUE;						// メニュー
-	m_PauseColor = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);	// 選択肢の色
-	sizeDest = D3DXVECTOR3(c_aPauseInfo[m_PauseMenu].size.x * SIZEDEST_MAGNI, c_aPauseInfo[m_PauseMenu].size.y * SIZEDEST_MAGNI, 0.0f);			// 目標のサイズ
-	m_nPauseCounter = 0;								// カウンター
-	m_fPauseAlpha = PAUSE_ALPHA;						// 透明度の変化量
-	m_bPause = false;									// ポーズ状況
-	m_bDisp = true;										// 描画状況
+	m_PauseMenu = MENU_CONTINUE;		// メニュー
+	m_PauseColor = NONE_D3DXCOLOR;		// 選択肢の色
+	m_sizeDest = D3DXVECTOR3(c_aPauseInfo[m_PauseMenu + POLYGON_CONTINUE].size.x * SIZEDEST_MAGNI, c_aPauseInfo[m_PauseMenu + POLYGON_CONTINUE].size.y * SIZEDEST_MAGNI, 0.0f);			// 目標のサイズ
+	m_nPauseCounter = 0;				// カウンター
+	m_fPauseAlpha = PAUSE_ALPHA;		// 透明度の変化量
+	m_bPause = false;					// ポーズ状況
+	m_bDisp = true;						// 描画状況
+
+	// カーソルの移動処理
+	CursorMove();
 
 	// 成功を返す
 	return S_OK;
@@ -165,6 +173,9 @@ void CPause::Update(void)
 
 	// ポーズの選択処理
 	PauseSelect();
+
+	// カーソルの移動処理
+	CursorMove();
 
 	// ポーズの決定処理
 	if (PauseDecide() == true)
@@ -230,8 +241,8 @@ void CPause::SizeCorrect(int nIdx)
 	D3DXVECTOR3 size = m_apObject[nIdx]->GetSize();		// サイズを取得する
 
 	// サイズの補正
-	useful::Correct(sizeDest.x, &size.x, SIZEDEST_CORRECT_VALUE);
-	useful::Correct(sizeDest.y, &size.y, SIZEDEST_CORRECT_VALUE);
+	useful::Correct(m_sizeDest.x, &size.x, SIZEDEST_CORRECT_VALUE);
+	useful::Correct(m_sizeDest.y, &size.y, SIZEDEST_CORRECT_VALUE);
 
 	//サイズを更新する
 	m_apObject[nIdx]->SetSize(size);
@@ -307,7 +318,7 @@ void CPause::PauseSelect(void)
 	}
 
 	// 目標のサイズの設定処理
-	sizeDest = D3DXVECTOR3(c_aPauseInfo[m_PauseMenu + POLYGON_CONTINUE].size.x * SIZEDEST_MAGNI, c_aPauseInfo[m_PauseMenu + POLYGON_CONTINUE].size.y * SIZEDEST_MAGNI, 0.0f);
+	m_sizeDest = D3DXVECTOR3(c_aPauseInfo[m_PauseMenu + POLYGON_CONTINUE].size.x * SIZEDEST_MAGNI, c_aPauseInfo[m_PauseMenu + POLYGON_CONTINUE].size.y * SIZEDEST_MAGNI, 0.0f);
 }
 
 //=====================================
@@ -426,6 +437,23 @@ void CPause::PauseVertex(void)
 		// 頂点座標の設定処理
 		m_apObject[nPauseCnt + POLYGON_CONTINUE]->SetVertex();
 	}
+}
+
+//=====================================
+// メニューの移動処理
+//=====================================
+void CPause::CursorMove(void)
+{
+	// 現在選択中のメニューの位置とサイズを取得する
+	D3DXVECTOR3 pos = m_apObject[m_PauseMenu + POLYGON_CONTINUE]->GetPos();
+
+	// カーソルの設定処理
+	m_apObject[POLYGON_RCURSOR]->SetPos(D3DXVECTOR3(pos.x + m_sizeDest.x + CURSOR_SIZE.x, pos.y, 0.0f));
+	m_apObject[POLYGON_LCURSOR]->SetPos(D3DXVECTOR3(pos.x - m_sizeDest.x - CURSOR_SIZE.x, pos.y, 0.0f));
+
+	// 頂点座標の設定処理
+	m_apObject[POLYGON_RCURSOR]->SetVertex();
+	m_apObject[POLYGON_LCURSOR]->SetVertex();
 }
 
 //=====================================

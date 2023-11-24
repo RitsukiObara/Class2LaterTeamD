@@ -65,7 +65,6 @@ public:			// 誰でもアクセスできる
 	int GetRatIdx(void) const;				// ネズミの番号の取得処理
 	bool IsMove(void);						// 移動状況の取得処理
 	CRatState* GetState(void);				// ネズミの状態の取得処理
-	void SetStun(void);						// 気絶演出の設定処理
 	CStun* GetStun(void);					// 気絶演出の取得処理
 	void DeleteStun(void);					// 気絶演出の消去処理
 	CRatGhost* GetRatGhost(void);			// 幽霊ネズミの取得処理
