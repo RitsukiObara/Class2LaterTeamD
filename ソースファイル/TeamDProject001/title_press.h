@@ -35,6 +35,8 @@ public:			// 誰でもアクセスできる
 	// 構造体定義(プレスエンター)
 	struct SPress
 	{
+		D3DXVECTOR3 move;		// 移動量
+		float fRotMove;			// 向きの移動量
 		CObject2D* pPress;		// ポリゴンの情報
 		int nStateCount;		// 状態カウント
 		float fAlpha;			// 透明度
@@ -59,6 +61,7 @@ private:		// 自分だけアクセスできる
 
 	// メンバ関数
 	void Alpha(const float fAdd);		// 透明度の処理
+	void Smash(const int nType);		// 吹き飛ばし処理
 
 	// メンバ変数
 	SPress m_aPress[TYPE_MAX];			// プレスの情報構造体
