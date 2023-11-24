@@ -31,6 +31,7 @@ namespace collision
 	// 障害物の当たり判定
 	void ObstacleCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type);			// 障害物の衝突判定
 	void ObstacleHit(CRat* pRat, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type);						// 障害物の当たり判定
+	void ObstacleAction(CRat* pRat, const float Radius, const CObstacle::COLLTYPE type);					// 障害物の起動判定
 
 	// 今後実装予定のブロックの当たり判定
 	void BlockCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth);		// ブロックの当たり判定

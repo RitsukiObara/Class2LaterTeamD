@@ -257,6 +257,11 @@ void CRat::Update(void)
 	// áŠQ•¨‚Æ‚Ì“–‚½‚è”»’è
 	ObstacleCollision();
 
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_E))
+	{
+		collision::ObstacleAction(this, SIZE.x, CObstacle::COLLTYPE_RAT);
+	}
+
 	if (m_pRatState != nullptr)
 	{ // ƒlƒYƒ~‚Ìó‘Ô‚ª NULL ‚¶‚á‚È‚¢ê‡
 
