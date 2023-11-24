@@ -28,6 +28,7 @@
 #include "obstacle.h"
 #include "Particle.h"
 #include "rat_ghost.h"
+#include "resurrection_fan.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -41,11 +42,13 @@
 #define SIZE				(D3DXVECTOR3(30.0f, 50.0f, 30.0f))		// 当たり判定でのサイズ
 #define STUN_HEIGHT			(80.0f)			// 気絶演出が出てくる高さ
 #define SMASH_MOVE			(D3DXVECTOR3(10.0f, 20.0f, 10.0f))		// 吹き飛び状態の移動量
+#define TIME_RESURRECTION	(60 * 4)		// 復活時間
 
 //--------------------------------------------
 // 静的メンバ変数宣言
 //--------------------------------------------
 int CRat::m_nNumAll = 0;				// ネズミの総数
+int CRat::m_nResurrectionCounter = 0;	// 生き返るまでのカウンター
 
 //==============================
 // コンストラクタ
@@ -771,6 +774,9 @@ bool CRat::Hit(void)
 
 			m_pRatState->SetState(CRatState::STATE_DEATH);		// 死亡状態にする
 
+			// 生き返りの円の範囲生成
+			CRessrectionFan::Create(GetPos(), D3DXCOLOR(1.0f,1.0f,1.0f,1.0f));
+
 			// ネズミの幽霊の生成
 			if (m_pRatGhost == nullptr)
 			{ // 幽霊ネズミが NULL のとき
@@ -943,13 +949,28 @@ void CRat::ResurrectionCollision(void)
 						D3DXVECTOR3(-30.0f, -50.0f, -30.0f), D3DXVECTOR3(-30.0f, -50.0f, -30.0f)) == true)
 					{ // XZの矩形に当たってたら
 
-						// 無敵状態にする
-						pRat->GetState()->SetState(CRatState::STATE_INVINCIBLE);
+						// 生き返りのカウンター加算
+						m_nResurrectionCounter++;
 
-						// 幽霊ネズミの破棄
-						pRat->DeleteRatGhost();
+						if (m_nResurrectionCounter >= TIME_RESURRECTION)
+						{ // 一定時間経ったら
 
-						m_nNumAll++;		// 総数増やす
+							// 無敵状態にする
+							pRat->GetState()->SetState(CRatState::STATE_INVINCIBLE);
+
+							// 幽霊ネズミの破棄
+							pRat->DeleteRatGhost();
+
+							// 生き返りのカウンター初期化
+							m_nResurrectionCounter = 0;
+
+							m_nNumAll++;		// 総数増やす
+						}
+					}
+					else
+					{
+						// 生き返りのカウンター初期化
+						m_nResurrectionCounter = 0;
 					}
 				}
 			}

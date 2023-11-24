@@ -19,7 +19,9 @@ CObject3DFan::CObject3DFan() : CObject(CObject::TYPE_3DPOLYGON, CObject::PRIORIT
 {
 	// 全ての値をクリアする
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// 位置
+	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 前回の位置
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// 向き
+	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// サイズ
 	m_pVtxBuff = nullptr;							// 頂点バッファのポインタ
 	ZeroMemory(&m_mtxWorld, sizeof(m_mtxWorld));	// ワールドマトリックス
 	m_nNumAngle = 0;								// 角度の数
@@ -41,7 +43,9 @@ HRESULT CObject3DFan::Init(void)
 {
 	// 全ての値を初期化する
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// 位置
+	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 前回の位置
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// 向き
+	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// サイズ
 	m_nNumAngle = 1024;								// 角度の数
 	m_fRadius = 100.0f;								// 半径
 
@@ -215,7 +219,7 @@ void CObject3DFan::SetVertex(void)
 	for (int nCnt = 0; nCnt < m_nNumAngle; nCnt++)
 	{
 		// 頂点座標の設定
-		pVtx[0].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		pVtx[0].pos = D3DXVECTOR3(m_pos.x, m_pos.y, m_pos.z);
 
 		// 角度を算出する
 		fAngle = ((float)((D3DX_PI * 2) / m_nNumAngle) * nCnt) - (D3DX_PI * 2);
@@ -223,7 +227,7 @@ void CObject3DFan::SetVertex(void)
 		// 向きの正規化
 		useful::RotNormalize(&fAngle);
 
-		pVtx[1].pos = D3DXVECTOR3(sinf(fAngle) * m_fRadius, 0.0f, cosf(fAngle) * m_fRadius);
+		pVtx[1].pos = D3DXVECTOR3(m_pos.x + sinf(fAngle) * m_fRadius, m_pos.y, m_pos.z + cosf(fAngle) * m_fRadius);
 
 		// 角度を算出する
 		fAngle = ((float)((D3DX_PI * 2) / m_nNumAngle) * (nCnt + 1)) - (D3DX_PI * 2);
@@ -231,7 +235,7 @@ void CObject3DFan::SetVertex(void)
 		// 向きの正規化
 		useful::RotNormalize(&fAngle);
 
-		pVtx[2].pos = D3DXVECTOR3(sinf(fAngle) * m_fRadius, 0.0f, cosf(fAngle) * m_fRadius);
+		pVtx[2].pos = D3DXVECTOR3(m_pos.x + sinf(fAngle) * m_fRadius, m_pos.y, m_pos.z + cosf(fAngle) * m_fRadius);
 
 		// 頂点データを3つ分進める
 		pVtx += 3;
@@ -246,7 +250,7 @@ void CObject3DFan::SetVertex(void)
 //===========================================
 void CObject3DFan::SetVtxColor(const D3DXCOLOR& col)
 {
-		VERTEX_3D * pVtx;											//頂点情報へのポインタ
+	VERTEX_3D * pVtx;											//頂点情報へのポインタ
 
 	//頂点バッファをロックし、頂点情報へのポインタを取得
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
@@ -264,6 +268,87 @@ void CObject3DFan::SetVtxColor(const D3DXCOLOR& col)
 
 	// 頂点バッファをアンロックする
 	m_pVtxBuff->Unlock();
+}
+
+//===========================================
+// テクスチャの割り当て処理
+//===========================================
+void CObject3DFan::BindTexture(const int nIdx)
+{
+	// テクスチャを割り当てる
+	m_nTexIdx = nIdx;
+}
+
+//===========================================
+// 位置設定処理
+//===========================================
+void CObject3DFan::SetPos(const D3DXVECTOR3& pos)
+{
+	// 位置を設定する
+	m_pos = pos;
+}
+
+//===========================================
+// 位置取得処理
+//===========================================
+D3DXVECTOR3 CObject3DFan::GetPos(void) const
+{
+	// 位置を返す
+	return m_pos;
+}
+
+//===========================================
+// 前回の位置設定処理
+//===========================================
+void CObject3DFan::SetPosOld(const D3DXVECTOR3& posOld)
+{
+	// 前回の位置を設定する
+	m_posOld = posOld;
+}
+
+//===========================================
+// 前回の位置取得処理
+//===========================================
+D3DXVECTOR3 CObject3DFan::GetPosOld(void) const
+{
+	// 前回の位置を返す
+	return m_posOld;
+}
+
+//===========================================
+// 向き設定処理
+//===========================================
+void CObject3DFan::SetRot(const D3DXVECTOR3& rot)
+{
+	// 向きを設定する
+	m_rot = rot;
+}
+
+//===========================================
+// 向き取得処理
+//===========================================
+D3DXVECTOR3 CObject3DFan::GetRot(void) const
+{
+	// 向きを返す
+	return m_rot;
+}
+
+//===========================================
+// サイズ設定処理
+//===========================================
+void CObject3DFan::SetSize(const D3DXVECTOR3& size)
+{
+	// サイズを設定する
+	m_size = size;
+}
+
+//===========================================
+// サイズ取得処理
+//===========================================
+D3DXVECTOR3 CObject3DFan::GetSize(void) const
+{
+	// サイズを返す
+	return m_size;
 }
 
 //===========================================
