@@ -27,6 +27,7 @@
 #define DEEP_DEST_ALPHA		(1.0f)									// 濃色の目的の透明度
 #define LIGHT_DEST_ALPHA	(0.3f)									// 薄色の目的の透明度
 #define ADD_ALPHA			(0.02f)									// 追加の透明度
+#define TRANS_ADD_ALPHA		(0.2f)									// 遷移状態の追加の透明度
 
 //============================
 // コンストラクタ
@@ -37,8 +38,7 @@ CTitlePress::CTitlePress() : CObject(CObject::TYPE_PRESSENTER, PRIORITY_UI)
 	for (int nCnt = 0; nCnt < TYPE_MAX; nCnt++)
 	{
 		m_aPress[nCnt].pPress = nullptr;			// プレスの情報
-		m_aPress[nCnt].posDest = NONE_D3DXVECTOR3;	// 目的の位置
-		m_aPress[nCnt].move = NONE_D3DXVECTOR3;		// 移動量
+		m_aPress[nCnt].nStateCount = 0;				// 状態カウント
 		m_aPress[nCnt].fAlpha = 0.0f;				// 透明度
 		m_aPress[nCnt].fAlphaDest = 0.0f;			// 目的の透明度
 	}
@@ -90,8 +90,7 @@ HRESULT CTitlePress::Init(void)
 			return E_FAIL;
 		}
 
-		m_aPress[nCnt].posDest = NONE_D3DXVECTOR3;	// 目的の位置
-		m_aPress[nCnt].move = NONE_D3DXVECTOR3;		// 移動量
+		m_aPress[nCnt].nStateCount = 0;				// 状態カウント
 		m_aPress[nCnt].fAlpha = 0.0f;				// 透明度
 		m_aPress[nCnt].fAlphaDest = 0.0f;			// 目的の透明度
 	}
@@ -135,13 +134,20 @@ void CTitlePress::Update(void)
 	case CTitle::STATE_WAIT:			// 待機状態
 
 		// 透明度処理
-		Alpha();
+		Alpha(ADD_ALPHA);
 
 		break;
 
 	case CTitle::STATE_TRANS:			// 遷移状態
 
+		for (int nCnt = 0; nCnt < TYPE_MAX; nCnt++)
+		{
+			// 状態カウントを加算する
+			m_aPress[nCnt].nStateCount++;
+		}
 
+		// 透明度処理
+		Alpha(TRANS_ADD_ALPHA);
 
 		break;
 
@@ -241,8 +247,7 @@ void CTitlePress::SetData(void)
 			assert(false);
 		}
 
-		m_aPress[nCnt].posDest = NONE_D3DXVECTOR3;		// 目的の位置
-		m_aPress[nCnt].move = NONE_D3DXVECTOR3;			// 移動量
+		m_aPress[nCnt].nStateCount = 0;					// 状態カウント
 		m_aPress[nCnt].fAlpha = 1.0f;					// 透明度
 		m_aPress[nCnt].fAlphaDest = LIGHT_DEST_ALPHA;	// 目的の透明度
 	}
@@ -306,11 +311,11 @@ CTitlePress* CTitlePress::Create(void)
 //============================
 // 透明度の処理
 //============================
-void CTitlePress::Alpha(void)
+void CTitlePress::Alpha(const float fAdd)
 {
 	for (int nCnt = 0; nCnt < TYPE_MAX; nCnt++)
 	{
-		if (useful::FrameCorrect(m_aPress[nCnt].fAlphaDest, &m_aPress[nCnt].fAlpha, ADD_ALPHA) == true)
+		if (useful::FrameCorrect(m_aPress[nCnt].fAlphaDest, &m_aPress[nCnt].fAlpha, fAdd) == true)
 		{ // 目的の透明度に近づいた場合
 
 			// 目的の透明度を設定する
