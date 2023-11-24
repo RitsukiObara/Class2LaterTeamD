@@ -11,6 +11,8 @@
 #include "manager.h"
 #include "resurrection_fan.h"
 #include "object3Dfan.h"
+#include "model.h"
+#include "texture.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -37,16 +39,16 @@ CRessrectionFan::~CRessrectionFan()
 }
 
 //==============================
-// 破片の初期化処理
+// 生き返りの円の初期化処理
 //==============================
 HRESULT CRessrectionFan::Init(void)
 {
-	//if (FAILED(親クラス::Init()))
-	//{ // 初期化処理に失敗した場合
+	if (FAILED(CObject3DFan::Init()))
+	{ // 初期化処理に失敗した場合
 
-	//	// 失敗を返す
-	//	return E_FAIL;
-	//}
+		// 失敗を返す
+		return E_FAIL;
+	}
 
 	// 全ての値を初期化する
 
@@ -55,16 +57,16 @@ HRESULT CRessrectionFan::Init(void)
 }
 
 //========================================
-// 破片の終了処理
+// 生き返りの円の終了処理
 //========================================
 void CRessrectionFan::Uninit(void)
 {
-	//// 終了処理
-	//親クラス::Uninit();
+	// 終了処理
+	CObject3DFan::Uninit();
 }
 
 //=====================================
-// 破片の更新処理
+// 生き返りの円の更新処理
 //=====================================
 void CRessrectionFan::Update(void)
 {
@@ -72,18 +74,18 @@ void CRessrectionFan::Update(void)
 }
 
 //=====================================
-// 破片の描画処理
+// 生き返りの円の描画処理
 //=====================================
 void CRessrectionFan::Draw(void)
 {
-	//// 描画処理
-	//親クラス::Draw();
+	// 描画処理
+	CObject3DFan::Draw();
 }
 
 //=====================================
 // 情報の設定処理
 //=====================================
-void CRessrectionFan::SetData(void/*基本Createと同じ引数を入れる*/)
+void CRessrectionFan::SetData(const D3DXVECTOR3& pos, const D3DXCOLOR& col)
 {
 	// 設定処理に便利なマクロ定義
 	//NONE_D3DXVECTOR3					// 向きを傾けない時とかに使用する
@@ -91,41 +93,17 @@ void CRessrectionFan::SetData(void/*基本Createと同じ引数を入れる*/)
 	// 情報の設定処理
 
 	//==========================================================================
-	// 2Dポリゴン
-	//==========================================================================
-	//SetPos(位置を入れる);			// 位置
-	//SetPosOld(位置を入れる);		// 前回の位置
-	//SetRot(向きを入れる);			// 向き
-	//SetSize(サイズを入れる);		// サイズ
-	//SetLength(引数無し);			// 長さ
-	//SetAngle(引数無し);			// 方向
-	//BindTexture(CManager::Get()->GetTexture()->Regist(テクスチャの名前));		// テクスチャの割り当て処理
-
-	//// 頂点座標の設定処理
-	//SetVertex();
-
-	//==========================================================================
 	// 3Dポリゴン
 	//==========================================================================
-	//SetPos(位置を入れる);			// 位置
-	//SetPosOld(位置を入れる);		// 前回の位置
-	//SetRot(向きを入れる);			// 向き
-	//SetSize(サイズを入れる);		// サイズ
-	//BindTexture(CManager::Get()->GetTexture()->Regist(テクスチャの名前));		// テクスチャの割り当て処理
+	SetPos(pos);			// 位置
+	SetPosOld(GetPos());	// 前回の位置
+	SetRot(NONE_D3DXVECTOR3);		// 向き
+	SetSize(NONE_SCALE);			// サイズ
+	BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\cheese.jpg"));		// テクスチャの割り当て処理
 
-	//// 頂点座標の設定処理
-	//SetVertex();
-
-	//==========================================================================
-	// ビルボード
-	//==========================================================================
-	//SetPos(位置を入れる);			// 位置
-	//SetPosOld(位置を入れる);		// 前回の位置
-	//SetSize(サイズを入れる);		// サイズ
-	//BindTexture(CManager::Get()->GetTexture()->Regist(テクスチャの名前));		// テクスチャの割り当て処理
-
-	//// 頂点座標の設定処理
-	//SetVertex();
+	// 頂点座標の設定処理
+	SetVertex();
+	SetVtxColor(col);
 
 	//==========================================================================
 	// アニメーション系
@@ -146,21 +124,12 @@ void CRessrectionFan::SetData(void/*基本Createと同じ引数を入れる*/)
 
 	// テクスチャの設定(アニメーションバージョン)
 	//SetVtxTextureAnim(アニメーションの総パターン数を入れる, 0);
-
-	//==========================================================================
-	// モデル
-	//==========================================================================
-	//SetPos(位置を入れる);					// 位置
-	//SetPosOld(位置を入れる);				// 前回の位置
-	//SetRot(向きを入れる);					// 向き
-	//SetScale(拡大率を入れる);				// 拡大率
-	//SetFileData(モデルの種類を入れる);	// モデルの情報
 }
 
 //=======================================
 // 生成処理
 //=======================================
-CRessrectionFan* CRessrectionFan::Create(void/*引数を入れる*/)
+CRessrectionFan* CRessrectionFan::Create(const D3DXVECTOR3& pos, const D3DXCOLOR& col)
 {
 	// ローカルオブジェクトを生成
 	CRessrectionFan* pRessrectionFan = nullptr;	// サンプルのインスタンスを生成
@@ -196,7 +165,7 @@ CRessrectionFan* CRessrectionFan::Create(void/*引数を入れる*/)
 		}
 
 		// 情報の設定処理
-		pRessrectionFan->SetData(/*引数*/);
+		pRessrectionFan->SetData(pos, col);
 	}
 	else
 	{ // オブジェクトが NULL の場合

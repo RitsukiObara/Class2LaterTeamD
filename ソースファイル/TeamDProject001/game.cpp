@@ -29,6 +29,7 @@
 #include "block.h"
 #include "countdown.h"
 #include "item.h"
+#include "resurrection_fan.h"
 
 #include "obstacle_manager.h"
 #include "chara_infoUI.h"
@@ -162,6 +163,13 @@ HRESULT CGame::Init(void)
 			CCharaInfoUI::Create(D3DXVECTOR3(160.0f + (nCnt * 320.0f), 650.0f, 0.0f), nCnt, CCharaIcon::TYPE_RAT);
 		}
 	}
+
+#ifdef _DEBUG	//円の範囲の表示テスト用
+
+	//円の範囲表示
+	CRessrectionFan::Create(D3DXVECTOR3(-350.0f,0.0f,-500.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+
+#endif
 
 	//// 武器選択UIを生成
 	//CWeaponSelectUI::Create();
