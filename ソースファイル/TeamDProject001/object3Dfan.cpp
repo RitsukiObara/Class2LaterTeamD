@@ -26,6 +26,7 @@ CObject3DFan::CObject3DFan() : CObject(CObject::TYPE_3DPOLYGON, CObject::PRIORIT
 	ZeroMemory(&m_mtxWorld, sizeof(m_mtxWorld));	// ワールドマトリックス
 	m_nNumAngle = 0;								// 角度の数
 	m_fRadius = 0.0f;								// 半径
+	m_nTexIdx = NONE_TEXIDX;						// テクスチャのインデックス
 }
 
 //=========================================
@@ -41,14 +42,6 @@ CObject3DFan::~CObject3DFan()
 //===========================================
 HRESULT CObject3DFan::Init(void)
 {
-	// 全ての値を初期化する
-	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// 位置
-	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 前回の位置
-	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// 向き
-	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// サイズ
-	m_nNumAngle = 1024;								// 角度の数
-	m_fRadius = 100.0f;								// 半径
-
 	// デバイスの取得
 	LPDIRECT3DDEVICE9 pDevice = CManager::Get()->GetRenderer()->GetDevice();
 
@@ -105,6 +98,11 @@ HRESULT CObject3DFan::Init(void)
 		pVtx[0].col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
 		pVtx[1].col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
 		pVtx[2].col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
+
+		// テクスチャ座標の設定
+		pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
+		pVtx[1].tex = D3DXVECTOR2(0.0f, 0.0f);
+		pVtx[2].tex = D3DXVECTOR2(0.0f, 0.0f);
 
 		// 頂点データを3つ分進める
 		pVtx += 3;
@@ -219,7 +217,7 @@ void CObject3DFan::SetVertex(void)
 	for (int nCnt = 0; nCnt < m_nNumAngle; nCnt++)
 	{
 		// 頂点座標の設定
-		pVtx[0].pos = D3DXVECTOR3(m_pos.x, m_pos.y, m_pos.z);
+		pVtx[0].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 		// 角度を算出する
 		fAngle = ((float)((D3DX_PI * 2) / m_nNumAngle) * nCnt) - (D3DX_PI * 2);
@@ -227,7 +225,7 @@ void CObject3DFan::SetVertex(void)
 		// 向きの正規化
 		useful::RotNormalize(&fAngle);
 
-		pVtx[1].pos = D3DXVECTOR3(m_pos.x + sinf(fAngle) * m_fRadius, m_pos.y, m_pos.z + cosf(fAngle) * m_fRadius);
+		pVtx[1].pos = D3DXVECTOR3(sinf(fAngle) * m_fRadius, 0.0f, cosf(fAngle) * m_fRadius);
 
 		// 角度を算出する
 		fAngle = ((float)((D3DX_PI * 2) / m_nNumAngle) * (nCnt + 1)) - (D3DX_PI * 2);
@@ -235,7 +233,7 @@ void CObject3DFan::SetVertex(void)
 		// 向きの正規化
 		useful::RotNormalize(&fAngle);
 
-		pVtx[2].pos = D3DXVECTOR3(m_pos.x + sinf(fAngle) * m_fRadius, m_pos.y, m_pos.z + cosf(fAngle) * m_fRadius);
+		pVtx[2].pos = D3DXVECTOR3(sinf(fAngle) * m_fRadius, 0.0f, cosf(fAngle) * m_fRadius);
 
 		// 頂点データを3つ分進める
 		pVtx += 3;
@@ -349,6 +347,42 @@ D3DXVECTOR3 CObject3DFan::GetSize(void) const
 {
 	// サイズを返す
 	return m_size;
+}
+
+//===========================================
+// 角度の総数の設定処理
+//===========================================
+void CObject3DFan::SetNumAngle(const int nNum)
+{
+	// 角度の総数の設定する
+	m_nNumAngle = nNum;
+}
+
+//===========================================
+// 角度の総数の取得処理
+//===========================================
+int CObject3DFan::GetNumAngle(void) const
+{
+	// 角度の総数を返す
+	return m_nNumAngle;
+}
+
+//===========================================
+// 半径の設定処理
+//===========================================
+void CObject3DFan::SetRadius(const float fRadius)
+{
+	// 半径を設定する
+	m_fRadius = fRadius;
+}
+
+//===========================================
+// 半径の取得処理
+//===========================================
+float CObject3DFan::GetRadius(void) const
+{
+	// 半径を返す
+	return m_fRadius;
 }
 
 //===========================================

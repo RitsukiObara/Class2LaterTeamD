@@ -25,7 +25,7 @@ public:			// 誰でもアクセスできる
 	virtual void Update(void);		// 更新処理
 	virtual void Draw(void);		// 描画処理
 
-	void BindTexture(int nIdx);				// テクスチャの割り当て処理
+	void BindTexture(int nIdx);		// テクスチャの割り当て処理
 
 	// 頂点操作系
 	void SetVertex(void);						// 頂点情報の設定
@@ -44,6 +44,12 @@ public:			// 誰でもアクセスできる
 	void SetSize(const D3DXVECTOR3& size);	// サイズ設定処理
 	D3DXVECTOR3 GetSize(void) const;		// サイズ取得処理
 
+	void SetNumAngle(const int nNum);		// 角度の総数の設定処理
+	int GetNumAngle(void) const;			// 角度の総数の取得処理
+
+	void SetRadius(const float fRadius);	// 半径の設定処理
+	float GetRadius(void) const;			// 半径の取得処理
+
 	// 静的メンバ関数
 	static CObject3DFan* Create(void);			// 生成処理
 
@@ -54,14 +60,11 @@ private:
 	D3DXVECTOR3 m_posOld;						// 前回の位置
 	D3DXVECTOR3 m_rot;							// 向き
 	D3DXVECTOR3 m_size;							// サイズ
-
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;			// 頂点バッファのポインタ
 	D3DXMATRIX m_mtxWorld;						// ワールドマトリックス
-
 	int m_nNumAngle;							// 角度の数
 	float m_fRadius;							// 半径
 	int m_nTexIdx;								// テクスチャのインデックス
-
 };
 
 #endif

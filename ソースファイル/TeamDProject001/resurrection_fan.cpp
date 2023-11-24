@@ -70,7 +70,8 @@ void CRessrectionFan::Uninit(void)
 //=====================================
 void CRessrectionFan::Update(void)
 {
-
+	// 頂点座標の設定処理
+	SetVertex();
 }
 
 //=====================================
@@ -95,15 +96,13 @@ void CRessrectionFan::SetData(const D3DXVECTOR3& pos, const D3DXCOLOR& col)
 	//==========================================================================
 	// 3Dポリゴン
 	//==========================================================================
-	SetPos(pos);			// 位置
-	SetPosOld(GetPos());	// 前回の位置
+	SetPos(pos);					// 位置
+	SetPosOld(GetPos());			// 前回の位置
 	SetRot(NONE_D3DXVECTOR3);		// 向き
 	SetSize(NONE_SCALE);			// サイズ
+	SetNumAngle(16);				// 角度の総数
+	SetRadius(100.0f);				// 半径
 	BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\cheese.jpg"));		// テクスチャの割り当て処理
-
-	// 頂点座標の設定処理
-	SetVertex();
-	SetVtxColor(col);
 
 	//==========================================================================
 	// アニメーション系
@@ -152,6 +151,9 @@ CRessrectionFan* CRessrectionFan::Create(const D3DXVECTOR3& pos, const D3DXCOLOR
 
 	if (pRessrectionFan != nullptr)
 	{ // オブジェクトが NULL じゃない場合
+		
+		// 情報の設定処理
+		pRessrectionFan->SetData(pos, col);
 
 		// 初期化処理
 		if (FAILED(pRessrectionFan->Init()))
@@ -163,9 +165,6 @@ CRessrectionFan* CRessrectionFan::Create(const D3DXVECTOR3& pos, const D3DXCOLOR
 			// NULL を返す
 			return nullptr;
 		}
-
-		// 情報の設定処理
-		pRessrectionFan->SetData(pos, col);
 	}
 	else
 	{ // オブジェクトが NULL の場合
