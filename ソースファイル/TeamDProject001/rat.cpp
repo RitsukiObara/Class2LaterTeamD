@@ -28,6 +28,8 @@
 #include "obstacle.h"
 #include "Particle.h"
 #include "rat_ghost.h"
+#include "resurrection_fan.h"
+#include "object3Dfan.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -41,11 +43,13 @@
 #define SIZE				(D3DXVECTOR3(30.0f, 50.0f, 30.0f))		// 当たり判定でのサイズ
 #define STUN_HEIGHT			(80.0f)			// 気絶演出が出てくる高さ
 #define SMASH_MOVE			(D3DXVECTOR3(10.0f, 20.0f, 10.0f))		// 吹き飛び状態の移動量
+#define TIME_RESURRECTION	(60 * 4)		// 復活時間
 
 //--------------------------------------------
 // 静的メンバ変数宣言
 //--------------------------------------------
 int CRat::m_nNumAll = 0;				// ネズミの総数
+int CRat::m_nResurrectionCounter = 0;	// 生き返るまでのカウンター
 
 //==============================
 // コンストラクタ
@@ -58,6 +62,7 @@ CRat::CRat() : CCharacter(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 	m_pRatState = nullptr;				// ネズミの状態の情報
 	m_pStun = nullptr;					// 気絶の情報
 	m_pRatGhost = nullptr;				// 幽霊ネズミの情報
+	m_pRessrectionFan = nullptr;		// 円の範囲の情報
 	m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_nRatIdx = NONE_RATIDX;			// ネズミの番号
 	m_nLife = 0;						// 寿命
@@ -200,6 +205,14 @@ void CRat::Uninit(void)
 		m_pRatGhost = nullptr;
 	}
 
+	if (m_pRessrectionFan != nullptr)
+	{ // 円の範囲が NULL じゃない場合
+
+		//円の範囲の終了処理
+		//m_pRessrectionFan->Uninit();
+		m_pRessrectionFan = nullptr;
+	}
+
 	// ネズミを消去する
 	CGame::DeleteRat(m_nRatIdx);
 
@@ -254,6 +267,11 @@ void CRat::Update(void)
 	// 障害物との当たり判定
 	ObstacleCollision();
 
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_E))
+	{
+		collision::ObstacleAction(this, SIZE.x, CObstacle::COLLTYPE_RAT);
+	}
+
 	if (m_pRatState != nullptr)
 	{ // ネズミの状態が NULL じゃない場合
 
@@ -271,7 +289,7 @@ void CRat::Update(void)
 	if (m_pPlayerID != nullptr)
 	{ // プレイヤーのID表示が NULL じゃない場合
 
-		// 位置を取得する
+		// 位置情報の取得
 		D3DXVECTOR3 pos = GetPos();
 
 		// 位置を設定する
@@ -488,15 +506,16 @@ void CRat::DeleteStun(void)
 }
 
 //=======================================
-// 幽霊ネズミの取得処理
+// 幽霊ネズミの情報取得処理
 //=======================================
 CRatGhost* CRat::GetRatGhost(void)
 {
+	// 幽霊ネズミの情報を返す
 	return m_pRatGhost;
 }
 
 //=======================================
-// 幽霊ネズミの消去処理
+// 幽霊ネズミの情報消去処理
 //=======================================
 void CRat::DeleteRatGhost(void)
 {
@@ -506,6 +525,28 @@ void CRat::DeleteRatGhost(void)
 		//幽霊ネズミの終了処理
 		m_pRatGhost->Uninit();
 		m_pRatGhost = nullptr;
+	}
+}
+//=======================================
+// 円の範囲の情報取得処理
+//=======================================
+CRessrectionFan* CRat::GetRessrectionFan(void)
+{
+	// 円の範囲の情報を返す
+	return m_pRessrectionFan;
+}
+
+//=======================================
+// 円の範囲の情報消去処理
+//=======================================
+void CRat::DeleteRessrectionFan(void)
+{
+	if (m_pRessrectionFan != nullptr)
+	{ // 円の範囲が NULL じゃない場合
+
+		//円の範囲の終了処理
+		m_pRessrectionFan->Uninit();
+		m_pRessrectionFan = nullptr;
 	}
 }
 
@@ -758,11 +799,18 @@ bool CRat::Hit(void)
 
 			m_pRatState->SetState(CRatState::STATE_DEATH);		// 死亡状態にする
 
+			// 生き返りの円の範囲生成
+			if (m_pRessrectionFan == nullptr)
+			{ // 円の範囲が NULL のとき
+
+				m_pRessrectionFan = CRessrectionFan::Create(D3DXVECTOR3(pos.x, pos.y + 10.0f, pos.z), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+			}
+
 			// ネズミの幽霊の生成
 			if (m_pRatGhost == nullptr)
 			{ // 幽霊ネズミが NULL のとき
 
-				m_pRatGhost = CRatGhost::Create(GetPos());
+				m_pRatGhost = CRatGhost::Create(pos);
 
 				m_nNumAll--;						// ネズミの総数減算
 			}
@@ -935,13 +983,31 @@ void CRat::ResurrectionCollision(void)
 						D3DXVECTOR3(-30.0f, -50.0f, -30.0f), D3DXVECTOR3(-30.0f, -50.0f, -30.0f)) == true)
 					{ // XZの矩形に当たってたら
 
-						// 無敵状態にする
-						pRat->GetState()->SetState(CRatState::STATE_INVINCIBLE);
+						// 生き返りのカウンター加算
+						m_nResurrectionCounter++;
 
-						// 幽霊ネズミの破棄
-						pRat->DeleteRatGhost();
+						if (m_nResurrectionCounter >= TIME_RESURRECTION)
+						{ // 一定時間経ったら
 
-						m_nNumAll++;		// 総数増やす
+							// 無敵状態にする
+							pRat->GetState()->SetState(CRatState::STATE_INVINCIBLE);
+
+							// 円の範囲の破棄
+							pRat->DeleteRessrectionFan();
+
+							// 幽霊ネズミの破棄
+							pRat->DeleteRatGhost();
+
+							// 生き返りのカウンター初期化
+							m_nResurrectionCounter = 0;
+
+							m_nNumAll++;		// 総数増やす
+						}
+					}
+					else
+					{
+						// 生き返りのカウンター初期化
+						m_nResurrectionCounter = 0;
 					}
 				}
 			}

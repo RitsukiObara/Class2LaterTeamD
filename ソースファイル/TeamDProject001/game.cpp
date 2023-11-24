@@ -29,6 +29,7 @@
 #include "block.h"
 #include "countdown.h"
 #include "item.h"
+#include "resurrection_fan.h"
 
 #include "obstacle_manager.h"
 #include "chara_infoUI.h"

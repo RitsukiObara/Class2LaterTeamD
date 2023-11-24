@@ -19,11 +19,15 @@ CObject3DFan::CObject3DFan() : CObject(CObject::TYPE_3DPOLYGON, CObject::PRIORIT
 {
 	// 全ての値をクリアする
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// 位置
+	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 前回の位置
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// 向き
+	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// サイズ
+	m_col = D3DXCOLOR(1.0f,1.0f,1.0f,1.0f);			// 色
 	m_pVtxBuff = nullptr;							// 頂点バッファのポインタ
 	ZeroMemory(&m_mtxWorld, sizeof(m_mtxWorld));	// ワールドマトリックス
 	m_nNumAngle = 0;								// 角度の数
 	m_fRadius = 0.0f;								// 半径
+	m_nTexIdx = NONE_TEXIDX;						// テクスチャのインデックス
 }
 
 //=========================================
@@ -39,12 +43,6 @@ CObject3DFan::~CObject3DFan()
 //===========================================
 HRESULT CObject3DFan::Init(void)
 {
-	// 全ての値を初期化する
-	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// 位置
-	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// 向き
-	m_nNumAngle = 1024;								// 角度の数
-	m_fRadius = 100.0f;								// 半径
-
 	// デバイスの取得
 	LPDIRECT3DDEVICE9 pDevice = CManager::Get()->GetRenderer()->GetDevice();
 
@@ -98,9 +96,14 @@ HRESULT CObject3DFan::Init(void)
 		pVtx[2].nor = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 
 		// 頂点カラーの設定
-		pVtx[0].col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
-		pVtx[1].col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
-		pVtx[2].col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
+		pVtx[0].col = D3DXCOLOR(m_col.r, m_col.g, m_col.b, m_col.a);
+		pVtx[1].col = D3DXCOLOR(m_col.r, m_col.g, m_col.b, m_col.a);
+		pVtx[2].col = D3DXCOLOR(m_col.r, m_col.g, m_col.b, m_col.a);
+
+		// テクスチャ座標の設定
+		pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
+		pVtx[1].tex = D3DXVECTOR2(0.0f, 0.0f);
+		pVtx[2].tex = D3DXVECTOR2(0.0f, 0.0f);
 
 		// 頂点データを3つ分進める
 		pVtx += 3;
@@ -246,7 +249,7 @@ void CObject3DFan::SetVertex(void)
 //===========================================
 void CObject3DFan::SetVtxColor(const D3DXCOLOR& col)
 {
-		VERTEX_3D * pVtx;											//頂点情報へのポインタ
+	VERTEX_3D * pVtx;											//頂点情報へのポインタ
 
 	//頂点バッファをロックし、頂点情報へのポインタを取得
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
@@ -264,6 +267,140 @@ void CObject3DFan::SetVtxColor(const D3DXCOLOR& col)
 
 	// 頂点バッファをアンロックする
 	m_pVtxBuff->Unlock();
+}
+
+//===========================================
+// テクスチャの割り当て処理
+//===========================================
+void CObject3DFan::BindTexture(const int nIdx)
+{
+	// テクスチャを割り当てる
+	m_nTexIdx = nIdx;
+}
+
+//===========================================
+// 位置設定処理
+//===========================================
+void CObject3DFan::SetPos(const D3DXVECTOR3& pos)
+{
+	// 位置を設定する
+	m_pos = pos;
+}
+
+//===========================================
+// 位置取得処理
+//===========================================
+D3DXVECTOR3 CObject3DFan::GetPos(void) const
+{
+	// 位置を返す
+	return m_pos;
+}
+
+//===========================================
+// 前回の位置設定処理
+//===========================================
+void CObject3DFan::SetPosOld(const D3DXVECTOR3& posOld)
+{
+	// 前回の位置を設定する
+	m_posOld = posOld;
+}
+
+//===========================================
+// 前回の位置取得処理
+//===========================================
+D3DXVECTOR3 CObject3DFan::GetPosOld(void) const
+{
+	// 前回の位置を返す
+	return m_posOld;
+}
+
+//===========================================
+// 向き設定処理
+//===========================================
+void CObject3DFan::SetRot(const D3DXVECTOR3& rot)
+{
+	// 向きを設定する
+	m_rot = rot;
+}
+
+//===========================================
+// 向き取得処理
+//===========================================
+D3DXVECTOR3 CObject3DFan::GetRot(void) const
+{
+	// 向きを返す
+	return m_rot;
+}
+
+//===========================================
+// サイズ設定処理
+//===========================================
+void CObject3DFan::SetSize(const D3DXVECTOR3& size)
+{
+	// サイズを設定する
+	m_size = size;
+}
+
+//===========================================
+// サイズ取得処理
+//===========================================
+D3DXVECTOR3 CObject3DFan::GetSize(void) const
+{
+	// サイズを返す
+	return m_size;
+}
+
+//===========================================
+// 角度の総数の設定処理
+//===========================================
+void CObject3DFan::SetNumAngle(const int nNum)
+{
+	// 角度の総数の設定する
+	m_nNumAngle = nNum;
+}
+
+//===========================================
+// 角度の総数の取得処理
+//===========================================
+int CObject3DFan::GetNumAngle(void) const
+{
+	// 角度の総数を返す
+	return m_nNumAngle;
+}
+
+//===========================================
+// 半径の設定処理
+//===========================================
+void CObject3DFan::SetRadius(const float fRadius)
+{
+	// 半径を設定する
+	m_fRadius = fRadius;
+}
+
+//===========================================
+// 半径の取得処理
+//===========================================
+float CObject3DFan::GetRadius(void) const
+{
+	// 半径を返す
+	return m_fRadius;
+}
+//===========================================
+// 色の設定処理
+//===========================================
+void CObject3DFan::SetColor(const D3DXCOLOR col)
+{
+	// 色を設定する
+	m_col = col;
+}
+
+//===========================================
+// 色の取得処理
+//===========================================
+D3DXCOLOR CObject3DFan::GetColor(void) const
+{
+	// 色を返す
+	return m_col;
 }
 
 //===========================================

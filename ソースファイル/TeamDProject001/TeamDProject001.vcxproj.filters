@@ -438,6 +438,12 @@
     <ClCompile Include="chara_state.cpp">
       <Filter>UI\CharaInfoUI</Filter>
     </ClCompile>
+    <ClCompile Include="electricfan.cpp">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="fan_blade.cpp">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -793,6 +799,12 @@
     </ClInclude>
     <ClInclude Include="chara_state.h">
       <Filter>UI\CharaInfoUI</Filter>
+    </ClInclude>
+    <ClInclude Include="electricfan.h">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="fan_blade.h">
+      <Filter>Gimmick\Obstacle</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

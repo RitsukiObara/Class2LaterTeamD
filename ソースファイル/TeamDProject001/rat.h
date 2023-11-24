@@ -20,6 +20,7 @@ class CPlayerID;			// プレイヤーのID
 class CRatState;			// ネズミの状態
 class CStun;				// 気絶
 class CRatGhost;			// 幽霊ネズミ
+class CRessrectionFan;		// 円の範囲
 
 //--------------------------------------------
 // クラス(ネズミクラス)
@@ -69,6 +70,8 @@ public:			// 誰でもアクセスできる
 	void DeleteStun(void);					// 気絶演出の消去処理
 	CRatGhost* GetRatGhost(void);			// 幽霊ネズミの取得処理
 	void DeleteRatGhost(void);				// 幽霊ネズミの消去処理
+	CRessrectionFan* GetRessrectionFan(void);			// 円の範囲の取得処理
+	void DeleteRessrectionFan(void);					// 円の範囲の消去処理
 
 	// 静的メンバ関数
 	static CRat* Create(const D3DXVECTOR3& pos, const int nID);		// 生成処理
@@ -90,6 +93,7 @@ private:		// 自分だけアクセスできる
 	CRatState* m_pRatState;		// ネズミの状態の情報
 	CStun* m_pStun;				// 気絶の情報
 	CRatGhost* m_pRatGhost;		// 幽霊ネズミの情報
+	CRessrectionFan* m_pRessrectionFan;		// 円の範囲の情報
 	D3DXVECTOR3 m_move;			// 移動量
 	int m_nRatIdx;				// ネズミの番号
 	int m_nLife;				// 寿命
@@ -101,6 +105,7 @@ private:		// 自分だけアクセスできる
 
 	// 静的メンバ関数
 	static int m_nNumAll;		// ネズミの総数
+	static int m_nResurrectionCounter;		// 生き返るまでのカウンター
 
 };
 
