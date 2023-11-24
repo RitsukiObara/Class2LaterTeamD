@@ -37,7 +37,7 @@
 #define GRAVITY				(1.0f)			// 重力
 #define ADD_MOVE_Y			(30.0f)			// 浮力
 #define NONE_RATIDX			(-1)			// ネズミの番号の初期値
-#define ATTACK_DISTANCE		(200.0f)		// 攻撃範囲までの距離
+#define ATTACK_DISTANCE		(230.0f)		// 攻撃範囲までの距離
 #define MAX_LIFE			(1)				// 寿命の最大値
 #define SPEED				(20.0f)			// 速度
 #define SIZE				(D3DXVECTOR3(30.0f, 50.0f, 30.0f))		// 当たり判定でのサイズ
@@ -299,6 +299,7 @@ void CRat::Update(void)
 	// デバッグ表示
 	CManager::Get()->GetDebugProc()->Print("位置：%f %f %f\n向き：%f %f %f\nジャンプ状況：%d\n寿命：%d\nネズミの状態：%d\n", GetPos().x, GetPos().y, GetPos().z, GetRot().x, GetRot().y, GetRot().z, m_bJump, m_nLife, m_pRatState->GetState());
 	CManager::Get()->GetDebugProc()->Print("\nネズミの総数:%d\n", m_nNumAll);
+	CManager::Get()->GetDebugProc()->Print("蘇生カウント：%d\n", m_nResurrectionCounter);
 }
 
 //=====================================
@@ -916,7 +917,7 @@ void CRat::Elevation(void)
 		if (pos.y < fHeight)
 		{ // 当たり判定の位置が高かった場合
 
-		  // 高さを設定する
+			// 高さを設定する
 			pos.y = fHeight;
 
 			m_move.y = 0.0f;
@@ -956,6 +957,7 @@ void CRat::ObstacleCollision(void)
 void CRat::ResurrectionCollision(void)
 {
 	CRat *pRat;		// ネズミの情報
+	bool bCollYZ = false;		// 当たったか
 
 	// 状態を取得する
 	CRatState::STATE state = m_pRatState->GetState();
@@ -973,15 +975,14 @@ void CRat::ResurrectionCollision(void)
 			{ // 他のネズミが死亡状態 && 操作してるネズミが復活させれる状態の時
 
 				// 他のネズミとの当たり判定
-				if (useful::RectangleCollisionXY(GetPos(), pRat->GetPos(),
-					D3DXVECTOR3(30.0f, 50.0f, 30.0f), D3DXVECTOR3(30.0f, 50.0f, 30.0f),
-					D3DXVECTOR3(-30.0f, -50.0f, -30.0f), D3DXVECTOR3(-30.0f, -50.0f, -30.0f)) == true)
-				{ // XY座標の矩形の当たり判定
+				if (useful::CircleCollisionXY(GetPos(), pRat->GetPos(), 30.0f, ATTACK_DISTANCE) == true)
+				{ // 円の当たり判定(XY平面)
 
-					if (useful::RectangleCollisionXZ(GetPos(), pRat->GetPos(),
-						D3DXVECTOR3(30.0f, 50.0f, 30.0f), D3DXVECTOR3(30.0f, 50.0f, 30.0f),
-						D3DXVECTOR3(-30.0f, -50.0f, -30.0f), D3DXVECTOR3(-30.0f, -50.0f, -30.0f)) == true)
-					{ // XZの矩形に当たってたら
+					// 円の当たり判定(XZ平面)
+					bCollYZ = useful::CircleCollisionXZ(GetPos(), pRat->GetPos(), 30.0f, ATTACK_DISTANCE);
+
+					if (bCollYZ == true)
+					{ // 円の当たり判定(XZ平面)
 
 						// 生き返りのカウンター加算
 						m_nResurrectionCounter++;
@@ -1004,11 +1005,12 @@ void CRat::ResurrectionCollision(void)
 							m_nNumAll++;		// 総数増やす
 						}
 					}
-					else
+					else if(bCollYZ == false)
 					{
 						// 生き返りのカウンター初期化
 						m_nResurrectionCounter = 0;
 					}
+
 				}
 			}
 		}
