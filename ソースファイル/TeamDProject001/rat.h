@@ -101,6 +101,7 @@ private:		// 自分だけアクセスできる
 
 	// 静的メンバ関数
 	static int m_nNumAll;		// ネズミの総数
+	static int m_nResurrectionCounter;		// 生き返るまでのカウンター
 
 };
 
