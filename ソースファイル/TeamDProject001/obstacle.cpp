@@ -241,14 +241,14 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const TYPE type)
 			
 			break;
 
-		case CObstacle::TYPE_HIMO:
+		case CObstacle::TYPE_HIMO:		//起動系
 
 			// ひもを生成する
 			pObstacle = new CHimo;
 
 			break;
 
-		case CObstacle::TYPE_SPEAKER:
+		case CObstacle::TYPE_SPEAKER:	//起動系
 
 			// スピーカーを生成する
 			pObstacle = new CSpeaker;
@@ -262,16 +262,16 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const TYPE type)
 
 			break;
 
-		case CObstacle::TYPE_LEASH:
+		case CObstacle::TYPE_LEASH:		//2人で起動系
 
-			// ネズミ捕りを生成する
+			// リードを生成する
 			pObstacle = new CLeash;
 
 			break;
 
-		case CObstacle::TYPE_PIN:
+		case CObstacle::TYPE_PIN:		//起動系
 
-			// ネズミ捕りを生成する
+			// 画鋲を生成する
 			pObstacle = new CPin;
 
 			break;

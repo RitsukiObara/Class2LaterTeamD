@@ -178,6 +178,7 @@
     <ClCompile Include="edit.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="effect2D.cpp" />
+    <ClCompile Include="electricfan.cpp" />
     <ClCompile Include="elevation_manager.cpp" />
     <ClCompile Include="entry.cpp" />
     <ClCompile Include="entry_arrow.cpp" />
@@ -301,6 +302,7 @@
     <ClInclude Include="edit.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="effect2D.h" />
+    <ClInclude Include="electricfan.h" />
     <ClInclude Include="elevation_manager.h" />
     <ClInclude Include="entry.h" />
     <ClInclude Include="entry_arrow.h" />

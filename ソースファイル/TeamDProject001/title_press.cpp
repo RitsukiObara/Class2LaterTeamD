@@ -22,12 +22,14 @@
 #define BUTTON_TEXTURE		"data\\TEXTURE\\ENTER.png"				// ボタンのテクスチャ
 #define PRESS_SIZE			(D3DXVECTOR3(200.0f, 50.0f, 0.0f))		// 「PRESS」のサイズ
 #define BUTTON_SIZE			(D3DXVECTOR3(200.0f, 50.0f, 0.0f))		// 「ENTER」のサイズ
-#define INIT_PRESS_POS		(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - PRESS_SIZE.x, 500.0f, 0.0f))		// 「PRESS」の初期位置
-#define INIT_BUTTON_POS		(D3DXVECTOR3(SCREEN_WIDTH * 0.5f + BUTTON_SIZE.x, 500.0f, 0.0f))	// 「ENTER」の初期位置
-#define DEEP_DEST_ALPHA		(1.0f)									// 濃色の目的の透明度
-#define LIGHT_DEST_ALPHA	(0.3f)									// 薄色の目的の透明度
-#define ADD_ALPHA			(0.02f)									// 追加の透明度
-#define TRANS_ADD_ALPHA		(0.2f)									// 遷移状態の追加の透明度
+#define INIT_PRESS_POS		(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - PRESS_SIZE.x, 600.0f, 0.0f))		// 「PRESS」の初期位置
+#define INIT_BUTTON_POS		(D3DXVECTOR3(SCREEN_WIDTH * 0.5f + BUTTON_SIZE.x, 600.0f, 0.0f))	// 「ENTER」の初期位置
+#define DEEP_DEST_ALPHA		(1.0f)		// 濃色の目的の透明度
+#define LIGHT_DEST_ALPHA	(0.3f)		// 薄色の目的の透明度
+#define ADD_ALPHA			(0.02f)		// 追加の透明度
+#define TRANS_ADD_ALPHA		(0.2f)		// 遷移状態の追加の透明度
+#define SMASH_COUNT			(26)		// 吹き飛ばすカウント数
+#define SMASH_MOVE			(D3DXVECTOR3(-35.0f, 0.0f, 0.0f))		// 吹き飛ばす移動量
 
 //============================
 // コンストラクタ
@@ -37,6 +39,8 @@ CTitlePress::CTitlePress() : CObject(CObject::TYPE_PRESSENTER, PRIORITY_UI)
 	// 全ての値をクリアする
 	for (int nCnt = 0; nCnt < TYPE_MAX; nCnt++)
 	{
+		m_aPress[nCnt].move = NONE_D3DXVECTOR3;		// 移動量
+		m_aPress[nCnt].fRotMove = 0.0f;				// 向きの移動量
 		m_aPress[nCnt].pPress = nullptr;			// プレスの情報
 		m_aPress[nCnt].nStateCount = 0;				// 状態カウント
 		m_aPress[nCnt].fAlpha = 0.0f;				// 透明度
@@ -90,6 +94,8 @@ HRESULT CTitlePress::Init(void)
 			return E_FAIL;
 		}
 
+		m_aPress[nCnt].move = NONE_D3DXVECTOR3;		// 移動量
+		m_aPress[nCnt].fRotMove = 0.0f;				// 向きの移動量
 		m_aPress[nCnt].nStateCount = 0;				// 状態カウント
 		m_aPress[nCnt].fAlpha = 0.0f;				// 透明度
 		m_aPress[nCnt].fAlphaDest = 0.0f;			// 目的の透明度
@@ -144,6 +150,16 @@ void CTitlePress::Update(void)
 		{
 			// 状態カウントを加算する
 			m_aPress[nCnt].nStateCount++;
+
+			if (m_aPress[nCnt].nStateCount % SMASH_COUNT == 0)
+			{ // 状態カウントが一定数になった場合
+
+				// 移動量を設定する
+				m_aPress[nCnt].move = SMASH_MOVE;
+
+				// 向きの移動量を設定する
+				m_aPress[nCnt].fRotMove = (float)((rand() % 11 - 5) * 0.01f);
+			}
 		}
 
 		// 透明度処理
@@ -165,8 +181,11 @@ void CTitlePress::Update(void)
 
 	for (int nCnt = 0; nCnt < TYPE_MAX; nCnt++)
 	{
+		// 吹き飛ばし処理
+		Smash(nCnt);
+
 		// 頂点座標の設定処理
-		m_aPress[nCnt].pPress->SetVertex();
+		m_aPress[nCnt].pPress->SetVertexRot();
 
 		// 頂点カラーの設定処理
 		m_aPress[nCnt].pPress->SetVtxColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, m_aPress[nCnt].fAlpha));
@@ -247,6 +266,8 @@ void CTitlePress::SetData(void)
 			assert(false);
 		}
 
+		m_aPress[nCnt].move = NONE_D3DXVECTOR3;			// 移動量
+		m_aPress[nCnt].fRotMove = 0.0f;					// 向きの移動量
 		m_aPress[nCnt].nStateCount = 0;					// 状態カウント
 		m_aPress[nCnt].fAlpha = 1.0f;					// 透明度
 		m_aPress[nCnt].fAlphaDest = LIGHT_DEST_ALPHA;	// 目的の透明度
@@ -322,4 +343,24 @@ void CTitlePress::Alpha(const float fAdd)
 			m_aPress[nCnt].fAlphaDest = (m_aPress[nCnt].fAlphaDest >= DEEP_DEST_ALPHA) ? LIGHT_DEST_ALPHA : DEEP_DEST_ALPHA;
 		}
 	}
+}
+
+//============================
+// 吹き飛ばし処理
+//============================
+void CTitlePress::Smash(const int nType)
+{
+	// 位置と向きを取得する
+	D3DXVECTOR3 pos = m_aPress[nType].pPress->GetPos();
+	D3DXVECTOR3 rot = m_aPress[nType].pPress->GetRot();
+
+	// 位置を移動させる
+	pos += m_aPress[nType].move;
+
+	// 向きを移動させる
+	rot.z += m_aPress[nType].fRotMove;
+
+	// 位置と向きを適用する
+	m_aPress[nType].pPress->SetPos(pos);
+	m_aPress[nType].pPress->SetRot(rot);
 }

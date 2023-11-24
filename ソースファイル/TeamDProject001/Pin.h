@@ -41,6 +41,7 @@ public:			// 誰でもアクセスできる
 
 	bool Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type);	// 当たり判定処理
 	bool Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type);		// ヒット処理
+	bool HitCircle(const D3DXVECTOR3& pos, const float Radius, const CObstacle::COLLTYPE type);
 	void Action(void) override;
 
 private:		// 自分だけアクセスできる
