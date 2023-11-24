@@ -237,6 +237,29 @@ void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight,
 }
 
 //===============================
+// 障害物の起動判定
+//===============================
+void collision::ObstacleAction(CRat* pRat, const float Radius, const CObstacle::COLLTYPE type)
+{
+	// ローカル変数宣言
+	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を取得する
+	D3DXVECTOR3 pos = pRat->GetPos();			// 位置を取得する
+	float fAngle;								// 吹き飛ぶ方向
+
+	while (pObstacle != nullptr)
+	{ // ブロックの情報が NULL じゃない場合
+
+		if (pObstacle->HitCircle(pos, Radius, type) == true)
+		{ // 障害物の当たり判定が通った場合
+			pObstacle->Action();
+		}
+
+		// 次のオブジェクトを代入する
+		pObstacle = pObstacle->GetNext();
+	}
+}
+
+//===============================
 // ブロックの当たり判定
 //===============================
 void collision::BlockCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth)

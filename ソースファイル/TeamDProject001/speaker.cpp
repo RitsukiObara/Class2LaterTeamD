@@ -16,6 +16,7 @@
 #include "note.h"
 #include "input.h"
 
+#define SPEAKER_RADIUS (50.0f)	//音符の出現間隔(フレーム)
 #define NOTE_INTERVAL (20)	//音符の出現間隔(フレーム)
 #define NOTE_LIFE (120)		//音符の寿命
 #define NOTE_SPEED (15.0f)	//音符の速さ
@@ -198,6 +199,20 @@ bool CSpeaker::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeig
 				return true;
 			}
 		}
+	}
+
+	// false を返す
+	return false;
+}
+
+//=====================================
+// ヒット処理
+//=====================================
+bool CSpeaker::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CObstacle::COLLTYPE type)
+{
+	if (useful::CircleCollisionXZ(pos, GetPos(), Radius, GetFileData().fRadius) == true)
+	{//円の範囲内の場合tureを返す
+		return true;
 	}
 
 	// false を返す
