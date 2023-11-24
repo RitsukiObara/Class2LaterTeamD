@@ -50,6 +50,9 @@ public:			// 誰でもアクセスできる
 	void SetRadius(const float fRadius);	// 半径の設定処理
 	float GetRadius(void) const;			// 半径の取得処理
 
+	void SetColor(const D3DXCOLOR col);		// 色の設定処理
+	D3DXCOLOR GetColor(void) const;			// 色の取得処理
+
 	// 静的メンバ関数
 	static CObject3DFan* Create(void);			// 生成処理
 
@@ -60,6 +63,7 @@ private:
 	D3DXVECTOR3 m_posOld;						// 前回の位置
 	D3DXVECTOR3 m_rot;							// 向き
 	D3DXVECTOR3 m_size;							// サイズ
+	D3DXCOLOR m_col;							// 色
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;			// 頂点バッファのポインタ
 	D3DXMATRIX m_mtxWorld;						// ワールドマトリックス
 	int m_nNumAngle;							// 角度の数

@@ -22,6 +22,7 @@ CObject3DFan::CObject3DFan() : CObject(CObject::TYPE_3DPOLYGON, CObject::PRIORIT
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 前回の位置
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// 向き
 	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// サイズ
+	m_col = D3DXCOLOR(1.0f,1.0f,1.0f,1.0f);			// 色
 	m_pVtxBuff = nullptr;							// 頂点バッファのポインタ
 	ZeroMemory(&m_mtxWorld, sizeof(m_mtxWorld));	// ワールドマトリックス
 	m_nNumAngle = 0;								// 角度の数
@@ -95,9 +96,9 @@ HRESULT CObject3DFan::Init(void)
 		pVtx[2].nor = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 
 		// 頂点カラーの設定
-		pVtx[0].col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
-		pVtx[1].col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
-		pVtx[2].col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
+		pVtx[0].col = D3DXCOLOR(m_col.r, m_col.g, m_col.b, m_col.a);
+		pVtx[1].col = D3DXCOLOR(m_col.r, m_col.g, m_col.b, m_col.a);
+		pVtx[2].col = D3DXCOLOR(m_col.r, m_col.g, m_col.b, m_col.a);
 
 		// テクスチャ座標の設定
 		pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
@@ -383,6 +384,23 @@ float CObject3DFan::GetRadius(void) const
 {
 	// 半径を返す
 	return m_fRadius;
+}
+//===========================================
+// 色の設定処理
+//===========================================
+void CObject3DFan::SetColor(const D3DXCOLOR col)
+{
+	// 色を設定する
+	m_col = col;
+}
+
+//===========================================
+// 色の取得処理
+//===========================================
+D3DXCOLOR CObject3DFan::GetColor(void) const
+{
+	// 色を返す
+	return m_col;
 }
 
 //===========================================
