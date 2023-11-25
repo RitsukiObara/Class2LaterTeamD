@@ -1,7 +1,7 @@
 //===========================================
 //
 // 扇風機の処理[electricfan.cpp]
-// Author 坂本翔唯
+// Author 小原立暉
 //
 //===========================================
 //*******************************************
@@ -11,12 +11,15 @@
 #include "electricfan.h"
 #include "manager.h"
 
+#include "fan_blade.h"
+
 //==============================
 // コンストラクタ
 //==============================
 CElecFan::CElecFan() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 {
-
+	// 全ての値をクリアする
+	m_pFan = nullptr;			// 扇風機のファン
 }
 
 //==============================
@@ -28,45 +31,68 @@ CElecFan::~CElecFan()
 }
 
 //==============================
-// スピーカーの初期化処理
+// 扇風機の初期化処理
 //==============================
 HRESULT CElecFan::Init(void)
 {
 	if (FAILED(CObstacle::Init()))
 	{ // 初期化処理に失敗した場合
 
-	  // 失敗を返す
+		// 失敗を返す
 		return E_FAIL;
 	}
+
+	// 全ての値を初期化する
+	m_pFan = nullptr;			// 扇風機のファン
 
 	// 値を返す
 	return S_OK;
 }
 
 //========================================
-// スピーカーの終了処理
+// 扇風機の終了処理
 //========================================
 void CElecFan::Uninit(void)
 {
+	if (m_pFan != nullptr)
+	{ // ファンが NULL じゃない場合
+
+		// ファンの終了処理
+		m_pFan->Uninit();
+		m_pFan = nullptr;
+	}
+
 	// 終了処理
 	CObstacle::Uninit();
 }
 
 //=====================================
-// スピーカーの更新処理
+// 扇風機の更新処理
 //=====================================
 void CElecFan::Update(void)
 {
+	if (m_pFan != nullptr)
+	{ // ファンが NULL じゃない場合
 
+		// ファンの更新処理
+		m_pFan->Update();
+	}
 }
 
 //=====================================
-// スピーカーの描画処理
+// 扇風機の描画処理
 //=====================================
 void CElecFan::Draw(void)
 {
 	// 描画処理
 	CObstacle::Draw();
+
+	if (m_pFan != nullptr)
+	{ // ファンが NULL じゃない場合
+
+		// ファンの描画処理
+		m_pFan->Draw();
+	}
 }
 
 //=====================================
@@ -76,6 +102,14 @@ void CElecFan::SetData(const D3DXVECTOR3& pos, const TYPE type)
 {
 	// 情報の設定処理
 	CObstacle::SetData(pos, type);
+
+	// 全ての値を設定する
+	if (m_pFan == nullptr)
+	{ // ファンが NULL だった場合
+
+		// ファンを生成する
+		m_pFan = CFanBlade::Create(pos);
+	}
 }
 
 //=====================================
