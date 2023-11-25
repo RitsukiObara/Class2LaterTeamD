@@ -432,6 +432,18 @@
     <ClCompile Include="title_press.cpp">
       <Filter>Scene\Title</Filter>
     </ClCompile>
+    <ClCompile Include="resurrection_fan.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="chara_state.cpp">
+      <Filter>UI\CharaInfoUI</Filter>
+    </ClCompile>
+    <ClCompile Include="electricfan.cpp">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="fan_blade.cpp">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -781,6 +793,18 @@
     </ClInclude>
     <ClInclude Include="title_press.h">
       <Filter>Scene\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="resurrection_fan.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="chara_state.h">
+      <Filter>UI\CharaInfoUI</Filter>
+    </ClInclude>
+    <ClInclude Include="electricfan.h">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="fan_blade.h">
+      <Filter>Gimmick\Obstacle</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

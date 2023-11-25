@@ -192,11 +192,8 @@ void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight,
 
 			case CObstacle::TYPE_HIMO:
 
-				// 向きを算出する
-				fAngle = atan2f(pos.x - pObstacle->GetPos().x, pos.z - pObstacle->GetPos().z);
-
-				// ヒット処理
-				pRat->Smash(fAngle);
+				// 気絶処理
+				pRat->Stun();
 
 				break;
 
@@ -214,6 +211,17 @@ void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight,
 
 				break;
 
+			case CObstacle::TYPE_LEASH:
+
+				break;
+
+			case CObstacle::TYPE_PIN:
+
+				// 気絶処理
+				pRat->Stun();
+
+				break;
+
 			default:
 
 				// 停止
@@ -221,6 +229,29 @@ void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight,
 
 				break;
 			}
+		}
+
+		// 次のオブジェクトを代入する
+		pObstacle = pObstacle->GetNext();
+	}
+}
+
+//===============================
+// 障害物の起動判定
+//===============================
+void collision::ObstacleAction(CRat* pRat, const float Radius, const CObstacle::COLLTYPE type)
+{
+	// ローカル変数宣言
+	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を取得する
+	D3DXVECTOR3 pos = pRat->GetPos();			// 位置を取得する
+	float fAngle;								// 吹き飛ぶ方向
+
+	while (pObstacle != nullptr)
+	{ // ブロックの情報が NULL じゃない場合
+
+		if (pObstacle->HitCircle(pos, Radius, type) == true)
+		{ // 障害物の当たり判定が通った場合
+			pObstacle->Action();
 		}
 
 		// 次のオブジェクトを代入する
@@ -262,6 +293,8 @@ void collision::BlockRectangleCollision(CBlock& block, D3DXVECTOR3& pos, const D
 {
 	bool bPosbool = false, bPosOldbool = false, bVecbool = false, bVecboolOld = false;
 
+	bool bInside[4] = {};
+
 	D3DXVECTOR3 vecLine, vecMove, vecToPos, vecToPosOld, posOldToVec, posOldToVecOld;
 	D3DXVECTOR3 vec[4];
 
@@ -276,7 +309,6 @@ void collision::BlockRectangleCollision(CBlock& block, D3DXVECTOR3& pos, const D
 	fAngle[2] = atan2f(vtxMax.x, vtxMin.z);
 	fAngle[3] = atan2f(vtxMin.x, vtxMin.z);
 
-
 	float fDistance[4];
 	fDistance[0] = sqrtf(powf(vtxMin.x, 2) + powf(vtxMax.z, 2));
 	fDistance[1] = sqrtf(powf(vtxMax.x, 2) + powf(vtxMax.z, 2));
@@ -287,7 +319,6 @@ void collision::BlockRectangleCollision(CBlock& block, D3DXVECTOR3& pos, const D
 	vec[1] = D3DXVECTOR3(objpos.x - sinf(-D3DX_PI + fAngle[1] + rot.y)*fDistance[1], 0, objpos.z - cosf(-D3DX_PI + fAngle[1] + rot.y)* fDistance[1]);
 	vec[2] = D3DXVECTOR3(objpos.x - sinf(-D3DX_PI + fAngle[2] + rot.y)*fDistance[2], 0, objpos.z - cosf(-D3DX_PI + fAngle[2] + rot.y)* fDistance[2]);
 	vec[3] = D3DXVECTOR3(objpos.x - sinf(-D3DX_PI + fAngle[3] + rot.y)*fDistance[3], 0, objpos.z - cosf(-D3DX_PI + fAngle[3] + rot.y)* fDistance[3]);
-
 
 	for (int nCnt = 0; nCnt < 4; nCnt++)
 	{
@@ -349,8 +380,9 @@ void collision::BlockRectangleCollision(CBlock& block, D3DXVECTOR3& pos, const D
 			bVecboolOld = false;
 		}
 
-		//交差判定
-		if (bPosbool != bPosOldbool&&bVecbool != bVecboolOld)
+		bInside[nCnt] = bPosbool;
+
+		if (bPosbool != bPosOldbool&&bVecbool != bVecboolOld&&objpos.y + vtxMax.y > pos.y)
 		{
 			//ベクトルの正規化
 			float fmagnitude = sqrtf(vecLine.x*vecLine.x + vecLine.y*vecLine.y + vecLine.z*vecLine.z);
@@ -394,7 +426,7 @@ void collision::BlockRectangleCollision(CBlock& block, D3DXVECTOR3& pos, const D
 					NorVecLine *= 0;
 				}
 
-				D3DXVECTOR3 move = D3DXVECTOR3(fMove*NorVecLine.x, fMove*NorVecLine.y, fMove*NorVecLine.z);
+				D3DXVECTOR3 move = D3DXVECTOR3(fMove*NorVecLine.x, pos.y, fMove*NorVecLine.z);
 
 				D3DXVECTOR3 SetPos = posOld + move;
 
@@ -413,6 +445,13 @@ void collision::BlockRectangleCollision(CBlock& block, D3DXVECTOR3& pos, const D
 			}
 		}
 	}
+	//上からの判定
+	if (bInside[0] == bInside[1] && bInside[1] == bInside[2] && bInside[2] == bInside[3] && objpos.y + vtxMax.y > pos.y&&objpos.y + vtxMax.y <= posOld.y)
+	{
+		pos .y= objpos.y + vtxMax.y;
+	}
+
+
 	//if (block.GetPos().y + block.GetFileData().vtxMax.y >= pos.y &&
 	//	block.GetPos().y + block.GetFileData().vtxMin.y <= pos.y + fHeight &&
 	//	block.GetPos().z + block.GetFileData().vtxMax.z >= pos.z - fDepth&&

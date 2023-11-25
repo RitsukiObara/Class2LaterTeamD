@@ -25,6 +25,7 @@ public:			// 誰でもアクセスできる
 		TYPE_NONE = 0,			// 無し
 		TYPE_SCENE,				// シーン
 		TYPE_TITLELOGO,			// タイトル
+		TYPE_PRESSENTER,		// プレスエンター
 		TYPE_EDITUI,			// エディットUI
 		TYPE_2DUI,				// 2DUI
 		TYPE_TIME,				// タイム

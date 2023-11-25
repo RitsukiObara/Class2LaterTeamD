@@ -166,8 +166,39 @@ bool CPin::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fW
 //=====================================
 bool CPin::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
 {
-	//// 終了処理
-	//Uninit();
+	if (m_State == STATE_TRUE)
+	{ // ギミック発動状態の場合
+
+		// 最大値と最小値を設定する
+		D3DXVECTOR3 vtxMax = D3DXVECTOR3(fWidth, fHeight, fDepth);
+		D3DXVECTOR3 vtxMin = D3DXVECTOR3(-fWidth, 0.0f, -fDepth);
+
+		if (useful::RectangleCollisionXY(pos, GetPos(), vtxMax, GetFileData().vtxMax, vtxMin, GetFileData().vtxMin) == true &&
+			useful::RectangleCollisionXZ(pos, GetPos(), vtxMax, GetFileData().vtxMax, vtxMin, GetFileData().vtxMin) == true &&
+			useful::RectangleCollisionYZ(pos, GetPos(), vtxMax, GetFileData().vtxMax, vtxMin, GetFileData().vtxMin) == true)
+		{ // 範囲内に入った場合
+
+			// 終了処理
+			Uninit();
+
+			// true を返す
+			return true;
+		}
+	}
+
+	// false を返す
+	return false;
+}
+
+//=====================================
+// ヒット処理
+//=====================================
+bool CPin::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CObstacle::COLLTYPE type)
+{
+	if (useful::CircleCollisionXZ(pos, GetPos(), Radius, GetFileData().fRadius) == true)
+	{//円の範囲内の場合tureを返す
+		return true;
+	}
 
 	// false を返す
 	return false;

@@ -33,7 +33,7 @@ public:			// 誰でもアクセスできる
 		TYPE_SPEAKER,		// スピーカー
 		TYPE_MOUSETRAP,		// ネズミ捕り
 		TYPE_LEASH,			// リード
-		TYPE_PIN,		// 画鋲
+		TYPE_PIN,			// 画鋲
 		TYPE_MAX			// この列挙型の総数
 	};
 
@@ -66,7 +66,9 @@ public:			// 誰でもアクセスできる
 
 	virtual bool Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type) = 0;	// 当たり判定処理
 	virtual bool Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type) = 0;								// ヒット処理
+	virtual bool HitCircle(const D3DXVECTOR3& pos, const float Radius, const CObstacle::COLLTYPE type) { return false; }													// ヒット処理
 	virtual void Action(void) = 0;											// ギミック起動処理
+	virtual void MultiAction(void) {}										// ギミック同時起動処理
 
 	// セット・ゲット関係
 	void SetType(const TYPE type);		// 種類の設定処理

@@ -28,6 +28,8 @@
 #include "obstacle.h"
 #include "Particle.h"
 #include "rat_ghost.h"
+#include "resurrection_fan.h"
+#include "object3Dfan.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -35,17 +37,19 @@
 #define GRAVITY				(1.0f)			// 重力
 #define ADD_MOVE_Y			(30.0f)			// 浮力
 #define NONE_RATIDX			(-1)			// ネズミの番号の初期値
-#define ATTACK_DISTANCE		(200.0f)		// 攻撃範囲までの距離
+#define ATTACK_DISTANCE		(230.0f)		// 攻撃範囲までの距離
 #define MAX_LIFE			(1)				// 寿命の最大値
 #define SPEED				(20.0f)			// 速度
 #define SIZE				(D3DXVECTOR3(30.0f, 50.0f, 30.0f))		// 当たり判定でのサイズ
 #define STUN_HEIGHT			(80.0f)			// 気絶演出が出てくる高さ
 #define SMASH_MOVE			(D3DXVECTOR3(10.0f, 20.0f, 10.0f))		// 吹き飛び状態の移動量
+#define TIME_RESURRECTION	(60 * 4)		// 復活時間
 
 //--------------------------------------------
 // 静的メンバ変数宣言
 //--------------------------------------------
 int CRat::m_nNumAll = 0;				// ネズミの総数
+int CRat::m_nResurrectionCounter = 0;	// 生き返るまでのカウンター
 
 //==============================
 // コンストラクタ
@@ -58,6 +62,7 @@ CRat::CRat() : CCharacter(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 	m_pRatState = nullptr;				// ネズミの状態の情報
 	m_pStun = nullptr;					// 気絶の情報
 	m_pRatGhost = nullptr;				// 幽霊ネズミの情報
+	m_pRessrectionFan = nullptr;		// 円の範囲の情報
 	m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_nRatIdx = NONE_RATIDX;			// ネズミの番号
 	m_nLife = 0;						// 寿命
@@ -200,6 +205,14 @@ void CRat::Uninit(void)
 		m_pRatGhost = nullptr;
 	}
 
+	if (m_pRessrectionFan != nullptr)
+	{ // 円の範囲が NULL じゃない場合
+
+		//円の範囲の終了処理
+		//m_pRessrectionFan->Uninit();
+		m_pRessrectionFan = nullptr;
+	}
+
 	// ネズミを消去する
 	CGame::DeleteRat(m_nRatIdx);
 
@@ -254,6 +267,11 @@ void CRat::Update(void)
 	// 障害物との当たり判定
 	ObstacleCollision();
 
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_E))
+	{
+		collision::ObstacleAction(this, SIZE.x, CObstacle::COLLTYPE_RAT);
+	}
+
 	if (m_pRatState != nullptr)
 	{ // ネズミの状態が NULL じゃない場合
 
@@ -271,7 +289,7 @@ void CRat::Update(void)
 	if (m_pPlayerID != nullptr)
 	{ // プレイヤーのID表示が NULL じゃない場合
 
-		// 位置を取得する
+		// 位置情報の取得
 		D3DXVECTOR3 pos = GetPos();
 
 		// 位置を設定する
@@ -281,6 +299,7 @@ void CRat::Update(void)
 	// デバッグ表示
 	CManager::Get()->GetDebugProc()->Print("位置：%f %f %f\n向き：%f %f %f\nジャンプ状況：%d\n寿命：%d\nネズミの状態：%d\n", GetPos().x, GetPos().y, GetPos().z, GetRot().x, GetRot().y, GetRot().z, m_bJump, m_nLife, m_pRatState->GetState());
 	CManager::Get()->GetDebugProc()->Print("\nネズミの総数:%d\n", m_nNumAll);
+	CManager::Get()->GetDebugProc()->Print("蘇生カウント：%d\n", m_nResurrectionCounter);
 }
 
 //=====================================
@@ -465,19 +484,6 @@ CRatState* CRat::GetState(void)
 }
 
 //=======================================
-// 気絶演出の設定処理
-//=======================================
-void CRat::SetStun(void)
-{
-	if (m_pStun == nullptr)
-	{ // 気絶の情報が NULL だった場合
-
-		// 気絶演出を生成する
-		m_pStun = CStun::Create(D3DXVECTOR3(GetPos().x, GetPos().y + STUN_HEIGHT, GetPos().z));
-	}
-}
-
-//=======================================
 // 気絶演出の取得処理
 //=======================================
 CStun* CRat::GetStun(void)
@@ -501,15 +507,16 @@ void CRat::DeleteStun(void)
 }
 
 //=======================================
-// 幽霊ネズミの取得処理
+// 幽霊ネズミの情報取得処理
 //=======================================
 CRatGhost* CRat::GetRatGhost(void)
 {
+	// 幽霊ネズミの情報を返す
 	return m_pRatGhost;
 }
 
 //=======================================
-// 幽霊ネズミの消去処理
+// 幽霊ネズミの情報消去処理
 //=======================================
 void CRat::DeleteRatGhost(void)
 {
@@ -519,6 +526,28 @@ void CRat::DeleteRatGhost(void)
 		//幽霊ネズミの終了処理
 		m_pRatGhost->Uninit();
 		m_pRatGhost = nullptr;
+	}
+}
+//=======================================
+// 円の範囲の情報取得処理
+//=======================================
+CRessrectionFan* CRat::GetRessrectionFan(void)
+{
+	// 円の範囲の情報を返す
+	return m_pRessrectionFan;
+}
+
+//=======================================
+// 円の範囲の情報消去処理
+//=======================================
+void CRat::DeleteRessrectionFan(void)
+{
+	if (m_pRessrectionFan != nullptr)
+	{ // 円の範囲が NULL じゃない場合
+
+		//円の範囲の終了処理
+		m_pRessrectionFan->Uninit();
+		m_pRessrectionFan = nullptr;
 	}
 }
 
@@ -771,15 +800,21 @@ bool CRat::Hit(void)
 
 			m_pRatState->SetState(CRatState::STATE_DEATH);		// 死亡状態にする
 
+			// 生き返りの円の範囲生成
+			if (m_pRessrectionFan == nullptr)
+			{ // 円の範囲が NULL のとき
+
+				m_pRessrectionFan = CRessrectionFan::Create(D3DXVECTOR3(pos.x, pos.y + 10.0f, pos.z), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+			}
+
 			// ネズミの幽霊の生成
 			if (m_pRatGhost == nullptr)
 			{ // 幽霊ネズミが NULL のとき
 
-				m_pRatGhost = CRatGhost::Create(GetPos());
+				m_pRatGhost = CRatGhost::Create(pos);
 
+				m_nNumAll--;						// ネズミの総数減算
 			}
-
-			m_nNumAll--;						// ネズミの総数減算
 
 #if 0	// デバッグの為の処理↓
 
@@ -847,13 +882,19 @@ void CRat::Stun(void)
 
 	if (state != CRatState::STATE_DAMAGE &&
 		state != CRatState::STATE_INVINCIBLE &&
-		state != CRatState::STATE_SMASH &&
 		state != CRatState::STATE_DEATH &&
 		state != CRatState::STATE_STUN)
 	{ // ダメージ受ける状態だった場合
 
 		// 気絶状態にする
 		m_pRatState->SetState(CRatState::STATE_STUN);
+
+		if (m_pStun == nullptr)
+		{ // 気絶の情報が NULL だった場合
+
+			// 気絶演出を生成する
+			m_pStun = CStun::Create(D3DXVECTOR3(GetPos().x, GetPos().y + STUN_HEIGHT, GetPos().z));
+		}
 	}
 }
 
@@ -876,7 +917,7 @@ void CRat::Elevation(void)
 		if (pos.y < fHeight)
 		{ // 当たり判定の位置が高かった場合
 
-		  // 高さを設定する
+			// 高さを設定する
 			pos.y = fHeight;
 
 			m_move.y = 0.0f;
@@ -916,6 +957,7 @@ void CRat::ObstacleCollision(void)
 void CRat::ResurrectionCollision(void)
 {
 	CRat *pRat;		// ネズミの情報
+	bool bCollYZ = false;		// 当たったか
 
 	// 状態を取得する
 	CRatState::STATE state = m_pRatState->GetState();
@@ -933,24 +975,42 @@ void CRat::ResurrectionCollision(void)
 			{ // 他のネズミが死亡状態 && 操作してるネズミが復活させれる状態の時
 
 				// 他のネズミとの当たり判定
-				if (useful::RectangleCollisionXY(GetPos(), pRat->GetPos(),
-					D3DXVECTOR3(30.0f, 50.0f, 30.0f), D3DXVECTOR3(30.0f, 50.0f, 30.0f),
-					D3DXVECTOR3(-30.0f, -50.0f, -30.0f), D3DXVECTOR3(-30.0f, -50.0f, -30.0f)) == true)
-				{ // XY座標の矩形の当たり判定
+				if (useful::CircleCollisionXY(GetPos(), pRat->GetPos(), 30.0f, ATTACK_DISTANCE) == true)
+				{ // 円の当たり判定(XY平面)
 
-					if (useful::RectangleCollisionXZ(GetPos(), pRat->GetPos(),
-						D3DXVECTOR3(30.0f, 50.0f, 30.0f), D3DXVECTOR3(30.0f, 50.0f, 30.0f),
-						D3DXVECTOR3(-30.0f, -50.0f, -30.0f), D3DXVECTOR3(-30.0f, -50.0f, -30.0f)) == true)
-					{ // XZの矩形に当たってたら
+					// 円の当たり判定(XZ平面)
+					bCollYZ = useful::CircleCollisionXZ(GetPos(), pRat->GetPos(), 30.0f, ATTACK_DISTANCE);
 
-						// 無敵状態にする
-						pRat->GetState()->SetState(CRatState::STATE_INVINCIBLE);
+					if (bCollYZ == true)
+					{ // 円の当たり判定(XZ平面)
 
-						// 幽霊ネズミの破棄
-						pRat->DeleteRatGhost();
+						// 生き返りのカウンター加算
+						m_nResurrectionCounter++;
 
-						m_nNumAll++;		// 総数増やす
+						if (m_nResurrectionCounter >= TIME_RESURRECTION)
+						{ // 一定時間経ったら
+
+							// 無敵状態にする
+							pRat->GetState()->SetState(CRatState::STATE_INVINCIBLE);
+
+							// 円の範囲の破棄
+							pRat->DeleteRessrectionFan();
+
+							// 幽霊ネズミの破棄
+							pRat->DeleteRatGhost();
+
+							// 生き返りのカウンター初期化
+							m_nResurrectionCounter = 0;
+
+							m_nNumAll++;		// 総数増やす
+						}
 					}
+					else if(bCollYZ == false)
+					{
+						// 生き返りのカウンター初期化
+						m_nResurrectionCounter = 0;
+					}
+
 				}
 			}
 		}

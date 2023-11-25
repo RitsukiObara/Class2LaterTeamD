@@ -38,10 +38,12 @@ public:		// 誰でもアクセスできる
 	{
 		POLYGON_BACK = 0,		// 真っ黒ポリゴン
 		POLYGON_MENU,			// メニュー
-		POLYGON_CONTINUE,		// コンテニュー
+		POLYGON_CONTINUE,		// コンティニュー
 		POLYGON_RESET,			// リトライ
-		POLYGON_TITLE,			// クイット
-		POLYGON_MAX
+		POLYGON_TITLE,			// タイトル
+		POLYGON_RCURSOR,		// 右カーソル
+		POLYGON_LCURSOR,		// 左カーソル
+		POLYGON_MAX				// この列挙型の総数
 	};
 
 	// 構造体定義(情報構造体)
@@ -77,10 +79,11 @@ private:		// 自分だけアクセスできる
 	bool PauseDecide(void);			// ポーズの決定処理
 	void PauseAlphaCorrect(void);	// ポーズの透明度補正処理
 	void PauseVertex(void);			// ポーズの頂点設定処理
+	void CursorMove(void);			// メニューの移動処理
 
 	// メンバ変数
 	D3DXCOLOR m_PauseColor;					// 選択中の選択肢の色
-	D3DXVECTOR3 sizeDest;					// 目標のサイズ
+	D3DXVECTOR3 m_sizeDest;					// 目標のサイズ
 	CObject2D* m_apObject[POLYGON_MAX];		// ポリゴンの情報
 	MENU m_PauseMenu;						// ポーズメニュー
 	int m_nPauseCounter;					// カウンター
