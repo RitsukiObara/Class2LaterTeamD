@@ -58,12 +58,6 @@
     <Filter Include="UI\WeaponSelectUI">
       <UniqueIdentifier>{f023ad43-3ac2-4525-a7fc-20769fcab501}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Cat">
-      <UniqueIdentifier>{2f0cfa38-123d-404e-b4b5-8fc83900d5b0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Rat">
-      <UniqueIdentifier>{6525e328-f0cd-4b74-aa93-2899d1a22b4c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Map">
       <UniqueIdentifier>{8863d5a5-bcd2-4f27-a1ee-0d3618800a6b}</UniqueIdentifier>
     </Filter>
@@ -81,6 +75,15 @@
     </Filter>
     <Filter Include="UI\CharaInfoUI">
       <UniqueIdentifier>{8d7c9c9a-88dc-4db0-b314-c8f99b8b07c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Player">
+      <UniqueIdentifier>{620e7ce5-b87b-488a-abcd-f99181d4f59a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Player\Rat">
+      <UniqueIdentifier>{6525e328-f0cd-4b74-aa93-2899d1a22b4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Player\Cat">
+      <UniqueIdentifier>{2f0cfa38-123d-404e-b4b5-8fc83900d5b0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -274,7 +277,7 @@
       <Filter>Edit</Filter>
     </ClCompile>
     <ClCompile Include="rat.cpp">
-      <Filter>Rat</Filter>
+      <Filter>Player\Rat</Filter>
     </ClCompile>
     <ClCompile Include="weapon_selectUI.cpp">
       <Filter>UI\WeaponSelectUI</Filter>
@@ -286,7 +289,7 @@
       <Filter>UI\WeaponSelectUI</Filter>
     </ClCompile>
     <ClCompile Include="Cat.cpp">
-      <Filter>Cat</Filter>
+      <Filter>Player\Cat</Filter>
     </ClCompile>
     <ClCompile Include="map.cpp">
       <Filter>Map</Filter>
@@ -322,7 +325,7 @@
       <Filter>Gimmick\Obstacle</Filter>
     </ClCompile>
     <ClCompile Include="rat_ghost.cpp">
-      <Filter>Rat</Filter>
+      <Filter>Player\Rat</Filter>
     </ClCompile>
     <ClCompile Include="speech_message.cpp">
       <Filter>Staging</Filter>
@@ -397,7 +400,7 @@
       <Filter>Gimmick\Obstacle</Filter>
     </ClCompile>
     <ClCompile Include="rat_state.cpp">
-      <Filter>Rat</Filter>
+      <Filter>Player\Rat</Filter>
     </ClCompile>
     <ClCompile Include="mousetrap.cpp">
       <Filter>Gimmick\Obstacle</Filter>
@@ -443,6 +446,9 @@
     </ClCompile>
     <ClCompile Include="fan_blade.cpp">
       <Filter>Gimmick\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -636,7 +642,7 @@
       <Filter>Edit</Filter>
     </ClInclude>
     <ClInclude Include="rat.h">
-      <Filter>Rat</Filter>
+      <Filter>Player\Rat</Filter>
     </ClInclude>
     <ClInclude Include="weapon_selectUI.h">
       <Filter>UI\WeaponSelectUI</Filter>
@@ -648,7 +654,7 @@
       <Filter>UI\WeaponSelectUI</Filter>
     </ClInclude>
     <ClInclude Include="Cat.h">
-      <Filter>Cat</Filter>
+      <Filter>Player\Cat</Filter>
     </ClInclude>
     <ClInclude Include="map.h">
       <Filter>Map</Filter>
@@ -684,7 +690,7 @@
       <Filter>Gimmick\Obstacle</Filter>
     </ClInclude>
     <ClInclude Include="rat_ghost.h">
-      <Filter>Rat</Filter>
+      <Filter>Player\Rat</Filter>
     </ClInclude>
     <ClInclude Include="speech_message.h">
       <Filter>Staging</Filter>
@@ -759,7 +765,7 @@
       <Filter>Gimmick\Obstacle</Filter>
     </ClInclude>
     <ClInclude Include="rat_state.h">
-      <Filter>Rat</Filter>
+      <Filter>Player\Rat</Filter>
     </ClInclude>
     <ClInclude Include="mousetrap.h">
       <Filter>Gimmick\Obstacle</Filter>
@@ -805,6 +811,9 @@
     </ClInclude>
     <ClInclude Include="fan_blade.h">
       <Filter>Gimmick\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>Player</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -239,6 +239,7 @@
     <ClCompile Include="pause.cpp" />
     <ClCompile Include="petbottle.cpp" />
     <ClCompile Include="Pin.cpp" />
+    <ClCompile Include="player.cpp" />
     <ClCompile Include="player_idUI.cpp" />
     <ClCompile Include="rat.cpp" />
     <ClCompile Include="precompile.cpp">
@@ -364,6 +365,7 @@
     <ClInclude Include="pause.h" />
     <ClInclude Include="petbottle.h" />
     <ClInclude Include="Pin.h" />
+    <ClInclude Include="player.h" />
     <ClInclude Include="player_idUI.h" />
     <ClInclude Include="rat.h" />
     <ClInclude Include="precompile.h" />
