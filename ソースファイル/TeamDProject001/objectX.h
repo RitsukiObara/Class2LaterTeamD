@@ -50,6 +50,7 @@ public:			// 誰でもアクセスできる
 		TYPE_LEASHSET,			// 設置状態のリード
 		TYPE_PINSET,			// 設置状態の画鋲
 		TYPE_PINONE,			// 破片用の画鋲
+		TYPE_FANBLADE,			// 扇風機(羽根)
 
 		// ブロックモデル
 		TYPE_CARDBOARD,			// 段ボール
@@ -87,6 +88,7 @@ public:			// 誰でもアクセスできる
 		TYPE_MOUSETRAP,			// ネズミ捕り
 		TYPE_LEASH,				// リード
 		TYPE_PIN,				// 画鋲
+		TYPE_ELECFAN,			// 扇風機(本体)
 
 		//マップモデル
 		TYPE_KITCHEN,			//キッチン

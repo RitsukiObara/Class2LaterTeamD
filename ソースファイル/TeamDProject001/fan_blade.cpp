@@ -79,7 +79,7 @@ void CFanBlade::SetData(const D3DXVECTOR3& pos)
 	SetPosOld(pos);								// 前回の位置
 	SetRot(NONE_D3DXVECTOR3);					// 向き
 	SetScale(NONE_SCALE);						// 拡大率
-	SetFileData(CXFile::TYPE_TOYCARSCREW);		// モデル情報
+	SetFileData(CXFile::TYPE_FANBLADE);			// モデル情報
 }
 
 //=======================================

@@ -34,6 +34,7 @@ public:			// 誰でもアクセスできる
 		TYPE_MOUSETRAP,		// ネズミ捕り
 		TYPE_LEASH,			// リード
 		TYPE_PIN,			// 画鋲
+		TYPE_FAN,			// 扇風機
 		TYPE_MAX			// この列挙型の総数
 	};
 

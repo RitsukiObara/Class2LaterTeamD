@@ -13,6 +13,11 @@
 
 #include "fan_blade.h"
 
+//-------------------------------------------
+// マクロ定義
+//-------------------------------------------
+#define FAN_SHIFT		(175.0f)		// 扇風機の羽根のずらす高さ
+
 //==============================
 // コンストラクタ
 //==============================
@@ -107,8 +112,16 @@ void CElecFan::SetData(const D3DXVECTOR3& pos, const TYPE type)
 	if (m_pFan == nullptr)
 	{ // ファンが NULL だった場合
 
+		// 羽根の位置
+		D3DXVECTOR3 posFan;
+
+		// 羽根の位置を設定する
+		posFan.x = pos.x;
+		posFan.y = pos.y + FAN_SHIFT;
+		posFan.z = pos.z;
+
 		// ファンを生成する
-		m_pFan = CFanBlade::Create(pos);
+		m_pFan = CFanBlade::Create(posFan);
 	}
 }
 

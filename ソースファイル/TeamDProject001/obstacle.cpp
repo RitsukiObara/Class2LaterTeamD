@@ -26,6 +26,7 @@
 #include "mousetrap.h"
 #include "leash.h"
 #include "Pin.h"
+#include "electricfan.h"
 
 //==============================
 // コンストラクタ
@@ -273,6 +274,13 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const TYPE type)
 
 			// 画鋲を生成する
 			pObstacle = new CPin;
+
+			break;
+
+		case CObstacle::TYPE_FAN:		// 起動系
+
+			// 扇風機を生成する
+			pObstacle = new CElecFan;
 
 			break;
 

@@ -210,7 +210,7 @@ Object "obj4" {
 	}
 }
 Object "obj5" {
-	visible 15
+	visible 0
 	locking 0
 	shading 1
 	facet 59.5
@@ -344,7 +344,7 @@ Object "obj5" {
 	}
 }
 Object "obj7" {
-	visible 15
+	visible 0
 	locking 0
 	shading 1
 	facet 59.5
