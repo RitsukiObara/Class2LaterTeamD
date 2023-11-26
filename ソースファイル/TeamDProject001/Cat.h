@@ -10,18 +10,12 @@
 //********************************************
 // インクルードファイル
 //********************************************
-#include "character.h"
-#include "scene.h"
-
-//--------------------------------------------
-// 前方宣言
-//--------------------------------------------
-class CMotion;				// モーション
+#include "player.h"
 
 //--------------------------------------------
 // クラス(プレイヤークラス)
 //--------------------------------------------
-class CCat : public CCharacter
+class CCat : public CPlayer
 {
 public:			// 誰でもアクセスできる
 
@@ -53,35 +47,26 @@ public:			// 誰でもアクセスできる
 	void Update(void);		// 更新処理
 	void Draw(void);		// 描画処理
 
-	void Hit(void);			// ヒット処理
-	void SetData(const D3DXVECTOR3& pos);		// 情報の設定処理
+	void Hit(void);						// ヒット処理
+	void Smash(const float fAngle);		// 吹き飛び状態
+	void Stun(void);					// 気絶状態
+	void MotionManager(void);			// モーションマネージャー
 
-	// セット・ゲット関係
-
-	CMotion* GetMotion(void) const;				// モーションの情報の取得処理
+	void SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type);		// 情報の設定処理
 
 	// 静的メンバ関数
 	static CCat* Get(void);					// 取得処理
-	static CCat* Create(const D3DXVECTOR3& pos);	// 生成処理
 
 private:		// 自分だけアクセスできる
 
 	// メンバ関数
-	void Move();
 	void Attack();
 	void AttackStateManager();
-	void CollisionMagicWall();
 	void DebugMessage();
-	void MotionManager(void);		// モーションの管理
 
 	// メンバ変数
-	CMotion* m_pMotion;				// モーションの情報
-	MOTIONTYPE MotionType;			// モーションの状態
-
 	D3DXVECTOR3 m_AttackPos;		// 攻撃の位置
 	D3DXVECTOR3 m_posDest;			// 目的の位置
-	D3DXVECTOR3 m_move;				// 移動量
-	float m_fSpeed;					// 速度
 	D3DXVECTOR3 m_rotDest;			// 目的の向き
 	int m_nShadowIdx;				// 影のインデックス
 

@@ -43,7 +43,7 @@
 // 静的メンバ変数宣言
 //--------------------------------------------
 CPause* CGame::m_pPause = nullptr;							// ポーズの情報
-CRat* CGame::m_apRat[MAX_RAT] = {};							// ネズミの情報
+CPlayer* CGame::m_apRat[MAX_RAT] = {};							// ネズミの情報
 CGame::STATE CGame::m_GameState = CGame::STATE_START;		// ゲームの進行状態
 int CGame::m_nFinishCount = 0;								// 終了カウント
 
@@ -143,11 +143,11 @@ HRESULT CGame::Init(void)
 	// ネズミの生成
 	for (int nCntRat = 0; nCntRat < MAX_RAT; nCntRat++)
 	{
-		m_apRat[nCntRat] = CRat::Create(D3DXVECTOR3(500.0f * nCntRat, 0.0f, 0.0f), nCntRat);
+		m_apRat[nCntRat] = CPlayer::Create(D3DXVECTOR3(500.0f * nCntRat, 0.0f, 0.0f), nCntRat, CPlayer::TYPE_RAT);
 	}
 
 	//猫の生成
-	CCat::Create(D3DXVECTOR3(400.0f, 0.0f, 400.0f));
+	CCat::Create(D3DXVECTOR3(400.0f, 0.0f, 400.0f),3, CPlayer::TYPE_CAT);
 
 	// 生成処理
 	CGameTime::Create();
@@ -446,7 +446,7 @@ CGame::STATE CGame::GetState(void)
 //======================================
 // ネズミの取得処理
 //======================================
-CRat* CGame::GetRat(const int nID)
+CPlayer* CGame::GetRat(const int nID)
 {
 	if (nID < MAX_RAT)
 	{ // インデックスが一定未満の場合

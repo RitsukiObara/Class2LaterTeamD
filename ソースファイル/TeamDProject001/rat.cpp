@@ -9,6 +9,7 @@
 //*******************************************
 #include "main.h"
 #include "rat.h"
+#include "player.h"
 #include "game.h"
 #include "result.h"
 #include "input.h"
@@ -54,21 +55,14 @@ int CRat::m_nResurrectionCounter = 0;	// 生き返るまでのカウンター
 //==============================
 // コンストラクタ
 //==============================
-CRat::CRat() : CCharacter(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
+CRat::CRat() : CPlayer(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 {
 	// 全ての値をクリアする
-	m_pMotion = nullptr;				// モーションの情報
-	m_pPlayerID = nullptr;				// プレイヤーのID表示
 	m_pRatState = nullptr;				// ネズミの状態の情報
-	m_pStun = nullptr;					// 気絶の情報
 	m_pRatGhost = nullptr;				// 幽霊ネズミの情報
 	m_pRessrectionFan = nullptr;		// 円の範囲の情報
-	m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_nRatIdx = NONE_RATIDX;			// ネズミの番号
-	m_nLife = 0;						// 寿命
-	m_fSpeed = 0.0f;					// 速度
-	m_bJump = false;					// ジャンプしたか
-	m_bAttack = false;					// 攻撃したか
+	m_bJump = false;					// ジャンプ状況
 	m_nNumAll++;						// ネズミの総数加算
 }
 
@@ -85,7 +79,7 @@ CRat::~CRat()
 //==============================
 HRESULT CRat::Init(void)
 {
-	if (FAILED(CCharacter::Init()))
+	if (FAILED(CPlayer::Init()))
 	{ // 初期化処理に失敗した場合
 
 		// 停止
@@ -101,11 +95,14 @@ HRESULT CRat::Init(void)
 	// データの設定処理
 	CCharacter::SetData();
 
-	if (m_pMotion == nullptr)
+	// モーションのポインタを宣言
+	CMotion* pMotion = nullptr;
+
+	if (pMotion == nullptr)
 	{ // モーションが NULL だった場合
 
 		// モーションの生成処理
-		m_pMotion = CMotion::Create();
+		pMotion = CMotion::Create();
 	}
 	else
 	{ // ポインタが NULL じゃない場合
@@ -114,14 +111,14 @@ HRESULT CRat::Init(void)
 		assert(false);
 	}
 
-	if (m_pMotion != nullptr)
+	if (pMotion != nullptr)
 	{ // ポインタが NULL じゃない場合
 
 		// モーションの情報を取得する
-		m_pMotion->SetModel(GetHierarchy(), GetNumModel());
+		pMotion->SetModel(GetHierarchy(), GetNumModel());
 
 		// ロード処理
-		m_pMotion->Load(CMotion::TYPE_RAT);
+		pMotion->Load(CMotion::TYPE_RAT);
 	}
 	else
 	{ // ポインタが NULL じゃない場合
@@ -131,7 +128,10 @@ HRESULT CRat::Init(void)
 	}
 
 	// モーションの設定処理
-	m_pMotion->Set(MotionType);
+	pMotion->Set(MOTIONTYPE_NEUTRAL);
+
+	// モーションの情報を設定する
+	SetMotion(pMotion);
 
 	if (m_pRatState == nullptr)
 	{ // ネズミの状態が NULL の場合
@@ -147,14 +147,8 @@ HRESULT CRat::Init(void)
 	}
 
 	// 全ての値を初期化する
-	m_pPlayerID = nullptr;			// プレイヤーのID表示
-	m_pStun = nullptr;				// 気絶の情報
-	m_move = NONE_D3DXVECTOR3;		// 移動量
 	m_nRatIdx = NONE_RATIDX;		// ネズミの番号
-	m_fSpeed = 0.0f;				// 速度
-	m_nLife = MAX_LIFE;				// 寿命
-	m_bJump = false;				// ジャンプしたか
-	m_bAttack = false;				// 攻撃したか
+	m_bJump = false;				// ジャンプ状況
 
 	// 値を返す
 	return S_OK;
@@ -165,36 +159,12 @@ HRESULT CRat::Init(void)
 //========================================
 void CRat::Uninit(void)
 {
-	if (m_pMotion != nullptr)
-	{ // モーションが NULL じゃない場合
-
-		// モーションのメモリを開放する
-		delete m_pMotion;
-		m_pMotion = nullptr;
-	}
-
-	if (m_pPlayerID != nullptr)
-	{ // プレイヤーのID表示が NULL じゃない場合
-
-		// プレイヤーのID表示の終了処理
-		m_pPlayerID->Uninit();
-		m_pPlayerID = nullptr;
-	}
-
 	if (m_pRatState != nullptr)
 	{ // ネズミの状態が NULL じゃない場合
 
 		// ネズミの状態の終了処理
 		delete m_pRatState;
 		m_pRatState = nullptr;
-	}
-
-	if (m_pStun != nullptr)
-	{ // 気絶演出が NULL じゃない場合
-
-		// 気絶演出の終了処理
-		m_pStun->Uninit();
-		m_pStun = nullptr;
 	}
 
 	if (m_pRatGhost != nullptr)
@@ -217,7 +187,7 @@ void CRat::Uninit(void)
 	CGame::DeleteRat(m_nRatIdx);
 
 	// 終了処理
-	CCharacter::Uninit();
+	CPlayer::Uninit();
 }
 
 //=====================================
@@ -229,10 +199,7 @@ void CRat::Update(void)
 	SetPosOld(GetPos());
 
 	// 移動量を設定する(移動量を常に一定にするため)
-	m_fSpeed = SPEED;
-
-	// 障害物との当たり判定
-	collision::ObstacleHit(this, SIZE.x, SIZE.y, SIZE.z, CObstacle::COLLTYPE_RAT);
+	SetSpeed(SPEED);
 
 	if (m_pRatState->GetState() != CRatState::STATE_DEATH &&
 		m_pRatState->GetState() != CRatState::STATE_STUN)
@@ -264,9 +231,6 @@ void CRat::Update(void)
 	//壁との当たり判定
 	SetPos(collision::WallCollision(GetPosOld(), GetPos()));
 
-	// 障害物との当たり判定
-	ObstacleCollision();
-
 	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_E))
 	{
 		collision::ObstacleAction(this, SIZE.x, CObstacle::COLLTYPE_RAT);
@@ -279,25 +243,10 @@ void CRat::Update(void)
 		m_pRatState->Update(*this);
 	}
 
-	if (m_pMotion != nullptr)
-	{ // モーションが NULL じゃない場合
-
-		// モーションの更新処理
-		m_pMotion->Update();
-	}
-
-	if (m_pPlayerID != nullptr)
-	{ // プレイヤーのID表示が NULL じゃない場合
-
-		// 位置情報の取得
-		D3DXVECTOR3 pos = GetPos();
-
-		// 位置を設定する
-		m_pPlayerID->SetPos(D3DXVECTOR3(pos.x, pos.y + 90.0f, pos.z));
-	}
+	// プレイヤーの更新処理
+	CPlayer::Update();
 
 	// デバッグ表示
-	CManager::Get()->GetDebugProc()->Print("位置：%f %f %f\n向き：%f %f %f\nジャンプ状況：%d\n寿命：%d\nネズミの状態：%d\n", GetPos().x, GetPos().y, GetPos().z, GetRot().x, GetRot().y, GetRot().z, m_bJump, m_nLife, m_pRatState->GetState());
 	CManager::Get()->GetDebugProc()->Print("\nネズミの総数:%d\n", m_nNumAll);
 	CManager::Get()->GetDebugProc()->Print("蘇生カウント：%d\n", m_nResurrectionCounter);
 }
@@ -308,7 +257,7 @@ void CRat::Update(void)
 void CRat::Draw(void)
 {
 	// 描画処理
-	CCharacter::Draw();
+	CPlayer::Draw();
 }
 
 //=====================================
@@ -316,29 +265,32 @@ void CRat::Draw(void)
 //=====================================
 void CRat::MotionManager(void)
 {
+	// モーションの種類を取得する
+	int nMotionType = GetMotion()->GetType();
+
 	if (CManager::Get()->GetMode() == CScene::MODE_RESULT)
 	{ // リザルト
 
 		if (CResult::GetState() == CGame::STATE_RAT_WIN)
 		{ // ねずみのかち
 
-			if (MotionType != MOTIONTYPE_MOVE)
+			if (nMotionType != MOTIONTYPE_MOVE)
 			{
-				MotionType = MOTIONTYPE_MOVE;
+				nMotionType = MOTIONTYPE_MOVE;
 
 				// モーションの設定処理
-				m_pMotion->Set(MotionType);
+				GetMotion()->Set(nMotionType);
 			}
 		}
 		else if (CResult::GetState() == CGame::STATE_CAT_WIN)
 		{ // ねこのかち
 
-			if (MotionType != MOTIONTYPE_NEUTRAL)
+			if (nMotionType != MOTIONTYPE_NEUTRAL)
 			{
-				MotionType = MOTIONTYPE_NEUTRAL;
+				nMotionType = MOTIONTYPE_NEUTRAL;
 
 				// モーションの設定処理
-				m_pMotion->Set(MotionType);
+				GetMotion()->Set(nMotionType);
 			}
 		}
 	}
@@ -347,33 +299,33 @@ void CRat::MotionManager(void)
 
 		if (m_bJump == true)
 		{
-			if (MotionType != MOTIONTYPE_JUMP)
+			if (nMotionType != MOTIONTYPE_JUMP)
 			{
-				MotionType = MOTIONTYPE_JUMP;
+				nMotionType = MOTIONTYPE_JUMP;
 
 				// モーションの設定処理
-				m_pMotion->Set(MotionType);
+				GetMotion()->Set(nMotionType);
 			}
 		}
-		else if (m_move.x > 0.05f || m_move.x < -0.05f ||
-			m_move.z > 0.05f || m_move.z < -0.05f)
+		else if (GetMove().x > 0.05f || GetMove().x < -0.05f ||
+			GetMove().z > 0.05f || GetMove().z < -0.05f)
 		{
-			if (MotionType != MOTIONTYPE_MOVE)
+			if (nMotionType != MOTIONTYPE_MOVE)
 			{
-				MotionType = MOTIONTYPE_MOVE;
+				nMotionType = MOTIONTYPE_MOVE;
 
 				// モーションの設定処理
-				m_pMotion->Set(MotionType);
+				GetMotion()->Set(nMotionType);
 			}
 		}
 		else
 		{
-			if (MotionType != MOTIONTYPE_NEUTRAL)
+			if (nMotionType != MOTIONTYPE_NEUTRAL)
 			{
-				MotionType = MOTIONTYPE_NEUTRAL;
+				nMotionType = MOTIONTYPE_NEUTRAL;
 
 				// モーションの設定処理
-				m_pMotion->Set(MotionType);
+				GetMotion()->Set(nMotionType);
 			}
 		}
 	}
@@ -382,22 +334,14 @@ void CRat::MotionManager(void)
 //=====================================
 // 情報の設定処理
 //=====================================
-void CRat::SetData(const D3DXVECTOR3& pos, const int nID)
+void CRat::SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 {
 	// 情報の設定処理
-	SetPos(pos);					// 位置
-	SetPosOld(pos);					// 前回の位置
-	SetRot(NONE_D3DXVECTOR3);		// 向き
-	SetScale(NONE_SCALE);			// 拡大率
+	CPlayer::SetData(pos, nID, type);
 
 	// 情報を設定する
-	m_pStun = nullptr;				// 気絶の情報
 	m_nRatIdx = nID;				// ネズミの番号
-	m_move = NONE_D3DXVECTOR3;		// 移動量
-	m_fSpeed = 0.0f;				// 速度
-	m_nLife = MAX_LIFE;				// 寿命
 	m_bJump = false;				// ジャンプしたか
-	m_bAttack = false;				// 攻撃したか
 
 	for (int nCntData = 0; nCntData < GetNumModel(); nCntData++)
 	{
@@ -410,7 +354,7 @@ void CRat::SetData(const D3DXVECTOR3& pos, const int nID)
 	}
 
 	// モーションの設定処理
-	m_pMotion->Set(MOTIONTYPE_NEUTRAL);
+	GetMotion()->Set(MOTIONTYPE_NEUTRAL);
 
 	//if (m_pPlayerID == nullptr)
 	//{ // プレイヤーのID表示が NULL の場合
@@ -418,42 +362,6 @@ void CRat::SetData(const D3DXVECTOR3& pos, const int nID)
 	//	// プレイヤーのID表示の生成処理
 	//	m_pPlayerID = CPlayerID::Create(D3DXVECTOR3(pos.x, pos.y + 90.0f, pos.z), m_nRatIdx);
 	//}
-}
-
-//=======================================
-// 移動量の設定処理
-//=======================================
-void CRat::SetMove(const D3DXVECTOR3& move)
-{
-	// 移動量を設定する
-	m_move = move;
-}
-
-//=======================================
-// 移動量の取得処理
-//=======================================
-D3DXVECTOR3 CRat::GetMove(void) const
-{
-	// 移動量を返す
-	return m_move;
-}
-
-//=======================================
-// 速度の設定処理
-//=======================================
-void CRat::SetSpeed(const float fSpeed)
-{
-	// 速度を設定する
-	m_fSpeed = fSpeed;
-}
-
-//=======================================
-// 速度の取得処理
-//=======================================
-float CRat::GetSpeed(void) const
-{
-	// 速度を返す
-	return m_fSpeed;
 }
 
 //=======================================
@@ -466,44 +374,12 @@ int CRat::GetRatIdx(void) const
 }
 
 //=======================================
-// // 移動状況の取得処理
-//=======================================
-bool CRat::IsMove(void)
-{
-	// 移動状況を返す
-	return m_bMove;
-}
-
-//=======================================
 // ネズミの状態の取得処理
 //=======================================
 CRatState* CRat::GetState(void)
 {
 	// ネズミの状態を返す
 	return m_pRatState;
-}
-
-//=======================================
-// 気絶演出の取得処理
-//=======================================
-CStun* CRat::GetStun(void)
-{
-	// 気絶演出を返す
-	return m_pStun;
-}
-
-//=======================================
-// 気絶演出の消去処理
-//=======================================
-void CRat::DeleteStun(void)
-{
-	if (m_pStun != nullptr)
-	{ // 気絶演出が NULL じゃない場合
-
-		// 気絶演出の終了処理
-		m_pStun->Uninit();
-		m_pStun = nullptr;
-	}
 }
 
 //=======================================
@@ -552,152 +428,6 @@ void CRat::DeleteRessrectionFan(void)
 }
 
 //=======================================
-// 生成処理
-//=======================================
-CRat* CRat::Create(const D3DXVECTOR3& pos, const int nID)
-{
-	// ネズミのポインタ
-	CRat* pRat = nullptr;
-
-	if (pRat == nullptr)
-	{ // オブジェクトが NULL の場合
-
-		// インスタンスを生成
-		pRat = new CRat;
-	}
-	else
-	{ // オブジェクトが NULL じゃない場合
-
-		// 停止
-		assert(false);
-
-		// NULL を返す
-		return nullptr;
-	}
-
-	if (pRat != nullptr)
-	{ // オブジェクトが NULL じゃない場合
-
-		// 初期化処理
-		if (FAILED(pRat->Init()))
-		{ // 初期化に失敗した場合
-
-			// 停止
-			assert(false);
-
-			// NULL を返す
-			return nullptr;
-		}
-
-		// 情報の設定処理
-		pRat->SetData(pos, nID);
-	}
-	else
-	{ // オブジェクトが NULL の場合
-
-		// 停止
-		assert(false);
-
-		// NULL を返す
-		return nullptr;
-	}
-
-	// プレイヤーのポインタを返す
-	return pRat;
-}
-
-//=======================================
-// 移動処理
-//=======================================
-void CRat::Move(void)
-{
-	// ローカル変数宣言
-	D3DXVECTOR3 rot = GetRot();
-
-	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_D) == true ||
-		CManager::Get()->GetInputGamePad()->GetGameStickLXPress(m_nRatIdx) > 0)
-	{ // 右を押した場合
-
-		if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_W) == true ||
-			CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) > 0)
-		{ // 上を押した場合
-
-			// 向きを設定する
-			rot.y = D3DX_PI * -0.75f;
-		}
-		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true ||
-			CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) < 0)
-		{ // 下を押した場合
-
-			// 向きを設定する
-			rot.y = D3DX_PI * -0.25f;
-		}
-		else
-		{ // 上記以外
-
-			// 向きを設定する
-			rot.y = D3DX_PI * -0.5f;
-		}
-		m_bMove = true;
-	}
-	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_A) == true ||
-		CManager::Get()->GetInputGamePad()->GetGameStickLXPress(m_nRatIdx) < 0)
-	{ // 左を押した場合
-
-		if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_W) == true ||
-			CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) > 0)
-		{ // 上を押した場合
-
-			// 向きを設定する
-			rot.y = D3DX_PI * 0.75f;
-		}
-		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true ||
-			CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) < 0)
-		{ // 下を押した場合
-
-			// 向きを設定する
-			rot.y = D3DX_PI * 0.25f;
-		}
-		else
-		{ // 上記以外
-
-			// 向きを設定する
-			rot.y = D3DX_PI * 0.5f;
-		}
-		m_bMove = true;
-	}
-	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_W) == true ||
-		CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) > 0)
-	{ // 上を押した場合
-
-		// 向きを設定する
-		rot.y = D3DX_PI;
-		m_bMove = true;
-	}
-	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true ||
-		CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nRatIdx) < 0)
-	{ // 下を押した場合
-
-		// 向きを設定する
-		rot.y = 0.0f;
-		m_bMove = true;
-	}
-	else
-	{ // 上記以外
-		m_bMove = false;
-		// 速度を設定する
-		m_fSpeed = 0.0f;
-	}
-
-	// 移動量を設定する
-	m_move.x = -sinf(rot.y) * m_fSpeed;
-	m_move.z = -cosf(rot.y) * m_fSpeed;
-
-	// 向きを適用する
-	SetRot(rot);
-}
-
-//=======================================
 // ジャンプ処理
 //=======================================
 void CRat::Jump(void)
@@ -705,6 +435,7 @@ void CRat::Jump(void)
 	// ローカル変数宣言
 	D3DXVECTOR3 pos = GetPos();
 	D3DXVECTOR3 rot = GetRot();
+	D3DXVECTOR3 move = GetMove();
 
 #ifdef _DEBUG
 
@@ -713,7 +444,7 @@ void CRat::Jump(void)
 		m_bJump == false)
 	{ // Aボタンを押した場合
 
-		m_move.y = ADD_MOVE_Y;	// 浮力代入
+		move.y = ADD_MOVE_Y;	// 浮力代入
 
 		m_bJump = true;		// ジャンプしてる状態にする
 	}
@@ -725,19 +456,20 @@ void CRat::Jump(void)
 		m_bJump == false)
 	{ // Aボタンを押した場合
 
-		m_move.y = ADD_MOVE_Y;	// 浮力代入
+		move.y = ADD_MOVE_Y;	// 浮力代入
 
 		m_bJump = true;		// ジャンプしてる状態にする
 	}
 
-	m_move.y -= GRAVITY;		// 重力加算
+	move.y -= GRAVITY;		// 重力加算
 
 	// 位置を加算する
-	pos += m_move;
+	pos += move;
 
 	// 情報を適用する
 	SetPos(pos);
 	SetRot(rot);
+	SetMove(move);
 }
 
 //=======================================
@@ -782,20 +514,21 @@ void CRat::Attack(void)
 //=======================================
 // ヒット処理
 //=======================================
-bool CRat::Hit(void)
+void CRat::Hit(void)
 {
 	// ローカル変数宣言
 	D3DXVECTOR3 pos = GetPos();		// 位置を取得する
+	int nLife = GetLife();			// 寿命を取得する
 	CRatState::STATE state = m_pRatState->GetState();	// 状態を取得する
 
 	if (state != CRatState::STATE_DAMAGE && 
 		state != CRatState::STATE_INVINCIBLE)
 	{ // ダメージ受ける状態だった場合
-		m_nLife--;			// 寿命減らす
+		nLife--;			// 寿命減らす
 
 		CParticle::Create(pos, CParticle::TYPE_ENEMYDEATH); //パーティクル
 
-		if (m_nLife <= 0)
+		if (nLife <= 0)
 		{ // 寿命が無いとき
 
 			m_pRatState->SetState(CRatState::STATE_DEATH);		// 死亡状態にする
@@ -828,22 +561,16 @@ bool CRat::Hit(void)
 				// ネコが勝利した状態にする
 				CGame::SetState(CGame::STATE_CAT_WIN);
 			}
-
-			// 死を返す
-			return true;
 		}
 		else
 		{ // 上記以外
 
 			m_pRatState->SetState(CRatState::STATE_DAMAGE);		// ダメージ状態にする
 		}
-
-		// 死を返す
-		return true;
 	}
 
-	// 生を返す
-	return false;
+	// 寿命を設定する
+	SetLife(nLife);
 }
 
 //=======================================
@@ -853,6 +580,7 @@ void CRat::Smash(const float fAngle)
 {
 	// ローカル変数宣言
 	D3DXVECTOR3 pos = GetPos();		// 位置を取得する
+	D3DXVECTOR3 move = GetMove();	// 移動量を取得する
 	CRatState::STATE state = m_pRatState->GetState();	// 状態を取得する
 
 	if (state != CRatState::STATE_DAMAGE &&
@@ -863,13 +591,16 @@ void CRat::Smash(const float fAngle)
 	{ // ダメージ受ける状態だった場合
 
 		// 移動量を算出する
-		m_move.x = sinf(fAngle) * SMASH_MOVE.x;
-		m_move.y = SMASH_MOVE.y;
-		m_move.z = cosf(fAngle) * SMASH_MOVE.z;
+		move.x = sinf(fAngle) * SMASH_MOVE.x;
+		move.y = SMASH_MOVE.y;
+		move.z = cosf(fAngle) * SMASH_MOVE.z;
 
 		// 吹き飛び状態にする
 		m_pRatState->SetState(CRatState::STATE_SMASH);
 	}
+
+	// 移動量を適用する
+	SetMove(move);
 }
 
 //=======================================
@@ -889,12 +620,8 @@ void CRat::Stun(void)
 		// 気絶状態にする
 		m_pRatState->SetState(CRatState::STATE_STUN);
 
-		if (m_pStun == nullptr)
-		{ // 気絶の情報が NULL だった場合
-
-			// 気絶演出を生成する
-			m_pStun = CStun::Create(D3DXVECTOR3(GetPos().x, GetPos().y + STUN_HEIGHT, GetPos().z));
-		}
+		// 気絶演出の設定処理
+		SetStun(GetPos());
 	}
 }
 
@@ -906,6 +633,7 @@ void CRat::Elevation(void)
 	// ローカル変数宣言
 	CElevation* pMesh = CElevationManager::Get()->GetTop();		// 起伏の先頭のオブジェクトを取得する
 	D3DXVECTOR3 pos = GetPos();				// 位置を取得する
+	D3DXVECTOR3 move = GetMove();			// 移動量を取得する
 	float fHeight = 0.0f;					// 高さ
 
 	while (pMesh != nullptr)
@@ -920,7 +648,7 @@ void CRat::Elevation(void)
 			// 高さを設定する
 			pos.y = fHeight;
 
-			m_move.y = 0.0f;
+			move.y = 0.0f;
 
 			m_bJump = false;		// ジャンプしてない状態にする
 		}
@@ -929,26 +657,9 @@ void CRat::Elevation(void)
 		pMesh = pMesh->GetNext();
 	}
 
-	// 位置を更新する
+	// 位置と移動量を更新する
 	SetPos(pos);
-}
-
-//=======================================
-// 障害物との当たり判定
-//=======================================
-void CRat::ObstacleCollision(void)
-{
-	// 位置を取得する
-	D3DXVECTOR3 pos = GetPos();
-
-	// 障害物との衝突判定
-	collision::ObstacleCollision(pos, GetPosOld(), SIZE.x, SIZE.y, SIZE.z, CObstacle::COLLTYPE_RAT);
-
-	// ブロックとの当たり判定
-	collision::BlockCollision(pos, GetPosOld(), SIZE.x, SIZE.y, SIZE.z);
-
-	// 位置を設定する
-	SetPos(pos);
+	SetMove(move);
 }
 
 //=======================================
@@ -956,63 +667,63 @@ void CRat::ObstacleCollision(void)
 //=======================================
 void CRat::ResurrectionCollision(void)
 {
-	CRat *pRat;		// ネズミの情報
-	bool bCollYZ = false;		// 当たったか
+	//CPlayer *pRat;		// ネズミの情報
+	//bool bCollYZ = false;		// 当たったか
 
-	// 状態を取得する
-	CRatState::STATE state = m_pRatState->GetState();
+	//// 状態を取得する
+	//CRatState::STATE state = m_pRatState->GetState();
 
-	for (int nCntRat = 0; nCntRat < MAX_RAT; nCntRat++)
-	{
-		if (m_nRatIdx != nCntRat)
-		{ // 操作してるネズミじゃないとき
+	//for (int nCntRat = 0; nCntRat < MAX_RAT; nCntRat++)
+	//{
+	//	if (m_nRatIdx != nCntRat)
+	//	{ // 操作してるネズミじゃないとき
 
-			// 他のネズミの情報取得
-			pRat = CGame::GetRat(nCntRat);
+	//		// 他のネズミの情報取得
+	//		pRat = CGame::GetRat(nCntRat);
 
-			if (pRat->GetState()->GetState() == CRatState::STATE_DEATH && 
-				state != CRatState::STATE_STUN && state != CRatState::STATE_DEATH)
-			{ // 他のネズミが死亡状態 && 操作してるネズミが復活させれる状態の時
+	//		if (pRat->GetState()->GetState() == CRatState::STATE_DEATH && 
+	//			state != CRatState::STATE_STUN && state != CRatState::STATE_DEATH)
+	//		{ // 他のネズミが死亡状態 && 操作してるネズミが復活させれる状態の時
 
-				// 他のネズミとの当たり判定
-				if (useful::CircleCollisionXY(GetPos(), pRat->GetPos(), 30.0f, ATTACK_DISTANCE) == true)
-				{ // 円の当たり判定(XY平面)
+	//			// 他のネズミとの当たり判定
+	//			if (useful::CircleCollisionXY(GetPos(), pRat->GetPos(), 30.0f, ATTACK_DISTANCE) == true)
+	//			{ // 円の当たり判定(XY平面)
 
-					// 円の当たり判定(XZ平面)
-					bCollYZ = useful::CircleCollisionXZ(GetPos(), pRat->GetPos(), 30.0f, ATTACK_DISTANCE);
+	//				// 円の当たり判定(XZ平面)
+	//				bCollYZ = useful::CircleCollisionXZ(GetPos(), pRat->GetPos(), 30.0f, ATTACK_DISTANCE);
 
-					if (bCollYZ == true)
-					{ // 円の当たり判定(XZ平面)
+	//				if (bCollYZ == true)
+	//				{ // 円の当たり判定(XZ平面)
 
-						// 生き返りのカウンター加算
-						m_nResurrectionCounter++;
+	//					// 生き返りのカウンター加算
+	//					m_nResurrectionCounter++;
 
-						if (m_nResurrectionCounter >= TIME_RESURRECTION)
-						{ // 一定時間経ったら
+	//					if (m_nResurrectionCounter >= TIME_RESURRECTION)
+	//					{ // 一定時間経ったら
 
-							// 無敵状態にする
-							pRat->GetState()->SetState(CRatState::STATE_INVINCIBLE);
+	//						// 無敵状態にする
+	//						pRat->GetState()->SetState(CRatState::STATE_INVINCIBLE);
 
-							// 円の範囲の破棄
-							pRat->DeleteRessrectionFan();
+	//						// 円の範囲の破棄
+	//						pRat->DeleteRessrectionFan();
 
-							// 幽霊ネズミの破棄
-							pRat->DeleteRatGhost();
+	//						// 幽霊ネズミの破棄
+	//						pRat->DeleteRatGhost();
 
-							// 生き返りのカウンター初期化
-							m_nResurrectionCounter = 0;
+	//						// 生き返りのカウンター初期化
+	//						m_nResurrectionCounter = 0;
 
-							m_nNumAll++;		// 総数増やす
-						}
-					}
-					else if(bCollYZ == false)
-					{
-						// 生き返りのカウンター初期化
-						m_nResurrectionCounter = 0;
-					}
+	//						m_nNumAll++;		// 総数増やす
+	//					}
+	//				}
+	//				else if(bCollYZ == false)
+	//				{
+	//					// 生き返りのカウンター初期化
+	//					m_nResurrectionCounter = 0;
+	//				}
 
-				}
-			}
-		}
-	}
+	//			}
+	//		}
+	//	}
+	//}
 }

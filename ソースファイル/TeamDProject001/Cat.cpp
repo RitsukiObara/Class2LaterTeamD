@@ -46,13 +46,11 @@ CCat* CCat::m_pPlayer = nullptr;		// プレイヤーのポインタ
 //=========================================
 // コンストラクタ
 //=========================================
-CCat::CCat() : CCharacter(CObject::TYPE_CAT, CObject::PRIORITY_PLAYER)
+CCat::CCat() : CPlayer(CObject::TYPE_CAT, CObject::PRIORITY_PLAYER)
 {
 	// 全ての値をクリアする
-	m_pMotion = nullptr;			// モーションの情報
 	m_AttackPos = NONE_D3DXVECTOR3;	//攻撃の位置
 	m_posDest = NONE_D3DXVECTOR3;	// 目的の位置
-	m_move = NONE_D3DXVECTOR3;		// 移動量
 	m_rotDest = NONE_D3DXVECTOR3;	// 目的の向き
 	m_nShadowIdx = INIT_SHADOW;		// 影のインデックス
 }
@@ -70,7 +68,7 @@ CCat::~CCat()
 //===========================================
 HRESULT CCat::Init(void)
 {
-	if (FAILED(CCharacter::Init()))
+	if (FAILED(CPlayer::Init()))
 	{ // 初期化処理に失敗した場合
 
 	  // 停止
@@ -86,11 +84,14 @@ HRESULT CCat::Init(void)
 	// データの設定処理
 	CCharacter::SetData();
 
-	if (m_pMotion == nullptr)
+	// モーションのポインタを宣言
+	CMotion* pMotion = nullptr;
+
+	if (pMotion == nullptr)
 	{ // モーションが NULL だった場合
 
-	  // モーションの生成処理
-		m_pMotion = CMotion::Create();
+		// モーションの生成処理
+		pMotion = CMotion::Create();
 	}
 	else
 	{ // ポインタが NULL じゃない場合
@@ -99,14 +100,14 @@ HRESULT CCat::Init(void)
 		assert(false);
 	}
 
-	if (m_pMotion != nullptr)
+	if (pMotion != nullptr)
 	{ // ポインタが NULL じゃない場合
 
-	  // モーションの情報を取得する
-		m_pMotion->SetModel(GetHierarchy(), GetNumModel());
+		// モーションの情報を取得する
+		pMotion->SetModel(GetHierarchy(), GetNumModel());
 
 		// ロード処理
-		m_pMotion->Load(CMotion::TYPE_CAT);
+		pMotion->Load(CMotion::TYPE_CAT);
 	}
 	else
 	{ // ポインタが NULL じゃない場合
@@ -116,11 +117,13 @@ HRESULT CCat::Init(void)
 	}
 
 	// モーションの設定処理
-	m_pMotion->Set(MOTIONTYPE_NEUTRAL);
+	pMotion->Set(MOTIONTYPE_NEUTRAL);
+
+	// モーション情報を設定する
+	SetMotion(pMotion);
 
 	// 全ての値を初期化する
 	m_posDest = NONE_D3DXVECTOR3;	// 目的の位置
-	m_move = NONE_D3DXVECTOR3;		// 移動量
 	m_rotDest = NONE_D3DXVECTOR3;	// 目的の向き
 	m_nShadowIdx = INIT_SHADOW;		// 影のインデックス
 
@@ -133,12 +136,8 @@ HRESULT CCat::Init(void)
 //===========================================
 void CCat::Uninit(void)
 {
-	// モーションのメモリを開放する
-	delete m_pMotion;
-	m_pMotion = nullptr;
-
 	// 終了処理
-	CCharacter::Uninit();
+	CPlayer::Uninit();
 
 	// プレイヤーを NULL にする
 	m_pPlayer = nullptr;
@@ -149,20 +148,29 @@ void CCat::Uninit(void)
 //===========================================
 void CCat::Update(void)
 {
-	D3DXVECTOR3 pos = GetPos();
-
 	// 前回の位置の設定処理
-	SetPosOld(pos);
-
-	// モーションの更新処理
-	m_pMotion->Update();
+	SetPosOld(GetPos());
 
 	if (m_AttackState == ATTACKSTATE_MOVE)
 	{// 移動状態の時
-		m_fSpeed = MOVE_SPEED;
+
+		// 速度を設定する
+		SetSpeed(MOVE_SPEED);
 
 		// 攻撃位置の移動入力処理
 		Move();
+
+		{
+			// 位置と移動量を取得する
+			D3DXVECTOR3 pos = GetPos();
+			D3DXVECTOR3 move = GetMove();
+
+			// 移動量を加算する
+			pos += move;
+
+			// 位置を適用する
+			SetPos(pos);
+		}
 
 		// 攻撃入力の処理
 		Attack();
@@ -172,22 +180,21 @@ void CCat::Update(void)
 	}
 	else
 	{
-		m_move = NONE_D3DXVECTOR3;
+		// 移動量を初期化する
+		SetMove(NONE_D3DXVECTOR3);
 	}
 
 	// 攻撃状態の管理
 	AttackStateManager();
 
-	//位置更新
-	pos += m_move;
-
 	 // 影の位置向きの設定処理
-	CShadowCircle::SetPosRot(m_nShadowIdx, pos, GetRot());
-
-	SetPos(pos);
+	CShadowCircle::SetPosRot(m_nShadowIdx, GetPos(), GetRot());
 
 	// アイテムとの当たり判定処理
 	collision::ItemCollision(*this);
+
+	// 更新処理
+	CPlayer::Update();
 
 	// デバッグ表示
 	DebugMessage();
@@ -198,101 +205,8 @@ void CCat::Update(void)
 //===========================================
 void CCat::Draw(void)
 {
-	//// デバイスの取得
-	//LPDIRECT3DDEVICE9 pDevice = CManager::Get()->GetRenderer()->GetDevice();
-
-	//// Zテストを無効にする
-	//pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_ALWAYS);					//Zテストの設定
-	//pDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);						//Zテストの有効/無効設定
-
-	//																		// 描画処理
-	//CCharacter::Draw(m_fAlpha);
-
-	//// Zテストを有効にする
-	//pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);			// Zテストの設定
-	//pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);				// Zテストの有効/無効設定
-
 	// 描画処理
-	CCharacter::Draw();
-}
-
-//===========================================
-// 攻撃位置の移動処理
-//===========================================
-void CCat::Move(void)
-{
-	// ローカル変数宣言
-	D3DXVECTOR3 rot = GetRot();
-
-	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_L) == true)
-	{ // 右を押した場合
-
-		if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_I) == true)
-		{ // 上を押した場合
-
-		  // 向きを設定する
-			rot.y = D3DX_PI * -0.75f;
-		}
-		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_K) == true)
-		{ // 下を押した場合
-
-		  // 向きを設定する
-			rot.y = D3DX_PI * -0.25f;
-		}
-		else
-		{ // 上記以外
-
-		  // 向きを設定する
-			rot.y = D3DX_PI * -0.5f;
-		}
-	}
-	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_J) == true)
-	{ // 左を押した場合
-
-		if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_I) == true)
-		{ // 上を押した場合
-
-		  // 向きを設定する
-			rot.y = D3DX_PI * 0.75f;
-		}
-		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_K) == true)
-		{ // 下を押した場合
-
-		  // 向きを設定する
-			rot.y = D3DX_PI * 0.25f;
-		}
-		else
-		{ // 上記以外
-
-		  // 向きを設定する
-			rot.y = D3DX_PI * 0.5f;
-		}
-	}
-	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_I) == true)
-	{ // 上を押した場合
-
-	  // 向きを設定する
-		rot.y = D3DX_PI;
-	}
-	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_K) == true)
-	{ // 下を押した場合
-
-	  // 向きを設定する
-		rot.y = 0.0f;
-	}
-	else
-	{ // 上記以外
-
-	  // 速度を設定する
-		m_fSpeed = 0.0f;
-	}
-
-	// 移動量を設定する
-	m_move.x = -sinf(rot.y) * m_fSpeed;
-	m_move.z = -cosf(rot.y) * m_fSpeed;
-
-	// 向きを適用する
-	SetRot(rot);
+	CPlayer::Draw();
 }
 
 //===========================================
@@ -301,7 +215,7 @@ void CCat::Move(void)
 void CCat::Attack(void)
 {
 	// ローカル変数宣言
-	CRat *pRat[3];
+	CPlayer *pRat[3];
 	D3DXVECTOR3 pos = GetPos();
 	D3DXVECTOR3 rot = GetRot();
 	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_RETURN) == true)
@@ -406,15 +320,6 @@ void CCat::DebugMessage(void)
 }
 
 //===========================================
-// モーションの情報の設定処理
-//===========================================
-CMotion* CCat::GetMotion(void) const
-{
-	// モーションの情報を返す
-	return m_pMotion;
-}
-
-//===========================================
 // 取得処理
 //===========================================
 CCat* CCat::Get(void)
@@ -422,64 +327,18 @@ CCat* CCat::Get(void)
 	if (m_pPlayer != nullptr)
 	{ // プレイヤーの情報がある場合
 
-	  // プレイヤーのポインタを返す
+		// プレイヤーのポインタを返す
 		return m_pPlayer;
 	}
 	else
 	{ // 上記以外
 
-	  // 停止
+		// 停止
 		assert(false);
 
 		// プレイヤーのポインタを返す
 		return m_pPlayer;
 	}
-}
-
-//===========================================
-// 生成処理
-//===========================================
-CCat* CCat::Create(const D3DXVECTOR3& pos)
-{
-	if (m_pPlayer == nullptr)
-	{ // オブジェクトが NULL の場合
-
-	  // メモリを確保する
-		m_pPlayer = new CCat;
-	}
-	else
-	{ // オブジェクトが NULL じゃない場合
-
-	  // NULL を返す
-		return m_pPlayer;
-	}
-
-	if (m_pPlayer != nullptr)
-	{ // オブジェクトが NULL じゃない場合
-
-	  // 初期化処理
-		if (FAILED(m_pPlayer->Init()))
-		{ // 初期化に失敗した場合
-
-		  // 警告文
-			MessageBox(NULL, "プレイヤーの初期化に失敗！", "警告！", MB_ICONWARNING);
-
-			// NULL を返す
-			return nullptr;
-		}
-
-		// 情報の設定処理
-		m_pPlayer->SetData(pos);
-	}
-	else
-	{ // オブジェクトが NULL の場合
-
-	  // NULL を返す
-		return nullptr;
-	}
-
-	// プレイヤーのポインタを返す
-	return m_pPlayer;
 }
 
 //=======================================
@@ -491,17 +350,31 @@ void CCat::Hit(void)
 }
 
 //=======================================
+// 吹き飛び状態
+//=======================================
+void CCat::Smash(const float fAngle)
+{
+
+}
+
+//=======================================
+// 気絶状態
+//=======================================
+void CCat::Stun(void)
+{
+
+}
+
+//=======================================
 // 情報の設定処理
 //=======================================
-void CCat::SetData(const D3DXVECTOR3& pos)
+void CCat::SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 {
-	// 全ての値を初期化する
-	m_posDest = pos;	// 目的の位置
-	SetPos(pos);		// 位置
-	SetPosOld(GetPos());			// 前回の位置
-	SetRot(NONE_D3DXVECTOR3);		// 向き
-	SetScale(NONE_SCALE);			// 拡大率
+	// 情報の設定処理
+	CPlayer::SetData(pos, nID, type);
 
+	// 全ての値を初期化する
+	m_posDest = pos;		// 目的の位置
 	m_rotDest = GetRot();	// 目的の向きを設定する
 
 	for (int nCntData = 0; nCntData < GetNumModel(); nCntData++)
@@ -523,12 +396,15 @@ void CCat::SetData(const D3DXVECTOR3& pos)
 	if (pShadow != nullptr)
 	{ // 影のポインタが NULL以外の場合
 
-	  // 影のインデックス設定
+		// 影のインデックス設定
 		m_nShadowIdx = pShadow->GetNumID();
 	}
 
 	// モーションの設定処理
-	m_pMotion->Set(MOTIONTYPE_NEUTRAL);
+	GetMotion()->Set(MOTIONTYPE_NEUTRAL);
+
+	// プレイヤーのポインタを設定する
+	m_pPlayer = this;
 }
 
 //=====================================
@@ -536,29 +412,32 @@ void CCat::SetData(const D3DXVECTOR3& pos)
 //=====================================
 void CCat::MotionManager(void)
 {
+	// モーションの種類を取得する
+	int nMotionType = GetMotion()->GetType();
+
 	if (CManager::Get()->GetMode() == CScene::MODE_RESULT)
 	{ // リザルト && ねこのかち
 
 		if (CResult::GetState() == CGame::STATE_RAT_WIN)
 		{ // ねずみのかち
 
-			if (MotionType != MOTIONTYPE_NEUTRAL)
+			if (nMotionType != MOTIONTYPE_NEUTRAL)
 			{
-				MotionType = MOTIONTYPE_NEUTRAL;
+				nMotionType = MOTIONTYPE_NEUTRAL;
 
 				// モーションの設定処理
-				m_pMotion->Set(MotionType);
+				GetMotion()->Set(nMotionType);
 			}
 		}
 		else if (CResult::GetState() == CGame::STATE_CAT_WIN)
 		{ // ねこのかち
 
-			if (MotionType != MOTIONTYPE_MOVE)
+			if (nMotionType != MOTIONTYPE_MOVE)
 			{
-				MotionType = MOTIONTYPE_MOVE;
+				nMotionType = MOTIONTYPE_MOVE;
 
 				// モーションの設定処理
-				m_pMotion->Set(MotionType);
+				GetMotion()->Set(nMotionType);
 			}
 		}
 	}
@@ -567,33 +446,33 @@ void CCat::MotionManager(void)
 
 		if (m_AttackState == ATTACKSTATE_STANDBY)
 		{
-			if (MotionType != MOTIONTYPE_JUMP)
+			if (nMotionType != MOTIONTYPE_JUMP)
 			{
-				MotionType = MOTIONTYPE_JUMP;
+				nMotionType = MOTIONTYPE_JUMP;
 
 				// モーションの設定処理
-				m_pMotion->Set(MotionType);
+				GetMotion()->Set(nMotionType);
 			}
 		}
-		else if (m_move.x > 0.05f || m_move.x < -0.05f ||
-			m_move.z > 0.05f || m_move.z < -0.05f)
+		else if (GetMove().x > 0.05f || GetMove().x < -0.05f ||
+			GetMove().z > 0.05f || GetMove().z < -0.05f)
 		{
-			if (MotionType != MOTIONTYPE_MOVE)
+			if (nMotionType != MOTIONTYPE_MOVE)
 			{
-				MotionType = MOTIONTYPE_MOVE;
+				nMotionType = MOTIONTYPE_MOVE;
 
 				// モーションの設定処理
-				m_pMotion->Set(MotionType);
+				GetMotion()->Set(nMotionType);
 			}
 		}
 		else
 		{
-			if (MotionType != MOTIONTYPE_NEUTRAL)
+			if (nMotionType != MOTIONTYPE_NEUTRAL)
 			{
-				MotionType = MOTIONTYPE_NEUTRAL;
+				nMotionType = MOTIONTYPE_NEUTRAL;
 
 				// モーションの設定処理
-				m_pMotion->Set(MotionType);
+				GetMotion()->Set(nMotionType);
 			}
 		}
 	}

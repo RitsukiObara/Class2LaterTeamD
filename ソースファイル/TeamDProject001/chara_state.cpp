@@ -173,55 +173,55 @@ CCharaState* CCharaState::Create(const D3DXVECTOR3& pos)
 //=========================
 void CCharaState::State(void)
 {
-	// ネズミのポインタを宣言する
-	CRat* pRat = nullptr;
+	//// ネズミのポインタを宣言する
+	//CRat* pRat = nullptr;
 
-	for (int nCnt = 0; nCnt < MAX_RAT; nCnt++)
-	{
-		// ネズミのポインタを取得する
-		pRat = CGame::GetRat(nCnt);
+	//for (int nCnt = 0; nCnt < MAX_RAT; nCnt++)
+	//{
+	//	// ネズミのポインタを取得する
+	//	pRat = CGame::GetRat(nCnt);
 
-		if (pRat != nullptr)
-		{ // ネズミが NULL じゃない場合
+	//	if (pRat != nullptr)
+	//	{ // ネズミが NULL じゃない場合
 
-			if (pRat->GetState()->GetState() == CRatState::STATE_STUN &&
-				m_state != STATE_STUN)
-			{ // 気絶状態の場合
+	//		if (pRat->GetState()->GetState() == CRatState::STATE_STUN &&
+	//			m_state != STATE_STUN)
+	//		{ // 気絶状態の場合
 
-				// 描画状況を true にする
-				m_bDisp = true;
+	//			// 描画状況を true にする
+	//			m_bDisp = true;
 
-				// 気絶状態にする
-				m_state = STATE_STUN;
+	//			// 気絶状態にする
+	//			m_state = STATE_STUN;
 
-				// テクスチャの割り当て処理
-				BindTexture(CManager::Get()->GetTexture()->Regist(STUNICON_TEXTURE));
+	//			// テクスチャの割り当て処理
+	//			BindTexture(CManager::Get()->GetTexture()->Regist(STUNICON_TEXTURE));
 
-				// サイズを設定する
-				SetSize(STUN_SIZE);
+	//			// サイズを設定する
+	//			SetSize(STUN_SIZE);
 
-				// 頂点情報の設定処理
-				SetVertex();
-			}
-			else if (pRat->GetState()->GetState() == CRatState::STATE_DEATH &&
-				m_state != STATE_GHOST)
-			{ // 死亡状態の場合
+	//			// 頂点情報の設定処理
+	//			SetVertex();
+	//		}
+	//		else if (pRat->GetState()->GetState() == CRatState::STATE_DEATH &&
+	//			m_state != STATE_GHOST)
+	//		{ // 死亡状態の場合
 
-				// 描画状況を true にする
-				m_bDisp = true;
+	//			// 描画状況を true にする
+	//			m_bDisp = true;
 
-				// ゴースト状態にする
-				m_state = STATE_GHOST;
+	//			// ゴースト状態にする
+	//			m_state = STATE_GHOST;
 
-				// テクスチャの割り当て処理
-				BindTexture(CManager::Get()->GetTexture()->Regist(GHOSTICON_TEXTURE));
+	//			// テクスチャの割り当て処理
+	//			BindTexture(CManager::Get()->GetTexture()->Regist(GHOSTICON_TEXTURE));
 
-				// サイズを設定する
-				SetSize(GHOST_SIZE);
+	//			// サイズを設定する
+	//			SetSize(GHOST_SIZE);
 
-				// 頂点情報の設定処理
-				SetVertex();
-			}
-		}
-	}
+	//			// 頂点情報の設定処理
+	//			SetVertex();
+	//		}
+	//	}
+	//}
 }
