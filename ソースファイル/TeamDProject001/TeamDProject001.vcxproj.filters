@@ -384,9 +384,6 @@
     <ClCompile Include="entry_ID.cpp">
       <Filter>Scene\Entry</Filter>
     </ClCompile>
-    <ClCompile Include="entry_arrow.cpp">
-      <Filter>Scene\Entry</Filter>
-    </ClCompile>
     <ClCompile Include="Himo.cpp">
       <Filter>Gimmick\Obstacle</Filter>
     </ClCompile>
@@ -753,9 +750,6 @@
       <Filter>Scene\Entry</Filter>
     </ClInclude>
     <ClInclude Include="entry_ID.h">
-      <Filter>Scene\Entry</Filter>
-    </ClInclude>
-    <ClInclude Include="entry_arrow.h">
       <Filter>Scene\Entry</Filter>
     </ClInclude>
     <ClInclude Include="Himo.h">

@@ -14,6 +14,7 @@
 #include "Objectmesh.h"
 
 #include "entry_UI.h"
+#include "entry_match.h"
 #include "input.h"
 
 //=========================================
@@ -48,6 +49,8 @@ HRESULT CEntry::Init(void)
 	CEntryUI::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 125.0f, SCREEN_HEIGHT * 0.5f, 0.0f), 1);
 	CEntryUI::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f + 125.0f, SCREEN_HEIGHT * 0.5f, 0.0f), 2);
 	CEntryUI::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f + 375.0f, SCREEN_HEIGHT * 0.5f, 0.0f), 3);
+
+
 
 	// ê¨å˜Çï‘Ç∑
 	return S_OK;
