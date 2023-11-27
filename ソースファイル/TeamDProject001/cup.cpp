@@ -49,13 +49,6 @@ HRESULT CCup::Init(void)
 		return E_FAIL;
 	}
 
-	if (m_pConsent == NULL)
-	{
-		m_pConsent = CConsent::Create(GetPos());
-		m_pConsent->SetFileData(CXFile::TYPE::TYPE_CONSENT);
-		m_pConsent->SetMain(this);
-	}
-
 	// ’l‚ğ•Ô‚·
 	return S_OK;
 }
@@ -159,6 +152,15 @@ void CCup::SetData(const D3DXVECTOR3& pos, const TYPE type)
 {
 	// î•ñ‚Ìİ’èˆ—
 	CObstacle::SetData(pos, type);
+
+	if (m_pConsent == NULL)
+	{
+		m_pConsent = CConsent::Create(D3DXVECTOR3(
+			pos.x + sinf(0.0f + (D3DX_PI * -0.5f)) * 100.0f,
+			0.0f,
+			pos.z + cosf(0.0f + (D3DX_PI * -0.5f)) * 100.0f));
+		m_pConsent->SetMain(this);
+	}
 }
 
 //=====================================

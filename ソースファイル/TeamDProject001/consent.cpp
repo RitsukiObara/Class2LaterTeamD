@@ -75,22 +75,6 @@ void CConsent::Update(void)
 	D3DXVECTOR3 pos = GetPos();
 	D3DXVECTOR3 rot = GetRot();
 
-	// 位置を加算する
-	m_nLife--;
-	rot.y += NOTE_CYCLE_SPEED;
-	pos.y = m_StartPosY + sinf(m_nLife * 0.1f) * NOTE_UD_HEIGHT;
-
-	if (m_nLife <= 0)
-	{
-		if (m_pMain != NULL)
-		{
-			m_pMain->NULLConsent();
-		}
-
-		Uninit();
-		return;
-	}
-
 	// 位置更新
 	pos += m_move;
 
@@ -118,21 +102,7 @@ void CConsent::SetData(const D3DXVECTOR3& pos)
 	SetPosOld(pos);								// 前回の位置
 	SetRot(NONE_D3DXVECTOR3);					// 向き
 	SetScale(NONE_SCALE);						// 拡大率
-
-	int nRandNote = rand() % 3;
-	switch (nRandNote)
-	{
-	case 0:
-		SetFileData(CXFile::TYPE_NOTE4);			// モデル情報
-		break;
-	case 1:
-		SetFileData(CXFile::TYPE_NOTE8);			// モデル情報
-		break;
-	case 2:
-		SetFileData(CXFile::TYPE_NOTE16);			// モデル情報
-		break;
-	}
-	m_StartPosY = pos.y;
+	SetFileData(CXFile::TYPE_CONSENT);			// モデル情報
 }
 
 //=======================================
