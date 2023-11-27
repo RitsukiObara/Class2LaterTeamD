@@ -13,6 +13,7 @@
 #include "cup.h"
 #include "useful.h"
 #include "objectX.h"
+#include "consent.h"
 #include "object3D.h"
 #include "input.h"
 
@@ -50,8 +51,9 @@ HRESULT CCup::Init(void)
 
 	if (m_pConsent == NULL)
 	{
-		m_pConsent = CModel::Create();
-		m_pConsent->SetFileData(CXFile::TYPE::TYPE_CUP);
+		m_pConsent = CConsent::Create(GetPos());
+		m_pConsent->SetFileData(CXFile::TYPE::TYPE_CONSENT);
+		m_pConsent->SetMain(this);
 	}
 
 	// 値を返す
@@ -64,11 +66,10 @@ HRESULT CCup::Init(void)
 void CCup::Uninit(void)
 {
 	if (m_pConsent != NULL)
-	{ // 音符が NULL の場合
+	{ // コンセントが NULL の場合
 
-	  // 音符の終了処理
+	  // コンセントの終了処理
 		m_pConsent->Uninit();
-		m_pConsent = NULL;
 	}
 
 	// 終了処理
@@ -175,7 +176,7 @@ bool CCup::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fW
 bool CCup::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
 	if (m_pConsent != nullptr)
-	{ // 音符が NULL じゃない場合
+	{ // コンセントが NULL じゃない場合
 
 		if (pos.y <= m_pConsent->GetPos().y + m_pConsent->GetFileData().vtxMax.y &&
 			pos.y + fHeight >= m_pConsent->GetPos().y + m_pConsent->GetFileData().vtxMin.y &&
