@@ -208,6 +208,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manager.cpp" />
     <ClCompile Include="map.cpp" />
+    <ClCompile Include="match_frame.cpp" />
     <ClCompile Include="mesh_cylinder.cpp" />
     <ClCompile Include="mesh_dome.cpp" />
     <ClCompile Include="mesh_field.cpp" />
@@ -334,6 +335,7 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="manager.h" />
     <ClInclude Include="map.h" />
+    <ClInclude Include="matsh_frame.h" />
     <ClInclude Include="mesh_cylinder.h" />
     <ClInclude Include="mesh_dome.h" />
     <ClInclude Include="mesh_field.h" />

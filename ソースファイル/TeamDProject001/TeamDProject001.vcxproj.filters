@@ -85,6 +85,9 @@
     <Filter Include="Player\Cat">
       <UniqueIdentifier>{2f0cfa38-123d-404e-b4b5-8fc83900d5b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scene\Entry\Entry_Match">
+      <UniqueIdentifier>{4c3a524a-c992-4338-85fd-f6026d493ba3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="fade.cpp">
@@ -450,6 +453,9 @@
     <ClCompile Include="player.cpp">
       <Filter>Player</Filter>
     </ClCompile>
+    <ClCompile Include="match_frame.cpp">
+      <Filter>Scene\Entry\Entry_Match</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -814,6 +820,9 @@
     </ClInclude>
     <ClInclude Include="player.h">
       <Filter>Player</Filter>
+    </ClInclude>
+    <ClInclude Include="matsh_frame.h">
+      <Filter>Scene\Entry\Entry_Match</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
