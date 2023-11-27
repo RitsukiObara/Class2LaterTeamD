@@ -155,7 +155,7 @@ void CPin::SetData(const D3DXVECTOR3& pos, const TYPE type)
 //=====================================
 // 当たり判定処理
 //=====================================
-bool CPin::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
+bool CPin::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
 	// false を返す
 	return false;
@@ -164,7 +164,7 @@ bool CPin::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fW
 //=====================================
 // ヒット処理
 //=====================================
-bool CPin::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
+bool CPin::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
 	if (m_State == STATE_TRUE)
 	{ // ギミック発動状態の場合
@@ -193,7 +193,7 @@ bool CPin::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, 
 //=====================================
 // ヒット処理
 //=====================================
-bool CPin::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CObstacle::COLLTYPE type)
+bool CPin::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type)
 {
 	if (useful::CircleCollisionXZ(pos, GetPos(), Radius, GetFileData().fRadius) == true)
 	{//円の範囲内の場合tureを返す

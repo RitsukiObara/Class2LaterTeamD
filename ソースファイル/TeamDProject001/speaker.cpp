@@ -174,7 +174,7 @@ void CSpeaker::SetData(const D3DXVECTOR3& pos, const TYPE type)
 //=====================================
 // ìñÇΩÇËîªíËèàóù
 //=====================================
-bool CSpeaker::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
+bool CSpeaker::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
 	// false Çï‘Ç∑
 	return false;
@@ -183,7 +183,7 @@ bool CSpeaker::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const floa
 //=====================================
 // ÉqÉbÉgèàóù
 //=====================================
-bool CSpeaker::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
+bool CSpeaker::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
 	for (int nCntNote = 0; nCntNote < MAX_NOTE; nCntNote++)
 	{
@@ -208,7 +208,7 @@ bool CSpeaker::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeig
 //=====================================
 // ÉqÉbÉgèàóù
 //=====================================
-bool CSpeaker::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CObstacle::COLLTYPE type)
+bool CSpeaker::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type)
 {
 	if (useful::CircleCollisionXZ(pos, GetPos(), Radius, GetFileData().fRadius) == true)
 	{//â~ÇÃîÕàÕì‡ÇÃèÍçátureÇï‘Ç∑

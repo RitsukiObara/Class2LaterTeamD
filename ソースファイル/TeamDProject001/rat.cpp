@@ -233,7 +233,7 @@ void CRat::Update(void)
 
 	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_E))
 	{
-		collision::ObstacleAction(this, SIZE.x, CObstacle::COLLTYPE_RAT);
+		collision::ObstacleAction(this, SIZE.x, CPlayer::TYPE_RAT);
 	}
 
 	if (m_pRatState != nullptr)

@@ -10,8 +10,6 @@
 #include "game.h"
 #include "collision.h"
 #include "shadowCircle.h"
-#include "rat.h"
-#include "Cat.h"
 #include "objectElevation.h"
 #include "elevation_manager.h"
 #include "obstacle_manager.h"
@@ -26,6 +24,7 @@
 #include "objectX.h"
 #include "item.h"
 #include "item_manager.h"
+#include "player.h"
 
 //===============================
 // マクロ定義
@@ -57,7 +56,7 @@ void collision::ShadowCollision(const D3DXVECTOR3& pos, int nIdx)
 //===============================
 // 障害物の当たり判定
 //===============================
-void collision::ObstacleCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
+void collision::ObstacleCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
 	// ローカル変数宣言
 	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を取得する
@@ -113,11 +112,11 @@ void collision::ObstacleCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, c
 //===============================
 // 障害物の当たり判定
 //===============================
-void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
+void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
 	// ローカル変数宣言
 	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を取得する
-	D3DXVECTOR3 pos = pRat->GetPos();			// 位置を取得する
+	D3DXVECTOR3 pos = pPlayer->GetPos();			// 位置を取得する
 	float fAngle;								// 吹き飛ぶ方向
 
 	while (pObstacle != nullptr)
@@ -131,16 +130,16 @@ void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight,
 			case CObstacle::TYPE_HONEY:
 
 				// 移動量を設定する
-				pRat->SetSpeed(pRat->GetSpeed() * 0.3f);
+				pPlayer->SetSpeed(pPlayer->GetSpeed() * 0.3f);
 
 				break;
 
 			case CObstacle::TYPE_SLIME:
 
 				// 移動量を設定する
-				pRat->SetSpeed(pRat->GetSpeed() * 0.7f);
+				pPlayer->SetSpeed(pPlayer->GetSpeed() * 0.7f);
 
-				if (pRat->IsMove() == true)
+				if (pPlayer->IsMove() == true)
 				{
 					CParticle::Create(pos, CParticle::TYPE_SLIME);
 				}
@@ -153,7 +152,7 @@ void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight,
 				fAngle = atan2f(pos.x - pObstacle->GetPos().x, pos.z - pObstacle->GetPos().z);
 
 				// ヒット処理
-				pRat->Smash(fAngle);
+				pPlayer->Smash(fAngle);
 
 				break;
 
@@ -169,7 +168,7 @@ void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight,
 				fAngle = atan2f(pos.x - pObstacle->GetPos().x, pos.z - pObstacle->GetPos().z);
 
 				// ヒット処理
-				pRat->Smash(fAngle);
+				pPlayer->Smash(fAngle);
 
 				break;
 
@@ -181,7 +180,7 @@ void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight,
 				fAngle = atan2f(pos.x - pObstacle->GetPos().x, pos.z - pObstacle->GetPos().z);
 
 				// 吹き飛び処理
-				pRat->Smash(fAngle);
+				pPlayer->Smash(fAngle);
 			}
 
 				break;
@@ -193,7 +192,7 @@ void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight,
 			case CObstacle::TYPE_HIMO:
 
 				// 気絶処理
-				pRat->Stun();
+				pPlayer->Stun();
 
 				break;
 
@@ -203,7 +202,7 @@ void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight,
 				fAngle = atan2f(pos.x - pObstacle->GetPos().x, pos.z - pObstacle->GetPos().z);
 
 				// ヒット処理
-				pRat->Smash(fAngle);
+				pPlayer->Smash(fAngle);
 
 				break;
 
@@ -218,7 +217,7 @@ void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight,
 			case CObstacle::TYPE_PIN:
 
 				// 気絶処理
-				pRat->Stun();
+				pPlayer->Stun();
 
 				break;
 
@@ -239,11 +238,11 @@ void collision::ObstacleHit(CRat* pRat, const float fWidth, const float fHeight,
 //===============================
 // 障害物の起動判定
 //===============================
-void collision::ObstacleAction(CRat* pRat, const float Radius, const CObstacle::COLLTYPE type)
+void collision::ObstacleAction(CPlayer* pPlayer, const float Radius, const CPlayer::TYPE type)
 {
 	// ローカル変数宣言
 	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を取得する
-	D3DXVECTOR3 pos = pRat->GetPos();			// 位置を取得する
+	D3DXVECTOR3 pos = pPlayer->GetPos();			// 位置を取得する
 	float fAngle;								// 吹き飛ぶ方向
 
 	while (pObstacle != nullptr)
@@ -714,12 +713,12 @@ D3DXVECTOR3 collision::WallCollision(D3DXVECTOR3& objVec1, D3DXVECTOR3& objVec2)
 //======================
 // ネコとアイテムとの当たり判定
 //======================
-void collision::ItemCollision(CCat& pCat)
+void collision::ItemCollision(CPlayer& pPlayer)
 {
 	// 処理に使う変数を宣言
 	CItem* pItem = CItemManager::Get()->GetTop();	// 最初のアイテムの情報を取得する
 	CItem* pItemNext;								// 次のアイテム
-	D3DXVECTOR3 pos = pCat.GetPos();				// 位置
+	D3DXVECTOR3 pos = pPlayer.GetPos();				// 位置
 	D3DXVECTOR3 Max = COLLISION_CAT_SIZE;													// 最大値
 	D3DXVECTOR3 Min = D3DXVECTOR3(-COLLISION_CAT_SIZE.x, 0.0f, -COLLISION_CAT_SIZE.z);		// 最小値
 

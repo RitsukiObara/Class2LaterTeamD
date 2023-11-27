@@ -137,7 +137,7 @@ void CHairBall::SetData(const D3DXVECTOR3& pos, const TYPE type)
 //=====================================
 // 当たり判定処理
 //=====================================
-bool CHairBall::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
+bool CHairBall::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
 	if (pos.y <= GetPos().y + GetFileData().vtxMax.y &&
 		pos.y + fHeight >= GetPos().y + GetFileData().vtxMin.y)
@@ -171,13 +171,13 @@ bool CHairBall::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const flo
 //=====================================
 // ヒット処理
 //=====================================
-bool CHairBall::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
+bool CHairBall::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
 	// ターゲットの位置を設定する
 	D3DXVECTOR3 Targetpos = pos;
 
 	if (m_state == STATE_SMASH &&
-		type == COLLTYPE_RAT &&
+		type == CPlayer::TYPE_RAT &&
 		pos.y <= GetPos().y + GetFileData().vtxMax.y &&
 		pos.y + fHeight >= GetPos().y + GetFileData().vtxMin.y &&
 		useful::CylinderCollision(&Targetpos, GetPos(), GetFileData().fRadius + fWidth) == true)
@@ -301,7 +301,6 @@ void CHairBall::Block(void)
 	// ローカル変数宣言
 	CBlock* pBlock = CBlockManager::Get()->GetTop();		// ブロックの先頭のオブジェクトを取得する
 	D3DXVECTOR3 pos = GetPos();				// 位置を取得する
-	bool bLand = false;						// 着地状況
 
 	while (pBlock != nullptr)
 	{ // 地面の情報がある限り回す
