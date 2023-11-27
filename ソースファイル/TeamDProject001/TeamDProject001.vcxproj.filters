@@ -459,6 +459,9 @@
     <ClCompile Include="entry_match.cpp">
       <Filter>Scene\Entry\Entry_Match</Filter>
     </ClCompile>
+    <ClCompile Include="match_chara.cpp">
+      <Filter>Scene\Entry\Entry_Match</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -828,6 +831,9 @@
       <Filter>Scene\Entry\Entry_Match</Filter>
     </ClInclude>
     <ClInclude Include="entry_match.h">
+      <Filter>Scene\Entry\Entry_Match</Filter>
+    </ClInclude>
+    <ClInclude Include="entry_chara.h">
       <Filter>Scene\Entry\Entry_Match</Filter>
     </ClInclude>
   </ItemGroup>
