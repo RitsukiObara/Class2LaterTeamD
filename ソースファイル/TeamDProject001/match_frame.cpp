@@ -11,7 +11,7 @@
 //=======================================
 // マクロ定義
 //=======================================
-#define TEAM_SIZE		(D3DXVECTOR3(120.0f, 60.0f, 0.0f))		// チームのサイズ
+#define FRAME_SIZE		(D3DXVECTOR3(120.0f, 60.0f, 0.0f))		// 枠のサイズ
 
 //=========================
 // コンストラクタ
@@ -79,7 +79,7 @@ void CMatchFrame::SetData(const D3DXVECTOR3& pos)
 	// スクロールの設定処理
 	SetPos(pos);				// 位置設定
 	SetRot(NONE_D3DXVECTOR3);	// 向き設定
-	SetSize(TEAM_SIZE);			// サイズ設定
+	SetSize(FRAME_SIZE);		// サイズ設定
 	SetLength();				// 長さ設定
 	SetAngle();					// 方向設定
 
@@ -87,7 +87,7 @@ void CMatchFrame::SetData(const D3DXVECTOR3& pos)
 	SetVertex();
 
 	// 頂点カラーの設定処理
-	SetVtxColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+	SetVtxColor(D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f));
 }
 
 //=========================

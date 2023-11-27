@@ -13,6 +13,11 @@
 #include "match_frame.h"
 #include "match_chara.h"
 
+//---------------------------------------
+// マクロ定義
+//---------------------------------------
+#define ENTRY_SHIFT_HEIGHT		(-30.0f)		// エントリーのずらす高さ
+
 //=========================
 // コンストラクタ
 //=========================
@@ -131,7 +136,7 @@ void CEntryMatch::SetData(const D3DXVECTOR3& pos)
 	{ // キャラクターの情報が NULL の場合
 
 		// 枠を生成する
-		m_pChara = CMatchChara::Create(pos);
+		m_pChara = CMatchChara::Create(D3DXVECTOR3(pos.x, pos.y + ENTRY_SHIFT_HEIGHT, pos.z));
 	}
 	else
 	{ // 上記以外

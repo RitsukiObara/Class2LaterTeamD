@@ -11,7 +11,8 @@
 //=======================================
 // マクロ定義
 //=======================================
-#define TEAM_SIZE		(D3DXVECTOR3(100.0f, 50.0f, 0.0f))		// チームのサイズ
+#define CHARA_SIZE		(D3DXVECTOR3(120.0f, 30.0f, 0.0f))		// キャラクターのサイズ
+#define CHARA_TEXTURE	"data\\TEXTURE\\MatchChara.png"			// キャラクターのテクスチャ
 
 //=========================
 // コンストラクタ
@@ -79,9 +80,12 @@ void CMatchChara::SetData(const D3DXVECTOR3& pos)
 	// スクロールの設定処理
 	SetPos(pos);				// 位置設定
 	SetRot(NONE_D3DXVECTOR3);	// 向き設定
-	SetSize(TEAM_SIZE);			// サイズ設定
+	SetSize(CHARA_SIZE);		// サイズ設定
 	SetLength();				// 長さ設定
 	SetAngle();					// 方向設定
+
+	// テクスチャの割り当て.処理
+	BindTexture(CManager::Get()->GetTexture()->Regist(CHARA_TEXTURE));
 
 	// 頂点情報の初期化
 	SetVertex();
