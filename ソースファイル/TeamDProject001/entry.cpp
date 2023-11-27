@@ -14,23 +14,14 @@
 #include "Objectmesh.h"
 
 #include "entry_UI.h"
-#include "entry_match.h"
 #include "input.h"
-
-//--------------------------------------------
-// 静的メンバ変数宣言
-//--------------------------------------------
-CEntryMatch* CEntry::m_apMatch[MAX_MATCHING] = {};		// マッチの情報
 
 //=========================================
 // コンストラクタ
 //=========================================
 CEntry::CEntry() : CScene(TYPE_SCENE, PRIORITY_BG)
 {
-	for (int nCntMatch = 0; nCntMatch < MAX_MATCHING; nCntMatch++)
-	{
-		m_apMatch[nCntMatch] = nullptr;		// マッチの情報
-	}
+
 }
 
 //=========================================
@@ -57,12 +48,6 @@ HRESULT CEntry::Init(void)
 	CEntryUI::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 125.0f, SCREEN_HEIGHT * 0.6f, 0.0f), 1);
 	CEntryUI::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f + 125.0f, SCREEN_HEIGHT * 0.6f, 0.0f), 2);
 	CEntryUI::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f + 375.0f, SCREEN_HEIGHT * 0.6f, 0.0f), 3);
-
-	// マッチングUIの生成処理
-	for (int nCntMatch = 0; nCntMatch < MAX_MATCHING; nCntMatch++)
-	{
-		m_apMatch[nCntMatch] = CEntryMatch::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f + (nCntMatch * 320.0f) - 480.0f, 90.0f, 0.0f), nCntMatch);		// マッチの情報
-	}
 
 	// 成功を返す
 	return S_OK;

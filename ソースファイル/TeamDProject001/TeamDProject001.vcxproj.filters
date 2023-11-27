@@ -85,9 +85,6 @@
     <Filter Include="Player\Cat">
       <UniqueIdentifier>{2f0cfa38-123d-404e-b4b5-8fc83900d5b0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scene\Entry\Entry_Match">
-      <UniqueIdentifier>{4c3a524a-c992-4338-85fd-f6026d493ba3}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="fade.cpp">
@@ -453,23 +450,8 @@
     <ClCompile Include="cup.cpp">
       <Filter>Gimmick\Obstacle</Filter>
     </ClCompile>
-    <ClCompile Include="match_frame.cpp">
-      <Filter>Scene\Entry\Entry_Match</Filter>
-    </ClCompile>
-    <ClCompile Include="entry_match.cpp">
-      <Filter>Scene\Entry\Entry_Match</Filter>
-    </ClCompile>
-    <ClCompile Include="match_chara.cpp">
-      <Filter>Scene\Entry\Entry_Match</Filter>
-    </ClCompile>
     <ClCompile Include="consent.cpp">
       <Filter>Gimmick\Obstacle</Filter>
-    </ClCompile>
-    <ClCompile Include="match_vs.cpp">
-      <Filter>Scene\Entry\Entry_Match</Filter>
-    </ClCompile>
-    <ClCompile Include="match_select.cpp">
-      <Filter>Scene\Entry\Entry_Match</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -836,23 +818,8 @@
     <ClInclude Include="cup.h">
       <Filter>Gimmick\Obstacle</Filter>
     </ClInclude>
-    <ClInclude Include="match_frame.h">
-      <Filter>Scene\Entry\Entry_Match</Filter>
-    </ClInclude>
-    <ClInclude Include="entry_match.h">
-      <Filter>Scene\Entry\Entry_Match</Filter>
-    </ClInclude>
-    <ClInclude Include="match_chara.h">
-      <Filter>Scene\Entry\Entry_Match</Filter>
-    </ClInclude>
     <ClInclude Include="consent.h">
       <Filter>Gimmick\Obstacle</Filter>
-    </ClInclude>
-    <ClInclude Include="match_vs.h">
-      <Filter>Scene\Entry\Entry_Match</Filter>
-    </ClInclude>
-    <ClInclude Include="match_select.h">
-      <Filter>Scene\Entry\Entry_Match</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
