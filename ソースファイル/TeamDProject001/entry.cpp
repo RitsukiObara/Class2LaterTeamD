@@ -14,6 +14,7 @@
 #include "Objectmesh.h"
 
 #include "entry_UI.h"
+#include "entry_match.h"
 #include "input.h"
 
 //=========================================
@@ -44,10 +45,16 @@ HRESULT CEntry::Init(void)
 	CMesh::TxtSet();
 
 	// エントリーUIの生成処理
-	CEntryUI::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 375.0f, SCREEN_HEIGHT * 0.5f, 0.0f), 0);
-	CEntryUI::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 125.0f, SCREEN_HEIGHT * 0.5f, 0.0f), 1);
-	CEntryUI::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f + 125.0f, SCREEN_HEIGHT * 0.5f, 0.0f), 2);
-	CEntryUI::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f + 375.0f, SCREEN_HEIGHT * 0.5f, 0.0f), 3);
+	CEntryUI::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 375.0f, SCREEN_HEIGHT * 0.6f, 0.0f), 0);
+	CEntryUI::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 125.0f, SCREEN_HEIGHT * 0.6f, 0.0f), 1);
+	CEntryUI::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f + 125.0f, SCREEN_HEIGHT * 0.6f, 0.0f), 2);
+	CEntryUI::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f + 375.0f, SCREEN_HEIGHT * 0.6f, 0.0f), 3);
+
+	// マッチングUIの生成処理
+	CEntryMatch::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 450.0f, SCREEN_HEIGHT * 0.1f, 0.0f));
+	CEntryMatch::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 150.0f, SCREEN_HEIGHT * 0.1f, 0.0f));
+	CEntryMatch::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f + 150.0f, SCREEN_HEIGHT * 0.1f, 0.0f));
+	CEntryMatch::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f + 450.0f, SCREEN_HEIGHT * 0.1f, 0.0f));
 
 	// 成功を返す
 	return S_OK;

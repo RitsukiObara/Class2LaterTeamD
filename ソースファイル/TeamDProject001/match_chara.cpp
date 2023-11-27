@@ -1,23 +1,23 @@
 //=======================================
 //
-// エントリーの矢印のメイン処理[entry_arrow.cpp]
+// マッチングのキャラクター処理[match_chara.cpp]
 // Author 小原立暉
 //
 //=======================================
 #include "manager.h"
-#include "entry_arrow.h"
+#include "match_chara.h"
 #include "texture.h"
 
 //=======================================
 // マクロ定義
 //=======================================
-#define ARROW_SIZE		(D3DXVECTOR3(30.0f, 30.0f, 0.0f))		// 矢印のサイズ
-#define ARROW_TEXTURE	"data\\TEXTURE\\Arrow.png"				// 矢印のテクスチャ
+#define CHARA_SIZE		(D3DXVECTOR3(120.0f, 30.0f, 0.0f))		// キャラクターのサイズ
+#define CHARA_TEXTURE	"data\\TEXTURE\\MatchChara.png"			// キャラクターのテクスチャ
 
 //=========================
 // コンストラクタ
 //=========================
-CEntryArrow::CEntryArrow() : CObject2D(CObject::TYPE_NONE, CObject::PRIORITY_ENTITY)
+CMatchChara::CMatchChara() : CObject2D(CObject::TYPE_NONE, CObject::PRIORITY_UI)
 {
 
 }
@@ -25,7 +25,7 @@ CEntryArrow::CEntryArrow() : CObject2D(CObject::TYPE_NONE, CObject::PRIORITY_ENT
 //=========================
 // デストラクタ
 //=========================
-CEntryArrow::~CEntryArrow()
+CMatchChara::~CMatchChara()
 {
 
 }
@@ -33,7 +33,7 @@ CEntryArrow::~CEntryArrow()
 //=========================
 // 初期化処理
 //=========================
-HRESULT CEntryArrow::Init(void)
+HRESULT CMatchChara::Init(void)
 {
 	if (FAILED(CObject2D::Init()))
 	{ // 初期化に失敗した場合
@@ -49,7 +49,7 @@ HRESULT CEntryArrow::Init(void)
 //=========================
 // 終了処理
 //=========================
-void CEntryArrow::Uninit(void)
+void CMatchChara::Uninit(void)
 {
 	// 終了
 	CObject2D::Uninit();
@@ -58,7 +58,7 @@ void CEntryArrow::Uninit(void)
 //=========================
 // 更新処理
 //=========================
-void CEntryArrow::Update(void)
+void CMatchChara::Update(void)
 {
 
 }
@@ -66,7 +66,7 @@ void CEntryArrow::Update(void)
 //=========================
 // 描画処理
 //=========================
-void CEntryArrow::Draw(void)
+void CMatchChara::Draw(void)
 {
 	// 描画処理
 	CObject2D::Draw();
@@ -75,48 +75,38 @@ void CEntryArrow::Draw(void)
 //=========================
 // 情報の設定処理
 //=========================
-void CEntryArrow::SetData(const D3DXVECTOR3& pos, const bool bRight)
+void CMatchChara::SetData(const D3DXVECTOR3& pos)
 {
 	// スクロールの設定処理
 	SetPos(pos);				// 位置設定
 	SetRot(NONE_D3DXVECTOR3);	// 向き設定
-	SetSize(ARROW_SIZE);		// サイズ設定
+	SetSize(CHARA_SIZE);		// サイズ設定
 	SetLength();				// 長さ設定
 	SetAngle();					// 方向設定
 
-	// テクスチャの読み込み処理
-	BindTexture(CManager::Get()->GetTexture()->Regist(ARROW_TEXTURE));
+	// テクスチャの割り当て.処理
+	BindTexture(CManager::Get()->GetTexture()->Regist(CHARA_TEXTURE));
 
 	// 頂点情報の初期化
 	SetVertex();
 
-	if (bRight == true)
-	{ // 右向きの場合
-
-		// テクスチャの設定処理
-		SetVtxTexture();
-	}
-	else
-	{ // 上記以外
-
-		// 反転テクスチャの設定処理
-		SetVtxTextureRev();
-	}
+	// 頂点カラーの設定処理
+	SetVtxColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 }
 
 //=========================
 // 生成処理
 //=========================
-CEntryArrow* CEntryArrow::Create(const D3DXVECTOR3& pos, const bool bRight)
+CMatchChara* CMatchChara::Create(const D3DXVECTOR3& pos)
 {
 	// ローカルオブジェクトを生成
-	CEntryArrow* pArrow = nullptr;	// プレイヤーのインスタンスを生成
+	CMatchChara* pChara = nullptr;	// プレイヤーのインスタンスを生成
 
-	if (pArrow == nullptr)
+	if (pChara == nullptr)
 	{ // オブジェクトが NULL の場合
 
 		// オブジェクトを生成
-		pArrow = new CEntryArrow;
+		pChara = new CMatchChara;
 	}
 	else
 	{ // オブジェクトが NULL じゃない場合
@@ -128,11 +118,11 @@ CEntryArrow* CEntryArrow::Create(const D3DXVECTOR3& pos, const bool bRight)
 		return nullptr;
 	}
 
-	if (pArrow != nullptr)
+	if (pChara != nullptr)
 	{ // オブジェクトが NULL じゃない場合
 
 		// 初期化処理
-		if (FAILED(pArrow->Init()))
+		if (FAILED(pChara->Init()))
 		{ // 初期化に失敗した場合
 
 			// 停止
@@ -143,7 +133,7 @@ CEntryArrow* CEntryArrow::Create(const D3DXVECTOR3& pos, const bool bRight)
 		}
 
 		// 情報の設定処理
-		pArrow->SetData(pos, bRight);
+		pChara->SetData(pos);
 	}
 	else
 	{ // オブジェクトが NULL の場合
@@ -155,6 +145,6 @@ CEntryArrow* CEntryArrow::Create(const D3DXVECTOR3& pos, const bool bRight)
 		return nullptr;
 	}
 
-	// エントリーの矢印のポインタを返す
-	return pArrow;
+	// エントリーチームのポインタを返す
+	return pChara;
 }

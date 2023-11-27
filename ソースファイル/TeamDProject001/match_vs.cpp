@@ -1,23 +1,23 @@
 //=======================================
 //
-// エントリーの枠のメイン処理[entry_frame.cpp]
+// マッチングのVS処理[match_vs.cpp]
 // Author 小原立暉
 //
 //=======================================
 #include "manager.h"
-#include "entry_frame.h"
+#include "match_vs.h"
 #include "texture.h"
 
 //=======================================
 // マクロ定義
 //=======================================
-#define FRAME_SIZE		(D3DXVECTOR3(120.0f, 250.0f, 0.0f))		// 枠のサイズ
-#define FRAME_TEXTURE	"data\\TEXTURE\\EntryFrame.png"			// 枠のテクスチャ
+#define VS_SIZE		(D3DXVECTOR3(20.0f, 20.0f, 0.0f))		// VSマークのサイズ
+#define VS_TEXTURE	"data\\TEXTURE\\MatchVS.png"			// VSマークのテクスチャ
 
 //=========================
 // コンストラクタ
 //=========================
-CEntryFrame::CEntryFrame() : CObject2D(CObject::TYPE_NONE, CObject::PRIORITY_ENTITY)
+CMatchVS::CMatchVS() : CObject2D(CObject::TYPE_NONE, CObject::PRIORITY_UI)
 {
 
 }
@@ -25,7 +25,7 @@ CEntryFrame::CEntryFrame() : CObject2D(CObject::TYPE_NONE, CObject::PRIORITY_ENT
 //=========================
 // デストラクタ
 //=========================
-CEntryFrame::~CEntryFrame()
+CMatchVS::~CMatchVS()
 {
 
 }
@@ -33,7 +33,7 @@ CEntryFrame::~CEntryFrame()
 //=========================
 // 初期化処理
 //=========================
-HRESULT CEntryFrame::Init(void)
+HRESULT CMatchVS::Init(void)
 {
 	if (FAILED(CObject2D::Init()))
 	{ // 初期化に失敗した場合
@@ -49,7 +49,7 @@ HRESULT CEntryFrame::Init(void)
 //=========================
 // 終了処理
 //=========================
-void CEntryFrame::Uninit(void)
+void CMatchVS::Uninit(void)
 {
 	// 終了
 	CObject2D::Uninit();
@@ -58,7 +58,7 @@ void CEntryFrame::Uninit(void)
 //=========================
 // 更新処理
 //=========================
-void CEntryFrame::Update(void)
+void CMatchVS::Update(void)
 {
 
 }
@@ -66,7 +66,7 @@ void CEntryFrame::Update(void)
 //=========================
 // 描画処理
 //=========================
-void CEntryFrame::Draw(void)
+void CMatchVS::Draw(void)
 {
 	// 描画処理
 	CObject2D::Draw();
@@ -75,35 +75,38 @@ void CEntryFrame::Draw(void)
 //=========================
 // 情報の設定処理
 //=========================
-void CEntryFrame::SetData(const D3DXVECTOR3& pos)
+void CMatchVS::SetData(const D3DXVECTOR3& pos)
 {
 	// スクロールの設定処理
 	SetPos(pos);				// 位置設定
 	SetRot(NONE_D3DXVECTOR3);	// 向き設定
-	SetSize(FRAME_SIZE);		// サイズ設定
+	SetSize(VS_SIZE);			// サイズ設定
 	SetLength();				// 長さ設定
 	SetAngle();					// 方向設定
 
-	// テクスチャの読み込み処理
-	BindTexture(CManager::Get()->GetTexture()->Regist(FRAME_TEXTURE));
+	// テクスチャの割り当て処理
+	BindTexture(CManager::Get()->GetTexture()->Regist(VS_TEXTURE));
 
 	// 頂点情報の初期化
 	SetVertex();
+
+	// 頂点カラーの設定処理
+	SetVtxColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 }
 
 //=========================
 // 生成処理
 //=========================
-CEntryFrame* CEntryFrame::Create(const D3DXVECTOR3& pos)
+CMatchVS* CMatchVS::Create(const D3DXVECTOR3& pos)
 {
 	// ローカルオブジェクトを生成
-	CEntryFrame* pEntryFrame = nullptr;	// プレイヤーのインスタンスを生成
+	CMatchVS* pMatchVS = nullptr;	// プレイヤーのインスタンスを生成
 
-	if (pEntryFrame == nullptr)
+	if (pMatchVS == nullptr)
 	{ // オブジェクトが NULL の場合
 
 		// オブジェクトを生成
-		pEntryFrame = new CEntryFrame;
+		pMatchVS = new CMatchVS;
 	}
 	else
 	{ // オブジェクトが NULL じゃない場合
@@ -115,11 +118,11 @@ CEntryFrame* CEntryFrame::Create(const D3DXVECTOR3& pos)
 		return nullptr;
 	}
 
-	if (pEntryFrame != nullptr)
+	if (pMatchVS != nullptr)
 	{ // オブジェクトが NULL じゃない場合
 
 		// 初期化処理
-		if (FAILED(pEntryFrame->Init()))
+		if (FAILED(pMatchVS->Init()))
 		{ // 初期化に失敗した場合
 
 			// 停止
@@ -130,7 +133,7 @@ CEntryFrame* CEntryFrame::Create(const D3DXVECTOR3& pos)
 		}
 
 		// 情報の設定処理
-		pEntryFrame->SetData(pos);
+		pMatchVS->SetData(pos);
 	}
 	else
 	{ // オブジェクトが NULL の場合
@@ -142,6 +145,6 @@ CEntryFrame* CEntryFrame::Create(const D3DXVECTOR3& pos)
 		return nullptr;
 	}
 
-	// エントリーの枠のポインタを返す
-	return pEntryFrame;
+	// エントリーチームのポインタを返す
+	return pMatchVS;
 }

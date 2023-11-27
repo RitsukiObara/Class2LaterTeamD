@@ -51,6 +51,7 @@ public:			// 誰でもアクセスできる
 		TYPE_PINSET,			// 設置状態の画鋲
 		TYPE_PINONE,			// 破片用の画鋲
 		TYPE_FANBLADE,			// 扇風機(羽根)
+		TYPE_CONSENT,			// コンセント
 
 		// ブロックモデル
 		TYPE_CARDBOARD,			// 段ボール
@@ -61,7 +62,6 @@ public:			// 誰でもアクセスできる
 		TYPE_CLOCK,				// 時計
 		TYPE_RUBBISH,			// チリ紙
 		TYPE_MILKPACK,			// 牛乳パック
-		TYPE_CUP,				// コップ
 		TYPE_OBAPHONE,			// オバフォン
 		TYPE_WII,				// Wii
 		TYPE_DS,				// DS
@@ -89,6 +89,7 @@ public:			// 誰でもアクセスできる
 		TYPE_LEASH,				// リード
 		TYPE_PIN,				// 画鋲
 		TYPE_ELECFAN,			// 扇風機(本体)
+		TYPE_CUP,				// コップ
 
 		//マップモデル
 		TYPE_KITCHEN,			//キッチン

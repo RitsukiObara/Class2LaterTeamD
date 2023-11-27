@@ -1,11 +1,11 @@
 //===================================
 //
-// エントリーの矢印ヘッダー[entry_arrow.h]
+// マッチングのキャラヘッダー[match_chara.h]
 // Author 小原立暉
 //
 //===================================
-#ifndef _ENTRY_ARROW_H_
-#define _ENTRY_ARROW_H_
+#ifndef _MATCH_CHARA_H_
+#define _MATCH_CHARA_H_
 
 //***********************************
 // インクルードファイル
@@ -13,14 +13,14 @@
 #include "object2D.h"
 
 //-----------------------------------
-// クラス定義(CEntryArrow)
+// クラス定義(CMatchChara)
 //-----------------------------------
-class CEntryArrow : public CObject2D
+class CMatchChara : public CObject2D
 {
 public:			// 誰でもアクセスできる
 
-	CEntryArrow();			// コンストラクタ
-	~CEntryArrow();			// デストラクタ
+	CMatchChara();			// コンストラクタ
+	~CMatchChara();			// デストラクタ
 
 	// メンバ関数
 	HRESULT Init(void);		// 初期化処理
@@ -28,10 +28,10 @@ public:			// 誰でもアクセスできる
 	void Update(void);		// 更新処理
 	void Draw(void);		// 描画処理
 
-	void SetData(const D3DXVECTOR3& pos, const bool bRight);					// 情報の設定処理
+	void SetData(const D3DXVECTOR3& pos);					// 情報の設定処理
 
 	// 静的メンバ関数
-	static CEntryArrow* Create(const D3DXVECTOR3& pos, const bool bRight);		// 生成処理
+	static CMatchChara* Create(const D3DXVECTOR3& pos);		// 生成処理
 
 private:		// 自分だけアクセスできる
 

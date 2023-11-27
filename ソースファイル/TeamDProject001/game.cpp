@@ -139,6 +139,9 @@ HRESULT CGame::Init(void)
 	// 扇風機の生成処理
 	CObstacle::Create(D3DXVECTOR3(0.0f, 200.0f, 900.0f), CObstacle::TYPE::TYPE_FAN);
 
+	// コップの生成処理
+	CObstacle::Create(D3DXVECTOR3(-200.0f, 200.0f, 100.0f), CObstacle::TYPE::TYPE_CUP);
+
 #endif // _DEBUG
 
 	// ネズミの生成

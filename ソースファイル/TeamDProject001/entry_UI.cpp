@@ -13,14 +13,12 @@
 #include "entry_frame.h"
 #include "entry_team.h"
 #include "entry_ID.h"
-#include "entry_arrow.h"
 
 //=======================================
 // マクロ定義
 //=======================================
-#define TEAM_SHIFT			(200.0f)		// チームのずらす高さ
-#define ID_SHIFT			(200.0f)		// IDのずらす高さ
-#define ARROW_SHIFT			(D3DXVECTOR3(95.0f, -200.0f, 0.0f))		// 矢印のずらす高さ
+#define TEAM_SHIFT			(180.0f)		// チームのずらす高さ
+#define ID_SHIFT			(180.0f)		// IDのずらす高さ
 #define NONE_ID				(-1)			// インデックスの初期数
 
 //=========================
@@ -32,10 +30,6 @@ CEntryUI::CEntryUI() : CObject(CObject::TYPE_ENTRYUI, CObject::PRIORITY_BG)
 	m_pFrame = nullptr;			// 枠の情報
 	m_pTeam = nullptr;			// チームの情報
 	m_pID = nullptr;			// プレイヤーIDの情報
-	for (int nCnt = 0; nCnt < 2; nCnt++)
-	{
-		m_apArrow[nCnt] = nullptr;		// 矢印の情報
-	}
 	m_nID = NONE_ID;			// インデックス
 }
 
@@ -56,10 +50,6 @@ HRESULT CEntryUI::Init(void)
 	m_pFrame = nullptr;			// 枠の情報
 	m_pTeam = nullptr;			// チームの情報
 	m_pID = nullptr;			// プレイヤーIDの情報
-	for (int nCnt = 0; nCnt < 2; nCnt++)
-	{
-		m_apArrow[nCnt] = nullptr;		// 矢印の情報
-	}
 	m_nID = NONE_ID;			// インデックス
 
 	// 成功を返す
@@ -93,17 +83,6 @@ void CEntryUI::Uninit(void)
 		// IDの終了処理
 		m_pID->Uninit();
 		m_pID = nullptr;
-	}
-
-	for (int nCnt = 0; nCnt < 2; nCnt++)
-	{
-		if (m_apArrow[nCnt] != nullptr)
-		{ // 矢印の情報が NULL じゃない場合
-
-			// 矢印の終了処理
-			m_apArrow[nCnt]->Uninit();
-			m_apArrow[nCnt] = nullptr;
-		}
 	}
 
 	// 本体の終了処理
@@ -140,16 +119,6 @@ void CEntryUI::Update(void)
 		// IDの更新処理
 		m_pID->Update();
 	}
-
-	for (int nCnt = 0; nCnt < 2; nCnt++)
-	{
-		if (m_apArrow[nCnt] != nullptr)
-		{ // 矢印の情報が NULL じゃない場合
-
-			// 矢印の更新処理
-			m_apArrow[nCnt]->Update();
-		}
-	}
 }
 
 //=========================
@@ -176,16 +145,6 @@ void CEntryUI::Draw(void)
 
 		// IDの描画処理
 		m_pID->Draw();
-	}
-
-	for (int nCnt = 0; nCnt < 2; nCnt++)
-	{
-		if (m_apArrow[nCnt] != nullptr)
-		{ // 矢印の情報が NULL じゃない場合
-
-			// 矢印の描画処理
-			m_apArrow[nCnt]->Draw();
-		}
 	}
 }
 
@@ -231,20 +190,6 @@ void CEntryUI::SetData(const D3DXVECTOR3& pos, const int nID)
 
 		// 停止
 		assert(false);
-	}
-
-	if (m_apArrow[0] == nullptr)
-	{ // 矢印の情報が NULL じゃない場合
-
-		// 矢印を生成する
-		m_apArrow[0] = CEntryArrow::Create(D3DXVECTOR3(pos.x - ARROW_SHIFT.x, pos.y + ARROW_SHIFT.y, 0.0f), false);
-	}
-
-	if (m_apArrow[1] == nullptr)
-	{ // 矢印の情報が NULL じゃない場合
-
-		// 矢印を生成する
-		m_apArrow[1] = CEntryArrow::Create(D3DXVECTOR3(pos.x + ARROW_SHIFT.x, pos.y + ARROW_SHIFT.y, 0.0f), true);
 	}
 }
 

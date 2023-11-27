@@ -18,7 +18,6 @@
 class CEntryFrame;			// エントリーの枠
 class CEntryTeam;			// エントリーチーム
 class CEntryID;				// エントリーID
-class CEntryArrow;			// エントリーの矢印
 
 //-----------------------------------
 // クラス定義(CEntryUI)
@@ -47,7 +46,6 @@ private:
 	CEntryFrame* m_pFrame;			// 枠の情報
 	CEntryTeam* m_pTeam;			// チームの情報
 	CEntryID* m_pID;				// プレイヤーIDの情報
-	CEntryArrow* m_apArrow[2];		// 矢印の情報
 	int m_nID;						// インデックス
 };
 
