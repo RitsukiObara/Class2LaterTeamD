@@ -465,6 +465,9 @@
     <ClCompile Include="consent.cpp">
       <Filter>Gimmick\Obstacle</Filter>
     </ClCompile>
+    <ClCompile Include="match_vs.cpp">
+      <Filter>Scene\Entry\Entry_Match</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -841,6 +844,9 @@
     </ClInclude>
     <ClInclude Include="consent.h">
       <Filter>Gimmick\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="match_vs.h">
+      <Filter>Scene\Entry\Entry_Match</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

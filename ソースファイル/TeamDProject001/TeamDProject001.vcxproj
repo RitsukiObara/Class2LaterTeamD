@@ -211,6 +211,7 @@
     <ClCompile Include="map.cpp" />
     <ClCompile Include="match_chara.cpp" />
     <ClCompile Include="match_frame.cpp" />
+    <ClCompile Include="match_vs.cpp" />
     <ClCompile Include="mesh_cylinder.cpp" />
     <ClCompile Include="mesh_dome.cpp" />
     <ClCompile Include="mesh_field.cpp" />
@@ -341,6 +342,7 @@
     <ClInclude Include="manager.h" />
     <ClInclude Include="map.h" />
     <ClInclude Include="match_frame.h" />
+    <ClInclude Include="match_vs.h" />
     <ClInclude Include="mesh_cylinder.h" />
     <ClInclude Include="mesh_dome.h" />
     <ClInclude Include="mesh_field.h" />
