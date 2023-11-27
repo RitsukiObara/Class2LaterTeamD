@@ -54,6 +54,7 @@ private:		// 自分だけアクセスできる
 	D3DXVECTOR3 m_move;
 	STATE m_State;
 	CObject3D *m_pWater;
+	D3DXVECTOR3 m_WaterSize;
 	CConsent *m_pConsent;
 };
 

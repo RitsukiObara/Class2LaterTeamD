@@ -16,6 +16,7 @@
 #include "consent.h"
 #include "object3D.h"
 #include "input.h"
+#include "texture.h"
 
 //==============================
 // コンストラクタ
@@ -27,6 +28,7 @@ CCup::CCup() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 	m_State = STATE_FALSE;
 	m_pWater = NULL;
 	m_pConsent = NULL;
+	m_WaterSize = NONE_D3DXVECTOR3;
 }
 
 //==============================
@@ -117,22 +119,40 @@ void CCup::StateManager(D3DXVECTOR3 *pos, D3DXVECTOR3 *rot)
 		break;
 
 	case CCup::STATE_FALLWAIT:	//ギミック起動から効果発動までの準備時間
-		rot->z += 0.1f;
+		rot->z += 0.07;
 		m_move.y -= 0.75f;
 		m_move.x = sinf(rot->y + (D3DX_PI * -0.5f)) * 4.0f;
 		m_move.z = cosf(rot->y + (D3DX_PI * -0.5f)) * 4.0f;
 
-		if (pos->y < 0)
+		if (pos->y < 15.0f)
 		{
-			pos->y = 0.0f;
-			rot->z = 0.0f;
+			pos->y = 15.0f;
 			m_State = STATE_TRUE;
+
+			m_pWater = CObject3D::Create(CObject3D::TYPE_3DPOLYGON);
+			m_pWater->SetPos(GetPos());
+			m_pWater->SetRot(D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f));
+			m_pWater->SetSize(m_WaterSize);
+			m_pWater->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\water.png"));
 		}
 		break;
 
 	case CCup::STATE_TRUE:	//ギミックの効果発動から停止までの処理
 		m_move = NONE_D3DXVECTOR3;
-		pos->y = 0.0f;
+		pos->y = 15.0f;
+
+		D3DXVECTOR3 WaterPos = m_pWater->GetPos();
+
+		if (m_WaterSize.x < 150.0f)
+		{
+			WaterPos.x += sinf(0.0f + (D3DX_PI * -0.5f)) * 0.5f;
+			WaterPos.z += cosf(0.0f + (D3DX_PI * -0.5f)) * 0.5f;
+			m_WaterSize.x += 0.5f;
+			m_WaterSize.y += 0.5f;
+		}
+
+		m_pWater->SetPos(WaterPos);
+		m_pWater->SetSize(m_WaterSize);
 		break;
 	}
 }
@@ -142,7 +162,10 @@ void CCup::StateManager(D3DXVECTOR3 *pos, D3DXVECTOR3 *rot)
 //=====================================
 void CCup::Action(void)
 {
-	m_State = STATE_FALLWAIT;
+	if (m_State == STATE_FALSE)
+	{
+		m_State = STATE_FALLWAIT;
+	}
 }
 
 //=====================================
@@ -156,9 +179,9 @@ void CCup::SetData(const D3DXVECTOR3& pos, const TYPE type)
 	if (m_pConsent == NULL)
 	{
 		m_pConsent = CConsent::Create(D3DXVECTOR3(
-			pos.x + sinf(0.0f + (D3DX_PI * -0.5f)) * 100.0f,
+			pos.x + sinf(0.0f + (D3DX_PI * -0.5f)) * 200.0f,
 			0.0f,
-			pos.z + cosf(0.0f + (D3DX_PI * -0.5f)) * 100.0f));
+			pos.z + cosf(0.0f + (D3DX_PI * -0.5f)) * 200.0f));
 		m_pConsent->SetMain(this);
 	}
 }
