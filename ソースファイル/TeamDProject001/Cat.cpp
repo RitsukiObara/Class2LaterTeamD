@@ -35,8 +35,9 @@
 //--------------------------------------------
 // マクロ定義
 //--------------------------------------------
-#define MOVE_SPEED				(20.0f)			// 体力の最大数
-#define ATTACK_DISTANCE	(160.0f)		// 攻撃範囲までの距離
+#define MOVE_SPEED			(20.0f)			// 体力の最大数
+#define ATTACK_DISTANCE		(160.0f)		// 攻撃範囲までの距離
+#define CAT_SIZE			(D3DXVECTOR3(70.0f, 200.0f, 70.0f))		// 当たり判定のサイズ
 
 //=========================================
 // コンストラクタ
@@ -347,11 +348,11 @@ void CCat::SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 	CPlayer::SetData(pos, nID, type);
 
 	// 当たり判定のサイズの設定
-	SetSizeColl(D3DXVECTOR3(70.0f, 200.0f, 70.0f));
+	SetSizeColl(CAT_SIZE);
 
 	// 全ての値を初期化する
 	m_posDest = pos;		// 目的の位置
-	m_rotDest = GetRot();	// 目的の向きを設定する6
+	m_rotDest = GetRot();	// 目的の向きを設定する
 
 	for (int nCntData = 0; nCntData < GetNumModel(); nCntData++)
 	{
