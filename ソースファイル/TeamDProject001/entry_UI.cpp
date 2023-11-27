@@ -17,8 +17,8 @@
 //=======================================
 // マクロ定義
 //=======================================
-#define TEAM_SHIFT			(180.0f)		// チームのずらす高さ
-#define ID_SHIFT			(180.0f)		// IDのずらす高さ
+#define TEAM_SHIFT			(210.0f)		// チームのずらす高さ
+#define ID_SHIFT			(210.0f)		// IDのずらす高さ
 #define NONE_ID				(-1)			// インデックスの初期数
 
 //=========================
@@ -151,7 +151,7 @@ void CEntryUI::Draw(void)
 //=========================
 // 情報の設定処理
 //=========================
-void CEntryUI::SetData(const D3DXVECTOR3& pos, const int nID)
+void CEntryUI::SetData(const D3DXVECTOR3& pos, const int nID, const CPlayer::TYPE type)
 {
 	if (m_pFrame == nullptr)
 	{ // 枠の情報が NULL の場合
@@ -170,7 +170,7 @@ void CEntryUI::SetData(const D3DXVECTOR3& pos, const int nID)
 	{ // チームの情報が NULL の場合
 
 		// チームを生成する
-		m_pTeam = CEntryTeam::Create(D3DXVECTOR3(pos.x, pos.y - TEAM_SHIFT, 0.0f));
+		m_pTeam = CEntryTeam::Create(D3DXVECTOR3(pos.x, pos.y - TEAM_SHIFT, 0.0f), type);
 	}
 	else
 	{ // 上記以外
@@ -196,7 +196,7 @@ void CEntryUI::SetData(const D3DXVECTOR3& pos, const int nID)
 //=========================
 // 生成処理
 //=========================
-CEntryUI* CEntryUI::Create(const D3DXVECTOR3& pos, const int nID)
+CEntryUI* CEntryUI::Create(const D3DXVECTOR3& pos, const int nID, const CPlayer::TYPE type)
 {
 	// ローカルオブジェクトを生成
 	CEntryUI* pEntry = nullptr;	// プレイヤーのインスタンスを生成
@@ -232,7 +232,7 @@ CEntryUI* CEntryUI::Create(const D3DXVECTOR3& pos, const int nID)
 		}
 
 		// 情報の設定処理
-		pEntry->SetData(pos, nID);
+		pEntry->SetData(pos, nID, type);
 	}
 	else
 	{ // オブジェクトが NULL の場合

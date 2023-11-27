@@ -11,6 +11,7 @@
 // インクルードファイル
 //***********************************
 #include "object2D.h"
+#include "player.h"
 
 //-----------------------------------
 // クラス定義(CEntryTeam)
@@ -28,10 +29,10 @@ public:			// 誰でもアクセスできる
 	void Update(void);		// 更新処理
 	void Draw(void);		// 描画処理
 
-	void SetData(const D3DXVECTOR3& pos);					// 情報の設定処理
+	void SetData(const D3DXVECTOR3& pos, const CPlayer::TYPE type);					// 情報の設定処理
 
 	// 静的メンバ関数
-	static CEntryTeam* Create(const D3DXVECTOR3& pos);		// 生成処理
+	static CEntryTeam* Create(const D3DXVECTOR3& pos, const CPlayer::TYPE type);	// 生成処理
 
 private:		// 自分だけアクセスできる
 

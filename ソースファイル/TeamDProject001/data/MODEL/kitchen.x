@@ -1137,7 +1137,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Documents\\フォトショ\\haisuikou.png";
+    "data\\TEXTURE\\haisuikou.png";
    }
   }
   Material {
@@ -1146,7 +1146,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Downloads\\28052988_s.jpg";
+    "data\\TEXTURE\\28052988_s.jpg";
    }
   }
   Material {
@@ -1155,7 +1155,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Documents\\フォトショ\\IH_off.png";
+    "data\\TEXTURE\\IH_off.png";
    }
   }
   Material {
@@ -1164,7 +1164,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Documents\\フォトショ\\grill.png";
+    "data\\TEXTURE\\grill.png";
    }
   }
  }

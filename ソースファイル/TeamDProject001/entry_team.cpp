@@ -11,8 +11,9 @@
 //=======================================
 // マクロ定義
 //=======================================
-#define TEAM_SIZE		(D3DXVECTOR3(80.0f, 40.0f, 0.0f))		// チームのサイズ
+#define TEAM_SIZE		(D3DXVECTOR3(120.0f, 60.0f, 0.0f))		// チームのサイズ
 #define TEAM_TEXTURE	"data\\TEXTURE\\MatchChara.png"			// チームのテクスチャ
+#define TEAM_PATTERN	(0.5f)									// チームのパターン数
 
 //=========================
 // コンストラクタ
@@ -75,7 +76,7 @@ void CEntryTeam::Draw(void)
 //=========================
 // 情報の設定処理
 //=========================
-void CEntryTeam::SetData(const D3DXVECTOR3& pos)
+void CEntryTeam::SetData(const D3DXVECTOR3& pos, const CPlayer::TYPE type)
 {
 	// スクロールの設定処理
 	SetPos(pos);				// 位置設定
@@ -89,12 +90,15 @@ void CEntryTeam::SetData(const D3DXVECTOR3& pos)
 
 	// 頂点情報の初期化
 	SetVertex();
+
+	// テクスチャ座標の設定処理
+	SetVtxTextureAnim(TEAM_PATTERN, type);
 }
 
 //=========================
 // 生成処理
 //=========================
-CEntryTeam* CEntryTeam::Create(const D3DXVECTOR3& pos)
+CEntryTeam* CEntryTeam::Create(const D3DXVECTOR3& pos, const CPlayer::TYPE type)
 {
 	// ローカルオブジェクトを生成
 	CEntryTeam* pEntryTeam = nullptr;	// プレイヤーのインスタンスを生成
@@ -130,7 +134,7 @@ CEntryTeam* CEntryTeam::Create(const D3DXVECTOR3& pos)
 		}
 
 		// 情報の設定処理
-		pEntryTeam->SetData(pos);
+		pEntryTeam->SetData(pos, type);
 	}
 	else
 	{ // オブジェクトが NULL の場合

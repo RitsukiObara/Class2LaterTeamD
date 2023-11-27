@@ -11,6 +11,7 @@
 // インクルードファイル
 //***********************************
 #include "object.h"
+#include "player.h"
 
 //-----------------------------------
 // 前方宣言
@@ -35,10 +36,10 @@ public:
 	void Update(void);		// 更新処理
 	void Draw(void);		// 描画処理
 
-	void SetData(const D3DXVECTOR3& pos, const int nID);				// 情報の設定処理
+	void SetData(const D3DXVECTOR3& pos, const int nID, const CPlayer::TYPE type);				// 情報の設定処理
 
 	// 静的メンバ関数
-	static CEntryUI* Create(const D3DXVECTOR3& pos, const int nID);	// 生成処理
+	static CEntryUI* Create(const D3DXVECTOR3& pos, const int nID, const CPlayer::TYPE type);	// 生成処理
 
 private:
 

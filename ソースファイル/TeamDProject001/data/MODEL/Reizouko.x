@@ -771,7 +771,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Desktop\\TeamDProject001\\data\\TEXTURE\\reizouko_memo00.png";
+    "data\\TEXTURE\\reizouko_memo00.png";
    }
   }
   Material {
@@ -780,7 +780,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Desktop\\TeamDProject001\\data\\TEXTURE\\reizouko_memo01.png";
+    "data\\TEXTURE\\reizouko_memo01.png";
    }
   }
   Material {

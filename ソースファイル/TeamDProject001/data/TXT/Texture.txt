@@ -26,7 +26,6 @@ TEXTURE = data\TEXTURE\RankingWord.png		# ランキングの文字
 TEXTURE = data\TEXTURE\SkyBox.jpg			# スカイボックス
 TEXTURE = data\TEXTURE\TimeCoron.png		# タイムのコロン
 TEXTURE = data\TEXTURE\TimeNumber.png		# タイムの数字
-TEXTURE = data\TEXTURE\TitleLogo.png		# タイトルロゴ
 
 # エフェクト系
 TEXTURE = data\TEXTURE\Dust.tga				# 埃

@@ -15,13 +15,23 @@
 
 #include "entry_UI.h"
 #include "input.h"
+#include "player.h"
+
+//--------------------------------------------
+// 静的メンバ変数
+//--------------------------------------------
+CEntryUI* CEntry::m_apUI[MAX_ENTRY] = {};		// エントリーUIの情報
 
 //=========================================
 // コンストラクタ
 //=========================================
 CEntry::CEntry() : CScene(TYPE_SCENE, PRIORITY_BG)
 {
-
+	// 全ての値をクリアする
+	for (int nCnt = 0; nCnt < MAX_ENTRY; nCnt++)
+	{
+		m_apUI[nCnt] = nullptr;		// エントリーUIの情報
+	}
 }
 
 //=========================================
@@ -43,11 +53,21 @@ HRESULT CEntry::Init(void)
 	// テキスト読み込み処理
 	CMesh::TxtSet();
 
-	// エントリーUIの生成処理
-	CEntryUI::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 375.0f, SCREEN_HEIGHT * 0.6f, 0.0f), 0);
-	CEntryUI::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 125.0f, SCREEN_HEIGHT * 0.6f, 0.0f), 1);
-	CEntryUI::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f + 125.0f, SCREEN_HEIGHT * 0.6f, 0.0f), 2);
-	CEntryUI::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f + 375.0f, SCREEN_HEIGHT * 0.6f, 0.0f), 3);
+	for (int nCnt = 0; nCnt < MAX_ENTRY; nCnt++)
+	{
+		if (nCnt == 0)
+		{ // 最初のみ
+
+			// エントリーUIの生成処理
+			m_apUI[nCnt] = CEntryUI::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f + (300.0f * nCnt) - 450.0f, SCREEN_HEIGHT * 0.45f, 0.0f), nCnt, CPlayer::TYPE_CAT);
+		}
+		else
+		{ // 上記以外
+
+			// エントリーUIの生成処理
+			m_apUI[nCnt] = CEntryUI::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f + (300.0f * nCnt) - 450.0f, SCREEN_HEIGHT * 0.45f, 0.0f), nCnt, CPlayer::TYPE_RAT);
+		}
+	}
 
 	// 成功を返す
 	return S_OK;
@@ -58,6 +78,18 @@ HRESULT CEntry::Init(void)
 //=============================================
 void CEntry::Uninit(void)
 {
+	// 全ての値をクリアする
+	for (int nCnt = 0; nCnt < MAX_ENTRY; nCnt++)
+	{
+		if (m_apUI[nCnt] != nullptr)
+		{ // エントリーUIの情報が NULL じゃない場合
+
+			// エントリーUIの終了処理
+			m_apUI[nCnt]->Uninit();
+			m_apUI[nCnt] = nullptr;
+		}
+	}
+
 	// 終了処理
 	CScene::Uninit();
 }

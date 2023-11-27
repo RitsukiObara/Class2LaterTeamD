@@ -11,7 +11,7 @@
 //=======================================
 // マクロ定義
 //=======================================
-#define ID_SIZE		(D3DXVECTOR3(80.0f, 40.0f, 0.0f))		// IDのサイズ
+#define ID_SIZE		(D3DXVECTOR3(120.0f, 60.0f, 0.0f))		// IDのサイズ
 #define ID_TEXTURE	"data\\TEXTURE\\PlayerID.png"			// IDのテクスチャ
 #define ID_PATTERN		(0.25f)								// IDのテクスチャのパターン数
 
