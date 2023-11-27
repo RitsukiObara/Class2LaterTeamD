@@ -140,7 +140,7 @@ void CHoney::SetData(const D3DXVECTOR3& pos, const TYPE type)
 //=====================================
 // 当たり判定処理
 //=====================================
-bool CHoney::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
+bool CHoney::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
 	// 最大値と最小値を設定する
 	D3DXVECTOR3 vtxMax = D3DXVECTOR3(fWidth, fHeight, fDepth);
@@ -173,7 +173,7 @@ bool CHoney::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float 
 //=====================================
 // ヒット処理
 //=====================================
-bool CHoney::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
+bool CHoney::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
 	// ローカル変数宣言
 	D3DXVECTOR3 vtxMax = D3DXVECTOR3(fWidth, fHeight, fDepth);		// サイズの最大値
@@ -182,7 +182,7 @@ bool CHoney::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight
 	if (m_State == STATE_HONEYBOTTLE)
 	{ // 蜂蜜ボトル状態の場合
 
-		if (type == COLLTYPE_CAT)
+		if (type == CPlayer::TYPE_CAT)
 		{ // ネコの場合
 
 			if (useful::RectangleCollisionXY(pos, GetPos(), vtxMax, GetFileData().vtxMax, vtxMin, GetFileData().vtxMin) == true &&

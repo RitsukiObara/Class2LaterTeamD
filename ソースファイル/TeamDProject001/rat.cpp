@@ -183,8 +183,8 @@ void CRat::Uninit(void)
 		m_pRessrectionFan = nullptr;
 	}
 
-	// ネズミを消去する
-	CGame::DeleteRat(m_nRatIdx);
+	// プレイヤーを消去する
+	CGame::DeletePlayer(m_nRatIdx);
 
 	// 終了処理
 	CPlayer::Uninit();
@@ -233,7 +233,7 @@ void CRat::Update(void)
 
 	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_E))
 	{
-		collision::ObstacleAction(this, SIZE.x, CObstacle::COLLTYPE_RAT);
+		collision::ObstacleAction(this, SIZE.x, CPlayer::TYPE_RAT);
 	}
 
 	if (m_pRatState != nullptr)

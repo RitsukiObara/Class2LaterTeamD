@@ -134,7 +134,7 @@ void CPetbottle::SetData(const D3DXVECTOR3& pos, const TYPE type)
 //=====================================
 // 当たり判定処理
 //=====================================
-bool CPetbottle::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
+bool CPetbottle::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
 	if (m_state == STATE_STAND)
 	{ // 直立状態の場合
@@ -172,14 +172,14 @@ bool CPetbottle::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const fl
 //=====================================
 // ヒット処理
 //=====================================
-bool CPetbottle::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
+bool CPetbottle::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
 	// 最大値と最小値を設定する
 	D3DXVECTOR3 vtxMax = D3DXVECTOR3(fWidth, fHeight, fDepth);
 	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-fWidth, 0.0f, -fDepth);
 
 	if (m_state == STATE_COLLAPSE &&
-		type == COLLTYPE_RAT)
+		type == CPlayer::TYPE_RAT)
 	{ // 倒れ状態の場合
 
 		if (useful::RectangleCollisionXY(GetPos(), pos, GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true &&

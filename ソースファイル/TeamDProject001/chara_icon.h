@@ -11,6 +11,7 @@
 // インクルードファイル
 //********************************************
 #include "object2D.h"
+#include "player.h"
 
 //--------------------------------------------
 // クラス定義(キャラクターの画像)
@@ -18,14 +19,6 @@
 class CCharaIcon : public CObject2D
 {
 public:				// 誰でもアクセスできる
-
-	// 列挙型定義(種類)
-	enum TYPE
-	{
-		TYPE_CAT = 0,		// ネコ
-		TYPE_RAT,			// ネズミ
-		TYPE_MAX			// この列挙型の総数
-	};
 
 	CCharaIcon();						// コンストラクタ
 	~CCharaIcon();						// デストラクタ
@@ -36,10 +29,10 @@ public:				// 誰でもアクセスできる
 	void Update(void);					// 更新処理
 	void Draw(void);					// 描画処理
 
-	void SetData(const D3DXVECTOR3& pos, const TYPE type);					// 情報の設定処理
+	void SetData(const D3DXVECTOR3& pos, const CPlayer::TYPE type);					// 情報の設定処理
 
 	// 静的メンバ関数
-	static CCharaIcon* Create(const D3DXVECTOR3& pos, const TYPE type);		// 生成処理
+	static CCharaIcon* Create(const D3DXVECTOR3& pos, const CPlayer::TYPE type);	// 生成処理
 
 private:			// 自分だけアクセスできる
 

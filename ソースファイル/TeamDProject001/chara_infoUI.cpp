@@ -12,6 +12,7 @@
 #include "texture.h"
 #include "useful.h"
 
+#include "chara_icon.h"
 #include "chara_ID.h"
 #include "chara_state.h"
 
@@ -138,7 +139,7 @@ void CCharaInfoUI::Draw(void)
 //========================
 // 情報の設定処理
 //========================
-void CCharaInfoUI::SetData(const D3DXVECTOR3& pos, const int nPlayerID, const CCharaIcon::TYPE type)
+void CCharaInfoUI::SetData(const D3DXVECTOR3& pos, const int nPlayerID, const CPlayer::TYPE type)
 {
 	if (m_pIcon == nullptr)
 	{ // アイコンが NULL の場合
@@ -171,7 +172,7 @@ void CCharaInfoUI::SetData(const D3DXVECTOR3& pos, const int nPlayerID, const CC
 //========================
 // 生成処理
 //========================
-CCharaInfoUI* CCharaInfoUI::Create(const D3DXVECTOR3& pos, const int nPlayerID, const CCharaIcon::TYPE type)
+CCharaInfoUI* CCharaInfoUI::Create(const D3DXVECTOR3& pos, const int nPlayerID, const CPlayer::TYPE type)
 {
 	// ローカルオブジェクトを生成
 	CCharaInfoUI* pInfoUI = nullptr;		// キャラクター情報UIのインスタンスを生成

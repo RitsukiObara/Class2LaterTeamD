@@ -74,21 +74,21 @@ void CPlayerID::Update(void)
 //=========================
 void CPlayerID::Draw(void)
 {
-	// デバイスの取得
-	LPDIRECT3DDEVICE9 pDevice = CManager::Get()->GetRenderer()->GetDevice();
+	//// デバイスの取得
+	//LPDIRECT3DDEVICE9 pDevice = CManager::Get()->GetRenderer()->GetDevice();
 
-	//αブレンディングを加算処理に設定
-	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
-	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+	////αブレンディングを加算処理に設定
+	//pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+	//pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	//pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
 
 	// 描画処理
 	CBillboard::DrawLightOff();
 
-	//αブレンディングを元に戻す
-	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
-	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+	////αブレンディングを元に戻す
+	//pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+	//pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	//pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 }
 
 //=========================
