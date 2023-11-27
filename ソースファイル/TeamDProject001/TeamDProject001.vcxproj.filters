@@ -420,9 +420,6 @@
     <ClCompile Include="chara_infoUI.cpp">
       <Filter>UI\CharaInfoUI</Filter>
     </ClCompile>
-    <ClCompile Include="leash.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="chara_icon.cpp">
       <Filter>UI\CharaInfoUI</Filter>
     </ClCompile>
@@ -449,6 +446,12 @@
     </ClCompile>
     <ClCompile Include="player.cpp">
       <Filter>Player</Filter>
+    </ClCompile>
+    <ClCompile Include="leash.cpp">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="cup.cpp">
+      <Filter>Gimmick\Obstacle</Filter>
     </ClCompile>
     <ClCompile Include="match_frame.cpp">
       <Filter>Scene\Entry\Entry_Match</Filter>
@@ -788,9 +791,6 @@
     <ClInclude Include="chara_infoUI.h">
       <Filter>UI\CharaInfoUI</Filter>
     </ClInclude>
-    <ClInclude Include="leash.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="chara_icon.h">
       <Filter>UI\CharaInfoUI</Filter>
     </ClInclude>
@@ -817,6 +817,12 @@
     </ClInclude>
     <ClInclude Include="player.h">
       <Filter>Player</Filter>
+    </ClInclude>
+    <ClInclude Include="leash.h">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="cup.h">
+      <Filter>Gimmick\Obstacle</Filter>
     </ClInclude>
     <ClInclude Include="match_frame.h">
       <Filter>Scene\Entry\Entry_Match</Filter>

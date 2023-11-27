@@ -39,6 +39,7 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\pin_floor.x",			// 設置状態の画鋲
 	"data\\MODEL\\pin_one.x",			// 破片用の画鋲
 	"data\\MODEL\\Senpuki_Fan.x",		// 扇風機(羽根)
+	"data\\MODEL\\consent.x",			// コンセント
 
 	// ブロックモデル
 	"data\\MODEL\\cardboard.x",			// 段ボール
@@ -49,7 +50,6 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\Clock.x",				// 時計
 	"data\\MODEL\\rubbish.x",			// チリ紙
 	"data\\MODEL\\milk_carton.x",		// 牛乳パック
-	"data\\MODEL\\cup.x",				// コップ
 	"data\\MODEL\\obaphone.x",			// オバフォン
 	"data\\MODEL\\wii.x",				// Wii
 	"data\\MODEL\\ds.x",				// DS
@@ -77,6 +77,7 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\leash.x",				// リード
 	"data\\MODEL\\pin_box.x",			// 画鋲
 	"data\\MODEL\\Senpuki_Body.x",		// 扇風機(本体)
+	"data\\MODEL\\cup.x",				// コップ
 
 	//マップモデル
 	"data\\MODEL\\Kitchen.x",			//キッチン

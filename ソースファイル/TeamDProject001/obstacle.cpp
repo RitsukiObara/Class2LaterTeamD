@@ -27,6 +27,7 @@
 #include "leash.h"
 #include "Pin.h"
 #include "electricfan.h"
+#include "cup.h"
 
 //==============================
 // コンストラクタ
@@ -281,6 +282,13 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const TYPE type)
 
 			// 扇風機を生成する
 			pObstacle = new CElecFan;
+
+			break;
+
+		case CObstacle::TYPE_CUP:		// 起動系
+
+			// コップを生成する
+			pObstacle = new CCup;
 
 			break;
 
