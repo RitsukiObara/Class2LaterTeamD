@@ -12,7 +12,7 @@
 // マクロ定義
 //=======================================
 #define TEAM_SIZE		(D3DXVECTOR3(80.0f, 40.0f, 0.0f))		// チームのサイズ
-#define TEAM_TEXTURE	"data\\TEXTURE\\Entry_Team.png"			// チームのテクスチャ
+#define TEAM_TEXTURE	"data\\TEXTURE\\MatchChara.png"			// チームのテクスチャ
 
 //=========================
 // コンストラクタ
@@ -89,9 +89,6 @@ void CEntryTeam::SetData(const D3DXVECTOR3& pos)
 
 	// 頂点情報の初期化
 	SetVertex();
-
-	// 頂点カラーの設定処理
-	SetVtxColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
 }
 
 //=========================

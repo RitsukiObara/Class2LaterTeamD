@@ -33,7 +33,7 @@
 #define NONE_PLAYERIDX		(-1)			// プレイヤーの番号の初期値
 #define MAX_LIFE			(1)				// 寿命の最大値
 #define STUN_HEIGHT			(80.0f)			// 気絶演出が出てくる高さ
-#define ID_HEIGHT			(90.0f)			// IDが出てくる高さ
+#define ID_HEIGHT			(150.0f)		// IDが出てくる高さ
 #define SMASH_MOVE			(D3DXVECTOR3(10.0f, 20.0f, 10.0f))		// 吹き飛び状態の移動量
 
 //==============================
@@ -232,7 +232,7 @@ void CPlayer::SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 	{ // プレイヤーのID表示が NULL の場合
 
 		// プレイヤーのID表示の生成処理
-		m_pPlayerID = CPlayerID::Create(D3DXVECTOR3(pos.x, pos.y + 90.0f, pos.z), nID);
+		m_pPlayerID = CPlayerID::Create(D3DXVECTOR3(pos.x, pos.y + ID_HEIGHT, pos.z), nID);
 	}
 }
 

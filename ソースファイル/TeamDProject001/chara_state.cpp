@@ -174,17 +174,17 @@ CCharaState* CCharaState::Create(const D3DXVECTOR3& pos)
 void CCharaState::State(void)
 {
 	//// ネズミのポインタを宣言する
-	//CRat* pRat = nullptr;
+	//CPlayer* pPlayer = nullptr;
 
-	//for (int nCnt = 0; nCnt < MAX_RAT; nCnt++)
+	//for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
 	//{
 	//	// ネズミのポインタを取得する
-	//	pRat = CGame::GetRat(nCnt);
+	//	pPlayer = CGame::GetPlayer(nCnt);
 
-	//	if (pRat != nullptr)
+	//	if (pPlayer != nullptr)
 	//	{ // ネズミが NULL じゃない場合
 
-	//		if (pRat->GetState()->GetState() == CRatState::STATE_STUN &&
+	//		if (pPlayer->GetState()->GetState() == CRatState::STATE_STUN &&
 	//			m_state != STATE_STUN)
 	//		{ // 気絶状態の場合
 
@@ -203,7 +203,7 @@ void CCharaState::State(void)
 	//			// 頂点情報の設定処理
 	//			SetVertex();
 	//		}
-	//		else if (pRat->GetState()->GetState() == CRatState::STATE_DEATH &&
+	//		else if (pPlayer->GetState()->GetState() == CRatState::STATE_DEATH &&
 	//			m_state != STATE_GHOST)
 	//		{ // 死亡状態の場合
 
