@@ -833,7 +833,7 @@
     <ClInclude Include="entry_match.h">
       <Filter>Scene\Entry\Entry_Match</Filter>
     </ClInclude>
-    <ClInclude Include="entry_chara.h">
+    <ClInclude Include="match_chara.h">
       <Filter>Scene\Entry\Entry_Match</Filter>
     </ClInclude>
   </ItemGroup>
