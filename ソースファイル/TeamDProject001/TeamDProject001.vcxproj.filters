@@ -821,7 +821,7 @@
     <ClInclude Include="player.h">
       <Filter>Player</Filter>
     </ClInclude>
-    <ClInclude Include="matsh_frame.h">
+    <ClInclude Include="match_frame.h">
       <Filter>Scene\Entry\Entry_Match</Filter>
     </ClInclude>
   </ItemGroup>
