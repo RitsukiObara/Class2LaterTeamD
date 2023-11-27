@@ -468,7 +468,7 @@
     <ClCompile Include="match_vs.cpp">
       <Filter>Scene\Entry\Entry_Match</Filter>
     </ClCompile>
-    <ClCompile Include="match_cat.cpp">
+    <ClCompile Include="match_select.cpp">
       <Filter>Scene\Entry\Entry_Match</Filter>
     </ClCompile>
   </ItemGroup>
@@ -851,7 +851,7 @@
     <ClInclude Include="match_vs.h">
       <Filter>Scene\Entry\Entry_Match</Filter>
     </ClInclude>
-    <ClInclude Include="match_cat.h">
+    <ClInclude Include="match_select.h">
       <Filter>Scene\Entry\Entry_Match</Filter>
     </ClInclude>
   </ItemGroup>

@@ -209,7 +209,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manager.cpp" />
     <ClCompile Include="map.cpp" />
-    <ClCompile Include="match_cat.cpp" />
+    <ClCompile Include="match_select.cpp" />
     <ClCompile Include="match_chara.cpp" />
     <ClCompile Include="match_frame.cpp" />
     <ClCompile Include="match_vs.cpp" />
@@ -314,7 +314,7 @@
     <ClInclude Include="electricfan.h" />
     <ClInclude Include="elevation_manager.h" />
     <ClInclude Include="entry.h" />
-    <ClInclude Include="match_cat.h" />
+    <ClInclude Include="match_select.h" />
     <ClInclude Include="match_chara.h" />
     <ClInclude Include="entry_frame.h" />
     <ClInclude Include="entry_ID.h" />
