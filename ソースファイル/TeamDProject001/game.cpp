@@ -30,6 +30,7 @@
 #include "countdown.h"
 #include "item.h"
 #include "resurrection_fan.h"
+#include "player.h"
 
 #include "obstacle_manager.h"
 #include "chara_infoUI.h"
@@ -154,14 +155,7 @@ HRESULT CGame::Init(void)
 
 	for (int nCnt = 0; nCnt < 4; nCnt++)
 	{
-		if (nCnt == 0)
-		{
-			CCharaInfoUI::Create(D3DXVECTOR3(160.0f + (nCnt * 320.0f), 650.0f, 0.0f), nCnt, CCharaIcon::TYPE_CAT);
-		}
-		else
-		{
-			CCharaInfoUI::Create(D3DXVECTOR3(160.0f + (nCnt * 320.0f), 650.0f, 0.0f), nCnt, CCharaIcon::TYPE_RAT);
-		}
+		CCharaInfoUI::Create(D3DXVECTOR3(160.0f + (nCnt * 320.0f), 650.0f, 0.0f), nCnt, m_apPlayer[nCnt]->GetType());
 	}
 
 	//// •Ší‘I‘ğUI‚ğ¶¬

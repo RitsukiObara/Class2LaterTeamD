@@ -41,7 +41,7 @@
 //=========================================
 // コンストラクタ
 //=========================================
-CCat::CCat() : CPlayer(CObject::TYPE_CAT, CObject::PRIORITY_PLAYER)
+CCat::CCat() : CPlayer(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 {
 	// 全ての値をクリアする
 	m_AttackPos = NONE_D3DXVECTOR3;	//攻撃の位置
