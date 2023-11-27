@@ -456,6 +456,9 @@
     <ClCompile Include="match_frame.cpp">
       <Filter>Scene\Entry\Entry_Match</Filter>
     </ClCompile>
+    <ClCompile Include="entry_match.cpp">
+      <Filter>Scene\Entry\Entry_Match</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -822,6 +825,9 @@
       <Filter>Player</Filter>
     </ClInclude>
     <ClInclude Include="match_frame.h">
+      <Filter>Scene\Entry\Entry_Match</Filter>
+    </ClInclude>
+    <ClInclude Include="entry_match.h">
       <Filter>Scene\Entry\Entry_Match</Filter>
     </ClInclude>
   </ItemGroup>
