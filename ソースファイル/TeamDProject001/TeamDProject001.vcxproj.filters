@@ -459,6 +459,9 @@
     <ClCompile Include="entry_match.cpp">
       <Filter>Scene\Entry\Entry_Match</Filter>
     </ClCompile>
+    <ClCompile Include="match_chara.cpp">
+      <Filter>Scene\Entry\Entry_Match</Filter>
+    </ClCompile>
     <ClCompile Include="consent.cpp">
       <Filter>Gimmick\Obstacle</Filter>
     </ClCompile>
@@ -831,6 +834,9 @@
       <Filter>Scene\Entry\Entry_Match</Filter>
     </ClInclude>
     <ClInclude Include="entry_match.h">
+      <Filter>Scene\Entry\Entry_Match</Filter>
+    </ClInclude>
+    <ClInclude Include="match_chara.h">
       <Filter>Scene\Entry\Entry_Match</Filter>
     </ClInclude>
     <ClInclude Include="consent.h">

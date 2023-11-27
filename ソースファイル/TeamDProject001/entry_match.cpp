@@ -87,7 +87,7 @@ void CEntryMatch::Draw(void)
 //=========================
 // 情報の設定処理
 //=========================
-void CEntryMatch::SetData(const D3DXVECTOR3& pos, const int nID)
+void CEntryMatch::SetData(const D3DXVECTOR3& pos)
 {
 	if (m_pFrame == nullptr)
 	{ // 枠の情報が NULL の場合
@@ -106,7 +106,7 @@ void CEntryMatch::SetData(const D3DXVECTOR3& pos, const int nID)
 //=========================
 // 生成処理
 //=========================
-CEntryMatch* CEntryMatch::Create(const D3DXVECTOR3& pos, const int nID)
+CEntryMatch* CEntryMatch::Create(const D3DXVECTOR3& pos)
 {
 	// ローカルオブジェクトを生成
 	CEntryMatch* pMatch = nullptr;	// プレイヤーのインスタンスを生成
@@ -142,7 +142,7 @@ CEntryMatch* CEntryMatch::Create(const D3DXVECTOR3& pos, const int nID)
 		}
 
 		// 情報の設定処理
-		pMatch->SetData(pos, nID);
+		pMatch->SetData(pos);
 	}
 	else
 	{ // オブジェクトが NULL の場合
