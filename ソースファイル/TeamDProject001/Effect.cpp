@@ -17,6 +17,7 @@
 #define FIRE_TEXTURE		"data\\TEXTURE\\Smoke.tga"				// 炎エフェクトのテクスチャ
 #define DUST_TEXTURE		"data\\TEXTURE\\Dust.tga"				// 埃エフェクトのテクスチャ
 #define RUPTURE_TEXTURE		"data\\TEXTURE\\Rupture.tga"			// 破裂エフェクトのテクスチャ
+#define THUNDER_TEXTURE		"data\\TEXTURE\\Thunder.png"			// 雷エフェクトのテクスチャ
 #define DUST_GRAVITY		(0.4f)									// 埃の重力
 
 //=========================
@@ -156,6 +157,15 @@ void CEffect::Update(void)
 
 		break;
 
+	case TYPE_THUNDER:		// 電気
+
+		SetSize(D3DXVECTOR3(25.0f, 50.0f, 0.0f));
+
+		// 移動処理
+		Move();
+
+		break;
+
 	default:
 
 		// 停止
@@ -260,6 +270,12 @@ void CEffect::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& move, const int
 
 		// テクスチャの読み込み処理
 		BindTexture(CManager::Get()->GetTexture()->Regist(RUPTURE_TEXTURE));
+	}
+	else if (m_type == TYPE_THUNDER)
+	{ // 電気の場合
+
+	  // テクスチャの読み込み処理
+		BindTexture(CManager::Get()->GetTexture()->Regist(THUNDER_TEXTURE));
 	}
 	else
 	{ // 上記以外

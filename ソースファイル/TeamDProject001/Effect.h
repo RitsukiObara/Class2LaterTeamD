@@ -27,6 +27,7 @@ public:
 		TYPE_DUST,				// ‰Œ
 		TYPE_RUPTURE,			// ”j—ô
 		TYPE_SMOKE,				// ‰Œ
+		TYPE_THUNDER,			// “d‹C
 		TYPE_MAX				// ‚±‚Ì—ñ‹“Œ^‚Ì‘”
 	};
 
