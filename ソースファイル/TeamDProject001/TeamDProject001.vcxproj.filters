@@ -85,6 +85,9 @@
     <Filter Include="Player\Cat">
       <UniqueIdentifier>{2f0cfa38-123d-404e-b4b5-8fc83900d5b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scene\Entry\Entry_Match">
+      <UniqueIdentifier>{4c3a524a-c992-4338-85fd-f6026d493ba3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="fade.cpp">
@@ -381,9 +384,6 @@
     <ClCompile Include="entry_ID.cpp">
       <Filter>Scene\Entry</Filter>
     </ClCompile>
-    <ClCompile Include="entry_arrow.cpp">
-      <Filter>Scene\Entry</Filter>
-    </ClCompile>
     <ClCompile Include="Himo.cpp">
       <Filter>Gimmick\Obstacle</Filter>
     </ClCompile>
@@ -420,9 +420,6 @@
     <ClCompile Include="chara_infoUI.cpp">
       <Filter>UI\CharaInfoUI</Filter>
     </ClCompile>
-    <ClCompile Include="leash.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="chara_icon.cpp">
       <Filter>UI\CharaInfoUI</Filter>
     </ClCompile>
@@ -449,6 +446,24 @@
     </ClCompile>
     <ClCompile Include="player.cpp">
       <Filter>Player</Filter>
+    </ClCompile>
+    <ClCompile Include="leash.cpp">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="cup.cpp">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="match_frame.cpp">
+      <Filter>Scene\Entry\Entry_Match</Filter>
+    </ClCompile>
+    <ClCompile Include="entry_match.cpp">
+      <Filter>Scene\Entry\Entry_Match</Filter>
+    </ClCompile>
+    <ClCompile Include="match_chara.cpp">
+      <Filter>Scene\Entry\Entry_Match</Filter>
+    </ClCompile>
+    <ClCompile Include="consent.cpp">
+      <Filter>Gimmick\Obstacle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -746,9 +761,6 @@
     <ClInclude Include="entry_ID.h">
       <Filter>Scene\Entry</Filter>
     </ClInclude>
-    <ClInclude Include="entry_arrow.h">
-      <Filter>Scene\Entry</Filter>
-    </ClInclude>
     <ClInclude Include="Himo.h">
       <Filter>Gimmick\Obstacle</Filter>
     </ClInclude>
@@ -785,9 +797,6 @@
     <ClInclude Include="chara_infoUI.h">
       <Filter>UI\CharaInfoUI</Filter>
     </ClInclude>
-    <ClInclude Include="leash.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="chara_icon.h">
       <Filter>UI\CharaInfoUI</Filter>
     </ClInclude>
@@ -814,6 +823,24 @@
     </ClInclude>
     <ClInclude Include="player.h">
       <Filter>Player</Filter>
+    </ClInclude>
+    <ClInclude Include="leash.h">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="cup.h">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="match_frame.h">
+      <Filter>Scene\Entry\Entry_Match</Filter>
+    </ClInclude>
+    <ClInclude Include="entry_match.h">
+      <Filter>Scene\Entry\Entry_Match</Filter>
+    </ClInclude>
+    <ClInclude Include="match_chara.h">
+      <Filter>Scene\Entry\Entry_Match</Filter>
+    </ClInclude>
+    <ClInclude Include="consent.h">
+      <Filter>Gimmick\Obstacle</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

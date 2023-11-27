@@ -103,7 +103,7 @@ private:		// 自分だけアクセスできる
 	CStun* m_pStun;				// 気絶の情報
 	D3DXVECTOR3 m_move;			// 移動量
 	D3DXVECTOR3 m_sizeColl;		// 当たり判定のサイズ
-	TYPE m_type;				// モーションの種類
+	TYPE m_type;				// 種類
 	int m_nLife;				// 寿命
 	int m_nPlayerIdx;			// プレイヤーのインデックス
 	float m_fSpeed;				// 速度

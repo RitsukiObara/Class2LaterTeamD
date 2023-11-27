@@ -142,7 +142,7 @@ void CMouseTrap::SetData(const D3DXVECTOR3& pos, const TYPE type)
 //=====================================
 // ìñÇΩÇËîªíËèàóù
 //=====================================
-bool CMouseTrap::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
+bool CMouseTrap::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
 	// false Çï‘Ç∑
 	return false;
@@ -151,7 +151,7 @@ bool CMouseTrap::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const fl
 //=====================================
 // ÉqÉbÉgèàóù
 //=====================================
-bool CMouseTrap::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
+bool CMouseTrap::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
 	// false Çï‘Ç∑
 	return false;

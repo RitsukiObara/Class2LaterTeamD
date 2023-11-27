@@ -1,29 +1,37 @@
 //===================================
 //
-// スピーカーヘッダー[Himo.h]
+// コップヘッダー[cup.h]
 // Author 坂本翔唯
 //
 //===================================
-#ifndef _SPEAKER_H_
-#define _SPEAKER_H_
+#ifndef _CUP_H_
+#define _CUP_H_
 
 //***********************************
 // インクルードファイル
 //***********************************
 #include "obstacle.h"
 
-#define MAX_NOTE (32)	//音符が画面の中に存在できる最大数
-
-class CNote;
+class CConsent;
+class CObject3D;
 //-----------------------------------
-// クラス定義(スピーカー)
+// クラス定義(コップ)
 //-----------------------------------
-class CSpeaker : public CObstacle
+class CCup : public CObstacle
 {
 public:			// 誰でもアクセスできる
 
-	CSpeaker();				// コンストラクタ
-	~CSpeaker();				// デストラクタ
+	CCup();				// コンストラクタ
+	~CCup();				// デストラクタ
+
+	// 列挙型定義(状態)
+	enum STATE
+	{
+		STATE_FALSE = 0,	// 停止状態
+		STATE_FALLWAIT,		// 起動まで落下中に準備する
+		STATE_TRUE,			// 起動状態
+		STATE_MAX			// この列挙型の総数
+	};
 
 	// メンバ関数
 	HRESULT Init(void);		// 初期化処理
@@ -38,14 +46,15 @@ public:			// 誰でもアクセスできる
 	bool HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type);
 	void Action(void) override;
 
-	static void NULLNote(int Idx) { m_apNote[Idx] = NULL; }
+	void NULLConsent(void) { m_pConsent = NULL; }
 
 private:		// 自分だけアクセスできる
-	void SetNote(void);
+	void StateManager(D3DXVECTOR3 *pos, D3DXVECTOR3 *rot);
 
-	static CNote *m_apNote[MAX_NOTE];
-	bool m_bAction;
-	int m_nNoteCount;
+	D3DXVECTOR3 m_move;
+	STATE m_State;
+	CObject3D *m_pWater;
+	CConsent *m_pConsent;
 };
 
 #endif

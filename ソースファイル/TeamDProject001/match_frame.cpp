@@ -1,23 +1,22 @@
 //=======================================
 //
-// エントリーの矢印のメイン処理[entry_arrow.cpp]
+// マッチングの枠チーム処理[match_frame.cpp]
 // Author 小原立暉
 //
 //=======================================
 #include "manager.h"
-#include "entry_arrow.h"
+#include "match_frame.h"
 #include "texture.h"
 
 //=======================================
 // マクロ定義
 //=======================================
-#define ARROW_SIZE		(D3DXVECTOR3(30.0f, 30.0f, 0.0f))		// 矢印のサイズ
-#define ARROW_TEXTURE	"data\\TEXTURE\\Arrow.png"				// 矢印のテクスチャ
+#define TEAM_SIZE		(D3DXVECTOR3(120.0f, 60.0f, 0.0f))		// チームのサイズ
 
 //=========================
 // コンストラクタ
 //=========================
-CEntryArrow::CEntryArrow() : CObject2D(CObject::TYPE_NONE, CObject::PRIORITY_ENTITY)
+CMatchFrame::CMatchFrame() : CObject2D(CObject::TYPE_NONE, CObject::PRIORITY_ENTITY)
 {
 
 }
@@ -25,7 +24,7 @@ CEntryArrow::CEntryArrow() : CObject2D(CObject::TYPE_NONE, CObject::PRIORITY_ENT
 //=========================
 // デストラクタ
 //=========================
-CEntryArrow::~CEntryArrow()
+CMatchFrame::~CMatchFrame()
 {
 
 }
@@ -33,7 +32,7 @@ CEntryArrow::~CEntryArrow()
 //=========================
 // 初期化処理
 //=========================
-HRESULT CEntryArrow::Init(void)
+HRESULT CMatchFrame::Init(void)
 {
 	if (FAILED(CObject2D::Init()))
 	{ // 初期化に失敗した場合
@@ -49,7 +48,7 @@ HRESULT CEntryArrow::Init(void)
 //=========================
 // 終了処理
 //=========================
-void CEntryArrow::Uninit(void)
+void CMatchFrame::Uninit(void)
 {
 	// 終了
 	CObject2D::Uninit();
@@ -58,7 +57,7 @@ void CEntryArrow::Uninit(void)
 //=========================
 // 更新処理
 //=========================
-void CEntryArrow::Update(void)
+void CMatchFrame::Update(void)
 {
 
 }
@@ -66,7 +65,7 @@ void CEntryArrow::Update(void)
 //=========================
 // 描画処理
 //=========================
-void CEntryArrow::Draw(void)
+void CMatchFrame::Draw(void)
 {
 	// 描画処理
 	CObject2D::Draw();
@@ -75,48 +74,35 @@ void CEntryArrow::Draw(void)
 //=========================
 // 情報の設定処理
 //=========================
-void CEntryArrow::SetData(const D3DXVECTOR3& pos, const bool bRight)
+void CMatchFrame::SetData(const D3DXVECTOR3& pos)
 {
 	// スクロールの設定処理
 	SetPos(pos);				// 位置設定
 	SetRot(NONE_D3DXVECTOR3);	// 向き設定
-	SetSize(ARROW_SIZE);		// サイズ設定
+	SetSize(TEAM_SIZE);			// サイズ設定
 	SetLength();				// 長さ設定
 	SetAngle();					// 方向設定
-
-	// テクスチャの読み込み処理
-	BindTexture(CManager::Get()->GetTexture()->Regist(ARROW_TEXTURE));
 
 	// 頂点情報の初期化
 	SetVertex();
 
-	if (bRight == true)
-	{ // 右向きの場合
-
-		// テクスチャの設定処理
-		SetVtxTexture();
-	}
-	else
-	{ // 上記以外
-
-		// 反転テクスチャの設定処理
-		SetVtxTextureRev();
-	}
+	// 頂点カラーの設定処理
+	SetVtxColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
 }
 
 //=========================
 // 生成処理
 //=========================
-CEntryArrow* CEntryArrow::Create(const D3DXVECTOR3& pos, const bool bRight)
+CMatchFrame* CMatchFrame::Create(const D3DXVECTOR3& pos)
 {
 	// ローカルオブジェクトを生成
-	CEntryArrow* pArrow = nullptr;	// プレイヤーのインスタンスを生成
+	CMatchFrame* pEntryTeam = nullptr;	// プレイヤーのインスタンスを生成
 
-	if (pArrow == nullptr)
+	if (pEntryTeam == nullptr)
 	{ // オブジェクトが NULL の場合
 
 		// オブジェクトを生成
-		pArrow = new CEntryArrow;
+		pEntryTeam = new CMatchFrame;
 	}
 	else
 	{ // オブジェクトが NULL じゃない場合
@@ -128,11 +114,11 @@ CEntryArrow* CEntryArrow::Create(const D3DXVECTOR3& pos, const bool bRight)
 		return nullptr;
 	}
 
-	if (pArrow != nullptr)
+	if (pEntryTeam != nullptr)
 	{ // オブジェクトが NULL じゃない場合
 
 		// 初期化処理
-		if (FAILED(pArrow->Init()))
+		if (FAILED(pEntryTeam->Init()))
 		{ // 初期化に失敗した場合
 
 			// 停止
@@ -143,7 +129,7 @@ CEntryArrow* CEntryArrow::Create(const D3DXVECTOR3& pos, const bool bRight)
 		}
 
 		// 情報の設定処理
-		pArrow->SetData(pos, bRight);
+		pEntryTeam->SetData(pos);
 	}
 	else
 	{ // オブジェクトが NULL の場合
@@ -155,6 +141,6 @@ CEntryArrow* CEntryArrow::Create(const D3DXVECTOR3& pos, const bool bRight)
 		return nullptr;
 	}
 
-	// エントリーの矢印のポインタを返す
-	return pArrow;
+	// エントリーチームのポインタを返す
+	return pEntryTeam;
 }

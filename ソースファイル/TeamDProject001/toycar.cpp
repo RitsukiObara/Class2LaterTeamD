@@ -191,7 +191,7 @@ void CToyCar::SetData(const D3DXVECTOR3& pos, const TYPE type)
 //=====================================
 // 当たり判定処理
 //=====================================
-bool CToyCar::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
+bool CToyCar::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
 	// 最小値と最大値を宣言
 	D3DXVECTOR3 vtxMin, vtxMax;
@@ -210,7 +210,7 @@ bool CToyCar::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float
 //=====================================
 // ヒット処理
 //=====================================
-bool CToyCar::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
+bool CToyCar::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
 	// 最小値と最大値を宣言
 	D3DXVECTOR3 vtxMin, vtxMax;
@@ -219,7 +219,7 @@ bool CToyCar::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeigh
 	vtxMax = D3DXVECTOR3(fWidth, fHeight, fDepth);
 	vtxMin = D3DXVECTOR3(-fWidth, 0.0f, -fDepth);
 
-	if (type == COLLTYPE_RAT &&
+	if (type == CPlayer::TYPE_RAT &&
 		m_state == STATE_DRIVE)
 	{ // ネズミかつ、ドライブ状態の場合
 

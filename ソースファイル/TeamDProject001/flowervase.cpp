@@ -95,7 +95,7 @@ void CFlowerVase::SetData(const D3DXVECTOR3& pos, const TYPE type)
 //=====================================
 // ìñÇΩÇËîªíËèàóù
 //=====================================
-bool CFlowerVase::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
+bool CFlowerVase::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
 	// false Çï‘Ç∑
 	return false;
@@ -104,7 +104,7 @@ bool CFlowerVase::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const f
 //=====================================
 // ÉqÉbÉgèàóù
 //=====================================
-bool CFlowerVase::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
+bool CFlowerVase::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
 	//// îjï–ÇÃèoÇÈçÇÇ≥
 	//float fFracHeight;

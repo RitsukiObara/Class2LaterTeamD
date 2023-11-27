@@ -128,7 +128,7 @@ void CElecFan::SetData(const D3DXVECTOR3& pos, const TYPE type)
 //=====================================
 // 当たり判定処理
 //=====================================
-bool CElecFan::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
+bool CElecFan::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
 	// false を返す
 	return false;
@@ -137,7 +137,7 @@ bool CElecFan::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const floa
 //=====================================
 // ヒット処理
 //=====================================
-bool CElecFan::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
+bool CElecFan::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
 	// false を返す
 	return false;
@@ -146,7 +146,7 @@ bool CElecFan::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeig
 //=====================================
 // ヒット処理
 //=====================================
-bool CElecFan::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CObstacle::COLLTYPE type)
+bool CElecFan::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type)
 {
 	// false を返す
 	return false;

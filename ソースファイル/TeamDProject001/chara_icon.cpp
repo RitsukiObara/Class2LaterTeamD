@@ -77,7 +77,7 @@ void CCharaIcon::Draw(void)
 //=========================
 // 情報の設定処理
 //=========================
-void CCharaIcon::SetData(const D3DXVECTOR3& pos, const TYPE type)
+void CCharaIcon::SetData(const D3DXVECTOR3& pos, const CPlayer::TYPE type)
 {
 	// スクロールの設定処理
 	SetPos(pos);				// 位置設定
@@ -91,14 +91,14 @@ void CCharaIcon::SetData(const D3DXVECTOR3& pos, const TYPE type)
 
 	switch (type)
 	{
-	case TYPE::TYPE_CAT:
+	case CPlayer::TYPE_CAT:
 
 		// テクスチャの読み込み処理
 		BindTexture(CManager::Get()->GetTexture()->Regist(CAT_ICON_TEXTURE));
 
 		break;
 
-	case TYPE::TYPE_RAT:
+	case CPlayer::TYPE_RAT:
 
 		// テクスチャの読み込み処理
 		BindTexture(CManager::Get()->GetTexture()->Regist(RAT_ICON_TEXTURE));
@@ -117,7 +117,7 @@ void CCharaIcon::SetData(const D3DXVECTOR3& pos, const TYPE type)
 //=========================
 // 生成処理
 //=========================
-CCharaIcon* CCharaIcon::Create(const D3DXVECTOR3& pos, const TYPE type)
+CCharaIcon* CCharaIcon::Create(const D3DXVECTOR3& pos, const CPlayer::TYPE type)
 {
 	// ローカルオブジェクトを生成
 	CCharaIcon* pCharaImage = nullptr;	// プレイヤーのインスタンスを生成

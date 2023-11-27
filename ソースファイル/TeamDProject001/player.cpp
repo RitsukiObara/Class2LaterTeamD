@@ -73,7 +73,7 @@ void CPlayer::Box(void)
 	m_pStun = nullptr;					// 気絶の情報
 	m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_sizeColl = NONE_D3DXVECTOR3;		// 当たり判定のサイズ
-	m_type = TYPE_CAT;					// モーションの種類
+	m_type = TYPE_CAT;					// 種類
 	m_nLife = 0;						// 寿命
 	m_nPlayerIdx = NONE_PLAYERIDX;		// プレイヤーのインデックス
 	m_fSpeed = 0.0f;					// 速度
@@ -102,6 +102,7 @@ HRESULT CPlayer::Init(void)
 	m_pStun = nullptr;					// 気絶の情報
 	m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_sizeColl = NONE_D3DXVECTOR3;		// 当たり判定のサイズ
+	m_type = TYPE_CAT;					// 種類
 	m_nLife = 0;						// 寿命
 	m_nPlayerIdx = NONE_PLAYERIDX;		// プレイヤーのインデックス
 	m_fSpeed = 0.0f;					// 速度
@@ -151,7 +152,7 @@ void CPlayer::Uninit(void)
 void CPlayer::Update(void)
 {
 	// 障害物との当たり判定
-	//collision::ObstacleHit(this, m_sizeColl.x, m_sizeColl.y, m_sizeColl.z, m_type);
+	collision::ObstacleHit(this, m_sizeColl.x, m_sizeColl.y, m_sizeColl.z, m_type);
 
 	//壁との当たり判定
 	SetPos(collision::WallCollision(GetPosOld(), GetPos()));
@@ -161,7 +162,7 @@ void CPlayer::Update(void)
 
 	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_E))
 	{
-		//collision::ObstacleAction(this, m_sizeColl.x, m_type);
+		collision::ObstacleAction(this, m_sizeColl.x, m_type);
 	}
 
 	if (m_pMotion != nullptr)
@@ -220,7 +221,7 @@ void CPlayer::SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 	m_pStun = nullptr;					// 気絶の情報
 	m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_sizeColl = NONE_D3DXVECTOR3;		// 当たり判定のサイズ
-	m_type = type;						// モーションの種類
+	m_type = type;						// 種類
 	m_nLife = MAX_LIFE;					// 寿命
 	m_nPlayerIdx = nID;					// プレイヤーのインデックス
 	m_fSpeed = 0.0f;					// 速度
@@ -639,7 +640,7 @@ void CPlayer::ObstacleCollision(void)
 	D3DXVECTOR3 pos = GetPos();
 
 	// 障害物との衝突判定
-	//collision::ObstacleCollision(pos, GetPosOld(), m_sizeColl.x, m_sizeColl.y, m_sizeColl.z, m_type);
+	collision::ObstacleCollision(pos, GetPosOld(), m_sizeColl.x, m_sizeColl.y, m_sizeColl.z, m_type);
 
 	// ブロックとの当たり判定
 	collision::BlockCollision(pos, GetPosOld(), m_sizeColl.x, m_sizeColl.y, m_sizeColl.z);

@@ -1,6 +1,6 @@
 //===========================================
 //
-// 画鋲の処理[Pin.cpp]
+// コップの処理[cup.cpp]
 // Author 坂本翔唯
 //
 //===========================================
@@ -10,38 +10,37 @@
 #include "main.h"
 #include "manager.h"
 #include "renderer.h"
-#include "Pin.h"
+#include "cup.h"
 #include "useful.h"
 #include "objectX.h"
+#include "consent.h"
+#include "object3D.h"
 #include "input.h"
-#include "effect.h"
-#include "fraction.h"
-
-#define ACTION_TIME (120)
-#define WAIT_TIME (20)
 
 //==============================
 // コンストラクタ
 //==============================
-CPin::CPin() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
+CCup::CCup() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 {
 	// 全ての値をクリアする
-	m_State = STATE_FALSE;
 	m_move = NONE_D3DXVECTOR3;
+	m_State = STATE_FALSE;
+	m_pWater = NULL;
+	m_pConsent = NULL;
 }
 
 //==============================
 // デストラクタ
 //==============================
-CPin::~CPin()
+CCup::~CCup()
 {
 
 }
 
 //==============================
-// 画鋲の初期化処理
+// コップの初期化処理
 //==============================
-HRESULT CPin::Init(void)
+HRESULT CCup::Init(void)
 {
 	if (FAILED(CObstacle::Init()))
 	{ // 初期化処理に失敗した場合
@@ -50,28 +49,42 @@ HRESULT CPin::Init(void)
 		return E_FAIL;
 	}
 
+	if (m_pConsent == NULL)
+	{
+		m_pConsent = CConsent::Create(GetPos());
+		m_pConsent->SetFileData(CXFile::TYPE::TYPE_CONSENT);
+		m_pConsent->SetMain(this);
+	}
+
 	// 値を返す
 	return S_OK;
 }
 
 //========================================
-// 画鋲の終了処理
+// コップの終了処理
 //========================================
-void CPin::Uninit(void)
+void CCup::Uninit(void)
 {
+	if (m_pConsent != NULL)
+	{ // コンセントが NULL の場合
+
+	  // コンセントの終了処理
+		m_pConsent->Uninit();
+	}
+
 	// 終了処理
 	CObstacle::Uninit();
 }
 
 //=====================================
-// 画鋲の更新処理
+// コップの更新処理
 //=====================================
-void CPin::Update(void)
+void CCup::Update(void)
 {
 	D3DXVECTOR3 pos = GetPos();
 	D3DXVECTOR3 rot = GetRot();
 
-	StateManager(&pos,&rot);
+	StateManager(&pos, &rot);
 
 	//位置更新
 	pos += m_move;
@@ -86,26 +99,31 @@ void CPin::Update(void)
 }
 
 //=====================================
-// 画鋲の描画処理
+// コップの描画処理
 //=====================================
-void CPin::Draw(void)
+void CCup::Draw(void)
 {
 	// 描画処理
 	CObstacle::Draw();
+
+	if (m_pConsent != NULL)
+	{
+		m_pConsent->Draw();
+	}
 }
 
 //=====================================
 // 状態管理
 //=====================================
-void CPin::StateManager(D3DXVECTOR3 *pos, D3DXVECTOR3 *rot)
+void CCup::StateManager(D3DXVECTOR3 *pos, D3DXVECTOR3 *rot)
 {
 	switch (m_State)
 	{
-	case CPin::STATE_FALSE:
+	case CCup::STATE_FALSE:
 
 		break;
 
-	case CPin::STATE_FALLWAIT:	//ギミック起動から効果発動までの準備時間
+	case CCup::STATE_FALLWAIT:	//ギミック起動から効果発動までの準備時間
 		rot->z += 0.1f;
 		m_move.y -= 0.75f;
 		m_move.x = sinf(rot->y + (D3DX_PI * -0.5f)) * 4.0f;
@@ -116,16 +134,10 @@ void CPin::StateManager(D3DXVECTOR3 *pos, D3DXVECTOR3 *rot)
 			pos->y = 0.0f;
 			rot->z = 0.0f;
 			m_State = STATE_TRUE;
-			SetFileData(CXFile::TYPE_PINSET);
-
-			for (int nCnt = 0; nCnt < 20; nCnt++)
-			{
-				CFraction::Create(GetPos(), CFraction::TYPE_PIN);
-			}
 		}
 		break;
 
-	case CPin::STATE_TRUE:	//ギミックの効果発動から停止までの処理
+	case CCup::STATE_TRUE:	//ギミックの効果発動から停止までの処理
 		m_move = NONE_D3DXVECTOR3;
 		pos->y = 0.0f;
 		break;
@@ -133,20 +145,17 @@ void CPin::StateManager(D3DXVECTOR3 *pos, D3DXVECTOR3 *rot)
 }
 
 //=====================================
-// 両端起動時の処理
+// 紐を引っ張られた時の処理
 //=====================================
-void CPin::Action(void)
+void CCup::Action(void)
 {
-	if (m_State == STATE_FALSE)
-	{
-		m_State = STATE_FALLWAIT;
-	}
+	m_State = STATE_FALLWAIT;
 }
 
 //=====================================
 // 情報の設定処理
 //=====================================
-void CPin::SetData(const D3DXVECTOR3& pos, const TYPE type)
+void CCup::SetData(const D3DXVECTOR3& pos, const TYPE type)
 {
 	// 情報の設定処理
 	CObstacle::SetData(pos, type);
@@ -155,7 +164,7 @@ void CPin::SetData(const D3DXVECTOR3& pos, const TYPE type)
 //=====================================
 // 当たり判定処理
 //=====================================
-bool CPin::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
+bool CCup::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
 	// false を返す
 	return false;
@@ -164,24 +173,17 @@ bool CPin::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fW
 //=====================================
 // ヒット処理
 //=====================================
-bool CPin::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
+bool CCup::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
-	if (m_State == STATE_TRUE)
-	{ // ギミック発動状態の場合
+	if (m_pConsent != nullptr)
+	{ // コンセントが NULL じゃない場合
 
-		// 最大値と最小値を設定する
-		D3DXVECTOR3 vtxMax = D3DXVECTOR3(fWidth, fHeight, fDepth);
-		D3DXVECTOR3 vtxMin = D3DXVECTOR3(-fWidth, 0.0f, -fDepth);
+		if (pos.y <= m_pConsent->GetPos().y + m_pConsent->GetFileData().vtxMax.y &&
+			pos.y + fHeight >= m_pConsent->GetPos().y + m_pConsent->GetFileData().vtxMin.y &&
+			useful::CylinderInner(pos, m_pConsent->GetPos(), m_pConsent->GetFileData().fRadius + fWidth) == true)
+		{ // 当たり判定の中に入った場合
 
-		if (useful::RectangleCollisionXY(pos, GetPos(), vtxMax, GetFileData().vtxMax, vtxMin, GetFileData().vtxMin) == true &&
-			useful::RectangleCollisionXZ(pos, GetPos(), vtxMax, GetFileData().vtxMax, vtxMin, GetFileData().vtxMin) == true &&
-			useful::RectangleCollisionYZ(pos, GetPos(), vtxMax, GetFileData().vtxMax, vtxMin, GetFileData().vtxMin) == true)
-		{ // 範囲内に入った場合
-
-			// 終了処理
-			Uninit();
-
-			// true を返す
+		  // true を返す
 			return true;
 		}
 	}
@@ -193,7 +195,7 @@ bool CPin::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, 
 //=====================================
 // ヒット処理
 //=====================================
-bool CPin::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type)
+bool CCup::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type)
 {
 	if (useful::CircleCollisionXZ(pos, GetPos(), Radius, GetFileData().fRadius) == true)
 	{//円の範囲内の場合tureを返す

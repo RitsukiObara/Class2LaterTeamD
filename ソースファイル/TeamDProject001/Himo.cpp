@@ -182,7 +182,7 @@ void CHimo::SetData(const D3DXVECTOR3& pos, const TYPE type)
 //=====================================
 // ìñÇΩÇËîªíËèàóù
 //=====================================
-bool CHimo::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
+bool CHimo::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
 	// false Çï‘Ç∑
 	return false;
@@ -191,7 +191,7 @@ bool CHimo::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float f
 //=====================================
 // ÉqÉbÉgèàóù
 //=====================================
-bool CHimo::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
+bool CHimo::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
 	for (int nCntTarai = 0; nCntTarai < MAX_TARAI; nCntTarai++)
 	{
@@ -216,7 +216,7 @@ bool CHimo::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight,
 //=====================================
 // ÉqÉbÉgèàóù
 //=====================================
-bool CHimo::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CObstacle::COLLTYPE type)
+bool CHimo::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type)
 {
 	if (useful::CircleCollisionXZ(pos, GetPos(), Radius, GetFileData().fRadius) == true)
 	{//â~ÇÃîÕàÕì‡ÇÃèÍçátureÇï‘Ç∑

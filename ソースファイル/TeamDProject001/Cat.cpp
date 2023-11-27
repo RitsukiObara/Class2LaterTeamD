@@ -35,18 +35,14 @@
 //--------------------------------------------
 // マクロ定義
 //--------------------------------------------
-#define MOVE_SPEED				(20.0f)			// 体力の最大数
-#define ATTACK_DISTANCE	(160.0f)		// 攻撃範囲までの距離
-
-//--------------------------------------------
-// 静的メンバ変数宣言
-//--------------------------------------------
-CCat* CCat::m_pPlayer = nullptr;		// プレイヤーのポインタ
+#define MOVE_SPEED			(20.0f)			// 体力の最大数
+#define ATTACK_DISTANCE		(160.0f)		// 攻撃範囲までの距離
+#define CAT_SIZE			(D3DXVECTOR3(70.0f, 200.0f, 70.0f))		// 当たり判定のサイズ
 
 //=========================================
 // コンストラクタ
 //=========================================
-CCat::CCat() : CPlayer(CObject::TYPE_CAT, CObject::PRIORITY_PLAYER)
+CCat::CCat() : CPlayer(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 {
 	// 全ての値をクリアする
 	m_AttackPos = NONE_D3DXVECTOR3;	//攻撃の位置
@@ -139,8 +135,8 @@ void CCat::Uninit(void)
 	// 終了処理
 	CPlayer::Uninit();
 
-	// プレイヤーを NULL にする
-	m_pPlayer = nullptr;
+	// プレイヤーを消去する
+	CGame::DeletePlayer(3);
 }
 
 //===========================================
@@ -227,7 +223,7 @@ void CCat::Attack(void)
 		for (int nCnt = 0; nCnt < 3; nCnt++)
 
 		{
-			pRat[nCnt] = CGame::GetRat(nCnt);
+			pRat[nCnt] = CGame::GetPlayer(nCnt);
 			while (pRat[nCnt] != nullptr)
 			{ // ブロックの情報が NULL じゃない場合
 
@@ -319,28 +315,6 @@ void CCat::DebugMessage(void)
 	CManager::Get()->GetDebugProc()->Print("攻撃 : [ENTER] \n");
 }
 
-//===========================================
-// 取得処理
-//===========================================
-CCat* CCat::Get(void)
-{
-	if (m_pPlayer != nullptr)
-	{ // プレイヤーの情報がある場合
-
-		// プレイヤーのポインタを返す
-		return m_pPlayer;
-	}
-	else
-	{ // 上記以外
-
-		// 停止
-		assert(false);
-
-		// プレイヤーのポインタを返す
-		return m_pPlayer;
-	}
-}
-
 //=======================================
 // ヒット処理
 //=======================================
@@ -373,6 +347,9 @@ void CCat::SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 	// 情報の設定処理
 	CPlayer::SetData(pos, nID, type);
 
+	// 当たり判定のサイズの設定
+	SetSizeColl(CAT_SIZE);
+
 	// 全ての値を初期化する
 	m_posDest = pos;		// 目的の位置
 	m_rotDest = GetRot();	// 目的の向きを設定する
@@ -402,9 +379,6 @@ void CCat::SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 
 	// モーションの設定処理
 	GetMotion()->Set(MOTIONTYPE_NEUTRAL);
-
-	// プレイヤーのポインタを設定する
-	m_pPlayer = this;
 }
 
 //=====================================

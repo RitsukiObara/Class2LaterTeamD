@@ -172,6 +172,7 @@
     <ClCompile Include="collpolygon.cpp" />
     <ClCompile Include="confetti.cpp" />
     <ClCompile Include="countdown.cpp" />
+    <ClCompile Include="cup.cpp" />
     <ClCompile Include="danger_mark.cpp" />
     <ClCompile Include="debugproc.cpp" />
     <ClCompile Include="destruction.cpp" />
@@ -181,9 +182,9 @@
     <ClCompile Include="electricfan.cpp" />
     <ClCompile Include="elevation_manager.cpp" />
     <ClCompile Include="entry.cpp" />
-    <ClCompile Include="entry_arrow.cpp" />
     <ClCompile Include="entry_frame.cpp" />
     <ClCompile Include="entry_ID.cpp" />
+    <ClCompile Include="entry_match.cpp" />
     <ClCompile Include="entry_team.cpp" />
     <ClCompile Include="entry_UI.cpp" />
     <ClCompile Include="fade.cpp" />
@@ -208,6 +209,8 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manager.cpp" />
     <ClCompile Include="map.cpp" />
+    <ClCompile Include="match_chara.cpp" />
+    <ClCompile Include="match_frame.cpp" />
     <ClCompile Include="mesh_cylinder.cpp" />
     <ClCompile Include="mesh_dome.cpp" />
     <ClCompile Include="mesh_field.cpp" />
@@ -278,6 +281,7 @@
     <ClCompile Include="toycar.cpp" />
     <ClCompile Include="useful.cpp" />
     <ClCompile Include="wall.cpp" />
+    <ClCompile Include="consent.cpp" />
     <ClCompile Include="weapon_balloon.cpp" />
     <ClCompile Include="weapon_cage.cpp" />
     <ClCompile Include="weapon_selectUI.cpp" />
@@ -298,6 +302,7 @@
     <ClInclude Include="collpolygon.h" />
     <ClInclude Include="confetti.h" />
     <ClInclude Include="countdown.h" />
+    <ClInclude Include="cup.h" />
     <ClInclude Include="danger_mark.h" />
     <ClInclude Include="debugproc.h" />
     <ClInclude Include="destruction.h" />
@@ -307,9 +312,10 @@
     <ClInclude Include="electricfan.h" />
     <ClInclude Include="elevation_manager.h" />
     <ClInclude Include="entry.h" />
-    <ClInclude Include="entry_arrow.h" />
+    <ClInclude Include="match_chara.h" />
     <ClInclude Include="entry_frame.h" />
     <ClInclude Include="entry_ID.h" />
+    <ClInclude Include="entry_match.h" />
     <ClInclude Include="entry_team.h" />
     <ClInclude Include="entry_UI.h" />
     <ClInclude Include="fade.h" />
@@ -334,6 +340,7 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="manager.h" />
     <ClInclude Include="map.h" />
+    <ClInclude Include="match_frame.h" />
     <ClInclude Include="mesh_cylinder.h" />
     <ClInclude Include="mesh_dome.h" />
     <ClInclude Include="mesh_field.h" />
@@ -401,6 +408,7 @@
     <ClInclude Include="toycar.h" />
     <ClInclude Include="useful.h" />
     <ClInclude Include="wall.h" />
+    <ClInclude Include="consent.h" />
     <ClInclude Include="weapon_balloon.h" />
     <ClInclude Include="weapon_cage.h" />
     <ClInclude Include="weapon_selectUI.h" />

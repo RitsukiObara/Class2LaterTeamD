@@ -33,7 +33,7 @@ CSpeaker::CSpeaker() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK
 		m_apNote[nCnt] = NULL;
 	}
 	m_bAction = false;
-	m_nNoateCount = 0;
+	m_nNoteCount = 0;
 }
 
 //==============================
@@ -130,9 +130,9 @@ void CSpeaker::Draw(void)
 //=====================================
 void CSpeaker::SetNote(void)
 {
-	m_nNoateCount++;
+	m_nNoteCount++;
 
-	if (m_nNoateCount % NOTE_INTERVAL == 0)
+	if (m_nNoteCount % NOTE_INTERVAL == 0)
 	{
 		for (int nCnt = 0; nCnt < MAX_NOTE; nCnt++)
 		{
@@ -174,7 +174,7 @@ void CSpeaker::SetData(const D3DXVECTOR3& pos, const TYPE type)
 //=====================================
 // “–‚½‚è”»’èˆ—
 //=====================================
-bool CSpeaker::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
+bool CSpeaker::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
 	// false ‚ð•Ô‚·
 	return false;
@@ -183,7 +183,7 @@ bool CSpeaker::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const floa
 //=====================================
 // ƒqƒbƒgˆ—
 //=====================================
-bool CSpeaker::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CObstacle::COLLTYPE type)
+bool CSpeaker::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
 	for (int nCntNote = 0; nCntNote < MAX_NOTE; nCntNote++)
 	{
@@ -208,7 +208,7 @@ bool CSpeaker::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeig
 //=====================================
 // ƒqƒbƒgˆ—
 //=====================================
-bool CSpeaker::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CObstacle::COLLTYPE type)
+bool CSpeaker::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type)
 {
 	if (useful::CircleCollisionXZ(pos, GetPos(), Radius, GetFileData().fRadius) == true)
 	{//‰~‚Ì”ÍˆÍ“à‚Ìê‡ture‚ð•Ô‚·
