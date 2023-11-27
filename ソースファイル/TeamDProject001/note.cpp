@@ -58,6 +58,9 @@ HRESULT CNote::Init(void)
 //========================================
 void CNote::Uninit(void)
 {
+	//本体にある自身のポインタ削除処理
+	CSpeaker::NULLNote(m_nIndex);
+
 	// 終了処理
 	CModel::Uninit();
 }
@@ -78,8 +81,6 @@ void CNote::Update(void)
 
 	if (m_nLife <= 0)
 	{
-		CSpeaker::NULLNote(m_nIndex);
-
 		Uninit();
 		return;
 	}

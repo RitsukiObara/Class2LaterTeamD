@@ -12,7 +12,7 @@
 //***********************************
 #include "obstacle.h"
 
-class CModel;
+class CConsent;
 class CObject3D;
 //-----------------------------------
 // クラス定義(コップ)
@@ -54,7 +54,7 @@ private:		// 自分だけアクセスできる
 	D3DXVECTOR3 m_move;
 	STATE m_State;
 	CObject3D *m_pWater;
-	CModel *m_pConsent;
+	CConsent *m_pConsent;
 };
 
 #endif

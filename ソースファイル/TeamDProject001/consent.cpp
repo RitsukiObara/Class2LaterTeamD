@@ -1,6 +1,6 @@
 //===========================================
 //
-// 音符メイン処理[note.cpp]
+// コンセントのメイン処理[consent.cpp]
 // Author 坂本翔唯
 //
 //===========================================
@@ -10,9 +10,9 @@
 #include "main.h"
 #include "manager.h"
 #include "renderer.h"
-#include "note.h"
+#include "consent.h"
 #include "useful.h"
-#include "speaker.h"
+#include "cup.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -23,8 +23,9 @@
 //==============================
 // コンストラクタ
 //==============================
-CNote::CNote() : CModel(CObject::TYPE_NONE, CObject::PRIORITY_BLOCK)
+CConsent::CConsent() : CModel(CObject::TYPE_NONE, CObject::PRIORITY_BLOCK)
 {
+	m_pMain = NULL;
 	m_move = NONE_D3DXVECTOR3;
 	m_nLife = 10;
 }
@@ -32,15 +33,15 @@ CNote::CNote() : CModel(CObject::TYPE_NONE, CObject::PRIORITY_BLOCK)
 //==============================
 // デストラクタ
 //==============================
-CNote::~CNote()
+CConsent::~CConsent()
 {
 
 }
 
 //==============================
-// 破片の初期化処理
+// コンセントの初期化処理
 //==============================
-HRESULT CNote::Init(void)
+HRESULT CConsent::Init(void)
 {
 	if (FAILED(CModel::Init()))
 	{ // 初期化処理に失敗した場合
@@ -54,18 +55,21 @@ HRESULT CNote::Init(void)
 }
 
 //========================================
-// 破片の終了処理
+// コンセントの終了処理
 //========================================
-void CNote::Uninit(void)
+void CConsent::Uninit(void)
 {
+	//本体にある自身のポインタ削除処理
+	m_pMain->NULLConsent();
+
 	// 終了処理
 	CModel::Uninit();
 }
 
 //=====================================
-// 破片の更新処理
+// コンセントの更新処理
 //=====================================
-void CNote::Update(void)
+void CConsent::Update(void)
 {
 	// 位置と向きをを取得する
 	D3DXVECTOR3 pos = GetPos();
@@ -78,7 +82,10 @@ void CNote::Update(void)
 
 	if (m_nLife <= 0)
 	{
-		CSpeaker::NULLNote(m_nIndex);
+		if (m_pMain != NULL)
+		{
+			m_pMain->NULLConsent();
+		}
 
 		Uninit();
 		return;
@@ -93,9 +100,9 @@ void CNote::Update(void)
 }
 
 //=====================================
-// 破片の描画処理
+// コンセントの描画処理
 //=====================================
-void CNote::Draw(void)
+void CConsent::Draw(void)
 {
 	// 描画処理
 	CModel::Draw();
@@ -104,7 +111,7 @@ void CNote::Draw(void)
 //=====================================
 // 情報の設定処理
 //=====================================
-void CNote::SetData(const D3DXVECTOR3& pos)
+void CConsent::SetData(const D3DXVECTOR3& pos)
 {
 	// 情報の設定処理
 	SetPos(pos);								// 位置
@@ -131,16 +138,16 @@ void CNote::SetData(const D3DXVECTOR3& pos)
 //=======================================
 // 生成処理
 //=======================================
-CNote* CNote::Create(const D3DXVECTOR3& pos)
+CConsent* CConsent::Create(const D3DXVECTOR3& pos)
 {
 	// ローカルオブジェクトを生成
-	CNote* pTarai = nullptr;	// インスタンスを生成
+	CConsent* pTarai = nullptr;	// インスタンスを生成
 
 	if (pTarai == nullptr)
 	{ // オブジェクトが NULL の場合
 
 	  // インスタンスを生成
-		pTarai = new CNote;
+		pTarai = new CConsent;
 	}
 	else
 	{ // オブジェクトが NULL じゃない場合

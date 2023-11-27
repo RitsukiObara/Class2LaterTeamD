@@ -4,23 +4,25 @@
 // Author 坂本翔唯
 //
 //===================================
-#ifndef _WATER_H_
-#define _WATER_H_
+#ifndef _CONSENT_H_
+#define _CONSENT_H_
 
 //***********************************
 // インクルードファイル
 //***********************************
 #include "model.h"
 
+class CCup;
+
 //-----------------------------------
 // クラス定義(音符)
 //-----------------------------------
-class CNote : public CModel
+class CConsent : public CModel
 {
 public:			// 誰でもアクセスできる
 
-	CNote();			// コンストラクタ
-	~CNote();		// デストラクタ
+	CConsent();		// コンストラクタ
+	~CConsent();		// デストラクタ
 
 					// メンバ関数
 	HRESULT Init(void);		// 初期化処理
@@ -32,9 +34,10 @@ public:			// 誰でもアクセスできる
 	void SetLife(int Life) { m_nLife = Life; }				// 寿命の設定処理
 	void SetIndex(int Idx) { m_nIndex = Idx; }				// 使用番号の設定
 	void SetMove(D3DXVECTOR3 move) { m_move = move; }		// 移動量の設定
+	void SetMain(CCup *main) { m_pMain = main; }		// 移動量の設定
 
-															// 静的メンバ関数
-	static CNote* Create(const D3DXVECTOR3& pos);	// 生成処理
+	// 静的メンバ関数
+	static CConsent* Create(const D3DXVECTOR3& pos);	// 生成処理
 
 private:		// 自分だけアクセスできる
 
@@ -42,6 +45,7 @@ private:		// 自分だけアクセスできる
 	D3DXVECTOR3 m_move;		// 移動量
 	int m_nLife;			// 寿命
 	int m_nIndex;			// 使用番号
+	CCup *m_pMain;			// 自分自身を使用しているモデル
 };
 
 #endif
