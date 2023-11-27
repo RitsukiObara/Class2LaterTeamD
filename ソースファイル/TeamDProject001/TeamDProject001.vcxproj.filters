@@ -453,6 +453,9 @@
     <ClCompile Include="consent.cpp">
       <Filter>Gimmick\Obstacle</Filter>
     </ClCompile>
+    <ClCompile Include="fan_wind.cpp">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -819,6 +822,9 @@
       <Filter>Gimmick\Obstacle</Filter>
     </ClInclude>
     <ClInclude Include="consent.h">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="fan_wind.h">
       <Filter>Gimmick\Obstacle</Filter>
     </ClInclude>
   </ItemGroup>
