@@ -339,6 +339,9 @@ void CRat::SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 	// 情報の設定処理
 	CPlayer::SetData(pos, nID, type);
 
+	// 当たり判定のサイズの設定
+	SetSizeColl(SIZE);
+
 	// 情報を設定する
 	m_nRatIdx = nID;				// ネズミの番号
 	m_bJump = false;				// ジャンプしたか
