@@ -17,6 +17,7 @@
 #include "object3D.h"
 #include "input.h"
 #include "texture.h"
+#include "effect.h"
 
 //==============================
 // コンストラクタ
@@ -29,6 +30,7 @@ CCup::CCup() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 	m_pWater = NULL;
 	m_pConsent = NULL;
 	m_WaterSize = NONE_D3DXVECTOR3;
+	m_ThunderCounter = 0;
 }
 
 //==============================
@@ -140,6 +142,7 @@ void CCup::StateManager(D3DXVECTOR3 *pos, D3DXVECTOR3 *rot)
 	case CCup::STATE_TRUE:	//ギミックの効果発動から停止までの処理
 		m_move = NONE_D3DXVECTOR3;
 		pos->y = 15.0f;
+		m_ThunderCounter++;
 
 		D3DXVECTOR3 WaterPos = m_pWater->GetPos();
 
@@ -149,6 +152,14 @@ void CCup::StateManager(D3DXVECTOR3 *pos, D3DXVECTOR3 *rot)
 			WaterPos.z += cosf(0.0f + (D3DX_PI * -0.5f)) * 0.5f;
 			m_WaterSize.x += 0.5f;
 			m_WaterSize.y += 0.5f;
+		}
+
+		if (m_ThunderCounter % 2 == 0)
+		{
+			int nRandX = rand() % (int)(m_WaterSize.x * 2.0f);
+			int nRandZ = rand() % (int)(m_WaterSize.y * 2.0f);
+			int nHalf = (int)m_WaterSize.x;
+			CEffect *pEffect = CEffect::Create(D3DXVECTOR3(WaterPos.x + (nRandX - nHalf), WaterPos.y, WaterPos.z + (nRandZ - nHalf)), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 10, 30.0f, CEffect::TYPE::TYPE_THUNDER, NONE_D3DXCOLOR, true);
 		}
 
 		m_pWater->SetPos(WaterPos);

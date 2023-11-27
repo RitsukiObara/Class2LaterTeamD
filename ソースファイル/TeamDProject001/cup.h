@@ -51,6 +51,7 @@ public:			// 誰でもアクセスできる
 private:		// 自分だけアクセスできる
 	void StateManager(D3DXVECTOR3 *pos, D3DXVECTOR3 *rot);
 
+	int m_ThunderCounter;
 	D3DXVECTOR3 m_move;
 	STATE m_State;
 	CObject3D *m_pWater;
