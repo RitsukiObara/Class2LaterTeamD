@@ -51,10 +51,10 @@ HRESULT CEntry::Init(void)
 	CEntryUI::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f + 375.0f, SCREEN_HEIGHT * 0.6f, 0.0f), 3);
 
 	// マッチングUIの生成処理
-	CEntryMatch::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 450.0f, SCREEN_HEIGHT * 0.1f, 0.0f));
-	CEntryMatch::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 150.0f, SCREEN_HEIGHT * 0.1f, 0.0f));
-	CEntryMatch::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f + 150.0f, SCREEN_HEIGHT * 0.1f, 0.0f));
-	CEntryMatch::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f + 450.0f, SCREEN_HEIGHT * 0.1f, 0.0f));
+	CEntryMatch::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 480.0f, 90.0f, 0.0f), 0);
+	CEntryMatch::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 160.0f, 90.0f, 0.0f), 1);
+	CEntryMatch::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f + 160.0f, 90.0f, 0.0f), 2);
+	CEntryMatch::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f + 480.0f, 90.0f, 0.0f), 3);
 
 	// 成功を返す
 	return S_OK;
