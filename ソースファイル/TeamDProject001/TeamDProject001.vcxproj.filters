@@ -468,6 +468,9 @@
     <ClCompile Include="match_vs.cpp">
       <Filter>Scene\Entry\Entry_Match</Filter>
     </ClCompile>
+    <ClCompile Include="match_cat.cpp">
+      <Filter>Scene\Entry\Entry_Match</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -846,6 +849,9 @@
       <Filter>Gimmick\Obstacle</Filter>
     </ClInclude>
     <ClInclude Include="match_vs.h">
+      <Filter>Scene\Entry\Entry_Match</Filter>
+    </ClInclude>
+    <ClInclude Include="match_cat.h">
       <Filter>Scene\Entry\Entry_Match</Filter>
     </ClInclude>
   </ItemGroup>

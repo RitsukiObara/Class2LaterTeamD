@@ -17,6 +17,7 @@
 //-----------------------------------
 class CMatchFrame;		// エントリーの枠
 class CMatchChara;		// キャラクター
+class CMatchVS;			// VSマーク
 
 //-----------------------------------
 // クラス定義(CEntryMatch)
@@ -44,6 +45,7 @@ private:
 	// メンバ変数
 	CMatchFrame* m_pFrame;		// 枠の情報
 	CMatchChara* m_pChara;		// キャラクター
+	CMatchVS* m_pVS;			// VSマーク
 };
 
 #endif
