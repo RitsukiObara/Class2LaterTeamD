@@ -45,7 +45,7 @@ private:		// 自分だけアクセスできる
 
 	static CNote *m_apNote[MAX_NOTE];
 	bool m_bAction;
-	int m_nNoateCount;
+	int m_nNoteCount;
 };
 
 #endif

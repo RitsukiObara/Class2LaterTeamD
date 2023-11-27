@@ -191,9 +191,6 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 
 			case CObstacle::TYPE_HIMO:
 
-				// ãCê‚èàóù
-				pPlayer->Stun();
-
 				break;
 
 			case CObstacle::TYPE_SPEAKER:
@@ -212,6 +209,9 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 
 			case CObstacle::TYPE_LEASH:
 
+				// ãCê‚èàóù
+				pPlayer->Stun();
+
 				break;
 
 			case CObstacle::TYPE_PIN:
@@ -223,8 +223,7 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 
 			default:
 
-				// í‚é~
-				assert(false);
+				//ì¡Ç…Ç»Çµ
 
 				break;
 			}

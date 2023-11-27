@@ -172,6 +172,7 @@
     <ClCompile Include="collpolygon.cpp" />
     <ClCompile Include="confetti.cpp" />
     <ClCompile Include="countdown.cpp" />
+    <ClCompile Include="cup.cpp" />
     <ClCompile Include="danger_mark.cpp" />
     <ClCompile Include="debugproc.cpp" />
     <ClCompile Include="destruction.cpp" />
@@ -298,6 +299,7 @@
     <ClInclude Include="collpolygon.h" />
     <ClInclude Include="confetti.h" />
     <ClInclude Include="countdown.h" />
+    <ClInclude Include="cup.h" />
     <ClInclude Include="danger_mark.h" />
     <ClInclude Include="debugproc.h" />
     <ClInclude Include="destruction.h" />

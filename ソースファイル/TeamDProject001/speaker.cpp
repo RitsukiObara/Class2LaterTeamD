@@ -33,7 +33,7 @@ CSpeaker::CSpeaker() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK
 		m_apNote[nCnt] = NULL;
 	}
 	m_bAction = false;
-	m_nNoateCount = 0;
+	m_nNoteCount = 0;
 }
 
 //==============================
@@ -130,9 +130,9 @@ void CSpeaker::Draw(void)
 //=====================================
 void CSpeaker::SetNote(void)
 {
-	m_nNoateCount++;
+	m_nNoteCount++;
 
-	if (m_nNoateCount % NOTE_INTERVAL == 0)
+	if (m_nNoteCount % NOTE_INTERVAL == 0)
 	{
 		for (int nCnt = 0; nCnt < MAX_NOTE; nCnt++)
 		{
