@@ -43,7 +43,7 @@
 // 静的メンバ変数宣言
 //--------------------------------------------
 CPause* CGame::m_pPause = nullptr;							// ポーズの情報
-CPlayer* CGame::m_apRat[MAX_RAT] = {};							// ネズミの情報
+CPlayer* CGame::m_apPlayer[MAX_PLAYER] = {};				// プレイヤーの情報
 CGame::STATE CGame::m_GameState = CGame::STATE_START;		// ゲームの進行状態
 int CGame::m_nFinishCount = 0;								// 終了カウント
 
@@ -63,9 +63,9 @@ CGame::CGame() : CScene(TYPE_SCENE, PRIORITY_BG)
 	m_nFinishCount = 0;			// 終了カウント
 	m_GameState = STATE_START;	// 状態
 
-	for (int nCntRat = 0; nCntRat < MAX_RAT; nCntRat++)
+	for (int nCntPlay = 0; nCntPlay < MAX_PLAYER; nCntPlay++)
 	{
-		m_apRat[nCntRat] = nullptr;		// ネズミの情報
+		m_apPlayer[nCntPlay] = nullptr;		// ネズミの情報
 	}
 
 // デバッグ版
@@ -141,13 +141,13 @@ HRESULT CGame::Init(void)
 #endif // _DEBUG
 
 	// ネズミの生成
-	for (int nCntRat = 0; nCntRat < MAX_RAT; nCntRat++)
+	for (int nCntPlay = 0; nCntPlay < 3; nCntPlay++)
 	{
-		m_apRat[nCntRat] = CPlayer::Create(D3DXVECTOR3(500.0f * nCntRat, 0.0f, 0.0f), nCntRat, CPlayer::TYPE_RAT);
+		m_apPlayer[nCntPlay] = CPlayer::Create(D3DXVECTOR3(500.0f * nCntPlay, 0.0f, 0.0f), nCntPlay, CPlayer::TYPE_RAT);
 	}
 
 	//猫の生成
-	CCat::Create(D3DXVECTOR3(400.0f, 0.0f, 400.0f),3, CPlayer::TYPE_CAT);
+	m_apPlayer[3] = CCat::Create(D3DXVECTOR3(400.0f, 0.0f, 400.0f),3, CPlayer::TYPE_CAT);
 
 	// 生成処理
 	CGameTime::Create();
@@ -183,9 +183,9 @@ void CGame::Uninit(void)
 	// ポインタを NULL にする
 	m_pPause = nullptr;			// ポーズ
 
-	for (int nCntRat = 0; nCntRat < MAX_RAT; nCntRat++)
+	for (int nCntPlay = 0; nCntPlay < MAX_PLAYER; nCntPlay++)
 	{
-		m_apRat[nCntRat] = nullptr;		// ネズミの情報
+		m_apPlayer[nCntPlay] = nullptr;		// ネズミの情報
 	}
 
 	// 終了カウントを初期化する
@@ -444,15 +444,15 @@ CGame::STATE CGame::GetState(void)
 }
 
 //======================================
-// ネズミの取得処理
+// プレイヤーの取得処理
 //======================================
-CPlayer* CGame::GetRat(const int nID)
+CPlayer* CGame::GetPlayer(const int nID)
 {
-	if (nID < MAX_RAT)
+	if (nID < MAX_PLAYER)
 	{ // インデックスが一定未満の場合
 
-		// ネズミの情報を取得する
-		return m_apRat[nID];
+		// プレイヤーの情報を取得する
+		return m_apPlayer[nID];
 	}
 	else
 	{ // 上記以外
@@ -477,13 +477,13 @@ void CGame::DeletePause(void)
 //======================================
 // ネズミのNULL化処理
 //======================================
-void CGame::DeleteRat(int nIdx)
+void CGame::DeletePlayer(int nIdx)
 {
-	if (nIdx >= 0)
-	{ // 番号が 0 以上の場合
+	if (nIdx < MAX_PLAYER)
+	{ // 番号が最大数未満の場合
 
-		// ネズミのポインタを NULL にする
-		m_apRat[nIdx] = nullptr;
+		// プレイヤーのポインタを NULL にする
+		m_apPlayer[nIdx] = nullptr;
 	}
 	else
 	{ // 上記以外

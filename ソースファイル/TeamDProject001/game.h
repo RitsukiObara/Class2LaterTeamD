@@ -15,7 +15,7 @@
 //--------------------------------------------
 // マクロ定義
 //--------------------------------------------
-#define MAX_RAT			(3)		// ネズミの最大数
+#define MAX_PLAYER			(4)		// プレイヤーの最大数
 
 //--------------------------------------------
 // 前方宣言
@@ -58,11 +58,11 @@ public:						// 誰でもアクセスできる
 	static void SetState(const STATE state);		// ゲームの進行状態の設定処理
 	static STATE GetState(void);					// ゲームの進行状態の取得処理
 
-	static CPlayer* GetRat(const int nID);			// ネズミの取得処理
+	static CPlayer* GetPlayer(const int nID);		// プレイヤーの取得処理
 
 	// NULL化処理
 	static void DeletePause(void);		// ポーズのNULL化処理
-	static void DeleteRat(int nIdx);	// ネズミのNULL化処理
+	static void DeletePlayer(int nIdx);	// プレイヤーのNULL化処理
 
 // デバッグ版
 #ifdef _DEBUG
@@ -77,10 +77,10 @@ private:					// 自分だけアクセスできる
 	void Transition(void);		// 遷移処理
 
 	// 静的メンバ変数(最初から必要な物を配置しておく)
-	static CPause* m_pPause;			// ポーズの情報
-	static CPlayer* m_apRat[MAX_RAT];	// ネズミの情報
-	static STATE m_GameState;			// ゲームの進行状態
-	static int m_nFinishCount;			// 終了カウント
+	static CPause* m_pPause;				// ポーズの情報
+	static CPlayer* m_apPlayer[MAX_PLAYER];	// プレイヤーの情報
+	static STATE m_GameState;				// ゲームの進行状態
+	static int m_nFinishCount;				// 終了カウント
 
 // デバッグ版
 #ifdef _DEBUG

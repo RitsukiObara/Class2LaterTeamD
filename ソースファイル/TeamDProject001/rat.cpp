@@ -183,8 +183,8 @@ void CRat::Uninit(void)
 		m_pRessrectionFan = nullptr;
 	}
 
-	// ネズミを消去する
-	CGame::DeleteRat(m_nRatIdx);
+	// プレイヤーを消去する
+	CGame::DeletePlayer(m_nRatIdx);
 
 	// 終了処理
 	CPlayer::Uninit();
