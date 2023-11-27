@@ -119,7 +119,7 @@ void CCup::StateManager(D3DXVECTOR3 *pos, D3DXVECTOR3 *rot)
 		break;
 
 	case CCup::STATE_FALLWAIT:	//ギミック起動から効果発動までの準備時間
-		rot->z += 0.07;
+		rot->z += 0.07f;
 		m_move.y -= 0.75f;
 		m_move.x = sinf(rot->y + (D3DX_PI * -0.5f)) * 4.0f;
 		m_move.z = cosf(rot->y + (D3DX_PI * -0.5f)) * 4.0f;

@@ -184,7 +184,6 @@
     <ClCompile Include="entry.cpp" />
     <ClCompile Include="entry_frame.cpp" />
     <ClCompile Include="entry_ID.cpp" />
-    <ClCompile Include="entry_match.cpp" />
     <ClCompile Include="entry_team.cpp" />
     <ClCompile Include="entry_UI.cpp" />
     <ClCompile Include="fade.cpp" />
@@ -209,10 +208,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manager.cpp" />
     <ClCompile Include="map.cpp" />
-    <ClCompile Include="match_select.cpp" />
-    <ClCompile Include="match_chara.cpp" />
-    <ClCompile Include="match_frame.cpp" />
-    <ClCompile Include="match_vs.cpp" />
     <ClCompile Include="mesh_cylinder.cpp" />
     <ClCompile Include="mesh_dome.cpp" />
     <ClCompile Include="mesh_field.cpp" />
@@ -314,11 +309,8 @@
     <ClInclude Include="electricfan.h" />
     <ClInclude Include="elevation_manager.h" />
     <ClInclude Include="entry.h" />
-    <ClInclude Include="match_select.h" />
-    <ClInclude Include="match_chara.h" />
     <ClInclude Include="entry_frame.h" />
     <ClInclude Include="entry_ID.h" />
-    <ClInclude Include="entry_match.h" />
     <ClInclude Include="entry_team.h" />
     <ClInclude Include="entry_UI.h" />
     <ClInclude Include="fade.h" />
@@ -343,8 +335,6 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="manager.h" />
     <ClInclude Include="map.h" />
-    <ClInclude Include="match_frame.h" />
-    <ClInclude Include="match_vs.h" />
     <ClInclude Include="mesh_cylinder.h" />
     <ClInclude Include="mesh_dome.h" />
     <ClInclude Include="mesh_field.h" />
