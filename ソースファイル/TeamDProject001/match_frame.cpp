@@ -1,6 +1,6 @@
 //=======================================
 //
-// マッチングの枠チーム処理[match_frame.cpp]
+// マッチングの枠処理[match_frame.cpp]
 // Author 小原立暉
 //
 //=======================================
@@ -16,7 +16,7 @@
 //=========================
 // コンストラクタ
 //=========================
-CMatchFrame::CMatchFrame() : CObject2D(CObject::TYPE_NONE, CObject::PRIORITY_ENTITY)
+CMatchFrame::CMatchFrame() : CObject2D(CObject::TYPE_NONE, CObject::PRIORITY_UI)
 {
 
 }
