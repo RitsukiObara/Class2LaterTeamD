@@ -346,9 +346,12 @@ void CCat::SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 	// 情報の設定処理
 	CPlayer::SetData(pos, nID, type);
 
+	// 当たり判定のサイズの設定
+	SetSizeColl(D3DXVECTOR3(70.0f, 200.0f, 70.0f));
+
 	// 全ての値を初期化する
 	m_posDest = pos;		// 目的の位置
-	m_rotDest = GetRot();	// 目的の向きを設定する
+	m_rotDest = GetRot();	// 目的の向きを設定する6
 
 	for (int nCntData = 0; nCntData < GetNumModel(); nCntData++)
 	{

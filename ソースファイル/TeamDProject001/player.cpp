@@ -640,7 +640,7 @@ void CPlayer::ObstacleCollision(void)
 	D3DXVECTOR3 pos = GetPos();
 
 	// áŠQ•¨‚Æ‚ÌÕ“Ë”»’è
-	//collision::ObstacleCollision(pos, GetPosOld(), m_sizeColl.x, m_sizeColl.y, m_sizeColl.z, m_type);
+	collision::ObstacleCollision(pos, GetPosOld(), m_sizeColl.x, m_sizeColl.y, m_sizeColl.z, m_type);
 
 	// ƒuƒƒbƒN‚Æ‚Ì“–‚½‚è”»’è
 	collision::BlockCollision(pos, GetPosOld(), m_sizeColl.x, m_sizeColl.y, m_sizeColl.z);
