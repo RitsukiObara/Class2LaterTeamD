@@ -2,7 +2,7 @@
 //========================
 //マクロ定義
 //========================
-#define WALLSIZE_LONG D3DXVECTOR3(1000,0,600)
+#define WALLSIZE_LONG D3DXVECTOR3(1600,0,600)
 #define WALLSIZE_SHORT D3DXVECTOR3(1000,0,600)
 
 //========================
@@ -33,8 +33,8 @@ HRESULT CMap::Init(void)
 	//================================
 	m_Wall[0] = CWall::Create(D3DXVECTOR3(0, 300, 1000), D3DXVECTOR3(-1.57f, 0, 0), WALLSIZE_LONG);
 	m_Wall[1] = CWall::Create(D3DXVECTOR3(0, 300, -1000), D3DXVECTOR3(1.57f, 0, 0), WALLSIZE_LONG);
-	m_Wall[2] = CWall::Create(D3DXVECTOR3(1000, 300, 0), D3DXVECTOR3(1.57f, 0, 1.57f), WALLSIZE_SHORT);
-	m_Wall[3] = CWall::Create(D3DXVECTOR3(-1000, 300, 0), D3DXVECTOR3(1.57f, 0, -1.57f), WALLSIZE_SHORT);
+	m_Wall[2] = CWall::Create(D3DXVECTOR3(1600, 300, 0), D3DXVECTOR3(1.57f, 0, 1.57f), WALLSIZE_SHORT);
+	m_Wall[3] = CWall::Create(D3DXVECTOR3(-1600, 300, 0), D3DXVECTOR3(1.57f, 0, -1.57f), WALLSIZE_SHORT);
 
 	//================================
 	//モデルの初期化
@@ -42,12 +42,12 @@ HRESULT CMap::Init(void)
 	//キッチンの生成と初期化
 	m_Model[0]=CModel::Create();
 	m_Model[0]->SetFileData(CXFile::TYPE_KITCHEN);
-	m_Model[0]->SetPos(D3DXVECTOR3(50, 0, 900));
+	m_Model[0]->SetPos(D3DXVECTOR3(-500, 0, 850));
 
 	//冷蔵庫の生成と初期化
 	m_Model[1]=CModel::Create();
 	m_Model[1]->SetFileData(CXFile::TYPE_REIZOUKO);
-	m_Model[1]->SetPos(D3DXVECTOR3(-800, 0, 900));
+	m_Model[1]->SetPos(D3DXVECTOR3(-1450, 0, 850));
 
 	//テーブルの生成と初期化
 	m_Model[2]=CModel::Create();

@@ -1,11 +1,11 @@
 //===================================
 //
-// マッチングのキャラヘッダー[match_chara.h]
+// マッチングのVSヘッダー[match_vs.h]
 // Author 小原立暉
 //
 //===================================
-#ifndef _MATCH_CHARA_H_
-#define _MATCH_CHARA_H_
+#ifndef _MATCH_VS_H_
+#define _MATCH_VS_H_
 
 //***********************************
 // インクルードファイル
@@ -13,14 +13,14 @@
 #include "object2D.h"
 
 //-----------------------------------
-// クラス定義(CMatchChara)
+// クラス定義(CMatchVS)
 //-----------------------------------
-class CMatchChara : public CObject2D
+class CMatchVS : public CObject2D
 {
 public:			// 誰でもアクセスできる
 
-	CMatchChara();			// コンストラクタ
-	~CMatchChara();			// デストラクタ
+	CMatchVS();				// コンストラクタ
+	~CMatchVS();			// デストラクタ
 
 	// メンバ関数
 	HRESULT Init(void);		// 初期化処理
@@ -31,7 +31,7 @@ public:			// 誰でもアクセスできる
 	void SetData(const D3DXVECTOR3& pos);					// 情報の設定処理
 
 	// 静的メンバ関数
-	static CMatchChara* Create(const D3DXVECTOR3& pos);		// 生成処理
+	static CMatchVS* Create(const D3DXVECTOR3& pos);		// 生成処理
 
 private:		// 自分だけアクセスできる
 

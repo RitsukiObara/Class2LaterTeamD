@@ -1,23 +1,23 @@
 //=======================================
 //
-// マッチングのキャラクター処理[match_chara.cpp]
+// マッチングのVS処理[match_vs.cpp]
 // Author 小原立暉
 //
 //=======================================
 #include "manager.h"
-#include "match_chara.h"
+#include "match_vs.h"
 #include "texture.h"
 
 //=======================================
 // マクロ定義
 //=======================================
-#define CHARA_SIZE		(D3DXVECTOR3(120.0f, 30.0f, 0.0f))		// キャラクターのサイズ
-#define CHARA_TEXTURE	"data\\TEXTURE\\MatchChara.png"			// キャラクターのテクスチャ
+#define VS_SIZE		(D3DXVECTOR3(20.0f, 20.0f, 0.0f))		// VSマークのサイズ
+#define VS_TEXTURE	"data\\TEXTURE\\MatchVS.png"			// VSマークのテクスチャ
 
 //=========================
 // コンストラクタ
 //=========================
-CMatchChara::CMatchChara() : CObject2D(CObject::TYPE_NONE, CObject::PRIORITY_UI)
+CMatchVS::CMatchVS() : CObject2D(CObject::TYPE_NONE, CObject::PRIORITY_UI)
 {
 
 }
@@ -25,7 +25,7 @@ CMatchChara::CMatchChara() : CObject2D(CObject::TYPE_NONE, CObject::PRIORITY_UI)
 //=========================
 // デストラクタ
 //=========================
-CMatchChara::~CMatchChara()
+CMatchVS::~CMatchVS()
 {
 
 }
@@ -33,7 +33,7 @@ CMatchChara::~CMatchChara()
 //=========================
 // 初期化処理
 //=========================
-HRESULT CMatchChara::Init(void)
+HRESULT CMatchVS::Init(void)
 {
 	if (FAILED(CObject2D::Init()))
 	{ // 初期化に失敗した場合
@@ -49,7 +49,7 @@ HRESULT CMatchChara::Init(void)
 //=========================
 // 終了処理
 //=========================
-void CMatchChara::Uninit(void)
+void CMatchVS::Uninit(void)
 {
 	// 終了
 	CObject2D::Uninit();
@@ -58,7 +58,7 @@ void CMatchChara::Uninit(void)
 //=========================
 // 更新処理
 //=========================
-void CMatchChara::Update(void)
+void CMatchVS::Update(void)
 {
 
 }
@@ -66,7 +66,7 @@ void CMatchChara::Update(void)
 //=========================
 // 描画処理
 //=========================
-void CMatchChara::Draw(void)
+void CMatchVS::Draw(void)
 {
 	// 描画処理
 	CObject2D::Draw();
@@ -75,17 +75,17 @@ void CMatchChara::Draw(void)
 //=========================
 // 情報の設定処理
 //=========================
-void CMatchChara::SetData(const D3DXVECTOR3& pos)
+void CMatchVS::SetData(const D3DXVECTOR3& pos)
 {
 	// スクロールの設定処理
 	SetPos(pos);				// 位置設定
 	SetRot(NONE_D3DXVECTOR3);	// 向き設定
-	SetSize(CHARA_SIZE);		// サイズ設定
+	SetSize(VS_SIZE);			// サイズ設定
 	SetLength();				// 長さ設定
 	SetAngle();					// 方向設定
 
-	// テクスチャの割り当て.処理
-	BindTexture(CManager::Get()->GetTexture()->Regist(CHARA_TEXTURE));
+	// テクスチャの割り当て処理
+	BindTexture(CManager::Get()->GetTexture()->Regist(VS_TEXTURE));
 
 	// 頂点情報の初期化
 	SetVertex();
@@ -97,16 +97,16 @@ void CMatchChara::SetData(const D3DXVECTOR3& pos)
 //=========================
 // 生成処理
 //=========================
-CMatchChara* CMatchChara::Create(const D3DXVECTOR3& pos)
+CMatchVS* CMatchVS::Create(const D3DXVECTOR3& pos)
 {
 	// ローカルオブジェクトを生成
-	CMatchChara* pChara = nullptr;	// プレイヤーのインスタンスを生成
+	CMatchVS* pMatchVS = nullptr;	// プレイヤーのインスタンスを生成
 
-	if (pChara == nullptr)
+	if (pMatchVS == nullptr)
 	{ // オブジェクトが NULL の場合
 
 		// オブジェクトを生成
-		pChara = new CMatchChara;
+		pMatchVS = new CMatchVS;
 	}
 	else
 	{ // オブジェクトが NULL じゃない場合
@@ -118,11 +118,11 @@ CMatchChara* CMatchChara::Create(const D3DXVECTOR3& pos)
 		return nullptr;
 	}
 
-	if (pChara != nullptr)
+	if (pMatchVS != nullptr)
 	{ // オブジェクトが NULL じゃない場合
 
 		// 初期化処理
-		if (FAILED(pChara->Init()))
+		if (FAILED(pMatchVS->Init()))
 		{ // 初期化に失敗した場合
 
 			// 停止
@@ -133,7 +133,7 @@ CMatchChara* CMatchChara::Create(const D3DXVECTOR3& pos)
 		}
 
 		// 情報の設定処理
-		pChara->SetData(pos);
+		pMatchVS->SetData(pos);
 	}
 	else
 	{ // オブジェクトが NULL の場合
@@ -146,5 +146,5 @@ CMatchChara* CMatchChara::Create(const D3DXVECTOR3& pos)
 	}
 
 	// エントリーチームのポインタを返す
-	return pChara;
+	return pMatchVS;
 }

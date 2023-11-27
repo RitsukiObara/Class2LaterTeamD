@@ -11,6 +11,13 @@
 #include "texture.h"
 
 #include "match_frame.h"
+#include "match_chara.h"
+#include "match_vs.h"
+
+//---------------------------------------
+// マクロ定義
+//---------------------------------------
+#define MATCH_SHIFT_HEIGHT		(-30.0f)		// エントリーのずらす高さ
 
 //=========================
 // コンストラクタ
@@ -19,6 +26,8 @@ CEntryMatch::CEntryMatch() : CObject(CObject::TYPE_ENTRYUI, CObject::PRIORITY_BG
 {
 	// 全ての値をクリアする
 	m_pFrame = nullptr;			// 枠の情報
+	m_pChara = nullptr;			// キャラクター
+	m_pVS = nullptr;			// VSマーク
 }
 
 //=========================
@@ -36,6 +45,8 @@ HRESULT CEntryMatch::Init(void)
 {
 	// 全ての値をクリアする
 	m_pFrame = nullptr;			// 枠の情報
+	m_pChara = nullptr;			// キャラクター
+	m_pVS = nullptr;			// VSマーク
 
 	// 成功を返す
 	return S_OK;
@@ -54,6 +65,22 @@ void CEntryMatch::Uninit(void)
 		m_pFrame = nullptr;
 	}
 
+	if (m_pChara != nullptr)
+	{ // キャラクターの情報が NULL じゃない場合
+
+		// キャラクターの終了処理
+		m_pChara->Uninit();
+		m_pChara = nullptr;
+	}
+
+	if (m_pVS != nullptr)
+	{ // VSマークの情報が NULL じゃない場合
+
+		// VSマークの終了処理
+		m_pVS->Uninit();
+		m_pVS = nullptr;
+	}
+
 	// 本体の終了処理
 	Release();
 }
@@ -69,6 +96,20 @@ void CEntryMatch::Update(void)
 		// 枠の更新処理
 		m_pFrame->Update();
 	}
+
+	if (m_pChara != nullptr)
+	{ // キャラクターの情報が NULL じゃない場合
+
+		// キャラクターの更新処理
+		m_pChara->Update();
+	}
+
+	if (m_pVS != nullptr)
+	{ // VSマークの情報が NULL じゃない場合
+
+		// VSマークの更新処理
+		m_pVS->Update();
+	}
 }
 
 //=========================
@@ -82,6 +123,20 @@ void CEntryMatch::Draw(void)
 		// 枠の描画処理
 		m_pFrame->Draw();
 	}
+
+	if (m_pChara != nullptr)
+	{ // キャラクターの情報が NULL じゃない場合
+
+		// キャラクターの描画処理
+		m_pChara->Draw();
+	}
+
+	if (m_pVS != nullptr)
+	{ // VSマークの情報が NULL じゃない場合
+
+		// VSマークの描画処理
+		m_pVS->Draw();
+	}
 }
 
 //=========================
@@ -94,6 +149,32 @@ void CEntryMatch::SetData(const D3DXVECTOR3& pos)
 
 		// 枠を生成する
 		m_pFrame = CMatchFrame::Create(pos);
+	}
+	else
+	{ // 上記以外
+
+		// 停止
+		assert(false);
+	}
+
+	if (m_pChara == nullptr)
+	{ // キャラクターの情報が NULL の場合
+
+		// 枠を生成する
+		m_pChara = CMatchChara::Create(D3DXVECTOR3(pos.x, pos.y + MATCH_SHIFT_HEIGHT, pos.z));
+	}
+	else
+	{ // 上記以外
+
+		// 停止
+		assert(false);
+	}
+
+	if (m_pVS == nullptr)
+	{ // キャラクターの情報が NULL の場合
+
+		// 枠を生成する
+		m_pVS = CMatchVS::Create(D3DXVECTOR3(pos.x, pos.y, pos.z));
 	}
 	else
 	{ // 上記以外
