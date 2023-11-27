@@ -18,6 +18,14 @@ CMeshCylinder::CMeshCylinder() : CMesh(CObject::TYPE_MESH, CObject::PRIORITY_BG)
 }
 
 //================================
+// オーバーロードコンストラクタ
+//================================
+CMeshCylinder::CMeshCylinder(CObject::TYPE type, CObject::PRIORITY priority) : CMesh(type, priority)
+{
+
+}
+
+//================================
 // デストラクタ
 //================================
 CMeshCylinder::~CMeshCylinder()

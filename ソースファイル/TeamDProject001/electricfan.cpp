@@ -12,6 +12,7 @@
 #include "manager.h"
 
 #include "fan_blade.h"
+#include "fan_wind.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -25,6 +26,7 @@ CElecFan::CElecFan() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK
 {
 	// 全ての値をクリアする
 	m_pFan = nullptr;			// 扇風機のファン
+	m_pWind = nullptr;			// 扇風機の風の情報
 }
 
 //==============================
@@ -49,6 +51,7 @@ HRESULT CElecFan::Init(void)
 
 	// 全ての値を初期化する
 	m_pFan = nullptr;			// 扇風機のファン
+	m_pWind = nullptr;			// 扇風機の風の情報
 
 	// 値を返す
 	return S_OK;
@@ -67,6 +70,14 @@ void CElecFan::Uninit(void)
 		m_pFan = nullptr;
 	}
 
+	if (m_pWind != nullptr)
+	{ // 風が NULL じゃない場合
+
+		// 風の終了処理
+		m_pWind->Uninit();
+		m_pWind = nullptr;
+	}
+
 	// 終了処理
 	CObstacle::Uninit();
 }
@@ -81,6 +92,13 @@ void CElecFan::Update(void)
 
 		// ファンの更新処理
 		m_pFan->Update();
+	}
+
+	if (m_pWind != nullptr)
+	{ // 風が NULL じゃない場合
+
+		// 風の更新処理
+		m_pWind->Update();
 	}
 }
 
@@ -97,6 +115,13 @@ void CElecFan::Draw(void)
 
 		// ファンの描画処理
 		m_pFan->Draw();
+	}
+
+	if (m_pWind != nullptr)
+	{ // 風が NULL じゃない場合
+
+		// 風の描画処理
+		m_pWind->Draw();
 	}
 }
 
