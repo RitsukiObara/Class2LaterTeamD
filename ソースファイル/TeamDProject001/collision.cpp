@@ -698,6 +698,8 @@ D3DXVECTOR3 collision::WallCollision(D3DXVECTOR3& objVec1, D3DXVECTOR3& objVec2)
 					SetPos = objVec1;
 				}
 
+				SetPos.y = objVec2.y;
+
 				return	SetPos;
 			}
 			else
@@ -705,6 +707,11 @@ D3DXVECTOR3 collision::WallCollision(D3DXVECTOR3& objVec1, D3DXVECTOR3& objVec2)
 				return objVec1;
 			}
 		}
+	}
+	//élã˜ä—í ñhé~ÇÃó·äOèàóù
+	if (objVec2.x<vec[0].x || objVec2.x>vec[1].x || objVec2.z > vec[1].z || objVec2.z < vec[2].z)
+	{
+		objVec2 = objVec1;
 	}
 
 	return objVec2;
