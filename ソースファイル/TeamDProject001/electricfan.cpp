@@ -10,14 +10,18 @@
 #include "main.h"
 #include "electricfan.h"
 #include "manager.h"
+#include "renderer.h"
 
 #include "fan_blade.h"
 #include "fan_wind.h"
+#include "input.h"
 
 //-------------------------------------------
 // マクロ定義
 //-------------------------------------------
 #define FAN_SHIFT		(175.0f)		// 扇風機の羽根のずらす高さ
+#define WIND_CIRCUM		(80.0f)			// 扇風機の風の円周の大きさ
+#define WIND_HEIGHT		(1600.0f)		// 扇風機の風の高さ
 
 //==============================
 // コンストラクタ
@@ -27,6 +31,7 @@ CElecFan::CElecFan() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK
 	// 全ての値をクリアする
 	m_pFan = nullptr;			// 扇風機のファン
 	m_pWind = nullptr;			// 扇風機の風の情報
+	m_bPower = false;			// 電源状況
 }
 
 //==============================
@@ -52,6 +57,7 @@ HRESULT CElecFan::Init(void)
 	// 全ての値を初期化する
 	m_pFan = nullptr;			// 扇風機のファン
 	m_pWind = nullptr;			// 扇風機の風の情報
+	m_bPower = false;			// 電源状況
 
 	// 値を返す
 	return S_OK;
@@ -106,7 +112,10 @@ void CElecFan::Update(void)
 // 扇風機の描画処理
 //=====================================
 void CElecFan::Draw(void)
-{
+{	
+	// デバイスの取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::Get()->GetRenderer()->GetDevice();
+
 	// 描画処理
 	CObstacle::Draw();
 
@@ -120,8 +129,14 @@ void CElecFan::Draw(void)
 	if (m_pWind != nullptr)
 	{ // 風が NULL じゃない場合
 
+		// カリングの設定をOFFにする
+		pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+
 		// 風の描画処理
 		m_pWind->Draw();
+
+		// カリングの設定をONにする
+		pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 	}
 }
 
@@ -147,6 +162,13 @@ void CElecFan::SetData(const D3DXVECTOR3& pos, const TYPE type)
 
 		// ファンを生成する
 		m_pFan = CFanBlade::Create(posFan);
+	}
+
+	if (m_pWind == nullptr)
+	{ // 風の情報が NULL の場合
+
+		// 風を生成する
+		m_pWind = CFanWind::Create(m_pFan->GetPos(), D3DXVECTOR3(-D3DX_PI * 0.5f, GetRot().y, GetRot().z), WIND_CIRCUM, WIND_HEIGHT);
 	}
 }
 
@@ -174,7 +196,7 @@ bool CElecFan::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeig
 bool CElecFan::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type)
 {
 	// false を返す
-	return false;
+	return true;
 }
 
 //=====================================
@@ -182,5 +204,13 @@ bool CElecFan::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlay
 //=====================================
 void CElecFan::Action(void)
 {
+	// 電源ONにする
+	m_bPower = true;
 
+	if (m_pWind == nullptr)
+	{ // 風の情報が NULL の場合
+
+		// 風を生成する
+		m_pWind = CFanWind::Create(m_pFan->GetPos(), D3DXVECTOR3(D3DX_PI * 0.5f, GetRot().y, GetRot().z), 40.0f, 80.0f);
+	}
 }

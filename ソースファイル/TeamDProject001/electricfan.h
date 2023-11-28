@@ -46,6 +46,7 @@ private:		// 自分だけアクセスできる
 	// メンバ変数
 	CFanBlade* m_pFan;		// 扇風機のファン
 	CFanWind* m_pWind;		// 扇風機の風の情報
+	bool m_bPower;			// 電源状況
 };
 
 #endif
