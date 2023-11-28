@@ -24,7 +24,7 @@ CGameTime* CGameTime::m_pGameTimer = nullptr;		// ゲームタイマーの情報
 //--------------------------------------------------
 // マクロ定義
 //--------------------------------------------------
-#define TIME_COUNTDOWN		(10)	// 秒数
+#define TIME_COUNTDOWN		(60)	// 秒数
 #define ONE_SECOND			(60)	// 1秒のフレーム数
 #define TIME_POS			(D3DXVECTOR3(500.0f, 50.0f, 0.0f))		// ゲームタイマーの位置
 #define TIME_SIZE			(D3DXVECTOR3(25.0f, 40.0f, 0.0f))		// ゲームタイマーのサイズ
@@ -364,4 +364,12 @@ void CGameTime::Calculate(void)
 			m_apNumber[nCnt]->SetVtxTextureAnim(NUMBER_TEXTURE_PATTERN, aTexU[nCnt]);
 		}
 	}
+}
+
+//========================
+// 残り秒数の取得処理
+//========================
+int CGameTime::GetSeconds(void)
+{
+	return m_nSeconds;
 }
