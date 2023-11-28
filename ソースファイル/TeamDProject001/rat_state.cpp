@@ -107,7 +107,7 @@ void CRatState::Update(CRat& pRat)
 			m_nStateCount = 0;
 
 			// ‹Câˆ—
-			pRat.Stun();
+			pRat.Stun(60);
 		}
 
 		break;

@@ -453,6 +453,9 @@
     <ClCompile Include="fan_blade.cpp">
       <Filter>Gimmick\Obstacle</Filter>
     </ClCompile>
+    <ClCompile Include="MultiCamera.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -820,6 +823,9 @@
     </ClInclude>
     <ClInclude Include="fan_blade.h">
       <Filter>Gimmick\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="MultiCamera.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

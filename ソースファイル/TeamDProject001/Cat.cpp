@@ -332,14 +332,6 @@ void CCat::Smash(const float fAngle)
 }
 
 //=======================================
-// ‹Câó‘Ô
-//=======================================
-void CCat::Stun(void)
-{
-
-}
-
-//=======================================
 // î•ñ‚Ìİ’èˆ—
 //=======================================
 void CCat::SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type)

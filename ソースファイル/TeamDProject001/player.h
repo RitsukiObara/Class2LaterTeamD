@@ -34,6 +34,24 @@ public:			// 誰でもアクセスできる
 		TYPE_MAX			// この列挙型の総数
 	};
 
+	// 列挙型定義(気絶用状態)
+	enum STUNSTATE
+	{
+		STUNSTATE_NONE = 0,
+		STUNSTATE_STUN,
+		STUNSTATE_WAIT,
+		STUNSTATE_MAX,
+	};
+
+	// 列挙型定義(気絶用状態)
+	enum STATE
+	{
+		STATE_NONE = 0,
+		STATE_WAIT,
+		STATE_DEATH,
+		STATE_MAX,
+	};
+
 	CPlayer();				// コンストラクタ
 	CPlayer(CObject::TYPE type, PRIORITY priority = PRIORITY_PLAYER);				// オーバーロードコンストラクタ
 	virtual ~CPlayer();		// デストラクタ
@@ -47,7 +65,7 @@ public:			// 誰でもアクセスできる
 
 	virtual void Hit(void) = 0;					// ヒット処理
 	virtual void Smash(const float fAngle);		// 吹き飛び状態
-	virtual void Stun(void) = 0;				// 気絶状態
+	void Stun(int StunTime);					// 気絶状態
 	virtual void MotionManager(void) = 0;		// モーションマネージャー
 
 	virtual void SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type);		// 情報の設定処理
@@ -84,6 +102,12 @@ public:			// 誰でもアクセスできる
 	void SetEnableMove(const bool bMove);		// 移動状況の設定処理
 	bool IsMove(void) const;					// 移動状況の取得処理
 
+	void SetStunState(STUNSTATE StunState) { m_StunState = StunState; }	// 気絶状態の設定処理
+	STUNSTATE GetStunState(void) { return m_StunState; }				// 気絶状態の取得処理
+
+	void SetState(STATE State) { m_State = State; }		// 状態の設定処理
+	STATE GetState(void) { return m_State; }			// 状態の取得処理
+
 	// 静的メンバ関数
 	static CPlayer* Create(const D3DXVECTOR3& pos, const int nID, const TYPE type);		// 生成処理
 
@@ -95,7 +119,9 @@ protected:		// 自分と派生クラスだけがアクセスできる
 private:		// 自分だけアクセスできる
 
 	// メンバ関数
-	void ObstacleCollision(void);	// 障害物との当たり判定
+	void ObstacleCollision(void);		// 障害物との当たり判定
+	void StunStateManager(void);		// 気絶状態の管理
+	void StateManager(void);			// 状態の管理
 
 	// メンバ変数
 	CMotion* m_pMotion;			// モーションの情報
@@ -109,6 +135,11 @@ private:		// 自分だけアクセスできる
 	float m_fSpeed;				// 速度
 	bool m_bAttack;				// 攻撃したか
 	bool m_bMove;				// 移動しているか
+	bool m_bDeath;				// 死亡しているか
+	STUNSTATE m_StunState;		// 気絶の状態管理
+	int m_StunStateCount;		// 状態管理用カウント
+	STATE m_State;				// 状態管理
+	int m_StateCount;			// 状態管理用カウント
 };
 
 #endif

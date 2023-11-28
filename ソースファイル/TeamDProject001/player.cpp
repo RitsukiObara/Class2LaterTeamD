@@ -35,6 +35,8 @@
 #define STUN_HEIGHT			(80.0f)			// 気絶演出が出てくる高さ
 #define ID_HEIGHT			(150.0f)		// IDが出てくる高さ
 #define SMASH_MOVE			(D3DXVECTOR3(10.0f, 20.0f, 10.0f))		// 吹き飛び状態の移動量
+#define STUN_WAIT			(120)			// オブジェクト無効の待機時間
+#define DEATH_WAIT			(120)			// 死亡時の待機時間
 
 //==============================
 // コンストラクタ
@@ -82,7 +84,7 @@ void CPlayer::Box(void)
 }
 
 //==============================
-// ネズミの初期化処理
+// プレイヤーの初期化処理
 //==============================
 HRESULT CPlayer::Init(void)
 {
@@ -114,7 +116,7 @@ HRESULT CPlayer::Init(void)
 }
 
 //========================================
-// ネズミの終了処理
+// プレイヤーの終了処理
 //========================================
 void CPlayer::Uninit(void)
 {
@@ -147,7 +149,7 @@ void CPlayer::Uninit(void)
 }
 
 //=====================================
-// ネズミの更新処理
+// プレイヤーの更新処理
 //=====================================
 void CPlayer::Update(void)
 {
@@ -159,6 +161,12 @@ void CPlayer::Update(void)
 
 	// 障害物との当たり判定
 	ObstacleCollision();
+
+	// 気絶状態の管理
+	StunStateManager();
+
+	// 状態の管理
+	StateManager();
 
 	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_E))
 	{
@@ -187,7 +195,7 @@ void CPlayer::Update(void)
 }
 
 //=====================================
-// ネズミの描画処理
+// プレイヤーの描画処理
 //=====================================
 void CPlayer::Draw(void)
 {
@@ -233,6 +241,328 @@ void CPlayer::SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 
 		// プレイヤーのID表示の生成処理
 		m_pPlayerID = CPlayerID::Create(D3DXVECTOR3(pos.x, pos.y + ID_HEIGHT, pos.z), nID);
+	}
+}
+
+//=======================================
+// 生成処理
+//=======================================
+CPlayer* CPlayer::Create(const D3DXVECTOR3& pos, const int nID, const TYPE type)
+{
+	// プレイヤーのポインタ
+	CPlayer* pPlayer = nullptr;
+
+	if (pPlayer == nullptr)
+	{ // オブジェクトが NULL の場合
+
+		switch (type)
+		{
+		case TYPE::TYPE_CAT:		// ネコ
+
+									// ネコを生成
+			pPlayer = new CCat;
+
+			break;
+
+		case TYPE::TYPE_RAT:		// ネズミ
+
+									// ネズミを生成
+			pPlayer = new CRat;
+
+			break;
+
+		default:					// 上記以外
+
+									// 停止
+			assert(false);
+
+			break;
+		}
+	}
+	else
+	{ // オブジェクトが NULL じゃない場合
+
+	  // 停止
+		assert(false);
+
+		// NULL を返す
+		return nullptr;
+	}
+
+	if (pPlayer != nullptr)
+	{ // オブジェクトが NULL じゃない場合
+
+	  // 初期化処理
+		if (FAILED(pPlayer->Init()))
+		{ // 初期化に失敗した場合
+
+		  // 停止
+			assert(false);
+
+			// NULL を返す
+			return nullptr;
+		}
+
+		// 情報の設定処理
+		pPlayer->SetData(pos, nID, type);
+	}
+	else
+	{ // オブジェクトが NULL の場合
+
+	  // 停止
+		assert(false);
+
+		// NULL を返す
+		return nullptr;
+	}
+
+	// プレイヤーのポインタを返す
+	return pPlayer;
+}
+
+//=======================================
+// 移動処理
+//=======================================
+void CPlayer::Move(void)
+{
+	// ローカル変数宣言
+	D3DXVECTOR3 rot = GetRot();
+
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_D) == true ||
+		CManager::Get()->GetInputGamePad()->GetGameStickLXPress(m_nPlayerIdx) > 0)
+	{ // 右を押した場合
+
+		if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_W) == true ||
+			CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nPlayerIdx) > 0)
+		{ // 上を押した場合
+
+		  // 向きを設定する
+			rot.y = D3DX_PI * -0.75f;
+		}
+		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true ||
+			CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nPlayerIdx) < 0)
+		{ // 下を押した場合
+
+		  // 向きを設定する
+			rot.y = D3DX_PI * -0.25f;
+		}
+		else
+		{ // 上記以外
+
+		  // 向きを設定する
+			rot.y = D3DX_PI * -0.5f;
+		}
+		m_bMove = true;
+	}
+	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_A) == true ||
+		CManager::Get()->GetInputGamePad()->GetGameStickLXPress(m_nPlayerIdx) < 0)
+	{ // 左を押した場合
+
+		if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_W) == true ||
+			CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nPlayerIdx) > 0)
+		{ // 上を押した場合
+
+		  // 向きを設定する
+			rot.y = D3DX_PI * 0.75f;
+		}
+		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true ||
+			CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nPlayerIdx) < 0)
+		{ // 下を押した場合
+
+		  // 向きを設定する
+			rot.y = D3DX_PI * 0.25f;
+		}
+		else
+		{ // 上記以外
+
+		  // 向きを設定する
+			rot.y = D3DX_PI * 0.5f;
+		}
+		m_bMove = true;
+	}
+	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_W) == true ||
+		CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nPlayerIdx) > 0)
+	{ // 上を押した場合
+
+	  // 向きを設定する
+		rot.y = D3DX_PI;
+		m_bMove = true;
+	}
+	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true ||
+		CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nPlayerIdx) < 0)
+	{ // 下を押した場合
+
+	  // 向きを設定する
+		rot.y = 0.0f;
+		m_bMove = true;
+	}
+	else
+	{ // 上記以外
+		m_bMove = false;
+		// 速度を設定する
+		m_fSpeed = 0.0f;
+	}
+
+	// 移動量を設定する
+	m_move.x = -sinf(rot.y) * m_fSpeed;
+	m_move.z = -cosf(rot.y) * m_fSpeed;
+
+	// 向きを適用する
+	SetRot(rot);
+}
+
+////=======================================
+//// 攻撃処理
+////=======================================
+//void CPlayer::Attack(void)
+//{
+//	// ローカル変数宣言
+//	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を取得する
+//	D3DXVECTOR3 pos = GetPos();
+//	D3DXVECTOR3 rot = GetRot();
+//
+//	if (CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_B,m_nRatIdx) == true/* && m_bAttack == false*/)
+//	{ // Bボタンを押した場合
+//
+//		while (pObstacle != nullptr)
+//		{ // ブロックの情報が NULL じゃない場合
+//
+//			if (useful::RectangleCollisionXY(D3DXVECTOR3(pos.x + sinf(rot.y) * ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * ATTACK_DISTANCE), pObstacle->GetPos(),
+//				SIZE, pObstacle->GetFileData().vtxMax,
+//				-SIZE, pObstacle->GetFileData().vtxMin) == true)
+//			{ // XYの矩形に当たってたら
+//
+//				if (useful::RectangleCollisionXZ(D3DXVECTOR3(pos.x + sinf(rot.y) * ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * ATTACK_DISTANCE), pObstacle->GetPos(),
+//					SIZE, pObstacle->GetFileData().vtxMax,
+//					-SIZE, pObstacle->GetFileData().vtxMin) == true)
+//				{ // XZの矩形に当たってたら
+//
+//					// 障害物の終了処理
+//					pObstacle->Uninit();
+//				}
+//			}
+//
+//			// 次のオブジェクトを代入する
+//			pObstacle = pObstacle->GetNext();
+//		}
+//
+//		//m_bAttack = true;		// 攻撃した状態にする
+//	}
+//}
+
+//=======================================
+// 障害物との当たり判定
+//=======================================
+void CPlayer::ObstacleCollision(void)
+{
+	// 位置を取得する
+	D3DXVECTOR3 pos = GetPos();
+
+	// 障害物との衝突判定
+	collision::ObstacleCollision(pos, GetPosOld(), m_sizeColl.x, m_sizeColl.y, m_sizeColl.z, m_type);
+
+	// ブロックとの当たり判定
+	collision::BlockCollision(pos, GetPosOld(), m_sizeColl.x, m_sizeColl.y, m_sizeColl.z);
+
+	// 位置を設定する
+	SetPos(pos);
+}
+
+//=======================================
+// 気絶処理
+//=======================================
+void CPlayer::Stun(int StunTime)
+{
+	if (m_StunState == STUNSTATE_NONE &&
+		m_State == STATE_NONE)
+	{ // 通常状態だった場合
+
+	  // 気絶状態にする
+		m_StunState = STUNSTATE_STUN;
+		m_StunStateCount = StunTime;
+
+		// 気絶演出の設定処理
+		SetStun(GetPos());
+	}
+
+	////猫とネズミで気絶の仕様を変える場合は使って
+	//if (m_type == TYPE_CAT)
+	//{ // 猫の場合
+	//}
+	//else if (m_type == TYPE_RAT)
+	//{ // ネズミの場合
+	//}
+}
+
+//=======================================
+// 気絶状態の管理
+//=======================================
+void CPlayer::StunStateManager(void)
+{
+	switch (m_StunState)
+	{
+	case STUNSTATE_NONE:
+
+		break;
+
+	case STUNSTATE_STUN:	//気絶状態
+		m_StunStateCount--;
+
+		if (m_StunStateCount <= 0)
+		{
+			m_StunState = STUNSTATE_WAIT;
+			m_StunStateCount = STUN_WAIT;
+
+			if (m_pStun != nullptr)
+			{ // 気絶演出が NULL の場合
+
+			  // 気絶演出を削除する
+				m_pStun->Uninit();
+				m_pStun = nullptr;
+			}
+		}
+		break;
+
+	case STUNSTATE_WAIT:	//障害物のみ無敵状態
+		m_StunStateCount--;
+
+		if (m_StunStateCount <= 0)
+		{
+			m_StunState = STUNSTATE_NONE;
+		}
+		break;
+	}
+}
+
+//=======================================
+// 状態の管理
+//=======================================
+void CPlayer::StateManager(void)
+{
+	switch (m_State)
+	{
+	case STATE_NONE:
+
+		break;
+
+	case STATE_WAIT:	//無敵状態
+		m_StunStateCount--;
+
+		if (m_StunStateCount <= 0)
+		{
+			m_State = STATE_DEATH;
+			m_StunStateCount = DEATH_WAIT;
+		}
+		break;
+
+	case STATE_DEATH:	//死亡状態
+		m_StunStateCount--;
+
+		if (m_StunStateCount <= 0)
+		{
+			m_State = STATE_NONE;
+		}
+		break;
 	}
 }
 
@@ -423,228 +753,4 @@ bool CPlayer::IsMove(void) const
 {
 	// 移動状況を返す
 	return m_bMove;
-}
-
-//=======================================
-// 生成処理
-//=======================================
-CPlayer* CPlayer::Create(const D3DXVECTOR3& pos, const int nID, const TYPE type)
-{
-	// ネズミのポインタ
-	CPlayer* pPlayer = nullptr;
-
-	if (pPlayer == nullptr)
-	{ // オブジェクトが NULL の場合
-
-		switch (type)
-		{
-		case TYPE::TYPE_CAT:		// ネコ
-
-			// ネコを生成
-			pPlayer = new CCat;
-
-			break;
-
-		case TYPE::TYPE_RAT:		// ネズミ
-
-			// ネズミを生成
-			pPlayer = new CRat;
-
-			break;
-
-		default:					// 上記以外
-
-			// 停止
-			assert(false);
-
-			break;
-		}
-	}
-	else
-	{ // オブジェクトが NULL じゃない場合
-
-		// 停止
-		assert(false);
-
-		// NULL を返す
-		return nullptr;
-	}
-
-	if (pPlayer != nullptr)
-	{ // オブジェクトが NULL じゃない場合
-
-		// 初期化処理
-		if (FAILED(pPlayer->Init()))
-		{ // 初期化に失敗した場合
-
-			// 停止
-			assert(false);
-
-			// NULL を返す
-			return nullptr;
-		}
-
-		// 情報の設定処理
-		pPlayer->SetData(pos, nID, type);
-	}
-	else
-	{ // オブジェクトが NULL の場合
-
-		// 停止
-		assert(false);
-
-		// NULL を返す
-		return nullptr;
-	}
-
-	// プレイヤーのポインタを返す
-	return pPlayer;
-}
-
-//=======================================
-// 移動処理
-//=======================================
-void CPlayer::Move(void)
-{
-	// ローカル変数宣言
-	D3DXVECTOR3 rot = GetRot();
-
-	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_D) == true ||
-		CManager::Get()->GetInputGamePad()->GetGameStickLXPress(m_nPlayerIdx) > 0)
-	{ // 右を押した場合
-
-		if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_W) == true ||
-			CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nPlayerIdx) > 0)
-		{ // 上を押した場合
-
-			// 向きを設定する
-			rot.y = D3DX_PI * -0.75f;
-		}
-		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true ||
-			CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nPlayerIdx) < 0)
-		{ // 下を押した場合
-
-			// 向きを設定する
-			rot.y = D3DX_PI * -0.25f;
-		}
-		else
-		{ // 上記以外
-
-			// 向きを設定する
-			rot.y = D3DX_PI * -0.5f;
-		}
-		m_bMove = true;
-	}
-	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_A) == true ||
-		CManager::Get()->GetInputGamePad()->GetGameStickLXPress(m_nPlayerIdx) < 0)
-	{ // 左を押した場合
-
-		if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_W) == true ||
-			CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nPlayerIdx) > 0)
-		{ // 上を押した場合
-
-			// 向きを設定する
-			rot.y = D3DX_PI * 0.75f;
-		}
-		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true ||
-			CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nPlayerIdx) < 0)
-		{ // 下を押した場合
-
-			// 向きを設定する
-			rot.y = D3DX_PI * 0.25f;
-		}
-		else
-		{ // 上記以外
-
-			// 向きを設定する
-			rot.y = D3DX_PI * 0.5f;
-		}
-		m_bMove = true;
-	}
-	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_W) == true ||
-		CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nPlayerIdx) > 0)
-	{ // 上を押した場合
-
-		// 向きを設定する
-		rot.y = D3DX_PI;
-		m_bMove = true;
-	}
-	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true ||
-		CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nPlayerIdx) < 0)
-	{ // 下を押した場合
-
-		// 向きを設定する
-		rot.y = 0.0f;
-		m_bMove = true;
-	}
-	else
-	{ // 上記以外
-		m_bMove = false;
-		// 速度を設定する
-		m_fSpeed = 0.0f;
-	}
-
-	// 移動量を設定する
-	m_move.x = -sinf(rot.y) * m_fSpeed;
-	m_move.z = -cosf(rot.y) * m_fSpeed;
-
-	// 向きを適用する
-	SetRot(rot);
-}
-
-////=======================================
-//// 攻撃処理
-////=======================================
-//void CPlayer::Attack(void)
-//{
-//	// ローカル変数宣言
-//	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を取得する
-//	D3DXVECTOR3 pos = GetPos();
-//	D3DXVECTOR3 rot = GetRot();
-//
-//	if (CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_B,m_nRatIdx) == true/* && m_bAttack == false*/)
-//	{ // Bボタンを押した場合
-//
-//		while (pObstacle != nullptr)
-//		{ // ブロックの情報が NULL じゃない場合
-//
-//			if (useful::RectangleCollisionXY(D3DXVECTOR3(pos.x + sinf(rot.y) * ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * ATTACK_DISTANCE), pObstacle->GetPos(),
-//				SIZE, pObstacle->GetFileData().vtxMax,
-//				-SIZE, pObstacle->GetFileData().vtxMin) == true)
-//			{ // XYの矩形に当たってたら
-//
-//				if (useful::RectangleCollisionXZ(D3DXVECTOR3(pos.x + sinf(rot.y) * ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * ATTACK_DISTANCE), pObstacle->GetPos(),
-//					SIZE, pObstacle->GetFileData().vtxMax,
-//					-SIZE, pObstacle->GetFileData().vtxMin) == true)
-//				{ // XZの矩形に当たってたら
-//
-//					// 障害物の終了処理
-//					pObstacle->Uninit();
-//				}
-//			}
-//
-//			// 次のオブジェクトを代入する
-//			pObstacle = pObstacle->GetNext();
-//		}
-//
-//		//m_bAttack = true;		// 攻撃した状態にする
-//	}
-//}
-
-//=======================================
-// 障害物との当たり判定
-//=======================================
-void CPlayer::ObstacleCollision(void)
-{
-	// 位置を取得する
-	D3DXVECTOR3 pos = GetPos();
-
-	// 障害物との衝突判定
-	collision::ObstacleCollision(pos, GetPosOld(), m_sizeColl.x, m_sizeColl.y, m_sizeColl.z, m_type);
-
-	// ブロックとの当たり判定
-	collision::BlockCollision(pos, GetPosOld(), m_sizeColl.x, m_sizeColl.y, m_sizeColl.z);
-
-	// 位置を設定する
-	SetPos(pos);
 }
