@@ -166,6 +166,20 @@ void CEffect::Update(void)
 
 		break;
 
+	case TYPE_WIND:
+
+		// ˆÚ“®ˆ—
+		Move();
+
+		// “§–¾“x‚ÌŒ¸Zˆ—
+		SubAlpha();
+
+		// ˆÚ“®—Ê‚ğã‚°‚é
+		m_move.x *= 1.05f;
+		m_move.z *= 1.05f;
+
+		break;
+
 	default:
 
 		// ’â~

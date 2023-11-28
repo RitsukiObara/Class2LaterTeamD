@@ -14,6 +14,7 @@
 #include "useful.h"
 
 #include "fan_blade.h"
+#include "Effect.h"
 #include "input.h"
 
 //-------------------------------------------
@@ -83,6 +84,29 @@ void CElecFan::Uninit(void)
 //=====================================
 void CElecFan::Update(void)
 {
+	// 電源をONにする
+	m_bPower = true;
+
+	if (m_bPower == true)
+	{ // 電源がついている場合
+
+		D3DXVECTOR3 pos;		// 位置
+		D3DXVECTOR3 move;		// 移動量
+
+		// 位置を設定する
+		pos.x = GetPos().x + sinf(GetRot().y + (D3DX_PI * 0.5f)) * (rand() % (int)(GetFileData().vtxMax.x) - (int)(GetFileData().vtxMax.x * 0.5f));
+		pos.y = GetPos().y + rand() % (int)(GetFileData().vtxMax.y) + (int)(GetFileData().vtxMin.y);
+		pos.z = GetPos().z + cosf(GetRot().y + (D3DX_PI * 0.5f)) * (rand() % (int)(GetFileData().vtxMax.z) - (int)(GetFileData().vtxMax.z * 0.5f));
+
+		// 移動量を設定する
+		move.x = sinf(GetRot().y + D3DX_PI) * (rand() % 10 + 5);
+		move.y = 0.0f;
+		move.z = cosf(GetRot().y + D3DX_PI) * (rand() % 10 + 5);
+
+		// エフェクトを出す
+		CEffect::Create(pos, move, 50, 70.0f, CEffect::TYPE_WIND, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true);
+	}
+
 	if (m_pFan != nullptr)
 	{ // ファンが NULL じゃない場合
 

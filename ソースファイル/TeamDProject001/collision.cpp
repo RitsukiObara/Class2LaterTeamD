@@ -230,8 +230,8 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 				useful::RotNormalize(&fAngle);
 
 				// ˆÊ’u‚ð‰Ÿ‚µo‚·
-				pos.x += sinf(fAngle) * 10.0f;
-				pos.z += cosf(fAngle) * 10.0f;
+				pos.x += sinf(fAngle) * 17.0f;
+				pos.z += cosf(fAngle) * 17.0f;
 
 				// ˆÊ’u‚ðÝ’è‚·‚é
 				pPlayer->SetPos(pos);
