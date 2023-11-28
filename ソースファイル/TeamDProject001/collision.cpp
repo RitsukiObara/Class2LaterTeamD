@@ -221,6 +221,27 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 
 				break;
 
+			case CObstacle::TYPE_FAN:
+
+				// Œü‚«‚ðŽZo‚·‚é
+				fAngle = pObstacle->GetRot().y + D3DX_PI;
+
+				// Œü‚«‚ð³‹K‰»‚·‚é
+				useful::RotNormalize(&fAngle);
+
+				// ˆÊ’u‚ð‰Ÿ‚µo‚·
+				pos.x += sinf(fAngle) * 10.0f;
+				pos.z += cosf(fAngle) * 10.0f;
+
+				// ˆÊ’u‚ðÝ’è‚·‚é
+				pPlayer->SetPos(pos);
+
+				break;
+
+			case CObstacle::TYPE_CUP:
+
+				break;
+
 			default:
 
 				//“Á‚É‚È‚µ

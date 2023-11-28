@@ -62,6 +62,8 @@ public:			// 誰でもアクセスできる
 	void SetVertexCylinder(void);	// 筒の設定処理
 	void SetVertexDome(void);		// ドームの設定処理
 
+	void SetVtxColor(const D3DXCOLOR& col);			// 頂点カラーの設定処理
+
 	void SetIndex(const int nNumVtx1, const int nNumVtx2);		// インデックスの設定処理
 
 	void BindTexture(int nIdx);		// テクスチャの割り当て処理
