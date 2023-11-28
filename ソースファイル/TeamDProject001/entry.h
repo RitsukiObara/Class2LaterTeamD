@@ -41,7 +41,8 @@ public:				// 誰でもアクセスできる
 private:					// 自分だけアクセスできる
 
 	// 静的メンバ変数
-	static CEntryUI* m_apUI[MAX_ENTRY];		// エントリーUIの情報
+	int m_nCatIdx;					// ネコをやるプレイヤー
+	CEntryUI* m_apUI[MAX_ENTRY];	// エントリーUIの情報
 };
 
 #endif

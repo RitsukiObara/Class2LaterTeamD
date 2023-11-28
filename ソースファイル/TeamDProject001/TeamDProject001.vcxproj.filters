@@ -438,9 +438,6 @@
     <ClCompile Include="electricfan.cpp">
       <Filter>Gimmick\Obstacle</Filter>
     </ClCompile>
-    <ClCompile Include="fan_blade.cpp">
-      <Filter>Gimmick\Obstacle</Filter>
-    </ClCompile>
     <ClCompile Include="player.cpp">
       <Filter>Player</Filter>
     </ClCompile>
@@ -453,7 +450,7 @@
     <ClCompile Include="consent.cpp">
       <Filter>Gimmick\Obstacle</Filter>
     </ClCompile>
-    <ClCompile Include="fan_wind.cpp">
+    <ClCompile Include="fan_blade.cpp">
       <Filter>Gimmick\Obstacle</Filter>
     </ClCompile>
     <ClCompile Include="MultiCamera.cpp">
@@ -812,9 +809,6 @@
     <ClInclude Include="electricfan.h">
       <Filter>Gimmick\Obstacle</Filter>
     </ClInclude>
-    <ClInclude Include="fan_blade.h">
-      <Filter>Gimmick\Obstacle</Filter>
-    </ClInclude>
     <ClInclude Include="player.h">
       <Filter>Player</Filter>
     </ClInclude>
@@ -827,7 +821,7 @@
     <ClInclude Include="consent.h">
       <Filter>Gimmick\Obstacle</Filter>
     </ClInclude>
-    <ClInclude Include="fan_wind.h">
+    <ClInclude Include="fan_blade.h">
       <Filter>Gimmick\Obstacle</Filter>
     </ClInclude>
     <ClInclude Include="MultiCamera.h">

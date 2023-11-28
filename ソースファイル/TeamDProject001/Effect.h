@@ -28,6 +28,7 @@ public:
 		TYPE_RUPTURE,			// ”j—ô
 		TYPE_SMOKE,				// ‰Œ
 		TYPE_THUNDER,			// “d‹C
+		TYPE_WIND,				// •—
 		TYPE_MAX				// ‚±‚Ì—ñ‹“Œ^‚Ì‘”
 	};
 

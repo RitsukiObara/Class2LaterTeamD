@@ -247,3 +247,12 @@ CEntryUI* CEntryUI::Create(const D3DXVECTOR3& pos, const int nID, const CPlayer:
 	// エントリーUIのポインタを返す
 	return pEntry;
 }
+
+//=========================
+// チームの取得処理
+//=========================
+CEntryTeam* CEntryUI::GetTeam(void)
+{
+	// チームのポインタを返す
+	return m_pTeam;
+}

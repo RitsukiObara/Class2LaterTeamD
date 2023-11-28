@@ -20,7 +20,8 @@
 //=========================
 CEntryTeam::CEntryTeam() : CObject2D(CObject::TYPE_NONE, CObject::PRIORITY_ENTITY)
 {
-
+	// 全ての値をクリアする
+	m_type = CPlayer::TYPE_CAT;		// チームの種類
 }
 
 //=========================
@@ -43,6 +44,9 @@ HRESULT CEntryTeam::Init(void)
 		return E_FAIL;
 	}
 
+	// 全ての値を初期化する
+	m_type = CPlayer::TYPE_CAT;		// チームの種類
+
 	// 成功を返す
 	return S_OK;
 }
@@ -61,7 +65,11 @@ void CEntryTeam::Uninit(void)
 //=========================
 void CEntryTeam::Update(void)
 {
+	// 頂点情報の初期化
+	SetVertex();
 
+	// テクスチャ座標の設定処理
+	SetVtxTextureAnim(TEAM_PATTERN, m_type);
 }
 
 //=========================
@@ -85,6 +93,9 @@ void CEntryTeam::SetData(const D3DXVECTOR3& pos, const CPlayer::TYPE type)
 	SetLength();				// 長さ設定
 	SetAngle();					// 方向設定
 
+	// 全ての値を設定する
+	m_type = type;				// チームの種類
+
 	// テクスチャの読み込み処理
 	BindTexture(CManager::Get()->GetTexture()->Regist(TEAM_TEXTURE));
 
@@ -92,7 +103,7 @@ void CEntryTeam::SetData(const D3DXVECTOR3& pos, const CPlayer::TYPE type)
 	SetVertex();
 
 	// テクスチャ座標の設定処理
-	SetVtxTextureAnim(TEAM_PATTERN, type);
+	SetVtxTextureAnim(TEAM_PATTERN, m_type);
 }
 
 //=========================
@@ -148,4 +159,13 @@ CEntryTeam* CEntryTeam::Create(const D3DXVECTOR3& pos, const CPlayer::TYPE type)
 
 	// エントリーチームのポインタを返す
 	return pEntryTeam;
+}
+
+//=========================
+// 種類の設定処理
+//=========================
+void CEntryTeam::SetType(const CPlayer::TYPE type)
+{
+	// 種類を設定する
+	m_type = type;
 }

@@ -10,14 +10,21 @@
 #include "main.h"
 #include "electricfan.h"
 #include "manager.h"
+#include "renderer.h"
+#include "useful.h"
 
 #include "fan_blade.h"
-#include "fan_wind.h"
+#include "Effect.h"
+#include "input.h"
 
 //-------------------------------------------
 // マクロ定義
 //-------------------------------------------
 #define FAN_SHIFT		(175.0f)		// 扇風機の羽根のずらす高さ
+#define WIND_RANGE		(1600.0f)		// 扇風機の風の範囲
+#define WIND_MOVE		(11)			// 風エフェクトの移動量の幅
+#define WIND_LIFE		(50)			// 風エフェクトの寿命
+#define WIND_RADIUS		(70.0f)			// 風エフェクトの半径
 
 //==============================
 // コンストラクタ
@@ -26,7 +33,7 @@ CElecFan::CElecFan() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK
 {
 	// 全ての値をクリアする
 	m_pFan = nullptr;			// 扇風機のファン
-	m_pWind = nullptr;			// 扇風機の風の情報
+	m_bPower = false;			// 電源状況
 }
 
 //==============================
@@ -51,7 +58,7 @@ HRESULT CElecFan::Init(void)
 
 	// 全ての値を初期化する
 	m_pFan = nullptr;			// 扇風機のファン
-	m_pWind = nullptr;			// 扇風機の風の情報
+	m_bPower = false;			// 電源状況
 
 	// 値を返す
 	return S_OK;
@@ -70,14 +77,6 @@ void CElecFan::Uninit(void)
 		m_pFan = nullptr;
 	}
 
-	if (m_pWind != nullptr)
-	{ // 風が NULL じゃない場合
-
-		// 風の終了処理
-		m_pWind->Uninit();
-		m_pWind = nullptr;
-	}
-
 	// 終了処理
 	CObstacle::Uninit();
 }
@@ -87,18 +86,34 @@ void CElecFan::Uninit(void)
 //=====================================
 void CElecFan::Update(void)
 {
+	// 電源をONにする
+	m_bPower = true;
+
+	if (m_bPower == true)
+	{ // 電源がついている場合
+
+		D3DXVECTOR3 pos;		// 位置
+		D3DXVECTOR3 move;		// 移動量
+
+		// 位置を設定する
+		pos.x = GetPos().x + sinf(GetRot().y + (D3DX_PI * 0.5f)) * (rand() % (int)(GetFileData().vtxMax.x) - (int)(GetFileData().vtxMax.x * 0.5f));
+		pos.y = GetPos().y + rand() % (int)(GetFileData().vtxMax.y) + (int)(GetFileData().vtxMin.y);
+		pos.z = GetPos().z + cosf(GetRot().y + (D3DX_PI * 0.5f)) * (rand() % (int)(GetFileData().vtxMax.z) - (int)(GetFileData().vtxMax.z * 0.5f));
+
+		// 移動量を設定する
+		move.x = sinf(GetRot().y + D3DX_PI) * (rand() % WIND_MOVE + (WIND_MOVE * 0.5f));
+		move.y = 0.0f;
+		move.z = cosf(GetRot().y + D3DX_PI) * (rand() % WIND_MOVE + (WIND_MOVE * 0.5f));
+
+		// エフェクトを出す
+		CEffect::Create(pos, move, WIND_LIFE, WIND_RADIUS, CEffect::TYPE_WIND, NONE_D3DXCOLOR, true);
+	}
+
 	if (m_pFan != nullptr)
 	{ // ファンが NULL じゃない場合
 
 		// ファンの更新処理
 		m_pFan->Update();
-	}
-
-	if (m_pWind != nullptr)
-	{ // 風が NULL じゃない場合
-
-		// 風の更新処理
-		m_pWind->Update();
 	}
 }
 
@@ -106,7 +121,7 @@ void CElecFan::Update(void)
 // 扇風機の描画処理
 //=====================================
 void CElecFan::Draw(void)
-{
+{	
 	// 描画処理
 	CObstacle::Draw();
 
@@ -115,13 +130,6 @@ void CElecFan::Draw(void)
 
 		// ファンの描画処理
 		m_pFan->Draw();
-	}
-
-	if (m_pWind != nullptr)
-	{ // 風が NULL じゃない場合
-
-		// 風の描画処理
-		m_pWind->Draw();
 	}
 }
 
@@ -164,6 +172,25 @@ bool CElecFan::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const floa
 //=====================================
 bool CElecFan::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
+	if (m_bPower == true)
+	{ // 電源状況が true の場合
+
+		// 各最大値・最小値を宣言
+		D3DXVECTOR3 vtxMin = D3DXVECTOR3(sinf(GetRot().y) * -WIND_RANGE, 0.0f, cosf(GetRot().y) * -WIND_RANGE);
+		D3DXVECTOR3 vtxMax = D3DXVECTOR3(0.0f, GetFileData().vtxMax.y, 0.0f);
+		D3DXVECTOR3 playerMin = D3DXVECTOR3(-fWidth, 0.0f, -fDepth);
+		D3DXVECTOR3 playerMax = D3DXVECTOR3(fWidth, fHeight, fDepth);
+
+		if (useful::RectangleCollisionXY(pos, GetPos(), playerMax, vtxMax, playerMin, vtxMin) == true &&
+			useful::RectangleCollisionXZ(pos, GetPos(), playerMax, vtxMax, playerMin, vtxMin) == true &&
+			useful::RectangleCollisionYZ(pos, GetPos(), playerMax, vtxMax, playerMin, vtxMin) == true)
+		{ // 当たり判定の中に入った場合
+
+			// true を返す
+			return true;
+		}
+	}
+
 	// false を返す
 	return false;
 }
@@ -174,7 +201,7 @@ bool CElecFan::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeig
 bool CElecFan::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type)
 {
 	// false を返す
-	return false;
+	return true;
 }
 
 //=====================================
@@ -182,5 +209,6 @@ bool CElecFan::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlay
 //=====================================
 void CElecFan::Action(void)
 {
-
+	// 電源ONにする
+	m_bPower = true;
 }

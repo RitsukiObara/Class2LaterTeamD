@@ -31,11 +31,16 @@ public:			// 誰でもアクセスできる
 
 	void SetData(const D3DXVECTOR3& pos, const CPlayer::TYPE type);					// 情報の設定処理
 
+	// セット・ゲット関係
+	void SetType(const CPlayer::TYPE type);		// 種類の設定処理
+
 	// 静的メンバ関数
 	static CEntryTeam* Create(const D3DXVECTOR3& pos, const CPlayer::TYPE type);	// 生成処理
 
 private:		// 自分だけアクセスできる
 
+	// メンバ変数
+	CPlayer::TYPE m_type;		// チームの種類
 };
 
 #endif

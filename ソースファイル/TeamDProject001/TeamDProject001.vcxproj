@@ -188,7 +188,6 @@
     <ClCompile Include="entry_UI.cpp" />
     <ClCompile Include="fade.cpp" />
     <ClCompile Include="fan_blade.cpp" />
-    <ClCompile Include="fan_wind.cpp" />
     <ClCompile Include="file.cpp" />
     <ClCompile Include="flowervase.cpp" />
     <ClCompile Include="fraction.cpp" />
@@ -317,7 +316,6 @@
     <ClInclude Include="entry_UI.h" />
     <ClInclude Include="fade.h" />
     <ClInclude Include="fan_blade.h" />
-    <ClInclude Include="fan_wind.h" />
     <ClInclude Include="file.h" />
     <ClInclude Include="flowervase.h" />
     <ClInclude Include="fraction.h" />

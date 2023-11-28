@@ -31,6 +31,7 @@
 //===============================
 #define COLLISION_ADD_DIFF_LENGTH		(0.01f)			// 僅かな誤差を埋めるためのマクロ定義(突っかかり防止)
 #define COLLISION_CAT_SIZE				(D3DXVECTOR3(70.0f,250.0f,70.0f))		// ネコの当たり判定のサイズ
+#define WIND_MOVE						(17.0f)			// 風で吹き飛ぶ移動量
 
 //===============================
 // 丸影の当たり判定処理
@@ -218,6 +219,27 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 
 				// 気絶処理
 				pPlayer->Stun(60);
+
+				break;
+
+			case CObstacle::TYPE_FAN:
+
+				// 向きを算出する
+				fAngle = pObstacle->GetRot().y + D3DX_PI;
+
+				// 向きを正規化する
+				useful::RotNormalize(&fAngle);
+
+				// 位置を押し出す
+				pos.x += sinf(fAngle) * WIND_MOVE;
+				pos.z += cosf(fAngle) * WIND_MOVE;
+
+				// 位置を設定する
+				pPlayer->SetPos(pos);
+
+				break;
+
+			case CObstacle::TYPE_CUP:
 
 				break;
 
