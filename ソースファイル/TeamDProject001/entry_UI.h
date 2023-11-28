@@ -38,6 +38,9 @@ public:
 
 	void SetData(const D3DXVECTOR3& pos, const int nID, const CPlayer::TYPE type);				// 情報の設定処理
 
+	// セット・ゲット関係
+	CEntryTeam* GetTeam(void);		// チームの取得処理
+
 	// 静的メンバ関数
 	static CEntryUI* Create(const D3DXVECTOR3& pos, const int nID, const CPlayer::TYPE type);	// 生成処理
 

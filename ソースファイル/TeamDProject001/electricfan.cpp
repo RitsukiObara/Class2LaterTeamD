@@ -21,8 +21,10 @@
 // マクロ定義
 //-------------------------------------------
 #define FAN_SHIFT		(175.0f)		// 扇風機の羽根のずらす高さ
-#define WIND_CIRCUM		(80.0f)			// 扇風機の風の円周の大きさ
-#define WIND_HEIGHT		(1600.0f)		// 扇風機の風の高さ
+#define WIND_RANGE		(1600.0f)		// 扇風機の風の範囲
+#define WIND_MOVE		(11)			// 風エフェクトの移動量の幅
+#define WIND_LIFE		(50)			// 風エフェクトの寿命
+#define WIND_RADIUS		(70.0f)			// 風エフェクトの半径
 
 //==============================
 // コンストラクタ
@@ -99,12 +101,12 @@ void CElecFan::Update(void)
 		pos.z = GetPos().z + cosf(GetRot().y + (D3DX_PI * 0.5f)) * (rand() % (int)(GetFileData().vtxMax.z) - (int)(GetFileData().vtxMax.z * 0.5f));
 
 		// 移動量を設定する
-		move.x = sinf(GetRot().y + D3DX_PI) * (rand() % 10 + 5);
+		move.x = sinf(GetRot().y + D3DX_PI) * (rand() % WIND_MOVE + (WIND_MOVE * 0.5f));
 		move.y = 0.0f;
-		move.z = cosf(GetRot().y + D3DX_PI) * (rand() % 10 + 5);
+		move.z = cosf(GetRot().y + D3DX_PI) * (rand() % WIND_MOVE + (WIND_MOVE * 0.5f));
 
 		// エフェクトを出す
-		CEffect::Create(pos, move, 50, 70.0f, CEffect::TYPE_WIND, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true);
+		CEffect::Create(pos, move, WIND_LIFE, WIND_RADIUS, CEffect::TYPE_WIND, NONE_D3DXCOLOR, true);
 	}
 
 	if (m_pFan != nullptr)
@@ -174,7 +176,7 @@ bool CElecFan::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeig
 	{ // 電源状況が true の場合
 
 		// 各最大値・最小値を宣言
-		D3DXVECTOR3 vtxMin = D3DXVECTOR3(sinf(GetRot().y) * -WIND_HEIGHT, 0.0f, cosf(GetRot().y) * -WIND_HEIGHT);
+		D3DXVECTOR3 vtxMin = D3DXVECTOR3(sinf(GetRot().y) * -WIND_RANGE, 0.0f, cosf(GetRot().y) * -WIND_RANGE);
 		D3DXVECTOR3 vtxMax = D3DXVECTOR3(0.0f, GetFileData().vtxMax.y, 0.0f);
 		D3DXVECTOR3 playerMin = D3DXVECTOR3(-fWidth, 0.0f, -fDepth);
 		D3DXVECTOR3 playerMax = D3DXVECTOR3(fWidth, fHeight, fDepth);
