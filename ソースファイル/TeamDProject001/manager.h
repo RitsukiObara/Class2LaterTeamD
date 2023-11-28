@@ -54,13 +54,15 @@ public:						// 誰でもアクセスできる
 	CSound* GetSound(void);					// サウンドの取得処理
 	CFile* GetFile(void);					// ファイルの取得処理
 	CDebugProc* GetDebugProc(void);			// デバッグ表示の取得処理
-	CCamera* GetCamera(void);			// カメラ表示の取得処理
+	CCamera* GetCamera(void);				// カメラ表示の取得処理
 	CMultiCamera* GetMlutiCamera(int Idx);	// カメラ表示の取得処理
 	CLight* GetLight(void);					// ライトの取得処理
 	CTexture* GetTexture(void);				// テクスチャの取得処理
 	CFade* GetFade(void);					// フェードの取得処理
 	void SetMode(const CScene::MODE mode);	// モードの設定処理
 	CScene::MODE GetMode(void);				// モードの取得処理
+
+	void SetMlutiCamera(CMultiCamera *Camera, int Idx) { m_pMultiCamera[Idx] = Camera; }	// カメラ表示の取得処理
 
 	// 静的メンバ関数
 	static CManager* Create(void);			// マネージャーの生成処理
