@@ -365,3 +365,11 @@ void CGameTime::Calculate(void)
 		}
 	}
 }
+
+//========================
+// c‚è•b”‚Ìæ“¾ˆ—
+//========================
+int CGameTime::GetSeconds(void)
+{
+	return m_nSeconds;
+}

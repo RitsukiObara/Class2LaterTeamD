@@ -16,6 +16,7 @@
 #include "renderer.h"
 #include "debugproc.h"
 #include "useful.h"
+#include "MultiCamera.h"
 
 #include "motion.h"
 #include "player_idUI.h"
@@ -81,6 +82,7 @@ void CPlayer::Box(void)
 	m_fSpeed = 0.0f;					// 速度
 	m_bAttack = false;					// 攻撃したか
 	m_bMove = false;					// 移動しているか
+	m_CameraRot = NONE_D3DXVECTOR3;		// カメラの向き
 }
 
 //==============================
@@ -167,6 +169,11 @@ void CPlayer::Update(void)
 
 	// 状態の管理
 	StateManager();
+
+#if CAMERA != 0
+	//カメラ情報の更新
+	CameraUpdate();
+#endif // CAMERA
 
 	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_E))
 	{
@@ -409,6 +416,25 @@ void CPlayer::Move(void)
 
 	// 向きを適用する
 	SetRot(rot);
+}
+
+//=======================================
+// 攻撃処理
+//=======================================
+void CPlayer::CameraUpdate(void)
+{
+	CMultiCamera *pCamera = CManager::Get()->GetMlutiCamera(m_nPlayerIdx);
+	D3DXVECTOR3 Pos = GetPos();
+	pCamera->SetPosR(Pos);
+	pCamera->SetPosV(D3DXVECTOR3(
+		Pos.x + sinf(m_CameraRot.y + (D3DX_PI * 1.0f)) * 200.0f,
+		Pos.y + 100.0f,
+		Pos.z + cosf(m_CameraRot.y + (D3DX_PI * 1.0f)) * 200.0f));
+
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LSHIFT) == true)
+	{
+		m_CameraRot.y += 0.01f;
+	}
 }
 
 ////=======================================

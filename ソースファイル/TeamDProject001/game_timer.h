@@ -37,6 +37,7 @@ public:				// 誰でもアクセスできる
 	void Draw(void);		// 描画処理
 
 	void SetData(void);		// 情報の設定処理
+	int GetSeconds(void);	// 残り秒数の取得処理
 
 	// 静的メンバ変数
 	static CGameTime* Get(void);			// 取得処理

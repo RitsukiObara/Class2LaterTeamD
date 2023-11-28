@@ -122,6 +122,7 @@ private:		// 自分だけアクセスできる
 	void ObstacleCollision(void);		// 障害物との当たり判定
 	void StunStateManager(void);		// 気絶状態の管理
 	void StateManager(void);			// 状態の管理
+	void CameraUpdate(void);			// カメラ情報の更新
 
 	// メンバ変数
 	CMotion* m_pMotion;			// モーションの情報
@@ -140,6 +141,7 @@ private:		// 自分だけアクセスできる
 	int m_StunStateCount;		// 状態管理用カウント
 	STATE m_State;				// 状態管理
 	int m_StateCount;			// 状態管理用カウント
+	D3DXVECTOR3 m_CameraRot;	// カメラの向き
 };
 
 #endif

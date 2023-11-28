@@ -68,6 +68,7 @@ public:			// 誰でもアクセスできる
 		TYPE_ITEM,				// アイテム
 		TYPE_CHARAINFO,			// キャラクターの情報UI
 		TYPE_WATER,				// 水
+		TYPE_FINISHUI,			// 終了カウントダウンのUI
 		TYPE_MAX				// この列挙型の総数
 	};
 
