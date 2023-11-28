@@ -31,6 +31,7 @@
 #include "item.h"
 #include "resurrection_fan.h"
 #include "player.h"
+#include "entry.h"
 
 #include "obstacle_manager.h"
 #include "chara_infoUI.h"
@@ -44,7 +45,7 @@
 // 静的メンバ変数宣言
 //--------------------------------------------
 CPause* CGame::m_pPause = nullptr;							// ポーズの情報
-CPlayer* CGame::m_apPlayer[MAX_PLAYER] = {};				// プレイヤーの情報
+CPlayer* CGame::m_apPlayer[MAX_PLAY] = {};				// プレイヤーの情報
 CGame::STATE CGame::m_GameState = CGame::STATE_START;		// ゲームの進行状態
 int CGame::m_nFinishCount = 0;								// 終了カウント
 
@@ -64,7 +65,7 @@ CGame::CGame() : CScene(TYPE_SCENE, PRIORITY_BG)
 	m_nFinishCount = 0;			// 終了カウント
 	m_GameState = STATE_START;	// 状態
 
-	for (int nCntPlay = 0; nCntPlay < MAX_PLAYER; nCntPlay++)
+	for (int nCntPlay = 0; nCntPlay < MAX_PLAY; nCntPlay++)
 	{
 		m_apPlayer[nCntPlay] = nullptr;		// ネズミの情報
 	}
@@ -144,14 +145,25 @@ HRESULT CGame::Init(void)
 
 #endif // _DEBUG
 
-	// ネズミの生成
-	for (int nCntPlay = 0; nCntPlay < 3; nCntPlay++)
-	{
-		m_apPlayer[nCntPlay] = CPlayer::Create(D3DXVECTOR3(500.0f * nCntPlay, 0.0f, 0.0f), nCntPlay, CPlayer::TYPE_RAT);
-	}
+	// ネコのインデックスを取得する
+	int nCat = CEntry::GetCatIdx();
 
-	//猫の生成
-	m_apPlayer[3] = CCat::Create(D3DXVECTOR3(400.0f, 0.0f, 400.0f),3, CPlayer::TYPE_CAT);
+	// ネズミの生成
+	for (int nCntPlay = 0; nCntPlay < MAX_PLAY; nCntPlay++)
+	{
+		if (nCntPlay == nCat)
+		{ // ネコ担当のプレイヤーの場合
+
+			// プレイヤーの生成
+			m_apPlayer[nCntPlay] = CPlayer::Create(D3DXVECTOR3(500.0f * nCntPlay - 500.0f, 0.0f, 0.0f), nCntPlay, CPlayer::TYPE_CAT);
+		}
+		else
+		{ // 上記以外
+
+			// プレイヤーの生成
+			m_apPlayer[nCntPlay] = CPlayer::Create(D3DXVECTOR3(500.0f * nCntPlay - 500.0f, 0.0f, 0.0f), nCntPlay, CPlayer::TYPE_RAT);
+		}
+	}
 
 	// 生成処理
 	CGameTime::Create();
@@ -180,7 +192,7 @@ void CGame::Uninit(void)
 	// ポインタを NULL にする
 	m_pPause = nullptr;			// ポーズ
 
-	for (int nCntPlay = 0; nCntPlay < MAX_PLAYER; nCntPlay++)
+	for (int nCntPlay = 0; nCntPlay < MAX_PLAY; nCntPlay++)
 	{
 		m_apPlayer[nCntPlay] = nullptr;		// ネズミの情報
 	}
@@ -445,7 +457,7 @@ CGame::STATE CGame::GetState(void)
 //======================================
 CPlayer* CGame::GetPlayer(const int nID)
 {
-	if (nID < MAX_PLAYER)
+	if (nID < MAX_PLAY)
 	{ // インデックスが一定未満の場合
 
 		// プレイヤーの情報を取得する
@@ -476,7 +488,7 @@ void CGame::DeletePause(void)
 //======================================
 void CGame::DeletePlayer(int nIdx)
 {
-	if (nIdx < MAX_PLAYER)
+	if (nIdx < MAX_PLAY)
 	{ // 番号が最大数未満の場合
 
 		// プレイヤーのポインタを NULL にする
