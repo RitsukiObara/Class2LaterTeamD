@@ -20,7 +20,6 @@
 
 #include "motion.h"
 #include "player_idUI.h"
-#include "rat_state.h"
 #include "stun.h"
 #include "collision.h"
 #include "elevation_manager.h"
@@ -58,7 +57,6 @@ int CRat::m_nResurrectionCounter = 0;	// 生き返るまでのカウンター
 CRat::CRat() : CPlayer(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 {
 	// 全ての値をクリアする
-	m_pRatState = nullptr;				// ネズミの状態の情報
 	m_pRatGhost = nullptr;				// 幽霊ネズミの情報
 	m_pRessrectionFan = nullptr;		// 円の範囲の情報
 	m_nRatIdx = NONE_RATIDX;			// ネズミの番号
@@ -133,19 +131,6 @@ HRESULT CRat::Init(void)
 	// モーションの情報を設定する
 	SetMotion(pMotion);
 
-	if (m_pRatState == nullptr)
-	{ // ネズミの状態が NULL の場合
-		
-		// ネズミの状態の情報を生成する
-		m_pRatState = new CRatState;
-	}
-	else
-	{ // 上記以外
-
-		// 停止
-		assert(false);
-	}
-
 	// 全ての値を初期化する
 	m_nRatIdx = NONE_RATIDX;		// ネズミの番号
 	m_bJump = false;				// ジャンプ状況
@@ -159,14 +144,6 @@ HRESULT CRat::Init(void)
 //========================================
 void CRat::Uninit(void)
 {
-	if (m_pRatState != nullptr)
-	{ // ネズミの状態が NULL じゃない場合
-
-		// ネズミの状態の終了処理
-		delete m_pRatState;
-		m_pRatState = nullptr;
-	}
-
 	if (m_pRatGhost != nullptr)
 	{ // 幽霊ネズミが NULL じゃない場合
 
@@ -204,7 +181,8 @@ void CRat::Update(void)
 	if (CPlayer::GetStunState() != CPlayer::STUNSTATE_STUN &&
 		CPlayer::GetState() != CPlayer::STATE_DEATH)
 	{ // 気絶状態or死亡状態じゃない場合
-		if (m_pRatState->GetState() != CRatState::STATE_SMASH)
+
+		if (GetStunState() != STUNSTATE_SMASH)
 		{ // 吹き飛び状態の場合
 
 			// 移動処理
@@ -233,13 +211,6 @@ void CRat::Update(void)
 	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_E))
 	{
 		collision::ObstacleAction(this, SIZE.x * 2.0f, CPlayer::TYPE_RAT);
-	}
-
-	if (m_pRatState != nullptr)
-	{ // ネズミの状態が NULL じゃない場合
-
-		// ネズミの状態の更新処理
-		m_pRatState->Update(*this);
 	}
 
 	// プレイヤーの更新処理
@@ -376,15 +347,6 @@ int CRat::GetRatIdx(void) const
 }
 
 //=======================================
-// ネズミの状態の取得処理
-//=======================================
-CRatState* CRat::GetState(void)
-{
-	// ネズミの状態を返す
-	return m_pRatState;
-}
-
-//=======================================
 // 幽霊ネズミの情報取得処理
 //=======================================
 CRatGhost* CRat::GetRatGhost(void)
@@ -442,7 +404,7 @@ void CRat::Jump(void)
 #ifdef _DEBUG
 
 	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_SPACE) == true &&
-		m_pRatState->GetState() != CRatState::STATE_SMASH &&
+		GetStunState() != STUNSTATE_SMASH &&
 		m_bJump == false)
 	{ // Aボタンを押した場合
 
@@ -454,7 +416,7 @@ void CRat::Jump(void)
 #endif // _DEBUG
 
 	if (CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_A, m_nRatIdx) == true &&
-		m_pRatState->GetState() != CRatState::STATE_SMASH &&
+		GetStunState() != STUNSTATE_SMASH &&
 		m_bJump == false)
 	{ // Aボタンを押した場合
 
@@ -519,90 +481,48 @@ void CRat::Attack(void)
 void CRat::Hit(void)
 {
 	// ローカル変数宣言
-	D3DXVECTOR3 pos = GetPos();		// 位置を取得する
-	int nLife = GetLife();			// 寿命を取得する
-	CRatState::STATE state = m_pRatState->GetState();	// 状態を取得する
+	D3DXVECTOR3 pos = GetPos();				// 位置を取得する
+	STATE state = GetState();				// 状態を取得する
+	STUNSTATE stunState = GetStunState();	// 気絶状態を取得する
 
-	if (state != CRatState::STATE_DAMAGE && 
-		state != CRatState::STATE_INVINCIBLE)
+	if (state == STATE_NONE &&
+		stunState == STUNSTATE_NONE)
 	{ // ダメージ受ける状態だった場合
-		nLife--;			// 寿命減らす
 
 		CParticle::Create(pos, CParticle::TYPE_ENEMYDEATH); //パーティクル
 
-		if (nLife <= 0)
-		{ // 寿命が無いとき
+		SetState(STATE_DEATH);				// 死亡状態にする
 
-			m_pRatState->SetState(CRatState::STATE_DEATH);		// 死亡状態にする
+		// 生き返りの円の範囲生成
+		if (m_pRessrectionFan == nullptr)
+		{ // 円の範囲が NULL のとき
 
-			// 生き返りの円の範囲生成
-			if (m_pRessrectionFan == nullptr)
-			{ // 円の範囲が NULL のとき
+			m_pRessrectionFan = CRessrectionFan::Create(D3DXVECTOR3(pos.x, pos.y + 10.0f, pos.z), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+		}
 
-				m_pRessrectionFan = CRessrectionFan::Create(D3DXVECTOR3(pos.x, pos.y + 10.0f, pos.z), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-			}
+		// ネズミの幽霊の生成
+		if (m_pRatGhost == nullptr)
+		{ // 幽霊ネズミが NULL のとき
 
-			// ネズミの幽霊の生成
-			if (m_pRatGhost == nullptr)
-			{ // 幽霊ネズミが NULL のとき
+			m_pRatGhost = CRatGhost::Create(pos);
 
-				m_pRatGhost = CRatGhost::Create(pos);
-
-				m_nNumAll--;						// ネズミの総数減算
-			}
+			m_nNumAll--;						// ネズミの総数減算
+		}
 
 #if 0	// デバッグの為の処理↓
 
-			// 終了状態にする
-			Uninit();
+		// 終了状態にする
+		Uninit();
 #endif
 
-			if (m_nNumAll <= 0)
-			{ // ネズミが全滅したら
+		if (m_nNumAll <= 0)
+		{ // ネズミが全滅したら
 
-				// ネコが勝利した状態にする
-				CGame::SetState(CGame::STATE_CAT_WIN);
-			}
+			// ネコが勝利した状態にする
+			CGame::SetState(CGame::STATE_CAT_WIN);
 		}
-		else
-		{ // 上記以外
 
-			m_pRatState->SetState(CRatState::STATE_DAMAGE);		// ダメージ状態にする
-		}
 	}
-
-	// 寿命を設定する
-	SetLife(nLife);
-}
-
-//=======================================
-// 吹き飛び状態
-//=======================================
-void CRat::Smash(const float fAngle)
-{
-	// ローカル変数宣言
-	D3DXVECTOR3 pos = GetPos();		// 位置を取得する
-	D3DXVECTOR3 move = GetMove();	// 移動量を取得する
-	CRatState::STATE state = m_pRatState->GetState();	// 状態を取得する
-
-	if (state != CRatState::STATE_DAMAGE &&
-		state != CRatState::STATE_INVINCIBLE &&
-		state != CRatState::STATE_SMASH &&
-		state != CRatState::STATE_DEATH &&
-		state != CRatState::STATE_STUN)
-	{ // ダメージ受ける状態だった場合
-
-		// 移動量を算出する
-		move.x = sinf(fAngle) * SMASH_MOVE.x;
-		move.y = SMASH_MOVE.y;
-		move.z = cosf(fAngle) * SMASH_MOVE.z;
-
-		// 吹き飛び状態にする
-		m_pRatState->SetState(CRatState::STATE_SMASH);
-	}
-
-	// 移動量を適用する
-	SetMove(move);
 }
 
 //=======================================

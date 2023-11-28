@@ -48,7 +48,6 @@ public:			// 誰でもアクセスできる
 	void Draw(void);		// 描画処理
 
 	void Hit(void);						// ヒット処理
-	void Smash(const float fAngle);		// 吹き飛び状態
 	void MotionManager(void);			// モーションマネージャー
 
 	void SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type);		// 情報の設定処理

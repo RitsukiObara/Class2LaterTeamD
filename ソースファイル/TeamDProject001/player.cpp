@@ -32,7 +32,6 @@
 #define GRAVITY				(1.0f)			// 重力
 #define ADD_MOVE_Y			(30.0f)			// 浮力
 #define NONE_PLAYERIDX		(-1)			// プレイヤーの番号の初期値
-#define MAX_LIFE			(1)				// 寿命の最大値
 #define STUN_HEIGHT			(80.0f)			// 気絶演出が出てくる高さ
 #define ID_HEIGHT			(150.0f)		// IDが出てくる高さ
 #define SMASH_MOVE			(D3DXVECTOR3(10.0f, 20.0f, 10.0f))		// 吹き飛び状態の移動量
@@ -77,7 +76,6 @@ void CPlayer::Box(void)
 	m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_sizeColl = NONE_D3DXVECTOR3;		// 当たり判定のサイズ
 	m_type = TYPE_CAT;					// 種類
-	m_nLife = 0;						// 寿命
 	m_nPlayerIdx = NONE_PLAYERIDX;		// プレイヤーのインデックス
 	m_fSpeed = 0.0f;					// 速度
 	m_bAttack = false;					// 攻撃したか
@@ -107,7 +105,6 @@ HRESULT CPlayer::Init(void)
 	m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_sizeColl = NONE_D3DXVECTOR3;		// 当たり判定のサイズ
 	m_type = TYPE_CAT;					// 種類
-	m_nLife = 0;						// 寿命
 	m_nPlayerIdx = NONE_PLAYERIDX;		// プレイヤーのインデックス
 	m_fSpeed = 0.0f;					// 速度
 	m_bAttack = false;					// 攻撃したか
@@ -198,7 +195,7 @@ void CPlayer::Update(void)
 	}
 
 	// デバッグ表示
-	CManager::Get()->GetDebugProc()->Print("位置：%f %f %f\n向き：%f %f %f\n寿命：%d\n", GetPos().x, GetPos().y, GetPos().z, GetRot().x, GetRot().y, GetRot().z, m_nLife);
+	CManager::Get()->GetDebugProc()->Print("位置：%f %f %f\n向き：%f %f %f\n", GetPos().x, GetPos().y, GetPos().z, GetRot().x, GetRot().y, GetRot().z);
 }
 
 //=====================================
@@ -215,6 +212,27 @@ void CPlayer::Draw(void)
 //=====================================
 void CPlayer::Smash(const float fAngle)
 {
+	// ローカル変数宣言
+	D3DXVECTOR3 pos = GetPos();		// 位置を取得する
+	D3DXVECTOR3 move = GetMove();	// 移動量を取得する
+
+	if (m_State != STATE_DEATH &&
+		m_State != STATE_WAIT &&
+		m_StunState != STUNSTATE_NONE)
+	{ // ダメージ受ける状態だった場合
+
+		// 移動量を算出する
+		move.x = sinf(fAngle) * SMASH_MOVE.x;
+		move.y = SMASH_MOVE.y;
+		move.z = cosf(fAngle) * SMASH_MOVE.z;
+
+		// 吹き飛び状態にする
+		m_StunState = STUNSTATE_SMASH;
+	}
+
+	// 移動量を適用する
+	SetMove(move);
+
 	// 移動量を設定する
 	m_move.x = sinf(fAngle) * SMASH_MOVE.x;
 	m_move.y = SMASH_MOVE.y;
@@ -237,7 +255,6 @@ void CPlayer::SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 	m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_sizeColl = NONE_D3DXVECTOR3;		// 当たり判定のサイズ
 	m_type = type;						// 種類
-	m_nLife = MAX_LIFE;					// 寿命
 	m_nPlayerIdx = nID;					// プレイヤーのインデックス
 	m_fSpeed = 0.0f;					// 速度
 	m_bAttack = false;					// 攻撃したか
@@ -527,7 +544,22 @@ void CPlayer::StunStateManager(void)
 {
 	switch (m_StunState)
 	{
-	case STUNSTATE_NONE:
+	case STUNSTATE_NONE:	// 無状態
+
+		break;
+
+	case STUNSTATE_SMASH:	// 吹き飛び状態
+
+		m_StunStateCount--;
+
+		if (m_StunStateCount <= 0)
+		{
+			m_StunState = STUNSTATE_STUN;
+			m_StunStateCount = STUN_WAIT;
+
+			// 気絶演出の設定処理
+			SetStun(GetPos());
+		}
 
 		break;
 
@@ -550,12 +582,20 @@ void CPlayer::StunStateManager(void)
 		break;
 
 	case STUNSTATE_WAIT:	//障害物のみ無敵状態
+
 		m_StunStateCount--;
 
 		if (m_StunStateCount <= 0)
 		{
 			m_StunState = STUNSTATE_NONE;
 		}
+		break;
+
+	default:
+
+		// 停止
+		assert(false);
+
 		break;
 	}
 }
@@ -582,12 +622,12 @@ void CPlayer::StateManager(void)
 		break;
 
 	case STATE_DEATH:	//死亡状態
-		m_StunStateCount--;
+		//m_StunStateCount--;
 
-		if (m_StunStateCount <= 0)
-		{
-			m_State = STATE_NONE;
-		}
+		//if (m_StunStateCount <= 0)
+		//{
+		//	m_State = STATE_NONE;
+		//}
 		break;
 	}
 }
@@ -698,24 +738,6 @@ CPlayer::TYPE CPlayer::GetType(void) const
 {
 	// 種類を返す
 	return m_type;
-}
-
-//=======================================
-// 寿命の設定処理
-//=======================================
-void CPlayer::SetLife(const int nLife)
-{
-	// 寿命を設定する
-	m_nLife = nLife;
-}
-
-//=======================================
-// 寿命の取得処理
-//=======================================
-int CPlayer::GetLife(void) const
-{
-	// 寿命を返す
-	return m_nLife;
 }
 
 //=======================================

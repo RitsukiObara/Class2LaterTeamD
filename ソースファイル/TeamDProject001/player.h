@@ -37,19 +37,20 @@ public:			// 誰でもアクセスできる
 	// 列挙型定義(気絶用状態)
 	enum STUNSTATE
 	{
-		STUNSTATE_NONE = 0,
-		STUNSTATE_STUN,
-		STUNSTATE_WAIT,
-		STUNSTATE_MAX,
+		STUNSTATE_NONE = 0,	// 無状態
+		STUNSTATE_SMASH,	// 吹き飛び状態
+		STUNSTATE_STUN,		// 気絶状態
+		STUNSTATE_WAIT,		// 無敵状態
+		STUNSTATE_MAX,		// この列挙型の総数
 	};
 
-	// 列挙型定義(気絶用状態)
+	// 列挙型定義(通常用状態)
 	enum STATE
 	{
 		STATE_NONE = 0,
 		STATE_WAIT,
 		STATE_DEATH,
-		STATE_MAX,
+		STATE_MAX
 	};
 
 	CPlayer();				// コンストラクタ
@@ -64,7 +65,7 @@ public:			// 誰でもアクセスできる
 	virtual void Draw(void);		// 描画処理
 
 	virtual void Hit(void) = 0;					// ヒット処理
-	virtual void Smash(const float fAngle);		// 吹き飛び状態
+	void Smash(const float fAngle);				// 吹き飛び状態
 	void Stun(int StunTime);					// 気絶状態
 	virtual void MotionManager(void) = 0;		// モーションマネージャー
 
@@ -87,9 +88,6 @@ public:			// 誰でもアクセスできる
 
 	void SetType(const TYPE type);				// 種類の設定処理
 	TYPE GetType(void) const;					// 種類の取得処理
-
-	void SetLife(const int nLife);				// 寿命の設定処理
-	int GetLife(void) const;					// 寿命の取得処理
 
 	int GetPlayerIdx(void) const;				// プレイヤーのIDの取得処理
 
@@ -131,7 +129,6 @@ private:		// 自分だけアクセスできる
 	D3DXVECTOR3 m_move;			// 移動量
 	D3DXVECTOR3 m_sizeColl;		// 当たり判定のサイズ
 	TYPE m_type;				// 種類
-	int m_nLife;				// 寿命
 	int m_nPlayerIdx;			// プレイヤーのインデックス
 	float m_fSpeed;				// 速度
 	bool m_bAttack;				// 攻撃したか

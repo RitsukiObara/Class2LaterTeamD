@@ -15,7 +15,6 @@
 //--------------------------------------------
 // 前方宣言
 //--------------------------------------------
-class CRatState;			// ネズミの状態
 class CRatGhost;			// 幽霊ネズミ
 class CRessrectionFan;		// 円の範囲
 
@@ -50,14 +49,12 @@ public:			// 誰でもアクセスできる
 	void Draw(void);		// 描画処理
 
 	void Hit(void);					// ヒット処理
-	void Smash(const float fAngle);	// 吹き飛び状態
 	void MotionManager(void);		// モーションの管理
 
 	void SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type);	// 情報の設定処理
 
 	// セット・ゲット関係
 	int GetRatIdx(void) const;				// ネズミの番号の取得処理
-	CRatState* GetState(void);				// ネズミの状態の取得処理
 	CRatGhost* GetRatGhost(void);			// 幽霊ネズミの取得処理
 	void DeleteRatGhost(void);				// 幽霊ネズミの消去処理
 	CRessrectionFan* GetRessrectionFan(void);			// 円の範囲の取得処理
@@ -72,7 +69,6 @@ private:		// 自分だけアクセスできる
 	void ResurrectionCollision(void);		// 生き返りの当たり判定
 
 	// メンバ変数
-	CRatState* m_pRatState;		// ネズミの状態の情報
 	CRatGhost* m_pRatGhost;		// 幽霊ネズミの情報
 	CRessrectionFan* m_pRessrectionFan;		// 円の範囲の情報
 	int m_nRatIdx;				// ネズミの番号

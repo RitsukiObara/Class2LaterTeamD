@@ -11,7 +11,6 @@
 
 #include "game.h"
 #include "rat.h"
-#include "rat_state.h"
 
 //=======================================
 // ƒ}ƒNƒ’è‹`
