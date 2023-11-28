@@ -18,6 +18,11 @@
 #include "input.h"
 #include "player.h"
 
+//--------------------------------------------
+// 静的メンバ変数
+//--------------------------------------------
+int CEntry::m_nCatIdx = 0;		// ネコをやるプレイヤー
+
 //=========================================
 // コンストラクタ
 //=========================================
@@ -25,7 +30,7 @@ CEntry::CEntry() : CScene(TYPE_SCENE, PRIORITY_BG)
 {
 	// 全ての値をクリアする
 	m_nCatIdx = 0;					// ネコをやるプレイヤー
-	for (int nCnt = 0; nCnt < MAX_ENTRY; nCnt++)
+	for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
 	{
 		m_apUI[nCnt] = nullptr;		// エントリーUIの情報
 	}
@@ -53,7 +58,7 @@ HRESULT CEntry::Init(void)
 	// テキスト読み込み処理
 	CMesh::TxtSet();
 
-	for (int nCnt = 0; nCnt < MAX_ENTRY; nCnt++)
+	for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
 	{
 		if (nCnt == m_nCatIdx)
 		{ // ネコをやるプレイヤーのみ
@@ -79,7 +84,7 @@ HRESULT CEntry::Init(void)
 void CEntry::Uninit(void)
 {
 	// 全ての値をクリアする
-	for (int nCnt = 0; nCnt < MAX_ENTRY; nCnt++)
+	for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
 	{
 		if (m_apUI[nCnt] != nullptr)
 		{ // エントリーUIの情報が NULL じゃない場合
@@ -116,9 +121,9 @@ void CEntry::Update(void)
 	{ // 右キーを押した場合
 
 		// ネコをやるプレイヤーを設定
-		m_nCatIdx = (m_nCatIdx + 1) % MAX_ENTRY;
+		m_nCatIdx = (m_nCatIdx + 1) % MAX_PLAY;
 
-		for (int nCnt = 0; nCnt < MAX_ENTRY; nCnt++)
+		for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
 		{
 			if (nCnt == m_nCatIdx)
 			{ // ネコをやるプレイヤーのみ
@@ -139,9 +144,9 @@ void CEntry::Update(void)
 	{ // 左キーを押した場合
 
 		// ネコをやるプレイヤーを設定
-		m_nCatIdx = (m_nCatIdx + MAX_ENTRY - 1) % MAX_ENTRY;
+		m_nCatIdx = (m_nCatIdx + MAX_PLAY - 1) % MAX_PLAY;
 
-		for (int nCnt = 0; nCnt < MAX_ENTRY; nCnt++)
+		for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
 		{
 			if (nCnt == m_nCatIdx)
 			{ // ネコをやるプレイヤーのみ
@@ -168,4 +173,13 @@ void CEntry::Update(void)
 void CEntry::Draw(void)
 {
 
+}
+
+//======================================
+// ネコ担当の取得処理
+//======================================
+int CEntry::GetCatIdx(void)
+{
+	// ネコのインデックスを返す
+	return m_nCatIdx;
 }

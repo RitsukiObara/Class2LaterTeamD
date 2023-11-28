@@ -15,6 +15,7 @@
 #include "fade.h"
 #include "Objectmesh.h"
 
+#include "entry.h"
 #include "file.h"
 #include "camera.h"
 #include "skybox.h"
@@ -35,7 +36,7 @@
 //--------------------------------------------
 // 静的メンバ変数宣言
 //--------------------------------------------
-CPlayer* CResult::m_apRat[MAX_RAT] = {};							// ネズミの情報
+CPlayer* CResult::m_apPlayer[MAX_PLAY] = {};							// ネズミの情報
 int CResult::m_nGameState = 0;			// ゲームの情報
 
 //=========================================
@@ -88,14 +89,29 @@ HRESULT CResult::Init(void)
 
 	}
 
-	// ネズミの生成
-	for (int nCntRat = 0; nCntRat < MAX_RAT; nCntRat++)
-	{
-		m_apRat[nCntRat] = CPlayer::Create(D3DXVECTOR3(300.0f * nCntRat, 0.0f, 0.0f), nCntRat, CPlayer::TYPE_RAT);
-	}
+	
+	int nCatIdx = CEntry::GetCatIdx();// ネコのインデックスを取得する
+	int nRatCount = 0;		// ネズミのカウント
 
-	// 猫の生成
-	CPlayer::Create(D3DXVECTOR3(-500.0f, 0.0f, 0.0f), 3, CPlayer::TYPE_CAT);
+	// ネズミの生成
+	for (int nCntRat = 0; nCntRat < MAX_PLAY; nCntRat++)
+	{
+		if (nCntRat == nCatIdx)
+		{ // ネコのインデックスの場合
+
+			// ネコの生成
+			m_apPlayer[nCntRat] = CPlayer::Create(D3DXVECTOR3(-500.0f, 0.0f, 0.0f), nCntRat, CPlayer::TYPE_CAT);
+		}
+		else
+		{ // 上記以外
+
+			// ネズミの生成
+			m_apPlayer[nCntRat] = CPlayer::Create(D3DXVECTOR3(300.0f * nRatCount, 0.0f, 0.0f), nCntRat, CPlayer::TYPE_RAT);
+
+			// ネズミのカウントを加算する
+			nRatCount++;
+		}
+	}
 
 	// 紙吹雪の生成
 	CreateConfetti();

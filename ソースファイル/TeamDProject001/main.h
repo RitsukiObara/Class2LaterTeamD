@@ -36,6 +36,7 @@
 #define NONE_PARENT					(-1)								// 親無しの数値
 #define NONE_D3DXVECTOR3			(D3DXVECTOR3(0.0f,0.0f,0.0f))		// D3DXVECTOR3の初期値
 #define NONE_D3DXCOLOR				(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f))	// D3DXCOLORの初期値
+#define MAX_PLAY					(4)									// プレイヤーの数
 
 // 頂点データ(2D)の構造体
 struct VERTEX_2D
