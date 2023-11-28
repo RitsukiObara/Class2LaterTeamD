@@ -16,6 +16,7 @@
 #include "texture.h"
 #include "objectX.h"
 #include "camera.h"
+#include "MultiCamera.h"
 #include "light.h"
 #include "fade.h"
 
@@ -136,18 +137,36 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 		assert(false);
 	}
 
-	if (m_pCamera == nullptr)
-	{ // カメラへのポインタが NULL の場合
+#if CAMERA == 0
+		if (m_pCamera == nullptr)
+		{ // カメラへのポインタが NULL の場合
 
-		// カメラのメモリを確保する
-		m_pCamera = new CCamera;
-	}
-	else
-	{ // ポインタが使われていた場合
+		  // カメラのメモリを確保する
+			m_pCamera = new CCamera;
+		}
+		else
+		{ // ポインタが使われていた場合
 
-		// 停止
-		assert(false);
+		  // 停止
+			assert(false);
+		}
+#else
+	for (int nCnt = 0; nCnt < 4; nCnt++)
+	{
+		if (m_pMultiCamera[nCnt] == nullptr)
+		{ // カメラへのポインタが NULL の場合
+
+		  // カメラのメモリを確保する
+			m_pMultiCamera[nCnt] = new CMultiCamera;
+		}
+		else
+		{ // ポインタが使われていた場合
+
+		  // 停止
+			assert(false);
+		}
 	}
+#endif // CAMERA
 
 	if (m_pLight == nullptr)
 	{ // ライトへのポインタが NULL の場合
@@ -275,26 +294,52 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 		return E_FAIL;
 	}
 
+#if CAMERA == 0
 	if (m_pCamera != nullptr)
 	{ // 確保に成功していた場合
 
-		// 初期化処理
+	  // 初期化処理
 		if (FAILED(m_pCamera->Init()))
 		{ // カメラの初期化に失敗した場合
 
-			// 失敗を返す
+		  // 失敗を返す
 			return E_FAIL;
 		}
 	}
 	else
 	{ // 確保に失敗していた場合
 
-		// 停止
+	  // 停止
 		assert(false);
 
 		// 失敗を返す
 		return E_FAIL;
 	}
+#else
+	for (int nCnt = 0; nCnt < 4; nCnt++)
+	{
+		if (m_pMultiCamera[nCnt] != nullptr)
+		{ // 確保に成功していた場合
+
+		  // 初期化処理
+			if (FAILED(m_pMultiCamera[nCnt]->Init(nCnt)))
+			{ // カメラの初期化に失敗した場合
+
+			  // 失敗を返す
+				return E_FAIL;
+			}
+		}
+		else
+		{ // 確保に失敗していた場合
+
+		  // 停止
+			assert(false);
+
+			// 失敗を返す
+			return E_FAIL;
+		}
+	}
+#endif // CAMERA
 
 	if (m_pLight != nullptr)
 	{ // 確保に成功していた場合
@@ -455,16 +500,32 @@ void CManager::Uninit(void)
 		m_pDebugProc = nullptr;
 	}
 
+#if CAMERA == 0
 	if (m_pCamera != nullptr)
 	{ // カメラが NULL じゃない場合
 
-		// 終了処理
+	  // 終了処理
 		m_pCamera->Uninit();
 
 		// メモリを開放する
 		delete m_pCamera;
 		m_pCamera = nullptr;
 	}
+#else
+	for (int nCnt = 0; nCnt < 4; nCnt++)
+	{
+		if (m_pMultiCamera[nCnt] != nullptr)
+		{ // カメラが NULL じゃない場合
+
+		  // 終了処理
+			m_pMultiCamera[nCnt]->Uninit();
+
+			// メモリを開放する
+			delete m_pMultiCamera[nCnt];
+			m_pMultiCamera[nCnt] = nullptr;
+		}
+	}
+#endif // CAMERA
 
 	if (m_pLight != nullptr)
 	{ // ライトが NULL じゃない場合
@@ -540,12 +601,24 @@ void CManager::Update(void)
 		m_pInputGamePad->Update();
 	}
 
+#if CAMERA == 0
 	if (m_pCamera != nullptr)
 	{ // カメラが NULL じゃない場合
 
-		// カメラの更新
+	  // カメラの更新
 		m_pCamera->Update();
 	}
+#else
+	for (int nCnt = 0; nCnt < 4; nCnt++)
+	{
+		if (m_pMultiCamera[nCnt] != nullptr)
+		{ // カメラが NULL じゃない場合
+
+		  // カメラの更新
+			m_pMultiCamera[nCnt]->Update();
+		}
+	}
+#endif // CAMERA
 
 	if (m_pLight != nullptr)
 	{ // ライトが NULL じゃない場合
@@ -710,6 +783,15 @@ CCamera* CManager::GetCamera(void)
 {
 	// カメラの情報を返す
 	return m_pCamera;
+}
+
+//======================================
+// カメラ表示の取得処理
+//======================================
+CMultiCamera* CManager::GetMlutiCamera(int Idx)
+{
+	// カメラの情報を返す
+	return m_pMultiCamera[Idx];
 }
 
 //======================================

@@ -218,6 +218,7 @@
     <ClCompile Include="motion.cpp" />
     <ClCompile Include="mousetrap.cpp" />
     <ClCompile Include="mousetrap_iron.cpp" />
+    <ClCompile Include="MultiCamera.cpp" />
     <ClCompile Include="note.cpp" />
     <ClCompile Include="number.cpp" />
     <ClCompile Include="object.cpp" />
@@ -346,6 +347,7 @@
     <ClInclude Include="motion.h" />
     <ClInclude Include="mousetrap.h" />
     <ClInclude Include="mousetrap_iron.h" />
+    <ClInclude Include="MultiCamera.h" />
     <ClInclude Include="note.h" />
     <ClInclude Include="number.h" />
     <ClInclude Include="object.h" />

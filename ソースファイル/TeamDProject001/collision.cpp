@@ -210,14 +210,14 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 			case CObstacle::TYPE_LEASH:
 
 				// ‹Câˆ—
-				pPlayer->Stun();
+				pPlayer->Stun(60);
 
 				break;
 
 			case CObstacle::TYPE_PIN:
 
 				// ‹Câˆ—
-				pPlayer->Stun();
+				pPlayer->Stun(60);
 
 				break;
 

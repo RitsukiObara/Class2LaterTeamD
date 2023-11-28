@@ -201,10 +201,9 @@ void CRat::Update(void)
 	// 移動量を設定する(移動量を常に一定にするため)
 	SetSpeed(SPEED);
 
-	if (m_pRatState->GetState() != CRatState::STATE_DEATH &&
-		m_pRatState->GetState() != CRatState::STATE_STUN)
-	{ // 幽霊状態と気絶状態以外のとき
-
+	if (CPlayer::GetStunState() != CPlayer::STUNSTATE_STUN &&
+		CPlayer::GetState() != CPlayer::STATE_DEATH)
+	{ // 気絶状態or死亡状態じゃない場合
 		if (m_pRatState->GetState() != CRatState::STATE_SMASH)
 		{ // 吹き飛び状態の場合
 
@@ -604,28 +603,6 @@ void CRat::Smash(const float fAngle)
 
 	// 移動量を適用する
 	SetMove(move);
-}
-
-//=======================================
-// 気絶状態
-//=======================================
-void CRat::Stun(void)
-{
-	// 状態を取得する
-	CRatState::STATE state = m_pRatState->GetState();
-
-	if (state != CRatState::STATE_DAMAGE &&
-		state != CRatState::STATE_INVINCIBLE &&
-		state != CRatState::STATE_DEATH &&
-		state != CRatState::STATE_STUN)
-	{ // ダメージ受ける状態だった場合
-
-		// 気絶状態にする
-		m_pRatState->SetState(CRatState::STATE_STUN);
-
-		// 気絶演出の設定処理
-		SetStun(GetPos());
-	}
 }
 
 //=======================================

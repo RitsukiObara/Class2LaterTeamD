@@ -175,6 +175,10 @@ void CRenderer::Draw(void)
 	if (SUCCEEDED(m_pD3DDevice->BeginScene()))
 	{//描画開始が成功した場合
 
+		D3DVIEWPORT9 viewportDef;
+
+		m_pD3DDevice->GetViewport(&viewportDef);
+
 		// 全ての描画処理
 		CObject::DrawAll();
 
@@ -191,6 +195,9 @@ void CRenderer::Draw(void)
 			// デバッグ表示の描画
 			CManager::Get()->GetDebugProc()->Draw();
 		}
+
+		//ビューポートの設定
+		m_pD3DDevice->SetViewport(&viewportDef);
 
 		//描画終了
 		m_pD3DDevice->EndScene();

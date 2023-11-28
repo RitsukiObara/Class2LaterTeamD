@@ -14,6 +14,8 @@
 #include "scene.h"
 #include "camera.h"
 
+#define CAMERA 0
+
 //--------------------------------------------
 // 前方宣言
 //--------------------------------------------
@@ -24,6 +26,7 @@ class CSound;			// サウンド
 class CFile;			// ファイル
 class CDebugProc;		// デバッグ表示
 class CCamera;			// カメラ
+class CMultiCamera;			// カメラ
 class CLight;			// ライト
 class CTexture;			// テクスチャ
 class CFade;			// フェード
@@ -51,7 +54,8 @@ public:						// 誰でもアクセスできる
 	CSound* GetSound(void);					// サウンドの取得処理
 	CFile* GetFile(void);					// ファイルの取得処理
 	CDebugProc* GetDebugProc(void);			// デバッグ表示の取得処理
-	CCamera* GetCamera(void);				// カメラ表示の取得処理
+	CCamera* GetCamera(void);			// カメラ表示の取得処理
+	CMultiCamera* GetMlutiCamera(int Idx);	// カメラ表示の取得処理
 	CLight* GetLight(void);					// ライトの取得処理
 	CTexture* GetTexture(void);				// テクスチャの取得処理
 	CFade* GetFade(void);					// フェードの取得処理
@@ -75,6 +79,7 @@ private:					// 自分だけアクセスできる
 	CFile* m_pFile;							// ファイルの情報
 	CDebugProc* m_pDebugProc;				// デバッグ表示の情報
 	CCamera* m_pCamera;						// カメラの情報
+	CMultiCamera* m_pMultiCamera[4];		// カメラの情報
 	CLight* m_pLight;						// ライトの情報
 	CTexture* m_pTexture;					// テクスチャの情報
 	CScene* m_pScene;						// シーンの情報
