@@ -344,20 +344,20 @@ void CPlayer::Move(void)
 		{ // 上を押した場合
 
 		  // 向きを設定する
-			rot.y = D3DX_PI * -0.75f;
+			rot.y = m_CameraRot.y + D3DX_PI * -0.75f;
 		}
 		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true ||
 			CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nPlayerIdx) < 0)
 		{ // 下を押した場合
 
 		  // 向きを設定する
-			rot.y = D3DX_PI * -0.25f;
+			rot.y = m_CameraRot.y + D3DX_PI * -0.25f;
 		}
 		else
 		{ // 上記以外
 
 		  // 向きを設定する
-			rot.y = D3DX_PI * -0.5f;
+			rot.y = m_CameraRot.y + D3DX_PI * -0.5f;
 		}
 		m_bMove = true;
 	}
@@ -370,20 +370,20 @@ void CPlayer::Move(void)
 		{ // 上を押した場合
 
 		  // 向きを設定する
-			rot.y = D3DX_PI * 0.75f;
+			rot.y = m_CameraRot.y + D3DX_PI * 0.75f;
 		}
 		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true ||
 			CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nPlayerIdx) < 0)
 		{ // 下を押した場合
 
 		  // 向きを設定する
-			rot.y = D3DX_PI * 0.25f;
+			rot.y = m_CameraRot.y + D3DX_PI * 0.25f;
 		}
 		else
 		{ // 上記以外
 
 		  // 向きを設定する
-			rot.y = D3DX_PI * 0.5f;
+			rot.y = m_CameraRot.y + D3DX_PI * 0.5f;
 		}
 		m_bMove = true;
 	}
@@ -392,7 +392,7 @@ void CPlayer::Move(void)
 	{ // 上を押した場合
 
 	  // 向きを設定する
-		rot.y = D3DX_PI;
+		rot.y = m_CameraRot.y + D3DX_PI * 1.0f;
 		m_bMove = true;
 	}
 	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true ||
@@ -400,7 +400,7 @@ void CPlayer::Move(void)
 	{ // 下を押した場合
 
 	  // 向きを設定する
-		rot.y = 0.0f;
+		rot.y = m_CameraRot.y + D3DX_PI * 0.0f;
 		m_bMove = true;
 	}
 	else
@@ -433,7 +433,11 @@ void CPlayer::CameraUpdate(void)
 
 	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LSHIFT) == true)
 	{
-		m_CameraRot.y += 0.01f;
+		m_CameraRot.y -= 0.05f;
+	}
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_RSHIFT) == true)
+	{
+		m_CameraRot.y += 0.05f;
 	}
 }
 

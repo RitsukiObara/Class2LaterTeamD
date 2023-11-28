@@ -211,38 +211,43 @@ void CCat::Draw(void)
 void CCat::Attack(void)
 {
 	// ローカル変数宣言
-	CPlayer *pRat[3];
+	CPlayer* pPlayer = nullptr;
 	D3DXVECTOR3 pos = GetPos();
 	D3DXVECTOR3 rot = GetRot();
+
 	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_RETURN) == true)
-	{ // Wキーを押していた場合
+	{ // ENTERキーを押していた場合
 
 		// 状態を攻撃準備にする
 		m_AttackState = ATTACKSTATE_STANDBY;
 		m_nAtkStateCount = 20;
-		for (int nCnt = 0; nCnt < 3; nCnt++)
-
+		for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
 		{
-			pRat[nCnt] = CGame::GetPlayer(nCnt);
-			while (pRat[nCnt] != nullptr)
-			{ // ブロックの情報が NULL じゃない場合
+			// プレイヤーの情報を取得する
+			pPlayer = CGame::GetPlayer(nCnt);
+
+			if (pPlayer != nullptr &&
+				pPlayer->GetType() == CPlayer::TYPE_RAT)
+			{ // プレイヤーがネズミの場合
 
 				if (useful::RectangleCollisionXY(D3DXVECTOR3(pos.x + sinf(rot.y) * -ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * -ATTACK_DISTANCE),
-					pRat[nCnt]->GetPos(),
-					D3DXVECTOR3(30.0f, 50.0f, 30.0f), 
+					pPlayer->GetPos(),
 					D3DXVECTOR3(30.0f, 50.0f, 30.0f),
-					D3DXVECTOR3(-30.0f, -50.0f, -30.0f), 
+					D3DXVECTOR3(30.0f, 50.0f, 30.0f),
+					D3DXVECTOR3(-30.0f, -50.0f, -30.0f),
 					D3DXVECTOR3(-30.0f, -50.0f, -30.0f)) == true)
 				{ // XYの矩形に当たってたら
 
-					if (useful::RectangleCollisionXZ(D3DXVECTOR3(pos.x + sinf(rot.y) * -ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * -ATTACK_DISTANCE), pRat[nCnt]->GetPos(),
+					if (useful::RectangleCollisionXZ(D3DXVECTOR3(pos.x + sinf(rot.y) * -ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * -ATTACK_DISTANCE), 
+						pPlayer->GetPos(),
 						D3DXVECTOR3(30.0f, 50.0f, 30.0f), D3DXVECTOR3(30.0f, 50.0f, 30.0f),
 						D3DXVECTOR3(-30.0f, -50.0f, -30.0f), D3DXVECTOR3(-30.0f, -50.0f, -30.0f)) == true)
 					{ // XZの矩形に当たってたら
-						pRat[nCnt]->Hit();
+
+						// プレイヤーのヒット処理
+						pPlayer->Hit();
 					}
 				}
-				break;
 			}
 		}
 	}
