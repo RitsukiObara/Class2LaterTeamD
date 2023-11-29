@@ -65,8 +65,15 @@ void CCup::Uninit(void)
 	if (m_pConsent != NULL)
 	{ // コンセントが NULL の場合
 
-	  // コンセントの終了処理
+		// コンセントの終了処理
 		m_pConsent->Uninit();
+	}
+
+	if (m_pWater != NULL)
+	{ // 水が NULL の場合
+
+		// 水の終了処理
+		m_pWater->Uninit();
 	}
 
 	// 終了処理
@@ -93,6 +100,13 @@ void CCup::Update(void)
 
 	SetPos(pos);
 	SetRot(rot);
+
+	if (m_pWater != NULL)
+	{ // 水が NULL じゃない場合
+
+		// 水の更新処理
+		m_pWater->Update();
+	}
 }
 
 //=====================================
@@ -106,6 +120,11 @@ void CCup::Draw(void)
 	if (m_pConsent != NULL)
 	{
 		m_pConsent->Draw();
+	}
+
+	if (m_pWater != NULL)
+	{
+		m_pWater->Draw();
 	}
 }
 
@@ -131,7 +150,7 @@ void CCup::StateManager(D3DXVECTOR3 *pos, D3DXVECTOR3 *rot)
 			pos->y = 15.0f;
 			m_State = STATE_TRUE;
 
-			m_pWater = CObject3D::Create(CObject3D::TYPE_3DPOLYGON);
+			m_pWater = CObject3D::Create(CObject3D::TYPE_NONE);
 			m_pWater->SetPos(GetPos());
 			m_pWater->SetRot(D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f));
 			m_pWater->SetSize(m_WaterSize);
@@ -211,15 +230,19 @@ bool CCup::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fW
 //=====================================
 bool CCup::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
-	if (m_pConsent != nullptr)
-	{ // コンセントが NULL じゃない場合
+	if (m_pWater != nullptr)
+	{ // 水が NULL じゃない場合
 
-		if (pos.y <= m_pConsent->GetPos().y + m_pConsent->GetFileData().vtxMax.y &&
-			pos.y + fHeight >= m_pConsent->GetPos().y + m_pConsent->GetFileData().vtxMin.y &&
-			useful::CylinderInner(pos, m_pConsent->GetPos(), m_pConsent->GetFileData().fRadius + fWidth) == true)
+		// 水の位置と半径を取得する
+		D3DXVECTOR3 posWater = m_pWater->GetPos();
+		float radiusWater = m_pWater->GetSize().x;
+
+		if (posWater.y >= pos.y &&
+			posWater.y <= pos.y + fHeight &&
+			useful::CylinderInner(pos, posWater, radiusWater) == true)
 		{ // 当たり判定の中に入った場合
 
-		  // true を返す
+			// true を返す
 			return true;
 		}
 	}

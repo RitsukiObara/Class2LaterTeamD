@@ -254,6 +254,9 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 
 			case CObstacle::TYPE_CUP:
 
+				// ‹Câó‘Ô
+				pPlayer->Stun(60);
+
 				break;
 
 			default:

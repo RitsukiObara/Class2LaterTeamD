@@ -177,11 +177,14 @@ bool CRoomba::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float
 //=====================================
 bool CRoomba::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
-	// 位置を取得する
+	// 位置、半径、高さを取得する
 	D3DXVECTOR3 objPos = GetPos();
 	float objRadius = GetFileData().fRadius;
+	float objHeight = GetFileData().vtxMax.y;
 
-	if (useful::CylinderInner(pos, objPos, fWidth + objRadius))
+	if (objPos.y <= pos.y + fHeight &&
+		objPos.y + objHeight >= pos.y &&
+		useful::CylinderInner(pos, objPos, fWidth + objRadius))
 	{ // 円の中に入る場合
 
 		// true を返す
