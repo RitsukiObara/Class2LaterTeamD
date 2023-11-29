@@ -10,6 +10,8 @@
 #include "main.h"
 #include "manager.h"
 #include "recoveringUI.h"
+#include "model.h"
+#include "texture.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -82,84 +84,28 @@ void CRecoveringUI::Draw(void)
 //=====================================
 // 情報の設定処理
 //=====================================
-void CRecoveringUI::SetData(void/*基本Createと同じ引数を入れる*/)
+void CRecoveringUI::SetData(D3DXVECTOR3& pos, D3DXVECTOR3& posOld)
 {
 	// 設定処理に便利なマクロ定義
 	//NONE_D3DXVECTOR3					// 向きを傾けない時とかに使用する
-	//NONE_SCALE						// 拡大率を変更しないときとかに使う
 	// 情報の設定処理
-
-	//==========================================================================
-	// 2Dポリゴン
-	//==========================================================================
-	//SetPos(位置を入れる);			// 位置
-	//SetPosOld(位置を入れる);		// 前回の位置
-	//SetRot(向きを入れる);			// 向き
-	//SetSize(サイズを入れる);		// サイズ
-	//SetLength(引数無し);			// 長さ
-	//SetAngle(引数無し);			// 方向
-	//BindTexture(CManager::Get()->GetTexture()->Regist(テクスチャの名前));		// テクスチャの割り当て処理
-
-	//// 頂点座標の設定処理
-	//SetVertex();
-
-	//==========================================================================
-	// 3Dポリゴン
-	//==========================================================================
-	//SetPos(位置を入れる);			// 位置
-	//SetPosOld(位置を入れる);		// 前回の位置
-	//SetRot(向きを入れる);			// 向き
-	//SetSize(サイズを入れる);		// サイズ
-	//BindTexture(CManager::Get()->GetTexture()->Regist(テクスチャの名前));		// テクスチャの割り当て処理
-
-	//// 頂点座標の設定処理
-	//SetVertex();
 
 	//==========================================================================
 	// ビルボード
 	//==========================================================================
-	//SetPos(位置を入れる);			// 位置
-	//SetPosOld(位置を入れる);		// 前回の位置
-	//SetSize(サイズを入れる);		// サイズ
-	//BindTexture(CManager::Get()->GetTexture()->Regist(テクスチャの名前));		// テクスチャの割り当て処理
+	SetPos(pos);			// 位置
+	SetPosOld(posOld);		// 前回の位置
+	SetSize(NONE_SCALE);	// サイズ
+	BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\CageMark.png"));		// テクスチャの割り当て処理
 
-	//// 頂点座標の設定処理
-	//SetVertex();
-
-	//==========================================================================
-	// アニメーション系
-	//==========================================================================
-	//SetPos(位置を入れる);			// 位置
-	//SetPosOld(位置を入れる);		// 前回の位置
-	//SetRot(向きを入れる);			// 向き
-	//SetSize(サイズを入れる);		// サイズ
-	//SetLength(引数無し);			// 長さ
-	//SetAngle(引数無し);			// 方向
-	//BindTexture(CManager::Get()->GetTexture()->Regist(テクスチャの名前));		// テクスチャの割り当て処理
-
-	// アニメーションの設定処理
-	//SetAnim(カウントを入れる, パターン数を入れる);
-
-	//// 頂点座標の設定処理
-	//SetVertex();
-
-	// テクスチャの設定(アニメーションバージョン)
-	//SetVtxTextureAnim(アニメーションの総パターン数を入れる, 0);
-
-	//==========================================================================
-	// モデル
-	//==========================================================================
-	//SetPos(位置を入れる);					// 位置
-	//SetPosOld(位置を入れる);				// 前回の位置
-	//SetRot(向きを入れる);					// 向き
-	//SetScale(拡大率を入れる);				// 拡大率
-	//SetFileData(モデルの種類を入れる);	// モデルの情報
+	// 頂点座標の設定処理
+	SetVertex();
 }
 
 //=======================================
 // 生成処理
 //=======================================
-CRecoveringUI* CRecoveringUI::Create(void/*引数を入れる*/)
+CRecoveringUI* CRecoveringUI::Create(D3DXVECTOR3& pos, D3DXVECTOR3& posOld)
 {
 	// ローカルオブジェクトを生成
 	CRecoveringUI* pRecoveringUI = nullptr;	// サンプルのインスタンスを生成
@@ -195,7 +141,7 @@ CRecoveringUI* CRecoveringUI::Create(void/*引数を入れる*/)
 		}
 
 		// 情報の設定処理
-		pRecoveringUI->SetData(/*引数*/);
+		pRecoveringUI->SetData(pos, posOld);
 	}
 	else
 	{ // オブジェクトが NULL の場合
