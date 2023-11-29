@@ -167,6 +167,7 @@ void CRoomba::SetData(const D3DXVECTOR3& pos, const TYPE type)
 //=====================================
 bool CRoomba::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
+
 	// false を返す
 	return false;
 }
@@ -176,20 +177,24 @@ bool CRoomba::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float
 //=====================================
 bool CRoomba::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
-	//// ルンバの出る高さ
-	//float fFracHeight;
+	D3DXVECTOR3 rot = GetRot();
+	D3DXVECTOR3 objpos = GetPos();
 
-	//for (int nCnt = 0; nCnt < NUM_FRAC; nCnt++)
-	//{
-	//	fFracHeight = (float)(rand() % (int)(GetFileData().vtxMax.y) - (int)(GetFileData().vtxMin.y));
+	D3DXVECTOR3 posDif = pos - objpos;
 
-	//	// ルンバを生成
-	//	CFraction::Create(D3DXVECTOR3(GetPos().x, GetPos().y + fFracHeight, GetPos().z), CFraction::TYPE::TYPE_PRASTICRVASE);
-	//}
+	float fLength = D3DXVec3Length(&posDif);
+	float fSize = GetFileData().vtxMax.z;
 
-	//// 終了処理
-	//Uninit();
+	if (fLength <= fSize)
+	{
+		//オブジェクトからの角度
+		float fRot = atan2f(pos.x - objpos.x, pos.z - objpos.z);
 
+		D3DXVECTOR3 SetPos = D3DXVECTOR3(objpos.x + sinf(-D3DX_PI - fRot)*fSize, pos.y, objpos.z + cosf(-D3DX_PI - fRot)*fSize);
+
+
+		return true;
+	}
 	// false を返す
 	return false;
 }

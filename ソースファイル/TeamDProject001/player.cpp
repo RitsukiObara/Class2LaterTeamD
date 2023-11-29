@@ -239,7 +239,7 @@ void CPlayer::Smash(const float fAngle)
 	D3DXVECTOR3 move = GetMove();	// 移動量を取得する
 
 	if (m_State != STATE_DEATH &&
-		m_State != STATE_WAIT &&
+		m_State != STATE_INVINCIBLE &&
 		m_StunState != STUNSTATE_NONE)
 	{ // ダメージ受ける状態だった場合
 
@@ -546,7 +546,7 @@ void CPlayer::Stun(int StunTime)
 		m_State == STATE_NONE)
 	{ // 通常状態だった場合
 
-	  // 気絶状態にする
+		// 気絶状態にする
 		m_StunState = STUNSTATE_STUN;
 		m_StunStateCount = StunTime;
 
@@ -576,10 +576,13 @@ void CPlayer::StunStateManager(void)
 
 	case STUNSTATE_SMASH:	// 吹き飛び状態
 
+		// カウントを減算する
 		m_StunStateCount--;
 
 		if (m_StunStateCount <= 0)
-		{
+		{ // カウントが一定数以下になった場合
+
+			// 気絶状態にする
 			m_StunState = STUNSTATE_STUN;
 			m_StunStateCount = STUN_WAIT;
 
@@ -590,17 +593,21 @@ void CPlayer::StunStateManager(void)
 		break;
 
 	case STUNSTATE_STUN:	//気絶状態
+
+		// カウントを減算する
 		m_StunStateCount--;
 
 		if (m_StunStateCount <= 0)
-		{
+		{ // カウントが一定数以下になった場合
+
+			// 無敵状態にする
 			m_StunState = STUNSTATE_WAIT;
 			m_StunStateCount = STUN_WAIT;
 
 			if (m_pStun != nullptr)
 			{ // 気絶演出が NULL の場合
 
-			  // 気絶演出を削除する
+				// 気絶演出を削除する
 				m_pStun->Uninit();
 				m_pStun = nullptr;
 			}
@@ -609,10 +616,13 @@ void CPlayer::StunStateManager(void)
 
 	case STUNSTATE_WAIT:	//障害物のみ無敵状態
 
+		// カウントを減算する
 		m_StunStateCount--;
 
 		if (m_StunStateCount <= 0)
-		{
+		{ // カウントが一定数以下になった場合
+
+			// 無状態にする
 			m_StunState = STUNSTATE_NONE;
 		}
 		break;
@@ -637,23 +647,22 @@ void CPlayer::StateManager(void)
 
 		break;
 
-	case STATE_WAIT:	//無敵状態
-		m_StunStateCount--;
+	case STATE_INVINCIBLE:	//無敵状態
 
-		if (m_StunStateCount <= 0)
-		{
-			m_State = STATE_DEATH;
-			m_StunStateCount = DEATH_WAIT;
+		// カウントを減算する
+		m_StateCount--;
+
+		if (m_StateCount <= 0)
+		{ // カウントが一定数以下になった場合
+			
+			// 無状態にする
+			m_State = STATE_NONE;
 		}
 		break;
 
 	case STATE_DEATH:	//死亡状態
-		//m_StunStateCount--;
 
-		//if (m_StunStateCount <= 0)
-		//{
-		//	m_State = STATE_NONE;
-		//}
+
 		break;
 	}
 }
