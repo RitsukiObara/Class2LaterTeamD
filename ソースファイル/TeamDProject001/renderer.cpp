@@ -182,13 +182,6 @@ void CRenderer::Draw(void)
 		// 全ての描画処理
 		CObject::DrawAll();
 
-		if (CManager::Get()->GetFade() != nullptr)
-		{ // フェードが NULL じゃない場合
-
-			// フェードの描画
-			CManager::Get()->GetFade()->Draw();
-		}
-
 		if (CManager::Get()->GetDebugProc() != nullptr)
 		{ // デバッグ表示が NULL じゃない場合
 

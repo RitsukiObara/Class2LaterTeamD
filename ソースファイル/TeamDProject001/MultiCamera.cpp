@@ -13,6 +13,7 @@
 #include "renderer.h"
 #include "input.h"
 #include "useful.h"
+#include "fade.h"
 
 #include "title.h"
 #include "game.h"
