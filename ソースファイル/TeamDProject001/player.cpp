@@ -39,6 +39,7 @@
 #define SMASH_MOVE			(D3DXVECTOR3(10.0f, 20.0f, 10.0f))		// 吹き飛び状態の移動量
 #define STUN_WAIT			(120)			// オブジェクト無効の待機時間
 #define DEATH_WAIT			(120)			// 死亡時の待機時間
+#define SMASH_WAIT			(40)			// 吹き飛び状態のカウント数
 
 //==============================
 // コンストラクタ
@@ -238,9 +239,8 @@ void CPlayer::Smash(const float fAngle)
 	D3DXVECTOR3 pos = GetPos();		// 位置を取得する
 	D3DXVECTOR3 move = GetMove();	// 移動量を取得する
 
-	if (m_State != STATE_DEATH &&
-		m_State != STATE_INVINCIBLE &&
-		m_StunState != STUNSTATE_NONE)
+	if (m_State == STATE_NONE &&
+		m_StunState == STUNSTATE_NONE)
 	{ // ダメージ受ける状態だった場合
 
 		// 移動量を算出する
@@ -250,15 +250,13 @@ void CPlayer::Smash(const float fAngle)
 
 		// 吹き飛び状態にする
 		m_StunState = STUNSTATE_SMASH;
+
+		// 気絶状態カウントを設定する
+		m_StunStateCount = SMASH_WAIT;
 	}
 
 	// 移動量を適用する
 	SetMove(move);
-
-	// 移動量を設定する
-	m_move.x = sinf(fAngle) * SMASH_MOVE.x;
-	m_move.y = SMASH_MOVE.y;
-	m_move.z = cosf(fAngle) * SMASH_MOVE.z;
 }
 
 //=====================================

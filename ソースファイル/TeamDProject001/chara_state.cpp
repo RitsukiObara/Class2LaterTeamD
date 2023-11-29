@@ -183,45 +183,60 @@ void CCharaState::State(void)
 	pPlayer = CGame::GetPlayer(m_nPlayerIdx);
 
 	if (pPlayer != nullptr)
-	{ // ネズミが NULL じゃない場合
+	{ // プレイヤーが NULL じゃない場合
 
-		if (pPlayer->GetStunState() == CPlayer::STUNSTATE_STUN &&
-			m_state != STATE_STUN)
+		if (pPlayer->GetStunState() == CPlayer::STUNSTATE_STUN)
 		{ // 気絶状態の場合
 
-			// 描画状況を true にする
-			m_bDisp = true;
+			if (m_state != STATE_STUN)
+			{ // 気絶状態以外の場合
 
-			// 気絶状態にする
-			m_state = STATE_STUN;
+				// 描画状況を true にする
+				m_bDisp = true;
 
-			// テクスチャの割り当て処理
-			BindTexture(CManager::Get()->GetTexture()->Regist(STUNICON_TEXTURE));
+				// 気絶状態にする
+				m_state = STATE_STUN;
 
-			// サイズを設定する
-			SetSize(STUN_SIZE);
+				// テクスチャの割り当て処理
+				BindTexture(CManager::Get()->GetTexture()->Regist(STUNICON_TEXTURE));
 
-			// 頂点情報の設定処理
-			SetVertex();
+				// サイズを設定する
+				SetSize(STUN_SIZE);
+
+				// 頂点情報の設定処理
+				SetVertex();
+			}
 		}
-		else if (pPlayer->GetState() == CPlayer::STATE_DEATH &&
-			m_state != STATE_GHOST)
+		else if (pPlayer->GetState() == CPlayer::STATE_DEATH)
 		{ // 死亡状態の場合
 
-			// 描画状況を true にする
-			m_bDisp = true;
+			if (m_state != STATE_GHOST)
+			{ // ゴースト状態以外の場合
 
-			// ゴースト状態にする
-			m_state = STATE_GHOST;
+				// 描画状況を true にする
+				m_bDisp = true;
 
-			// テクスチャの割り当て処理
-			BindTexture(CManager::Get()->GetTexture()->Regist(GHOSTICON_TEXTURE));
+				// ゴースト状態にする
+				m_state = STATE_GHOST;
 
-			// サイズを設定する
-			SetSize(GHOST_SIZE);
+				// テクスチャの割り当て処理
+				BindTexture(CManager::Get()->GetTexture()->Regist(GHOSTICON_TEXTURE));
 
-			// 頂点情報の設定処理
-			SetVertex();
+				// サイズを設定する
+				SetSize(GHOST_SIZE);
+
+				// 頂点情報の設定処理
+				SetVertex();
+			}
+		}
+		else
+		{ // 上記以外
+
+			// 描画状況を false にする
+			m_bDisp = false;
+
+			// 無状態にする
+			m_state = STATE_NONE;
 		}
 	}
 }
