@@ -47,10 +47,10 @@ public:			// 誰でもアクセスできる
 	// 列挙型定義(通常用状態)
 	enum STATE
 	{
-		STATE_NONE = 0,
-		STATE_WAIT,
-		STATE_DEATH,
-		STATE_MAX
+		STATE_NONE = 0,		// 無状態
+		STATE_INVINCIBLE,	// 無敵状態
+		STATE_DEATH,		// 死状態
+		STATE_MAX			// この列挙型の総数
 	};
 
 	CPlayer();				// コンストラクタ
@@ -105,6 +105,8 @@ public:			// 誰でもアクセスできる
 
 	void SetState(STATE State) { m_State = State; }		// 状態の設定処理
 	STATE GetState(void) { return m_State; }			// 状態の取得処理
+
+	void SetStateCount(const int nCount) { m_StateCount = nCount; };		// 状態カウントの設定処理
 
 	// 静的メンバ関数
 	static CPlayer* Create(const D3DXVECTOR3& pos, const int nID, const TYPE type);		// 生成処理

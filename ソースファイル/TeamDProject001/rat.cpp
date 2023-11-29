@@ -38,12 +38,12 @@
 #define ADD_MOVE_Y			(30.0f)			// 浮力
 #define NONE_RATIDX			(-1)			// ネズミの番号の初期値
 #define ATTACK_DISTANCE		(230.0f)		// 攻撃範囲までの距離
-#define MAX_LIFE			(1)				// 寿命の最大値
 #define SPEED				(20.0f)			// 速度
 #define SIZE				(D3DXVECTOR3(30.0f, 50.0f, 30.0f))		// 当たり判定でのサイズ
 #define STUN_HEIGHT			(80.0f)			// 気絶演出が出てくる高さ
 #define SMASH_MOVE			(D3DXVECTOR3(10.0f, 20.0f, 10.0f))		// 吹き飛び状態の移動量
 #define TIME_RESURRECTION	(60 * 4)		// 復活時間
+#define INVINCIBLE_COUNT	(60)			// 無敵カウント
 
 //--------------------------------------------
 // 静的メンバ変数宣言
@@ -556,7 +556,6 @@ void CRat::Elevation(void)
 void CRat::ResurrectionCollision(void)
 {
 	CPlayer *pPlayer;						// ネズミの情報
-	bool bCollYZ = false;					// 当たったか
 	STATE state = GetState();				// 状態を取得する
 	STUNSTATE stunState = GetStunState();	// 気絶状態を取得する
 
@@ -580,10 +579,7 @@ void CRat::ResurrectionCollision(void)
 				if (useful::CircleCollisionXY(GetPos(), pPlayer->GetPos(), 30.0f, ATTACK_DISTANCE) == true)
 				{ // 円の当たり判定(XY平面)
 
-					// 円の当たり判定(XZ平面)
-					bCollYZ = useful::CircleCollisionXZ(GetPos(), pPlayer->GetPos(), 30.0f, ATTACK_DISTANCE);
-
-					if (bCollYZ == true)
+					if (useful::CircleCollisionXZ(GetPos(), pPlayer->GetPos(), 30.0f, ATTACK_DISTANCE) == true)
 					{ // 円の当たり判定(XZ平面)
 
 						// 生き返りのカウンター加算
@@ -593,7 +589,8 @@ void CRat::ResurrectionCollision(void)
 						{ // 一定時間経ったら
 
 							// 無敵状態にする
-							pPlayer->SetState(STATE_WAIT);
+							pPlayer->SetState(STATE_INVINCIBLE);
+							pPlayer->SetStateCount(INVINCIBLE_COUNT);
 
 							//// 円の範囲の破棄
 							//pPlayer->DeleteRessrectionFan();
@@ -607,7 +604,7 @@ void CRat::ResurrectionCollision(void)
 							m_nNumAll++;		// 総数増やす
 						}
 					}
-					else if(bCollYZ == false)
+					else
 					{
 						// 生き返りのカウンター初期化
 						m_nResurrectionCounter = 0;
