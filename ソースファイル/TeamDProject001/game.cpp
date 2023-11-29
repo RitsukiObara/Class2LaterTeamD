@@ -32,6 +32,7 @@
 #include "resurrection_fan.h"
 #include "player.h"
 #include "entry.h"
+#include "game_finish.h"
 
 #include "obstacle_manager.h"
 #include "chara_infoUI.h"
@@ -45,9 +46,10 @@
 // 静的メンバ変数宣言
 //--------------------------------------------
 CPause* CGame::m_pPause = nullptr;							// ポーズの情報
-CPlayer* CGame::m_apPlayer[MAX_PLAY] = {};				// プレイヤーの情報
+CPlayer* CGame::m_apPlayer[MAX_PLAY] = {};					// プレイヤーの情報
 CGame::STATE CGame::m_GameState = CGame::STATE_START;		// ゲームの進行状態
 int CGame::m_nFinishCount = 0;								// 終了カウント
+CGameFinish* CGame::m_pFinish = nullptr;					// フィニッシュの情報
 
 // デバッグ版
 #ifdef _DEBUG
@@ -62,6 +64,7 @@ CGame::CGame() : CScene(TYPE_SCENE, PRIORITY_BG)
 {
 	// 全ての値をクリアする
 	m_pPause = nullptr;			// ポーズ
+	m_pFinish = nullptr;		// フィニッシュ
 	m_nFinishCount = 0;			// 終了カウント
 	m_GameState = STATE_START;	// 状態
 
@@ -167,6 +170,7 @@ HRESULT CGame::Init(void)
 
 	// 生成処理
 	CGameTime::Create();
+	m_pFinish = CGameFinish::Create();
 
 	for (int nCnt = 0; nCnt < 4; nCnt++)
 	{
@@ -191,6 +195,7 @@ void CGame::Uninit(void)
 {
 	// ポインタを NULL にする
 	m_pPause = nullptr;			// ポーズ
+	m_pFinish = nullptr;		// フィニッシュ
 
 	for (int nCntPlay = 0; nCntPlay < MAX_PLAY; nCntPlay++)
 	{
@@ -285,6 +290,7 @@ void CGame::Update(void)
 	case CGame::STATE_CAT_WIN:
 
 		// 遷移処理
+		m_pFinish->SetFinish(true);
 		Transition();
 
 		break;
