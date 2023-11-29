@@ -10,13 +10,21 @@
 #include "main.h"
 #include "manager.h"
 #include "fan_blade.h"
+#include "useful.h"
+
+//-------------------------------------------
+// マクロ定義
+//-------------------------------------------
+#define ROT_MOVE_CORRECT		(0.01f)		// 向きの移動量の補正量
 
 //==============================
 // コンストラクタ
 //==============================
 CFanBlade::CFanBlade() : CModel(CObject::TYPE_NONE, CObject::PRIORITY_BLOCK)
 {
-
+	// 全ての値をクリアする
+	m_fRotMove = 0.0f;			// 向きの移動量
+	m_fRotMoveDest = 0.0f;		// 目的の向きの移動量
 }
 
 //==============================
@@ -39,6 +47,10 @@ HRESULT CFanBlade::Init(void)
 		return E_FAIL;
 	}
 
+	// 全ての値をクリアする
+	m_fRotMove = 0.0f;			// 向きの移動量
+	m_fRotMoveDest = 0.0f;		// 目的の向きの移動量
+
 	// 値を返す
 	return S_OK;
 }
@@ -57,7 +69,17 @@ void CFanBlade::Uninit(void)
 //=====================================
 void CFanBlade::Update(void)
 {
+	// 向きを取得する
+	D3DXVECTOR3 rot = GetRot();
 
+	// 向きの補正処理
+	useful::RotCorrect(m_fRotMoveDest, &m_fRotMove, ROT_MOVE_CORRECT);
+
+	// 向きを加算する
+	rot.z += m_fRotMove;
+
+	// 向きを適用する
+	SetRot(rot);
 }
 
 //=====================================
@@ -135,4 +157,13 @@ CFanBlade* CFanBlade::Create(const D3DXVECTOR3& pos)
 
 	// 扇風機のファンのポインタを返す
 	return pFanBlade;
+}
+
+//=======================================
+// 目的の向きの移動量の設定処理
+//=======================================
+void CFanBlade::SetRotMoveDest(const float fRotMove)
+{
+	// 目的の向きの移動量を設定する
+	m_fRotMoveDest = fRotMove;
 }

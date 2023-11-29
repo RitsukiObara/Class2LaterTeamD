@@ -24,7 +24,9 @@
 #define WIND_RANGE		(1600.0f)		// 扇風機の風の範囲
 #define WIND_MOVE		(11)			// 風エフェクトの移動量の幅
 #define WIND_LIFE		(50)			// 風エフェクトの寿命
-#define WIND_RADIUS		(70.0f)			// 風エフェクトの半径
+#define WIND_RADIUS		(40.0f)			// 風エフェクトの半径
+#define FAN_MOVE_OFF	(0.0f)			// スイッチOFFの羽根の移動量
+#define FAN_MOVE_ON		(0.5f)			// スイッチONの羽根の移動量
 
 //==============================
 // コンストラクタ
@@ -86,27 +88,43 @@ void CElecFan::Uninit(void)
 //=====================================
 void CElecFan::Update(void)
 {
-	// 電源をONにする
-	m_bPower = true;
+	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_0) == true)
+	{
+		// 電源を設定する
+		m_bPower = !m_bPower;
+
+		if (m_bPower == true)
+		{ // 電源ONの場合
+
+			// 目的の向きの移動量を設定する
+			m_pFan->SetRotMoveDest(FAN_MOVE_ON);
+		}
+		else
+		{ // 上記以外
+
+			// 目的の向きの移動量を設定する
+			m_pFan->SetRotMoveDest(FAN_MOVE_OFF);
+		}
+	}
 
 	if (m_bPower == true)
 	{ // 電源がついている場合
 
-		D3DXVECTOR3 pos;		// 位置
-		D3DXVECTOR3 move;		// 移動量
+		//D3DXVECTOR3 pos;		// 位置
+		//D3DXVECTOR3 move;		// 移動量
 
-		// 位置を設定する
-		pos.x = GetPos().x + sinf(GetRot().y + (D3DX_PI * 0.5f)) * (rand() % (int)(GetFileData().vtxMax.x) - (int)(GetFileData().vtxMax.x * 0.5f));
-		pos.y = GetPos().y + rand() % (int)(GetFileData().vtxMax.y) + (int)(GetFileData().vtxMin.y);
-		pos.z = GetPos().z + cosf(GetRot().y + (D3DX_PI * 0.5f)) * (rand() % (int)(GetFileData().vtxMax.z) - (int)(GetFileData().vtxMax.z * 0.5f));
+		//// 位置を設定する
+		//pos.x = GetPos().x + sinf(GetRot().y + (D3DX_PI * 0.5f)) * (rand() % (int)(GetFileData().vtxMax.x) - (int)(GetFileData().vtxMax.x * 0.5f));
+		//pos.y = GetPos().y + rand() % (int)(GetFileData().vtxMax.y) + (int)(GetFileData().vtxMin.y);
+		//pos.z = GetPos().z + cosf(GetRot().y + (D3DX_PI * 0.5f)) * (rand() % (int)(GetFileData().vtxMax.z) - (int)(GetFileData().vtxMax.z * 0.5f));
 
-		// 移動量を設定する
-		move.x = sinf(GetRot().y + D3DX_PI) * (rand() % WIND_MOVE + (WIND_MOVE * 0.5f));
-		move.y = 0.0f;
-		move.z = cosf(GetRot().y + D3DX_PI) * (rand() % WIND_MOVE + (WIND_MOVE * 0.5f));
+		//// 移動量を設定する
+		//move.x = sinf(GetRot().y + D3DX_PI) * (rand() % WIND_MOVE + (WIND_MOVE * 0.5f));
+		//move.y = 0.0f;
+		//move.z = cosf(GetRot().y + D3DX_PI) * (rand() % WIND_MOVE + (WIND_MOVE * 0.5f));
 
-		// エフェクトを出す
-		CEffect::Create(pos, move, WIND_LIFE, WIND_RADIUS, CEffect::TYPE_WIND, NONE_D3DXCOLOR, true);
+		//// エフェクトを出す
+		//CEffect::Create(pos, move, WIND_LIFE, WIND_RADIUS, CEffect::TYPE_WIND, NONE_D3DXCOLOR, true);
 	}
 
 	if (m_pFan != nullptr)
@@ -201,7 +219,7 @@ bool CElecFan::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeig
 bool CElecFan::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type)
 {
 	if (useful::CircleCollisionXZ(pos, GetPos(), Radius, GetFileData().fRadius) == true)
-	{//円の範囲内の場合tureを返す
+	{//円の範囲内の場合trueを返す
 		return true;
 	}
 
@@ -214,6 +232,6 @@ bool CElecFan::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlay
 //=====================================
 void CElecFan::Action(void)
 {
-	// 電源ONにする
-	m_bPower = true;
+	// 電源OFFにする
+	m_bPower = false;
 }

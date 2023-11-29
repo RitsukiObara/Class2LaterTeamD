@@ -14,6 +14,7 @@
 #include "camera.h"
 #include "MultiCamera.h"
 #include "pause.h"
+#include "fade.h"
 
 //--------------------------------------------
 // 静的メンバ変数宣言
@@ -481,16 +482,50 @@ void CObject::DrawAll(void)
 //===========================================
 void CObject::DrawNormal(void)
 {
-	for (int nCnt = 0; nCnt < 4; nCnt++)
+	if (CManager::Get()->GetMode() == CScene::MODE_GAME)
 	{
+		for (int nCnt = 0; nCnt < 4; nCnt++)
+		{
+			// カメラの設定処理
+			CManager::Get()->GetMlutiCamera(nCnt)->Set(nCnt);
 
-#if CAMERA == 0
+			// ローカル変数宣言
+			CObject* pObj = nullptr;		// 現在のオブジェクトのポインタ
+
+			for (int nCntPriority = 0; nCntPriority < PRIORITY_MAX; nCntPriority++)
+			{
+				// 先頭のオブジェクトを設定する
+				pObj = m_apTop[nCntPriority];
+
+				while (pObj != nullptr)
+				{ // オブジェクトが NULL じゃない限り回す
+
+					if (pObj->GetType() != TYPE_NONE &&
+						pObj->GetType() != TYPE_PAUSE &&
+						pObj->GetType() != TYPE_SCENE)
+					{ // 種類が 無し・ポーズ 以外の場合
+
+					  // オブジェクトの描画
+						pObj->Draw();
+					}
+
+					// 次のオブジェクトを代入
+					pObj = pObj->m_pNext;
+				}
+			}
+
+			if (CManager::Get()->GetFade() != nullptr)
+			{ // フェードが NULL じゃない場合
+
+			  // フェードの描画
+				CManager::Get()->GetFade()->Draw();
+			}
+		}
+	}
+	else
+	{
 		// カメラの設定処理
 		CManager::Get()->GetCamera()->Set();
-#else
-		// カメラの設定処理
-		CManager::Get()->GetMlutiCamera(nCnt)->Set(nCnt);
-#endif // CAMERA
 
 		// ローカル変数宣言
 		CObject* pObj = nullptr;		// 現在のオブジェクトのポインタ
@@ -508,13 +543,20 @@ void CObject::DrawNormal(void)
 					pObj->GetType() != TYPE_SCENE)
 				{ // 種類が 無し・ポーズ 以外の場合
 
-					// オブジェクトの描画
+				  // オブジェクトの描画
 					pObj->Draw();
 				}
 
 				// 次のオブジェクトを代入
 				pObj = pObj->m_pNext;
 			}
+		}
+
+		if (CManager::Get()->GetFade() != nullptr)
+		{ // フェードが NULL じゃない場合
+
+		  // フェードの描画
+			CManager::Get()->GetFade()->Draw();
 		}
 	}
 }
@@ -524,15 +566,42 @@ void CObject::DrawNormal(void)
 //===========================================
 void CObject::DrawGame(void)
 {
-	for (int nCnt = 0; nCnt < 4; nCnt++)
+	if (CManager::Get()->GetMode() == CScene::MODE_GAME)
 	{
-#if CAMERA == 0
+		for (int nCnt = 0; nCnt < 4; nCnt++)
+		{
+			// カメラの設定処理
+			CManager::Get()->GetMlutiCamera(nCnt)->Set(nCnt);
+
+			// ローカル変数宣言
+			CObject* pObj = nullptr;		// 現在のオブジェクトのポインタ
+
+			for (int nCntPriority = 0; nCntPriority < PRIORITY_MAX; nCntPriority++)
+			{
+				// 先頭のオブジェクトを設定する
+				pObj = m_apTop[nCntPriority];
+
+				while (pObj != nullptr)
+				{ // オブジェクトが NULL じゃない限り回す
+
+					if (pObj->GetType() != TYPE_NONE &&
+						pObj->GetType() != TYPE_SCENE)
+					{ // 種類が 無し 以外の場合
+
+					  // オブジェクトの描画
+						pObj->Draw();
+					}
+
+					// 次のオブジェクトを代入
+					pObj = pObj->m_pNext;
+				}
+			}
+		}
+	}
+	else
+	{
 		// カメラの設定処理
 		CManager::Get()->GetCamera()->Set();
-#else
-		// カメラの設定処理
-		CManager::Get()->GetMlutiCamera(nCnt)->Set(nCnt);
-#endif // CAMERA
 
 		// ローカル変数宣言
 		CObject* pObj = nullptr;		// 現在のオブジェクトのポインタ
@@ -549,7 +618,7 @@ void CObject::DrawGame(void)
 					pObj->GetType() != TYPE_SCENE)
 				{ // 種類が 無し 以外の場合
 
-					// オブジェクトの描画
+				  // オブジェクトの描画
 					pObj->Draw();
 				}
 

@@ -189,11 +189,16 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 			case CObstacle::TYPE_ROOMBA:
 				// Œü‚«‚ðŽZo‚·‚é
 				fAngle = atan2f(pos.x - pObstacle->GetPos().x, pos.z - pObstacle->GetPos().z);
+
 				// ‚«”ò‚Ñˆ—
 				pPlayer->Smash(fAngle);
+
 				break;
 
 			case CObstacle::TYPE_HIMO:
+
+				// ƒqƒbƒgˆ—
+				pPlayer->Stun(60);
 
 				break;
 
@@ -209,8 +214,10 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 				break;
 
 			case CObstacle::TYPE_MOUSETRAP:
-				pPlayer->GetStun();
-				pPlayer->SetMove(D3DXVECTOR3(0, 20.0f, 0));
+
+				// ‹Câó‘Ô
+				pPlayer->Stun(60);
+
 				break;
 
 			case CObstacle::TYPE_LEASH:
