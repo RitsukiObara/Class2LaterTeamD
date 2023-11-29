@@ -52,13 +52,11 @@ public:			// 誰でもアクセスできる
 
 	void SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type);	// 情報の設定処理
 
-	// セット・ゲット関係
-	int GetRatIdx(void) const;				// ネズミの番号の取得処理
-
 private:		// 自分だけアクセスできる
 
 	// メンバ関数
 	void Jump(void);				// ジャンプ処理
+	void Gravity(void);				// 重力処理
 	void Attack(void);				// 攻撃処理
 	void Elevation(void);			// 起伏地面の当たり判定
 	void ResurrectionCollision(void);		// 生き返りの当たり判定
