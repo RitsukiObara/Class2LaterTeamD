@@ -48,8 +48,8 @@
 //--------------------------------------------
 // 静的メンバ変数宣言
 //--------------------------------------------
-int CRat::m_nNumAll = 0;				// ネズミの総数
-int CRat::m_nResurrectionCounter = 0;	// 生き返るまでのカウンター
+//int CRat::m_nNumAll = 0;				// ネズミの総数
+bool CRat::m_bResurrection = false;		// 復活させてるのか
 
 //==============================
 // コンストラクタ
@@ -57,10 +57,9 @@ int CRat::m_nResurrectionCounter = 0;	// 生き返るまでのカウンター
 CRat::CRat() : CPlayer(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 {
 	// 全ての値をクリアする
-	m_pRatGhost = nullptr;				// 幽霊ネズミの情報
-	m_pRessrectionFan = nullptr;		// 円の範囲の情報
+	m_nRezCounter = 0;					// 回復するまでのカウンター
 	m_bJump = false;					// ジャンプ状況
-	m_nNumAll++;						// ネズミの総数加算
+	//m_nNumAll++;						// ネズミの総数加算
 }
 
 //==============================
@@ -142,22 +141,6 @@ HRESULT CRat::Init(void)
 //========================================
 void CRat::Uninit(void)
 {
-	if (m_pRatGhost != nullptr)
-	{ // 幽霊ネズミが NULL じゃない場合
-
-		//幽霊ネズミの終了処理
-		m_pRatGhost->Uninit();
-		m_pRatGhost = nullptr;
-	}
-
-	if (m_pRessrectionFan != nullptr)
-	{ // 円の範囲が NULL じゃない場合
-
-		//円の範囲の終了処理
-		//m_pRessrectionFan->Uninit();
-		m_pRessrectionFan = nullptr;
-	}
-
 	// プレイヤーを消去する
 	CGame::DeletePlayer(GetPlayerIdx());
 
@@ -215,8 +198,8 @@ void CRat::Update(void)
 	CPlayer::Update();
 
 	// デバッグ表示
-	CManager::Get()->GetDebugProc()->Print("\nネズミの総数:%d\n", m_nNumAll);
-	CManager::Get()->GetDebugProc()->Print("蘇生カウント：%d\n", m_nResurrectionCounter);
+	//CManager::Get()->GetDebugProc()->Print("\nネズミの総数:%d\n", m_nNumAll);
+	CManager::Get()->GetDebugProc()->Print("蘇生カウント：%d\n", CPlayer::GetResurrectionTime());
 }
 
 //=====================================
@@ -335,51 +318,6 @@ void CRat::SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 }
 
 //=======================================
-// 幽霊ネズミの情報取得処理
-//=======================================
-CRatGhost* CRat::GetRatGhost(void)
-{
-	// 幽霊ネズミの情報を返す
-	return m_pRatGhost;
-}
-
-//=======================================
-// 幽霊ネズミの情報消去処理
-//=======================================
-void CRat::DeleteRatGhost(void)
-{
-	if (m_pRatGhost != nullptr)
-	{ // 幽霊ネズミが NULL じゃない場合
-
-		//幽霊ネズミの終了処理
-		m_pRatGhost->Uninit();
-		m_pRatGhost = nullptr;
-	}
-}
-//=======================================
-// 円の範囲の情報取得処理
-//=======================================
-CRessrectionFan* CRat::GetRessrectionFan(void)
-{
-	// 円の範囲の情報を返す
-	return m_pRessrectionFan;
-}
-
-//=======================================
-// 円の範囲の情報消去処理
-//=======================================
-void CRat::DeleteRessrectionFan(void)
-{
-	if (m_pRessrectionFan != nullptr)
-	{ // 円の範囲が NULL じゃない場合
-
-		//円の範囲の終了処理
-		m_pRessrectionFan->Uninit();
-		m_pRessrectionFan = nullptr;
-	}
-}
-
-//=======================================
 // ジャンプ処理
 //=======================================
 void CRat::Jump(void)
@@ -469,9 +407,11 @@ void CRat::Attack(void)
 void CRat::Hit(void)
 {
 	// ローカル変数宣言
+	CPlayer *pPlayer;						// ネズミの情報
 	D3DXVECTOR3 pos = GetPos();				// 位置を取得する
 	STATE state = GetState();				// 状態を取得する
 	STUNSTATE stunState = GetStunState();	// 気絶状態を取得する
+	int nCntDeath = 0;						// 死亡した数
 
 	if (state == STATE_NONE &&
 		stunState == STUNSTATE_NONE)
@@ -482,29 +422,27 @@ void CRat::Hit(void)
 		SetState(STATE_DEATH);				// 死亡状態にする
 
 		// 生き返りの円の範囲生成
-		if (m_pRessrectionFan == nullptr)
-		{ // 円の範囲が NULL のとき
-
-			m_pRessrectionFan = CRessrectionFan::Create(D3DXVECTOR3(pos.x, pos.y + 10.0f, pos.z), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-		}
+		CPlayer::SetRessrectionFan(pos, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 
 		// ネズミの幽霊の生成
-		if (m_pRatGhost == nullptr)
-		{ // 幽霊ネズミが NULL のとき
+		CPlayer::SetRatGhost(pos);
 
-			m_pRatGhost = CRatGhost::Create(pos);
+		for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
+		{
+			// プレイヤーの情報を取得する
+			pPlayer = CGame::GetPlayer(nCnt);
 
-			m_nNumAll--;						// ネズミの総数減算
+			if (pPlayer != nullptr &&
+				pPlayer->GetType() == TYPE_RAT && 
+				pPlayer->GetState() == STATE_DEATH)
+			{ // 死亡してるネズミの時
+
+				nCntDeath++;
+			}
 		}
 
-#if 0	// デバッグの為の処理↓
-
-		// 終了状態にする
-		Uninit();
-#endif
-
-		if (m_nNumAll <= 0)
-		{ // ネズミが全滅したら
+		if (nCntDeath >= (MAX_PLAY - 1))
+		{ // ネズミ全匹死んだら
 
 			// ネコが勝利した状態にする
 			CGame::SetState(CGame::STATE_CAT_WIN);
@@ -556,7 +494,9 @@ void CRat::Elevation(void)
 void CRat::ResurrectionCollision(void)
 {
 	CPlayer *pPlayer;						// ネズミの情報
-	bool bCollYZ = false;					// 当たったか
+	bool bCollXY = false;					// XYの範囲に入ったか
+	bool bCollXZ = false;					// XZの範囲に入ったか
+	bool abRez[MAX_PLAY];					// 回復してるか
 	STATE state = GetState();				// 状態を取得する
 	STUNSTATE stunState = GetStunState();	// 気絶状態を取得する
 
@@ -564,6 +504,7 @@ void CRat::ResurrectionCollision(void)
 	{
 		// プレイヤーの情報を取得する
 		pPlayer = CGame::GetPlayer(nCnt);
+		abRez[nCnt] = false;
 
 		if (pPlayer != nullptr &&
 			pPlayer->GetType() == TYPE_RAT &&
@@ -576,45 +517,79 @@ void CRat::ResurrectionCollision(void)
 				stunState != STUNSTATE::STUNSTATE_STUN)
 			{ // 他のネズミが死亡状態 && 操作してるネズミが復活させれる状態の時
 
+				// 円の当たり判定(XY平面)取得
+				bCollXY = useful::CircleCollisionXY(GetPos(), pPlayer->GetPos(), 30.0f, ATTACK_DISTANCE);
+
+				// 円の当たり判定(XZ平面)取得
+				bCollXZ = useful::CircleCollisionXZ(GetPos(), pPlayer->GetPos(), 30.0f, ATTACK_DISTANCE);
+
 				// 他のネズミとの当たり判定
-				if (useful::CircleCollisionXY(GetPos(), pPlayer->GetPos(), 30.0f, ATTACK_DISTANCE) == true)
-				{ // 円の当たり判定(XY平面)
+				if (bCollXY == true && bCollXZ == true)
+				{ // 円の当たり判定(XY平面)と(XZ平面)の範囲にいる場合
 
-					// 円の当たり判定(XZ平面)
-					bCollYZ = useful::CircleCollisionXZ(GetPos(), pPlayer->GetPos(), 30.0f, ATTACK_DISTANCE);
+					if (m_bResurrection == false)
+					{ // 復活させてない状態だったら
 
-					if (bCollYZ == true)
-					{ // 円の当たり判定(XZ平面)
-
-						// 生き返りのカウンター加算
-						m_nResurrectionCounter++;
-
-						if (m_nResurrectionCounter >= TIME_RESURRECTION)
-						{ // 一定時間経ったら
-
-							// 無敵状態にする
-							pPlayer->SetState(STATE_WAIT);
-
-							//// 円の範囲の破棄
-							//pPlayer->DeleteRessrectionFan();
-
-							//// 幽霊ネズミの破棄
-							//pPlayer->DeleteRatGhost();
-
-							// 生き返りのカウンター初期化
-							m_nResurrectionCounter = 0;
-
-							m_nNumAll++;		// 総数増やす
-						}
+						// 復活させてる状態にする
+						m_bResurrection = true;
 					}
-					else if(bCollYZ == false)
-					{
+
+					// 回復させてる状態にする
+					abRez[nCnt] = true;
+
+					// 現在の生き返りの時間取得
+					m_nRezCounter = pPlayer->GetResurrectionTime();
+
+					// 生き返りのカウンター加算
+					m_nRezCounter++;
+
+					pPlayer->SetResurrectionTime(m_nRezCounter);
+
+					if (pPlayer->GetResurrectionTime() >= TIME_RESURRECTION)
+					{ // 一定時間経ったら
+
+						// 無敵状態にする
+						pPlayer->SetState(STATE_WAIT);
+
+						// 円の範囲の破棄
+						pPlayer->DeleteRessrectionFan();
+
+						// 幽霊ネズミの破棄
+						pPlayer->DeleteRatGhost();
+
 						// 生き返りのカウンター初期化
-						m_nResurrectionCounter = 0;
-					}
+						pPlayer->SetResurrectionTime(0);
+						m_nRezCounter = 0;
 
+						// 復活させてない状態にする
+						m_bResurrection = false;
+
+						//m_nNumAll++;		// 総数増やす
+					}
+				}
+				else if (m_bResurrection == false && (bCollXY == false || bCollXZ == true))
+				{ // 復活させてない状態 && 円の当たり判定(XY平面)か(XZ平面)の範囲にいない場合
+
+					if (pPlayer->GetResurrectionTime() > 0)
+					{ // 生き返りのカウンターが加算されてたら
+
+						pPlayer->AddResurrectionTime(-1);		// カウンター減算
+					}
+					else
+					{ // 生き返りのカウンターが0以下だったら
+
+						// 生き返りのカウンター初期化
+						pPlayer->SetResurrectionTime(0);
+					}
 				}
 			}
 		}
+	}
+
+	if (abRez[0] == false && abRez[1] == false && abRez[2] == false && abRez[3] == false)
+	{ // 全員が誰も助けてないとき
+
+		// 復活させてない状態にする
+		m_bResurrection = false;
 	}
 }
