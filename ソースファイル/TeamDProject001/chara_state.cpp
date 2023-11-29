@@ -10,7 +10,7 @@
 #include "useful.h"
 
 #include "game.h"
-#include "rat.h"
+#include "player.h"
 
 //=======================================
 // マクロ定義
@@ -19,6 +19,7 @@
 #define GHOST_SIZE				(D3DXVECTOR3(80.0f, 20.0f, 0.0f))	// 死亡アイコンのサイズ
 #define STUNICON_TEXTURE		"data\\TEXTURE\\StunIcon.png"		// 気絶アイコンのテクスチャ
 #define GHOSTICON_TEXTURE		"data\\TEXTURE\\GhostIcon.png"		// 死亡アイコンのテクスチャ
+#define NONE_PLAYERIDX			(-1)								// プレイヤーのインデックスの初期値
 
 //=========================
 // コンストラクタ
@@ -26,8 +27,9 @@
 CCharaState::CCharaState() : CObject2D(CObject::TYPE_NONE, CObject::PRIORITY_UI)
 {
 	// 全ての値をクリアする
-	m_state = STATE_STUN;	// 状態
-	m_bDisp = false;		// 描画状況
+	m_state = STATE_STUN;			// 状態
+	m_nPlayerIdx = NONE_PLAYERIDX;	// プレイヤーのインデックス
+	m_bDisp = false;				// 描画状況
 }
 
 //=========================
@@ -51,8 +53,9 @@ HRESULT CCharaState::Init(void)
 	}
 
 	// 全ての値を初期化する
-	m_state = STATE_STUN;	// 状態
-	m_bDisp = false;		// 描画状況
+	m_state = STATE_STUN;			// 状態
+	m_nPlayerIdx = NONE_PLAYERIDX;	// プレイヤーのインデックス
+	m_bDisp = false;				// 描画状況
 
 	// 成功を返す
 	return S_OK;
@@ -92,7 +95,7 @@ void CCharaState::Draw(void)
 //=========================
 // 情報の設定処理
 //=========================
-void CCharaState::SetData(const D3DXVECTOR3& pos)
+void CCharaState::SetData(const D3DXVECTOR3& pos, const int nID)
 {
 	// スクロールの設定処理
 	SetPos(pos);				// 位置設定
@@ -109,13 +112,14 @@ void CCharaState::SetData(const D3DXVECTOR3& pos)
 
 	// 全ての値を設定する
 	m_state = STATE_NONE;	// 状態
+	m_nPlayerIdx = nID;		// プレイヤーのインデックス
 	m_bDisp = false;		// 描画状況
 }
 
 //=========================
 // 生成処理
 //=========================
-CCharaState* CCharaState::Create(const D3DXVECTOR3& pos)
+CCharaState* CCharaState::Create(const D3DXVECTOR3& pos, const int nID)
 {
 	// ローカルオブジェクトを生成
 	CCharaState* pCharaImage = nullptr;	// プレイヤーのインスタンスを生成
@@ -151,7 +155,7 @@ CCharaState* CCharaState::Create(const D3DXVECTOR3& pos)
 		}
 
 		// 情報の設定処理
-		pCharaImage->SetData(pos);
+		pCharaImage->SetData(pos, nID);
 	}
 	else
 	{ // オブジェクトが NULL の場合
@@ -172,55 +176,52 @@ CCharaState* CCharaState::Create(const D3DXVECTOR3& pos)
 //=========================
 void CCharaState::State(void)
 {
-	//// ネズミのポインタを宣言する
-	//CPlayer* pPlayer = nullptr;
+	// ネズミのポインタを宣言する
+	CPlayer* pPlayer = nullptr;
 
-	//for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
-	//{
-	//	// ネズミのポインタを取得する
-	//	pPlayer = CGame::GetPlayer(nCnt);
+	// ネズミのポインタを取得する
+	pPlayer = CGame::GetPlayer(m_nPlayerIdx);
 
-	//	if (pPlayer != nullptr)
-	//	{ // ネズミが NULL じゃない場合
+	if (pPlayer != nullptr)
+	{ // ネズミが NULL じゃない場合
 
-	//		if (pPlayer->GetState()->GetState() == CRatState::STATE_STUN &&
-	//			m_state != STATE_STUN)
-	//		{ // 気絶状態の場合
+		if (pPlayer->GetStunState() == CPlayer::STUNSTATE_STUN &&
+			m_state != STATE_STUN)
+		{ // 気絶状態の場合
 
-	//			// 描画状況を true にする
-	//			m_bDisp = true;
+			// 描画状況を true にする
+			m_bDisp = true;
 
-	//			// 気絶状態にする
-	//			m_state = STATE_STUN;
+			// 気絶状態にする
+			m_state = STATE_STUN;
 
-	//			// テクスチャの割り当て処理
-	//			BindTexture(CManager::Get()->GetTexture()->Regist(STUNICON_TEXTURE));
+			// テクスチャの割り当て処理
+			BindTexture(CManager::Get()->GetTexture()->Regist(STUNICON_TEXTURE));
 
-	//			// サイズを設定する
-	//			SetSize(STUN_SIZE);
+			// サイズを設定する
+			SetSize(STUN_SIZE);
 
-	//			// 頂点情報の設定処理
-	//			SetVertex();
-	//		}
-	//		else if (pPlayer->GetState()->GetState() == CRatState::STATE_DEATH &&
-	//			m_state != STATE_GHOST)
-	//		{ // 死亡状態の場合
+			// 頂点情報の設定処理
+			SetVertex();
+		}
+		else if (pPlayer->GetState() == CPlayer::STATE_DEATH &&
+			m_state != STATE_GHOST)
+		{ // 死亡状態の場合
 
-	//			// 描画状況を true にする
-	//			m_bDisp = true;
+			// 描画状況を true にする
+			m_bDisp = true;
 
-	//			// ゴースト状態にする
-	//			m_state = STATE_GHOST;
+			// ゴースト状態にする
+			m_state = STATE_GHOST;
 
-	//			// テクスチャの割り当て処理
-	//			BindTexture(CManager::Get()->GetTexture()->Regist(GHOSTICON_TEXTURE));
+			// テクスチャの割り当て処理
+			BindTexture(CManager::Get()->GetTexture()->Regist(GHOSTICON_TEXTURE));
 
-	//			// サイズを設定する
-	//			SetSize(GHOST_SIZE);
+			// サイズを設定する
+			SetSize(GHOST_SIZE);
 
-	//			// 頂点情報の設定処理
-	//			SetVertex();
-	//		}
-	//	}
-	//}
+			// 頂点情報の設定処理
+			SetVertex();
+		}
+	}
 }

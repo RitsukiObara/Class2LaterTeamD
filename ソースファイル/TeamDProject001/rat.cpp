@@ -38,12 +38,12 @@
 #define ADD_MOVE_Y			(30.0f)			// 浮力
 #define NONE_RATIDX			(-1)			// ネズミの番号の初期値
 #define ATTACK_DISTANCE		(230.0f)		// 攻撃範囲までの距離
-#define MAX_LIFE			(1)				// 寿命の最大値
 #define SPEED				(20.0f)			// 速度
 #define SIZE				(D3DXVECTOR3(30.0f, 50.0f, 30.0f))		// 当たり判定でのサイズ
 #define STUN_HEIGHT			(80.0f)			// 気絶演出が出てくる高さ
 #define SMASH_MOVE			(D3DXVECTOR3(10.0f, 20.0f, 10.0f))		// 吹き飛び状態の移動量
 #define TIME_RESURRECTION	(60 * 4)		// 復活時間
+#define INVINCIBLE_COUNT	(60)			// 無敵カウント
 
 //--------------------------------------------
 // 静的メンバ変数宣言
@@ -59,7 +59,6 @@ CRat::CRat() : CPlayer(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 	// 全ての値をクリアする
 	m_pRatGhost = nullptr;				// 幽霊ネズミの情報
 	m_pRessrectionFan = nullptr;		// 円の範囲の情報
-	m_nRatIdx = NONE_RATIDX;			// ネズミの番号
 	m_bJump = false;					// ジャンプ状況
 	m_nNumAll++;						// ネズミの総数加算
 }
@@ -132,7 +131,6 @@ HRESULT CRat::Init(void)
 	SetMotion(pMotion);
 
 	// 全ての値を初期化する
-	m_nRatIdx = NONE_RATIDX;		// ネズミの番号
 	m_bJump = false;				// ジャンプ状況
 
 	// 値を返す
@@ -161,7 +159,7 @@ void CRat::Uninit(void)
 	}
 
 	// プレイヤーを消去する
-	CGame::DeletePlayer(m_nRatIdx);
+	CGame::DeletePlayer(GetPlayerIdx());
 
 	// 終了処理
 	CPlayer::Uninit();
@@ -313,7 +311,6 @@ void CRat::SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 	SetSizeColl(SIZE);
 
 	// 情報を設定する
-	m_nRatIdx = nID;				// ネズミの番号
 	m_bJump = false;				// ジャンプしたか
 
 	for (int nCntData = 0; nCntData < GetNumModel(); nCntData++)
@@ -335,15 +332,6 @@ void CRat::SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 	//	// プレイヤーのID表示の生成処理
 	//	m_pPlayerID = CPlayerID::Create(D3DXVECTOR3(pos.x, pos.y + 90.0f, pos.z), m_nRatIdx);
 	//}
-}
-
-//=======================================
-// ネズミの番号の取得処理
-//=======================================
-int CRat::GetRatIdx(void) const
-{
-	// ネズミの番号を返す
-	return m_nRatIdx;
 }
 
 //=======================================
@@ -415,7 +403,7 @@ void CRat::Jump(void)
 
 #endif // _DEBUG
 
-	if (CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_A, m_nRatIdx) == true &&
+	if (CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_A, GetPlayerIdx()) == true &&
 		GetStunState() != STUNSTATE_SMASH &&
 		m_bJump == false)
 	{ // Aボタンを押した場合
@@ -446,7 +434,7 @@ void CRat::Attack(void)
 	D3DXVECTOR3 pos = GetPos();
 	D3DXVECTOR3 rot = GetRot();
 
-	if (CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_B,m_nRatIdx) == true/* && m_bAttack == false*/)
+	if (CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_B, GetPlayerIdx()) == true/* && m_bAttack == false*/)
 	{ // Bボタンを押した場合
 
 		while (pObstacle != nullptr)
@@ -567,63 +555,63 @@ void CRat::Elevation(void)
 //=======================================
 void CRat::ResurrectionCollision(void)
 {
-	//CPlayer *pRat;		// ネズミの情報
-	//bool bCollYZ = false;		// 当たったか
+	CPlayer *pPlayer;						// ネズミの情報
+	STATE state = GetState();				// 状態を取得する
+	STUNSTATE stunState = GetStunState();	// 気絶状態を取得する
 
-	//// 状態を取得する
-	//CRatState::STATE state = m_pRatState->GetState();
+	for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
+	{
+		// プレイヤーの情報を取得する
+		pPlayer = CGame::GetPlayer(nCnt);
 
-	//for (int nCntRat = 0; nCntRat < MAX_RAT; nCntRat++)
-	//{
-	//	if (m_nRatIdx != nCntRat)
-	//	{ // 操作してるネズミじゃないとき
+		if (pPlayer != nullptr &&
+			pPlayer->GetType() == TYPE_RAT &&
+			GetPlayerIdx() != pPlayer->GetPlayerIdx())
+		{ // 操作してるネズミじゃないとき
 
-	//		// 他のネズミの情報取得
-	//		pRat = CGame::GetRat(nCntRat);
+			if (pPlayer->GetState() == STATE_DEATH &&
+				state != STATE_DEATH && 
+				stunState != STUNSTATE::STUNSTATE_SMASH &&
+				stunState != STUNSTATE::STUNSTATE_STUN)
+			{ // 他のネズミが死亡状態 && 操作してるネズミが復活させれる状態の時
 
-	//		if (pRat->GetState()->GetState() == CRatState::STATE_DEATH && 
-	//			state != CRatState::STATE_STUN && state != CRatState::STATE_DEATH)
-	//		{ // 他のネズミが死亡状態 && 操作してるネズミが復活させれる状態の時
+				// 他のネズミとの当たり判定
+				if (useful::CircleCollisionXY(GetPos(), pPlayer->GetPos(), 30.0f, ATTACK_DISTANCE) == true)
+				{ // 円の当たり判定(XY平面)
 
-	//			// 他のネズミとの当たり判定
-	//			if (useful::CircleCollisionXY(GetPos(), pRat->GetPos(), 30.0f, ATTACK_DISTANCE) == true)
-	//			{ // 円の当たり判定(XY平面)
+					if (useful::CircleCollisionXZ(GetPos(), pPlayer->GetPos(), 30.0f, ATTACK_DISTANCE) == true)
+					{ // 円の当たり判定(XZ平面)
 
-	//				// 円の当たり判定(XZ平面)
-	//				bCollYZ = useful::CircleCollisionXZ(GetPos(), pRat->GetPos(), 30.0f, ATTACK_DISTANCE);
+						// 生き返りのカウンター加算
+						m_nResurrectionCounter++;
 
-	//				if (bCollYZ == true)
-	//				{ // 円の当たり判定(XZ平面)
+						if (m_nResurrectionCounter >= TIME_RESURRECTION)
+						{ // 一定時間経ったら
 
-	//					// 生き返りのカウンター加算
-	//					m_nResurrectionCounter++;
+							// 無敵状態にする
+							pPlayer->SetState(STATE_INVINCIBLE);
+							pPlayer->SetStateCount(INVINCIBLE_COUNT);
 
-	//					if (m_nResurrectionCounter >= TIME_RESURRECTION)
-	//					{ // 一定時間経ったら
+							//// 円の範囲の破棄
+							//pPlayer->DeleteRessrectionFan();
 
-	//						// 無敵状態にする
-	//						pRat->GetState()->SetState(CRatState::STATE_INVINCIBLE);
+							//// 幽霊ネズミの破棄
+							//pPlayer->DeleteRatGhost();
 
-	//						// 円の範囲の破棄
-	//						pRat->DeleteRessrectionFan();
+							// 生き返りのカウンター初期化
+							m_nResurrectionCounter = 0;
 
-	//						// 幽霊ネズミの破棄
-	//						pRat->DeleteRatGhost();
+							m_nNumAll++;		// 総数増やす
+						}
+					}
+					else
+					{
+						// 生き返りのカウンター初期化
+						m_nResurrectionCounter = 0;
+					}
 
-	//						// 生き返りのカウンター初期化
-	//						m_nResurrectionCounter = 0;
-
-	//						m_nNumAll++;		// 総数増やす
-	//					}
-	//				}
-	//				else if(bCollYZ == false)
-	//				{
-	//					// 生き返りのカウンター初期化
-	//					m_nResurrectionCounter = 0;
-	//				}
-
-	//			}
-	//		}
-	//	}
-	//}
+				}
+			}
+		}
+	}
 }

@@ -71,7 +71,6 @@ private:		// 自分だけアクセスできる
 	// メンバ変数
 	CRatGhost* m_pRatGhost;		// 幽霊ネズミの情報
 	CRessrectionFan* m_pRessrectionFan;		// 円の範囲の情報
-	int m_nRatIdx;				// ネズミの番号
 	bool m_bJump;				// ジャンプ状況
 
 	// 静的メンバ関数
