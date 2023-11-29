@@ -30,6 +30,7 @@ public:			// 誰でもアクセスできる
 	// 頂点操作系
 	void SetVertex(void);						// 頂点情報の設定
 	void SetVtxColor(const D3DXCOLOR& col);		// 頂点カラーの設定処理
+	void SetVtxColor(const D3DXCOLOR& normalCol, const D3DXCOLOR& rezCol, int nEndRezVtx);		// 頂点カラーの細かい設定処理
 
 	// セット・ゲット関係
 	void SetPos(const D3DXVECTOR3& pos);	// 位置設定処理

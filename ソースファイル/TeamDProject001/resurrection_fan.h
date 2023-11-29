@@ -29,11 +29,13 @@ public:			// 誰でもアクセスできる
 	void Draw(void);		// 描画処理
 
 	void SetData(const D3DXVECTOR3& pos, const D3DXCOLOR& col);		// 情報の設定処理
+	void SetResurrectionFan(int nFan);								// 角度の設定
 
 	// 静的メンバ関数
 	static CRessrectionFan* Create(const D3DXVECTOR3& pos, const D3DXCOLOR& col);		// 生成処理
 
 private:		// 自分だけアクセスできる
+	int m_nRezTime;			// 回復時間
 
 };
 
