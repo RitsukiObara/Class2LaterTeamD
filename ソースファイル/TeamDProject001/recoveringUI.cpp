@@ -1,7 +1,7 @@
 //===========================================
 //
-// 扇風機のファンのメイン処理[fan_blade.cpp]
-// Author 小原立暉
+// 回復中UIメイン処理[recoveringUI.cpp]
+// Author 佐藤根詩音
 //
 //===========================================
 //*******************************************
@@ -9,28 +9,30 @@
 //*******************************************
 #include "main.h"
 #include "manager.h"
-#include "fan_blade.h"
-#include "useful.h"
+#include "recoveringUI.h"
+#include "model.h"
+#include "texture.h"
 
 //-------------------------------------------
 // マクロ定義
 //-------------------------------------------
-#define ROT_MOVE_CORRECT		(0.01f)		// 向きの移動量の補正量
+
+//-------------------------------------------
+// 静的メンバ変数宣言
+//-------------------------------------------
 
 //==============================
 // コンストラクタ
 //==============================
-CFanBlade::CFanBlade() : CModel(CObject::TYPE_NONE, CObject::PRIORITY_BLOCK)
+CRecoveringUI::CRecoveringUI() : CBillboard(CObject::TYPE_RECOVERINGUI, CObject::PRIORITY_PLAYER)
 {
 	// 全ての値をクリアする
-	m_fRotMove = 0.0f;			// 向きの移動量
-	m_fRotMoveDest = 0.0f;		// 目的の向きの移動量
 }
 
 //==============================
 // デストラクタ
 //==============================
-CFanBlade::~CFanBlade()
+CRecoveringUI::~CRecoveringUI()
 {
 
 }
@@ -38,18 +40,16 @@ CFanBlade::~CFanBlade()
 //==============================
 // 破片の初期化処理
 //==============================
-HRESULT CFanBlade::Init(void)
+HRESULT CRecoveringUI::Init(void)
 {
-	if (FAILED(CModel::Init()))
+	if (FAILED(CBillboard::Init()))
 	{ // 初期化処理に失敗した場合
 
 		// 失敗を返す
 		return E_FAIL;
 	}
 
-	// 全ての値をクリアする
-	m_fRotMove = 0.0f;			// 向きの移動量
-	m_fRotMoveDest = 0.0f;		// 目的の向きの移動量
+	// 全ての値を初期化する
 
 	// 値を返す
 	return S_OK;
@@ -58,65 +58,63 @@ HRESULT CFanBlade::Init(void)
 //========================================
 // 破片の終了処理
 //========================================
-void CFanBlade::Uninit(void)
+void CRecoveringUI::Uninit(void)
 {
 	// 終了処理
-	CModel::Uninit();
+	CBillboard::Uninit();
 }
 
 //=====================================
 // 破片の更新処理
 //=====================================
-void CFanBlade::Update(void)
+void CRecoveringUI::Update(void)
 {
-	// 向きを取得する
-	D3DXVECTOR3 rot = GetRot();
 
-	// 向きの補正処理
-	useful::RotCorrect(m_fRotMoveDest, &m_fRotMove, ROT_MOVE_CORRECT);
-
-	// 向きを加算する
-	rot.z += m_fRotMove;
-
-	// 向きを適用する
-	SetRot(rot);
 }
 
 //=====================================
 // 破片の描画処理
 //=====================================
-void CFanBlade::Draw(void)
+void CRecoveringUI::Draw(void)
 {
 	// 描画処理
-	CModel::Draw();
+	CBillboard::Draw();
 }
 
 //=====================================
 // 情報の設定処理
 //=====================================
-void CFanBlade::SetData(const D3DXVECTOR3& pos)
+void CRecoveringUI::SetData(D3DXVECTOR3& pos, D3DXVECTOR3& posOld)
 {
+	// 設定処理に便利なマクロ定義
+	//NONE_D3DXVECTOR3					// 向きを傾けない時とかに使用する
 	// 情報の設定処理
-	SetPos(pos);								// 位置
-	SetPosOld(pos);								// 前回の位置
-	SetRot(NONE_D3DXVECTOR3);					// 向き
-	SetScale(NONE_SCALE);						// 拡大率
-	SetFileData(CXFile::TYPE_FANBLADE);			// モデル情報
+
+	//==========================================================================
+	// ビルボード
+	//==========================================================================
+	SetPos(pos);			// 位置
+	SetPosOld(posOld);		// 前回の位置
+	SetSize(NONE_SCALE);	// サイズ
+	BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\CageMark.png"));		// テクスチャの割り当て処理
+
+	// 頂点座標の設定処理
+	SetVertex();
 }
 
 //=======================================
 // 生成処理
 //=======================================
-CFanBlade* CFanBlade::Create(const D3DXVECTOR3& pos)
+CRecoveringUI* CRecoveringUI::Create(D3DXVECTOR3& pos, D3DXVECTOR3& posOld)
 {
 	// ローカルオブジェクトを生成
-	CFanBlade* pFanBlade = nullptr;	// インスタンスを生成
+	CRecoveringUI* pRecoveringUI = nullptr;	// サンプルのインスタンスを生成
 
-	if (pFanBlade == nullptr)
+	if (pRecoveringUI == nullptr)
 	{ // オブジェクトが NULL の場合
 
 		// インスタンスを生成
-		pFanBlade = new CFanBlade;
+		pRecoveringUI = new CRecoveringUI;
 	}
 	else
 	{ // オブジェクトが NULL じゃない場合
@@ -128,11 +126,11 @@ CFanBlade* CFanBlade::Create(const D3DXVECTOR3& pos)
 		return nullptr;
 	}
 
-	if (pFanBlade != nullptr)
+	if (pRecoveringUI != nullptr)
 	{ // オブジェクトが NULL じゃない場合
 
 		// 初期化処理
-		if (FAILED(pFanBlade->Init()))
+		if (FAILED(pRecoveringUI->Init()))
 		{ // 初期化に失敗した場合
 
 			// 停止
@@ -143,7 +141,7 @@ CFanBlade* CFanBlade::Create(const D3DXVECTOR3& pos)
 		}
 
 		// 情報の設定処理
-		pFanBlade->SetData(pos);
+		pRecoveringUI->SetData(pos, posOld);
 	}
 	else
 	{ // オブジェクトが NULL の場合
@@ -155,15 +153,6 @@ CFanBlade* CFanBlade::Create(const D3DXVECTOR3& pos)
 		return nullptr;
 	}
 
-	// 扇風機のファンのポインタを返す
-	return pFanBlade;
-}
-
-//=======================================
-// 目的の向きの移動量の設定処理
-//=======================================
-void CFanBlade::SetRotMoveDest(const float fRotMove)
-{
-	// 目的の向きの移動量を設定する
-	m_fRotMoveDest = fRotMove;
+	// サンプルのポインタを返す
+	return pRecoveringUI;
 }

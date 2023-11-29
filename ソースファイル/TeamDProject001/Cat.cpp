@@ -38,6 +38,7 @@
 #define MOVE_SPEED			(20.0f)			// 体力の最大数
 #define ATTACK_DISTANCE		(160.0f)		// 攻撃範囲までの距離
 #define CAT_SIZE			(D3DXVECTOR3(70.0f, 200.0f, 70.0f))		// 当たり判定のサイズ
+#define GRAVITY				(1.0f)			// 重力
 
 //=========================================
 // コンストラクタ
@@ -147,6 +148,9 @@ void CCat::Update(void)
 	// 前回の位置の設定処理
 	SetPosOld(GetPos());
 
+	// 重力処理
+	Gravity();
+
 	if (m_AttackState == ATTACKSTATE_MOVE)
 	{// 移動状態の時
 
@@ -155,18 +159,6 @@ void CCat::Update(void)
 
 		// 攻撃位置の移動入力処理
 		Move();
-
-		{
-			// 位置と移動量を取得する
-			D3DXVECTOR3 pos = GetPos();
-			D3DXVECTOR3 move = GetMove();
-
-			// 移動量を加算する
-			pos += move;
-
-			// 位置を適用する
-			SetPos(pos);
-		}
 
 		// 攻撃入力の処理
 		Attack();
@@ -189,6 +181,9 @@ void CCat::Update(void)
 	// アイテムとの当たり判定処理
 	collision::ItemCollision(*this);
 
+	// 起伏地面の当たり判定
+	Elevation();
+
 	// 更新処理
 	CPlayer::Update();
 
@@ -203,6 +198,21 @@ void CCat::Draw(void)
 {
 	// 描画処理
 	CPlayer::Draw();
+}
+
+//===========================================
+// 重力処理
+//===========================================
+void CCat::Gravity(void)
+{
+	// 移動量を取得する
+	D3DXVECTOR3 move = GetMove();
+
+	// 重力加算
+	move.y -= GRAVITY;
+
+	// 情報を適用する
+	SetMove(move);
 }
 
 //===========================================
@@ -252,10 +262,6 @@ void CCat::Attack(void)
 		}
 	}
 
-
-
-	
-
 	//m_bAttack = true;		// 攻撃した状態にする
 }
 
@@ -277,7 +283,7 @@ void CCat::AttackStateManager(void)
 		//CEffect::Create(m_AttackPos, NONE_D3DXVECTOR3, 1, 400.0f, CEffect::TYPE::TYPE_NONE, D3DXCOLOR(1.0f, 1.0f, 0.0f, 0.5f), true);
 
 		if (m_nAtkStateCount <= 0)
-		{//状態カウントが０になった時
+		{//状態カウントが0になった時
 			m_AttackState = ATTACKSTATE_ATTACK;
 			m_nAtkStateCount = 10;
 		}
@@ -293,7 +299,7 @@ void CCat::AttackStateManager(void)
 		}
 
 		if (m_nAtkStateCount <= 0)
-		{//状態カウントが０になった時
+		{//状態カウントが0になった時
 			m_AttackState = ATTACKSTATE_MOVE;
 		}
 		break;
@@ -303,6 +309,41 @@ void CCat::AttackStateManager(void)
 	{
 		m_nAtkStateCount--;
 	}
+}
+
+//=======================================
+// 起伏地面の当たり判定
+//=======================================
+void CCat::Elevation(void)
+{
+	// ローカル変数宣言
+	CElevation* pMesh = CElevationManager::Get()->GetTop();		// 起伏の先頭のオブジェクトを取得する
+	D3DXVECTOR3 pos = GetPos();				// 位置を取得する
+	D3DXVECTOR3 move = GetMove();			// 移動量を取得する
+	float fHeight = 0.0f;					// 高さ
+
+	while (pMesh != nullptr)
+	{ // 地面の情報がある限り回す
+
+		// 当たり判定を取る
+		fHeight = pMesh->ElevationCollision(pos);
+
+		if (pos.y < fHeight)
+		{ // 当たり判定の位置が高かった場合
+
+			// 高さを設定する
+			pos.y = fHeight;
+
+			move.y = 0.0f;
+		}
+
+		// 次のポインタを取得する
+		pMesh = pMesh->GetNext();
+	}
+
+	// 位置と移動量を更新する
+	SetPos(pos);
+	SetMove(move);
 }
 
 //===========================================

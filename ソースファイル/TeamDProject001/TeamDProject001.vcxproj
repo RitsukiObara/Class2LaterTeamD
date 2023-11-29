@@ -188,6 +188,7 @@
     <ClCompile Include="entry_UI.cpp" />
     <ClCompile Include="fade.cpp" />
     <ClCompile Include="fan_blade.cpp" />
+    <ClCompile Include="fan_wind.cpp" />
     <ClCompile Include="file.cpp" />
     <ClCompile Include="flowervase.cpp" />
     <ClCompile Include="fraction.cpp" />
@@ -249,6 +250,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="rat_ghost.cpp" />
+    <ClCompile Include="recoveringUI.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="result.cpp" />
     <ClCompile Include="result_letter.cpp" />
@@ -316,6 +318,7 @@
     <ClInclude Include="entry_UI.h" />
     <ClInclude Include="fade.h" />
     <ClInclude Include="fan_blade.h" />
+    <ClInclude Include="fan_wind.h" />
     <ClInclude Include="file.h" />
     <ClInclude Include="flowervase.h" />
     <ClInclude Include="fraction.h" />
@@ -374,6 +377,7 @@
     <ClInclude Include="rat.h" />
     <ClInclude Include="precompile.h" />
     <ClInclude Include="rat_ghost.h" />
+    <ClInclude Include="recoveringUI.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="result.h" />
     <ClInclude Include="result_letter.h" />

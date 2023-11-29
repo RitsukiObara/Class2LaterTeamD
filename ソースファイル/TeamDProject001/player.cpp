@@ -379,6 +379,7 @@ CPlayer* CPlayer::Create(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 void CPlayer::Move(void)
 {
 	// ローカル変数宣言
+	D3DXVECTOR3 pos = GetPos();
 	D3DXVECTOR3 rot = GetRot();
 
 	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_D) == true ||
@@ -460,7 +461,11 @@ void CPlayer::Move(void)
 	m_move.x = -sinf(rot.y) * m_fSpeed;
 	m_move.z = -cosf(rot.y) * m_fSpeed;
 
-	// 向きを適用する
+	// 移動量を加算する
+	pos += m_move;
+
+	// 位置と向きを適用する
+	SetPos(pos);
 	SetRot(rot);
 }
 

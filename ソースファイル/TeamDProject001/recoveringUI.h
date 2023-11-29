@@ -1,26 +1,26 @@
 //===================================
 //
-// 生き返りの円の範囲ヘッダー[resurrection_fan.h]
+// 回復中UIヘッダー[recoveringUI.h]
 // Author 佐藤根詩音
 //
 //===================================
-#ifndef _RESURRECTION_FAN_H_
-#define _RESURRECTION_FAN_H_
+#ifndef _RECOVERINGUI_H_
+#define _RECOVERINGUI_H_
 
 //***********************************
 // インクルードファイル
 //***********************************
-#include "object3Dfan.h"
+#include "objectbillboard.h"
 
 //-----------------------------------
 // クラス定義(サンプル)
 //-----------------------------------
-class CRessrectionFan : public CObject3DFan
+class CRecoveringUI : public CBillboard
 {
 public:			// 誰でもアクセスできる
 
-	CRessrectionFan();			// コンストラクタ
-	~CRessrectionFan();			// デストラクタ
+	CRecoveringUI();			// コンストラクタ
+	~CRecoveringUI();			// デストラクタ
 
 	// メンバ関数
 	HRESULT Init(void);		// 初期化処理
@@ -28,14 +28,12 @@ public:			// 誰でもアクセスできる
 	void Update(void);		// 更新処理
 	void Draw(void);		// 描画処理
 
-	void SetData(const D3DXVECTOR3& pos, const D3DXCOLOR& col);		// 情報の設定処理
-	void SetResurrectionFan(int nFan);								// 角度の設定
+	void SetData(D3DXVECTOR3& pos, D3DXVECTOR3& posOld);		// 情報の設定処理
 
 	// 静的メンバ関数
-	static CRessrectionFan* Create(const D3DXVECTOR3& pos, const D3DXCOLOR& col);		// 生成処理
+	static CRecoveringUI* Create(D3DXVECTOR3& pos, D3DXVECTOR3& posOld);		// 生成処理
 
 private:		// 自分だけアクセスできる
-	int m_nRezTime;			// 回復時間
 
 };
 

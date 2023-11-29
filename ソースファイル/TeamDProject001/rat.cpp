@@ -159,9 +159,15 @@ void CRat::Update(void)
 	// 移動量を設定する(移動量を常に一定にするため)
 	SetSpeed(SPEED);
 
+	// 重力処理
+	Gravity();
+
 	if (CPlayer::GetStunState() != CPlayer::STUNSTATE_STUN &&
 		CPlayer::GetState() != CPlayer::STATE_DEATH)
 	{ // 気絶状態or死亡状態じゃない場合
+
+		// ジャンプ処理
+		Jump();
 
 		if (GetStunState() != STUNSTATE_SMASH)
 		{ // 吹き飛び状態の場合
@@ -169,9 +175,6 @@ void CRat::Update(void)
 			// 移動処理
 			Move();
 		}
-
-		// ジャンプ処理
-		Jump();
 
 		// 攻撃処理
 		Attack();
@@ -323,8 +326,6 @@ void CRat::SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 void CRat::Jump(void)
 {
 	// ローカル変数宣言
-	D3DXVECTOR3 pos = GetPos();
-	D3DXVECTOR3 rot = GetRot();
 	D3DXVECTOR3 move = GetMove();
 
 #ifdef _DEBUG
@@ -351,14 +352,27 @@ void CRat::Jump(void)
 		m_bJump = true;		// ジャンプしてる状態にする
 	}
 
-	move.y -= GRAVITY;		// 重力加算
+	// 情報を適用する
+	SetMove(move);
+}
+
+//=======================================
+// 重力処理
+//=======================================
+void CRat::Gravity(void)
+{
+	// 移動量を取得する
+	D3DXVECTOR3 pos = GetPos();
+	D3DXVECTOR3 move = GetMove();
+
+	// 重力を加算する
+	move.y -= GRAVITY;
 
 	// 位置を加算する
-	pos += move;
+	pos.y += move.y;
 
-	// 情報を適用する
+	// 移動量を適用する
 	SetPos(pos);
-	SetRot(rot);
 	SetMove(move);
 }
 
@@ -580,6 +594,16 @@ void CRat::ResurrectionCollision(void)
 						// 生き返りのカウンター初期化
 						pPlayer->SetResurrectionTime(0);
 					}
+				}
+
+				// 回復する範囲の情報取得
+				CRessrectionFan *pResurrectionFan = pPlayer->GetRessrectionFan();
+
+				if (pResurrectionFan != nullptr)
+				{ // 回復する範囲が NULLのとき
+
+					// 回復の範囲の時間設定
+					pResurrectionFan->SetResurrectionFan(pPlayer->GetResurrectionTime());
 				}
 			}
 		}
