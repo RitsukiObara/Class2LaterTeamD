@@ -26,13 +26,14 @@ CGameTime* CGameTime::m_pGameTimer = nullptr;		// ゲームタイマーの情報
 //--------------------------------------------------
 #define TIME_COUNTDOWN		(60)	// 秒数
 #define ONE_SECOND			(60)	// 1秒のフレーム数
-#define TIME_POS			(D3DXVECTOR3(500.0f, 50.0f, 0.0f))		// ゲームタイマーの位置
+#define TIME_POS			(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f))		// ゲームタイマーの位置
 #define TIME_SIZE			(D3DXVECTOR3(25.0f, 40.0f, 0.0f))		// ゲームタイマーのサイズ
-#define TIME_CORON_POS		(D3DXVECTOR3(540.0f, 50.0f, 0.0f))		// ゲームタイマーのコロンの位置
-#define TIME_CORON_SIZE		(D3DXVECTOR3(20.0f, 40.0f, 0.0f))		// ゲームタイマーのコロンのサイズ
-#define TIME_WIDTH_SHIFT	(50.0f)									// ゲームタイマーのずらす横幅
+#define TIME_CORON_POS		(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f))		// ゲームタイマーのコロンの位置
+#define TIME_CORON_SIZE		(D3DXVECTOR3(15.0f, 30.0f, 0.0f))		// ゲームタイマーのコロンのサイズ
+#define TIME_SHIFT			(23.0f)									// ゲームタイマーのコロンのサイズ
+#define TIME_CORON_SHIFT	(15.0f)									// ゲームタイマーのコロンのサイズ
 #define NUMBER_TEXTURE		"data\\TEXTURE\\Number.png"				// 数字のテクスチャ
-#define CORON_TEXTURE		"data\\TEXTURE\\TimeCoron.png"			// コロンのテクスチャ
+#define CORON_TEXTURE		"data\\TEXTURE\\time_koron.png"			// コロンのテクスチャ
 
 //========================
 // コンストラクタ
@@ -205,13 +206,19 @@ void CGameTime::SetData(void)
 			{ // 0以外の場合
 
 				// 位置を設定する
-				m_apNumber[nCnt]->SetPos(TIME_POS);
+				m_apNumber[nCnt]->SetPos(D3DXVECTOR3(TIME_POS.x - TIME_SHIFT - TIME_CORON_SHIFT, TIME_POS.y, TIME_POS.z));
 			}
-			else
-			{ // 上記以外
+			else if (nCnt == 1)
+			{ // 1
 
 				// 位置を設定する
-				m_apNumber[nCnt]->SetPos(D3DXVECTOR3(TIME_POS.x + (nCnt * TIME_WIDTH_SHIFT) + TIME_CORON_SIZE.x, TIME_POS.y, TIME_POS.z));
+				m_apNumber[nCnt]->SetPos(D3DXVECTOR3(TIME_POS.x + TIME_SHIFT + TIME_CORON_SHIFT, TIME_POS.y, TIME_POS.z));
+			}
+			else
+			{ // 2
+
+				// 位置を設定する
+				m_apNumber[nCnt]->SetPos(D3DXVECTOR3(TIME_POS.x + (3 * TIME_SHIFT) + TIME_CORON_SHIFT, TIME_POS.y, TIME_POS.z));
 			}
 
 			// 情報を設定する
