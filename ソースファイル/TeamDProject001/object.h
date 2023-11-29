@@ -70,6 +70,7 @@ public:			// 誰でもアクセスできる
 		TYPE_WATER,				// 水
 		TYPE_FINISHUI,			// 終了カウントダウンのUI
 		TYPE_CONFETTI,			// 紙吹雪
+		TYPE_RECOVERINGUI,		// 回復中のUI
 		TYPE_MAX				// この列挙型の総数
 	};
 
