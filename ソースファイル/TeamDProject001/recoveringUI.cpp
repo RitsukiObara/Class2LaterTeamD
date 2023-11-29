@@ -24,7 +24,7 @@
 //==============================
 // コンストラクタ
 //==============================
-CRecoveringUI::CRecoveringUI() : CBillboard(CObject::TYPE_RECOVERINGUI, CObject::PRIORITY_PLAYER)
+CRecoveringUI::CRecoveringUI() : CBillboard(CObject::TYPE_RECOVERINGUI, CObject::PRIORITY_ENTITY)
 {
 	// 全ての値をクリアする
 }
@@ -84,7 +84,7 @@ void CRecoveringUI::Draw(void)
 //=====================================
 // 情報の設定処理
 //=====================================
-void CRecoveringUI::SetData(D3DXVECTOR3& pos, D3DXVECTOR3& posOld)
+void CRecoveringUI::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& posOld)
 {
 	// 設定処理に便利なマクロ定義
 	//NONE_D3DXVECTOR3					// 向きを傾けない時とかに使用する
@@ -95,7 +95,7 @@ void CRecoveringUI::SetData(D3DXVECTOR3& pos, D3DXVECTOR3& posOld)
 	//==========================================================================
 	SetPos(pos);			// 位置
 	SetPosOld(posOld);		// 前回の位置
-	SetSize(NONE_SCALE);	// サイズ
+	SetSize(D3DXVECTOR3(50.0f, 50.0f, 0.0f));	// サイズ
 	BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\CageMark.png"));		// テクスチャの割り当て処理
 
 	// 頂点座標の設定処理
@@ -105,7 +105,7 @@ void CRecoveringUI::SetData(D3DXVECTOR3& pos, D3DXVECTOR3& posOld)
 //=======================================
 // 生成処理
 //=======================================
-CRecoveringUI* CRecoveringUI::Create(D3DXVECTOR3& pos, D3DXVECTOR3& posOld)
+CRecoveringUI* CRecoveringUI::Create(const D3DXVECTOR3& pos, const  D3DXVECTOR3& posOld)
 {
 	// ローカルオブジェクトを生成
 	CRecoveringUI* pRecoveringUI = nullptr;	// サンプルのインスタンスを生成

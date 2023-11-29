@@ -30,6 +30,7 @@
 #include "rat_ghost.h"
 #include "resurrection_fan.h"
 #include "object3Dfan.h"
+#include "recoveringUI.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -440,6 +441,10 @@ void CRat::Hit(void)
 
 		// ネズミの幽霊の生成
 		CPlayer::SetRatGhost(pos);
+
+		// 回復中UIの生成
+		CPlayer::SetRecoveringUI(pos, GetPosOld());
+
 		for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
 		{
 			// プレイヤーの情報を取得する
@@ -539,6 +544,7 @@ void CRat::ResurrectionCollision(void)
 				// 他のネズミとの当たり判定
 				if (bCollXY == true && bCollXZ == true)
 				{ // 円の当たり判定(XY平面)と(XZ平面)の範囲にいる場合
+
 					if (m_bResurrection == false)
 					{ // 復活させてない状態だったら
 
@@ -570,14 +576,15 @@ void CRat::ResurrectionCollision(void)
 						// 幽霊ネズミの破棄
 						pPlayer->DeleteRatGhost();
 
+						// 回復中UIの破棄
+						pPlayer->DeleteRecoveringUI();
+
 						// 生き返りのカウンター初期化
 						pPlayer->SetResurrectionTime(0);
 						m_nRezCounter = 0;
 
 						// 復活させてない状態にする
 						m_bResurrection = false;
-
-						//m_nNumAll++;		// 総数増やす
 					}
 				}
 				else if (m_bResurrection == false && (bCollXY == false || bCollXZ == true))
