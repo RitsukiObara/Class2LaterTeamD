@@ -151,20 +151,29 @@ void CCat::Update(void)
 	// 重力処理
 	Gravity();
 
-	if (m_AttackState == ATTACKSTATE_MOVE)
+	if (CPlayer::GetStunState() != CPlayer::STUNSTATE_STUN &&
+		CPlayer::GetState() != CPlayer::STATE_DEATH &&
+		m_AttackState == ATTACKSTATE_MOVE)
 	{// 移動状態の時
 
 		// 速度を設定する
 		SetSpeed(MOVE_SPEED);
 
-		// 攻撃位置の移動入力処理
-		Move();
+		if (GetStunState() != STUNSTATE_SMASH)
+		{ // 吹き飛び状態の場合
+
+			// 移動操作処理
+			MoveControl();
+		}
 
 		// 攻撃入力の処理
 		Attack();
 
 		// モーション状態の管理
 		MotionManager();
+
+		// 移動処理
+		Move();
 	}
 	else
 	{

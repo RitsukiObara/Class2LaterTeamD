@@ -173,8 +173,8 @@ void CRat::Update(void)
 		if (GetStunState() != STUNSTATE_SMASH)
 		{ // ‚«”ò‚Ñó‘Ô‚Ìê‡
 
-			// ˆÚ“®ˆ—
-			Move();
+			// ˆÚ“®‘€ìˆ—
+			MoveControl();
 		}
 
 		// UŒ‚ˆ—
@@ -185,6 +185,9 @@ void CRat::Update(void)
 
 		// ¶‚«•Ô‚è‚Ì“–‚½‚è”»’è
 		ResurrectionCollision();
+
+		//ˆÚ“®ˆ—
+		Move();
 	}
 
 	// ‹N•š’n–Ê‚Ì“–‚½‚è”»’è

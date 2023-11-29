@@ -133,7 +133,8 @@ public:			// 誰でもアクセスできる
 protected:		// 自分と派生クラスだけがアクセスできる
 
 	// メンバ関数
-	void Move(void);		// 移動処理
+	void MoveControl(void);		// 移動操作処理
+	void Move(void);			// 移動処理
 
 private:		// 自分だけアクセスできる
 

@@ -187,6 +187,7 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 				break;
 
 			case CObstacle::TYPE_ROOMBA:
+
 				// Œü‚«‚ðŽZo‚·‚é
 				fAngle = atan2f(pos.x - pObstacle->GetPos().x, pos.z - pObstacle->GetPos().z);
 
