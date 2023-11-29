@@ -17,7 +17,7 @@
 //=========================
 // コンストラクタ
 //=========================
-CConfetti::CConfetti() : CObject3D(CObject::TYPE_DESTRUCTION, CObject::PRIORITY_BLOCK)
+CConfetti::CConfetti() : CObject3D(CObject::TYPE_CONFETTI, CObject::PRIORITY_BLOCK)
 {
 	// 全ての値をクリアする
 	m_rotMove = NONE_D3DXVECTOR3;		// 向きの移動量
