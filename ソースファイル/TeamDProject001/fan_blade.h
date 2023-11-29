@@ -30,11 +30,17 @@ public:			// 誰でもアクセスできる
 
 	void SetData(const D3DXVECTOR3& pos);				// 情報の設定処理
 
+	// セット・ゲット関係
+	void SetRotMoveDest(const float fRotMove);			// 目的の向きの移動量の設定処理
+
 	// 静的メンバ関数
 	static CFanBlade* Create(const D3DXVECTOR3& pos);	// 生成処理
 
 private:		// 自分だけアクセスできる
 
+	// メンバ変数
+	float m_fRotMove;		// 向きの移動量
+	float m_fRotMoveDest;	// 目的の向きの移動量
 };
 
 #endif

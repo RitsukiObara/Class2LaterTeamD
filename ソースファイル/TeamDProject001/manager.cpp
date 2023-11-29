@@ -137,7 +137,6 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 		assert(false);
 	}
 
-#if CAMERA == 0
 		if (m_pCamera == nullptr)
 		{ // カメラへのポインタが NULL の場合
 
@@ -150,7 +149,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 		  // 停止
 			assert(false);
 		}
-#else
+
 	for (int nCnt = 0; nCnt < 4; nCnt++)
 	{
 		if (m_pMultiCamera[nCnt] == nullptr)
@@ -166,7 +165,6 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 			assert(false);
 		}
 	}
-#endif // CAMERA
 
 	if (m_pLight == nullptr)
 	{ // ライトへのポインタが NULL の場合
@@ -294,7 +292,6 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 		return E_FAIL;
 	}
 
-#if CAMERA == 0
 	if (m_pCamera != nullptr)
 	{ // 確保に成功していた場合
 
@@ -315,7 +312,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 		// 失敗を返す
 		return E_FAIL;
 	}
-#else
+
 	for (int nCnt = 0; nCnt < 4; nCnt++)
 	{
 		if (m_pMultiCamera[nCnt] != nullptr)
@@ -339,7 +336,6 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 			return E_FAIL;
 		}
 	}
-#endif // CAMERA
 
 	if (m_pLight != nullptr)
 	{ // 確保に成功していた場合
@@ -500,7 +496,6 @@ void CManager::Uninit(void)
 		m_pDebugProc = nullptr;
 	}
 
-#if CAMERA == 0
 	if (m_pCamera != nullptr)
 	{ // カメラが NULL じゃない場合
 
@@ -511,7 +506,7 @@ void CManager::Uninit(void)
 		delete m_pCamera;
 		m_pCamera = nullptr;
 	}
-#else
+
 	for (int nCnt = 0; nCnt < 4; nCnt++)
 	{
 		if (m_pMultiCamera[nCnt] != nullptr)
@@ -525,7 +520,6 @@ void CManager::Uninit(void)
 			m_pMultiCamera[nCnt] = nullptr;
 		}
 	}
-#endif // CAMERA
 
 	if (m_pLight != nullptr)
 	{ // ライトが NULL じゃない場合
@@ -601,24 +595,27 @@ void CManager::Update(void)
 		m_pInputGamePad->Update();
 	}
 
-#if CAMERA == 0
-	if (m_pCamera != nullptr)
-	{ // カメラが NULL じゃない場合
-
-	  // カメラの更新
-		m_pCamera->Update();
-	}
-#else
-	for (int nCnt = 0; nCnt < 4; nCnt++)
+	if (m_pScene->GetMode() == CScene::MODE_GAME)
 	{
-		if (m_pMultiCamera[nCnt] != nullptr)
+		for (int nCnt = 0; nCnt < 4; nCnt++)
+		{
+			if (m_pMultiCamera[nCnt] != nullptr)
+			{ // カメラが NULL じゃない場合
+
+			  // カメラの更新
+				m_pMultiCamera[nCnt]->Update();
+			}
+		}
+	}
+	else
+	{
+		if (m_pCamera != nullptr)
 		{ // カメラが NULL じゃない場合
 
 		  // カメラの更新
-			m_pMultiCamera[nCnt]->Update();
+			m_pCamera->Update();
 		}
 	}
-#endif // CAMERA
 
 	if (m_pLight != nullptr)
 	{ // ライトが NULL じゃない場合

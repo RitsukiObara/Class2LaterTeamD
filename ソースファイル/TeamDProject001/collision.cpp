@@ -189,11 +189,16 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 			case CObstacle::TYPE_ROOMBA:
 				// 向きを算出する
 				fAngle = atan2f(pos.x - pObstacle->GetPos().x, pos.z - pObstacle->GetPos().z);
+
 				// 吹き飛び処理
 				pPlayer->Smash(fAngle);
+
 				break;
 
 			case CObstacle::TYPE_HIMO:
+
+				// ヒット処理
+				pPlayer->Stun(60);
 
 				break;
 
@@ -209,8 +214,10 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 				break;
 
 			case CObstacle::TYPE_MOUSETRAP:
-				pPlayer->GetStun();
-				pPlayer->SetMove(D3DXVECTOR3(0, 20.0f, 0));
+
+				// 気絶状態
+				pPlayer->Stun(60);
+
 				break;
 
 			case CObstacle::TYPE_LEASH:
@@ -277,6 +284,42 @@ void collision::ObstacleAction(CPlayer* pPlayer, const float Radius, const CPlay
 		if (pObstacle->HitCircle(pos, Radius, type) == true)
 		{ // 障害物の当たり判定が通った場合
 			pObstacle->Action();
+		}
+
+		// 次のオブジェクトを代入する
+		pObstacle = pObstacle->GetNext();
+	}
+}
+
+//===========================================
+// 起動可能障害物や警告を出す障害物のサーチ
+//===========================================
+void collision::ObstacleSearch(CPlayer* pPlayer, const float Radius, const CPlayer::TYPE type, int Player_Idx)
+{
+	// ローカル変数宣言
+	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を取得する
+	D3DXVECTOR3 pos = pPlayer->GetPos();			// 位置を取得する
+	float fAngle;								// 吹き飛ぶ方向
+
+	while (pObstacle != nullptr)
+	{ // ブロックの情報が NULL じゃない場合
+
+		if (pObstacle->GetType() == CObstacle::TYPE_HIMO ||
+			pObstacle->GetType() == CObstacle::TYPE_SPEAKER ||
+			pObstacle->GetType() == CObstacle::TYPE_MOUSETRAP ||
+			pObstacle->GetType() == CObstacle::TYPE_LEASH ||
+			pObstacle->GetType() == CObstacle::TYPE_PIN ||
+			pObstacle->GetType() == CObstacle::TYPE_FAN ||
+			pObstacle->GetType() == CObstacle::TYPE_CUP)
+		{
+			if (pObstacle->HitCircle(pos, Radius, type) == true)
+			{ // 障害物の当たり判定が通った場合
+				pObstacle->GimmickUI(true, Player_Idx);
+			}
+			else
+			{
+				pObstacle->GimmickUI(false, Player_Idx);
+			}
 		}
 
 		// 次のオブジェクトを代入する

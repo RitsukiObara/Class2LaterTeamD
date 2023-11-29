@@ -456,6 +456,9 @@
     <ClCompile Include="game_finish.cpp">
       <Filter>Scene\Game</Filter>
     </ClCompile>
+    <ClCompile Include="fan_wind.cpp">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -826,6 +829,9 @@
     </ClInclude>
     <ClInclude Include="game_finish.h">
       <Filter>Scene\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="fan_wind.h">
+      <Filter>Gimmick\Obstacle</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -71,7 +71,7 @@ C2DUIEdit *C2DUIEdit::Create()
 	}
 
 	m_pEditUI = CObject2D::Create(CObject2D::TYPE_NONE, CObject::TYPE_EDITUI, CObject::PRIORITY_UI);
-	m_pEditUI->SetPos(D3DXVECTOR3(200.0f, 200.0f, 0.0f));
+	m_pEditUI->SetPos(D3DXVECTOR3(-200.0f, -200.0f, 0.0f));
 	m_pEditUI->SetRot(NONE_D3DXVECTOR3);
 	m_pEditUI->SetSize(D3DXVECTOR3(100.0f, 100.0f, 0.0f));
 	m_pEditUI->SetAngle();				// •ûŒü

@@ -18,6 +18,8 @@
 class CMotion;				// モーション
 class CPlayerID;			// プレイヤーのID
 class CStun;				// 気絶
+class CRatGhost;			// 幽霊ネズミ
+class CRessrectionFan;		// 円の範囲
 
 //--------------------------------------------
 // クラス(プレイヤークラス)
@@ -81,6 +83,14 @@ public:			// 誰でもアクセスできる
 	CStun* GetStun(void) const;					// 気絶演出の取得処理
 	void DeleteStun(void);						// 気絶演出の消去処理
 
+	void SetRatGhost(const D3DXVECTOR3& pos);	// 幽霊ネズミの設定処理
+	CRatGhost* GetRatGhost(void);				// 幽霊ネズミの取得処理
+	void DeleteRatGhost(void);					// 幽霊ネズミの消去処理
+
+	void SetRessrectionFan(const D3DXVECTOR3& pos, const D3DXCOLOR& col);	// 円の範囲の設定処理
+	CRessrectionFan* GetRessrectionFan(void);	// 円の範囲の取得処理
+	void DeleteRessrectionFan(void);			// 円の範囲の消去処理
+
 	void SetMove(const D3DXVECTOR3& move);		// 移動量の設定処理
 	D3DXVECTOR3 GetMove(void) const;			// 移動量の取得処理
 
@@ -99,6 +109,10 @@ public:			// 誰でもアクセスできる
 
 	void SetEnableMove(const bool bMove);		// 移動状況の設定処理
 	bool IsMove(void) const;					// 移動状況の取得処理
+
+	void SetResurrectionTime(const int nRezTime);	// 死んだネズミの復活時間の合計設定
+	void AddResurrectionTime(const int nRezTime);	// 死んだネズミの復活時間の合計追加
+	int GetResurrectionTime(void);					// 死んだネズミの復活時間の合計取得
 
 	void SetStunState(STUNSTATE StunState) { m_StunState = StunState; }	// 気絶状態の設定処理
 	STUNSTATE GetStunState(void) { return m_StunState; }				// 気絶状態の取得処理
@@ -128,6 +142,8 @@ private:		// 自分だけアクセスできる
 	CMotion* m_pMotion;			// モーションの情報
 	CPlayerID* m_pPlayerID;		// プレイヤーのID
 	CStun* m_pStun;				// 気絶の情報
+	CRatGhost* m_pRatGhost;		// 幽霊ネズミの情報
+	CRessrectionFan* m_pRessrectionFan;		// 円の範囲の情報
 	D3DXVECTOR3 m_move;			// 移動量
 	D3DXVECTOR3 m_sizeColl;		// 当たり判定のサイズ
 	TYPE m_type;				// 種類
@@ -141,6 +157,7 @@ private:		// 自分だけアクセスできる
 	STATE m_State;				// 状態管理
 	int m_StateCount;			// 状態管理用カウント
 	D3DXVECTOR3 m_CameraRot;	// カメラの向き
+	int m_nResurrectionTime;	// 復活するまでの時間
 };
 
 #endif

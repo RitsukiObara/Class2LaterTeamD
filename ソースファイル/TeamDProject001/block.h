@@ -51,6 +51,9 @@ public:			// 誰でもアクセスできる
 		TYPE_PICTUREFRAME,		// 写真立て
 		TYPE_SHELF,				// 戸棚
 		TYPE_PULLSHELF,			// 引き出し棚
+		TYPE_KITCHEN,			//キッチン
+		TYPE_REIZOUKO,			//冷蔵庫
+		TYPE_TABLE,				//テーブル
 		TYPE_MAX				// この列挙型の総数
 	};
 

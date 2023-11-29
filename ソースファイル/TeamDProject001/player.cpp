@@ -21,6 +21,8 @@
 #include "motion.h"
 #include "player_idUI.h"
 #include "stun.h"
+#include "rat_ghost.h"
+#include "resurrection_fan.h"
 #include "collision.h"
 
 #include "Cat.h"
@@ -37,6 +39,7 @@
 #define SMASH_MOVE			(D3DXVECTOR3(10.0f, 20.0f, 10.0f))		// 吹き飛び状態の移動量
 #define STUN_WAIT			(120)			// オブジェクト無効の待機時間
 #define DEATH_WAIT			(120)			// 死亡時の待機時間
+#define SMASH_WAIT			(40)			// 吹き飛び状態のカウント数
 
 //==============================
 // コンストラクタ
@@ -73,6 +76,8 @@ void CPlayer::Box(void)
 	m_pMotion = nullptr;				// モーションの情報
 	m_pPlayerID = nullptr;				// プレイヤーのID表示
 	m_pStun = nullptr;					// 気絶の情報
+	m_pRatGhost = nullptr;				// 幽霊ネズミの情報
+	m_pRessrectionFan = nullptr;		// 円の範囲の情報
 	m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_sizeColl = NONE_D3DXVECTOR3;		// 当たり判定のサイズ
 	m_type = TYPE_CAT;					// 種類
@@ -81,6 +86,7 @@ void CPlayer::Box(void)
 	m_bAttack = false;					// 攻撃したか
 	m_bMove = false;					// 移動しているか
 	m_CameraRot = NONE_D3DXVECTOR3;		// カメラの向き
+	m_nResurrectionTime = 0;			// 復活するまでの時間
 }
 
 //==============================
@@ -109,6 +115,7 @@ HRESULT CPlayer::Init(void)
 	m_fSpeed = 0.0f;					// 速度
 	m_bAttack = false;					// 攻撃したか
 	m_bMove = false;					// 移動しているか
+	m_nResurrectionTime = 0;			// 復活するまでの時間
 
 	// 値を返す
 	return S_OK;
@@ -143,6 +150,22 @@ void CPlayer::Uninit(void)
 		m_pStun = nullptr;
 	}
 
+	if (m_pRatGhost != nullptr)
+	{ // 幽霊ネズミが NULL じゃない場合
+
+		//幽霊ネズミの終了処理
+		m_pRatGhost->Uninit();
+		m_pRatGhost = nullptr;
+	}
+
+	if (m_pRessrectionFan != nullptr)
+	{ // 円の範囲が NULL じゃない場合
+
+		//円の範囲の終了処理
+		//m_pRessrectionFan->Uninit();
+		m_pRessrectionFan = nullptr;
+	}
+
 	// 終了処理
 	CCharacter::Uninit();
 }
@@ -166,6 +189,15 @@ void CPlayer::Update(void)
 
 	// 状態の管理
 	StateManager();
+
+	if (m_type == TYPE_CAT)
+	{
+		collision::ObstacleSearch(this, 30.0f * 2.0f, m_type, m_nPlayerIdx);
+	}
+	else if (m_type == TYPE_RAT)
+	{
+		collision::ObstacleSearch(this, 30.0f * 2.0f, m_type, m_nPlayerIdx);
+	}
 
 #if CAMERA != 0
 	//カメラ情報の更新
@@ -216,9 +248,8 @@ void CPlayer::Smash(const float fAngle)
 	D3DXVECTOR3 pos = GetPos();		// 位置を取得する
 	D3DXVECTOR3 move = GetMove();	// 移動量を取得する
 
-	if (m_State != STATE_DEATH &&
-		m_State != STATE_INVINCIBLE &&
-		m_StunState != STUNSTATE_NONE)
+	if (m_State == STATE_NONE &&
+		m_StunState == STUNSTATE_NONE)
 	{ // ダメージ受ける状態だった場合
 
 		// 移動量を算出する
@@ -228,15 +259,13 @@ void CPlayer::Smash(const float fAngle)
 
 		// 吹き飛び状態にする
 		m_StunState = STUNSTATE_SMASH;
+
+		// 気絶状態カウントを設定する
+		m_StunStateCount = SMASH_WAIT;
 	}
 
 	// 移動量を適用する
 	SetMove(move);
-
-	// 移動量を設定する
-	m_move.x = sinf(fAngle) * SMASH_MOVE.x;
-	m_move.y = SMASH_MOVE.y;
-	m_move.z = cosf(fAngle) * SMASH_MOVE.z;
 }
 
 //=====================================
@@ -709,6 +738,78 @@ void CPlayer::DeleteStun(void)
 }
 
 //=======================================
+// 幽霊ネズミの設定処理
+//=======================================
+void CPlayer::SetRatGhost(const D3DXVECTOR3& pos)
+{
+	if (m_pRatGhost == nullptr)
+	{ // 幽霊ネズミが NULL のとき
+
+		// ネズミの幽霊の生成
+		m_pRatGhost = CRatGhost::Create(pos);
+	}
+}
+
+//=======================================
+// 幽霊ネズミの情報取得処理
+//=======================================
+CRatGhost* CPlayer::GetRatGhost(void)
+{
+	// 幽霊ネズミの情報を返す
+	return m_pRatGhost;
+}
+
+//=======================================
+// 幽霊ネズミの情報消去処理
+//=======================================
+void CPlayer::DeleteRatGhost(void)
+{
+	if (m_pRatGhost != nullptr)
+	{ // 幽霊ネズミが NULL じゃない場合
+
+		//幽霊ネズミの終了処理
+		m_pRatGhost->Uninit();
+		m_pRatGhost = nullptr;
+	}
+}
+
+//=======================================
+// 円の範囲の設定処理
+//=======================================
+void CPlayer::SetRessrectionFan(const D3DXVECTOR3& pos, const D3DXCOLOR& col)
+{
+	if (m_pRessrectionFan == nullptr)
+	{ // 円の範囲が NULL のとき
+
+		// 生き返りの円の範囲生成
+		m_pRessrectionFan = CRessrectionFan::Create(D3DXVECTOR3(pos.x, pos.y + 10.0f, pos.z), col);
+	}
+}
+
+//=======================================
+// 円の範囲の情報取得処理
+//=======================================
+CRessrectionFan* CPlayer::GetRessrectionFan(void)
+{
+	// 円の範囲の情報を返す
+	return m_pRessrectionFan;
+}
+
+//=======================================
+// 円の範囲の情報消去処理
+//=======================================
+void CPlayer::DeleteRessrectionFan(void)
+{
+	if (m_pRessrectionFan != nullptr)
+	{ // 円の範囲が NULL じゃない場合
+
+		//円の範囲の終了処理
+		m_pRessrectionFan->Uninit();
+		m_pRessrectionFan = nullptr;
+	}
+}
+
+//=======================================
 // 移動量の設定処理
 //=======================================
 void CPlayer::SetMove(const D3DXVECTOR3& move)
@@ -814,4 +915,31 @@ bool CPlayer::IsMove(void) const
 {
 	// 移動状況を返す
 	return m_bMove;
+}
+
+//=======================================
+// 死んだネズミの復活時間の合計設定
+//=======================================
+void CPlayer::SetResurrectionTime(const int nRezTime)
+{
+	// 復活時間の合計設定
+	m_nResurrectionTime = nRezTime;
+}
+
+//=======================================
+// 死んだネズミの復活時間の合計追加
+//=======================================
+void CPlayer::AddResurrectionTime(const int nRezTime)
+{
+	// 復活時間の合計加算
+	m_nResurrectionTime += nRezTime;
+}
+
+//=======================================
+// 死んだネズミの復活時間の合計取得
+//=======================================
+int CPlayer::GetResurrectionTime(void)
+{
+	// 復活時間の合計を返す
+	return m_nResurrectionTime;
 }
