@@ -134,6 +134,8 @@ HRESULT CGame::Init(void)
 
 #ifdef _DEBUG	//障害物テスト用
 
+	CObstacle *pObstacle = NULL;
+
 	// ルンバの生成処理
 	CObstacle::Create(D3DXVECTOR3(-600.0f, 0.0f, -400.0f), CObstacle::TYPE_ROOMBA);
 
@@ -141,10 +143,11 @@ HRESULT CGame::Init(void)
 	CObstacle::Create(D3DXVECTOR3(-600.0f, 650.0f, 0.0f), CObstacle::TYPE_HIMO);
 
 	// スピーカーの生成処理
-	CObstacle::Create(D3DXVECTOR3(-250.0f, 200.0f, 900.0f), CObstacle::TYPE_SPEAKER);
+	pObstacle = CObstacle::Create(D3DXVECTOR3(900.0f, 0.0f, 900.0f), CObstacle::TYPE_SPEAKER);
+	pObstacle->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.25f, 0.0f));
 
 	// リードの生成処理
-	CObstacle *pObstacle = CObstacle::Create(D3DXVECTOR3(400.0f, 0.0f, -600.0f), CObstacle::TYPE_LEASH);
+	pObstacle = CObstacle::Create(D3DXVECTOR3(400.0f, 0.0f, -600.0f), CObstacle::TYPE_LEASH);
 	pObstacle->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
 
 	// 画鋲の生成処理

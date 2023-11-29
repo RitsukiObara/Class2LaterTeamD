@@ -190,6 +190,15 @@ void CPlayer::Update(void)
 	// ó‘Ô‚ÌŠÇ—
 	StateManager();
 
+	if (m_type == TYPE_CAT)
+	{
+		collision::ObstacleSearch(this, 30.0f * 2.0f, m_type, m_nPlayerIdx);
+	}
+	else if (m_type == TYPE_RAT)
+	{
+		collision::ObstacleSearch(this, 30.0f * 2.0f, m_type, m_nPlayerIdx);
+	}
+
 #if CAMERA != 0
 	//ƒJƒƒ‰î•ñ‚ÌXV
 	CameraUpdate();

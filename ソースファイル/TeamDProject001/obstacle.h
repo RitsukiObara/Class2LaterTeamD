@@ -13,6 +13,8 @@
 #include "model.h"
 #include "player.h"
 
+class CBillboard;
+
 //-----------------------------------
 // クラス定義(障害物)
 //-----------------------------------
@@ -64,6 +66,7 @@ public:			// 誰でもアクセスできる
 	virtual bool HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type) { return false; }													// ヒット処理
 	virtual void Action(void) = 0;											// ギミック起動処理
 	virtual void MultiAction(void) {}										// ギミック同時起動処理
+	void GimmickUI(bool Set, int Player_Idx);												// ギミック起動UIの表示
 
 	// セット・ゲット関係
 	void SetType(const TYPE type);		// 種類の設定処理
@@ -76,6 +79,8 @@ private:		// 自分だけアクセスできる
 
 	// メンバ変数
 	TYPE m_type;		// 種類
+	CBillboard *m_pGimmickUI;
+	bool m_pGimmickUIFalse[4];		//全部[False]の時にUIを削除する
 
 	// リスト構造関係
 	CObstacle* m_pPrev;	// 前へのポインタ
