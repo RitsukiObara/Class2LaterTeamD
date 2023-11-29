@@ -2,7 +2,7 @@
 #define _MAP_H_	//二重インクルード防止マクロ
 
 #include "main.h"
-#include "model.h"
+#include "block.h"
 #include "ground.h"
 #include "wall.h"
 
@@ -27,7 +27,7 @@ private:
 	D3DXVECTOR3 m_pos;
 	int m_partsNum;
 
-	CModel* m_Model[MAX_MAPMODEL];
+	CBlock* m_Model[MAX_MAPMODEL];
 	CGround* m_Ground;
 	static CWall* m_Wall[WALL_NUM];
 };

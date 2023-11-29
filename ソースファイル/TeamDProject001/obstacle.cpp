@@ -13,6 +13,8 @@
 #include "obstacle.h"
 #include "obstacle_manager.h"
 #include "useful.h"
+#include "objectbillboard.h"
+#include "texture.h"
 
 #include "honey.h"
 #include "slime.h"
@@ -64,6 +66,11 @@ void CObstacle::Box(void)
 	m_type = TYPE_HONEY;	// 種類
 	m_pPrev = nullptr;		// 前のへのポインタ
 	m_pNext = nullptr;		// 次のへのポインタ
+	m_pGimmickUI = NULL;
+	for (int nCnt = 0; nCnt < 4; nCnt++)
+	{
+		m_pGimmickUIFalse[nCnt] = false;
+	}
 
 	if (CObstacleManager::Get() != nullptr)
 	{ // マネージャーが存在していた場合
@@ -143,6 +150,12 @@ void CObstacle::Uninit(void)
 		CObstacleManager::Get()->Pull(this);
 	}
 
+	if (m_pGimmickUI != NULL)
+	{
+		m_pGimmickUI->Uninit();
+		m_pGimmickUI = NULL;
+	}
+
 	// リスト構造関係のポインタを NULL にする
 	m_pPrev = nullptr;
 	m_pNext = nullptr;
@@ -153,7 +166,10 @@ void CObstacle::Uninit(void)
 //=====================================
 void CObstacle::Update(void)
 {
-
+	if (m_pGimmickUI != NULL)
+	{
+		m_pGimmickUI->Update();
+	}
 }
 
 //=====================================
@@ -163,6 +179,11 @@ void CObstacle::Draw(void)
 {
 	// 描画処理
 	CModel::Draw();
+
+	if (m_pGimmickUI != NULL)
+	{
+		m_pGimmickUI->Draw();
+	}
 }
 
 //=====================================
@@ -339,6 +360,49 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const TYPE type)
 
 	// 障害物のポインタを返す
 	return pObstacle;
+}
+
+//=====================================
+// ギミック起動UIの表示
+//=====================================
+void CObstacle::GimmickUI(bool Set, int Player_Idx)
+{
+	if (Set == true)
+	{
+		if (m_pGimmickUI == NULL)
+		{
+			m_pGimmickUIFalse[Player_Idx] = true;
+
+			m_pGimmickUI = CBillboard::Create(TYPE_NONE);
+			m_pGimmickUI->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\UI_GimmickOn.png"));
+			m_pGimmickUI->SetSize(D3DXVECTOR3(50.0f, 50.0f, 0.0f));
+			m_pGimmickUI->SetPos(D3DXVECTOR3(
+				GetPos().x, 
+				GetPos().y + 50.0f, 
+				GetPos().z));
+			m_pGimmickUI->SetPosOld(D3DXVECTOR3(
+				GetPos().x,
+				GetPos().y + 50.0f,
+				GetPos().z));
+			m_pGimmickUI->SetVertex();
+		}
+	}
+	else
+	{
+		m_pGimmickUIFalse[Player_Idx] = false;
+	}
+
+	if (m_pGimmickUIFalse[0] == false &&
+		m_pGimmickUIFalse[1] == false &&
+		m_pGimmickUIFalse[2] == false &&
+		m_pGimmickUIFalse[3] == false)
+	{
+		if (m_pGimmickUI != NULL)
+		{
+			m_pGimmickUI->Uninit();
+			m_pGimmickUI = NULL;
+		}
+	}
 }
 
 //=======================================
