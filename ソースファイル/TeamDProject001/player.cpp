@@ -24,6 +24,7 @@
 #include "rat_ghost.h"
 #include "resurrection_fan.h"
 #include "collision.h"
+#include "recoveringUI.h"
 
 #include "Cat.h"
 #include "rat.h"
@@ -78,6 +79,7 @@ void CPlayer::Box(void)
 	m_pStun = nullptr;					// 気絶の情報
 	m_pRatGhost = nullptr;				// 幽霊ネズミの情報
 	m_pRessrectionFan = nullptr;		// 円の範囲の情報
+	m_pRecoveringUI = nullptr;			// 回復中のUI
 	m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_sizeColl = NONE_D3DXVECTOR3;		// 当たり判定のサイズ
 	m_type = TYPE_CAT;					// 種類
@@ -811,6 +813,42 @@ void CPlayer::DeleteRessrectionFan(void)
 		//円の範囲の終了処理
 		m_pRessrectionFan->Uninit();
 		m_pRessrectionFan = nullptr;
+	}
+}
+
+//=======================================
+// 回復中UIの設定処理
+//=======================================
+void CPlayer::SetRecoveringUI(const D3DXVECTOR3& pos, const D3DXVECTOR3& posOld)
+{
+	if (m_pRecoveringUI == nullptr)
+	{ // 回復中UIが NULL のとき
+
+		// 回復中UIの範囲生成
+		m_pRecoveringUI = CRecoveringUI::Create(D3DXVECTOR3(pos.x + 120.0f, pos.y + 100.0f, pos.z), posOld);
+	}
+}
+
+//=======================================
+// 回復中UIの情報取得処理
+//=======================================
+CRecoveringUI* CPlayer::GetRecoveringUI(void)
+{
+	// 回復中UIの情報を返す
+	return m_pRecoveringUI;
+}
+
+//=======================================
+// 回復中UIの情報消去処理
+//=======================================
+void CPlayer::DeleteRecoveringUI(void)
+{
+	if (m_pRecoveringUI != nullptr)
+	{ // 回復中UIが NULL じゃない場合
+
+		//回復中UIの終了処理
+		m_pRecoveringUI->Uninit();
+		m_pRecoveringUI = nullptr;
 	}
 }
 
