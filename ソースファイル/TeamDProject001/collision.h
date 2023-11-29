@@ -31,6 +31,7 @@ namespace collision
 	void ObstacleCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type);			// 障害物の衝突判定
 	void ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type);						// 障害物の当たり判定
 	void ObstacleAction(CPlayer* pPlayer, const float Radius, const CPlayer::TYPE type);					// 障害物の起動判定
+	void ObstacleSearch(CPlayer* pPlayer, const float Radius, const CPlayer::TYPE type, int Player_Idx);					// 起動可能障害物や警告を出す障害物のサーチ
 
 	// 今後実装予定のブロックの当たり判定
 	void BlockCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth);		// ブロックの当たり判定

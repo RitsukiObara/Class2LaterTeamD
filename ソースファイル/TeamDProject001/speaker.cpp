@@ -141,7 +141,7 @@ void CSpeaker::SetNote(void)
 				D3DXVECTOR3 pos = GetPos();
 				D3DXVECTOR3 rot = GetRot();
 
-				m_apNote[nCnt] = CNote::Create(D3DXVECTOR3(pos.x, pos.y + 20.0f, pos.z));
+				m_apNote[nCnt] = CNote::Create(D3DXVECTOR3(pos.x, pos.y + 100.0f, pos.z));
 				m_apNote[nCnt]->SetIndex(nCnt);
 				m_apNote[nCnt]->SetLife(NOTE_LIFE);
 				m_apNote[nCnt]->SetMove(D3DXVECTOR3(

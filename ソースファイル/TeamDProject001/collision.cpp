@@ -279,6 +279,42 @@ void collision::ObstacleAction(CPlayer* pPlayer, const float Radius, const CPlay
 	}
 }
 
+//===========================================
+// 起動可能障害物や警告を出す障害物のサーチ
+//===========================================
+void collision::ObstacleSearch(CPlayer* pPlayer, const float Radius, const CPlayer::TYPE type, int Player_Idx)
+{
+	// ローカル変数宣言
+	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を取得する
+	D3DXVECTOR3 pos = pPlayer->GetPos();			// 位置を取得する
+	float fAngle;								// 吹き飛ぶ方向
+
+	while (pObstacle != nullptr)
+	{ // ブロックの情報が NULL じゃない場合
+
+		if (pObstacle->GetType() == CObstacle::TYPE_HIMO ||
+			pObstacle->GetType() == CObstacle::TYPE_SPEAKER ||
+			pObstacle->GetType() == CObstacle::TYPE_MOUSETRAP ||
+			pObstacle->GetType() == CObstacle::TYPE_LEASH ||
+			pObstacle->GetType() == CObstacle::TYPE_PIN ||
+			pObstacle->GetType() == CObstacle::TYPE_FAN ||
+			pObstacle->GetType() == CObstacle::TYPE_CUP)
+		{
+			if (pObstacle->HitCircle(pos, Radius, type) == true)
+			{ // 障害物の当たり判定が通った場合
+				pObstacle->GimmickUI(true, Player_Idx);
+			}
+			else
+			{
+				pObstacle->GimmickUI(false, Player_Idx);
+			}
+		}
+
+		// 次のオブジェクトを代入する
+		pObstacle = pObstacle->GetNext();
+	}
+}
+
 //===============================
 // ブロックの当たり判定
 //===============================
