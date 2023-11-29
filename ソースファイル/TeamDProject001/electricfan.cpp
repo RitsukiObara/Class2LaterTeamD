@@ -200,8 +200,13 @@ bool CElecFan::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeig
 //=====================================
 bool CElecFan::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type)
 {
+	if (useful::CircleCollisionXZ(pos, GetPos(), Radius, GetFileData().fRadius) == true)
+	{//‰~‚Ì”ÍˆÍ“à‚Ìê‡ture‚ğ•Ô‚·
+		return true;
+	}
+
 	// false ‚ğ•Ô‚·
-	return true;
+	return false;
 }
 
 //=====================================
