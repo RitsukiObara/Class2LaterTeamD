@@ -581,6 +581,16 @@ void CRat::ResurrectionCollision(void)
 						pPlayer->SetResurrectionTime(0);
 					}
 				}
+
+				// ‰ñ•œ‚·‚é”ÍˆÍ‚Ìî•ñŽæ“¾
+				CRessrectionFan *pResurrectionFan = pPlayer->GetRessrectionFan();
+
+				if (pResurrectionFan != nullptr)
+				{ // ‰ñ•œ‚·‚é”ÍˆÍ‚ª NULL‚Ì‚Æ‚«
+
+					// ‰ñ•œ‚Ì”ÍˆÍ‚ÌŽžŠÔÝ’è
+					pResurrectionFan->SetResurrectionFan(pPlayer->GetResurrectionTime());
+				}
 			}
 		}
 	}

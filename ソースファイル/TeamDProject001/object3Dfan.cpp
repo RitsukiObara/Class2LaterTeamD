@@ -270,6 +270,45 @@ void CObject3DFan::SetVtxColor(const D3DXCOLOR& col)
 }
 
 //===========================================
+// 頂点カラーの細かい設定処理
+//===========================================
+void CObject3DFan::SetVtxColor(const D3DXCOLOR& normalCol, const D3DXCOLOR& rezCol, int nEndResVtx)
+{
+	VERTEX_3D * pVtx;											//頂点情報へのポインタ
+
+	//頂点バッファをロックし、頂点情報へのポインタを取得
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	for (int nCnt = 0; nCnt < m_nNumAngle; nCnt++)
+	{
+		if (nCnt <= nEndResVtx)
+		{ // 回復してる範囲の頂点のとき
+
+			// 頂点座標の設定
+			pVtx[0].col = rezCol;
+			pVtx[1].col = rezCol;
+			pVtx[2].col = rezCol;
+		}
+		else
+		{ // 回復してる範囲外
+
+			// 頂点座標の設定
+			pVtx[0].col = normalCol;
+			pVtx[1].col = normalCol;
+			pVtx[2].col = normalCol;
+		}
+
+		
+
+		// 頂点データを3つ分進める
+		pVtx += 3;
+	}
+
+	// 頂点バッファをアンロックする
+	m_pVtxBuff->Unlock();
+}
+
+//===========================================
 // テクスチャの割り当て処理
 //===========================================
 void CObject3DFan::BindTexture(const int nIdx)
