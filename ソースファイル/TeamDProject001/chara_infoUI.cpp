@@ -165,7 +165,7 @@ void CCharaInfoUI::SetData(const D3DXVECTOR3& pos, const int nPlayerID, const CP
 		D3DXVECTOR3 posState = D3DXVECTOR3(pos.x, pos.y - 40.0f, pos.z);
 
 		// IDÇê∂ê¨Ç∑ÇÈ
-		m_pState = CCharaState::Create(posState);
+		m_pState = CCharaState::Create(posState, nPlayerID);
 	}
 }
 

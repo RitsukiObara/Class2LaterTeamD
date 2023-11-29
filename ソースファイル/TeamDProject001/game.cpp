@@ -32,22 +32,34 @@
 #include "resurrection_fan.h"
 #include "player.h"
 #include "entry.h"
+#include "game_finish.h"
 
 #include "obstacle_manager.h"
 #include "chara_infoUI.h"
 
 //--------------------------------------------
-// マクロ定義
+// 無名名前空間
 //--------------------------------------------
-#define TRANS_COUNT		(80)	// 遷移カウント
+namespace
+{
+	static const D3DXVECTOR3 PLAYERUI_POS[MAX_PLAY] =								// プレイヤーUIの位置
+	{
+		D3DXVECTOR3(90.0f, SCREEN_HEIGHT * 0.5f - 80.0f, 0.0f),
+		D3DXVECTOR3(SCREEN_WIDTH - 90.0f, SCREEN_HEIGHT * 0.5f - 80.0f, 0.0f),
+		D3DXVECTOR3(90.0f, SCREEN_HEIGHT - 80.0f, 0.0f),
+		D3DXVECTOR3(SCREEN_WIDTH - 90.0f, SCREEN_HEIGHT - 80.0f, 0.0f),
+	};
+	static const int TRANS_COUNT = 80;				// 遷移カウント
+}
 
 //--------------------------------------------
 // 静的メンバ変数宣言
 //--------------------------------------------
 CPause* CGame::m_pPause = nullptr;							// ポーズの情報
-CPlayer* CGame::m_apPlayer[MAX_PLAY] = {};				// プレイヤーの情報
+CPlayer* CGame::m_apPlayer[MAX_PLAY] = {};					// プレイヤーの情報
 CGame::STATE CGame::m_GameState = CGame::STATE_START;		// ゲームの進行状態
 int CGame::m_nFinishCount = 0;								// 終了カウント
+CGameFinish* CGame::m_pFinish = nullptr;					// フィニッシュの情報
 
 // デバッグ版
 #ifdef _DEBUG
@@ -62,6 +74,7 @@ CGame::CGame() : CScene(TYPE_SCENE, PRIORITY_BG)
 {
 	// 全ての値をクリアする
 	m_pPause = nullptr;			// ポーズ
+	m_pFinish = nullptr;		// フィニッシュ
 	m_nFinishCount = 0;			// 終了カウント
 	m_GameState = STATE_START;	// 状態
 
@@ -148,32 +161,37 @@ HRESULT CGame::Init(void)
 
 #endif // _DEBUG
 
-	// ネコのインデックスを取得する
-	int nCat = CEntry::GetCatIdx();
+	{ // キャラの生成処理
 
-	// ネズミの生成
-	for (int nCntPlay = 0; nCntPlay < MAX_PLAY; nCntPlay++)
-	{
-		if (nCntPlay == nCat)
-		{ // ネコ担当のプレイヤーの場合
+		// ネコのインデックスを取得する
+		int nCat = CEntry::GetCatIdx();
 
-			// プレイヤーの生成
-			m_apPlayer[nCntPlay] = CPlayer::Create(D3DXVECTOR3(500.0f * nCntPlay - 500.0f, 0.0f, 0.0f), nCntPlay, CPlayer::TYPE_CAT);
-		}
-		else
-		{ // 上記以外
+		// ネズミの生成
+		for (int nCntPlay = 0; nCntPlay < MAX_PLAY; nCntPlay++)
+		{
+			if (nCntPlay == nCat)
+			{ // ネコ担当のプレイヤーの場合
 
-			// プレイヤーの生成
-			m_apPlayer[nCntPlay] = CPlayer::Create(D3DXVECTOR3(500.0f * nCntPlay - 500.0f, 0.0f, 0.0f), nCntPlay, CPlayer::TYPE_RAT);
+				// プレイヤーの生成
+				m_apPlayer[nCntPlay] = CPlayer::Create(D3DXVECTOR3(500.0f * nCntPlay - 500.0f, 0.0f, 0.0f), nCntPlay, CPlayer::TYPE_CAT);
+			}
+			else
+			{ // 上記以外
+
+				// プレイヤーの生成
+				m_apPlayer[nCntPlay] = CPlayer::Create(D3DXVECTOR3(500.0f * nCntPlay - 500.0f, 0.0f, 0.0f), nCntPlay, CPlayer::TYPE_RAT);
+			}
 		}
 	}
 
 	// 生成処理
 	CGameTime::Create();
+	m_pFinish = CGameFinish::Create();
 
-	for (int nCnt = 0; nCnt < 4; nCnt++)
+	// キャラクターUIの生成処理
+	for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
 	{
-		CCharaInfoUI::Create(D3DXVECTOR3(160.0f + (nCnt * 320.0f), 650.0f, 0.0f), nCnt, m_apPlayer[nCnt]->GetType());
+		CCharaInfoUI::Create(PLAYERUI_POS[nCnt], nCnt, m_apPlayer[nCnt]->GetType());
 	}
 
 	//// 武器選択UIを生成
@@ -194,6 +212,7 @@ void CGame::Uninit(void)
 {
 	// ポインタを NULL にする
 	m_pPause = nullptr;			// ポーズ
+	m_pFinish = nullptr;		// フィニッシュ
 
 	for (int nCntPlay = 0; nCntPlay < MAX_PLAY; nCntPlay++)
 	{
@@ -288,6 +307,7 @@ void CGame::Update(void)
 	case CGame::STATE_CAT_WIN:
 
 		// 遷移処理
+		m_pFinish->SetFinish(true);
 		Transition();
 
 		break;

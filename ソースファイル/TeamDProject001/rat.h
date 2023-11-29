@@ -15,8 +15,7 @@
 //--------------------------------------------
 // 前方宣言
 //--------------------------------------------
-class CRatGhost;			// 幽霊ネズミ
-class CRessrectionFan;		// 円の範囲
+
 
 //--------------------------------------------
 // クラス(ネズミクラス)
@@ -55,10 +54,6 @@ public:			// 誰でもアクセスできる
 
 	// セット・ゲット関係
 	int GetRatIdx(void) const;				// ネズミの番号の取得処理
-	CRatGhost* GetRatGhost(void);			// 幽霊ネズミの取得処理
-	void DeleteRatGhost(void);				// 幽霊ネズミの消去処理
-	CRessrectionFan* GetRessrectionFan(void);			// 円の範囲の取得処理
-	void DeleteRessrectionFan(void);					// 円の範囲の消去処理
 
 private:		// 自分だけアクセスできる
 
@@ -69,13 +64,12 @@ private:		// 自分だけアクセスできる
 	void ResurrectionCollision(void);		// 生き返りの当たり判定
 
 	// メンバ変数
-	CRatGhost* m_pRatGhost;		// 幽霊ネズミの情報
-	CRessrectionFan* m_pRessrectionFan;		// 円の範囲の情報
-	bool m_bJump;				// ジャンプ状況
+	int m_nRezCounter;				// 回復するまでのカウンター
+	bool m_bJump;					// ジャンプ状況
 
 	// 静的メンバ関数
-	static int m_nNumAll;		// ネズミの総数
-	static int m_nResurrectionCounter;		// 生き返るまでのカウンター
+	//static int m_nNumAll;			// ネズミの総数
+	static bool m_bResurrection;	// 復活させてるのか
 
 };
 

@@ -19,6 +19,7 @@
 class CPause;			// ポーズ
 class CEdit;			// エディット
 class CPlayer;			// プレイヤー
+class CGameFinish;		// フィニッシュ
 
 //--------------------------------------------
 // クラス(ゲームクラス)
@@ -75,6 +76,7 @@ private:					// 自分だけアクセスできる
 	// 静的メンバ変数(最初から必要な物を配置しておく)
 	static CPause* m_pPause;				// ポーズの情報
 	static CPlayer* m_apPlayer[MAX_PLAY];	// プレイヤーの情報
+	static CGameFinish* m_pFinish;			// フィニッシュの情報
 	static STATE m_GameState;				// ゲームの進行状態
 	static int m_nFinishCount;				// 終了カウント
 
