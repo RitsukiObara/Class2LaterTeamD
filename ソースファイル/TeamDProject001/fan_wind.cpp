@@ -98,13 +98,13 @@ void CFanWind::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size)
 CFanWind* CFanWind::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& size)
 {
 	// ローカルオブジェクトを生成
-	CFanWind* pConfetti = nullptr;	// プレイヤーのインスタンスを生成
+	CFanWind* pWind = nullptr;		// 風のインスタンスを生成
 
-	if (pConfetti == nullptr)
+	if (pWind == nullptr)
 	{ // オブジェクトが NULL の場合
 
 		// オブジェクトを生成
-		pConfetti = new CFanWind;
+		pWind = new CFanWind;
 	}
 	else
 	{ // オブジェクトが NULL じゃない場合
@@ -116,11 +116,11 @@ CFanWind* CFanWind::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& size)
 		return nullptr;
 	}
 
-	if (pConfetti != nullptr)
+	if (pWind != nullptr)
 	{ // オブジェクトが NULL じゃない場合
 
 		// 初期化処理
-		if (FAILED(pConfetti->Init()))
+		if (FAILED(pWind->Init()))
 		{ // 初期化に失敗した場合
 
 			// 停止
@@ -131,7 +131,7 @@ CFanWind* CFanWind::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& size)
 		}
 
 		// 情報の設定処理
-		pConfetti->SetData(pos, size);
+		pWind->SetData(pos, size);
 	}
 	else
 	{ // オブジェクトが NULL の場合
@@ -143,6 +143,6 @@ CFanWind* CFanWind::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& size)
 		return nullptr;
 	}
 
-	// 紙吹雪のポインタを返す
-	return pConfetti;
+	// 扇風機の風のポインタを返す
+	return pWind;
 }
