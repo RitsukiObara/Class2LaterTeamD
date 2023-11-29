@@ -63,7 +63,7 @@ HRESULT CGameFinish::Init(void)
 	if (m_pFinish == nullptr)
 	{ // フィニッシュの情報が NULL の場合
 
-	  // フィニッシュを生成する
+		// フィニッシュを生成する
 		m_pFinish = CObject2D::Create(CObject2D::TYPE_NONE, CObject::TYPE_NONE, PRIORITY_UI);
 
 		if (m_pFinish != nullptr)
@@ -72,7 +72,7 @@ HRESULT CGameFinish::Init(void)
 			if (FAILED(m_pFinish->Init()))
 			{ // 初期化に失敗した場合
 
-			  // 停止
+				// 停止
 				assert(false);
 
 				// 失敗を返す
@@ -83,7 +83,7 @@ HRESULT CGameFinish::Init(void)
 	else
 	{ // 上記以外
 
-	  // 停止
+		// 停止
 		assert(false);
 
 		// 失敗を返す
@@ -102,7 +102,15 @@ void CGameFinish::Uninit(void)
 	// 全ての値をクリアする
 	m_pGameTime = nullptr;
 	m_pCountdown = nullptr;
-	m_pFinish = nullptr;
+
+	if (m_pFinish != nullptr)
+	{ // 終了のポリゴンが NULL じゃない場合
+
+		// 終了のポリゴンの終了処理
+		m_pFinish->Uninit();
+		m_pFinish = nullptr;
+	}
+
 	// 本体の終了処理
 	Release();
 }

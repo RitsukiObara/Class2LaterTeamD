@@ -38,9 +38,19 @@
 #include "chara_infoUI.h"
 
 //--------------------------------------------
-// マクロ定義
+// 無名名前空間
 //--------------------------------------------
-#define TRANS_COUNT		(80)	// 遷移カウント
+namespace
+{
+	static const D3DXVECTOR3 PLAYERUI_POS[MAX_PLAY] =								// プレイヤーUIの位置
+	{
+		D3DXVECTOR3(90.0f, SCREEN_HEIGHT * 0.5f - 80.0f, 0.0f),
+		D3DXVECTOR3(SCREEN_WIDTH - 90.0f, SCREEN_HEIGHT * 0.5f - 80.0f, 0.0f),
+		D3DXVECTOR3(90.0f, SCREEN_HEIGHT - 80.0f, 0.0f),
+		D3DXVECTOR3(SCREEN_WIDTH - 90.0f, SCREEN_HEIGHT - 80.0f, 0.0f),
+	};
+	static const int TRANS_COUNT = 80;				// 遷移カウント
+}
 
 //--------------------------------------------
 // 静的メンバ変数宣言
@@ -148,23 +158,26 @@ HRESULT CGame::Init(void)
 
 #endif // _DEBUG
 
-	// ネコのインデックスを取得する
-	int nCat = CEntry::GetCatIdx();
+	{ // キャラの生成処理
 
-	// ネズミの生成
-	for (int nCntPlay = 0; nCntPlay < MAX_PLAY; nCntPlay++)
-	{
-		if (nCntPlay == nCat)
-		{ // ネコ担当のプレイヤーの場合
+		// ネコのインデックスを取得する
+		int nCat = CEntry::GetCatIdx();
 
-			// プレイヤーの生成
-			m_apPlayer[nCntPlay] = CPlayer::Create(D3DXVECTOR3(500.0f * nCntPlay - 500.0f, 0.0f, 0.0f), nCntPlay, CPlayer::TYPE_CAT);
-		}
-		else
-		{ // 上記以外
+		// ネズミの生成
+		for (int nCntPlay = 0; nCntPlay < MAX_PLAY; nCntPlay++)
+		{
+			if (nCntPlay == nCat)
+			{ // ネコ担当のプレイヤーの場合
 
-			// プレイヤーの生成
-			m_apPlayer[nCntPlay] = CPlayer::Create(D3DXVECTOR3(500.0f * nCntPlay - 500.0f, 0.0f, 0.0f), nCntPlay, CPlayer::TYPE_RAT);
+				// プレイヤーの生成
+				m_apPlayer[nCntPlay] = CPlayer::Create(D3DXVECTOR3(500.0f * nCntPlay - 500.0f, 0.0f, 0.0f), nCntPlay, CPlayer::TYPE_CAT);
+			}
+			else
+			{ // 上記以外
+
+				// プレイヤーの生成
+				m_apPlayer[nCntPlay] = CPlayer::Create(D3DXVECTOR3(500.0f * nCntPlay - 500.0f, 0.0f, 0.0f), nCntPlay, CPlayer::TYPE_RAT);
+			}
 		}
 	}
 
@@ -172,9 +185,10 @@ HRESULT CGame::Init(void)
 	CGameTime::Create();
 	m_pFinish = CGameFinish::Create();
 
-	for (int nCnt = 0; nCnt < 4; nCnt++)
+	// キャラクターUIの生成処理
+	for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
 	{
-		CCharaInfoUI::Create(D3DXVECTOR3(160.0f + (nCnt * 320.0f), 650.0f, 0.0f), nCnt, m_apPlayer[nCnt]->GetType());
+		CCharaInfoUI::Create(PLAYERUI_POS[nCnt], nCnt, m_apPlayer[nCnt]->GetType());
 	}
 
 	//// 武器選択UIを生成
