@@ -99,7 +99,7 @@ void collision::ObstacleCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, c
 			default:			// ã‹LˆÈŠO
 
 				// ’âŽ~
-				assert(false);
+				//assert(false);
 
 				break;
 			}
@@ -187,12 +187,16 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 				break;
 
 			case CObstacle::TYPE_ROOMBA:
-
+				// Œü‚«‚ðŽZo‚·‚é
+				fAngle = atan2f(pos.x - pObstacle->GetPos().x, pos.z - pObstacle->GetPos().z);
+				// ‚«”ò‚Ñˆ—
+				pPlayer->Smash(fAngle);
 				break;
 
 			case CObstacle::TYPE_HIMO:
 
 				break;
+
 
 			case CObstacle::TYPE_SPEAKER:
 
@@ -205,7 +209,8 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 				break;
 
 			case CObstacle::TYPE_MOUSETRAP:
-
+				pPlayer->GetStun();
+				pPlayer->SetMove(D3DXVECTOR3(0, 20.0f, 0));
 				break;
 
 			case CObstacle::TYPE_LEASH:
