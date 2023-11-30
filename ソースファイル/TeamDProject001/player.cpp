@@ -25,6 +25,7 @@
 #include "resurrection_fan.h"
 #include "collision.h"
 #include "recoveringUI.h"
+#include "speech_message.h"
 
 #include "Cat.h"
 #include "rat.h"
@@ -84,6 +85,7 @@ void CPlayer::Box(void)
 	m_pRatGhost = nullptr;				// 幽霊ネズミの情報
 	m_pRessrectionFan = nullptr;		// 円の範囲の情報
 	m_pRecoveringUI = nullptr;			// 回復中のUI
+	m_pSpeechMessage = nullptr;			// 伝達メッセージ
 	m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_sizeColl = NONE_D3DXVECTOR3;		// 当たり判定のサイズ
 	m_type = TYPE_CAT;					// 種類
@@ -114,6 +116,10 @@ HRESULT CPlayer::Init(void)
 	m_pMotion = nullptr;				// モーションの情報
 	m_pPlayerID = nullptr;				// プレイヤーのID表示
 	m_pStun = nullptr;					// 気絶の情報
+	m_pRatGhost = nullptr;				// 幽霊ネズミの情報
+	m_pRessrectionFan = nullptr;		// 円の範囲の情報
+	m_pRecoveringUI = nullptr;			// 回復中のUI
+	m_pSpeechMessage = nullptr;			// 伝達メッセージ
 	m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_sizeColl = NONE_D3DXVECTOR3;		// 当たり判定のサイズ
 	m_type = TYPE_CAT;					// 種類
@@ -170,6 +176,22 @@ void CPlayer::Uninit(void)
 		//円の範囲の終了処理
 		//m_pRessrectionFan->Uninit();
 		m_pRessrectionFan = nullptr;
+	}
+
+	if (m_pRecoveringUI != nullptr)
+	{ // 回復中のUIが NULL じゃない場合
+
+		//回復中のUIの終了処理
+		m_pRecoveringUI->Uninit();
+		m_pRecoveringUI = nullptr;
+	}
+
+	if (m_pSpeechMessage != nullptr)
+	{ // 伝達メッセージが NULL じゃないとき
+
+		//伝達メッセージの終了処理
+		m_pSpeechMessage->Uninit();
+		m_pSpeechMessage = nullptr;
 	}
 
 	// 終了処理
@@ -883,6 +905,41 @@ void CPlayer::DeleteRecoveringUI(void)
 		//回復中UIの終了処理
 		m_pRecoveringUI->Uninit();
 		m_pRecoveringUI = nullptr;
+	}
+}
+
+//=======================================
+// 伝達メッセージの設定処理
+//=======================================
+void CPlayer::SetSpeechMessage(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const int nLife, const int type)
+{
+	if (m_pSpeechMessage == nullptr)
+	{ // 伝達メッセージが NULLのとき
+
+		m_pSpeechMessage = CSpeechMessage::Create(pos, size, nLife, (CSpeechMessage::TYPE)type);
+	}
+}
+
+//=======================================
+// 伝達メッセージの取得処理
+//=======================================
+CSpeechMessage* CPlayer::GetSpeechMessage(void)
+{
+	// 伝達メッセージを返す
+	return m_pSpeechMessage;
+}
+
+//=======================================
+// 伝達メッセージの消去処理
+//=======================================
+void CPlayer::DeleteSpeechMessage(void)
+{
+	if (m_pSpeechMessage != nullptr)
+	{ // 伝達メッセージが NULL じゃないとき
+
+		// 伝達メッセージの終了処理
+		m_pSpeechMessage->Uninit();
+		m_pSpeechMessage = nullptr;
 	}
 }
 
