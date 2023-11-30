@@ -21,6 +21,7 @@ class CStun;				// 気絶
 class CRatGhost;			// 幽霊ネズミ
 class CRessrectionFan;		// 円の範囲
 class CRecoveringUI;		// 回復中のUI
+class CSpeechMessage;		// 伝達メッセージ
 
 //--------------------------------------------
 // クラス(プレイヤークラス)
@@ -96,6 +97,10 @@ public:			// 誰でもアクセスできる
 	CRecoveringUI* GetRecoveringUI(void);		// 回復中UIの取得処理
 	void DeleteRecoveringUI(void);				// 回復中UIの消去処理
 
+	void SetSpeechMessage(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const int nLife, const int type);				// 伝達メッセージの設定処理
+	CSpeechMessage* GetSpeechMessage(void);		// 伝達メッセージの取得処理
+	void DeleteSpeechMessage(void);				// 伝達メッセージの消去処理
+
 	void SetMove(const D3DXVECTOR3& move);		// 移動量の設定処理
 	D3DXVECTOR3 GetMove(void) const;			// 移動量の取得処理
 
@@ -154,6 +159,7 @@ private:		// 自分だけアクセスできる
 	CRatGhost* m_pRatGhost;		// 幽霊ネズミの情報
 	CRessrectionFan* m_pRessrectionFan;		// 円の範囲の情報
 	CRecoveringUI* m_pRecoveringUI;			// 回復中のUI
+	CSpeechMessage* m_pSpeechMessage;		// 伝達メッセージ
 	D3DXVECTOR3 m_move;			// 移動量
 	D3DXVECTOR3 m_sizeColl;		// 当たり判定のサイズ
 	TYPE m_type;				// 種類
