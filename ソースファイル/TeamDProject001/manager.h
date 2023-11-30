@@ -26,7 +26,7 @@ class CSound;			// サウンド
 class CFile;			// ファイル
 class CDebugProc;		// デバッグ表示
 class CCamera;			// カメラ
-class CMultiCamera;			// カメラ
+class CMultiCamera;		// カメラ
 class CLight;			// ライト
 class CTexture;			// テクスチャ
 class CFade;			// フェード
