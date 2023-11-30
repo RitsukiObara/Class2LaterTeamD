@@ -17,6 +17,8 @@
 //-------------------------------------------
 // マクロ定義
 //-------------------------------------------
+#define SIZE_UI		(D3DXVECTOR3(50.0f, 50.0f, 0.0f))		// UIの大きさ
+#define SUB_ALPHA	(0.025f)			// 透明度減算する数
 
 //-------------------------------------------
 // 静的メンバ変数宣言
@@ -25,10 +27,12 @@
 //==============================
 // コンストラクタ
 //==============================
-CRecoveringUI::CRecoveringUI() : CBillboard(CObject::TYPE_RECOVERINGUI, CObject::PRIORITY_ENTITY)
+CRecoveringUI::CRecoveringUI() : CBillboard(CObject::TYPE_RECOVERINGUI, CObject::PRIORITY_PLAYER)
 {
 	// 全ての値をクリアする
 	m_bDisp = false;			// UIを表示するか
+	m_fAlpha = 1.0f;			// 透明度
+	m_alpha = ALPHA_OPACITY;	// 透明度の状態
 }
 
 //==============================
@@ -40,7 +44,7 @@ CRecoveringUI::~CRecoveringUI()
 }
 
 //==============================
-// 破片の初期化処理
+// 回復中UIの初期化処理
 //==============================
 HRESULT CRecoveringUI::Init(void)
 {
@@ -53,13 +57,15 @@ HRESULT CRecoveringUI::Init(void)
 
 	// 全ての値を初期化する
 	m_bDisp = false;			// UIを表示するか
+	m_fAlpha = 1.0f;			// 透明度
+	m_alpha = ALPHA_OPACITY;	// 透明度の状態
 
 	// 値を返す
 	return S_OK;
 }
 
 //========================================
-// 破片の終了処理
+// 回復中UIの終了処理
 //========================================
 void CRecoveringUI::Uninit(void)
 {
@@ -68,15 +74,66 @@ void CRecoveringUI::Uninit(void)
 }
 
 //=====================================
-// 破片の更新処理
+// 回復中UIの更新処理
 //=====================================
 void CRecoveringUI::Update(void)
 {
+	if (m_bDisp == true)
+	{ // UIを表示する状態の時
 
+		// 透明度変更
+		switch (m_alpha)
+		{
+		case CRecoveringUI::ALPHA_OPACITY:		// 不透明
+
+				// 透明にしていく
+				m_fAlpha -= SUB_ALPHA;
+
+				if (m_fAlpha <= 0.0f)
+				{ // 透明になったら
+
+					// 透明状態にする
+					m_alpha = ALPHA_TRANSPARENT;
+				}
+
+			break;
+
+		case CRecoveringUI::ALPHA_TRANSPARENT:	// 透明
+
+			// 不透明にしていく
+			m_fAlpha += SUB_ALPHA;
+
+			if (m_fAlpha >= 1.0f)
+			{ // 不透明になったら
+
+				// 不透明状態にする
+				m_alpha = ALPHA_OPACITY;
+			}
+
+			break;
+
+		default:
+
+			// 停止する
+			assert(false);
+
+			break;
+		}
+	}
+	else if (m_bDisp == false && m_alpha != ALPHA_OPACITY)
+	{ // 表示する状態じゃないとき
+
+		m_fAlpha = 1.0f;
+		m_alpha = ALPHA_OPACITY;
+
+	}
+
+	// 色設定
+	SetVtxColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, m_fAlpha));
 }
 
 //=====================================
-// 破片の描画処理
+// 回復中UIの描画処理
 //=====================================
 void CRecoveringUI::Draw(void)
 {
@@ -84,7 +141,7 @@ void CRecoveringUI::Draw(void)
 	{ // UIを表示する状態のとき
 
 		// 描画処理
-		CBillboard::Draw();
+		CBillboard::DrawLightOff();
 	}
 }
 
@@ -102,8 +159,8 @@ void CRecoveringUI::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& posOld)
 	//==========================================================================
 	SetPos(pos);			// 位置
 	SetPosOld(posOld);		// 前回の位置
-	SetSize(D3DXVECTOR3(50.0f, 50.0f, 0.0f));	// サイズ
-	BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\CageMark.png"));		// テクスチャの割り当て処理
+	SetSize(SIZE_UI);	// サイズ
+	BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\rez_keep.png"));		// テクスチャの割り当て処理
 
 	// 頂点座標の設定処理
 	SetVertex();

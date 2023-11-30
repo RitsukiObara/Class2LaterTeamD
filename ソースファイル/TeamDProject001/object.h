@@ -71,6 +71,7 @@ public:			// 誰でもアクセスできる
 		TYPE_FINISHUI,			// 終了カウントダウンのUI
 		TYPE_CONFETTI,			// 紙吹雪
 		TYPE_RECOVERINGUI,		// 回復中のUI
+		TYPE_ITEMUI,			// アイテムUI
 		TYPE_MAX				// この列挙型の総数
 	};
 
