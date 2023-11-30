@@ -17,7 +17,7 @@
 //-------------------------------------------
 // マクロ定義
 //-------------------------------------------
-#define NOTE_CYCLE_SPEED		(0.05f)		// 回る速度
+#define NOTE_CYCLE_SPEED	(0.05f)			// 回る速度
 #define NOTE_UD_HEIGHT		(100.0f)		// 上下移動の幅
 
 //==============================
@@ -59,7 +59,8 @@ HRESULT CNote::Init(void)
 void CNote::Uninit(void)
 {
 	//本体にある自身のポインタ削除処理
-	CSpeaker::NULLNote(m_nIndex);
+	m_Main->NULLNote(m_nIndex);
+	m_Main->MySetIdx(m_nIndex);
 
 	// 終了処理
 	CModel::Uninit();

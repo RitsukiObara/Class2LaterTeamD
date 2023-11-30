@@ -74,6 +74,17 @@ public:			// 誰でもアクセスできる
 		TYPE_PICTUREFRAME,		// 写真立て
 		TYPE_SHELF,				// 戸棚
 		TYPE_PULLSHELF,			// 引き出し棚
+		TYPE_KITCHEN,			//キッチン
+		TYPE_REIZOUKO,			//冷蔵庫
+		TYPE_TABLE,				//テーブル
+		TYPE_CHAIR,				// 机の椅子
+		TYPE_CORKBOARD,			// コルクボード
+		TYPE_DESK,				// デスク
+		TYPE_DESKBOOK,			// デスク用の本
+		TYPE_EXTIMGISHER,		// 消火器
+		TYPE_KATEN,				// カーテン
+		TYPE_KATENRAIL,			// カーテンのレール
+		TYPE_TANSU02,			// たんす
 
 		// 障害物モデル
 		TYPE_HONEYBOTTLE,		// 蜂蜜のボトル
@@ -90,11 +101,6 @@ public:			// 誰でもアクセスできる
 		TYPE_PIN,				// 画鋲
 		TYPE_ELECFAN,			// 扇風機(本体)
 		TYPE_CUP,				// コップ
-
-		//マップモデル
-		TYPE_KITCHEN,			//キッチン
-		TYPE_REIZOUKO,			//冷蔵庫
-		TYPE_TABLE,				//テーブル
 
 		//ネズミモデル
 		TYPE_RAT_BODY,			// 体
