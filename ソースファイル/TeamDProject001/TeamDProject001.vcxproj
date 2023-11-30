@@ -203,6 +203,7 @@
     <ClCompile Include="item.cpp" />
     <ClCompile Include="itemUI.cpp" />
     <ClCompile Include="item_manager.cpp" />
+    <ClCompile Include="item_mark.cpp" />
     <ClCompile Include="leash.cpp" />
     <ClCompile Include="light.cpp" />
     <ClCompile Include="locus2D.cpp" />
@@ -334,6 +335,7 @@
     <ClInclude Include="item.h" />
     <ClInclude Include="itemUI.h" />
     <ClInclude Include="item_manager.h" />
+    <ClInclude Include="item_mark.h" />
     <ClInclude Include="leash.h" />
     <ClInclude Include="light.h" />
     <ClInclude Include="locus2D.h" />
