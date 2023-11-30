@@ -553,6 +553,7 @@ void CRat::ResurrectionCollision(void)
 
 						// •œŠˆ‚³‚¹‚Ä‚éó‘Ô‚É‚·‚é
 						m_bResurrection = true;
+						//pPlayer->SetDispRecoveringUI(m_bResurrection);
 					}
 
 					// ‰ñ•œ‚³‚¹‚Ä‚éó‘Ô‚É‚·‚é
@@ -615,6 +616,9 @@ void CRat::ResurrectionCollision(void)
 					// ‰ñ•œ‚Ì”ÍˆÍ‚ÌŽžŠÔÝ’è
 					pResurrectionFan->SetResurrectionFan(pPlayer->GetResurrectionTime());
 				}
+
+				// ‰ñ•œ’†UI•\Ž¦Ý’è
+				pPlayer->SetDispRecoveringUI(abRez[nCnt]);
 			}
 		}
 	}

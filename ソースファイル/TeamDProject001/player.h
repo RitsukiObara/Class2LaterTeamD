@@ -93,8 +93,8 @@ public:			// 誰でもアクセスできる
 	void DeleteRessrectionFan(void);			// 円の範囲の消去処理
 
 	void SetRecoveringUI(const D3DXVECTOR3& pos, const D3DXVECTOR3& posOld);	// 回復中UIの設定処理
-	CRecoveringUI* GetRecoveringUI(void);			// 回復中UIの取得処理
-	void DeleteRecoveringUI(void);					// 回復中UIの消去処理
+	CRecoveringUI* GetRecoveringUI(void);		// 回復中UIの取得処理
+	void DeleteRecoveringUI(void);				// 回復中UIの消去処理
 
 	void SetMove(const D3DXVECTOR3& move);		// 移動量の設定処理
 	D3DXVECTOR3 GetMove(void) const;			// 移動量の取得処理
@@ -121,6 +121,9 @@ public:			// 誰でもアクセスできる
 
 	void SetStunState(STUNSTATE StunState) { m_StunState = StunState; }	// 気絶状態の設定処理
 	STUNSTATE GetStunState(void) { return m_StunState; }				// 気絶状態の取得処理
+
+	void SetDispRecoveringUI(const bool bRez);	// 回復中UIの表示判定
+	bool IsDispRecoveringUI(void);				// 回復中UIの表示取得
 
 	void SetState(STATE State) { m_State = State; }		// 状態の設定処理
 	STATE GetState(void) { return m_State; }			// 状態の取得処理
