@@ -29,11 +29,15 @@ public:			// 誰でもアクセスできる
 	void Draw(void);		// 描画処理
 
 	void SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& posOld);		// 情報の設定処理
+	
+	void SetDisplayUI(bool bRez);	// UIの表示状態の設定
+	bool GetDisplayUI(void);		// UIの表示状態の取得
 
 	// 静的メンバ関数
 	static CRecoveringUI* Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& posOld);		// 生成処理
 
 private:		// 自分だけアクセスできる
+	bool m_bDisp;			// 表示するか
 
 };
 

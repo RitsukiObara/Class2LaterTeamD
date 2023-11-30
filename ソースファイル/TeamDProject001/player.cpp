@@ -41,6 +41,10 @@
 #define STUN_WAIT			(120)			// オブジェクト無効の待機時間
 #define DEATH_WAIT			(120)			// 死亡時の待機時間
 #define SMASH_WAIT			(40)			// 吹き飛び状態のカウント数
+#define CAT_CAMERA_HEIGHT	(200.0f)		// 猫のカメラの高さ
+#define CAT_CAMERA_DIS		(300.0f)		// 猫のカメラの視点と注視点の高さの差分(角度)
+#define RAT_CAMERA_HEIGHT	(30.0f)			// ネズミのカメラの高さ
+#define RAT_CAMERA_DIS		(60.0f)			// ネズミのカメラの視点と注視点の高さの差分(角度)
 
 //==============================
 // コンストラクタ
@@ -482,17 +486,37 @@ void CPlayer::Move(void)
 }
 
 //=======================================
-// 攻撃処理
+// それぞれのプレイヤーのカメラの更新
 //=======================================
 void CPlayer::CameraUpdate(void)
 {
 	CMultiCamera *pCamera = CManager::Get()->GetMlutiCamera(m_nPlayerIdx);
 	D3DXVECTOR3 Pos = GetPos();
-	pCamera->SetPosR(Pos);
-	pCamera->SetPosV(D3DXVECTOR3(
-		Pos.x + sinf(m_CameraRot.y + (D3DX_PI * 1.0f)) * 200.0f,
-		Pos.y + 100.0f,
-		Pos.z + cosf(m_CameraRot.y + (D3DX_PI * 1.0f)) * 200.0f));
+
+	if (m_type == TYPE::TYPE_CAT)
+	{ //猫のカメラの位置
+		pCamera->SetPosR(D3DXVECTOR3(
+			Pos.x,
+			Pos.y + CAT_CAMERA_HEIGHT,
+			Pos.z
+		));
+		pCamera->SetPosV(D3DXVECTOR3(
+			Pos.x + sinf(m_CameraRot.y + (D3DX_PI * 1.0f)) * 200.0f,
+			Pos.y + CAT_CAMERA_HEIGHT + CAT_CAMERA_DIS,
+			Pos.z + cosf(m_CameraRot.y + (D3DX_PI * 1.0f)) * 200.0f));
+	}
+	else
+	{ //ネズミのカメラの位置
+		pCamera->SetPosR(D3DXVECTOR3(
+			Pos.x,
+			Pos.y + RAT_CAMERA_HEIGHT,
+			Pos.z
+		));
+		pCamera->SetPosV(D3DXVECTOR3(
+			Pos.x + sinf(m_CameraRot.y + (D3DX_PI * 1.0f)) * 200.0f,
+			Pos.y + RAT_CAMERA_HEIGHT + RAT_CAMERA_DIS,
+			Pos.z + cosf(m_CameraRot.y + (D3DX_PI * 1.0f)) * 200.0f));
+	}
 
 	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LSHIFT) == true)
 	{
@@ -995,4 +1019,26 @@ int CPlayer::GetResurrectionTime(void)
 {
 	// 復活時間の合計を返す
 	return m_nResurrectionTime;
+}
+
+//=======================================
+// 回復中表示の判定
+//=======================================
+void CPlayer::SetDispRecoveringUI(const bool bRez)
+{
+	if (m_pRecoveringUI != nullptr)
+	{ // 回復中UIが NULLじゃなかったら
+
+		// 回復状態を設定する
+		m_pRecoveringUI->SetDisplayUI(bRez);
+	}
+}
+
+//=======================================
+// 回復中表示の取得
+//=======================================
+bool CPlayer::IsDispRecoveringUI(void)
+{
+	// 回復状態を返す
+	return m_pRecoveringUI->GetDisplayUI();
 }

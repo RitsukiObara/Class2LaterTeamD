@@ -36,10 +36,10 @@
 // マクロ定義
 //-------------------------------------------
 #define GRAVITY				(1.0f)			// 重力
-#define ADD_MOVE_Y			(30.0f)			// 浮力
+#define ADD_MOVE_Y			(20.0f)			// ジャンプ力
 #define NONE_RATIDX			(-1)			// ネズミの番号の初期値
 #define ATTACK_DISTANCE		(230.0f)		// 攻撃範囲までの距離
-#define SPEED				(20.0f)			// 速度
+#define SPEED				(15.0f)			// 速度
 #define SIZE				(D3DXVECTOR3(30.0f, 50.0f, 30.0f))		// 当たり判定でのサイズ
 #define STUN_HEIGHT			(80.0f)			// 気絶演出が出てくる高さ
 #define SMASH_MOVE			(D3DXVECTOR3(10.0f, 20.0f, 10.0f))		// 吹き飛び状態の移動量
@@ -468,7 +468,6 @@ void CRat::Hit(void)
 			// ネコが勝利した状態にする
 			CGame::SetState(CGame::STATE_CAT_WIN);
 		}
-
 	}
 }
 
@@ -553,6 +552,7 @@ void CRat::ResurrectionCollision(void)
 
 						// 復活させてる状態にする
 						m_bResurrection = true;
+						//pPlayer->SetDispRecoveringUI(m_bResurrection);
 					}
 
 					// 回復させてる状態にする
@@ -615,6 +615,9 @@ void CRat::ResurrectionCollision(void)
 					// 回復の範囲の時間設定
 					pResurrectionFan->SetResurrectionFan(pPlayer->GetResurrectionTime());
 				}
+
+				// 回復中UI表示設定
+				pPlayer->SetDispRecoveringUI(abRez[nCnt]);
 			}
 		}
 	}

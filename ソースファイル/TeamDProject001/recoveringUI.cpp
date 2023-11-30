@@ -12,6 +12,7 @@
 #include "recoveringUI.h"
 #include "model.h"
 #include "texture.h"
+#include "player.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -27,6 +28,7 @@
 CRecoveringUI::CRecoveringUI() : CBillboard(CObject::TYPE_RECOVERINGUI, CObject::PRIORITY_ENTITY)
 {
 	// 全ての値をクリアする
+	m_bDisp = false;			// UIを表示するか
 }
 
 //==============================
@@ -50,6 +52,7 @@ HRESULT CRecoveringUI::Init(void)
 	}
 
 	// 全ての値を初期化する
+	m_bDisp = false;			// UIを表示するか
 
 	// 値を返す
 	return S_OK;
@@ -77,8 +80,12 @@ void CRecoveringUI::Update(void)
 //=====================================
 void CRecoveringUI::Draw(void)
 {
-	// 描画処理
-	CBillboard::Draw();
+	if (m_bDisp == true)
+	{ // UIを表示する状態のとき
+
+		// 描画処理
+		CBillboard::Draw();
+	}
 }
 
 //=====================================
@@ -155,4 +162,22 @@ CRecoveringUI* CRecoveringUI::Create(const D3DXVECTOR3& pos, const  D3DXVECTOR3&
 
 	// サンプルのポインタを返す
 	return pRecoveringUI;
+}
+
+//=======================================
+// UIの表示状態の設定
+//=======================================
+void CRecoveringUI::SetDisplayUI(bool bRez)
+{
+	// UIの表示状態を設定
+	m_bDisp = bRez;
+}
+
+//=======================================
+// UIの表示状態の取得
+//=======================================
+bool CRecoveringUI::GetDisplayUI(void)
+{
+	// UIの表示状態を返す
+	return m_bDisp;
 }

@@ -15,6 +15,7 @@
 #include "MultiCamera.h"
 #include "pause.h"
 #include "fade.h"
+#include "debugproc.h"
 
 //--------------------------------------------
 // 静的メンバ変数宣言
@@ -519,6 +520,13 @@ void CObject::DrawNormal(void)
 
 			  // フェードの描画
 				CManager::Get()->GetFade()->Draw();
+			}
+
+			if (CManager::Get()->GetDebugProc() != nullptr)
+			{ // デバッグ表示が NULL じゃない場合
+
+			  // デバッグ表示の描画
+				CManager::Get()->GetDebugProc()->Draw();
 			}
 		}
 	}
