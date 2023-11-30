@@ -471,6 +471,9 @@
     <ClCompile Include="item_mark.cpp">
       <Filter>UI\ItemUI</Filter>
     </ClCompile>
+    <ClCompile Include="item_magni.cpp">
+      <Filter>UI\ItemUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -852,6 +855,9 @@
       <Filter>UI\ItemUI</Filter>
     </ClInclude>
     <ClInclude Include="item_mark.h">
+      <Filter>UI\ItemUI</Filter>
+    </ClInclude>
+    <ClInclude Include="item_magni.h">
       <Filter>UI\ItemUI</Filter>
     </ClInclude>
   </ItemGroup>
