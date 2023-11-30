@@ -1020,3 +1020,25 @@ int CPlayer::GetResurrectionTime(void)
 	// •œŠˆŽžŠÔ‚Ì‡Œv‚ð•Ô‚·
 	return m_nResurrectionTime;
 }
+
+//=======================================
+// ‰ñ•œ’†•\Ž¦‚Ì”»’è
+//=======================================
+void CPlayer::SetDispRecoveringUI(const bool bRez)
+{
+	if (m_pRecoveringUI != nullptr)
+	{ // ‰ñ•œ’†UI‚ª NULL‚¶‚á‚È‚©‚Á‚½‚ç
+
+		// ‰ñ•œó‘Ô‚ðÝ’è‚·‚é
+		m_pRecoveringUI->SetDisplayUI(bRez);
+	}
+}
+
+//=======================================
+// ‰ñ•œ’†•\Ž¦‚ÌŽæ“¾
+//=======================================
+bool CPlayer::IsDispRecoveringUI(void)
+{
+	// ‰ñ•œó‘Ô‚ð•Ô‚·
+	return m_pRecoveringUI->GetDisplayUI();
+}

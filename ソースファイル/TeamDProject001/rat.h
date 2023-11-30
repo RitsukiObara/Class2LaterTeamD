@@ -66,7 +66,6 @@ private:		// 自分だけアクセスできる
 	bool m_bJump;					// ジャンプ状況
 
 	// 静的メンバ関数
-	//static int m_nNumAll;			// ネズミの総数
 	static bool m_bResurrection;	// 復活させてるのか
 
 };

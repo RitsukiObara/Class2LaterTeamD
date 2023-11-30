@@ -82,6 +82,7 @@ void CRessrectionFan::Update(void)
 	// 頂点座標の設定処理
 	SetVertex();
 
+	// 頂点の色の設定処理
 	SetVtxColor(DEFAULT_COLOR, REZ_COLOR, m_nRezTime);
 }
 
@@ -199,4 +200,13 @@ void CRessrectionFan::SetResurrectionFan(int nFan)
 {
 	// 回復時間代入
 	m_nRezTime = nFan;
+}
+
+//=======================================
+// 角度の取得
+//=======================================
+int CRessrectionFan::GetResurrectionFan(void)
+{
+	// 回復時間を返す
+	return m_nRezTime;
 }

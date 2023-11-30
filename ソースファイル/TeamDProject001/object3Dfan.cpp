@@ -298,8 +298,6 @@ void CObject3DFan::SetVtxColor(const D3DXCOLOR& normalCol, const D3DXCOLOR& rezC
 			pVtx[2].col = normalCol;
 		}
 
-		
-
 		// 頂点データを3つ分進める
 		pVtx += 3;
 	}
