@@ -93,13 +93,13 @@ void CItemMark::SetData(const D3DXVECTOR3& pos, const CItem::TYPE type)
 CItemMark* CItemMark::Create(const D3DXVECTOR3& pos, const CItem::TYPE type)
 {
 	// ローカルオブジェクトを生成
-	CItemMark* pCharaImage = nullptr;	// プレイヤーのインスタンスを生成
+	CItemMark* pItemMark = nullptr;		// プレイヤーのインスタンスを生成
 
-	if (pCharaImage == nullptr)
+	if (pItemMark == nullptr)
 	{ // オブジェクトが NULL の場合
 
 		// オブジェクトを生成
-		pCharaImage = new CItemMark;
+		pItemMark = new CItemMark;
 	}
 	else
 	{ // オブジェクトが NULL じゃない場合
@@ -111,11 +111,11 @@ CItemMark* CItemMark::Create(const D3DXVECTOR3& pos, const CItem::TYPE type)
 		return nullptr;
 	}
 
-	if (pCharaImage != nullptr)
+	if (pItemMark != nullptr)
 	{ // オブジェクトが NULL じゃない場合
 
 		// 初期化処理
-		if (FAILED(pCharaImage->Init()))
+		if (FAILED(pItemMark->Init()))
 		{ // 初期化に失敗した場合
 
 			// 停止
@@ -126,7 +126,7 @@ CItemMark* CItemMark::Create(const D3DXVECTOR3& pos, const CItem::TYPE type)
 		}
 
 		// 情報の設定処理
-		pCharaImage->SetData(pos, type);
+		pItemMark->SetData(pos, type);
 	}
 	else
 	{ // オブジェクトが NULL の場合
@@ -138,6 +138,6 @@ CItemMark* CItemMark::Create(const D3DXVECTOR3& pos, const CItem::TYPE type)
 		return nullptr;
 	}
 
-	// キャラクター画像のポインタを返す
-	return pCharaImage;
+	// アイテムマークのポインタを返す
+	return pItemMark;
 }

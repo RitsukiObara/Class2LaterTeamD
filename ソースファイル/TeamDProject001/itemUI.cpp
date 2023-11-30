@@ -12,12 +12,15 @@
 #include "texture.h"
 #include "useful.h"
 
+#include "item_mark.h"
+
 //========================
 // コンストラクタ
 //========================
 CItemUI::CItemUI() : CObject(TYPE_ITEMUI, PRIORITY_UI)
 {
 	// 全ての値をクリアする
+	m_pMark = nullptr;		// マークの情報
 }
 
 //========================
@@ -34,6 +37,7 @@ CItemUI::~CItemUI()
 HRESULT CItemUI::Init(void)
 {
 	// 全ての値を初期化する
+	m_pMark = nullptr;		// マークの情報
 
 	// 成功を返す
 	return S_OK;
@@ -44,6 +48,14 @@ HRESULT CItemUI::Init(void)
 //========================
 void CItemUI::Uninit(void)
 {
+	if (m_pMark != nullptr)
+	{ // マークが NULL じゃない場合
+
+		// マークの終了処理
+		m_pMark->Uninit();
+		m_pMark = nullptr;
+	}
+
 	// 本体の終了処理
 	Release();
 }
@@ -53,7 +65,12 @@ void CItemUI::Uninit(void)
 //========================
 void CItemUI::Update(void)
 {
-	
+	if (m_pMark != nullptr)
+	{ // マークが NULL じゃない場合
+
+		// マークの更新処理
+		m_pMark->Update();
+	}
 }
 
 //========================
@@ -61,7 +78,12 @@ void CItemUI::Update(void)
 //========================
 void CItemUI::Draw(void)
 {
-	
+	if (m_pMark != nullptr)
+	{ // マークが NULL じゃない場合
+
+		// マークの描画処理
+		m_pMark->Draw();
+	}
 }
 
 //========================
@@ -69,7 +91,7 @@ void CItemUI::Draw(void)
 //========================
 void CItemUI::SetData(const D3DXVECTOR3& pos)
 {
-	
+
 }
 
 //========================
@@ -78,13 +100,13 @@ void CItemUI::SetData(const D3DXVECTOR3& pos)
 CItemUI* CItemUI::Create(const D3DXVECTOR3& pos)
 {
 	// ローカルオブジェクトを生成
-	CItemUI* pInfoUI = nullptr;		// キャラクター情報UIのインスタンスを生成
+	CItemUI* pItemUI = nullptr;		// キャラクター情報UIのインスタンスを生成
 
-	if (pInfoUI == nullptr)
+	if (pItemUI == nullptr)
 	{ // オブジェクトが NULL の場合
 
 		// オブジェクトを生成
-		pInfoUI = new CItemUI;
+		pItemUI = new CItemUI;
 	}
 	else
 	{ // オブジェクトが NULL じゃない場合
@@ -96,11 +118,11 @@ CItemUI* CItemUI::Create(const D3DXVECTOR3& pos)
 		return nullptr;
 	}
 
-	if (pInfoUI != nullptr)
+	if (pItemUI != nullptr)
 	{ // オブジェクトが NULL じゃない場合
 
 		// 初期化処理
-		if (FAILED(pInfoUI->Init()))
+		if (FAILED(pItemUI->Init()))
 		{ // 初期化に失敗した場合
 
 			// 停止
@@ -111,7 +133,7 @@ CItemUI* CItemUI::Create(const D3DXVECTOR3& pos)
 		}
 
 		// 情報の設定処理
-		pInfoUI->SetData(pos);
+		pItemUI->SetData(pos);
 	}
 	else
 	{ // オブジェクトが NULL の場合
@@ -123,6 +145,6 @@ CItemUI* CItemUI::Create(const D3DXVECTOR3& pos)
 		return nullptr;
 	}
 
-	// キャラクターの情報UIのポインタを返す
-	return pInfoUI;
+	// アイテムUIのポインタを返す
+	return pItemUI;
 }
