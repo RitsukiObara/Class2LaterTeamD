@@ -19,6 +19,13 @@ class CItem : public CModel
 {
 public:			// 誰でもアクセスできる
 
+	// 列挙型定義(種類)
+	enum TYPE
+	{
+		TYPE_MOUSETRAP = 0,		// ネズミ捕り
+		TYPE_MAX				// この列挙型の総数
+	};
+
 	CItem();			// コンストラクタ
 	~CItem();			// デストラクタ
 
@@ -34,10 +41,10 @@ public:			// 誰でもアクセスできる
 	void Update(void);		// 更新処理
 	void Draw(void);		// 描画処理
 
-	void SetData(const D3DXVECTOR3& pos);			// 情報の設定処理
+	void SetData(const D3DXVECTOR3& pos, const TYPE type);			// 情報の設定処理
 
 	// 静的メンバ関数
-	static CItem* Create(const D3DXVECTOR3& pos);	// 生成処理
+	static CItem* Create(const D3DXVECTOR3& pos, const TYPE type);	// 生成処理
 
 private:		// 自分だけアクセスできる
 
@@ -46,6 +53,7 @@ private:		// 自分だけアクセスできる
 	void Scaling(void);		// 拡縮処理
 
 	// メンバ変数
+	TYPE m_type;			// 種類
 	float m_fScaleDest;		// 目的の拡大率
 
 	// リスト構造関係

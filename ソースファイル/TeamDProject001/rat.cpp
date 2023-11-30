@@ -31,6 +31,7 @@
 #include "resurrection_fan.h"
 #include "object3Dfan.h"
 #include "recoveringUI.h"
+#include "speech_message.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -49,7 +50,6 @@
 //--------------------------------------------
 // 静的メンバ変数宣言
 //--------------------------------------------
-//int CRat::m_nNumAll = 0;				// ネズミの総数
 bool CRat::m_bResurrection = false;		// 復活させてるのか
 
 //==============================
@@ -60,7 +60,6 @@ CRat::CRat() : CPlayer(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 	// 全ての値をクリアする
 	m_nRezCounter = 0;					// 回復するまでのカウンター
 	m_bJump = false;					// ジャンプ状況
-	//m_nNumAll++;						// ネズミの総数加算
 }
 
 //==============================
@@ -205,7 +204,6 @@ void CRat::Update(void)
 	CPlayer::Update();
 
 	// デバッグ表示
-	//CManager::Get()->GetDebugProc()->Print("\nネズミの総数:%d\n", m_nNumAll);
 	CManager::Get()->GetDebugProc()->Print("蘇生カウント：%d\n", CPlayer::GetResurrectionTime());
 }
 
@@ -390,7 +388,7 @@ void CRat::Attack(void)
 	D3DXVECTOR3 pos = GetPos();
 	D3DXVECTOR3 rot = GetRot();
 
-	if (CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_B, GetPlayerIdx()) == true/* && m_bAttack == false*/)
+	if (CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_B, GetPlayerIdx()) == true)
 	{ // Bボタンを押した場合
 
 		while (pObstacle != nullptr)
@@ -414,8 +412,6 @@ void CRat::Attack(void)
 			// 次のオブジェクトを代入する
 			pObstacle = pObstacle->GetNext();
 		}
-
-		//m_bAttack = true;		// 攻撃した状態にする
 	}
 }
 
@@ -447,6 +443,9 @@ void CRat::Hit(void)
 
 		// 回復中UIの生成
 		CPlayer::SetRecoveringUI(pos, GetPosOld());
+
+		// 伝達メッセージの表示
+		CPlayer::SetSpeechMessage(D3DXVECTOR3(pos.x, pos.y + 120.0f, pos.z), D3DXVECTOR3(80.0f, 80.0f, 0.0f), -1, CSpeechMessage::TYPE_HELP);
 
 		for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
 		{
@@ -552,7 +551,6 @@ void CRat::ResurrectionCollision(void)
 
 						// 復活させてる状態にする
 						m_bResurrection = true;
-						//pPlayer->SetDispRecoveringUI(m_bResurrection);
 					}
 
 					// 回復させてる状態にする
@@ -581,6 +579,9 @@ void CRat::ResurrectionCollision(void)
 
 						// 回復中UIの破棄
 						pPlayer->DeleteRecoveringUI();
+
+						// 伝達メッセージの破棄
+						pPlayer->DeleteSpeechMessage();
 
 						// 生き返りのカウンター初期化
 						pPlayer->SetResurrectionTime(0);
