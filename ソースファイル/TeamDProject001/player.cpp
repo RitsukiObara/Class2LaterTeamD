@@ -835,7 +835,7 @@ void CPlayer::SetRecoveringUI(const D3DXVECTOR3& pos, const D3DXVECTOR3& posOld)
 	{ // ‰ñ•œ’†UI‚ª NULL ‚Ì‚Æ‚«
 
 		// ‰ñ•œ’†UI‚Ì”ÍˆÍ¶¬
-		m_pRecoveringUI = CRecoveringUI::Create(D3DXVECTOR3(pos.x + 120.0f, pos.y + 100.0f, pos.z), posOld);
+		m_pRecoveringUI = CRecoveringUI::Create(D3DXVECTOR3(pos.x + 80.0f, pos.y + 100.0f, pos.z), posOld);
 	}
 }
 

@@ -19,6 +19,14 @@ class CRecoveringUI : public CBillboard
 {
 public:			// 誰でもアクセスできる
 
+	// UIの透明度状態
+	enum ALPHA
+	{
+		ALPHA_OPACITY = 0,		// 不透明
+		ALPHA_TRANSPARENT,		// 透明
+		ALPHA_MAX
+	};
+
 	CRecoveringUI();			// コンストラクタ
 	~CRecoveringUI();			// デストラクタ
 
@@ -38,6 +46,8 @@ public:			// 誰でもアクセスできる
 
 private:		// 自分だけアクセスできる
 	bool m_bDisp;			// 表示するか
+	float m_fAlpha;			// 透明度
+	ALPHA m_alpha;			// 透明度の状態
 
 };
 
