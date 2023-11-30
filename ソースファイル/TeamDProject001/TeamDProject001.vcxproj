@@ -201,6 +201,7 @@
     <ClCompile Include="honey.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="item.cpp" />
+    <ClCompile Include="itemUI.cpp" />
     <ClCompile Include="item_manager.cpp" />
     <ClCompile Include="leash.cpp" />
     <ClCompile Include="light.cpp" />
@@ -331,6 +332,7 @@
     <ClInclude Include="honey.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="item.h" />
+    <ClInclude Include="itemUI.h" />
     <ClInclude Include="item_manager.h" />
     <ClInclude Include="leash.h" />
     <ClInclude Include="light.h" />
