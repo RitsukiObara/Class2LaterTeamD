@@ -14,7 +14,7 @@
 #include "scene.h"
 #include "camera.h"
 
-#define CAMERA 0
+#define CAMERA 1
 
 //--------------------------------------------
 // 前方宣言
@@ -26,7 +26,7 @@ class CSound;			// サウンド
 class CFile;			// ファイル
 class CDebugProc;		// デバッグ表示
 class CCamera;			// カメラ
-class CMultiCamera;			// カメラ
+class CMultiCamera;		// カメラ
 class CLight;			// ライト
 class CTexture;			// テクスチャ
 class CFade;			// フェード

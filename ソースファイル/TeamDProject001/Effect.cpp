@@ -18,6 +18,7 @@
 #define DUST_TEXTURE		"data\\TEXTURE\\Dust.tga"				// 埃エフェクトのテクスチャ
 #define RUPTURE_TEXTURE		"data\\TEXTURE\\Rupture.tga"			// 破裂エフェクトのテクスチャ
 #define THUNDER_TEXTURE		"data\\TEXTURE\\Thunder.png"			// 雷エフェクトのテクスチャ
+#define RESURRECTION_TEXTURE"data\\TEXTURE\\RESURRECTION.png"		// 復活エフェクトのテクスチャ
 #define DUST_GRAVITY		(0.4f)									// 埃の重力
 
 //=========================
@@ -166,6 +167,11 @@ void CEffect::Update(void)
 
 		break;
 
+	case TYPE_RESURRECTION:	//復活
+
+
+		break;
+
 	case TYPE_WIND:
 
 		// 移動処理
@@ -291,6 +297,13 @@ void CEffect::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& move, const int
 	  // テクスチャの読み込み処理
 		BindTexture(CManager::Get()->GetTexture()->Regist(THUNDER_TEXTURE));
 	}
+	else if(m_type == TYPE_RESURRECTION)
+	{ // 復活の場合
+
+	  // テクスチャの読み込み処理
+		BindTexture(CManager::Get()->GetTexture()->Regist(RESURRECTION_TEXTURE));
+	}
+
 	else
 	{ // 上記以外
 
