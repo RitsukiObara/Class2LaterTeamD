@@ -25,6 +25,7 @@
 CItem::CItem() : CModel(CObject::TYPE_ITEM, CObject::PRIORITY_ENTITY)
 {
 	// 全ての値をクリアする
+	m_type = TYPE_MOUSETRAP;		// 種類
 	m_fScaleDest = 0.0f;			// 目的の拡大率
 	m_pPrev = nullptr;				// 前のへのポインタ
 	m_pNext = nullptr;				// 次のへのポインタ
@@ -94,7 +95,8 @@ HRESULT CItem::Init(void)
 	}
 
 	// 全ての値を初期化する
-	m_fScaleDest = 0.0f;	// 目的の拡大率
+	m_type = TYPE_MOUSETRAP;	// 種類
+	m_fScaleDest = 0.0f;		// 目的の拡大率
 
 	// 値を返す
 	return S_OK;
@@ -144,7 +146,7 @@ void CItem::Draw(void)
 //=====================================
 // 情報の設定処理
 //=====================================
-void CItem::SetData(const D3DXVECTOR3& pos)
+void CItem::SetData(const D3DXVECTOR3& pos, const TYPE type)
 {
 	// 情報の設定処理
 	SetPos(pos);							// 位置
@@ -154,13 +156,14 @@ void CItem::SetData(const D3DXVECTOR3& pos)
 	SetFileData(CXFile::TYPE_TRAPITEM);		// モデルの情報
 
 	// 全ての値を設定する
-	m_fScaleDest = EXTEND_SCALE;			// 目的の拡大率
+	m_type = type;					// 種類
+	m_fScaleDest = EXTEND_SCALE;	// 目的の拡大率
 }
 
 //=====================================
 // 生成処理
 //=====================================
-CItem* CItem::Create(const D3DXVECTOR3& pos)
+CItem* CItem::Create(const D3DXVECTOR3& pos, const TYPE type)
 {
 	// ローカルオブジェクトを生成
 	CItem* pItem = nullptr;	// インスタンスを生成
@@ -196,7 +199,7 @@ CItem* CItem::Create(const D3DXVECTOR3& pos)
 		}
 
 		// 情報の設定処理
-		pItem->SetData(pos);
+		pItem->SetData(pos, type);
 	}
 	else
 	{ // オブジェクトが NULL の場合
