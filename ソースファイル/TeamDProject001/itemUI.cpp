@@ -13,6 +13,7 @@
 #include "useful.h"
 
 #include "item_mark.h"
+#include "item_magni.h"
 
 //========================
 // コンストラクタ
@@ -21,6 +22,7 @@ CItemUI::CItemUI() : CObject(TYPE_ITEMUI, PRIORITY_UI)
 {
 	// 全ての値をクリアする
 	m_pMark = nullptr;		// マークの情報
+	m_pMagni = nullptr;		// 所持数の情報
 }
 
 //========================
@@ -38,6 +40,7 @@ HRESULT CItemUI::Init(void)
 {
 	// 全ての値を初期化する
 	m_pMark = nullptr;		// マークの情報
+	m_pMagni = nullptr;		// 所持数の情報
 
 	// 成功を返す
 	return S_OK;
@@ -56,6 +59,14 @@ void CItemUI::Uninit(void)
 		m_pMark = nullptr;
 	}
 
+	if (m_pMagni != nullptr)
+	{ // 倍率が NULL じゃない場合
+
+		// 倍率の終了処理
+		m_pMagni->Uninit();
+		m_pMagni = nullptr;
+	}
+
 	// 本体の終了処理
 	Release();
 }
@@ -71,6 +82,13 @@ void CItemUI::Update(void)
 		// マークの更新処理
 		m_pMark->Update();
 	}
+
+	if (m_pMagni != nullptr)
+	{ // 倍率が NULL じゃない場合
+
+		// 倍率の更新処理
+		m_pMagni->Update();
+	}
 }
 
 //========================
@@ -83,6 +101,13 @@ void CItemUI::Draw(void)
 
 		// マークの描画処理
 		m_pMark->Draw();
+	}
+
+	if (m_pMagni != nullptr)
+	{ // 倍率が NULL じゃない場合
+
+		// 倍率の描画処理
+		m_pMagni->Draw();
 	}
 }
 
