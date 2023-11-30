@@ -13,13 +13,13 @@
 //=======================================
 // マクロ定義
 //=======================================
-#define NORMAL_TEXTURE		"data\\TEXTURE\\effect000.jpg"			// 通常エフェクトのテクスチャ
-#define FIRE_TEXTURE		"data\\TEXTURE\\Smoke.tga"				// 炎エフェクトのテクスチャ
-#define DUST_TEXTURE		"data\\TEXTURE\\Dust.tga"				// 埃エフェクトのテクスチャ
-#define RUPTURE_TEXTURE		"data\\TEXTURE\\Rupture.tga"			// 破裂エフェクトのテクスチャ
-#define THUNDER_TEXTURE		"data\\TEXTURE\\Thunder.png"			// 雷エフェクトのテクスチャ
-#define RESURRECTION_TEXTURE"data\\TEXTURE\\RESURRECTION.png"		// 復活エフェクトのテクスチャ
-#define DUST_GRAVITY		(0.4f)									// 埃の重力
+#define NORMAL_TEXTURE			"data\\TEXTURE\\effect000.jpg"			// 通常エフェクトのテクスチャ
+#define FIRE_TEXTURE			"data\\TEXTURE\\Smoke.tga"				// 炎エフェクトのテクスチャ
+#define DUST_TEXTURE			"data\\TEXTURE\\Dust.tga"				// 埃エフェクトのテクスチャ
+#define RUPTURE_TEXTURE			"data\\TEXTURE\\Rupture.tga"			// 破裂エフェクトのテクスチャ
+#define THUNDER_TEXTURE			"data\\TEXTURE\\Thunder.png"			// 雷エフェクトのテクスチャ
+#define RESURRECTION_TEXTURE	"data\\TEXTURE\\RESURRECTION.png"		// 復活エフェクトのテクスチャ
+#define DUST_GRAVITY			(0.4f)									// 埃の重力
 
 //=========================
 // コンストラクタ

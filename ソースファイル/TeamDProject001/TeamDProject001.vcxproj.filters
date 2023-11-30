@@ -85,6 +85,9 @@
     <Filter Include="Player\Cat">
       <UniqueIdentifier>{2f0cfa38-123d-404e-b4b5-8fc83900d5b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI\ItemUI">
+      <UniqueIdentifier>{987117fa-4042-417e-b118-2416fb2cf6f5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="fade.cpp">
@@ -462,6 +465,9 @@
     <ClCompile Include="recoveringUI.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="itemUI.cpp">
+      <Filter>UI\ItemUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -838,6 +844,9 @@
     </ClInclude>
     <ClInclude Include="recoveringUI.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="itemUI.h">
+      <Filter>UI\ItemUI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
