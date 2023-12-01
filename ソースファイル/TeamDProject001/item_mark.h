@@ -29,10 +29,10 @@ public:				// 誰でもアクセスできる
 	void Update(void);		// 更新処理
 	void Draw(void);		// 描画処理
 
-	void SetData(const D3DXVECTOR3& pos, const CItem::TYPE type);				// 情報の設定処理
+	void SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const CItem::TYPE type);				// 情報の設定処理
 
 	// 静的メンバ関数
-	static CItemMark* Create(const D3DXVECTOR3& pos, const CItem::TYPE type);	// 生成処理
+	static CItemMark* Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const CItem::TYPE type);	// 生成処理
 
 private:			// 自分だけアクセスできる
 

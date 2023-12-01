@@ -12,7 +12,6 @@
 //=======================================
 // マクロ定義
 //=======================================
-#define SIZE				(D3DXVECTOR3(30.0f,30.0f,0.0f))		// ネズミ捕りのサイズ
 #define MOUSETRAP_TEXTURE	"data\\TEXTURE\\Mousetrap.png"		// ネズミ捕りのテクスチャ
 
 //=========================
@@ -76,12 +75,12 @@ void CItemMark::Draw(void)
 //=========================
 // 情報の設定処理
 //=========================
-void CItemMark::SetData(const D3DXVECTOR3& pos, const CItem::TYPE type)
+void CItemMark::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const CItem::TYPE type)
 {
 	// スクロールの設定処理
 	SetPos(pos);				// 位置設定
 	SetRot(NONE_D3DXVECTOR3);	// 向き設定
-	SetSize(SIZE);				// サイズ設定
+	SetSize(size);				// サイズ設定
 	SetLength();				// 長さ設定
 	SetAngle();					// 方向設定
 
@@ -109,7 +108,7 @@ void CItemMark::SetData(const D3DXVECTOR3& pos, const CItem::TYPE type)
 //=========================
 // 生成処理
 //=========================
-CItemMark* CItemMark::Create(const D3DXVECTOR3& pos, const CItem::TYPE type)
+CItemMark* CItemMark::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const CItem::TYPE type)
 {
 	// ローカルオブジェクトを生成
 	CItemMark* pItemMark = nullptr;		// プレイヤーのインスタンスを生成
@@ -145,7 +144,7 @@ CItemMark* CItemMark::Create(const D3DXVECTOR3& pos, const CItem::TYPE type)
 		}
 
 		// 情報の設定処理
-		pItemMark->SetData(pos, type);
+		pItemMark->SetData(pos, size, type);
 	}
 	else
 	{ // オブジェクトが NULL の場合

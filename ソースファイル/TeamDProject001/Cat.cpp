@@ -527,8 +527,18 @@ void CCat::GetItem(const CItem::TYPE type)
 	// アイテムの所持カウントを加算する
 	m_nItemCount++;
 
-	// アイテムのマークを生成する
-	m_pItemUI->SetMark(type);
+	if (m_nItemCount == 1)
+	{ // 1個目の場合
+
+		// アイテムのマークを生成する
+		m_pItemUI->SetMark(type, CItemUI::ORDER_FRONT);
+	}
+	else if (m_nItemCount == 2)
+	{ // 2個目の場合
+
+		// アイテムのマークを生成する
+		m_pItemUI->SetMark(type, CItemUI::ORDER_BACK);
+	}
 }
 
 //=====================================
