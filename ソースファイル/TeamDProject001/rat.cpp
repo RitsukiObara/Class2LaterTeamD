@@ -437,7 +437,7 @@ void CRat::Hit(void)
 		SetState(STATE_DEATH);				// 死亡状態にする
 
 		// 生き返りの円の範囲生成
-		CPlayer::SetRessrectionFan(pos, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+		CPlayer::SetRessrectionFan(pos, D3DXCOLOR(1.0f, 0.0f, 0.1f, 0.5f));
 
 		// ネズミの幽霊の生成
 		CPlayer::SetRatGhost(pos);
@@ -480,6 +480,7 @@ void CRat::DeathArrow(void)
 	STATE state = GetState();				// 状態を取得する
 	D3DXVECTOR3 pos = GetPos();				// 位置取得
 	D3DXVECTOR3 posOld = GetPosOld();		// 前回の位置取得
+	int nIdx = -1;							// プレイヤーの番号
 	bool abRez[MAX_PLAY];					// 復活してるか
 
 	for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
@@ -503,22 +504,22 @@ void CRat::DeathArrow(void)
 				DestRot.y = atan2f(-DestPos.z, DestPos.x);
 
 				// 死亡矢印生成
-				SetDeathArrow(D3DXVECTOR3(pos.x + sinf(DestRot.y + -D3DX_PI * 0.5f) * ARROW_DISTANCE, 
-					pos.y - 1.0f, 
+				SetDeathArrow(D3DXVECTOR3(pos.x + sinf(DestRot.y + -D3DX_PI * 0.5f) * ARROW_DISTANCE,
+					pos.y - 1.0f,
 					pos.z + cosf(DestRot.y + -D3DX_PI * 0.5f) * ARROW_DISTANCE),
-					posOld, DestRot);
+					posOld, DestRot, nCnt);
 
 				// 回復させてる状態にする
 				abRez[nCnt] = true;
 			}
+
+			if (abRez[nCnt] == false)
+			{ // 生き返ったら
+
+				// 死亡矢印消去
+				DeleteDeathArrow(nCnt);
+			}
 		}
-	}
-
-	if (abRez[0] == false && abRez[1] == false && abRez[2] == false && abRez[3] == false)
-	{ // 全員復活してるとき
-
-		// 死亡矢印消去
-		DeleteDeathArrow();
 	}
 }
 
