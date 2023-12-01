@@ -521,18 +521,22 @@ void collision::BlockRectangleCollision(CBlock& block, D3DXVECTOR3& pos, const D
 				//
 				//// ベクトルAとベクトルBのなす角を計算（ラジアン）
 				//float angleRad = acos(fdotProduct / (fmagnitudeLine * fmagnitudeMove));
-
+				float fLength = D3DXVec3Length(&vecToPosOld);
+				float fLength2 = D3DXVec3Length(&(posOld - vec[nCnt2]));
 				// 判定と出力
-				if (D3DXVec3Length(&vecToPos) > 30.0f)
+
+				if (fLength > 20.0f&&fLength2>20.0f)
 				{
 					if (fdotProduct > 0.005)
 					{
 						NorVecLine *= 1;
+					
 
 					}
 					else if (fdotProduct < -0.005)
 					{
 						NorVecLine *= -1;
+						
 					}
 					else
 					{
@@ -548,7 +552,7 @@ void collision::BlockRectangleCollision(CBlock& block, D3DXVECTOR3& pos, const D
 					}
 					else
 					{
-						NorVecLine *= -1;
+						NorVecLine *= -0.5;
 					}
 				}
 
