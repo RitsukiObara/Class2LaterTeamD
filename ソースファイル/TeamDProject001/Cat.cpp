@@ -40,10 +40,10 @@ namespace
 {
 	static const D3DXVECTOR3 ITEMUI_POS[MAX_PLAY] =			// アイテムUIの位置
 	{
-		D3DXVECTOR3(70.0f,70.0f,0.0f),
-		D3DXVECTOR3(SCREEN_WIDTH - 70.0f,70.0f,0.0f),
-		D3DXVECTOR3(70.0f,SCREEN_HEIGHT * 0.5f + 70.0f,0.0f),
-		D3DXVECTOR3(SCREEN_WIDTH - 70.0f,SCREEN_HEIGHT * 0.5f + 70.0f,0.0f)
+		D3DXVECTOR3(70.0f,50.0f,0.0f),
+		D3DXVECTOR3(SCREEN_WIDTH - 70.0f,50.0f,0.0f),
+		D3DXVECTOR3(70.0f,SCREEN_HEIGHT * 0.5f + 50.0f,0.0f),
+		D3DXVECTOR3(SCREEN_WIDTH - 70.0f,SCREEN_HEIGHT * 0.5f + 50.0f,0.0f)
 	};
 	static const float MOVE_SPEED = 20.0f;			// 移動速度
 	static const float ATTACK_DISTANCE = 160.0f;	// 攻撃範囲までの距離

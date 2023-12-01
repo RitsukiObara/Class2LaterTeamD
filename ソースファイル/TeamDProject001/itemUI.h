@@ -26,6 +26,21 @@ class CItemUI : public CObject
 {
 public:				// 誰でもアクセスできる
 
+	// 列挙型定義(順番)
+	enum ORDER
+	{
+		ORDER_BACK = 0,		// 後ろ
+		ORDER_FRONT,		// 前
+		ORDER_MAX			// この列挙型の総数
+	};
+
+	// 構造体定義(アイテムUI)
+	struct SItemUI
+	{
+		CItemMark* m_pMark;			// マークの情報
+		CItemFrame* m_pFrame;		// 枠の情報
+	};
+
 	CItemUI();				// コンストラクタ
 	~CItemUI();				// デストラクタ
 
@@ -46,8 +61,7 @@ public:				// 誰でもアクセスできる
 private:			// 自分だけアクセスできる
 
 	// メンバ変数
-	CItemMark* m_pMark;		// マークの情報
-	CItemFrame* m_pFrame;	// 枠の情報
+	SItemUI m_aItemUI[ORDER_MAX];		// アイテムUIの情報
 };
 
 #endif
