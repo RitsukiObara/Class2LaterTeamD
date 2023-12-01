@@ -161,13 +161,13 @@ void CToyCar::Draw(void)
 //=====================================
 // î•ñ‚Ìİ’èˆ—
 //=====================================
-void CToyCar::SetData(const D3DXVECTOR3& pos, const TYPE type)
+void CToyCar::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type)
 {
 	// Ô‚ÌŒo˜H‚ğİ’è‚·‚é
 	int nType = rand() % CManager::Get()->GetFile()->GetCarRouteNum();
 
 	// î•ñ‚Ìİ’èˆ—
-	CObstacle::SetData(pos, type);
+	CObstacle::SetData(pos, rot, type);
 
 	if (m_pGear == nullptr)
 	{ // •Ô‚Ìî•ñ‚ª NULL ‚Ìê‡

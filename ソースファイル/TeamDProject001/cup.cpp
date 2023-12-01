@@ -31,6 +31,7 @@ CCup::CCup() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 	m_pConsent = NULL;
 	m_WaterSize = NONE_D3DXVECTOR3;
 	m_ThunderCounter = 0;
+	SetRatUse(true);
 }
 
 //==============================
@@ -152,7 +153,7 @@ void CCup::StateManager(D3DXVECTOR3 *pos, D3DXVECTOR3 *rot)
 
 			m_pWater = CObject3D::Create(CObject3D::TYPE_NONE);
 			m_pWater->SetPos(GetPos());
-			m_pWater->SetRot(D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f));
+			m_pWater->SetRot(D3DXVECTOR3(D3DX_PI * 0.5f, rot->y, 0.0f));
 			m_pWater->SetSize(m_WaterSize);
 			m_pWater->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\water.png"));
 		}
@@ -167,8 +168,8 @@ void CCup::StateManager(D3DXVECTOR3 *pos, D3DXVECTOR3 *rot)
 
 		if (m_WaterSize.x < 150.0f)
 		{
-			WaterPos.x += sinf(0.0f + (D3DX_PI * -0.5f)) * 0.5f;
-			WaterPos.z += cosf(0.0f + (D3DX_PI * -0.5f)) * 0.5f;
+			WaterPos.x += sinf(rot->y + (D3DX_PI * -0.5f)) * 0.5f;
+			WaterPos.z += cosf(rot->y + (D3DX_PI * -0.5f)) * 0.5f;
 			m_WaterSize.x += 0.5f;
 			m_WaterSize.y += 0.5f;
 		}
@@ -201,17 +202,18 @@ void CCup::Action(void)
 //=====================================
 // î•ñ‚ÌÝ’èˆ—
 //=====================================
-void CCup::SetData(const D3DXVECTOR3& pos, const TYPE type)
+void CCup::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type)
 {
 	// î•ñ‚ÌÝ’èˆ—
-	CObstacle::SetData(pos, type);
+	CObstacle::SetData(pos, rot, type);
 
 	if (m_pConsent == NULL)
 	{
 		m_pConsent = CConsent::Create(D3DXVECTOR3(
-			pos.x + sinf(0.0f + (D3DX_PI * -0.5f)) * 200.0f,
+			pos.x + sinf(rot.y + (D3DX_PI * -0.5f)) * 200.0f,
 			0.0f,
-			pos.z + cosf(0.0f + (D3DX_PI * -0.5f)) * 200.0f));
+			pos.z + cosf(rot.y + (D3DX_PI * -0.5f)) * 200.0f));
+		m_pConsent->SetRot(D3DXVECTOR3(0.0f, rot.y + D3DX_PI * 1.0f, 0.0f));
 		m_pConsent->SetMain(this);
 	}
 }

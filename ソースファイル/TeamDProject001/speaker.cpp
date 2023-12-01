@@ -35,6 +35,8 @@ CSpeaker::CSpeaker() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK
 	}
 	m_bAction = false;
 	m_nNoteCount = 0;
+	SetCatUse(true);
+	SetRatUse(true);
 }
 
 //==============================
@@ -171,10 +173,10 @@ void CSpeaker::Action(void)
 //=====================================
 // î•ñ‚Ìİ’èˆ—
 //=====================================
-void CSpeaker::SetData(const D3DXVECTOR3& pos, const TYPE type)
+void CSpeaker::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type)
 {
 	// î•ñ‚Ìİ’èˆ—
-	CObstacle::SetData(pos, type);
+	CObstacle::SetData(pos, rot, type);
 }
 
 //=====================================

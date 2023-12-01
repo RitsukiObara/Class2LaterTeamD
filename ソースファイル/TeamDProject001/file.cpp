@@ -207,7 +207,7 @@ void CFile::SetMap(void)
 		for (int nCntObst = 0; nCntObst < m_ObstacleInfo.nNum; nCntObst++)
 		{
 			// áŠQ•¨‚Ì¶¬ˆ—
-			CObstacle::Create(m_ObstacleInfo.pos[nCntObst], m_ObstacleInfo.type[nCntObst]);
+			CObstacle::Create(m_ObstacleInfo.pos[nCntObst], NONE_D3DXVECTOR3, m_ObstacleInfo.type[nCntObst]);
 		}
 	}
 

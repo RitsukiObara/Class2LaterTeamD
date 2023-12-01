@@ -29,6 +29,7 @@ CMouseTrap::CMouseTrap() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_B
 	// 全ての値をクリアする
 	m_pIron = nullptr;			// 鉄部分
 	m_pMark = nullptr;			// 危険マークの情報
+	SetCatUse(true);
 }
 
 //==============================
@@ -119,10 +120,10 @@ void CMouseTrap::Draw(void)
 //=====================================
 // 情報の設定処理
 //=====================================
-void CMouseTrap::SetData(const D3DXVECTOR3& pos, const TYPE type)
+void CMouseTrap::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type)
 {
 	// 情報の設定処理
-	CObstacle::SetData(pos, type);
+	CObstacle::SetData(pos,rot, type);
 
 	// 全ての値を設定する
 	if (m_pIron == nullptr)
