@@ -71,6 +71,8 @@ void CObstacle::Box(void)
 	{
 		m_pGimmickUIFalse[nCnt] = false;
 	}
+	m_bCatUse = false;
+	m_bRatUse = false;
 
 	if (CObstacleManager::Get() != nullptr)
 	{ // マネージャーが存在していた場合
@@ -189,12 +191,12 @@ void CObstacle::Draw(void)
 //=====================================
 // 情報の設定処理
 //=====================================
-void CObstacle::SetData(const D3DXVECTOR3& pos, const TYPE type)
+void CObstacle::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type)
 {
 	// 情報の設定処理
 	SetPos(pos);							// 位置
 	SetPosOld(pos);							// 前回の位置
-	SetRot(NONE_D3DXVECTOR3);				// 向き
+	SetRot(rot);							// 向き
 	SetScale(NONE_SCALE);					// 拡大率
 	SetFileData((CXFile::TYPE)(INIT_OBSTACLE + type));	// モデル情報
 
@@ -205,7 +207,7 @@ void CObstacle::SetData(const D3DXVECTOR3& pos, const TYPE type)
 //=======================================
 // 生成処理
 //=======================================
-CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const TYPE type)
+CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type)
 {
 	// ローカルオブジェクトを生成
 	CObstacle* pObstacle = nullptr;	// インスタンスを生成
@@ -346,7 +348,7 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const TYPE type)
 		}
 
 		// 情報の設定処理
-		pObstacle->SetData(pos, type);
+		pObstacle->SetData(pos, rot, type);
 	}
 	else
 	{ // オブジェクトが NULL の場合

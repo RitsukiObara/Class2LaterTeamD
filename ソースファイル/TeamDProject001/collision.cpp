@@ -285,9 +285,25 @@ void collision::ObstacleAction(CPlayer* pPlayer, const float Radius, const CPlay
 	while (pObstacle != nullptr)
 	{ // ƒuƒƒbƒN‚Ìî•ñ‚ª NULL ‚¶‚á‚È‚¢ê‡
 
-		if (pObstacle->HitCircle(pos, Radius, type) == true)
-		{ // áŠQ•¨‚Ì“–‚½‚è”»’è‚ª’Ê‚Á‚½ê‡
-			pObstacle->Action();
+		if (type == CPlayer::TYPE::TYPE_CAT)
+		{
+			if (pObstacle->GetCatUse() == true)
+			{
+				if (pObstacle->HitCircle(pos, Radius, type) == true)
+				{ // áŠQ•¨‚Ì“–‚½‚è”»’è‚ª’Ê‚Á‚½ê‡
+					pObstacle->Action();
+				}
+			}
+		}
+		else if(type == CPlayer::TYPE::TYPE_RAT)
+		{
+			if (pObstacle->GetRatUse() == true)
+			{
+				if (pObstacle->HitCircle(pos, Radius, type) == true)
+				{ // áŠQ•¨‚Ì“–‚½‚è”»’è‚ª’Ê‚Á‚½ê‡
+					pObstacle->Action();
+				}
+			}
 		}
 
 		// ŽŸ‚ÌƒIƒuƒWƒFƒNƒg‚ð‘ã“ü‚·‚é
@@ -308,21 +324,32 @@ void collision::ObstacleSearch(CPlayer* pPlayer, const float Radius, const CPlay
 	while (pObstacle != nullptr)
 	{ // ƒuƒƒbƒN‚Ìî•ñ‚ª NULL ‚¶‚á‚È‚¢ê‡
 
-		if (pObstacle->GetType() == CObstacle::TYPE_HIMO ||
-			pObstacle->GetType() == CObstacle::TYPE_SPEAKER ||
-			pObstacle->GetType() == CObstacle::TYPE_MOUSETRAP ||
-			pObstacle->GetType() == CObstacle::TYPE_LEASH ||
-			pObstacle->GetType() == CObstacle::TYPE_PIN ||
-			pObstacle->GetType() == CObstacle::TYPE_FAN ||
-			pObstacle->GetType() == CObstacle::TYPE_CUP)
+		if (type == CPlayer::TYPE::TYPE_CAT)
 		{
-			if (pObstacle->HitCircle(pos, Radius, type) == true)
-			{ // áŠQ•¨‚Ì“–‚½‚è”»’è‚ª’Ê‚Á‚½ê‡
-				pObstacle->GimmickUI(true, Player_Idx);
-			}
-			else
+			if (pObstacle->GetCatUse() == true)
 			{
-				pObstacle->GimmickUI(false, Player_Idx);
+				if (pObstacle->HitCircle(pos, Radius, type) == true)
+				{ // áŠQ•¨‚Ì“–‚½‚è”»’è‚ª’Ê‚Á‚½ê‡
+					pObstacle->GimmickUI(true, Player_Idx);
+				}
+				else
+				{
+					pObstacle->GimmickUI(false, Player_Idx);
+				}
+			}
+		}
+		else if (type == CPlayer::TYPE::TYPE_RAT)
+		{
+			if (pObstacle->GetRatUse() == true)
+			{
+				if (pObstacle->HitCircle(pos, Radius, type) == true)
+				{ // áŠQ•¨‚Ì“–‚½‚è”»’è‚ª’Ê‚Á‚½ê‡
+					pObstacle->GimmickUI(true, Player_Idx);
+				}
+				else
+				{
+					pObstacle->GimmickUI(false, Player_Idx);
+				}
 			}
 		}
 

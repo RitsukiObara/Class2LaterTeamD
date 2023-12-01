@@ -36,6 +36,8 @@ CElecFan::CElecFan() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK
 	// 全ての値をクリアする
 	m_pFan = nullptr;			// 扇風機のファン
 	m_bPower = false;			// 電源状況
+	SetCatUse(true);
+	SetRatUse(true);
 }
 
 //==============================
@@ -154,10 +156,10 @@ void CElecFan::Draw(void)
 //=====================================
 // 情報の設定処理
 //=====================================
-void CElecFan::SetData(const D3DXVECTOR3& pos, const TYPE type)
+void CElecFan::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type)
 {
 	// 情報の設定処理
-	CObstacle::SetData(pos, type);
+	CObstacle::SetData(pos,rot, type);
 
 	// 全ての値を設定する
 	if (m_pFan == nullptr)
