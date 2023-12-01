@@ -131,10 +131,10 @@ void CHoney::Break(void)
 //=====================================
 // î•ñ‚Ìİ’èˆ—
 //=====================================
-void CHoney::SetData(const D3DXVECTOR3& pos, const TYPE type)
+void CHoney::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type)
 {
 	// î•ñ‚Ìİ’èˆ—
-	CObstacle::SetData(pos, type);
+	CObstacle::SetData(pos,rot, type);
 }
 
 //=====================================

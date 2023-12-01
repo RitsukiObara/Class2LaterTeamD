@@ -2211,7 +2211,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Documents\\授業用\\グループ制作1\\グループ制作1\\github9\\Sh2ot_Toso\\ソ\リューション\\Data\\TEXTURE\\metal02.jpg";
+    "data\\TEXTURE\\metal02.jpg";
    }
   }
   Material {
@@ -2238,7 +2238,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Desktop\\fire.jpg";
+    "data\\TEXTURE\\fire.jpg";
    }
   }
  }

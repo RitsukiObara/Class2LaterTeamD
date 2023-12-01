@@ -17,7 +17,6 @@
 // 前方宣言
 //--------------------------------------------
 class CItemMark;			// アイテムのマーク
-class CItemMagni;			// アイテムの所持数
 class CItemFrame;			// アイテムの枠
 
 //--------------------------------------------
@@ -40,7 +39,6 @@ public:				// 誰でもアクセスできる
 
 	// セット・ゲット関係
 	void SetMark(const CItem::TYPE type);		// マークの生成処理
-	void SetMagni(const int nNum);				// 所持数の生成処理
 
 	// 静的メンバ関数
 	static CItemUI* Create(const D3DXVECTOR3& pos);			// 生成処理
@@ -49,7 +47,6 @@ private:			// 自分だけアクセスできる
 
 	// メンバ変数
 	CItemMark* m_pMark;		// マークの情報
-	CItemMagni* m_pMagni;	// 所持数の情報
 	CItemFrame* m_pFrame;	// 枠の情報
 };
 

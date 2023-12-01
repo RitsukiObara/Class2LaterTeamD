@@ -13,8 +13,13 @@
 #include "useful.h"
 
 #include "item_mark.h"
-#include "item_magni.h"
 #include "item_frame.h"
+
+//--------------------------------------------
+// マクロ定義
+//--------------------------------------------
+#define ITEM_MARK_SHIFT		(D3DXVECTOR3(0.0f, -5.0f, 0.0f))		// マークのずらす幅
+#define ITEM_MAGNI_SHIFT	(D3DXVECTOR3(10.0f, 30.0f, 0.0f))		// 倍率のずらす幅
 
 //========================
 // コンストラクタ
@@ -23,7 +28,6 @@ CItemUI::CItemUI() : CObject(TYPE_ITEMUI, PRIORITY_UI)
 {
 	// 全ての値をクリアする
 	m_pMark = nullptr;		// マークの情報
-	m_pMagni = nullptr;		// 所持数の情報
 	m_pFrame = nullptr;		// 枠の情報
 }
 
@@ -42,7 +46,6 @@ HRESULT CItemUI::Init(void)
 {
 	// 全ての値を初期化する
 	m_pMark = nullptr;		// マークの情報
-	m_pMagni = nullptr;		// 所持数の情報
 	m_pFrame = nullptr;		// 枠の情報
 
 	// 成功を返す
@@ -60,14 +63,6 @@ void CItemUI::Uninit(void)
 		// マークの終了処理
 		m_pMark->Uninit();
 		m_pMark = nullptr;
-	}
-
-	if (m_pMagni != nullptr)
-	{ // 倍率が NULL じゃない場合
-
-		// 倍率の終了処理
-		m_pMagni->Uninit();
-		m_pMagni = nullptr;
 	}
 
 	if (m_pFrame != nullptr)
@@ -100,13 +95,6 @@ void CItemUI::Update(void)
 		// マークの更新処理
 		m_pMark->Update();
 	}
-
-	if (m_pMagni != nullptr)
-	{ // 倍率が NULL じゃない場合
-
-		// 倍率の更新処理
-		m_pMagni->Update();
-	}
 }
 
 //========================
@@ -127,13 +115,6 @@ void CItemUI::Draw(void)
 		// マークの描画処理
 		m_pMark->Draw();
 	}
-
-	if (m_pMagni != nullptr)
-	{ // 倍率が NULL じゃない場合
-
-		// 倍率の描画処理
-		m_pMagni->Draw();
-	}
 }
 
 //========================
@@ -145,7 +126,7 @@ void CItemUI::SetData(const D3DXVECTOR3& pos)
 	{ // 枠が NULL の場合
 
 		// 枠を生成する
-		m_pFrame = CItemFrame::Create(pos, CPlayer::TYPE_CAT);
+		m_pFrame = CItemFrame::Create(pos,NONE_D3DXVECTOR3, CPlayer::TYPE_CAT);
 	}
 }
 
@@ -214,20 +195,6 @@ void CItemUI::SetMark(const CItem::TYPE type)
 	{ // マークが NULL の場合
 
 		// マークを生成する
-		m_pMark = CItemMark::Create(m_pFrame->GetPos(), type);
-	}
-}
-
-//========================
-// 所持数の生成処理
-//========================
-void CItemUI::SetMagni(const int nNum)
-{
-	if (m_pMagni == nullptr &&
-		m_pFrame != nullptr)
-	{ // 所持数が NULL の場合
-
-		// 所持数を生成する
-		m_pMagni = CItemMagni::Create(D3DXVECTOR3(m_pFrame->GetPos().x + 10.0f, m_pFrame->GetPos().y + 30.0f, 0.0f), nNum);
+		m_pMark = CItemMark::Create(m_pFrame->GetPos() + ITEM_MARK_SHIFT, type);
 	}
 }

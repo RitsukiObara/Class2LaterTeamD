@@ -28,6 +28,7 @@ CPin::CPin() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 	// 全ての値をクリアする
 	m_State = STATE_FALSE;
 	m_move = NONE_D3DXVECTOR3;
+	SetRatUse(true);
 }
 
 //==============================
@@ -146,10 +147,10 @@ void CPin::Action(void)
 //=====================================
 // 情報の設定処理
 //=====================================
-void CPin::SetData(const D3DXVECTOR3& pos, const TYPE type)
+void CPin::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type)
 {
 	// 情報の設定処理
-	CObstacle::SetData(pos, type);
+	CObstacle::SetData(pos,rot, type);
 }
 
 //=====================================
