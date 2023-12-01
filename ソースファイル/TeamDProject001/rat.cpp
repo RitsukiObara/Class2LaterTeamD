@@ -46,6 +46,7 @@
 #define SMASH_MOVE			(D3DXVECTOR3(10.0f, 20.0f, 10.0f))		// 吹き飛び状態の移動量
 #define TIME_RESURRECTION	(60 * 4)		// 復活時間
 #define INVINCIBLE_COUNT	(60)			// 無敵カウント
+#define ARROW_DISTANCE		(100.0f)		// このネズミの矢印の距離
 
 //--------------------------------------------
 // 静的メンバ変数宣言
@@ -502,7 +503,10 @@ void CRat::DeathArrow(void)
 				DestRot.y = atan2f(-DestPos.z, DestPos.x);
 
 				// 死亡矢印生成
-				SetDeathArrow(D3DXVECTOR3(pos.x, pos.y - 2.0f, pos.z), posOld, DestRot);
+				SetDeathArrow(D3DXVECTOR3(pos.x + sinf(DestRot.y + -D3DX_PI * 0.5f) * ARROW_DISTANCE, 
+					pos.y - 1.0f, 
+					pos.z + cosf(DestRot.y + -D3DX_PI * 0.5f) * ARROW_DISTANCE),
+					posOld, DestRot);
 
 				// 回復させてる状態にする
 				abRez[nCnt] = true;
@@ -610,6 +614,9 @@ void CRat::ResurrectionCollision(void)
 					// 生き返りのカウンター加算
 					m_nRezCounter++;
 
+					// 回復中UI表示設定
+					pPlayer->SetDispRecoveringUI(abRez[nCnt]);
+
 					pPlayer->SetResurrectionTime(m_nRezCounter);
 
 					if (pPlayer->GetResurrectionTime() >= TIME_RESURRECTION)
@@ -642,6 +649,9 @@ void CRat::ResurrectionCollision(void)
 				else if (m_bResurrection == false && (bCollXY == false || bCollXZ == true))
 				{ // 復活させてない状態 && 円の当たり判定(XY平面)か(XZ平面)の範囲にいない場合
 
+					// 回復中UI表示設定
+					pPlayer->SetDispRecoveringUI(false);
+
 					if (pPlayer->GetResurrectionTime() > 0)
 					{ // 生き返りのカウンターが加算されてたら
 
@@ -664,9 +674,6 @@ void CRat::ResurrectionCollision(void)
 					// 回復の範囲の時間設定
 					pResurrectionFan->SetResurrectionFan(pPlayer->GetResurrectionTime());
 				}
-
-				// 回復中UI表示設定
-				pPlayer->SetDispRecoveringUI(abRez[nCnt]);
 			}
 		}
 	}
