@@ -820,7 +820,7 @@ D3DXVECTOR3 collision::WallCollision(D3DXVECTOR3& objVec1, D3DXVECTOR3& objVec2)
 //======================
 // ネコとアイテムとの当たり判定
 //======================
-void collision::ItemCollision(CPlayer& pPlayer)
+void collision::ItemCollision(CPlayer& pPlayer, const int nHave)
 {
 	// 処理に使う変数を宣言
 	CItem* pItem = CItemManager::Get()->GetTop();	// 最初のアイテムの情報を取得する
@@ -835,7 +835,8 @@ void collision::ItemCollision(CPlayer& pPlayer)
 		// 次のアイテムを取得する
 		pItemNext = pItem->GetNext();
 
-		if (useful::RectangleCollisionXY(pos, pItem->GetPos(), Max, pItem->GetFileData().vtxMax, Min, pItem->GetFileData().vtxMin) == true &&
+		if (nHave < 2 &&
+			useful::RectangleCollisionXY(pos, pItem->GetPos(), Max, pItem->GetFileData().vtxMax, Min, pItem->GetFileData().vtxMin) == true &&
 			useful::RectangleCollisionXZ(pos, pItem->GetPos(), Max, pItem->GetFileData().vtxMax, Min, pItem->GetFileData().vtxMin) == true &&
 			useful::RectangleCollisionYZ(pos, pItem->GetPos(), Max, pItem->GetFileData().vtxMax, Min, pItem->GetFileData().vtxMin) == true)
 		{ // 判定内に入った場合

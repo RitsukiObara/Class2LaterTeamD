@@ -213,7 +213,7 @@ void CCat::Update(void)
 	CShadowCircle::SetPosRot(m_nShadowIdx, GetPos(), GetRot());
 
 	// アイテムとの当たり判定処理
-	collision::ItemCollision(*this);
+	collision::ItemCollision(*this, m_nItemCount);
 
 	// 起伏地面の当たり判定
 	Elevation();
