@@ -117,11 +117,15 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 {
 	// ローカル変数宣言
 	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を取得する
+	CObstacle* pObstacleNext = nullptr;				// 次の障害物を取得する
 	D3DXVECTOR3 pos = pPlayer->GetPos();			// 位置を取得する
 	float fAngle;								// 吹き飛ぶ方向
 
 	while (pObstacle != nullptr)
 	{ // ブロックの情報が NULL じゃない場合
+
+		// 障害物の次のポインタを取得する
+		pObstacleNext = pObstacle->GetNext();
 
 		if (pObstacle->Hit(pos, fWidth, fHeight, fDepth, type) == true)
 		{ // 障害物の当たり判定が通った場合
@@ -268,7 +272,7 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 		}
 
 		// 次のオブジェクトを代入する
-		pObstacle = pObstacle->GetNext();
+		pObstacle = pObstacleNext;
 	}
 }
 
@@ -820,7 +824,7 @@ D3DXVECTOR3 collision::WallCollision(D3DXVECTOR3& objVec1, D3DXVECTOR3& objVec2)
 //======================
 // ネコとアイテムとの当たり判定
 //======================
-void collision::ItemCollision(CPlayer& pPlayer)
+void collision::ItemCollision(CPlayer& pPlayer, const int nHave)
 {
 	// 処理に使う変数を宣言
 	CItem* pItem = CItemManager::Get()->GetTop();	// 最初のアイテムの情報を取得する
@@ -835,7 +839,8 @@ void collision::ItemCollision(CPlayer& pPlayer)
 		// 次のアイテムを取得する
 		pItemNext = pItem->GetNext();
 
-		if (useful::RectangleCollisionXY(pos, pItem->GetPos(), Max, pItem->GetFileData().vtxMax, Min, pItem->GetFileData().vtxMin) == true &&
+		if (nHave < 2 &&
+			useful::RectangleCollisionXY(pos, pItem->GetPos(), Max, pItem->GetFileData().vtxMax, Min, pItem->GetFileData().vtxMin) == true &&
 			useful::RectangleCollisionXZ(pos, pItem->GetPos(), Max, pItem->GetFileData().vtxMax, Min, pItem->GetFileData().vtxMin) == true &&
 			useful::RectangleCollisionYZ(pos, pItem->GetPos(), Max, pItem->GetFileData().vtxMax, Min, pItem->GetFileData().vtxMin) == true)
 		{ // 判定内に入った場合

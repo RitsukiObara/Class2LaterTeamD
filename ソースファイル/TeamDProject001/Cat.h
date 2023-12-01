@@ -70,6 +70,7 @@ private:		// 自分だけアクセスできる
 	void Attack(void);				// 攻撃処理
 	void AttackStateManager(void);	// 攻撃状態マネージャー
 	void Elevation(void);			// 起伏地面の当たり判定
+	void ItemSet(void);				// ネコのアイテム設置処理
 	void DebugMessage(void);		// デバッグメッセージ処理
 
 	// メンバ変数

@@ -37,8 +37,9 @@ public:				// 誰でもアクセスできる
 	// 構造体定義(アイテムUI)
 	struct SItemUI
 	{
-		CItemMark* m_pMark;			// マークの情報
-		CItemFrame* m_pFrame;		// 枠の情報
+		CItemMark* pMark;		// マークの情報
+		CItemFrame* pFrame;		// 枠の情報
+		CItem::TYPE type;		// アイテムの種類
 	};
 
 	CItemUI();				// コンストラクタ
@@ -52,11 +53,14 @@ public:				// 誰でもアクセスできる
 
 	void SetData(const D3DXVECTOR3& pos);					// 情報の設定処理
 
+	void SortInfo(void);	// 情報のソート処理
+
 	// セット・ゲット関係
-	void SetMark(const CItem::TYPE type);		// マークの生成処理
+	void SetMark(const CItem::TYPE type, const ORDER order);	// マークの生成処理
+	SItemUI GetItemUI(const ORDER order) const;					// アイテムUIの取得処理
 
 	// 静的メンバ関数
-	static CItemUI* Create(const D3DXVECTOR3& pos);			// 生成処理
+	static CItemUI* Create(const D3DXVECTOR3& pos);				// 生成処理
 
 private:			// 自分だけアクセスできる
 
