@@ -202,6 +202,7 @@
     <ClCompile Include="input.cpp" />
     <ClCompile Include="item.cpp" />
     <ClCompile Include="itemUI.cpp" />
+    <ClCompile Include="item_frame.cpp" />
     <ClCompile Include="item_magni.cpp" />
     <ClCompile Include="item_manager.cpp" />
     <ClCompile Include="item_mark.cpp" />
@@ -335,6 +336,7 @@
     <ClInclude Include="input.h" />
     <ClInclude Include="item.h" />
     <ClInclude Include="itemUI.h" />
+    <ClInclude Include="item_frame.h" />
     <ClInclude Include="item_magni.h" />
     <ClInclude Include="item_manager.h" />
     <ClInclude Include="item_mark.h" />

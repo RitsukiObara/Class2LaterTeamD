@@ -13,6 +13,11 @@
 #include "player.h"
 
 //--------------------------------------------
+// 前方宣言
+//--------------------------------------------
+class CItemUI;			// アイテムUI
+
+//--------------------------------------------
 // クラス(プレイヤークラス)
 //--------------------------------------------
 class CCat : public CPlayer
@@ -49,6 +54,12 @@ public:			// 誰でもアクセスできる
 
 	void Hit(void);						// ヒット処理
 	void MotionManager(void);			// モーションマネージャー
+	void GetItem(void);					// アイテムの取得処理
+
+	// セット・ゲット関数
+	void SetItemUI(void);				// アイテムUIの設定処理
+	CItemUI* GetItemUI(void) const;		// アイテムUIの取得処理
+	void DeleteItemUI(void);			// アイテムUIの消去処理
 
 	void SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type);		// 情報の設定処理
 
@@ -62,6 +73,7 @@ private:		// 自分だけアクセスできる
 	void DebugMessage(void);		// デバッグメッセージ処理
 
 	// メンバ変数
+	CItemUI* m_pItemUI;				// アイテムUIの情報
 	D3DXVECTOR3 m_AttackPos;		// 攻撃の位置
 	D3DXVECTOR3 m_posDest;			// 目的の位置
 	D3DXVECTOR3 m_rotDest;			// 目的の向き
