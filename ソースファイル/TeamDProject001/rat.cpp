@@ -46,6 +46,7 @@
 #define SMASH_MOVE			(D3DXVECTOR3(10.0f, 20.0f, 10.0f))		// 吹き飛び状態の移動量
 #define TIME_RESURRECTION	(60 * 4)		// 復活時間
 #define INVINCIBLE_COUNT	(60)			// 無敵カウント
+#define ARROW_DISTANCE		(100.0f)		// このネズミの矢印の距離
 
 //--------------------------------------------
 // 静的メンバ変数宣言
@@ -479,11 +480,13 @@ void CRat::DeathArrow(void)
 	STATE state = GetState();				// 状態を取得する
 	D3DXVECTOR3 pos = GetPos();				// 位置取得
 	D3DXVECTOR3 posOld = GetPosOld();		// 前回の位置取得
+	bool abRez[MAX_PLAY];					// 復活してるか
 
 	for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
 	{
 		// プレイヤーの情報を取得する
 		pPlayer = CGame::GetPlayer(nCnt);
+		abRez[nCnt] = false;
 
 		if (pPlayer != nullptr &&
 			pPlayer->GetType() == TYPE_RAT &&
@@ -500,14 +503,22 @@ void CRat::DeathArrow(void)
 				DestRot.y = atan2f(-DestPos.z, DestPos.x);
 
 				// 死亡矢印生成
-				SetDeathArrow(D3DXVECTOR3(pos.x, pos.y - 2.0f, pos.z), posOld, DestRot);
-			}
-			else if(pPlayer->GetState() != STATE_DEATH)
-			{
-				// 死亡矢印消去
-				DeleteDeathArrow();
+				SetDeathArrow(D3DXVECTOR3(pos.x + sinf(DestRot.y + -D3DX_PI * 0.5f) * ARROW_DISTANCE, 
+					pos.y - 1.0f, 
+					pos.z + cosf(DestRot.y + -D3DX_PI * 0.5f) * ARROW_DISTANCE),
+					posOld, DestRot);
+
+				// 回復させてる状態にする
+				abRez[nCnt] = true;
 			}
 		}
+	}
+
+	if (abRez[0] == false && abRez[1] == false && abRez[2] == false && abRez[3] == false)
+	{ // 全員復活してるとき
+
+		// 死亡矢印消去
+		DeleteDeathArrow();
 	}
 }
 
@@ -603,6 +614,9 @@ void CRat::ResurrectionCollision(void)
 					// 生き返りのカウンター加算
 					m_nRezCounter++;
 
+					// 回復中UI表示設定
+					pPlayer->SetDispRecoveringUI(abRez[nCnt]);
+
 					pPlayer->SetResurrectionTime(m_nRezCounter);
 
 					if (pPlayer->GetResurrectionTime() >= TIME_RESURRECTION)
@@ -635,6 +649,9 @@ void CRat::ResurrectionCollision(void)
 				else if (m_bResurrection == false && (bCollXY == false || bCollXZ == true))
 				{ // 復活させてない状態 && 円の当たり判定(XY平面)か(XZ平面)の範囲にいない場合
 
+					// 回復中UI表示設定
+					pPlayer->SetDispRecoveringUI(false);
+
 					if (pPlayer->GetResurrectionTime() > 0)
 					{ // 生き返りのカウンターが加算されてたら
 
@@ -657,9 +674,6 @@ void CRat::ResurrectionCollision(void)
 					// 回復の範囲の時間設定
 					pResurrectionFan->SetResurrectionFan(pPlayer->GetResurrectionTime());
 				}
-
-				// 回復中UI表示設定
-				pPlayer->SetDispRecoveringUI(abRez[nCnt]);
 			}
 		}
 	}
