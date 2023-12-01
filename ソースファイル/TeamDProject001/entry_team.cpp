@@ -18,7 +18,7 @@
 //=========================
 // コンストラクタ
 //=========================
-CEntryTeam::CEntryTeam() : CObject2D(CObject::TYPE_NONE, CObject::PRIORITY_ENTITY)
+CEntryTeam::CEntryTeam() : CObject2D(CObject::TYPE_NONE, CObject::PRIORITY_UI)
 {
 	// 全ての値をクリアする
 	m_type = CPlayer::TYPE_CAT;		// チームの種類

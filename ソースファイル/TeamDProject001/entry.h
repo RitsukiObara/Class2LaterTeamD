@@ -17,6 +17,7 @@
 // 前方宣言
 //--------------------------------------------
 class CEntryUI;			// エントリーUI
+class CPlayer;
 
 //--------------------------------------------
 // クラス(エントリー画面クラス)
@@ -41,7 +42,10 @@ private:					// 自分だけアクセスできる
 
 	// 静的メンバ変数
 	static int m_nCatIdx;			// ネコをやるプレイヤー
+	static int m_nCatOldIdx;		// 差分用ID
+	static int m_EntryId[MAX_PLAY];			// 全体のID
 	CEntryUI* m_apUI[MAX_PLAY];		// エントリーUIの情報
+	static CPlayer*  m_apPlayer[MAX_PLAY];
 };
 
 #endif

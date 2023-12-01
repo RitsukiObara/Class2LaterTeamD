@@ -18,7 +18,7 @@
 //=========================
 // コンストラクタ
 //=========================
-CEntryID::CEntryID() : CObject2D(CObject::TYPE_NONE, CObject::PRIORITY_ENTITY)
+CEntryID::CEntryID() : CObject2D(CObject::TYPE_NONE, CObject::PRIORITY_UI)
 {
 
 }

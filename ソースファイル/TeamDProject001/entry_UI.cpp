@@ -24,7 +24,7 @@
 //=========================
 // コンストラクタ
 //=========================
-CEntryUI::CEntryUI() : CObject(CObject::TYPE_ENTRYUI, CObject::PRIORITY_BG)
+CEntryUI::CEntryUI() : CObject(CObject::TYPE_ENTRYUI, CObject::PRIORITY_UI)
 {
 	// 全ての値をクリアする
 	m_pFrame = nullptr;			// 枠の情報
