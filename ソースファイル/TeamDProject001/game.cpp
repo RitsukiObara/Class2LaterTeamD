@@ -13,6 +13,7 @@
 #include "fade.h"
 #include "file.h"
 #include "renderer.h"
+#include "log.h"
 
 #include "pause.h"
 #include "debugproc.h"
@@ -164,6 +165,7 @@ HRESULT CGame::Init(void)
 	CObstacle::Create(D3DXVECTOR3(-200.0f, 200.0f, 100.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_CUP);
 	pObstacle = CObstacle::Create(D3DXVECTOR3(400.0f, 200.0f, 100.0f), D3DXVECTOR3(0.0f, D3DX_PI * 1.0f, 0.0f), CObstacle::TYPE::TYPE_CUP);
 	pObstacle->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 1.0f, 0.0f));
+
 #endif // _DEBUG
 
 	{ // キャラの生成処理
@@ -205,6 +207,9 @@ HRESULT CGame::Init(void)
 	//// 武器選択UIを生成
 	//CWeaponSelectUI::Create();
 
+	// サウンドの再生
+	CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_BGM_GAME);
+
 	// 情報の初期化
 	m_nFinishCount = 0;				// 終了カウント
 	m_GameState = STATE_START;		// 状態
@@ -229,6 +234,9 @@ void CGame::Uninit(void)
 
 	// 終了カウントを初期化する
 	m_nFinishCount = 0;
+
+	// 再生中のサウンドの停止
+	CManager::Get()->GetSound()->Stop();
 
 	// 終了処理
 	CScene::Uninit();
@@ -305,7 +313,10 @@ void CGame::Update(void)
 	case CGame::STATE_CAT_WIN:
 
 		// 遷移処理
-		m_pFinish->SetFinish(true);
+		if (m_pFinish != nullptr)
+		{
+			m_pFinish->SetFinish(true);
+		}
 		Transition();
 
 		break;

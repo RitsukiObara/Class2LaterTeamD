@@ -479,11 +479,13 @@ void CRat::DeathArrow(void)
 	STATE state = GetState();				// 状態を取得する
 	D3DXVECTOR3 pos = GetPos();				// 位置取得
 	D3DXVECTOR3 posOld = GetPosOld();		// 前回の位置取得
+	bool abRez[MAX_PLAY];					// 復活してるか
 
 	for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
 	{
 		// プレイヤーの情報を取得する
 		pPlayer = CGame::GetPlayer(nCnt);
+		abRez[nCnt] = false;
 
 		if (pPlayer != nullptr &&
 			pPlayer->GetType() == TYPE_RAT &&
@@ -501,13 +503,18 @@ void CRat::DeathArrow(void)
 
 				// 死亡矢印生成
 				SetDeathArrow(D3DXVECTOR3(pos.x, pos.y - 2.0f, pos.z), posOld, DestRot);
-			}
-			else if(pPlayer->GetState() != STATE_DEATH)
-			{
-				// 死亡矢印消去
-				DeleteDeathArrow();
+
+				// 回復させてる状態にする
+				abRez[nCnt] = true;
 			}
 		}
+	}
+
+	if (abRez[0] == false && abRez[1] == false && abRez[2] == false && abRez[3] == false)
+	{ // 全員復活してるとき
+
+		// 死亡矢印消去
+		DeleteDeathArrow();
 	}
 }
 
