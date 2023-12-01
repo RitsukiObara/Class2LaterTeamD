@@ -146,6 +146,9 @@ HRESULT CGame::Init(void)
 	pObstacle = CObstacle::Create(D3DXVECTOR3(900.0f, 0.0f, 900.0f), CObstacle::TYPE_SPEAKER);
 	pObstacle->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.25f, 0.0f));
 
+	pObstacle = CObstacle::Create(D3DXVECTOR3(1000.0f, 0.0f, 900.0f), CObstacle::TYPE_SPEAKER);
+	pObstacle->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.0f, 0.0f));
+
 	// リードの生成処理
 	pObstacle = CObstacle::Create(D3DXVECTOR3(400.0f, 0.0f, -600.0f), CObstacle::TYPE_LEASH);
 	pObstacle->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
@@ -185,8 +188,8 @@ HRESULT CGame::Init(void)
 	}
 
 	// 生成処理
-	CGameTime::Create();
-	m_pFinish = CGameFinish::Create();
+	//CGameTime::Create();
+	//m_pFinish = CGameFinish::Create();
 
 	// キャラクターUIの生成処理
 	for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
@@ -234,16 +237,6 @@ void CGame::Update(void)
 
 // デバッグ版
 #ifdef _DEBUG
-
-	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_8) == true)
-	{ // 8キーを押したとき
-		m_GameState = STATE_CAT_WIN;		// ねこのかち
-	}
-	else if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_9) == true)
-	{ // 9キーを押したとき
-		m_GameState = STATE_RAT_WIN;		// ねずみのかち
-	}
-
 	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_F7) == true)
 	{ // F7キーを押した場合
 

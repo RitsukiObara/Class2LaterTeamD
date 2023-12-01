@@ -31,6 +31,7 @@ CSpeaker::CSpeaker() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK
 	for (int nCnt = 0; nCnt < MAX_NOTE; nCnt++)
 	{
 		m_apNote[nCnt] = NULL;
+		m_bmySet[nCnt] = false;
 	}
 	m_bAction = false;
 	m_nNoteCount = 0;
@@ -99,9 +100,12 @@ void CSpeaker::Update(void)
 
 	for (int nCnt = 0; nCnt < MAX_NOTE; nCnt++)
 	{
-		if (m_apNote[nCnt] != NULL)
+		if (m_bmySet[nCnt] == true)
 		{
-			m_apNote[nCnt]->Update();
+			if (m_apNote[nCnt] != NULL)
+			{
+				m_apNote[nCnt]->Update();
+			}
 		}
 	}
 
@@ -142,12 +146,14 @@ void CSpeaker::SetNote(void)
 				D3DXVECTOR3 rot = GetRot();
 
 				m_apNote[nCnt] = CNote::Create(D3DXVECTOR3(pos.x, pos.y + 100.0f, pos.z));
+				m_apNote[nCnt]->SetMain(this);
 				m_apNote[nCnt]->SetIndex(nCnt);
 				m_apNote[nCnt]->SetLife(NOTE_LIFE);
 				m_apNote[nCnt]->SetMove(D3DXVECTOR3(
 					sinf(rot.y + (D3DX_PI * 1.0f)) * NOTE_SPEED,
 					0.0f,
 					cosf(rot.y + (D3DX_PI * 1.0f)) * NOTE_SPEED));
+				m_bmySet[nCnt] = true;
 				break;
 			}
 		}

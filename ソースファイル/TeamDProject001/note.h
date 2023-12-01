@@ -12,6 +12,7 @@
 //***********************************
 #include "model.h"
 
+class CSpeaker;
 //-----------------------------------
 // クラス定義(音符)
 //-----------------------------------
@@ -32,6 +33,7 @@ public:			// 誰でもアクセスできる
 	void SetLife(int Life) { m_nLife = Life; }				// 寿命の設定処理
 	void SetIndex(int Idx) { m_nIndex = Idx; }				// 使用番号の設定
 	void SetMove(D3DXVECTOR3 move) { m_move = move; }		// 移動量の設定
+	void SetMain(CSpeaker *Main) { m_Main = Main; }			// 自分の事を使用しているオブジェクトのポインタを取得する
 
 	// 静的メンバ関数
 	static CNote* Create(const D3DXVECTOR3& pos);	// 生成処理
@@ -42,6 +44,7 @@ private:		// 自分だけアクセスできる
 	D3DXVECTOR3 m_move;		// 移動量
 	int m_nLife;			// 寿命
 	int m_nIndex;			// 使用番号
+	CSpeaker *m_Main;		// 自分の事を使用しているオブジェクト
 };
 
 #endif

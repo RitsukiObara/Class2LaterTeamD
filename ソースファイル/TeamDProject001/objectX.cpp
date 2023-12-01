@@ -62,6 +62,17 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\picture_frames.x",	// 写真立て
 	"data\\MODEL\\shelf.x",				// 戸棚
 	"data\\MODEL\\pullshelf.x",			// 引き出し棚
+	"data\\MODEL\\Kitchen.x",			//キッチン
+	"data\\MODEL\\Reizouko.x",			//冷蔵庫
+	"data\\MODEL\\Table000.x",			//テーブル
+	"data\\MODEL\\Table_Chair000.x",	// 机の椅子
+	"data\\MODEL\\corkboard.x",			// コルクボード
+	"data\\MODEL\\desk.x",				// デスク
+	"data\\MODEL\\deskbook.x",			// デスク用の本
+	"data\\MODEL\\fire_extingisher.x",	// 消火器
+	"data\\MODEL\\Katen.x",				// カーテン
+	"data\\MODEL\\KatenRail.x",			// カーテンのレール
+	"data\\MODEL\\Tansu002.x",			// たんす
 
 	// 障害物モデル
 	"data\\MODEL\\HoneyBottle.x",		// 蜂蜜のボトル
@@ -78,11 +89,6 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\pin_box.x",			// 画鋲
 	"data\\MODEL\\Senpuki_Body.x",		// 扇風機(本体)
 	"data\\MODEL\\cup.x",				// コップ
-
-	//マップモデル
-	"data\\MODEL\\Kitchen.x",			//キッチン
-	"data\\MODEL\\Reizouko.x",			//冷蔵庫
-	"data\\MODEL\\Table000.x",			//テーブル
 
 	// ネズミモデル
 	"data\\MODEL\\rat\\00_rat_body.x",	// 体

@@ -12,7 +12,7 @@
 //***********************************
 #include "obstacle.h"
 
-#define MAX_NOTE (32)	//音符が画面の中に存在できる最大数
+#define MAX_NOTE (64)	//音符が画面の中に存在できる最大数
 
 class CNote;
 //-----------------------------------
@@ -37,13 +37,14 @@ public:			// 誰でもアクセスできる
 	bool Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type);		// ヒット処理
 	bool HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type);
 	void Action(void) override;
-
+	void MySetIdx(int Idx){ m_bmySet[Idx] = false; }
 	static void NULLNote(int Idx) { m_apNote[Idx] = NULL; }
 
 private:		// 自分だけアクセスできる
 	void SetNote(void);
 
 	static CNote *m_apNote[MAX_NOTE];
+	bool m_bmySet[MAX_NOTE];
 	bool m_bAction;
 	int m_nNoteCount;
 };
