@@ -13,6 +13,7 @@
 #include "fade.h"
 #include "file.h"
 #include "renderer.h"
+#include "log.h"
 
 #include "pause.h"
 #include "debugproc.h"
@@ -164,6 +165,7 @@ HRESULT CGame::Init(void)
 	CObstacle::Create(D3DXVECTOR3(-200.0f, 200.0f, 100.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_CUP);
 	pObstacle = CObstacle::Create(D3DXVECTOR3(400.0f, 200.0f, 100.0f), D3DXVECTOR3(0.0f, D3DX_PI * 1.0f, 0.0f), CObstacle::TYPE::TYPE_CUP);
 	pObstacle->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 1.0f, 0.0f));
+
 #endif // _DEBUG
 
 	{ // ƒLƒƒƒ‰‚Ì¶¬ˆ—

@@ -186,6 +186,9 @@ void CRat::Update(void)
 		Move();
 	}
 
+	// 死亡矢印の処理
+	DeathArrow();
+
 	// 起伏地面の当たり判定
 	Elevation();
 
@@ -464,6 +467,54 @@ void CRat::Hit(void)
 			// ネコが勝利した状態にする
 			CGame::SetState(CGame::STATE_CAT_WIN);
 		}
+	}
+}
+
+//=======================================
+// 死亡矢印の処理
+//=======================================
+void CRat::DeathArrow(void)
+{
+	CPlayer *pPlayer;						// ネズミの情報
+	STATE state = GetState();				// 状態を取得する
+	D3DXVECTOR3 pos = GetPos();				// 位置取得
+	D3DXVECTOR3 posOld = GetPosOld();		// 前回の位置取得
+	bool abRez[MAX_PLAY];					// 復活してるか
+
+	for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
+	{
+		// プレイヤーの情報を取得する
+		pPlayer = CGame::GetPlayer(nCnt);
+		abRez[nCnt] = false;
+
+		if (pPlayer != nullptr &&
+			pPlayer->GetType() == TYPE_RAT &&
+			GetPlayerIdx() != pPlayer->GetPlayerIdx())
+		{ // 操作してるネズミじゃないとき
+
+			if (pPlayer->GetState() == STATE_DEATH && state != STATE_DEATH)
+			{ // 他のネズミが死亡状態の時
+
+				D3DXVECTOR3 DestPos = pos - pPlayer->GetPos();		// 目的の位置
+				D3DXVECTOR3 DestRot = NONE_D3DXVECTOR3;				// 目的の向き
+
+				// 目的の向きを求める
+				DestRot.y = atan2f(-DestPos.z, DestPos.x);
+
+				// 死亡矢印生成
+				SetDeathArrow(D3DXVECTOR3(pos.x, pos.y - 2.0f, pos.z), posOld, DestRot);
+
+				// 回復させてる状態にする
+				abRez[nCnt] = true;
+			}
+		}
+	}
+
+	if (abRez[0] == false && abRez[1] == false && abRez[2] == false && abRez[3] == false)
+	{ // 全員復活してるとき
+
+		// 死亡矢印消去
+		DeleteDeathArrow();
 	}
 }
 

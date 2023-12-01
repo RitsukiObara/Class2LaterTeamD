@@ -26,6 +26,8 @@
 CDeathArrow::CDeathArrow() : CModel(CObject::TYPE_DEATHARROW, CObject::PRIORITY_PLAYER)
 {
 	// 全ての値をクリアする
+	m_pos = NONE_D3DXVECTOR3;		// 位置
+	m_rot = NONE_D3DXVECTOR3;		// 向き
 }
 
 //==============================
@@ -49,6 +51,8 @@ HRESULT CDeathArrow::Init(void)
 	}
 
 	// 全ての値を初期化する
+	m_pos = NONE_D3DXVECTOR3;		// 位置
+	m_rot = NONE_D3DXVECTOR3;		// 向き
 
 	// 値を返す
 	return S_OK;
@@ -94,7 +98,7 @@ void CDeathArrow::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, con
 	SetPosOld(posOld);				// 前回の位置
 	SetRot(rot);					// 向き
 	SetScale(NONE_SCALE);			// 拡大率
-	//SetFileData(CXFile::TYPE);	// モデルの情報
+	SetFileData(CXFile::TYPE_DEATHARROW);	// モデルの情報
 }
 
 //=======================================
