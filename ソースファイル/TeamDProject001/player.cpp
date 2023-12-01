@@ -667,7 +667,7 @@ void CPlayer::ObstacleCollision(void)
 //=======================================
 // 気絶処理
 //=======================================
-void CPlayer::Stun(int StunTime)
+bool CPlayer::Stun(int StunTime)
 {
 	if (m_StunState == STUNSTATE_NONE &&
 		m_State == STATE_NONE)
@@ -679,6 +679,15 @@ void CPlayer::Stun(int StunTime)
 
 		// 気絶演出の設定処理
 		SetStun(GetPos());
+
+		// true(気絶できた) を返す
+		return true;
+	}
+	else
+	{ // 上記以外
+
+		// false(気絶失敗) を返す
+		return false;
 	}
 
 	////猫とネズミで気絶の仕様を変える場合は使って

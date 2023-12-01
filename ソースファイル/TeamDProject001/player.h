@@ -75,7 +75,7 @@ public:			// 誰でもアクセスできる
 
 	virtual void Hit(void) = 0;						// ヒット処理
 	void Smash(const float fAngle);					// 吹き飛び状態
-	void Stun(int StunTime);						// 気絶状態
+	bool Stun(int StunTime);						// 気絶状態
 	virtual void MotionManager(void) = 0;			// モーションマネージャー
 	virtual void GetItem(const CItem::TYPE type);	// アイテムの取得処理
 
