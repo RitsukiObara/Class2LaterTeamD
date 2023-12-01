@@ -31,6 +31,7 @@
 #include "ripple.h"
 #include "obstacle_manager.h"
 #include "rat.h"
+#include "itemUI.h"
 
 //--------------------------------------------
 // マクロ定義
@@ -46,6 +47,7 @@
 CCat::CCat() : CPlayer(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 {
 	// 全ての値をクリアする
+	m_pItemUI = nullptr;			// アイテムUIの情報
 	m_AttackPos = NONE_D3DXVECTOR3;	//攻撃の位置
 	m_posDest = NONE_D3DXVECTOR3;	// 目的の位置
 	m_rotDest = NONE_D3DXVECTOR3;	// 目的の向き
@@ -120,6 +122,7 @@ HRESULT CCat::Init(void)
 	SetMotion(pMotion);
 
 	// 全ての値を初期化する
+	m_pItemUI = nullptr;			// アイテムUIの情報
 	m_posDest = NONE_D3DXVECTOR3;	// 目的の位置
 	m_rotDest = NONE_D3DXVECTOR3;	// 目的の向き
 	m_nShadowIdx = INIT_SHADOW;		// 影のインデックス
@@ -133,11 +136,16 @@ HRESULT CCat::Init(void)
 //===========================================
 void CCat::Uninit(void)
 {
+	if (m_pItemUI != nullptr)
+	{ // アイテムUIの情報が NULL じゃない場合
+		
+		// アイテムUIの終了処理
+		m_pItemUI->Uninit();
+		m_pItemUI = nullptr;
+	}
+
 	// 終了処理
 	CPlayer::Uninit();
-
-	// プレイヤーを消去する
-	CGame::DeletePlayer(3);
 }
 
 //===========================================
@@ -488,5 +496,50 @@ void CCat::MotionManager(void)
 				GetMotion()->Set(nMotionType);
 			}
 		}
+	}
+}
+
+//=====================================
+// アイテムの取得処理
+//=====================================
+void CCat::GetItem(void)
+{
+	// アイテムUIの設定処理
+	SetItemUI();
+}
+
+//=====================================
+// アイテムUIの設定処理
+//=====================================
+void CCat::SetItemUI(void)
+{
+	if (m_pItemUI == nullptr)
+	{ // アイテムUIが NULL の場合
+
+		// アイテムUIの生成処理
+		m_pItemUI->Create(GetPos());
+	}
+}
+
+//=====================================
+// アイテムUIの取得処理
+//=====================================
+CItemUI* CCat::GetItemUI(void) const
+{
+	// アイテムUIの情報を返す
+	return m_pItemUI;
+}
+
+//=====================================
+// アイテムUIの消去処理
+//=====================================
+void CCat::DeleteItemUI(void)
+{
+	if (m_pItemUI != nullptr)
+	{ // アイテムUIが NULL じゃない場合
+
+		// アイテムUIの終了処理
+		m_pItemUI->Uninit();
+		m_pItemUI = nullptr;
 	}
 }

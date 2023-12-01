@@ -72,6 +72,7 @@ public:			// 誰でもアクセスできる
 	void Smash(const float fAngle);				// 吹き飛び状態
 	void Stun(int StunTime);					// 気絶状態
 	virtual void MotionManager(void) = 0;		// モーションマネージャー
+	virtual void GetItem(void);					// アイテムの取得処理
 
 	virtual void SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type);		// 情報の設定処理
 

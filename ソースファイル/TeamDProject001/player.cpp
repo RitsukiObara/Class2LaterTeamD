@@ -194,6 +194,9 @@ void CPlayer::Uninit(void)
 		m_pSpeechMessage = nullptr;
 	}
 
+	// プレイヤーを消去する
+	CGame::DeletePlayer(m_nPlayerIdx);
+
 	// 終了処理
 	CCharacter::Uninit();
 }
@@ -631,6 +634,14 @@ void CPlayer::Stun(int StunTime)
 	//else if (m_type == TYPE_RAT)
 	//{ // ネズミの場合
 	//}
+}
+
+//=======================================
+// アイテムの取得処理
+//=======================================
+void CPlayer::GetItem(void)
+{
+
 }
 
 //=======================================

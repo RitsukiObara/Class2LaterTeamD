@@ -141,9 +141,6 @@ HRESULT CRat::Init(void)
 //========================================
 void CRat::Uninit(void)
 {
-	// プレイヤーを消去する
-	CGame::DeletePlayer(GetPlayerIdx());
-
 	// 終了処理
 	CPlayer::Uninit();
 }

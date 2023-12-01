@@ -815,6 +815,8 @@ void collision::ItemCollision(CPlayer& pPlayer)
 
 			// 終了処理
 			pItem->Uninit();
+
+
 		}
 
 		// 次のアイテムを設定する
