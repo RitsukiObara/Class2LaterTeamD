@@ -46,14 +46,16 @@ public:			// 誰でもアクセスできる
 private:		// 自分だけアクセスできる
 
 	// メンバ関数
-	void TypeProcess(void);	// 種類ごとの処理
-	void Move(void);		// 移動処理
-	void Adjust(void);		// 微調整処理
-	void RotMove(void);		// 向きの移動処理
-	void Set(void);			// 設置処理
-	void Reset(void);		// リセット処理
-	void Delete(void);		// 消去処理
-	void Type(void);		// 種類の変更処理
+	void TypeProcess(void);		// 種類ごとの処理
+	void Move(void);			// 移動処理
+	void Adjust(void);			// 微調整処理
+	void HeightMove(void);		// 縦移動処理
+	void HeightAdjust(void);	// 縦微調整処理
+	void RotMove(void);			// 向きの移動処理
+	void Set(void);				// 設置処理
+	void Reset(void);			// リセット処理
+	void Delete(void);			// 消去処理
+	void Type(void);			// 種類の変更処理
 
 	// それぞれの種類ごとのメンバ関数
 	void ObstacleProcess(void);	// 障害物の処理

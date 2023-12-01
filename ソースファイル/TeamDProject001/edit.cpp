@@ -87,8 +87,14 @@ void CEdit::Update(void)
 	// 移動処理
 	Move();
 
+	// 縦移動処理
+	HeightMove();
+
 	// 微調整移動処理
 	Adjust();
+
+	// 縦微調整移動処理
+	HeightAdjust();
 
 	// リセット処理
 	Reset();
@@ -100,7 +106,10 @@ void CEdit::Update(void)
 	Set();
 
 	// デバッグ表示
-	CManager::Get()->GetDebugProc()->Print("位置：%f %f %f\n向き：%f %f %f\nLSHIFTキー：微調整キー\nW/A/S/Dキー：移動\n右キー：右回転\n左キー：左回転\n下キー：向きの初期化\n9キー：消去\n0キー：設置\nSPACEキー：種類変更\n", GetPos().x, GetPos().y, GetPos().z, GetRot().x, GetRot().y, GetRot().z);
+	CManager::Get()->GetDebugProc()->Print("位置：%f %f %f\n向き：%f %f %f\nスタイル：%d\n"
+		"LSHIFTキー：微調整キー\nW/A/S/Dキー：移動\n右キー：右回転\n左キー：左回転\n下キー：向きの初期化\n"
+		"9キー：消去\n0キー：設置\nSPACEキー：種類変更\nU/Mキー：縦移動"
+		, GetPos().x, GetPos().y, GetPos().z, GetRot().x, GetRot().y, GetRot().z, m_type);
 }
 
 //=====================================
@@ -322,6 +331,77 @@ void CEdit::Adjust(void)
 }
 
 //=======================================
+// 縦移動処理
+//=======================================
+void CEdit::HeightMove(void)
+{
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LSHIFT) == true ||
+		CManager::Get()->GetInputKeyboard()->GetPress(DIK_LCONTROL) == true)
+	{ // 左SHIFTまたは、左CTRLキーを押していた場合
+
+		// この先の処理を行わない
+		return;
+	}
+
+	// ローカル変数宣言
+	D3DXVECTOR3 pos = GetPos();		// 位置を取得する
+
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_U) == true)
+	{ // Uキーを押していた場合
+
+		// 位置を加算する
+		pos.y += NORMAL_MOVE;
+	}
+
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_M) == true)
+	{ // Mキーを押していた場合
+
+		// 位置を加算する
+		pos.y -= NORMAL_MOVE;
+	}
+
+	// 位置を設定する
+	SetPos(pos);
+}
+
+//=======================================
+// 縦微調整処理
+//=======================================
+void CEdit::HeightAdjust(void)
+{
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LCONTROL) == true)
+	{ // 左CTRLキーを押している場合
+
+		// この先の処理を行わない
+		return;
+	}
+
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LSHIFT) == true)
+	{ // 左SHIFTキーを押していた場合
+
+		// ローカル変数宣言
+		D3DXVECTOR3 pos = GetPos();		// 位置を取得する
+
+		if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_U) == true)
+		{ // Wキーを押した場合
+
+			// 位置を加算する
+			pos.y += ADJUST_MOVE;
+		}
+
+		if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_M) == true)
+		{ // Sキーを押した場合
+
+			// 位置を加算する
+			pos.y -= ADJUST_MOVE;
+		}
+
+		// 位置を設定する
+		SetPos(pos);
+	}
+}
+
+//=======================================
 // 向きの移動処理
 //=======================================
 void CEdit::RotMove(void)
@@ -370,7 +450,7 @@ void CEdit::Set(void)
 		case CEdit::TYPE_OBSTACLE:		// 障害物
 
 			// 障害物の生成処理
-			CObstacle::Create(GetPos(),NONE_D3DXVECTOR3, m_obstacleType);
+			CObstacle::Create(GetPos(), GetRot(), m_obstacleType);
 
 			break;
 
@@ -415,6 +495,12 @@ void CEdit::ObstacleProcess(void)
 		// 障害物の種類を設定する
 		m_obstacleType = (CObstacle::TYPE)((m_obstacleType + 1) % CObstacle::TYPE_MAX);
 	}
+	else if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_2) == true)
+	{ // 2キーを押した場合
+
+		// 障害物の種類を設定する
+		m_obstacleType = (CObstacle::TYPE)((m_obstacleType + (CObstacle::TYPE_MAX - 1)) % CObstacle::TYPE_MAX);
+	}
 
 	if (m_obstacleType >= CObstacle::TYPE_MAX)
 	{ // タイプにある場合
@@ -429,11 +515,11 @@ void CEdit::ObstacleProcess(void)
 		SetFileData((CXFile::TYPE)(INIT_OBSTACLE + m_obstacleType));
 	}
 
-	// 向きを設定する
-	SetRot(NONE_D3DXVECTOR3);
+	// 向きの移動処理
+	RotMove();
 
 	// デバッグ表示
-	CManager::Get()->GetDebugProc()->Print("1キー：障害物の種類変更\n");
+	CManager::Get()->GetDebugProc()->Print("1/2キー：障害物の種類変更\n");
 }
 
 //=======================================
@@ -446,6 +532,12 @@ void CEdit::BlockProcess(void)
 
 		// ブロックの種類を設定する
 		m_blockType = (CBlock::TYPE)((m_blockType + 1) % CBlock::TYPE_MAX);
+	}
+	else if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_2) == true)
+	{ // 2キーを押した場合
+
+		// ブロックの種類を設定する
+		m_blockType = (CBlock::TYPE)((m_blockType + (CBlock::TYPE_MAX - 1)) % CBlock::TYPE_MAX);
 	}
 
 	if (m_blockType >= CBlock::TYPE_MAX)
@@ -465,7 +557,7 @@ void CEdit::BlockProcess(void)
 	RotMove();
 
 	// デバッグ表示
-	CManager::Get()->GetDebugProc()->Print("1キー：ブロックの種類変更\n");
+	CManager::Get()->GetDebugProc()->Print("1/2キー：ブロックの種類変更\n");
 }
 
 //=======================================
