@@ -156,97 +156,101 @@ bool CMouseTrap::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const fl
 //=====================================
 bool CMouseTrap::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
-	bool bPosbool = false, bPosOldbool = false, bVecbool = false, bVecboolOld = false;
+	if (type == CPlayer::TYPE_RAT)
+	{ // 種類がネズミの場合
 
-	bool bInside[4] = {};
+		bool bPosbool = false, bPosOldbool = false, bVecbool = false, bVecboolOld = false;
 
-	D3DXVECTOR3 vecLine, vecMove, vecToPos, vecToPosOld, posOldToVec, posOldToVecOld;
-	D3DXVECTOR3 vec[4];
-	D3DXVECTOR3 objpos = GetPos();
+		bool bInside[4] = {};
 
-	float fAngle[4];
-	fAngle[0] = atan2f(GetFileData().vtxMin.x, GetFileData().vtxMax.z);
-	fAngle[1] = atan2f(GetFileData().vtxMax.x, GetFileData().vtxMax.z);
-	fAngle[2] = atan2f(GetFileData().vtxMax.x, GetFileData().vtxMin.z);
-	fAngle[3] = atan2f(GetFileData().vtxMin.x, GetFileData().vtxMin.z);
+		D3DXVECTOR3 vecLine, vecMove, vecToPos, vecToPosOld, posOldToVec, posOldToVecOld;
+		D3DXVECTOR3 vec[4];
+		D3DXVECTOR3 objpos = GetPos();
 
-	float fDistance[4];
-	fDistance[0] = sqrtf(powf(GetFileData().vtxMin.x, 2) + powf(GetFileData().vtxMax.z, 2));
-	fDistance[1] = sqrtf(powf(GetFileData().vtxMax.x, 2) + powf(GetFileData().vtxMax.z, 2));
-	fDistance[2] = sqrtf(powf(GetFileData().vtxMax.x, 2) + powf(GetFileData().vtxMin.z, 2));
-	fDistance[3] = sqrtf(powf(GetFileData().vtxMin.x, 2) + powf(GetFileData().vtxMin.z, 2));
+		float fAngle[4];
+		fAngle[0] = atan2f(GetFileData().vtxMin.x, GetFileData().vtxMax.z);
+		fAngle[1] = atan2f(GetFileData().vtxMax.x, GetFileData().vtxMax.z);
+		fAngle[2] = atan2f(GetFileData().vtxMax.x, GetFileData().vtxMin.z);
+		fAngle[3] = atan2f(GetFileData().vtxMin.x, GetFileData().vtxMin.z);
 
-	vec[0] = D3DXVECTOR3(objpos.x - sinf(-D3DX_PI + fAngle[0] + GetRot().y)*fDistance[0], 0, objpos.z - cosf(-D3DX_PI + fAngle[0] + GetRot().y)* fDistance[0]);
-	vec[1] = D3DXVECTOR3(objpos.x - sinf(-D3DX_PI + fAngle[1] + GetRot().y)*fDistance[1], 0, objpos.z - cosf(-D3DX_PI + fAngle[1] + GetRot().y)* fDistance[1]);
-	vec[2] = D3DXVECTOR3(objpos.x - sinf(-D3DX_PI + fAngle[2] + GetRot().y)*fDistance[2], 0, objpos.z - cosf(-D3DX_PI + fAngle[2] + GetRot().y)* fDistance[2]);
-	vec[3] = D3DXVECTOR3(objpos.x - sinf(-D3DX_PI + fAngle[3] + GetRot().y)*fDistance[3], 0, objpos.z - cosf(-D3DX_PI + fAngle[3] + GetRot().y)* fDistance[3]);
+		float fDistance[4];
+		fDistance[0] = sqrtf(powf(GetFileData().vtxMin.x, 2) + powf(GetFileData().vtxMax.z, 2));
+		fDistance[1] = sqrtf(powf(GetFileData().vtxMax.x, 2) + powf(GetFileData().vtxMax.z, 2));
+		fDistance[2] = sqrtf(powf(GetFileData().vtxMax.x, 2) + powf(GetFileData().vtxMin.z, 2));
+		fDistance[3] = sqrtf(powf(GetFileData().vtxMin.x, 2) + powf(GetFileData().vtxMin.z, 2));
 
-	for (int nCnt = 0; nCnt < 4; nCnt++)
-	{
-		int nCnt2 = nCnt + 1;
+		vec[0] = D3DXVECTOR3(objpos.x - sinf(-D3DX_PI + fAngle[0] + GetRot().y)*fDistance[0], 0, objpos.z - cosf(-D3DX_PI + fAngle[0] + GetRot().y)* fDistance[0]);
+		vec[1] = D3DXVECTOR3(objpos.x - sinf(-D3DX_PI + fAngle[1] + GetRot().y)*fDistance[1], 0, objpos.z - cosf(-D3DX_PI + fAngle[1] + GetRot().y)* fDistance[1]);
+		vec[2] = D3DXVECTOR3(objpos.x - sinf(-D3DX_PI + fAngle[2] + GetRot().y)*fDistance[2], 0, objpos.z - cosf(-D3DX_PI + fAngle[2] + GetRot().y)* fDistance[2]);
+		vec[3] = D3DXVECTOR3(objpos.x - sinf(-D3DX_PI + fAngle[3] + GetRot().y)*fDistance[3], 0, objpos.z - cosf(-D3DX_PI + fAngle[3] + GetRot().y)* fDistance[3]);
 
-		if (nCnt2 >= 4)
+		for (int nCnt = 0; nCnt < 4; nCnt++)
 		{
-			nCnt2 = 0;
+			int nCnt2 = nCnt + 1;
+
+			if (nCnt2 >= 4)
+			{
+				nCnt2 = 0;
+			}
+
+			//ベクトル化
+			vecLine = vec[nCnt2] - vec[nCnt];
+
+			vecMove = pos - GetPosOld();
+
+			vecToPos = pos - vec[nCnt];
+
+
+			//各ベクトルの算出と交差判定
+			if (0 <= (vecLine.z*vecToPos.x) - (vecLine.x*vecToPos.z))
+			{
+				bPosbool = true;
+			}
+			else if (0 > (vecLine.z*vecToPos.x) - (vecLine.x*vecToPos.z))
+			{
+				bPosbool = false;
+			}
+
+			vecToPosOld = GetPosOld() - vec[nCnt];
+
+			if (0 <= (vecLine.z*vecToPosOld.x) - (vecLine.x*vecToPosOld.z))
+			{
+				bPosOldbool = true;
+			}
+			else if (0 > (vecLine.z*vecToPosOld.x) - (vecLine.x*vecToPosOld.z))
+			{
+				bPosOldbool = false;
+			}
+
+			posOldToVec = vec[nCnt2] - GetPosOld();
+
+			if (0 <= (vecMove.z*posOldToVec.x) - (vecMove.x*posOldToVec.z))
+			{
+				bVecbool = true;
+			}
+			else if (0 > (vecMove.z*posOldToVec.x) - (vecMove.x*posOldToVec.z))
+			{
+				bVecbool = false;
+			}
+
+			posOldToVecOld = vec[nCnt] - GetPosOld();
+
+			if (0 <= (vecMove.z*posOldToVecOld.x) - (vecMove.x*posOldToVecOld.z))
+			{
+				bVecboolOld = true;
+			}
+			else if (0 > (vecMove.z*posOldToVecOld.x) - (vecMove.x*posOldToVecOld.z))
+			{
+				bVecboolOld = false;
+			}
+
+			bInside[nCnt] = bPosbool;
 		}
-
-		//ベクトル化
-		vecLine = vec[nCnt2] - vec[nCnt];
-
-		vecMove = pos - GetPosOld();
-
-		vecToPos = pos - vec[nCnt];
-
-
-		//各ベクトルの算出と交差判定
-		if (0 <= (vecLine.z*vecToPos.x) - (vecLine.x*vecToPos.z))
+		//上からの判定
+		if (bInside[0] == bInside[1] && bInside[1] == bInside[2] && bInside[2] == bInside[3] && objpos.y + GetFileData().vtxMax.y > pos.y)
 		{
-			bPosbool = true;
+			return true;
 		}
-		else if (0 > (vecLine.z*vecToPos.x) - (vecLine.x*vecToPos.z))
-		{
-			bPosbool = false;
-		}
-
-		vecToPosOld = GetPosOld() - vec[nCnt];
-
-		if (0 <= (vecLine.z*vecToPosOld.x) - (vecLine.x*vecToPosOld.z))
-		{
-			bPosOldbool = true;
-		}
-		else if (0 > (vecLine.z*vecToPosOld.x) - (vecLine.x*vecToPosOld.z))
-		{
-			bPosOldbool = false;
-		}
-
-		posOldToVec = vec[nCnt2] - GetPosOld();
-
-		if (0 <= (vecMove.z*posOldToVec.x) - (vecMove.x*posOldToVec.z))
-		{
-			bVecbool = true;
-		}
-		else if (0 > (vecMove.z*posOldToVec.x) - (vecMove.x*posOldToVec.z))
-		{
-			bVecbool = false;
-		}
-
-		posOldToVecOld = vec[nCnt] - GetPosOld();
-
-		if (0 <= (vecMove.z*posOldToVecOld.x) - (vecMove.x*posOldToVecOld.z))
-		{
-			bVecboolOld = true;
-		}
-		else if (0 > (vecMove.z*posOldToVecOld.x) - (vecMove.x*posOldToVecOld.z))
-		{
-			bVecboolOld = false;
-		}
-
-		bInside[nCnt] = bPosbool;
-	}
-	//上からの判定
-	if (bInside[0] == bInside[1] && bInside[1] == bInside[2] && bInside[2] == bInside[3] && objpos.y + GetFileData().vtxMax.y > pos.y)
-	{
-		return true;
 	}
 	// false を返す
 	return false;
