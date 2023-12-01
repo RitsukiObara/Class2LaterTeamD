@@ -10,9 +10,9 @@
 //***********************************
 // インクルードファイル
 //***********************************
-#include "model.h"
 
 class CObject2D;
+class CPlayer;
 
 //-----------------------------------
 // クラス定義(サンプル)
@@ -21,8 +21,23 @@ class CLog : public CObject/*親クラス*/
 {
 public:			// 誰でもアクセスできる
 
-	CLog();			// コンストラクタ
+	CLog();				// コンストラクタ
 	~CLog();			// デストラクタ
+
+	enum STATE
+	{
+		STATE_IN = 0,
+		STATE_DOWN,
+		STATE_OUT,
+		STATE_MAX,
+	};
+
+	enum TYPE
+	{
+		TYPE_DEATH = 0,
+		TYPE_STUN,
+		TYPE_MAX,
+	};
 
 	// メンバ関数
 	HRESULT Init(void);		// 初期化処理
@@ -30,18 +45,28 @@ public:			// 誰でもアクセスできる
 	void Update(void);		// 更新処理
 	void Draw(void);		// 描画処理
 
-	void SetData(int nIdex, int nCreateNumber);		// 情報の設定処理
+	void SetData(int nIdex, int nCreateNumber, CLog::TYPE Type);		// 情報の設定処理
+	void SetLogIdx(int nIdx) { m_nLogIdx = nIdx; }
+
+	void SetMain(CPlayer *pMain) { m_pMain = pMain; }		// 自分の事を使用しているオブジェクトのポインタを設定する
+	void DelCreateNumber(void) { m_CreateNumber--; }
 
 	// 静的メンバ関数
-	static CLog* Create(int nIdex, int nCreateNumber);		// 生成処理
+	static CLog* Create(int nIdex, int nCreateNumber, CLog::TYPE Type);		// 生成処理
 
 private:		// 自分だけアクセスできる
+	void StateManager(void);
 
-	D3DXVECTOR3 LogPos;
-	int m_nPlayerNumber;
-	int m_CreateNumber;
-	CObject2D *m_pLogBG;
-	CObject2D *m_pLogPlayerID;
-	CObject2D *m_pLogMessage;
+	D3DXVECTOR3 LogPos;			// ログ全体の位置
+	int m_nPlayerNumber;		// どのプレイヤーのログか
+	int m_CreateNumber;			// 何番目の生成のログか
+	STATE m_State;				// 状態
+	int m_nLife;				// 寿命
+	int m_nLogIdx;				// ログの使用番号
+	TYPE m_Type;				// ログの種類
+	CObject2D *m_pLogBG;		// ログの背景パーツ
+	CObject2D *m_pLogPlayerID;	// ログのプレイヤーIDパーツ
+	CObject2D *m_pLogMessage;	// ログの内容パーツ
+	CPlayer *m_pMain;			// 自分の事を使用しているオブジェクトのポインタ
 };
 #endif

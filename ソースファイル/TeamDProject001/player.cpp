@@ -87,7 +87,7 @@ void CPlayer::Box(void)
 	m_pRessrectionFan = nullptr;		// 円の範囲の情報
 	m_pRecoveringUI = nullptr;			// 回復中のUIの情報
 	m_pSpeechMessage = nullptr;			// 伝達メッセージの情報
-	m_pDeathArrow = nullptr;			// 死亡矢印の情報
+	m_pDeathArrow[MAX_PLAY] = {};		// 死亡矢印の情報
 	m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_sizeColl = NONE_D3DXVECTOR3;		// 当たり判定のサイズ
 	m_type = TYPE_CAT;					// 種類
@@ -97,6 +97,12 @@ void CPlayer::Box(void)
 	m_bMove = false;					// 移動しているか
 	m_CameraRot = NONE_D3DXVECTOR3;		// カメラの向き
 	m_nResurrectionTime = 0;			// 復活するまでの時間
+
+	for (int nCnt = 0; nCnt < LOG_MAX; nCnt++)
+	{
+		m_apLog[nCnt] = NULL;
+	}
+	m_nLogNumber = 0;
 }
 
 //==============================
@@ -122,7 +128,7 @@ HRESULT CPlayer::Init(void)
 	m_pRessrectionFan = nullptr;		// 円の範囲の情報
 	m_pRecoveringUI = nullptr;			// 回復中のUIの情報
 	m_pSpeechMessage = nullptr;			// 伝達メッセージの情報
-	m_pDeathArrow = nullptr;			// 死亡矢印の情報
+	m_pDeathArrow[MAX_PLAY] = {};		// 死亡矢印の情報
 	m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_sizeColl = NONE_D3DXVECTOR3;		// 当たり判定のサイズ
 	m_type = TYPE_CAT;					// 種類
@@ -177,7 +183,6 @@ void CPlayer::Uninit(void)
 	{ // 円の範囲が NULL じゃない場合
 
 		//円の範囲の終了処理
-		//m_pRessrectionFan->Uninit();
 		m_pRessrectionFan = nullptr;
 	}
 
@@ -196,12 +201,24 @@ void CPlayer::Uninit(void)
 		m_pSpeechMessage = nullptr;
 	}
 
-	if (m_pDeathArrow != nullptr)
-	{ // 死亡矢印が NULL じゃないとき
+	for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
+	{
+		if (m_pDeathArrow[nCnt] != nullptr)
+		{ // 死亡矢印が NULL じゃないとき
 
-		//死亡矢印の終了処理
-		m_pDeathArrow->Uninit();
-		m_pDeathArrow = nullptr;
+			//死亡矢印の終了処理
+			m_pDeathArrow[nCnt]->Uninit();
+			m_pDeathArrow[nCnt] = nullptr;
+		}
+	}
+
+	for (int nCnt = 0; nCnt < LOG_MAX; nCnt++)
+	{
+		if (m_apLog[nCnt] != NULL)
+		{
+			m_apLog[nCnt]->Uninit();
+			m_apLog[nCnt] = NULL;
+		}
 	}
 
 	// プレイヤーを消去する
@@ -218,9 +235,6 @@ void CPlayer::Update(void)
 {
 	// 障害物との当たり判定
 	collision::ObstacleHit(this, m_sizeColl.x, m_sizeColl.y, m_sizeColl.z, m_type);
-
-	//壁との当たり判定
-	SetPos(collision::WallCollision(GetPosOld(), GetPos()));
 
 	// 障害物との当たり判定
 	ObstacleCollision();
@@ -250,6 +264,20 @@ void CPlayer::Update(void)
 		collision::ObstacleAction(this, m_sizeColl.x, m_type);
 	}
 
+#ifdef _DEBUG
+
+	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_1))
+	{
+		SetLog(CLog::TYPE::TYPE_DEATH);
+	}
+
+	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_2))
+	{
+		SetLog(CLog::TYPE::TYPE_STUN);
+	}
+
+#endif // _DEBUG
+
 	if (m_pMotion != nullptr)
 	{ // モーションが NULL じゃない場合
 
@@ -267,6 +295,14 @@ void CPlayer::Update(void)
 		m_pPlayerID->SetPos(D3DXVECTOR3(pos.x, pos.y + ID_HEIGHT, pos.z));
 	}
 
+	for (int nCnt = 0; nCnt < LOG_MAX; nCnt++)
+	{
+		if (m_apLog[nCnt] != NULL)
+		{
+			m_apLog[nCnt]->Update();
+		}
+	}
+
 	// デバッグ表示
 	CManager::Get()->GetDebugProc()->Print("位置：%f %f %f\n向き：%f %f %f\n", GetPos().x, GetPos().y, GetPos().z, GetRot().x, GetRot().y, GetRot().z);
 }
@@ -278,6 +314,14 @@ void CPlayer::Draw(void)
 {
 	// 描画処理
 	CCharacter::Draw();
+
+	for (int nCnt = 0; nCnt < LOG_MAX; nCnt++)
+	{
+		if (m_apLog[nCnt] != NULL)
+		{
+			m_apLog[nCnt]->Draw();
+		}
+	}
 }
 
 //=====================================
@@ -759,6 +803,47 @@ void CPlayer::StateManager(void)
 }
 
 //=======================================
+// ログの生成番号の加算
+//=======================================
+void CPlayer::SetLog(CLog::TYPE Type)
+{
+	for (int nCnt = 0; nCnt < LOG_MAX; nCnt++)
+	{
+		if (m_apLog[nCnt] == NULL)
+		{
+			m_apLog[nCnt] = CLog::Create(m_nPlayerIdx, m_nLogNumber, Type);
+			m_apLog[nCnt]->SetLogIdx(nCnt);
+			m_apLog[nCnt]->SetMain(this);
+			break;
+		}
+	}
+
+	m_nLogNumber++;
+}
+
+//=======================================
+// ログの生成番号の減算
+//=======================================
+void CPlayer::DelLogNumber(int nLogIdex)
+{
+	m_nLogNumber--;
+
+	if (m_apLog[nLogIdex] != NULL)
+	{
+		m_apLog[nLogIdex]->Uninit();
+		m_apLog[nLogIdex] = NULL;
+	}
+
+	for (int nCnt = 0; nCnt < LOG_MAX; nCnt++)
+	{
+		if (m_apLog[nCnt] != NULL)
+		{
+			m_apLog[nCnt]->DelCreateNumber();
+		}
+	}
+}
+
+//=======================================
 // モーションの設定処理
 //=======================================
 void CPlayer::SetMotion(CMotion* pMotion)
@@ -967,43 +1052,43 @@ void CPlayer::DeleteSpeechMessage(void)
 //=======================================
 // 死亡矢印の設定処理
 //=======================================
-void CPlayer::SetDeathArrow(const D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& rot)
+void CPlayer::SetDeathArrow(const D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& rot, const int nIdx)
 {
-	if (m_pDeathArrow == nullptr)
+	if (m_pDeathArrow[nIdx] == nullptr)
 	{ // 死亡矢印が NULL の時
 
-		// 死亡矢印の生成
-		m_pDeathArrow = CDeathArrow::Create(pos, posOld, rot);
+	  // 死亡矢印の生成
+		m_pDeathArrow[nIdx] = CDeathArrow::Create(pos, posOld, rot);
 	}
-	else if (m_pDeathArrow != nullptr)
+	else if (m_pDeathArrow[nIdx] != nullptr)
 	{ // 死亡矢印が NULL じゃないとき
 
-		m_pDeathArrow->SetPos(pos);			// 位置設定
-		m_pDeathArrow->SetPosOld(posOld);	// 前回の位置設定
-		m_pDeathArrow->SetRot(rot);			// 向き設定
+		m_pDeathArrow[nIdx]->SetPos(pos);			// 位置設定
+		m_pDeathArrow[nIdx]->SetPosOld(posOld);		// 前回の位置設定
+		m_pDeathArrow[nIdx]->SetRot(rot);			// 向き設定
 	}
 }
 
 //=======================================
 // 死亡矢印の取得処理
 //=======================================
-CDeathArrow* CPlayer::GetDeathArrow(void)
+CDeathArrow* CPlayer::GetDeathArrow(const int nIdx)
 {
 	// 死亡矢印の情報を返す
-	return m_pDeathArrow;
+	return m_pDeathArrow[nIdx];
 }
 
 //=======================================
 // 死亡矢印の消去処理
 //=======================================
-void CPlayer::DeleteDeathArrow(void)
+void CPlayer::DeleteDeathArrow(const int nIdx)
 {
-	if (m_pDeathArrow != nullptr)
+	if (m_pDeathArrow[nIdx] != nullptr)
 	{ // 死亡矢印が NULL じゃない時
 
-		// 死亡矢印の終了処理
-		m_pDeathArrow->Uninit();
-		m_pDeathArrow = nullptr;
+	  // 死亡矢印の終了処理
+		m_pDeathArrow[nIdx]->Uninit();
+		m_pDeathArrow[nIdx] = nullptr;
 	}
 }
 
