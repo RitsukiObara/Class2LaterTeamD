@@ -43,6 +43,10 @@ public:			// 誰でもアクセスできる
 
 	void SetData(const D3DXVECTOR3& pos, const TYPE type);			// 情報の設定処理
 
+	// セット・ゲット関係
+	void SetType(const TYPE type);		// 種類の設定処理
+	TYPE GetType(void) const;			// 種類の取得処理
+
 	// 静的メンバ関数
 	static CItem* Create(const D3DXVECTOR3& pos, const TYPE type);	// 生成処理
 

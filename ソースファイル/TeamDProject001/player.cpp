@@ -649,7 +649,7 @@ void CPlayer::Stun(int StunTime)
 //=======================================
 // ƒAƒCƒeƒ€‚Ìæ“¾ˆ—
 //=======================================
-void CPlayer::GetItem(void)
+void CPlayer::GetItem(const CItem::TYPE type)
 {
 
 }

@@ -118,10 +118,10 @@ void CPetbottle::Draw(void)
 //=====================================
 // î•ñ‚Ìİ’èˆ—
 //=====================================
-void CPetbottle::SetData(const D3DXVECTOR3& pos, const TYPE type)
+void CPetbottle::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type)
 {
 	// î•ñ‚Ìİ’èˆ—
-	CObstacle::SetData(pos, type);
+	CObstacle::SetData(pos,rot, type);
 
 	// Œü‚«‚ğİ’è‚·‚é
 	SetRot(STAND_ROT);

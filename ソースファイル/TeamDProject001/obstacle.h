@@ -59,7 +59,7 @@ public:			// 誰でもアクセスできる
 	virtual void Update(void);		// 更新処理
 	virtual void Draw(void);		// 描画処理
 
-	virtual void SetData(const D3DXVECTOR3& pos, const TYPE type);			// 情報の設定処理
+	virtual void SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type);			// 情報の設定処理
 
 	virtual bool Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type) = 0;	// 当たり判定処理
 	virtual bool Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type) = 0;								// ヒット処理
@@ -72,8 +72,13 @@ public:			// 誰でもアクセスできる
 	void SetType(const TYPE type);		// 種類の設定処理
 	TYPE GetType(void);					// 種類の取得処理
 
+	void SetCatUse(const bool Set) { m_bCatUse = Set; }		// 起動可能の設定処理
+	bool GetCatUse(void) { return m_bCatUse; }				// 起動可能の取得処理
+	void SetRatUse(const bool Set) { m_bRatUse = Set; }		// 起動可能の設定処理
+	bool GetRatUse(void) { return m_bRatUse; }				// 起動可能の取得処理
+
 	// 静的メンバ関数
-	static CObstacle* Create(const D3DXVECTOR3& pos, const TYPE type);		// 生成処理
+	static CObstacle* Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type);		// 生成処理
 
 private:		// 自分だけアクセスできる
 
@@ -81,6 +86,8 @@ private:		// 自分だけアクセスできる
 	TYPE m_type;		// 種類
 	CBillboard *m_pGimmickUI;
 	bool m_pGimmickUIFalse[4];		//全部[False]の時にUIを削除する
+	bool m_bCatUse;					//猫が起動できるかどうか
+	bool m_bRatUse;					//ネズミが起動できるかどうか
 
 	// リスト構造関係
 	CObstacle* m_pPrev;	// 前へのポインタ

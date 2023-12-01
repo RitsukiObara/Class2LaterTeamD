@@ -551,7 +551,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Desktop\\チーム制作2\\Sh2ot_Toso\\ソ\リューション\\Data\\TEXTURE\\ka-ten00.png";
+    "data\\TEXTURE\\ka-ten00.png";
    }
   }
  }

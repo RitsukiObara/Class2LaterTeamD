@@ -12,7 +12,6 @@
 //=======================================
 // マクロ定義
 //=======================================
-#define SIZE				(D3DXVECTOR3(60.0f, 60.0f, 0.0f))	// 枠のサイズ
 #define CAT_TEXTURE			"data\\TEXTURE\\Cat_Frame.png"		// ネコの枠のテクスチャ
 #define RAT_TEXTURE			"data\\TEXTURE\\Rat_Frame.png"		// ネズミの枠のテクスチャ
 
@@ -77,12 +76,12 @@ void CItemFrame::Draw(void)
 //=========================
 // 情報の設定処理
 //=========================
-void CItemFrame::SetData(const D3DXVECTOR3& pos, const CPlayer::TYPE type)
+void CItemFrame::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const CPlayer::TYPE type)
 {
 	// スクロールの設定処理
 	SetPos(pos);				// 位置設定
 	SetRot(NONE_D3DXVECTOR3);	// 向き設定
-	SetSize(SIZE);				// サイズ設定
+	SetSize(size);				// サイズ設定
 	SetLength();				// 長さ設定
 	SetAngle();					// 方向設定
 
@@ -117,7 +116,7 @@ void CItemFrame::SetData(const D3DXVECTOR3& pos, const CPlayer::TYPE type)
 //=========================
 // 生成処理
 //=========================
-CItemFrame* CItemFrame::Create(const D3DXVECTOR3& pos, const CPlayer::TYPE type)
+CItemFrame* CItemFrame::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const CPlayer::TYPE type)
 {
 	// ローカルオブジェクトを生成
 	CItemFrame* pItemFrame = nullptr;		// プレイヤーのインスタンスを生成
@@ -153,7 +152,7 @@ CItemFrame* CItemFrame::Create(const D3DXVECTOR3& pos, const CPlayer::TYPE type)
 		}
 
 		// 情報の設定処理
-		pItemFrame->SetData(pos, type);
+		pItemFrame->SetData(pos, size, type);
 	}
 	else
 	{ // オブジェクトが NULL の場合

@@ -124,10 +124,10 @@ void CHairBall::Draw(void)
 //=====================================
 // î•ñ‚Ìİ’èˆ—
 //=====================================
-void CHairBall::SetData(const D3DXVECTOR3& pos, const TYPE type)
+void CHairBall::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type)
 {
 	// î•ñ‚Ìİ’èˆ—
-	CObstacle::SetData(pos, type);
+	CObstacle::SetData(pos,rot, type);
 
 	// ‘S‚Ä‚Ì’l‚ğİ’è‚·‚é
 	m_move = NONE_D3DXVECTOR3;		// ˆÚ“®—Ê

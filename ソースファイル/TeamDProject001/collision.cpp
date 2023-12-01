@@ -285,9 +285,25 @@ void collision::ObstacleAction(CPlayer* pPlayer, const float Radius, const CPlay
 	while (pObstacle != nullptr)
 	{ // ブロックの情報が NULL じゃない場合
 
-		if (pObstacle->HitCircle(pos, Radius, type) == true)
-		{ // 障害物の当たり判定が通った場合
-			pObstacle->Action();
+		if (type == CPlayer::TYPE::TYPE_CAT)
+		{
+			if (pObstacle->GetCatUse() == true)
+			{
+				if (pObstacle->HitCircle(pos, Radius, type) == true)
+				{ // 障害物の当たり判定が通った場合
+					pObstacle->Action();
+				}
+			}
+		}
+		else if(type == CPlayer::TYPE::TYPE_RAT)
+		{
+			if (pObstacle->GetRatUse() == true)
+			{
+				if (pObstacle->HitCircle(pos, Radius, type) == true)
+				{ // 障害物の当たり判定が通った場合
+					pObstacle->Action();
+				}
+			}
 		}
 
 		// 次のオブジェクトを代入する
@@ -308,21 +324,32 @@ void collision::ObstacleSearch(CPlayer* pPlayer, const float Radius, const CPlay
 	while (pObstacle != nullptr)
 	{ // ブロックの情報が NULL じゃない場合
 
-		if (pObstacle->GetType() == CObstacle::TYPE_HIMO ||
-			pObstacle->GetType() == CObstacle::TYPE_SPEAKER ||
-			pObstacle->GetType() == CObstacle::TYPE_MOUSETRAP ||
-			pObstacle->GetType() == CObstacle::TYPE_LEASH ||
-			pObstacle->GetType() == CObstacle::TYPE_PIN ||
-			pObstacle->GetType() == CObstacle::TYPE_FAN ||
-			pObstacle->GetType() == CObstacle::TYPE_CUP)
+		if (type == CPlayer::TYPE::TYPE_CAT)
 		{
-			if (pObstacle->HitCircle(pos, Radius, type) == true)
-			{ // 障害物の当たり判定が通った場合
-				pObstacle->GimmickUI(true, Player_Idx);
-			}
-			else
+			if (pObstacle->GetCatUse() == true)
 			{
-				pObstacle->GimmickUI(false, Player_Idx);
+				if (pObstacle->HitCircle(pos, Radius, type) == true)
+				{ // 障害物の当たり判定が通った場合
+					pObstacle->GimmickUI(true, Player_Idx);
+				}
+				else
+				{
+					pObstacle->GimmickUI(false, Player_Idx);
+				}
+			}
+		}
+		else if (type == CPlayer::TYPE::TYPE_RAT)
+		{
+			if (pObstacle->GetRatUse() == true)
+			{
+				if (pObstacle->HitCircle(pos, Radius, type) == true)
+				{ // 障害物の当たり判定が通った場合
+					pObstacle->GimmickUI(true, Player_Idx);
+				}
+				else
+				{
+					pObstacle->GimmickUI(false, Player_Idx);
+				}
 			}
 		}
 
@@ -813,10 +840,11 @@ void collision::ItemCollision(CPlayer& pPlayer)
 			useful::RectangleCollisionYZ(pos, pItem->GetPos(), Max, pItem->GetFileData().vtxMax, Min, pItem->GetFileData().vtxMin) == true)
 		{ // 判定内に入った場合
 
+			// アイテムの取得処理
+			pPlayer.GetItem(pItem->GetType());
+
 			// 終了処理
 			pItem->Uninit();
-
-
 		}
 
 		// 次のアイテムを設定する

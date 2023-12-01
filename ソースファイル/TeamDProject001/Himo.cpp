@@ -31,6 +31,7 @@ CHimo::CHimo() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 	m_bAction = false;
 	m_fDownPosY = 0.0f;
 	m_fUpPosY = 0.0f;
+	SetCatUse(true);
 }
 
 //==============================
@@ -170,10 +171,10 @@ void CHimo::Action(void)
 //=====================================
 // èÓïÒÇÃê›íËèàóù
 //=====================================
-void CHimo::SetData(const D3DXVECTOR3& pos, const TYPE type)
+void CHimo::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type)
 {
 	// èÓïÒÇÃê›íËèàóù
-	CObstacle::SetData(pos, type);
+	CObstacle::SetData(pos,rot, type);
 
 	m_fDownPosY = pos.y - 50.0f;
 	m_fUpPosY = pos.y;

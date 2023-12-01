@@ -370,7 +370,7 @@ void CEdit::Set(void)
 		case CEdit::TYPE_OBSTACLE:		// áŠQ•¨
 
 			// áŠQ•¨‚Ì¶¬ˆ—
-			CObstacle::Create(GetPos(), m_obstacleType);
+			CObstacle::Create(GetPos(),NONE_D3DXVECTOR3, m_obstacleType);
 
 			break;
 

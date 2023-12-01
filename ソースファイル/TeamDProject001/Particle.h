@@ -24,7 +24,7 @@ public:			// 誰でもアクセス出来る
 		TYPE_ITEMGET,		// アイテムゲット
 		TYPE_ENEMYDEATH,	// 敵の死亡
 		TYPE_SLIME,			// スライム床
-		TYPE_RESURRECTION,	//復活
+		TYPE_RESURRECTION,	// 復活
 		TYPE_MAX
 	};
 
