@@ -19,7 +19,8 @@
 //=========================
 CItemMark::CItemMark() : CObject2D(CObject::TYPE_NONE, CObject::PRIORITY_UI)
 {
-
+	// 全ての値をクリアする
+	m_type = CItem::TYPE_MOUSETRAP;		// 種類
 }
 
 //=========================
@@ -41,6 +42,9 @@ HRESULT CItemMark::Init(void)
 		// 失敗を返す
 		return E_FAIL;
 	}
+
+	// 全ての値を初期化する
+	m_type = CItem::TYPE_MOUSETRAP;		// 種類
 
 	// 成功を返す
 	return S_OK;
@@ -83,6 +87,9 @@ void CItemMark::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const C
 	SetSize(size);				// サイズ設定
 	SetLength();				// 長さ設定
 	SetAngle();					// 方向設定
+
+	// 全ての値を設定する
+	m_type = type;				// 種類
 
 	switch (type)
 	{
@@ -158,4 +165,13 @@ CItemMark* CItemMark::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, co
 
 	// アイテムマークのポインタを返す
 	return pItemMark;
+}
+
+//=========================
+// 種類の取得処理
+//=========================
+CItem::TYPE CItemMark::GetType(void) const
+{
+	// 種類を返す
+	return m_type;
 }

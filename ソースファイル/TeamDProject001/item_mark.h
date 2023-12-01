@@ -31,11 +31,16 @@ public:				// 誰でもアクセスできる
 
 	void SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const CItem::TYPE type);				// 情報の設定処理
 
+	// セット・ゲット関係
+	CItem::TYPE GetType(void) const;		// 種類の取得処理
+
 	// 静的メンバ関数
 	static CItemMark* Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const CItem::TYPE type);	// 生成処理
 
 private:			// 自分だけアクセスできる
 
+	// メンバ変数
+	CItem::TYPE m_type;		// 種類
 };
 
 #endif

@@ -53,6 +53,8 @@ public:				// 誰でもアクセスできる
 
 	void SetData(const D3DXVECTOR3& pos);					// 情報の設定処理
 
+	void SortInfo(void);	// 情報のソート処理
+
 	// セット・ゲット関係
 	void SetMark(const CItem::TYPE type, const ORDER order);	// マークの生成処理
 	SItemUI GetItemUI(const ORDER order) const;					// アイテムUIの取得処理

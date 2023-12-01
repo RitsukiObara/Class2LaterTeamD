@@ -181,6 +181,27 @@ void CItemUI::SetData(const D3DXVECTOR3& pos)
 }
 
 //========================
+// 情報のソート処理
+//========================
+void CItemUI::SortInfo(void)
+{
+	// 終了処理
+	m_aItemUI[ORDER_FRONT].pMark->Uninit();
+	m_aItemUI[ORDER_FRONT].pMark = nullptr;
+
+	if (m_aItemUI[ORDER_BACK].pMark != nullptr)
+	{ // マークが NULL じゃない場合
+
+		// 後半のマークを設定する
+		m_aItemUI[ORDER_FRONT].pMark = CItemMark::Create(m_aItemUI[ORDER_FRONT].pFrame->GetPos(), MARK_SIZE[ORDER_FRONT], m_aItemUI[ORDER_BACK].pMark->GetType());
+
+		// 終了処理
+		m_aItemUI[ORDER_BACK].pMark->Uninit();
+		m_aItemUI[ORDER_BACK].pMark = nullptr;
+	}
+}
+
+//========================
 // 生成処理
 //========================
 CItemUI* CItemUI::Create(const D3DXVECTOR3& pos)

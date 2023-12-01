@@ -410,6 +410,12 @@ void CCat::ItemSet(void)
 
 			break;
 		}
+
+		// 情報のソート処理
+		m_pItemUI->SortInfo();
+
+		// アイテムのカウント数を減算する
+		m_nItemCount--;
 	}
 }
 
