@@ -29,7 +29,8 @@ public:
 		TYPE_SMOKE,				// ‰Œ
 		TYPE_THUNDER,			// “d‹C
 		TYPE_WIND,				// •—
-		TYPE_RESURRECTION,		//	•œŠˆ	
+		TYPE_RESURRECTION,		// •œŠˆ	
+		TYPE_ITEMGET,			// Žæ“¾
 		TYPE_MAX				// ‚±‚Ì—ñ‹“Œ^‚Ì‘”
 	};
 

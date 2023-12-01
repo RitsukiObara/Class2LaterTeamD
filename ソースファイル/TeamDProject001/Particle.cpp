@@ -245,26 +245,30 @@ void CParticle::InitItemGet(const D3DXVECTOR3& pos)
 {
 	// ローカル変数宣言
 	D3DXVECTOR3 move;		// エフェクトの移動量
+	D3DXVECTOR3 effectpos;
 	int nLife;				// 寿命
 	float fRot;				// 向き
 	float fRadius;			// 半径
 
 	for (int nCntDust = 0; nCntDust < 15; nCntDust++)
 	{
+
 		// 向きを設定する
-		fRot = (float)((rand() % 629 - 314) * 0.01f);
+		fRot =  ((D3DX_PI *2)/15.0f)* nCntDust;
+		effectpos.x = pos.x + sinf(fRot) *15.0f;
+		effectpos.y = pos.y + cosf(fRot) *15.0f;
+		effectpos.z = 0.0f;
 
 		// 移動量を設定する
-		move.x = sinf(fRot) * (rand() % 21 - 10);
-		move.y = cosf(fRot) * (rand() % 21 - 10);
-		move.z = cosf(fRot) * (rand() % 21 - 10);
+		move.x = sinf(fRot) * 15.0f;
+		move.y = cosf(fRot) * 15.0f;
+		move.z = cosf(fRot) * 15.0f;
 
 		// 寿命を設定する
-		nLife = rand() % 10 + 15;
+		nLife = 17;
 
 		// 半径を設定する
-		fRadius = (float)(rand() % 8 + 4);
-
+		fRadius = 30.0f;
 		// エフェクトの生成処理
 		CEffect::Create
 		(
@@ -272,8 +276,8 @@ void CParticle::InitItemGet(const D3DXVECTOR3& pos)
 			move,
 			nLife,
 			fRadius,
-			CEffect::TYPE_NONE,
-			D3DXCOLOR(1.0f, 1.0f, 0.1f, 1.0f),
+			CEffect::TYPE_ITEMGET,
+			D3DXCOLOR(0.0f, 1.0f, 1.0f, 1.0f),
 			true
 		);
 	}
@@ -296,16 +300,16 @@ void CParticle::InitEnemyDeath(const D3DXVECTOR3& pos)
 		fRot = (float)((rand() % 629 - 314) * 0.01f);
 
 		// 移動量を設定する
-		move.x = sinf(fRot) * (rand() % 21 - 10);
-		move.y = cosf(fRot) * (rand() % 21 - 10);
+		move.x = sinf(fRot) * (rand() % 20 - 10);
+		move.y = cosf(fRot) * (rand() % 20);
 		move.z = 0.0f;
 
 		// 寿命を設定する
-		nLife = rand() % 10 + 20;
+		nLife = rand() % 10 + 10;
 
 		// 半径を設定する
-		fRadius = (float)(rand() % 300 + 15);
-
+		//fRadius = (float)(rand() % 300 + 15);
+		fRadius = 50.0f;
 		// エフェクトの生成処理
 		CEffect::Create
 		(
@@ -371,26 +375,24 @@ void CParticle::InitResurrection(const D3DXVECTOR3& pos)
 	int nLife;					// 寿命
 	D3DXVECTOR3 randRot;		// ランダムの向き
 
-	for (int nCnt = 0; nCnt < 5; nCnt++)
-	{
 		// 向きを設定する
 		randRot.x = (float)((rand() % 629 - 314) * 0.01f);
-		EffectPos.x = pos.x + sinf(randRot.x) * 20.0f;
+		EffectPos.x = pos.x + sinf(randRot.x) * ((float)(rand() %10) + 10.0f);
 
 		EffectPos.y = pos.y;
 
 		// 向きを設定する
 		randRot.z = (float)((rand() % 629 - 314) * 0.01f);
-		EffectPos.z = pos.z + cosf(randRot.z) * 20.0f;
+		EffectPos.z = pos.z + cosf(randRot.z) *((float)(rand() % 10) + 10.0f);
 
 		for (int nCntDust = 0; nCntDust < 4; nCntDust++)
 		{
-			EffectMove.x = sinf(randRot.x) * (rand() % 3 + 10);
-			EffectMove.y = (float)(rand() % 3 + 1);
+			EffectMove.x = sinf(randRot.x) * (rand() % 3 + 3);
+			EffectMove.y = (float)(rand() % 5 + 10);
 			EffectMove.z = cosf(randRot.z) * (rand() % 3 + 10);
 
 			// 寿命を設定する
-			nLife = rand() % 20 + 10;
+			nLife = rand() % 10 + 10;
 
 			// エフェクトの生成処理
 			CEffect::Create
@@ -398,11 +400,11 @@ void CParticle::InitResurrection(const D3DXVECTOR3& pos)
 				EffectPos,
 				EffectMove,
 				nLife,
-				50.0f,
+				20.0f,
 				CEffect::TYPE_RESURRECTION,
-				D3DXCOLOR(0.4f, 0.4f, 0.4f, 1.0f),
+				D3DXCOLOR(1.0f, 0.8f, 0.0f, 1.0f),
 				false
 			);
 		}
-	}
+
 }
