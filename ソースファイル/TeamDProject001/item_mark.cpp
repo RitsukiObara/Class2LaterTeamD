@@ -12,6 +12,8 @@
 //=======================================
 // マクロ定義
 //=======================================
+#define SIZE				(D3DXVECTOR3(30.0f,30.0f,0.0f))		// ネズミ捕りのサイズ
+#define MOUSETRAP_TEXTURE	"data\\TEXTURE\\Mousetrap.png"		// ネズミ捕りのテクスチャ
 
 //=========================
 // コンストラクタ
@@ -79,9 +81,26 @@ void CItemMark::SetData(const D3DXVECTOR3& pos, const CItem::TYPE type)
 	// スクロールの設定処理
 	SetPos(pos);				// 位置設定
 	SetRot(NONE_D3DXVECTOR3);	// 向き設定
-	SetSize(NONE_D3DXVECTOR3);	// サイズ設定
+	SetSize(SIZE);				// サイズ設定
 	SetLength();				// 長さ設定
 	SetAngle();					// 方向設定
+
+	switch (type)
+	{
+	case CItem::TYPE_MOUSETRAP:
+
+		// テクスチャの割り当て処理
+		BindTexture(CManager::Get()->GetTexture()->Regist(MOUSETRAP_TEXTURE));
+
+		break;
+
+	default:
+
+		// 停止
+		assert(false);
+
+		break;
+	}
 
 	// 頂点情報の初期化
 	SetVertex();

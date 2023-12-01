@@ -34,12 +34,27 @@
 #include "itemUI.h"
 
 //--------------------------------------------
+// 無名名前空間
+//--------------------------------------------
+namespace
+{
+	static const D3DXVECTOR3 ITEMUI_POS[MAX_PLAY] =			// アイテムUIの位置
+	{
+		D3DXVECTOR3(70.0f,70.0f,0.0f),
+		D3DXVECTOR3(SCREEN_WIDTH - 70.0f,70.0f,0.0f),
+		D3DXVECTOR3(70.0f,SCREEN_HEIGHT * 0.5f + 70.0f,0.0f),
+		D3DXVECTOR3(SCREEN_WIDTH - 70.0f,SCREEN_HEIGHT * 0.5f + 70.0f,0.0f)
+	};
+	static const float MOVE_SPEED = 20.0f;			// 移動速度
+	static const float ATTACK_DISTANCE = 160.0f;	// 攻撃範囲までの距離
+	static const D3DXVECTOR3 CAT_SIZE = D3DXVECTOR3(70.0f, 200.0f, 70.0f);		// 当たり判定のサイズ
+	static const float GRAVITY = 1.0f;				// 重力
+}
+
+//--------------------------------------------
 // マクロ定義
 //--------------------------------------------
-#define MOVE_SPEED			(20.0f)			// 体力の最大数
-#define ATTACK_DISTANCE		(160.0f)		// 攻撃範囲までの距離
-#define CAT_SIZE			(D3DXVECTOR3(70.0f, 200.0f, 70.0f))		// 当たり判定のサイズ
-#define GRAVITY				(1.0f)			// 重力
+
 
 //=========================================
 // コンストラクタ
@@ -520,7 +535,7 @@ void CCat::SetItemUI(void)
 	{ // アイテムUIが NULL の場合
 
 		// アイテムUIの生成処理
-		m_pItemUI->Create(GetPos());
+		m_pItemUI->Create(ITEMUI_POS[GetPlayerIdx()]);
 	}
 }
 
