@@ -52,6 +52,7 @@ public:			// 誰でもアクセスできる
 		TYPE_PINONE,			// 破片用の画鋲
 		TYPE_FANBLADE,			// 扇風機(羽根)
 		TYPE_CONSENT,			// コンセント
+		TYPE_DEATHARROW,		// 死亡矢印
 
 		// ブロックモデル
 		TYPE_CARDBOARD,			// 段ボール

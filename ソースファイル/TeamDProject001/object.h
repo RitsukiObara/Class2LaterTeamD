@@ -72,6 +72,7 @@ public:			// 誰でもアクセスできる
 		TYPE_CONFETTI,			// 紙吹雪
 		TYPE_RECOVERINGUI,		// 回復中のUI
 		TYPE_ITEMUI,			// アイテムUI
+		TYPE_DEATHARROW,		// 死亡矢印
 		TYPE_MAX				// この列挙型の総数
 	};
 

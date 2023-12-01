@@ -813,10 +813,11 @@ void collision::ItemCollision(CPlayer& pPlayer)
 			useful::RectangleCollisionYZ(pos, pItem->GetPos(), Max, pItem->GetFileData().vtxMax, Min, pItem->GetFileData().vtxMin) == true)
 		{ // 判定内に入った場合
 
+			// アイテムの取得処理
+			pPlayer.GetItem(pItem->GetType());
+
 			// 終了処理
 			pItem->Uninit();
-
-
 		}
 
 		// 次のアイテムを設定する
