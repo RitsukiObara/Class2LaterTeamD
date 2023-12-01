@@ -192,8 +192,8 @@ HRESULT CGame::Init(void)
 	}
 
 	// 生成処理
-	//CGameTime::Create();
-	//m_pFinish = CGameFinish::Create();
+	CGameTime::Create();
+	m_pFinish = CGameFinish::Create();
 
 	// キャラクターUIの生成処理
 	for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)

@@ -262,8 +262,9 @@ void CCat::Attack(void)
 	D3DXVECTOR3 pos = GetPos();
 	D3DXVECTOR3 rot = GetRot();
 
-	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_RETURN) == true)
-	{ // ENTERキーを押していた場合
+	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_RETURN) == true ||
+		CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_A, GetPlayerIdx()) == true)
+	{ // ENTERキー(Aボタン)を押していた場合
 
 		// 状態を攻撃準備にする
 		m_AttackState = ATTACKSTATE_STANDBY;
@@ -285,7 +286,7 @@ void CCat::Attack(void)
 					D3DXVECTOR3(-30.0f, -50.0f, -30.0f)) == true)
 				{ // XYの矩形に当たってたら
 
-					if (useful::RectangleCollisionXZ(D3DXVECTOR3(pos.x + sinf(rot.y) * -ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * -ATTACK_DISTANCE), 
+					if (useful::RectangleCollisionXZ(D3DXVECTOR3(pos.x + sinf(rot.y) * -ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * -ATTACK_DISTANCE),
 						pPlayer->GetPos(),
 						D3DXVECTOR3(30.0f, 50.0f, 30.0f), D3DXVECTOR3(30.0f, 50.0f, 30.0f),
 						D3DXVECTOR3(-30.0f, -50.0f, -30.0f), D3DXVECTOR3(-30.0f, -50.0f, -30.0f)) == true)
