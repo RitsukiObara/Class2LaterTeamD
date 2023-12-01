@@ -204,11 +204,13 @@
     <ClCompile Include="item.cpp" />
     <ClCompile Include="itemUI.cpp" />
     <ClCompile Include="item_frame.cpp" />
+    <ClCompile Include="item_magni.cpp" />
     <ClCompile Include="item_manager.cpp" />
     <ClCompile Include="item_mark.cpp" />
     <ClCompile Include="leash.cpp" />
     <ClCompile Include="light.cpp" />
     <ClCompile Include="locus2D.cpp" />
+    <ClCompile Include="log.cpp" />
     <ClCompile Include="logo.cpp" />
     <ClCompile Include="logo_mark.cpp" />
     <ClCompile Include="main.cpp" />
@@ -338,11 +340,13 @@
     <ClInclude Include="item.h" />
     <ClInclude Include="itemUI.h" />
     <ClInclude Include="item_frame.h" />
+    <ClInclude Include="item_magni.h" />
     <ClInclude Include="item_manager.h" />
     <ClInclude Include="item_mark.h" />
     <ClInclude Include="leash.h" />
     <ClInclude Include="light.h" />
     <ClInclude Include="locus2D.h" />
+    <ClInclude Include="log.h" />
     <ClInclude Include="logo.h" />
     <ClInclude Include="logo_mark.h" />
     <ClInclude Include="main.h" />

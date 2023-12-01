@@ -471,11 +471,17 @@
     <ClCompile Include="item_mark.cpp">
       <Filter>UI\ItemUI</Filter>
     </ClCompile>
+    <ClCompile Include="item_magni.cpp">
+      <Filter>UI\ItemUI</Filter>
+    </ClCompile>
     <ClCompile Include="item_frame.cpp">
       <Filter>UI\ItemUI</Filter>
     </ClCompile>
     <ClCompile Include="death_arrow.cpp">
       <Filter>Player\Rat</Filter>
+    </ClCompile>
+    <ClCompile Include="log.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -860,11 +866,17 @@
     <ClInclude Include="item_mark.h">
       <Filter>UI\ItemUI</Filter>
     </ClInclude>
+    <ClInclude Include="item_magni.h">
+      <Filter>UI\ItemUI</Filter>
+    </ClInclude>
     <ClInclude Include="item_frame.h">
       <Filter>UI\ItemUI</Filter>
     </ClInclude>
     <ClInclude Include="death_arrow.h">
       <Filter>Player\Rat</Filter>
+    </ClInclude>
+    <ClInclude Include="log.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
