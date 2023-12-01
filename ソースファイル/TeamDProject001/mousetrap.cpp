@@ -162,7 +162,7 @@ bool CMouseTrap::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHe
 
 	D3DXVECTOR3 vecLine, vecMove, vecToPos, vecToPosOld, posOldToVec, posOldToVecOld;
 	D3DXVECTOR3 vec[4];
-
+	D3DXVECTOR3 objpos = GetPos();
 
 	float fAngle[4];
 	fAngle[0] = atan2f(GetFileData().vtxMin.x, GetFileData().vtxMax.z);
@@ -176,10 +176,10 @@ bool CMouseTrap::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHe
 	fDistance[2] = sqrtf(powf(GetFileData().vtxMax.x, 2) + powf(GetFileData().vtxMin.z, 2));
 	fDistance[3] = sqrtf(powf(GetFileData().vtxMin.x, 2) + powf(GetFileData().vtxMin.z, 2));
 
-	vec[0] = D3DXVECTOR3(pos.x - sinf(-D3DX_PI + fAngle[0] + GetRot().y)*fDistance[0], 0, pos.z - cosf(-D3DX_PI + fAngle[0] + GetRot().y)* fDistance[0]);
-	vec[1] = D3DXVECTOR3(pos.x - sinf(-D3DX_PI + fAngle[1] + GetRot().y)*fDistance[1], 0, pos.z - cosf(-D3DX_PI + fAngle[1] + GetRot().y)* fDistance[1]);
-	vec[2] = D3DXVECTOR3(pos.x - sinf(-D3DX_PI + fAngle[2] + GetRot().y)*fDistance[2], 0, pos.z - cosf(-D3DX_PI + fAngle[2] + GetRot().y)* fDistance[2]);
-	vec[3] = D3DXVECTOR3(pos.x - sinf(-D3DX_PI + fAngle[3] + GetRot().y)*fDistance[3], 0, pos.z - cosf(-D3DX_PI + fAngle[3] + GetRot().y)* fDistance[3]);
+	vec[0] = D3DXVECTOR3(objpos.x - sinf(-D3DX_PI + fAngle[0] + GetRot().y)*fDistance[0], 0, objpos.z - cosf(-D3DX_PI + fAngle[0] + GetRot().y)* fDistance[0]);
+	vec[1] = D3DXVECTOR3(objpos.x - sinf(-D3DX_PI + fAngle[1] + GetRot().y)*fDistance[1], 0, objpos.z - cosf(-D3DX_PI + fAngle[1] + GetRot().y)* fDistance[1]);
+	vec[2] = D3DXVECTOR3(objpos.x - sinf(-D3DX_PI + fAngle[2] + GetRot().y)*fDistance[2], 0, objpos.z - cosf(-D3DX_PI + fAngle[2] + GetRot().y)* fDistance[2]);
+	vec[3] = D3DXVECTOR3(objpos.x - sinf(-D3DX_PI + fAngle[3] + GetRot().y)*fDistance[3], 0, objpos.z - cosf(-D3DX_PI + fAngle[3] + GetRot().y)* fDistance[3]);
 
 	for (int nCnt = 0; nCnt < 4; nCnt++)
 	{
@@ -244,7 +244,7 @@ bool CMouseTrap::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHe
 		bInside[nCnt] = bPosbool;
 	}
 	//ã‚©‚ç‚Ì”»’è
-	if (bInside[0] == bInside[1] && bInside[1] == bInside[2] && bInside[2] == bInside[3] && pos.y + GetFileData().vtxMax.y > pos.y)
+	if (bInside[0] == bInside[1] && bInside[1] == bInside[2] && bInside[2] == bInside[3] && objpos.y + GetFileData().vtxMax.y > pos.y)
 	{
 		return true;
 	}

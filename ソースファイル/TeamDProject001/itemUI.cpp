@@ -41,8 +41,9 @@ CItemUI::CItemUI() : CObject(TYPE_ITEMUI, PRIORITY_UI)
 	// 全ての値をクリアする
 	for (int nCnt = 0; nCnt < ORDER_MAX; nCnt++)
 	{
-		m_aItemUI[nCnt].m_pMark = nullptr;		// マークの情報
-		m_aItemUI[nCnt].m_pFrame = nullptr;		// 枠の情報
+		m_aItemUI[nCnt].pMark = nullptr;				// マークの情報
+		m_aItemUI[nCnt].pFrame = nullptr;				// 枠の情報
+		m_aItemUI[nCnt].type = CItem::TYPE_MOUSETRAP;	// 種類
 	}
 }
 
@@ -62,8 +63,9 @@ HRESULT CItemUI::Init(void)
 	// 全ての値をクリアする
 	for (int nCnt = 0; nCnt < ORDER_MAX; nCnt++)
 	{
-		m_aItemUI[nCnt].m_pMark = nullptr;		// マークの情報
-		m_aItemUI[nCnt].m_pFrame = nullptr;		// 枠の情報
+		m_aItemUI[nCnt].pMark = nullptr;				// マークの情報
+		m_aItemUI[nCnt].pFrame = nullptr;				// 枠の情報
+		m_aItemUI[nCnt].type = CItem::TYPE_MOUSETRAP;	// 種類
 	}
 
 	// 成功を返す
@@ -78,20 +80,20 @@ void CItemUI::Uninit(void)
 	// 全ての値をクリアする
 	for (int nCnt = 0; nCnt < ORDER_MAX; nCnt++)
 	{
-		if (m_aItemUI[nCnt].m_pMark != nullptr)
+		if (m_aItemUI[nCnt].pMark != nullptr)
 		{ // マークが NULL じゃない場合
 
 			// マークの終了処理
-			m_aItemUI[nCnt].m_pMark->Uninit();
-			m_aItemUI[nCnt].m_pMark = nullptr;
+			m_aItemUI[nCnt].pMark->Uninit();
+			m_aItemUI[nCnt].pMark = nullptr;
 		}
 
-		if (m_aItemUI[nCnt].m_pFrame != nullptr)
+		if (m_aItemUI[nCnt].pFrame != nullptr)
 		{ // 枠が NULL じゃない場合
 
 			// 枠の終了処理
-			m_aItemUI[nCnt].m_pFrame->Uninit();
-			m_aItemUI[nCnt].m_pFrame = nullptr;
+			m_aItemUI[nCnt].pFrame->Uninit();
+			m_aItemUI[nCnt].pFrame = nullptr;
 		}
 	}
 
@@ -106,18 +108,18 @@ void CItemUI::Update(void)
 {
 	for (int nCnt = 0; nCnt < ORDER_MAX; nCnt++)
 	{
-		if (m_aItemUI[nCnt].m_pFrame != nullptr)
+		if (m_aItemUI[nCnt].pFrame != nullptr)
 		{ // 枠が NULL じゃない場合
 
 			// 枠の更新処理
-			m_aItemUI[nCnt].m_pFrame->Update();
+			m_aItemUI[nCnt].pFrame->Update();
 		}
 
-		if (m_aItemUI[nCnt].m_pMark != nullptr)
+		if (m_aItemUI[nCnt].pMark != nullptr)
 		{ // マークが NULL じゃない場合
 
 			// マークの更新処理
-			m_aItemUI[nCnt].m_pMark->Update();
+			m_aItemUI[nCnt].pMark->Update();
 		}
 	}
 }
@@ -129,18 +131,18 @@ void CItemUI::Draw(void)
 {
 	for (int nCnt = 0; nCnt < ORDER_MAX; nCnt++)
 	{
-		if (m_aItemUI[nCnt].m_pFrame != nullptr)
+		if (m_aItemUI[nCnt].pFrame != nullptr)
 		{ // 枠が NULL じゃない場合
 
 			// 枠の描画処理
-			m_aItemUI[nCnt].m_pFrame->Draw();
+			m_aItemUI[nCnt].pFrame->Draw();
 		}
 
-		if (m_aItemUI[nCnt].m_pMark != nullptr)
+		if (m_aItemUI[nCnt].pMark != nullptr)
 		{ // マークが NULL じゃない場合
 
 			// マークの描画処理
-			m_aItemUI[nCnt].m_pMark->Draw();
+			m_aItemUI[nCnt].pMark->Draw();
 		}
 	}
 }
@@ -157,14 +159,14 @@ void CItemUI::SetData(const D3DXVECTOR3& pos)
 		case ORDER_BACK:		// 後ろ
 
 			// 枠を生成する
-			m_aItemUI[nCnt].m_pFrame = CItemFrame::Create(pos + FRAME_POS_SHIFT_BACK, FRAME_SIZE[nCnt], CPlayer::TYPE::TYPE_CAT);
+			m_aItemUI[nCnt].pFrame = CItemFrame::Create(pos + FRAME_POS_SHIFT_BACK, FRAME_SIZE[nCnt], CPlayer::TYPE::TYPE_CAT);
 
 			break;
 
 		case ORDER_FRONT:		// 前
 
 			// 枠を生成する
-			m_aItemUI[nCnt].m_pFrame = CItemFrame::Create(pos, FRAME_SIZE[nCnt], CPlayer::TYPE::TYPE_CAT);
+			m_aItemUI[nCnt].pFrame = CItemFrame::Create(pos, FRAME_SIZE[nCnt], CPlayer::TYPE::TYPE_CAT);
 
 			break;
 
@@ -238,10 +240,19 @@ CItemUI* CItemUI::Create(const D3DXVECTOR3& pos)
 //========================
 void CItemUI::SetMark(const CItem::TYPE type, const ORDER order)
 {
-	if (m_aItemUI[order].m_pMark == nullptr)
+	if (m_aItemUI[order].pMark == nullptr)
 	{ // マークの情報が NULL の場合
 
 		// アイテムUIのマークを設定する
-		m_aItemUI[order].m_pMark = CItemMark::Create(m_aItemUI[order].m_pFrame->GetPos(), MARK_SIZE[order], type);
+		m_aItemUI[order].pMark = CItemMark::Create(m_aItemUI[order].pFrame->GetPos(), MARK_SIZE[order], type);
 	}
+}
+
+//========================
+// アイテムUIの取得処理
+//========================
+CItemUI::SItemUI CItemUI::GetItemUI(const ORDER order) const
+{
+	// アイテムUIの情報を返す
+	return m_aItemUI[order];
 }
