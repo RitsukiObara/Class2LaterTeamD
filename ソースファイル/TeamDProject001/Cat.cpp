@@ -529,9 +529,6 @@ void CCat::GetItem(const CItem::TYPE type)
 
 	// アイテムのマークを生成する
 	m_pItemUI->SetMark(type);
-
-	// アイテムの所持数を生成する
-	m_pItemUI->SetMagni(m_nItemCount);
 }
 
 //=====================================
