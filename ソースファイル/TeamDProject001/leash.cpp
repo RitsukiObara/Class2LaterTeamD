@@ -32,6 +32,7 @@ CLeash::CLeash() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 	m_bSetHead = false;
 	m_bSetToes = false;
 	m_StateCount = 0;
+	SetRatUse(true);
 }
 
 //==============================
@@ -188,10 +189,10 @@ void CLeash::StateManager(D3DXVECTOR3 *pos)
 //=====================================
 // î•ñ‚Ìİ’èˆ—
 //=====================================
-void CLeash::SetData(const D3DXVECTOR3& pos, const TYPE type)
+void CLeash::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type)
 {
 	// î•ñ‚Ìİ’èˆ—
-	CObstacle::SetData(pos, type);
+	CObstacle::SetData(pos,rot, type);
 }
 
 //=====================================

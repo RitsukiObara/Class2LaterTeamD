@@ -13,7 +13,15 @@
 #include "useful.h"
 
 #include "item_mark.h"
-#include "item_magni.h"
+#include "item_frame.h"
+
+//--------------------------------------------
+// マクロ定義
+//--------------------------------------------
+#define FRAME_POS_SHIFT_BACK	(D3DXVECTOR3(-40.0f, 20.0f,0.0f))		// 後ろの枠の位置のずらす幅
+#define FRAME_SIZE_FRONT		(D3DXVECTOR3(50.0f, 50.0f, 0.0f))		// 前の枠のサイズ
+#define FRAME_SIZE_BACK			(D3DXVECTOR3(30.0f, 30.0f, 0.0f))		// 後ろの枠のサイズ
+#define ITEM_MARK_SHIFT			(D3DXVECTOR3(0.0f, -5.0f, 0.0f))		// マークのずらす幅
 
 //========================
 // コンストラクタ
@@ -21,8 +29,11 @@
 CItemUI::CItemUI() : CObject(TYPE_ITEMUI, PRIORITY_UI)
 {
 	// 全ての値をクリアする
-	m_pMark = nullptr;		// マークの情報
-	m_pMagni = nullptr;		// 所持数の情報
+	for (int nCnt = 0; nCnt < ORDER_MAX; nCnt++)
+	{
+		m_aItemUI[nCnt].m_pMark = nullptr;		// マークの情報
+		m_aItemUI[nCnt].m_pFrame = nullptr;		// 枠の情報
+	}
 }
 
 //========================
@@ -38,9 +49,12 @@ CItemUI::~CItemUI()
 //========================
 HRESULT CItemUI::Init(void)
 {
-	// 全ての値を初期化する
-	m_pMark = nullptr;		// マークの情報
-	m_pMagni = nullptr;		// 所持数の情報
+	// 全ての値をクリアする
+	for (int nCnt = 0; nCnt < ORDER_MAX; nCnt++)
+	{
+		m_aItemUI[nCnt].m_pMark = nullptr;		// マークの情報
+		m_aItemUI[nCnt].m_pFrame = nullptr;		// 枠の情報
+	}
 
 	// 成功を返す
 	return S_OK;
@@ -51,20 +65,24 @@ HRESULT CItemUI::Init(void)
 //========================
 void CItemUI::Uninit(void)
 {
-	if (m_pMark != nullptr)
-	{ // マークが NULL じゃない場合
+	// 全ての値をクリアする
+	for (int nCnt = 0; nCnt < ORDER_MAX; nCnt++)
+	{
+		if (m_aItemUI[nCnt].m_pMark != nullptr)
+		{ // マークが NULL じゃない場合
 
-		// マークの終了処理
-		m_pMark->Uninit();
-		m_pMark = nullptr;
-	}
+			// マークの終了処理
+			m_aItemUI[nCnt].m_pMark->Uninit();
+			m_aItemUI[nCnt].m_pMark = nullptr;
+		}
 
-	if (m_pMagni != nullptr)
-	{ // 倍率が NULL じゃない場合
+		if (m_aItemUI[nCnt].m_pFrame != nullptr)
+		{ // 枠が NULL じゃない場合
 
-		// 倍率の終了処理
-		m_pMagni->Uninit();
-		m_pMagni = nullptr;
+			// 枠の終了処理
+			m_aItemUI[nCnt].m_pFrame->Uninit();
+			m_aItemUI[nCnt].m_pFrame = nullptr;
+		}
 	}
 
 	// 本体の終了処理
@@ -76,18 +94,21 @@ void CItemUI::Uninit(void)
 //========================
 void CItemUI::Update(void)
 {
-	if (m_pMark != nullptr)
-	{ // マークが NULL じゃない場合
+	for (int nCnt = 0; nCnt < ORDER_MAX; nCnt++)
+	{
+		if (m_aItemUI[nCnt].m_pFrame != nullptr)
+		{ // 枠が NULL じゃない場合
 
-		// マークの更新処理
-		m_pMark->Update();
-	}
+			// 枠の更新処理
+			m_aItemUI[nCnt].m_pFrame->Update();
+		}
 
-	if (m_pMagni != nullptr)
-	{ // 倍率が NULL じゃない場合
+		if (m_aItemUI[nCnt].m_pMark != nullptr)
+		{ // マークが NULL じゃない場合
 
-		// 倍率の更新処理
-		m_pMagni->Update();
+			// マークの更新処理
+			m_aItemUI[nCnt].m_pMark->Update();
+		}
 	}
 }
 
@@ -96,18 +117,21 @@ void CItemUI::Update(void)
 //========================
 void CItemUI::Draw(void)
 {
-	if (m_pMark != nullptr)
-	{ // マークが NULL じゃない場合
+	for (int nCnt = 0; nCnt < ORDER_MAX; nCnt++)
+	{
+		if (m_aItemUI[nCnt].m_pFrame != nullptr)
+		{ // 枠が NULL じゃない場合
 
-		// マークの描画処理
-		m_pMark->Draw();
-	}
+			// 枠の描画処理
+			m_aItemUI[nCnt].m_pFrame->Draw();
+		}
 
-	if (m_pMagni != nullptr)
-	{ // 倍率が NULL じゃない場合
+		if (m_aItemUI[nCnt].m_pMark != nullptr)
+		{ // マークが NULL じゃない場合
 
-		// 倍率の描画処理
-		m_pMagni->Draw();
+			// マークの描画処理
+			m_aItemUI[nCnt].m_pMark->Draw();
+		}
 	}
 }
 
@@ -116,7 +140,32 @@ void CItemUI::Draw(void)
 //========================
 void CItemUI::SetData(const D3DXVECTOR3& pos)
 {
+	for (int nCnt = 0; nCnt < ORDER_MAX; nCnt++)
+	{
+		switch (nCnt)
+		{
+		case ORDER_BACK:		// 後ろ
 
+			// 枠を生成する
+			m_aItemUI[nCnt].m_pFrame = CItemFrame::Create(pos + FRAME_POS_SHIFT_BACK, FRAME_SIZE_BACK, CPlayer::TYPE::TYPE_CAT);
+
+			break;
+
+		case ORDER_FRONT:		// 前
+
+			// 枠を生成する
+			m_aItemUI[nCnt].m_pFrame = CItemFrame::Create(pos, FRAME_SIZE_FRONT, CPlayer::TYPE::TYPE_CAT);
+
+			break;
+
+		default:
+
+			// 停止
+			assert(false);
+
+			break;
+		}
+	}
 }
 
 //========================
@@ -172,4 +221,12 @@ CItemUI* CItemUI::Create(const D3DXVECTOR3& pos)
 
 	// アイテムUIのポインタを返す
 	return pItemUI;
+}
+
+//========================
+// マークの生成処理
+//========================
+void CItemUI::SetMark(const CItem::TYPE type)
+{
+
 }

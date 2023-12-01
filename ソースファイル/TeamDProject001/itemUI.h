@@ -11,12 +11,13 @@
 // インクルードファイル
 //********************************************
 #include "object.h"
+#include "item.h"
 
 //--------------------------------------------
 // 前方宣言
 //--------------------------------------------
 class CItemMark;			// アイテムのマーク
-class CItemMagni;			// アイテムの所持数
+class CItemFrame;			// アイテムの枠
 
 //--------------------------------------------
 // クラス定義(アイテムUI)
@@ -24,6 +25,21 @@ class CItemMagni;			// アイテムの所持数
 class CItemUI : public CObject
 {
 public:				// 誰でもアクセスできる
+
+	// 列挙型定義(順番)
+	enum ORDER
+	{
+		ORDER_BACK = 0,		// 後ろ
+		ORDER_FRONT,		// 前
+		ORDER_MAX			// この列挙型の総数
+	};
+
+	// 構造体定義(アイテムUI)
+	struct SItemUI
+	{
+		CItemMark* m_pMark;			// マークの情報
+		CItemFrame* m_pFrame;		// 枠の情報
+	};
 
 	CItemUI();				// コンストラクタ
 	~CItemUI();				// デストラクタ
@@ -36,14 +52,16 @@ public:				// 誰でもアクセスできる
 
 	void SetData(const D3DXVECTOR3& pos);					// 情報の設定処理
 
+	// セット・ゲット関係
+	void SetMark(const CItem::TYPE type);		// マークの生成処理
+
 	// 静的メンバ関数
 	static CItemUI* Create(const D3DXVECTOR3& pos);			// 生成処理
 
 private:			// 自分だけアクセスできる
 
 	// メンバ変数
-	CItemMark* m_pMark;		// マークの情報
-	CItemMagni* m_pMagni;	// 所持数の情報
+	SItemUI m_aItemUI[ORDER_MAX];		// アイテムUIの情報
 };
 
 #endif

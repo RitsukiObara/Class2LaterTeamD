@@ -14,7 +14,7 @@
 #include "scene.h"
 #include "camera.h"
 
-#define CAMERA 0
+#define CAMERA 1
 
 //--------------------------------------------
 // ‘O•ûéŒ¾

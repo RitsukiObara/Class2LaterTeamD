@@ -11,6 +11,7 @@
 // インクルードファイル
 //********************************************
 #include "character.h"
+#include "item.h"
 
 //--------------------------------------------
 // 前方宣言
@@ -68,11 +69,11 @@ public:			// 誰でもアクセスできる
 	virtual void Update(void);		// 更新処理
 	virtual void Draw(void);		// 描画処理
 
-	virtual void Hit(void) = 0;					// ヒット処理
-	void Smash(const float fAngle);				// 吹き飛び状態
-	void Stun(int StunTime);					// 気絶状態
-	virtual void MotionManager(void) = 0;		// モーションマネージャー
-	virtual void GetItem(void);					// アイテムの取得処理
+	virtual void Hit(void) = 0;						// ヒット処理
+	void Smash(const float fAngle);					// 吹き飛び状態
+	void Stun(int StunTime);						// 気絶状態
+	virtual void MotionManager(void) = 0;			// モーションマネージャー
+	virtual void GetItem(const CItem::TYPE type);	// アイテムの取得処理
 
 	virtual void SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type);		// 情報の設定処理
 

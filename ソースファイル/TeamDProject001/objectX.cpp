@@ -40,6 +40,7 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\pin_one.x",			// 破片用の画鋲
 	"data\\MODEL\\Senpuki_Fan.x",		// 扇風機(羽根)
 	"data\\MODEL\\consent.x",			// コンセント
+	"data\\MODEL\\arrow.x",				// 死亡矢印
 
 	// ブロックモデル
 	"data\\MODEL\\cardboard.x",			// 段ボール

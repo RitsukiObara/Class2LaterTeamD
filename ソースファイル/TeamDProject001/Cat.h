@@ -52,9 +52,9 @@ public:			// 誰でもアクセスできる
 	void Update(void);		// 更新処理
 	void Draw(void);		// 描画処理
 
-	void Hit(void);						// ヒット処理
-	void MotionManager(void);			// モーションマネージャー
-	void GetItem(void);					// アイテムの取得処理
+	void Hit(void);							// ヒット処理
+	void MotionManager(void);				// モーションマネージャー
+	void GetItem(const CItem::TYPE type);	// アイテムの取得処理
 
 	// セット・ゲット関数
 	void SetItemUI(void);				// アイテムUIの設定処理
@@ -78,6 +78,7 @@ private:		// 自分だけアクセスできる
 	D3DXVECTOR3 m_posDest;			// 目的の位置
 	D3DXVECTOR3 m_rotDest;			// 目的の向き
 	int m_nShadowIdx;				// 影のインデックス
+	int m_nItemCount;				// アイテムの所持数
 
 	ATTACKSTATE m_AttackState;		// 攻撃の状態
 	int m_nAtkStateCount;			// 攻撃の状態のカウント
