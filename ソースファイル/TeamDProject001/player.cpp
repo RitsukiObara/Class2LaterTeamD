@@ -97,6 +97,12 @@ void CPlayer::Box(void)
 	m_bMove = false;					// 移動しているか
 	m_CameraRot = NONE_D3DXVECTOR3;		// カメラの向き
 	m_nResurrectionTime = 0;			// 復活するまでの時間
+
+	for (int nCnt = 0; nCnt < LOG_MAX; nCnt++)
+	{
+		m_apLog[nCnt] = NULL;
+	}
+	m_nLogNumber = 0;
 }
 
 //==============================
@@ -204,6 +210,15 @@ void CPlayer::Uninit(void)
 		m_pDeathArrow = nullptr;
 	}
 
+	for (int nCnt = 0; nCnt < LOG_MAX; nCnt++)
+	{
+		if (m_apLog[nCnt] != NULL)
+		{
+			m_apLog[nCnt]->Uninit();
+			m_apLog[nCnt] = NULL;
+		}
+	}
+
 	// プレイヤーを消去する
 	CGame::DeletePlayer(m_nPlayerIdx);
 
@@ -250,6 +265,20 @@ void CPlayer::Update(void)
 		collision::ObstacleAction(this, m_sizeColl.x, m_type);
 	}
 
+#ifdef _DEBUG
+
+	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_1))
+	{
+		SetLog(CLog::TYPE::TYPE_DEATH);
+	}
+
+	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_2))
+	{
+		SetLog(CLog::TYPE::TYPE_STUN);
+	}
+
+#endif // _DEBUG
+
 	if (m_pMotion != nullptr)
 	{ // モーションが NULL じゃない場合
 
@@ -267,6 +296,14 @@ void CPlayer::Update(void)
 		m_pPlayerID->SetPos(D3DXVECTOR3(pos.x, pos.y + ID_HEIGHT, pos.z));
 	}
 
+	for (int nCnt = 0; nCnt < LOG_MAX; nCnt++)
+	{
+		if (m_apLog[nCnt] != NULL)
+		{
+			m_apLog[nCnt]->Update();
+		}
+	}
+
 	// デバッグ表示
 	CManager::Get()->GetDebugProc()->Print("位置：%f %f %f\n向き：%f %f %f\n", GetPos().x, GetPos().y, GetPos().z, GetRot().x, GetRot().y, GetRot().z);
 }
@@ -278,6 +315,14 @@ void CPlayer::Draw(void)
 {
 	// 描画処理
 	CCharacter::Draw();
+
+	for (int nCnt = 0; nCnt < LOG_MAX; nCnt++)
+	{
+		if (m_apLog[nCnt] != NULL)
+		{
+			m_apLog[nCnt]->Draw();
+		}
+	}
 }
 
 //=====================================
@@ -755,6 +800,47 @@ void CPlayer::StateManager(void)
 
 
 		break;
+	}
+}
+
+//=======================================
+// ログの生成番号の加算
+//=======================================
+void CPlayer::SetLog(CLog::TYPE Type)
+{
+	for (int nCnt = 0; nCnt < LOG_MAX; nCnt++)
+	{
+		if (m_apLog[nCnt] == NULL)
+		{
+			m_apLog[nCnt] = CLog::Create(m_nPlayerIdx, m_nLogNumber, Type);
+			m_apLog[nCnt]->SetLogIdx(nCnt);
+			m_apLog[nCnt]->SetMain(this);
+			break;
+		}
+	}
+
+	m_nLogNumber++;
+}
+
+//=======================================
+// ログの生成番号の減算
+//=======================================
+void CPlayer::DelLogNumber(int nLogIdex)
+{
+	m_nLogNumber--;
+
+	if (m_apLog[nLogIdex] != NULL)
+	{
+		m_apLog[nLogIdex]->Uninit();
+		m_apLog[nLogIdex] = NULL;
+	}
+
+	for (int nCnt = 0; nCnt < LOG_MAX; nCnt++)
+	{
+		if (m_apLog[nCnt] != NULL)
+		{
+			m_apLog[nCnt]->DelCreateNumber();
+		}
 	}
 }
 

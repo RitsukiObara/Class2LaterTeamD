@@ -12,6 +12,9 @@
 //********************************************
 #include "character.h"
 #include "item.h"
+#include "log.h"
+
+#define LOG_MAX (16)
 
 //--------------------------------------------
 // 前方宣言
@@ -142,6 +145,9 @@ public:			// 誰でもアクセスできる
 
 	void SetStateCount(const int nCount) { m_StateCount = nCount; };		// 状態カウントの設定処理
 
+	void SetLog(CLog::TYPE Type);				// ログの生成と生成番号の加算
+	void DelLogNumber(int nLogIdex);			// ログの生成番号の減算
+
 	// 静的メンバ関数
 	static CPlayer* Create(const D3DXVECTOR3& pos, const int nID, const TYPE type);		// 生成処理
 
@@ -182,6 +188,8 @@ private:		// 自分だけアクセスできる
 	int m_StateCount;			// 状態管理用カウント
 	D3DXVECTOR3 m_CameraRot;	// カメラの向き
 	int m_nResurrectionTime;	// 復活するまでの時間
+	CLog *m_apLog[LOG_MAX];		// ログ
+	int m_nLogNumber;			// ログの生成番号
 };
 
 #endif
