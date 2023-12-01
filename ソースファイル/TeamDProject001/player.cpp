@@ -236,9 +236,6 @@ void CPlayer::Update(void)
 	// áŠQ•¨‚Æ‚Ì“–‚½‚è”»’è
 	collision::ObstacleHit(this, m_sizeColl.x, m_sizeColl.y, m_sizeColl.z, m_type);
 
-	//•Ç‚Æ‚Ì“–‚½‚è”»’è
-	SetPos(collision::WallCollision(GetPosOld(), GetPos()));
-
 	// áŠQ•¨‚Æ‚Ì“–‚½‚è”»’è
 	ObstacleCollision();
 

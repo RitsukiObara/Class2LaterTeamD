@@ -193,9 +193,6 @@ void CRat::Update(void)
 	// ‹N•š’n–Ê‚Ì“–‚½‚è”»’è
 	Elevation();
 
-	//•Ç‚Æ‚Ì“–‚½‚è”»’è
-	SetPos(collision::WallCollision(GetPosOld(), GetPos()));
-
 	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_E))
 	{
 		collision::ObstacleAction(this, SIZE.x * 2.0f, CPlayer::TYPE_RAT);
