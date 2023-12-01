@@ -18,8 +18,9 @@
 //--------------------------------------------
 // マクロ定義
 //--------------------------------------------
-#define MAGNI_TEXTURE		"data\\TEXTURE\\Magni.png"			// ×マークのテクスチャ
+#define MAGNI_TEXTURE		"data\\TEXTURE\\KariMagni.png"		// ×マークのテクスチャ
 #define NUMBER_TEXTURE		"data\\TEXTURE\\Number.png"			// 数字のテクスチャ
+#define NUMBER_POS_SHIFT	(20.0f)								// 数字のずらす位置
 #define MAGNI_SIZE			(D3DXVECTOR3(10.0f, 10.0f, 0.0f))	// ×マークのサイズ
 #define NUMBER_SIZE			(D3DXVECTOR3(10.0f, 20.0f, 0.0f))	// 数字のサイズ
 
@@ -183,6 +184,9 @@ void CItemMagni::SetData(const D3DXVECTOR3& pos, const int nNum)
 
 	if (m_pNumber != nullptr)
 	{ // 数字が NULL じゃない場合
+
+		// 数字
+		D3DXVECTOR3 posNumber = D3DXVECTOR3(pos.x, pos.y + NUMBER_POS_SHIFT, pos.z);
 
 		// 情報を設定する
 		m_pNumber->SetPos(pos);						// 位置

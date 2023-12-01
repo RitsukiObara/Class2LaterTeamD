@@ -16,6 +16,12 @@
 #include "item_magni.h"
 #include "item_frame.h"
 
+//--------------------------------------------
+// マクロ定義
+//--------------------------------------------
+#define ITEM_MARK_SHIFT		(D3DXVECTOR3(0.0f, -5.0f, 0.0f))		// マークのずらす幅
+#define ITEM_MAGNI_SHIFT	(D3DXVECTOR3(10.0f, 30.0f, 0.0f))		// 倍率のずらす幅
+
 //========================
 // コンストラクタ
 //========================
@@ -145,7 +151,7 @@ void CItemUI::SetData(const D3DXVECTOR3& pos)
 	{ // 枠が NULL の場合
 
 		// 枠を生成する
-		m_pFrame = CItemFrame::Create(pos, CPlayer::TYPE_CAT);
+		m_pFrame = CItemFrame::Create(pos,NONE_D3DXVECTOR3, CPlayer::TYPE_CAT);
 	}
 }
 
@@ -214,7 +220,7 @@ void CItemUI::SetMark(const CItem::TYPE type)
 	{ // マークが NULL の場合
 
 		// マークを生成する
-		m_pMark = CItemMark::Create(m_pFrame->GetPos(), type);
+		m_pMark = CItemMark::Create(m_pFrame->GetPos() + ITEM_MARK_SHIFT, type);
 	}
 }
 
@@ -228,6 +234,6 @@ void CItemUI::SetMagni(const int nNum)
 	{ // 所持数が NULL の場合
 
 		// 所持数を生成する
-		m_pMagni = CItemMagni::Create(D3DXVECTOR3(m_pFrame->GetPos().x + 10.0f, m_pFrame->GetPos().y + 30.0f, 0.0f), nNum);
+		m_pMagni = CItemMagni::Create(m_pFrame->GetPos() + ITEM_MAGNI_SHIFT, nNum);
 	}
 }
