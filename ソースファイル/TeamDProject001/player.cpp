@@ -26,6 +26,7 @@
 #include "collision.h"
 #include "recoveringUI.h"
 #include "speech_message.h"
+#include "death_arrow.h"
 
 #include "Cat.h"
 #include "rat.h"
@@ -84,8 +85,9 @@ void CPlayer::Box(void)
 	m_pStun = nullptr;					// 気絶の情報
 	m_pRatGhost = nullptr;				// 幽霊ネズミの情報
 	m_pRessrectionFan = nullptr;		// 円の範囲の情報
-	m_pRecoveringUI = nullptr;			// 回復中のUI
-	m_pSpeechMessage = nullptr;			// 伝達メッセージ
+	m_pRecoveringUI = nullptr;			// 回復中のUIの情報
+	m_pSpeechMessage = nullptr;			// 伝達メッセージの情報
+	m_pDeathArrow = nullptr;			// 死亡矢印の情報
 	m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_sizeColl = NONE_D3DXVECTOR3;		// 当たり判定のサイズ
 	m_type = TYPE_CAT;					// 種類
@@ -118,8 +120,9 @@ HRESULT CPlayer::Init(void)
 	m_pStun = nullptr;					// 気絶の情報
 	m_pRatGhost = nullptr;				// 幽霊ネズミの情報
 	m_pRessrectionFan = nullptr;		// 円の範囲の情報
-	m_pRecoveringUI = nullptr;			// 回復中のUI
-	m_pSpeechMessage = nullptr;			// 伝達メッセージ
+	m_pRecoveringUI = nullptr;			// 回復中のUIの情報
+	m_pSpeechMessage = nullptr;			// 伝達メッセージの情報
+	m_pDeathArrow = nullptr;			// 死亡矢印の情報
 	m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_sizeColl = NONE_D3DXVECTOR3;		// 当たり判定のサイズ
 	m_type = TYPE_CAT;					// 種類
@@ -190,8 +193,15 @@ void CPlayer::Uninit(void)
 	{ // 伝達メッセージが NULL じゃないとき
 
 		//伝達メッセージの終了処理
-		m_pSpeechMessage->Uninit();
 		m_pSpeechMessage = nullptr;
+	}
+
+	if (m_pDeathArrow != nullptr)
+	{ // 死亡矢印が NULL じゃないとき
+
+		//死亡矢印の終了処理
+		m_pDeathArrow->Uninit();
+		m_pDeathArrow = nullptr;
 	}
 
 	// プレイヤーを消去する
@@ -951,6 +961,49 @@ void CPlayer::DeleteSpeechMessage(void)
 		// 伝達メッセージの終了処理
 		m_pSpeechMessage->Uninit();
 		m_pSpeechMessage = nullptr;
+	}
+}
+
+//=======================================
+// 死亡矢印の設定処理
+//=======================================
+void CPlayer::SetDeathArrow(const D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& rot)
+{
+	if (m_pDeathArrow == nullptr)
+	{ // 死亡矢印が NULL の時
+
+		// 死亡矢印の生成
+		m_pDeathArrow = CDeathArrow::Create(pos, posOld, rot);
+	}
+	else if (m_pDeathArrow != nullptr)
+	{ // 死亡矢印が NULL じゃないとき
+
+		m_pDeathArrow->SetPos(pos);			// 位置設定
+		m_pDeathArrow->SetPosOld(posOld);	// 前回の位置設定
+		m_pDeathArrow->SetRot(rot);			// 向き設定
+	}
+}
+
+//=======================================
+// 死亡矢印の取得処理
+//=======================================
+CDeathArrow* CPlayer::GetDeathArrow(void)
+{
+	// 死亡矢印の情報を返す
+	return m_pDeathArrow;
+}
+
+//=======================================
+// 死亡矢印の消去処理
+//=======================================
+void CPlayer::DeleteDeathArrow(void)
+{
+	if (m_pDeathArrow != nullptr)
+	{ // 死亡矢印が NULL じゃない時
+
+		// 死亡矢印の終了処理
+		m_pDeathArrow->Uninit();
+		m_pDeathArrow = nullptr;
 	}
 }
 

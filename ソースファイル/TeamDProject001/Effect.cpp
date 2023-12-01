@@ -18,7 +18,8 @@
 #define DUST_TEXTURE			"data\\TEXTURE\\Dust.tga"				// 埃エフェクトのテクスチャ
 #define RUPTURE_TEXTURE			"data\\TEXTURE\\Rupture.tga"			// 破裂エフェクトのテクスチャ
 #define THUNDER_TEXTURE			"data\\TEXTURE\\Thunder.png"			// 雷エフェクトのテクスチャ
-#define RESURRECTION_TEXTURE	"data\\TEXTURE\\RESURRECTION.png"		// 復活エフェクトのテクスチャ
+#define RESURRECTION_TEXTURE	"data\\TEXTURE\\ItemGet.png"		// 復活エフェクトのテクスチャ
+#define ITEMGET_TEXTURE			"data\\TEXTURE\\ItemGet.png"		// 取得エフェクトのテクスチャ
 #define DUST_GRAVITY			(0.4f)									// 埃の重力
 
 //=========================
@@ -168,7 +169,13 @@ void CEffect::Update(void)
 		break;
 
 	case TYPE_RESURRECTION:	//復活
+							// 重力を足す
+		m_move.y -= DUST_GRAVITY;
+		// 移動処理
+		Move();
 
+		// サイジング処理
+		Sizing();
 
 		break;
 
@@ -186,6 +193,16 @@ void CEffect::Update(void)
 
 		break;
 
+	case TYPE_ITEMGET:		// 破裂
+		// 移動処理
+		Move();
+
+		// サイジング処理
+		Sizing();
+
+		// 透明度の減算処理
+		SubAlpha();
+		break;
 	default:
 
 		// 停止
@@ -302,6 +319,12 @@ void CEffect::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& move, const int
 
 	  // テクスチャの読み込み処理
 		BindTexture(CManager::Get()->GetTexture()->Regist(RESURRECTION_TEXTURE));
+	}
+	else if (m_type == TYPE_ITEMGET)
+	{ // 復活の場合
+
+	  // テクスチャの読み込み処理
+		BindTexture(CManager::Get()->GetTexture()->Regist(ITEMGET_TEXTURE));
 	}
 
 	else

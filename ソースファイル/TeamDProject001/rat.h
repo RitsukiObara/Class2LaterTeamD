@@ -58,6 +58,7 @@ private:		// 自分だけアクセスできる
 	void Jump(void);				// ジャンプ処理
 	void Gravity(void);				// 重力処理
 	void Attack(void);				// 攻撃処理
+	void DeathArrow(void);			// 死亡矢印の処理
 	void Elevation(void);			// 起伏地面の当たり判定
 	void ResurrectionCollision(void);		// 生き返りの当たり判定
 
