@@ -12,6 +12,7 @@
 //=======================================
 // マクロ定義
 //=======================================
+#define SIZE				(D3DXVECTOR3(60.0f, 60.0f, 0.0f))	// 枠のサイズ
 #define CAT_TEXTURE			"data\\TEXTURE\\Cat_Frame.png"		// ネコの枠のテクスチャ
 #define RAT_TEXTURE			"data\\TEXTURE\\Rat_Frame.png"		// ネズミの枠のテクスチャ
 
@@ -81,7 +82,7 @@ void CItemFrame::SetData(const D3DXVECTOR3& pos, const CPlayer::TYPE type)
 	// スクロールの設定処理
 	SetPos(pos);				// 位置設定
 	SetRot(NONE_D3DXVECTOR3);	// 向き設定
-	SetSize(D3DXVECTOR3(50.0f, 50.0f, 0.0f));	// サイズ設定
+	SetSize(SIZE);				// サイズ設定
 	SetLength();				// 長さ設定
 	SetAngle();					// 方向設定
 
