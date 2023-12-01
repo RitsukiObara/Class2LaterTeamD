@@ -16,12 +16,22 @@
 #include "item_frame.h"
 
 //--------------------------------------------
-// マクロ定義
+// 無名名前空間
 //--------------------------------------------
-#define FRAME_POS_SHIFT_BACK	(D3DXVECTOR3(-40.0f, 20.0f,0.0f))		// 後ろの枠の位置のずらす幅
-#define FRAME_SIZE_FRONT		(D3DXVECTOR3(50.0f, 50.0f, 0.0f))		// 前の枠のサイズ
-#define FRAME_SIZE_BACK			(D3DXVECTOR3(30.0f, 30.0f, 0.0f))		// 後ろの枠のサイズ
-#define ITEM_MARK_SHIFT			(D3DXVECTOR3(0.0f, -5.0f, 0.0f))		// マークのずらす幅
+namespace
+{
+	static const D3DXVECTOR3 FRAME_POS_SHIFT_BACK = D3DXVECTOR3(-40.0f, 20.0f, 0.0f);		// 後ろの枠の位置のずらす幅
+	static const D3DXVECTOR3 FRAME_SIZE[CItemUI::ORDER_MAX] =								// 枠のサイズ
+	{
+		D3DXVECTOR3(30.0f, 30.0f, 0.0f),			// 後ろ
+		D3DXVECTOR3(50.0f, 50.0f, 0.0f),			// 前
+	};
+	static const D3DXVECTOR3 MARK_SIZE[CItemUI::ORDER_MAX] =								// 枠のサイズ
+	{
+		D3DXVECTOR3(15.0f, 15.0f, 0.0f),			// 後ろ
+		D3DXVECTOR3(30.0f, 30.0f, 0.0f),			// 前
+	};
+}
 
 //========================
 // コンストラクタ
@@ -147,14 +157,14 @@ void CItemUI::SetData(const D3DXVECTOR3& pos)
 		case ORDER_BACK:		// 後ろ
 
 			// 枠を生成する
-			m_aItemUI[nCnt].m_pFrame = CItemFrame::Create(pos + FRAME_POS_SHIFT_BACK, FRAME_SIZE_BACK, CPlayer::TYPE::TYPE_CAT);
+			m_aItemUI[nCnt].m_pFrame = CItemFrame::Create(pos + FRAME_POS_SHIFT_BACK, FRAME_SIZE[nCnt], CPlayer::TYPE::TYPE_CAT);
 
 			break;
 
 		case ORDER_FRONT:		// 前
 
 			// 枠を生成する
-			m_aItemUI[nCnt].m_pFrame = CItemFrame::Create(pos, FRAME_SIZE_FRONT, CPlayer::TYPE::TYPE_CAT);
+			m_aItemUI[nCnt].m_pFrame = CItemFrame::Create(pos, FRAME_SIZE[nCnt], CPlayer::TYPE::TYPE_CAT);
 
 			break;
 
@@ -226,7 +236,12 @@ CItemUI* CItemUI::Create(const D3DXVECTOR3& pos)
 //========================
 // マークの生成処理
 //========================
-void CItemUI::SetMark(const CItem::TYPE type)
+void CItemUI::SetMark(const CItem::TYPE type, const ORDER order)
 {
+	if (m_aItemUI[order].m_pMark == nullptr)
+	{ // マークの情報が NULL の場合
 
+		// アイテムUIのマークを設定する
+		m_aItemUI[order].m_pMark = CItemMark::Create(m_aItemUI[order].m_pFrame->GetPos(), MARK_SIZE[order], type);
+	}
 }

@@ -53,10 +53,10 @@ public:				// 誰でもアクセスできる
 	void SetData(const D3DXVECTOR3& pos);					// 情報の設定処理
 
 	// セット・ゲット関係
-	void SetMark(const CItem::TYPE type);		// マークの生成処理
+	void SetMark(const CItem::TYPE type, const ORDER order);	// マークの生成処理
 
 	// 静的メンバ関数
-	static CItemUI* Create(const D3DXVECTOR3& pos);			// 生成処理
+	static CItemUI* Create(const D3DXVECTOR3& pos);				// 生成処理
 
 private:			// 自分だけアクセスできる
 
