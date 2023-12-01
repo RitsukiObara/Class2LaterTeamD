@@ -35,17 +35,18 @@ namespace collision
 
 	// 今後実装予定のブロックの当たり判定
 	void BlockCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth);		// ブロックの当たり判定
-	void BlockRectangleCollision(CBlock& block, D3DXVECTOR3& pos, const D3DXVECTOR3& posOld);	// ブロックの矩形の当たり判定
+	void BlockRectangleCollision(CBlock& block, D3DXVECTOR3& pos, const D3DXVECTOR3& posOld,bool bToggle);	// ブロックの矩形の当たり判定
 	void BlockCircleCollision(CBlock& block, D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fRadius, const float fHeight);	// ブロックの円形の当たり判定
+	bool BlockRectangleCollisionBool(CBlock& block, D3DXVECTOR3& pos, const D3DXVECTOR3& posOld);
 
 	// 起伏地面の当たり判定
 	bool ElevOutRangeCollision(D3DXVECTOR3* pPos, const D3DXVECTOR3& posOld, const float fWidth);			// 起伏地面の範囲外の当たり判定
 
 	//壁との当たり判定
-	D3DXVECTOR3 WallCollision(D3DXVECTOR3& objVec1, D3DXVECTOR3& objVec2);
+	void WallCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld);
 
 	// アイテムとの当たり判定
-	void ItemCollision(CPlayer& pPlayer);		// ネコとアイテムとの当たり判定
+	void ItemCollision(CPlayer& pPlayer, const int nHave);		// ネコとアイテムとの当たり判定
 
 	// 汎用的な当たり判定
 	bool HexahedronCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posBlock, const D3DXVECTOR3& posOld, const D3DXVECTOR3& posOldBlock, const D3DXVECTOR3& min, const D3DXVECTOR3& minBlock, const D3DXVECTOR3& max, const D3DXVECTOR3& maxBlock);		// 六面体の当たり判定

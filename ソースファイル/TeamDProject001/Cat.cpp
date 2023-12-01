@@ -185,10 +185,13 @@ void CCat::Update(void)
 		SetSpeed(MOVE_SPEED);
 
 		if (GetStunState() != STUNSTATE_SMASH)
-		{ // 吹き飛び状態の場合
+		{ // 吹き飛び状態以外の場合
 
 			// 移動操作処理
 			MoveControl();
+
+			// アイテムの設置処理
+			ItemSet();
 		}
 
 		// 攻撃入力の処理
@@ -213,7 +216,7 @@ void CCat::Update(void)
 	CShadowCircle::SetPosRot(m_nShadowIdx, GetPos(), GetRot());
 
 	// アイテムとの当たり判定処理
-	collision::ItemCollision(*this);
+	collision::ItemCollision(*this, m_nItemCount);
 
 	// 起伏地面の当たり判定
 	Elevation();
@@ -259,8 +262,9 @@ void CCat::Attack(void)
 	D3DXVECTOR3 pos = GetPos();
 	D3DXVECTOR3 rot = GetRot();
 
-	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_RETURN) == true)
-	{ // ENTERキーを押していた場合
+	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_RETURN) == true ||
+		CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_A, GetPlayerIdx()) == true)
+	{ // ENTERキー(Aボタン)を押していた場合
 
 		// 状態を攻撃準備にする
 		m_AttackState = ATTACKSTATE_STANDBY;
@@ -282,7 +286,7 @@ void CCat::Attack(void)
 					D3DXVECTOR3(-30.0f, -50.0f, -30.0f)) == true)
 				{ // XYの矩形に当たってたら
 
-					if (useful::RectangleCollisionXZ(D3DXVECTOR3(pos.x + sinf(rot.y) * -ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * -ATTACK_DISTANCE), 
+					if (useful::RectangleCollisionXZ(D3DXVECTOR3(pos.x + sinf(rot.y) * -ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * -ATTACK_DISTANCE),
 						pPlayer->GetPos(),
 						D3DXVECTOR3(30.0f, 50.0f, 30.0f), D3DXVECTOR3(30.0f, 50.0f, 30.0f),
 						D3DXVECTOR3(-30.0f, -50.0f, -30.0f), D3DXVECTOR3(-30.0f, -50.0f, -30.0f)) == true)
@@ -381,6 +385,42 @@ void CCat::Elevation(void)
 }
 
 //===========================================
+// ネコのアイテム設置処理
+//===========================================
+void CCat::ItemSet(void)
+{
+	if (m_nItemCount > 0 &&
+		m_pItemUI->GetItemUI(CItemUI::ORDER_FRONT).pMark != nullptr &&
+		(CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_TAB) == true ||
+		CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_Y, GetPlayerIdx()) == true))
+	{ // アイテムを持っている状態でYボタンが押された場合
+
+		switch (m_pItemUI->GetItemUI(CItemUI::ORDER_FRONT).type)
+		{
+		case CItem::TYPE_MOUSETRAP:		// ネズミ捕り
+
+			// アイテムを設置する
+			CObstacle::Create(GetPos(), GetRot(), CObstacle::TYPE::TYPE_MOUSETRAP);
+
+			break;
+
+		default:
+
+			// 停止
+			assert(false);
+
+			break;
+		}
+
+		// 情報のソート処理
+		m_pItemUI->SortInfo();
+
+		// アイテムのカウント数を減算する
+		m_nItemCount--;
+	}
+}
+
+//===========================================
 // デバッグ表示
 //===========================================
 void CCat::DebugMessage(void)
@@ -388,7 +428,7 @@ void CCat::DebugMessage(void)
 	CManager::Get()->GetDebugProc()->Print("\n 猫情報--------------------------------------------\n");
 
 	// 猫の攻撃位置情報を表示
-	CManager::Get()->GetDebugProc()->Print("位置：%f %f %f\n", m_AttackPos.x, m_AttackPos.y, m_AttackPos.z);
+	CManager::Get()->GetDebugProc()->Print("位置：%f %f %f\n", GetPos().x, GetPos().y, GetPos().z);
 
 	// 猫の操作方法を表示
 	CManager::Get()->GetDebugProc()->Print("移動入力：上:[I] / 左:[J] / 下:[K] / 右:[L] \n");
@@ -527,8 +567,18 @@ void CCat::GetItem(const CItem::TYPE type)
 	// アイテムの所持カウントを加算する
 	m_nItemCount++;
 
-	// アイテムのマークを生成する
-	m_pItemUI->SetMark(type);
+	if (m_nItemCount == 1)
+	{ // 1個目の場合
+
+		// アイテムのマークを生成する
+		m_pItemUI->SetMark(type, CItemUI::ORDER_FRONT);
+	}
+	else if (m_nItemCount == 2)
+	{ // 2個目の場合
+
+		// アイテムのマークを生成する
+		m_pItemUI->SetMark(type, CItemUI::ORDER_BACK);
+	}
 }
 
 //=====================================

@@ -12,7 +12,6 @@
 //=======================================
 // マクロ定義
 //=======================================
-#define SIZE				(D3DXVECTOR3(30.0f,30.0f,0.0f))		// ネズミ捕りのサイズ
 #define MOUSETRAP_TEXTURE	"data\\TEXTURE\\Mousetrap.png"		// ネズミ捕りのテクスチャ
 
 //=========================
@@ -20,7 +19,8 @@
 //=========================
 CItemMark::CItemMark() : CObject2D(CObject::TYPE_NONE, CObject::PRIORITY_UI)
 {
-
+	// 全ての値をクリアする
+	m_type = CItem::TYPE_MOUSETRAP;		// 種類
 }
 
 //=========================
@@ -42,6 +42,9 @@ HRESULT CItemMark::Init(void)
 		// 失敗を返す
 		return E_FAIL;
 	}
+
+	// 全ての値を初期化する
+	m_type = CItem::TYPE_MOUSETRAP;		// 種類
 
 	// 成功を返す
 	return S_OK;
@@ -76,14 +79,17 @@ void CItemMark::Draw(void)
 //=========================
 // 情報の設定処理
 //=========================
-void CItemMark::SetData(const D3DXVECTOR3& pos, const CItem::TYPE type)
+void CItemMark::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const CItem::TYPE type)
 {
 	// スクロールの設定処理
 	SetPos(pos);				// 位置設定
 	SetRot(NONE_D3DXVECTOR3);	// 向き設定
-	SetSize(SIZE);				// サイズ設定
+	SetSize(size);				// サイズ設定
 	SetLength();				// 長さ設定
 	SetAngle();					// 方向設定
+
+	// 全ての値を設定する
+	m_type = type;				// 種類
 
 	switch (type)
 	{
@@ -109,7 +115,7 @@ void CItemMark::SetData(const D3DXVECTOR3& pos, const CItem::TYPE type)
 //=========================
 // 生成処理
 //=========================
-CItemMark* CItemMark::Create(const D3DXVECTOR3& pos, const CItem::TYPE type)
+CItemMark* CItemMark::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const CItem::TYPE type)
 {
 	// ローカルオブジェクトを生成
 	CItemMark* pItemMark = nullptr;		// プレイヤーのインスタンスを生成
@@ -145,7 +151,7 @@ CItemMark* CItemMark::Create(const D3DXVECTOR3& pos, const CItem::TYPE type)
 		}
 
 		// 情報の設定処理
-		pItemMark->SetData(pos, type);
+		pItemMark->SetData(pos, size, type);
 	}
 	else
 	{ // オブジェクトが NULL の場合
@@ -159,4 +165,13 @@ CItemMark* CItemMark::Create(const D3DXVECTOR3& pos, const CItem::TYPE type)
 
 	// アイテムマークのポインタを返す
 	return pItemMark;
+}
+
+//=========================
+// 種類の取得処理
+//=========================
+CItem::TYPE CItemMark::GetType(void) const
+{
+	// 種類を返す
+	return m_type;
 }
