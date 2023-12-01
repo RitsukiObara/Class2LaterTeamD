@@ -426,6 +426,9 @@ void CCat::SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 
 	// モーションの設定処理
 	GetMotion()->Set(MOTIONTYPE_NEUTRAL);
+
+	// アイテムUIの生成処理
+	SetItemUI();
 }
 
 //=====================================

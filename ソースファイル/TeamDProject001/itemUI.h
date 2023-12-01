@@ -17,6 +17,7 @@
 //--------------------------------------------
 class CItemMark;			// アイテムのマーク
 class CItemMagni;			// アイテムの所持数
+class CItemFrame;			// アイテムの枠
 
 //--------------------------------------------
 // クラス定義(アイテムUI)
@@ -44,6 +45,7 @@ private:			// 自分だけアクセスできる
 	// メンバ変数
 	CItemMark* m_pMark;		// マークの情報
 	CItemMagni* m_pMagni;	// 所持数の情報
+	CItemFrame* m_pFrame;	// 枠の情報
 };
 
 #endif
