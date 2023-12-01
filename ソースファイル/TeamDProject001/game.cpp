@@ -197,6 +197,9 @@ HRESULT CGame::Init(void)
 		CCharaInfoUI::Create(PLAYERUI_POS[nCnt], nCnt, m_apPlayer[nCnt]->GetType());
 	}
 
+	// ネズミ捕りの生成
+	CItem::Create(D3DXVECTOR3(0.0f, 0.0f, -700.0f), CItem::TYPE::TYPE_MOUSETRAP);
+
 	//// 武器選択UIを生成
 	//CWeaponSelectUI::Create();
 

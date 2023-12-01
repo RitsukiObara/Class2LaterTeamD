@@ -203,3 +203,31 @@ CItemUI* CItemUI::Create(const D3DXVECTOR3& pos)
 	// アイテムUIのポインタを返す
 	return pItemUI;
 }
+
+//========================
+// マークの生成処理
+//========================
+void CItemUI::SetMark(const CItem::TYPE type)
+{
+	if (m_pMark == nullptr &&
+		m_pFrame != nullptr)
+	{ // マークが NULL の場合
+
+		// マークを生成する
+		m_pMark = CItemMark::Create(m_pFrame->GetPos(), type);
+	}
+}
+
+//========================
+// 所持数の生成処理
+//========================
+void CItemUI::SetMagni(const int nNum)
+{
+	if (m_pMagni == nullptr &&
+		m_pFrame != nullptr)
+	{ // 所持数が NULL の場合
+
+		// 所持数を生成する
+		m_pMagni = CItemMagni::Create(D3DXVECTOR3(m_pFrame->GetPos().x + 10.0f, m_pFrame->GetPos().y + 30.0f, 0.0f), nNum);
+	}
+}

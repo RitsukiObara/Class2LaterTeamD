@@ -18,8 +18,10 @@
 //--------------------------------------------
 // マクロ定義
 //--------------------------------------------
-#define MAGNI_TEXTURE		"data\\TEXTURE\\Magni.png"		// ×マークのテクスチャ
-#define NUMBER_TEXTURE		"data\\TEXTURE\\Number.png"		// 数字のテクスチャ
+#define MAGNI_TEXTURE		"data\\TEXTURE\\Magni.png"			// ×マークのテクスチャ
+#define NUMBER_TEXTURE		"data\\TEXTURE\\Number.png"			// 数字のテクスチャ
+#define MAGNI_SIZE			(D3DXVECTOR3(10.0f, 10.0f, 0.0f))	// ×マークのサイズ
+#define NUMBER_SIZE			(D3DXVECTOR3(10.0f, 20.0f, 0.0f))	// 数字のサイズ
 
 //========================
 // コンストラクタ
@@ -168,7 +170,7 @@ void CItemMagni::SetData(const D3DXVECTOR3& pos, const int nNum)
 		m_pMagni->SetPos(pos);					// 位置
 		m_pMagni->SetPosOld(pos);				// 前回の位置
 		m_pMagni->SetRot(NONE_D3DXVECTOR3);		// 向き
-		m_pMagni->SetSize(NONE_D3DXVECTOR3);	// サイズ
+		m_pMagni->SetSize(MAGNI_SIZE);			// サイズ
 		m_pMagni->SetAngle();					// 方向
 		m_pMagni->SetLength();					// 長さ
 
@@ -186,7 +188,7 @@ void CItemMagni::SetData(const D3DXVECTOR3& pos, const int nNum)
 		m_pNumber->SetPos(pos);						// 位置
 		m_pNumber->SetPosOld(pos);					// 前回の位置
 		m_pNumber->SetRot(NONE_D3DXVECTOR3);		// 向き
-		m_pNumber->SetSize(NONE_D3DXVECTOR3);		// サイズ
+		m_pNumber->SetSize(NUMBER_SIZE);			// サイズ
 		m_pNumber->SetAngle();						// 方向
 		m_pNumber->SetLength();						// 長さ
 

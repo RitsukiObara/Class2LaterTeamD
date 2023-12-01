@@ -11,6 +11,7 @@
 // インクルードファイル
 //********************************************
 #include "object.h"
+#include "item.h"
 
 //--------------------------------------------
 // 前方宣言
@@ -36,6 +37,10 @@ public:				// 誰でもアクセスできる
 	void Draw(void);		// 描画処理
 
 	void SetData(const D3DXVECTOR3& pos);					// 情報の設定処理
+
+	// セット・ゲット関係
+	void SetMark(const CItem::TYPE type);		// マークの生成処理
+	void SetMagni(const int nNum);				// 所持数の生成処理
 
 	// 静的メンバ関数
 	static CItemUI* Create(const D3DXVECTOR3& pos);			// 生成処理

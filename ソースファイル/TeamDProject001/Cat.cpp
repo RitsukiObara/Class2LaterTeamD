@@ -67,6 +67,7 @@ CCat::CCat() : CPlayer(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 	m_posDest = NONE_D3DXVECTOR3;	// 目的の位置
 	m_rotDest = NONE_D3DXVECTOR3;	// 目的の向き
 	m_nShadowIdx = INIT_SHADOW;		// 影のインデックス
+	m_nItemCount = 0;				// アイテムの所持数
 }
 
 //=========================================
@@ -141,6 +142,7 @@ HRESULT CCat::Init(void)
 	m_posDest = NONE_D3DXVECTOR3;	// 目的の位置
 	m_rotDest = NONE_D3DXVECTOR3;	// 目的の向き
 	m_nShadowIdx = INIT_SHADOW;		// 影のインデックス
+	m_nItemCount = 0;				// アイテムの所持数
 
 	// 値を返す
 	return S_OK;
@@ -520,10 +522,16 @@ void CCat::MotionManager(void)
 //=====================================
 // アイテムの取得処理
 //=====================================
-void CCat::GetItem(void)
+void CCat::GetItem(const CItem::TYPE type)
 {
-	// アイテムUIの設定処理
-	SetItemUI();
+	// アイテムの所持カウントを加算する
+	m_nItemCount++;
+
+	// アイテムのマークを生成する
+	m_pItemUI->SetMark(type);
+
+	// アイテムの所持数を生成する
+	m_pItemUI->SetMagni(m_nItemCount);
 }
 
 //=====================================
@@ -535,7 +543,7 @@ void CCat::SetItemUI(void)
 	{ // アイテムUIが NULL の場合
 
 		// アイテムUIの生成処理
-		m_pItemUI->Create(ITEMUI_POS[GetPlayerIdx()]);
+		m_pItemUI = CItemUI::Create(ITEMUI_POS[GetPlayerIdx()]);
 	}
 }
 
