@@ -369,7 +369,7 @@ void collision::BlockCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, cons
 {
 	// 先頭のブロックの情報を取得する
 	CBlock* pBlock = CBlockManager::Get()->GetTop();
-	bool bToggle = false;
+	int nCollision = 0;
 
 	while (pBlock != nullptr)
 	{ // ブロックが NULL の場合	
@@ -377,7 +377,8 @@ void collision::BlockCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, cons
 		{ // 矩形の当たり判定の場合
 
 			// 矩形の当たり判定
-			BlockRectangleCollision(*pBlock, pos, posOld,bToggle);
+			BlockRectangleCollision(*pBlock, pos, posOld, nCollision);
+
 		}
 		else
 		{ // 上記以外
@@ -389,12 +390,25 @@ void collision::BlockCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, cons
 		// 次のブロックの情報を取得する
 		pBlock = pBlock->GetNext();
 	}
+	while (pBlock != nullptr)
+	{ // ブロックが NULL の場合	
+		if (pBlock->GetCollision() == CBlock::COLLISION_SQUARE)
+		{ // 矩形の当たり判定の場合
+
+		  // 矩形の当たり判定
+			BlockRectangleCollision(*pBlock, pos, posOld, nCollision);
+
+		}
+
+		// 次のブロックの情報を取得する
+		pBlock = pBlock->GetNext();
+	}
 WallCollision(pos, posOld);
 }
 //===============================
 // ブロックの矩形の当たり判定
 //===============================
-void collision::BlockRectangleCollision(CBlock& block, D3DXVECTOR3& pos, const D3DXVECTOR3& posOld,bool bToggle)
+void collision::BlockRectangleCollision(CBlock& block, D3DXVECTOR3& pos, const D3DXVECTOR3& posOld,int& nCollision)
 {
 	bool bPosbool = false, bPosOldbool = false, bVecbool = false, bVecboolOld = false;
 	bool bZeroVec = false;
@@ -524,49 +538,55 @@ void collision::BlockRectangleCollision(CBlock& block, D3DXVECTOR3& pos, const D
 				float fLength = D3DXVec3Length(&vecToPosOld);
 				float fLength2 = D3DXVec3Length(&(posOld - vec[nCnt2]));
 				// 判定と出力
-
-				if (fLength > 20.0f&&fLength2>20.0f)
+				if (nCollision>=2)
+				{
+					pos = posOld;
+				}
+				else if (fLength > 20.0f&&fLength2>20.0f)
 				{
 					if (fdotProduct > 0.005)
 					{
 						NorVecLine *= 1;
-					
-
+						
 					}
 					else if (fdotProduct < -0.005)
 					{
 						NorVecLine *= -1;
 						
+
 					}
 					else
 					{
 						NorVecLine *= 0;
 					}
+					D3DXVECTOR3 move = D3DXVECTOR3(fMove*NorVecLine.x, pos.y, fMove*NorVecLine.z);
+
+					D3DXVECTOR3 SetPos = D3DXVECTOR3(posOld.x + move.x, pos.y, posOld.z + move.z);
+
+					pos = SetPos;
 				}
 				else
 				{
 					if (fdotProduct > 0.0f)
 					{
 						NorVecLine *= 1;
+						
 
 					}
 					else
 					{
 						NorVecLine *= -0.5;
+						
+
 					}
+					D3DXVECTOR3 move = D3DXVECTOR3(fMove*NorVecLine.x, pos.y, fMove*NorVecLine.z);
+
+					D3DXVECTOR3 SetPos = D3DXVECTOR3(posOld.x + move.x, pos.y, posOld.z + move.z);
+
+					pos = SetPos;
 				}
 
-				D3DXVECTOR3 move = D3DXVECTOR3(fMove*NorVecLine.x, pos.y, fMove*NorVecLine.z);
-
-				D3DXVECTOR3 SetPos = D3DXVECTOR3(posOld.x+move.x,pos.y,posOld.z+move.z);
 				
-				////四隅貫通防止の例外処理
-				//if (SetPos.x>vec[0].x && SetPos.x<vec[1].x && SetPos.z < vec[1].z && SetPos.z > vec[2].z)
-				//{
-				//	SetPos = posOld;
-				//}
-
-				pos = SetPos;
 			}
 		
 		}
@@ -575,6 +595,10 @@ void collision::BlockRectangleCollision(CBlock& block, D3DXVECTOR3& pos, const D
 	if (bInside[0] == bInside[1] && bInside[1] == bInside[2] && bInside[2] == bInside[3] && objpos.y + vtxMax.y > pos.y&&objpos.y + vtxMax.y <= posOld.y)
 	{
 		pos .y= objpos.y + vtxMax.y;
+	}
+	if (bInside[0] == bInside[1] && bInside[1] == bInside[2] && bInside[2] == bInside[3]&& objpos.y + vtxMax.y > posOld.y)
+	{
+		nCollision++;
 	}
 
 
