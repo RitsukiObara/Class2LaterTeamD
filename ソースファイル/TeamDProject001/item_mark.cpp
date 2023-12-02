@@ -13,6 +13,10 @@
 // マクロ定義
 //=======================================
 #define MOUSETRAP_TEXTURE	"data\\TEXTURE\\Mousetrap.png"		// ネズミ捕りのテクスチャ
+#define SMALL_MAGNI			(D3DXVECTOR3(0.9f, 1.1f, 0.0f))		// 小さい状態の倍率
+#define BIG_MAGNI			(D3DXVECTOR3(1.1f, 0.9f, 0.0f))		// 大きい状態の倍率
+#define SIZING_CORRECT		(0.05f)								// 拡縮の補正倍率
+#define SIZING_BORDER		(0.1f)								// サイズの境界線
 
 //=========================
 // コンストラクタ
@@ -20,6 +24,9 @@
 CItemMark::CItemMark() : CObject2D(CObject::TYPE_NONE, CObject::PRIORITY_UI)
 {
 	// 全ての値をクリアする
+	m_sizeDest = NONE_D3DXVECTOR3;		// 目的のサイズ
+	m_sizeCopy = NONE_D3DXVECTOR3;		// 初期のサイズ
+	m_state = STATE_SMALL;				// 状態
 	m_type = CItem::TYPE_MOUSETRAP;		// 種類
 }
 
@@ -44,6 +51,9 @@ HRESULT CItemMark::Init(void)
 	}
 
 	// 全ての値を初期化する
+	m_sizeDest = NONE_D3DXVECTOR3;		// 目的のサイズ
+	m_sizeCopy = NONE_D3DXVECTOR3;		// 初期のサイズ
+	m_state = STATE_SMALL;				// 状態
 	m_type = CItem::TYPE_MOUSETRAP;		// 種類
 
 	// 成功を返す
@@ -64,7 +74,11 @@ void CItemMark::Uninit(void)
 //=========================
 void CItemMark::Update(void)
 {
+	// サイズ設定処理
+	Sizing();
 
+	// 頂点座標の設定処理
+	SetVertex();
 }
 
 //=========================
@@ -89,6 +103,10 @@ void CItemMark::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const C
 	SetAngle();					// 方向設定
 
 	// 全ての値を設定する
+	m_sizeDest.x = size.x * SMALL_MAGNI.x;			// 目的のサイズ(X軸)
+	m_sizeDest.y = size.y * SMALL_MAGNI.y;			// 目的のサイズ(Y軸)
+	m_sizeCopy = size;			// 初期のサイズ
+	m_state = STATE_SMALL;		// 状態
 	m_type = type;				// 種類
 
 	switch (type)
@@ -174,4 +192,61 @@ CItem::TYPE CItemMark::GetType(void) const
 {
 	// 種類を返す
 	return m_type;
+}
+
+//=========================
+// サイズ設定処理
+//=========================
+void CItemMark::Sizing(void)
+{
+	// サイズを取得する
+	D3DXVECTOR3 size = GetSize();
+
+	// サイズの補正処理
+	useful::Correct(m_sizeDest.x, &size.x, SIZING_CORRECT);
+	useful::Correct(m_sizeDest.y, &size.y, SIZING_CORRECT);
+	useful::Correct(m_sizeDest.z, &size.z, SIZING_CORRECT);
+
+	switch (m_state)
+	{
+	case CItemMark::STATE_SMALL:
+
+		if (m_sizeDest.x + SIZING_BORDER >= size.x)
+		{ // 目的のサイズに一定量近づいた場合
+
+			// 拡大状態にする
+			m_state = STATE_BIG;
+
+			// 目的のサイズを設定する
+			m_sizeDest.x = m_sizeCopy.x * BIG_MAGNI.x;
+			m_sizeDest.y = m_sizeCopy.y * BIG_MAGNI.y;
+		}
+
+		break;
+
+	case CItemMark::STATE_BIG:
+
+		if (m_sizeDest.x - SIZING_BORDER <= size.x)
+		{ // 目的のサイズに一定量近づいた場合
+
+			// 縮小状態にする
+			m_state = STATE_SMALL;
+
+			// 目的のサイズを設定する
+			m_sizeDest.x = m_sizeCopy.x * SMALL_MAGNI.x;
+			m_sizeDest.y = m_sizeCopy.y * SMALL_MAGNI.y;
+		}
+
+		break;
+
+	default:
+
+		// 停止
+		assert(false);
+
+		break;
+	}
+
+	// サイズを適用する
+	SetSize(size);
 }
