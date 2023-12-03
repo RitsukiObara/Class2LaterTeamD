@@ -21,10 +21,11 @@
 //--------------------------------------------
 // 静的メンバ変数
 //--------------------------------------------
-int CEntry::m_nCatIdx = 0;		// ネコをやるプレイヤー
-int CEntry::m_nCatOldIdx = 0;	// 差分用ID
-int CEntry::m_EntryId[MAX_PLAY] = {};	// 差分用ID
-CPlayer* CEntry::m_apPlayer[MAX_PLAY] = {};	// プレイヤーのモデル情報
+int CEntry::m_nCatIdx = 0;						// ネコをやるプレイヤー
+int CEntry::m_nCatOldIdx = 0;					// 差分用ID
+int CEntry::m_EntryId[MAX_PLAY] = {};			// 全体のID
+CPlayer* CEntry::m_apPlayer[MAX_PLAY] = {};		// プレイヤーのモデル情報
+CEntryUI* CEntry::m_apUI[MAX_PLAY] = {};		// エントリーUIの情報
 
 //=========================================
 // コンストラクタ
@@ -86,6 +87,7 @@ HRESULT CEntry::Init(void)
 			m_apPlayer[nCnt] = CPlayer::Create(D3DXVECTOR3(-500.0f + (350.0f*nCnt), -100.0f, -150.0f), nCnt, CPlayer::TYPE_RAT);
 
 		}
+		// ID代入
 		m_EntryId[nCnt] = nCnt;
 	}
 
@@ -183,23 +185,22 @@ void CEntry::Update(void)
 		}
 	}
 
+	// ID並べ替え処理
 	if (m_nCatOldIdx != m_nCatIdx)
 	{
-		int nKeepID = 0;
+		int nKeepID = 0;	// 保存用引数
  		nKeepID = m_EntryId[m_nCatIdx];
 		m_EntryId[m_nCatIdx] = m_EntryId[m_nCatOldIdx];
 		m_EntryId[m_nCatOldIdx] = nKeepID;
 		m_nCatOldIdx = m_nCatIdx;
 	}
+
+	// 位置設定&移動量リセット
 	for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
 	{
 		m_apPlayer[nCnt]->SetMove(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-		
+		m_apPlayer[m_EntryId[nCnt]]->SetPos(D3DXVECTOR3(-500.0f + (350.0f * nCnt), -100.0f, -150.0f));
 	}
-	m_apPlayer[m_EntryId[0]]->SetPos(D3DXVECTOR3(-500.0f + (350.0f*0), -100.0f, -150.0f));
-	m_apPlayer[m_EntryId[1]]->SetPos(D3DXVECTOR3(-500.0f + (350.0f*1), -100.0f, -150.0f));
-	m_apPlayer[m_EntryId[2]]->SetPos(D3DXVECTOR3(-500.0f + (350.0f*2), -100.0f, -150.0f));
-	m_apPlayer[m_EntryId[3]]->SetPos(D3DXVECTOR3(-500.0f + (350.0f*3), -100.0f, -150.0f));
 
 	// レンダラーの更新
 	CManager::Get()->GetRenderer()->Update();
