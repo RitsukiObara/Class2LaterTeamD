@@ -101,7 +101,6 @@ void CHoney::StateManager(void)
 		{
 			Scale.x += 0.005f;
 			Scale.z += 0.005f;
-			Scale.y -= 0.040f;
 
 			SetScale(Scale);
 		}
@@ -124,7 +123,7 @@ void CHoney::Break(void)
 		// ƒ‚ƒfƒ‹‚Ìî•ñ‚ğİ’è‚·‚é
 		SetFileData(CXFile::TYPE_HONEY);
 
-		SetScale(D3DXVECTOR3(0.5f, 12.0f, 0.5f));
+		SetScale(D3DXVECTOR3(0.5f, 1.0f, 0.5f));
 	}
 }
 

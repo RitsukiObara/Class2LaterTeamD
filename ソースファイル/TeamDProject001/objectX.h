@@ -37,6 +37,7 @@ public:			// 誰でもアクセスできる
 		TYPE_WEAPONCAGE,		// 武器小屋
 		TYPE_FLOWERFRAC,		// 花瓶の破片
 		TYPE_PLASTICFRAC,		// プラスチックケース破片
+		TYPE_CAT_ATTACK,		// ネコの攻撃
 		TYPE_HONEY,				// 蜂蜜
 		TYPE_TOYCARSCREW,		// おもちゃの車(ネジ)
 		TYPE_TITLEWALL,			// タイトルの壁

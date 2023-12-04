@@ -46,8 +46,8 @@
 #define SMASH_WAIT			(40)			// 吹き飛び状態のカウント数
 #define CAT_CAMERA_HEIGHT	(200.0f)		// 猫のカメラの高さ
 #define CAT_CAMERA_DIS		(300.0f)		// 猫のカメラの視点と注視点の高さの差分(角度)
-#define RAT_CAMERA_HEIGHT	(100.0f)		// ネズミのカメラの高さ
-#define RAT_CAMERA_DIS		(100.0f)		// ネズミのカメラの視点と注視点の高さの差分(角度)
+#define RAT_CAMERA_DIS		(60.0f)			// ネズミのカメラの視点と注視点の高さの差分(角度)
+#define DIFF_ROT			(0.2f)			// 角度に足す差分の割合
 
 //==============================
 // コンストラクタ
@@ -94,6 +94,8 @@ void CPlayer::Box(void)
 	m_type = TYPE_CAT;					// 種類
 	m_nPlayerIdx = NONE_PLAYERIDX;		// プレイヤーのインデックス
 	m_fSpeed = 0.0f;					// 速度
+	m_fRotDest = 0.0f;					// 目標
+	m_fRotDiff = 0.0f;					// 差分
 	m_bAttack = false;					// 攻撃したか
 	m_bMove = false;					// 移動しているか
 	m_CameraRot = NONE_D3DXVECTOR3;		// カメラの向き
@@ -135,6 +137,8 @@ HRESULT CPlayer::Init(void)
 	m_type = TYPE_CAT;					// 種類
 	m_nPlayerIdx = NONE_PLAYERIDX;		// プレイヤーのインデックス
 	m_fSpeed = 0.0f;					// 速度
+	m_fRotDest = 0.0f;					// 目標
+	m_fRotDiff = 0.0f;					// 差分
 	m_bAttack = false;					// 攻撃したか
 	m_bMove = false;					// 移動しているか
 	m_nResurrectionTime = 0;			// 復活するまでの時間
@@ -260,7 +264,8 @@ void CPlayer::Update(void)
 	CameraUpdate();
 #endif // CAMERA
 
-	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_E))
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_E) ||
+		CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_B,m_nPlayerIdx) == true)
 	{
 		collision::ObstacleAction(this, m_sizeColl.x, m_type);
 	}
@@ -477,6 +482,7 @@ void CPlayer::MoveControl(void)
 
 			// 向きを設定する
 			rot.y = m_CameraRot.y + D3DX_PI * -0.75f;
+			m_fRotDest = m_CameraRot.y + D3DX_PI * -0.75f;
 		}
 		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true ||
 			CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nPlayerIdx) < 0)
@@ -484,12 +490,15 @@ void CPlayer::MoveControl(void)
 
 			// 向きを設定する
 			rot.y = m_CameraRot.y + D3DX_PI * -0.25f;
+			m_fRotDest = m_CameraRot.y + D3DX_PI * -0.25f;
 		}
 		else
 		{ // 上記以外
 
 			// 向きを設定する
 			rot.y = m_CameraRot.y + D3DX_PI * -0.5f;
+			m_fRotDest = m_CameraRot.y + D3DX_PI * -0.5f;
+
 		}
 		m_bMove = true;
 	}
@@ -503,6 +512,8 @@ void CPlayer::MoveControl(void)
 
 			// 向きを設定する
 			rot.y = m_CameraRot.y + D3DX_PI * 0.75f;
+			m_fRotDest = m_CameraRot.y + D3DX_PI * 0.75f;
+
 		}
 		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true ||
 			CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nPlayerIdx) < 0)
@@ -510,12 +521,14 @@ void CPlayer::MoveControl(void)
 
 			// 向きを設定する
 			rot.y = m_CameraRot.y + D3DX_PI * 0.25f;
+			m_fRotDest = m_CameraRot.y + D3DX_PI * 0.25f;
 		}
 		else
 		{ // 上記以外
 
 			// 向きを設定する
 			rot.y = m_CameraRot.y + D3DX_PI * 0.5f;
+			m_fRotDest = m_CameraRot.y + D3DX_PI * 0.5f;
 		}
 		m_bMove = true;
 	}
@@ -525,6 +538,7 @@ void CPlayer::MoveControl(void)
 
 		// 向きを設定する
 		rot.y = m_CameraRot.y + D3DX_PI * 1.0f;
+		m_fRotDest = m_CameraRot.y + D3DX_PI * 1.0f;
 		m_bMove = true;
 	}
 	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true ||
@@ -533,6 +547,7 @@ void CPlayer::MoveControl(void)
 
 		// 向きを設定する
 		rot.y = m_CameraRot.y + D3DX_PI * 0.0f;
+		m_fRotDest = m_CameraRot.y + D3DX_PI * 0.0f;
 		m_bMove = true;
 	}
 	else
@@ -545,9 +560,6 @@ void CPlayer::MoveControl(void)
 	// 移動量を設定する
 	m_move.x = -sinf(rot.y) * m_fSpeed;
 	m_move.z = -cosf(rot.y) * m_fSpeed;
-
-	// 位置と向きを適用する
-	SetRot(rot);
 }
 
 //=======================================
@@ -598,14 +610,39 @@ void CPlayer::CameraUpdate(void)
 			Pos.z + cosf(m_CameraRot.y + (D3DX_PI * 1.0f)) * 200.0f));
 	}
 
-	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LSHIFT) == true)
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LSHIFT) == true ||
+		CManager::Get()->GetInputGamePad()->GetPress(CInputGamePad::JOYKEY_LB,m_nPlayerIdx) == true)
 	{
 		m_CameraRot.y -= 0.05f;
 	}
-	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_RSHIFT) == true)
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_RSHIFT) == true ||
+		CManager::Get()->GetInputGamePad()->GetPress(CInputGamePad::JOYKEY_RB, m_nPlayerIdx) == true)
 	{
 		m_CameraRot.y += 0.05f;
 	}
+}
+
+//=======================================
+// 向きの補正処理
+//=======================================
+void CPlayer::RotNormalize(void)
+{
+	D3DXVECTOR3 rot = GetRot();			// 向きの取得
+
+	// 向きの差分を求める
+	m_fRotDiff = m_fRotDest - rot.y;
+
+	// 目標の方向までの差分を修正
+	useful::RotNormalize(&m_fRotDiff);
+
+	// 差分足す
+	rot.y += m_fRotDiff * DIFF_ROT;
+
+	// 現在の方向修正
+	useful::RotNormalize(&rot.y);
+
+	// 向きの設定
+	SetRot(rot);
 }
 
 ////=======================================
@@ -791,16 +828,11 @@ void CPlayer::StunStateManager(void)
 
 	case STUNSTATE_WAIT:	//障害物のみ無敵状態
 
-// カウントを減算する
-m_StunStateCount--;
+		m_StunStateCount--;
 
-if (m_StunStateCount <= 0)
-{ // カウントが一定数以下になった場合
+		{ // カウントが一定数以下になった場合
 
-	// 無状態にする
-	m_StunState = STUNSTATE_NONE;
-}
-break;
+		break;
 
 	default:
 
@@ -829,7 +861,7 @@ void CPlayer::StateManager(void)
 
 		if (m_StateCount <= 0)
 		{ // カウントが一定数以下になった場合
-
+			
 			// 無状態にする
 			m_State = STATE_NONE;
 		}

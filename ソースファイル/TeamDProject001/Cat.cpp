@@ -55,7 +55,7 @@ namespace
 //--------------------------------------------
 // マクロ定義
 //--------------------------------------------
-#define ATTACK_SIZE		(D3DXVECTOR3(90.0f, 50.0f, 90.0f))		// 攻撃の判定の大きさ
+#define ATTACK_SIZE		(D3DXVECTOR3(98.0f, 50.0f, 98.0f))		// 攻撃の判定の大きさ
 
 //=========================================
 // コンストラクタ
@@ -222,6 +222,9 @@ void CCat::Update(void)
 	// 起伏地面の当たり判定
 	Elevation();
 
+	// 角度の正規化
+	RotNormalize();
+
 	// 更新処理
 	CPlayer::Update();
 
@@ -333,7 +336,7 @@ void CCat::AttackStateManager(void)
 			for (int nCnt = 0; nCnt < 10; nCnt++)
 			{
 				// 破片の生成
-				CFraction::Create(D3DXVECTOR3(pos.x + sinf(rot.y) * -ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * -ATTACK_DISTANCE), CFraction::TYPE_FLOWERVASE);
+				CFraction::Create(D3DXVECTOR3(pos.x + sinf(rot.y) * -ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * -ATTACK_DISTANCE), CFraction::TYPE_CAT_ATTACK);
 			}
 		}
 		break;

@@ -110,6 +110,9 @@ void CHairBall::Update(void)
 
 	// ブロックとの当たり判定
 	Block();
+
+	// 魔法の壁処理
+	MagicWall();
 }
 
 //=====================================
@@ -173,24 +176,57 @@ bool CHairBall::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const flo
 //=====================================
 bool CHairBall::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
-	// ターゲットの位置を設定する
+	// ターゲットの位置と方向を宣言
 	D3DXVECTOR3 Targetpos = pos;
+	float fAngle = 0.0f;
 
-	if (m_state == STATE_SMASH &&
-		type == CPlayer::TYPE_RAT &&
-		pos.y <= GetPos().y + GetFileData().vtxMax.y &&
-		pos.y + fHeight >= GetPos().y + GetFileData().vtxMin.y &&
-		useful::CylinderCollision(&Targetpos, GetPos(), GetFileData().fRadius + fWidth) == true)
-	{ // 毬と衝突した場合
+	if (type == CPlayer::TYPE_CAT)
+	{ // ネコの場合
 
-		// true を返す
-		return true;
+		if (pos.y <= GetPos().y + GetFileData().vtxMax.y &&
+			pos.y + fHeight >= GetPos().y + GetFileData().vtxMin.y &&
+			useful::CylinderInner(pos, GetPos(), GetFileData().fRadius + fWidth) == true)
+		{ // 毬と衝突した場合
+
+			// 吹き飛ばし状態にする
+			m_state = STATE_SMASH;
+
+			// 方向を設定する
+			fAngle = atan2f((GetPos().x - Targetpos.x), (GetPos().z - Targetpos.z));
+
+			// 移動量を設定する
+			m_move.x = sinf(fAngle) * 15.0f;
+			m_move.y = 15.0f;
+			m_move.z = cosf(fAngle) * 15.0f;
+
+			// true を返す
+			return false;
+		}
+		else
+		{ // 上記以外
+
+			// false を返す
+			return false;
+		}
 	}
 	else
 	{ // 上記以外
 
-		// false を返す
-		return false;
+		if (m_state == STATE_SMASH &&
+			pos.y <= GetPos().y + GetFileData().vtxMax.y &&
+			pos.y + fHeight >= GetPos().y + GetFileData().vtxMin.y &&
+			useful::CylinderCollision(&Targetpos, GetPos(), GetFileData().fRadius + fWidth) == true)
+		{ // 毬と衝突した場合
+
+			// true を返す
+			return true;
+		}
+		else
+		{ // 上記以外
+
+			// false を返す
+			return false;
+		}
 	}
 }
 
@@ -316,4 +352,53 @@ void CHairBall::Block(void)
 
 	// 位置を更新する
 	SetPos(pos);
+}
+
+//=====================================
+// 魔法の壁
+//=====================================
+void CHairBall::MagicWall(void)
+{
+	// 位置を取得する
+	D3DXVECTOR3 pos = GetPos();
+
+	if (pos.x <= -1600.0f)
+	{ // 位置が左から出そうな場合
+
+		// 位置を設定する
+		pos.x = -1600.0f;
+
+		// 移動量を逆にする
+		m_move.x *= -1;
+	}
+
+	if (pos.x >= 1600.0f)
+	{ // 位置が右から出そうな場合
+
+		// 位置を設定する
+		pos.x = 1600.0f;
+
+		// 移動量を逆にする
+		m_move.x *= -1;
+	}
+
+	if (pos.z <= -1000.0f)
+	{ // 位置が右から出そうな場合
+
+		// 位置を設定する
+		pos.z = -1000.0f;
+
+		// 移動量を逆にする
+		m_move.z *= -1;
+	}
+
+	if (pos.z >= 1000.0f)
+	{ // 位置が右から出そうな場合
+
+		// 位置を設定する
+		pos.z = 1000.0f;
+
+		// 移動量を逆にする
+		m_move.z *= -1;
+	}
 }

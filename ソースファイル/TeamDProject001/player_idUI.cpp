@@ -23,6 +23,7 @@
 CPlayerID::CPlayerID() : CBillboard(CObject::TYPE_PLAYERID, CObject::PRIORITY_PLAYER)
 {
 	// 全ての値をクリアする
+	m_bDisp = true;		// 描画状況
 }
 
 //=========================
@@ -46,6 +47,7 @@ HRESULT CPlayerID::Init(void)
 	}
 
 	// 全ての値を初期化する
+	m_bDisp = true;		// 描画状況
 
 	// 成功を返す
 	return S_OK;
@@ -74,21 +76,12 @@ void CPlayerID::Update(void)
 //=========================
 void CPlayerID::Draw(void)
 {
-	//// デバイスの取得
-	//LPDIRECT3DDEVICE9 pDevice = CManager::Get()->GetRenderer()->GetDevice();
+	if (m_bDisp == true)
+	{ // 描画状況が true の場合
 
-	////αブレンディングを加算処理に設定
-	//pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
-	//pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-	//pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
-
-	// 描画処理
-	CBillboard::DrawLightOff();
-
-	////αブレンディングを元に戻す
-	//pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
-	//pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-	//pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+		// 描画処理
+		CBillboard::DrawLightOff();
+	}
 }
 
 //=========================
@@ -102,6 +95,7 @@ void CPlayerID::SetData(const D3DXVECTOR3& pos, const int nID)
 	SetSize(PLAYER_ID_SIZE);	// サイズ設定
 
 	// 全ての値を設定する
+	m_bDisp = true;		// 描画状況
 
 	// 頂点情報の初期化
 	SetVertex();
@@ -166,4 +160,22 @@ CPlayerID* CPlayerID::Create(const D3DXVECTOR3& pos, const int nID)
 
 	// プレイヤーのID表示のポインタを返す
 	return pPlayerID;
+}
+
+//=========================
+// 描画状況の設定処理
+//=========================
+void CPlayerID::SetEnableDisp(const bool bDisp)
+{
+	// 描画状況を設定する
+	m_bDisp = bDisp;
+}
+
+//=========================
+// 描画状況の取得処理
+//=========================
+bool CPlayerID::IsDisp(void) const
+{
+	// 描画状況を返す
+	return m_bDisp;
 }

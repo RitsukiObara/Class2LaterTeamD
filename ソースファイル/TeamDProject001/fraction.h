@@ -33,6 +33,7 @@ public:			// 誰でもアクセスできる
 		TYPE_FLOWERVASE = 0,	// 花瓶
 		TYPE_PRASTICRVASE,		// プラスチックケース
 		TYPE_PIN,				// 画鋲
+		TYPE_CAT_ATTACK,		// 猫の攻撃
 
 		TYPE_MAX				// この列挙型の総数
 	};

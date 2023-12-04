@@ -156,6 +156,7 @@ protected:		// 自分と派生クラスだけがアクセスできる
 	// メンバ関数
 	void MoveControl(void);		// 移動操作処理
 	void Move(void);			// 移動処理
+	void RotNormalize(void);	// 向きの補正処理
 
 private:		// 自分だけアクセスできる
 
@@ -179,6 +180,8 @@ private:		// 自分だけアクセスできる
 	TYPE m_type;				// 種類
 	int m_nPlayerIdx;			// プレイヤーのインデックス
 	float m_fSpeed;				// 速度
+	float m_fRotDest;			// 目標
+	float m_fRotDiff;			// 差分
 	bool m_bAttack;				// 攻撃したか
 	bool m_bMove;				// 移動しているか
 	bool m_bDeath;				// 死亡しているか
