@@ -483,7 +483,8 @@ void CObject::DrawAll(void)
 //===========================================
 void CObject::DrawNormal(void)
 {
-	if (CManager::Get()->GetMode() == CScene::MODE_GAME)
+	if (CManager::Get()->GetMode() == CScene::MODE_GAME ||
+		CManager::Get()->GetMode() == CScene::MODE_TUTORIAL)
 	{
 		for (int nCnt = 0; nCnt < 4; nCnt++)
 		{
@@ -574,7 +575,8 @@ void CObject::DrawNormal(void)
 //===========================================
 void CObject::DrawGame(void)
 {
-	if (CManager::Get()->GetMode() == CScene::MODE_GAME)
+	if (CManager::Get()->GetMode() == CScene::MODE_GAME ||
+		CManager::Get()->GetMode() == CScene::MODE_TUTORIAL)
 	{
 		for (int nCnt = 0; nCnt < 4; nCnt++)
 		{
