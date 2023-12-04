@@ -19,6 +19,16 @@ class CBlock : public CModel
 {
 public:			// 誰でもアクセスできる
 
+	// 向きの種類
+	enum ROTTYPE
+	{
+		ROTTYPE_FRONT = 0,		// 正面
+		ROTTYPE_RIGHT,			// 右
+		ROTTYPE_BACK,			// 後ろ
+		ROTTYPE_LEFT,			// 左
+		ROTTYPE_MAX				// この列挙型の総数
+	};
+
 	// 列挙型定義(当たり判定の種類)
 	enum COLLISION
 	{
@@ -80,20 +90,22 @@ public:			// 誰でもアクセスできる
 	void Update(void);		// 更新処理
 	void Draw(void);		// 描画処理
 
-	void SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type);			// 情報の設定処理
+	void SetData(const D3DXVECTOR3& pos, const ROTTYPE rotType, const TYPE type);			// 情報の設定処理
 
 	// セット・ゲット関係
 	void SetCollision(const COLLISION collsion);	// 当たり判定の種類の設定処理
 	COLLISION GetCollision(void) const;				// 当たり判定の種類の取得処理
+	ROTTYPE GetRotType(void) const;					// 向きの種類の取得処理
 	TYPE GetType(void) const;						// 種類の取得処理
 
 	// 静的メンバ関数
-	static CBlock* Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type);	// 生成処理
+	static CBlock* Create(const D3DXVECTOR3& pos, const ROTTYPE rotType, const TYPE type);	// 生成処理
 
 private:		// 自分だけアクセスできる
 
 	// メンバ変数
 	COLLISION m_collision;	// 当たり判定の種類
+	ROTTYPE m_rotType;		// 向きの種類
 	TYPE m_type;			// 種類
 
 	// リスト構造関係

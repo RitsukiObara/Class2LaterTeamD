@@ -46,6 +46,7 @@ public:			// 誰でもアクセスできる
 	void SetData(void);				// 情報の設定処理
 
 	// セット・ゲット関係
+	CBlock::TYPE GetBlockType(void) const;		// ブロックの種類の取得処理
 	CCollisionEdit* GetCollEdit(void) const;	// 当たり判定エディットの取得処理
 	
 	// 静的メンバ関数
@@ -60,6 +61,7 @@ private:		// 自分だけアクセスできる
 	void HeightMove(void);		// 縦移動処理
 	void HeightAdjust(void);	// 縦微調整処理
 	void RotMove(void);			// 向きの移動処理
+	void BlockRotMove(void);	// ブロックの向きの移動処理
 	void Set(void);				// 設置処理
 	void Reset(void);			// リセット処理
 	void Delete(void);			// 消去処理
@@ -78,6 +80,7 @@ private:		// 自分だけアクセスできる
 	TYPE m_type;					// 種類
 	CObstacle::TYPE m_obstacleType;	// 障害物の種類
 	CBlock::TYPE m_blockType;		// ブロックの種類
+	CBlock::ROTTYPE m_rotType;		// 向きの種類
 	CCollisionEdit* m_pCollEdit;	// 当たり判定のエディットの情報
 	bool m_bCollEdit;				// 当たり判定エディット状況
 };

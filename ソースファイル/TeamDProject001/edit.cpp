@@ -34,6 +34,7 @@ CEdit::CEdit() : CModel(CObject::TYPE_EDIT, CObject::PRIORITY_UI)
 	m_type = TYPE::TYPE_OBSTACLE;				// 種類
 	m_obstacleType = CObstacle::TYPE_HONEY;		// 障害物の種類
 	m_blockType = CBlock::TYPE_CARDBOARD;		// ブロックの種類
+	m_rotType = CBlock::ROTTYPE_FRONT;			// 向きの種類
 	m_pCollEdit = nullptr;						// 当たり判定のエディットの情報
 	m_bCollEdit = false;						// 当たり判定エディット状況
 }
@@ -62,6 +63,7 @@ HRESULT CEdit::Init(void)
 	m_type = TYPE::TYPE_OBSTACLE;			// 種類
 	m_obstacleType = CObstacle::TYPE_HONEY;	// 障害物の種類
 	m_blockType = CBlock::TYPE_CARDBOARD;	// ブロックの種類
+	m_rotType = CBlock::ROTTYPE_FRONT;		// 向きの種類
 	m_pCollEdit = nullptr;					// 当たり判定のエディットの情報
 	m_bCollEdit = false;					// 当たり判定エディット状況
 
@@ -147,6 +149,15 @@ void CEdit::Draw(void)
 {
 	// 描画処理
 	CModel::Draw();
+}
+
+//=====================================
+// ブロックの種類の取得処理
+//=====================================
+CBlock::TYPE CEdit::GetBlockType(void) const
+{
+	// ブロックの種類を返す
+	return m_blockType;
 }
 
 //=====================================
@@ -470,6 +481,64 @@ void CEdit::RotMove(void)
 }
 
 //=======================================
+// ブロックの向きの移動処理
+//=======================================
+void CEdit::BlockRotMove(void)
+{
+	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_RIGHT) == true)
+	{ // 右キーを押している場合
+
+		// 向きの種類を加算する
+		m_rotType = (CBlock::ROTTYPE)((m_rotType + 1) % CBlock::ROTTYPE_MAX);
+	}
+
+	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_LEFT) == true)
+	{ // 左キーを押している場合
+
+		// 向きの種類を減算する
+		m_rotType = (CBlock::ROTTYPE)((m_rotType + (CBlock::ROTTYPE_MAX - 1)) % CBlock::ROTTYPE_MAX);
+	}
+
+	switch (m_rotType)
+	{
+	case CBlock::ROTTYPE_FRONT:
+
+		// 向きを設定する
+		SetRot(NONE_D3DXVECTOR3);
+
+		break;
+
+	case CBlock::ROTTYPE_RIGHT:
+
+		// 向きを設定する
+		SetRot(D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f));
+
+		break;
+
+	case CBlock::ROTTYPE_BACK:
+
+		// 向きを設定する
+		SetRot(D3DXVECTOR3(0.0f, D3DX_PI, 0.0f));
+
+		break;
+
+	case CBlock::ROTTYPE_LEFT:
+
+		// 向きを設定する
+		SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
+
+		break;
+
+	default:
+
+		// 停止
+		assert(false);
+
+		break;
+	}
+}
+
+//=======================================
 // 設置処理
 //=======================================
 void CEdit::Set(void)
@@ -496,7 +565,7 @@ void CEdit::Set(void)
 		case CEdit::TYPE_BLOCK:
 
 			// ブロックの生成処理
-			CBlock::Create(GetPos(), GetRot(), m_blockType);
+			CBlock::Create(GetPos(), m_rotType, m_blockType);
 
 			break;
 
@@ -592,8 +661,8 @@ void CEdit::BlockProcess(void)
 		SetFileData((CXFile::TYPE)(INIT_BLOCK + m_blockType));
 	}
 
-	// 向きの移動処理
-	RotMove();
+	// ブロックの向きの移動処理
+	BlockRotMove();
 
 	// デバッグ表示
 	CManager::Get()->GetDebugProc()->Print("1/2キー：ブロックの種類変更\n");

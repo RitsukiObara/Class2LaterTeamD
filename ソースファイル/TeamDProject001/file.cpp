@@ -53,7 +53,7 @@ CFile::CFile()
 		m_CarRouteInfo.nNumPos[nCntInfo] = 0;							// 位置の数
 
 		m_BlockInfo.pos[nCntInfo] = NONE_D3DXVECTOR3;			// 位置
-		m_BlockInfo.rot[nCntInfo] = NONE_D3DXVECTOR3;			// 向き
+		m_BlockInfo.rotType[nCntInfo] = CBlock::ROTTYPE_FRONT;	// 向きの種類
 		m_BlockInfo.type[nCntInfo] = CBlock::TYPE_CARDBOARD;	// 種類
 	}
 
@@ -68,6 +68,7 @@ CFile::CFile()
 			m_CollInfo.aData[nCntBlock].fHeight[nCntColl] = 0.0f;				// 高さ
 		}
 		m_CollInfo.aData[nCntBlock].nNum = 0;			// 総数
+		m_CollInfo.aData[nCntBlock].bSuccess = false;	// 成功状況
 	}
 
 
@@ -261,7 +262,7 @@ void CFile::SetMap(void)
 		for (int nCntBlock = 0; nCntBlock < m_BlockInfo.nNum; nCntBlock++)
 		{
 			// ブロックの生成処理
-			CBlock::Create(m_BlockInfo.pos[nCntBlock], m_BlockInfo.rot[nCntBlock], m_BlockInfo.type[nCntBlock]);
+			CBlock::Create(m_BlockInfo.pos[nCntBlock], m_BlockInfo.rotType[nCntBlock], m_BlockInfo.type[nCntBlock]);
 		}
 	}
 }
@@ -283,7 +284,7 @@ HRESULT CFile::Init(void)
 		m_CarRouteInfo.nNumPos[nCntInfo] = 0;							// 位置の数
 
 		m_BlockInfo.pos[nCntInfo] = NONE_D3DXVECTOR3;			// 位置
-		m_BlockInfo.rot[nCntInfo] = NONE_D3DXVECTOR3;			// 向き
+		m_BlockInfo.rotType[nCntInfo] = CBlock::ROTTYPE_FRONT;	// 向きの種類
 		m_BlockInfo.type[nCntInfo] = CBlock::TYPE_CARDBOARD;	// 種類
 	}
 
@@ -298,6 +299,7 @@ HRESULT CFile::Init(void)
 			m_CollInfo.aData[nCntBlock].fHeight[nCntColl] = 0.0f;				// 高さ
 		}
 		m_CollInfo.aData[nCntBlock].nNum = 0;			// 総数
+		m_CollInfo.aData[nCntBlock].bSuccess = false;	// 成功状況
 	}
 
 
@@ -464,8 +466,12 @@ HRESULT CFile::SaveCollision(void)
 			fprintf(pFile, "SET_COLLISION\n");		// 当たり判定の設定を書き込む
 
 			// 文字列を書き込む
-			fprintf(pFile, "COLL_NUM = ");						// 当たり判定の総数を書き込む
-			fprintf(pFile, "%d\n\n", pEdit->GetNumColl());		// 総数を書き込む
+			fprintf(pFile, "BLOCK_TYPE = ");							// ブロックの種類を書き込む
+			fprintf(pFile, "%d\n", CGame::GetEdit()->GetBlockType());	// 種類を書き込む
+
+			// 文字列を書き込む
+			fprintf(pFile, "COLL_NUM = ");								// 当たり判定の総数を書き込む
+			fprintf(pFile, "%d\n\n", pEdit->GetNumColl());				// 総数を書き込む
 
 			for (int nCnt = 0; nCnt < pEdit->GetNumColl(); nCnt++)
 			{
@@ -745,10 +751,8 @@ HRESULT CFile::LoadBlock(void)
 					{ // 読み込んだ文字列が ROT の場合
 
 						fscanf(pFile, "%s", &aString[0]);				// = を読み込む (不要)
-						fscanf(pFile, "%f%f%f",
-							&m_BlockInfo.rot[m_BlockInfo.nNum].x,
-							&m_BlockInfo.rot[m_BlockInfo.nNum].y,
-							&m_BlockInfo.rot[m_BlockInfo.nNum].z);		// 向きを読み込む
+						fscanf(pFile, "%d",
+							&m_BlockInfo.rotType[m_BlockInfo.nNum]);	// 向きを読み込む
 					}
 					else if (strcmp(&aString[0], "TYPE") == 0)
 					{ // 読み込んだ文字列が TYPE の場合

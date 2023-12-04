@@ -60,7 +60,7 @@ public:			// 誰でもアクセスできる
 	struct SBlockInfo
 	{
 		D3DXVECTOR3 pos[MAX_FILE_DATA];			// 位置
-		D3DXVECTOR3 rot[MAX_FILE_DATA];			// 向き
+		CBlock::ROTTYPE rotType[MAX_FILE_DATA];	// 向きの種類
 		CBlock::TYPE type[MAX_FILE_DATA];		// 種類
 		int nNum;								// 総数
 		bool bSuccess;							// 成功状況
@@ -75,6 +75,7 @@ public:			// 誰でもアクセスできる
 		float fLength[MAX_NUMCOLL];				// 長さ
 		float fHeight[MAX_NUMCOLL];				// 高さ
 		int nNum;								// 総数
+		bool bSuccess;							// 成功状況
 	};
 
 	// 当たり判定の情報
