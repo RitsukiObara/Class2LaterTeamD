@@ -17,7 +17,7 @@
 //=========================
 // コンストラクタ
 //=========================
-CEntryFrame::CEntryFrame() : CObject2D(CObject::TYPE_NONE, CObject::PRIORITY_ENTITY)
+CEntryFrame::CEntryFrame() : CObject2D(CObject::TYPE_NONE, CObject::PRIORITY_UI)
 {
 
 }

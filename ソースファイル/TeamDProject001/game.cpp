@@ -192,8 +192,8 @@ HRESULT CGame::Init(void)
 	}
 
 	// 生成処理
-	//CGameTime::Create();
-	//m_pFinish = CGameFinish::Create();
+	CGameTime::Create();
+	m_pFinish = CGameFinish::Create();
 
 	// キャラクターUIの生成処理
 	for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
@@ -203,6 +203,7 @@ HRESULT CGame::Init(void)
 
 	// ネズミ捕りの生成
 	CItem::Create(D3DXVECTOR3(0.0f, 0.0f, -700.0f), CItem::TYPE::TYPE_MOUSETRAP);
+	CItem::Create(D3DXVECTOR3(400.0f, 0.0f, -700.0f), CItem::TYPE::TYPE_MOUSETRAP);
 
 	//// 武器選択UIを生成
 	//CWeaponSelectUI::Create();

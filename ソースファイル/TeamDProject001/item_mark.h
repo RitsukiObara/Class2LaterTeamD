@@ -20,6 +20,14 @@ class CItemMark : public CObject2D
 {
 public:				// 誰でもアクセスできる
 
+	// 列挙型定義(状態)
+	enum STATE
+	{
+		STATE_SMALL = 0,	// 小状態
+		STATE_BIG,			// 大状態
+		STATE_MAX			// この列挙型の総数
+	};
+
 	CItemMark();			// コンストラクタ
 	~CItemMark();			// デストラクタ
 
@@ -40,6 +48,12 @@ public:				// 誰でもアクセスできる
 private:			// 自分だけアクセスできる
 
 	// メンバ変数
+	void Sizing(void);		// サイズ設定処理
+	
+	// メンバ変数
+	D3DXVECTOR3 m_sizeDest;	// 目的のサイズ
+	D3DXVECTOR3 m_sizeCopy;	// 初期のサイズ
+	STATE m_state;			// 状態
 	CItem::TYPE m_type;		// 種類
 };
 

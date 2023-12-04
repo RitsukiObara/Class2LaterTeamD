@@ -16,6 +16,7 @@
 //-------------------------------------------
 // マクロ定義
 //-------------------------------------------
+#define ROT_MOVE	(0.8f)		// 向きの移動量
 
 //==============================
 // コンストラクタ
@@ -78,12 +79,12 @@ void CTrapIron::Draw(void)
 //=====================================
 // 情報の設定処理
 //=====================================
-void CTrapIron::SetData(const D3DXVECTOR3& pos)
+void CTrapIron::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot)
 {
 	// 情報の設定処理
 	SetPos(pos);								// 位置
 	SetPosOld(pos);								// 前回の位置
-	SetRot(NONE_D3DXVECTOR3);					// 向き
+	SetRot(rot);								// 向き
 	SetScale(NONE_SCALE);						// 拡大率
 	SetFileData(CXFile::TYPE_TRAPIRON);			// モデル情報
 }
@@ -91,7 +92,7 @@ void CTrapIron::SetData(const D3DXVECTOR3& pos)
 //=======================================
 // 生成処理
 //=======================================
-CTrapIron* CTrapIron::Create(const D3DXVECTOR3& pos)
+CTrapIron* CTrapIron::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot)
 {
 	// ローカルオブジェクトを生成
 	CTrapIron* pIron = nullptr;	// インスタンスを生成
@@ -127,7 +128,7 @@ CTrapIron* CTrapIron::Create(const D3DXVECTOR3& pos)
 		}
 
 		// 情報の設定処理
-		pIron->SetData(pos);
+		pIron->SetData(pos, rot);
 	}
 	else
 	{ // オブジェクトが NULL の場合
@@ -141,4 +142,41 @@ CTrapIron* CTrapIron::Create(const D3DXVECTOR3& pos)
 
 	// ネズミ捕りの鉄部分のポインタを返す
 	return pIron;
+}
+
+//=======================================
+// 移動処理
+//=======================================
+bool CTrapIron::Move(void)
+{
+	// 向きを取得する
+	D3DXVECTOR3 rot = GetRot();
+
+	// 向きを加算する
+	rot.z += ROT_MOVE;
+
+	if (rot.z >= D3DX_PI)
+	{ // 向きが一定数の場合
+
+		// 向きの正規化
+		useful::RotNormalize(&rot.z);
+
+		// 向きを適用する
+		SetRot(rot);
+
+		// true を返す
+		return true;
+	}
+	else
+	{ // 上記以外
+
+		// 向きの正規化
+		useful::RotNormalize(&rot.z);
+
+		// 向きを適用する
+		SetRot(rot);
+
+		// false を返す
+		return false;
+	}
 }

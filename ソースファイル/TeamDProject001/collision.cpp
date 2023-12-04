@@ -369,6 +369,7 @@ void collision::BlockCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, cons
 {
 	// 先頭のブロックの情報を取得する
 	CBlock* pBlock = CBlockManager::Get()->GetTop();
+	int nCollision = 0;
 
 	while (pBlock != nullptr)
 	{ // ブロックが NULL の場合	
@@ -376,7 +377,8 @@ void collision::BlockCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, cons
 		{ // 矩形の当たり判定の場合
 
 			// 矩形の当たり判定
-			BlockRectangleCollision(*pBlock, pos, posOld);
+			BlockRectangleCollision(*pBlock, pos, posOld, nCollision);
+
 		}
 		else
 		{ // 上記以外
@@ -388,14 +390,28 @@ void collision::BlockCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, cons
 		// 次のブロックの情報を取得する
 		pBlock = pBlock->GetNext();
 	}
+	while (pBlock != nullptr)
+	{ // ブロックが NULL の場合	
+		if (pBlock->GetCollision() == CBlock::COLLISION_SQUARE)
+		{ // 矩形の当たり判定の場合
+
+		  // 矩形の当たり判定
+			BlockRectangleCollision(*pBlock, pos, posOld, nCollision);
+
+		}
+
+		// 次のブロックの情報を取得する
+		pBlock = pBlock->GetNext();
+	}
+WallCollision(pos, posOld);
 }
 //===============================
 // ブロックの矩形の当たり判定
 //===============================
-void collision::BlockRectangleCollision(CBlock& block, D3DXVECTOR3& pos, const D3DXVECTOR3& posOld)
+void collision::BlockRectangleCollision(CBlock& block, D3DXVECTOR3& pos, const D3DXVECTOR3& posOld,int& nCollision)
 {
 	bool bPosbool = false, bPosOldbool = false, bVecbool = false, bVecboolOld = false;
-
+	bool bZeroVec = false;
 	bool bInside[4] = {};
 
 	D3DXVECTOR3 vecLine, vecMove, vecToPos, vecToPosOld, posOldToVec, posOldToVecOld;
@@ -423,6 +439,8 @@ void collision::BlockRectangleCollision(CBlock& block, D3DXVECTOR3& pos, const D
 	vec[2] = D3DXVECTOR3(objpos.x - sinf(-D3DX_PI + fAngle[2] + rot.y)*fDistance[2], 0, objpos.z - cosf(-D3DX_PI + fAngle[2] + rot.y)* fDistance[2]);
 	vec[3] = D3DXVECTOR3(objpos.x - sinf(-D3DX_PI + fAngle[3] + rot.y)*fDistance[3], 0, objpos.z - cosf(-D3DX_PI + fAngle[3] + rot.y)* fDistance[3]);
 
+
+
 	for (int nCnt = 0; nCnt < 4; nCnt++)
 	{
 		int nCnt2 = nCnt + 1;
@@ -441,7 +459,7 @@ void collision::BlockRectangleCollision(CBlock& block, D3DXVECTOR3& pos, const D
 
 
 		//各ベクトルの算出と交差判定
-		if (0 <= (vecLine.z*vecToPos.x) - (vecLine.x*vecToPos.z))
+		if (0 < (vecLine.z*vecToPos.x) - (vecLine.x*vecToPos.z))
 		{
 			bPosbool = true;
 		}
@@ -449,10 +467,11 @@ void collision::BlockRectangleCollision(CBlock& block, D3DXVECTOR3& pos, const D
 		{
 			bPosbool = false;
 		}
+		
 
 		vecToPosOld = posOld - vec[nCnt];
 
-		if (0 <= (vecLine.z*vecToPosOld.x) - (vecLine.x*vecToPosOld.z))
+		if (0 < (vecLine.z*vecToPosOld.x) - (vecLine.x*vecToPosOld.z))
 		{
 			bPosOldbool = true;
 		}
@@ -463,7 +482,7 @@ void collision::BlockRectangleCollision(CBlock& block, D3DXVECTOR3& pos, const D
 
 		posOldToVec = vec[nCnt2] - posOld;
 
-		if (0 <= (vecMove.z*posOldToVec.x) - (vecMove.x*posOldToVec.z))
+		if (0 < (vecMove.z*posOldToVec.x) - (vecMove.x*posOldToVec.z))
 		{
 			bVecbool = true;
 		}
@@ -471,10 +490,11 @@ void collision::BlockRectangleCollision(CBlock& block, D3DXVECTOR3& pos, const D
 		{
 			bVecbool = false;
 		}
+		
 
 		posOldToVecOld = vec[nCnt] - posOld;
 
-		if (0 <= (vecMove.z*posOldToVecOld.x) - (vecMove.x*posOldToVecOld.z))
+		if (0 < (vecMove.z*posOldToVecOld.x) - (vecMove.x*posOldToVecOld.z))
 		{
 			bVecboolOld = true;
 		}
@@ -485,10 +505,11 @@ void collision::BlockRectangleCollision(CBlock& block, D3DXVECTOR3& pos, const D
 
 		bInside[nCnt] = bPosbool;
 
-		if (bPosbool != bPosOldbool&&bVecbool != bVecboolOld&&objpos.y + vtxMax.y > pos.y)
+		if (bPosbool != bPosOldbool&&bVecbool != bVecboolOld&&objpos.y + vtxMax.y > posOld.y)
 		{
 			//ベクトルの正規化
 			float fmagnitude = sqrtf(vecLine.x*vecLine.x + vecLine.y*vecLine.y + vecLine.z*vecLine.z);
+
 
 			D3DXVECTOR3 NorVecLine;
 			if (fmagnitude != 0)
@@ -514,44 +535,70 @@ void collision::BlockRectangleCollision(CBlock& block, D3DXVECTOR3& pos, const D
 				//
 				//// ベクトルAとベクトルBのなす角を計算（ラジアン）
 				//float angleRad = acos(fdotProduct / (fmagnitudeLine * fmagnitudeMove));
-
+				float fLength = D3DXVec3Length(&vecToPosOld);
+				float fLength2 = D3DXVec3Length(&(posOld - vec[nCnt2]));
 				// 判定と出力
-				if (fdotProduct > 0.01f)
+				if (nCollision>=2)
 				{
-					NorVecLine *= 1;
+					pos = posOld;
 				}
-				else if (fdotProduct < -0.01f)
+				else if (fLength > 20.0f&&fLength2>20.0f)
 				{
-					NorVecLine *= -1;
+					if (fdotProduct > 0.005)
+					{
+						NorVecLine *= 1;
+						
+					}
+					else if (fdotProduct < -0.005)
+					{
+						NorVecLine *= -1;
+						
+
+					}
+					else
+					{
+						NorVecLine *= 0;
+					}
+					D3DXVECTOR3 move = D3DXVECTOR3(fMove*NorVecLine.x, pos.y, fMove*NorVecLine.z);
+
+					D3DXVECTOR3 SetPos = D3DXVECTOR3(posOld.x + move.x, pos.y, posOld.z + move.z);
+
+					pos = SetPos;
 				}
 				else
 				{
-					NorVecLine *= 0;
+					if (fdotProduct > 0.0f)
+					{
+						NorVecLine *= 1;
+						
+
+					}
+					else
+					{
+						NorVecLine *= -0.5;
+						
+
+					}
+					D3DXVECTOR3 move = D3DXVECTOR3(fMove*NorVecLine.x, pos.y, fMove*NorVecLine.z);
+
+					D3DXVECTOR3 SetPos = D3DXVECTOR3(posOld.x + move.x, pos.y, posOld.z + move.z);
+
+					pos = SetPos;
 				}
 
-				D3DXVECTOR3 move = D3DXVECTOR3(fMove*NorVecLine.x, pos.y, fMove*NorVecLine.z);
-
-				D3DXVECTOR3 SetPos = posOld + move;
-
-
-				////四隅貫通防止の例外処理
-				//if (SetPos.x>vec[0].x && SetPos.x<vec[1].x && SetPos.z < vec[1].z && SetPos.z > vec[2].z)
-				//{
-				//	SetPos = posOld;
-				//}
-
-				pos = SetPos;
+				
 			}
-			else
-			{
-				pos = posOld;
-			}
+		
 		}
 	}
 	//上からの判定
 	if (bInside[0] == bInside[1] && bInside[1] == bInside[2] && bInside[2] == bInside[3] && objpos.y + vtxMax.y > pos.y&&objpos.y + vtxMax.y <= posOld.y)
 	{
 		pos .y= objpos.y + vtxMax.y;
+	}
+	if (bInside[0] == bInside[1] && bInside[1] == bInside[2] && bInside[2] == bInside[3]&& objpos.y + vtxMax.y > posOld.y)
+	{
+		nCollision++;
 	}
 
 
@@ -704,7 +751,7 @@ bool collision::ElevOutRangeCollision(D3DXVECTOR3* pPos, const D3DXVECTOR3& posO
 //===============================
 //壁との当たり判定（壁ずり有）
 //===============================
-D3DXVECTOR3 collision::WallCollision(D3DXVECTOR3& objVec1, D3DXVECTOR3& objVec2)
+void collision::WallCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld)
 {
 	bool bPosbool = false, bPosOldbool = false, bVecbool = false, bVecboolOld = false;
 
@@ -732,9 +779,9 @@ D3DXVECTOR3 collision::WallCollision(D3DXVECTOR3& objVec1, D3DXVECTOR3& objVec2)
 		//ベクトル化
 		vecLine = vec[nCnt2] - vec[nCnt];
 
-		vecMove = objVec2 - objVec1;
+		vecMove = pos - posOld;
 
-		vecToPos = objVec2 - vec[nCnt];
+		vecToPos = pos - vec[nCnt];
 
 
 		//各ベクトルの算出と交差判定
@@ -747,7 +794,7 @@ D3DXVECTOR3 collision::WallCollision(D3DXVECTOR3& objVec1, D3DXVECTOR3& objVec2)
 			bPosbool = false;
 		}
 
-		vecToPosOld = objVec1 - vec[nCnt];
+		vecToPosOld = posOld - vec[nCnt];
 
 		if (0 <= (vecLine.z*vecToPosOld.x) - (vecLine.x*vecToPosOld.z))
 		{
@@ -758,7 +805,7 @@ D3DXVECTOR3 collision::WallCollision(D3DXVECTOR3& objVec1, D3DXVECTOR3& objVec2)
 			bPosOldbool = false;
 		}
 
-		posOldToVec = vec[nCnt2] - objVec1;
+		posOldToVec = vec[nCnt2] - posOld;
 
 		if (0 <= (vecMove.z*posOldToVec.x) - (vecMove.x*posOldToVec.z))
 		{
@@ -769,7 +816,7 @@ D3DXVECTOR3 collision::WallCollision(D3DXVECTOR3& objVec1, D3DXVECTOR3& objVec2)
 			bVecbool = false;
 		}
 
-		posOldToVecOld = vec[nCnt] - objVec1;
+		posOldToVecOld = vec[nCnt] - posOld;
 
 		if (0 <= (vecMove.z*posOldToVecOld.x) - (vecMove.x*posOldToVecOld.z))
 		{
@@ -791,34 +838,32 @@ D3DXVECTOR3 collision::WallCollision(D3DXVECTOR3& objVec1, D3DXVECTOR3& objVec2)
 			{
 				NorVecLine = D3DXVECTOR3(std::abs(vecLine.x / fmagnitude), std::abs(vecLine.y / fmagnitude), std::abs(vecLine.z / fmagnitude));
 
-				D3DXVECTOR3 move = D3DXVECTOR3((objVec2.x - objVec1.x)*NorVecLine.x, (objVec2.y - objVec1.y)*NorVecLine.y, (objVec2.z - objVec1.z)*NorVecLine.z);
+				D3DXVECTOR3 move = D3DXVECTOR3((pos.x - posOld.x)*NorVecLine.x, (pos.y - posOld.y)*NorVecLine.y, (pos.z - posOld.z)*NorVecLine.z);
 
-				D3DXVECTOR3 SetPos = objVec1 + move;
+				D3DXVECTOR3 SetPos = posOld + move;
 
 
 				//四隅貫通防止の例外処理
 				if (SetPos.x<vec[0].x || SetPos.x>vec[1].x || SetPos.z > vec[1].z || SetPos.z < vec[2].z)
 				{
-					SetPos = objVec1;
+					SetPos = posOld;
 				}
 
-				SetPos.y = objVec2.y;
+				SetPos.y = pos.y;
 
-				return	SetPos;
+				pos=SetPos;
 			}
 			else
 			{
-				return objVec1;
+				pos= posOld;
 			}
 		}
 	}
 	//四隅貫通防止の例外処理
-	if (objVec2.x<vec[0].x || objVec2.x>vec[1].x || objVec2.z > vec[1].z || objVec2.z < vec[2].z)
+	if (pos.x<vec[0].x || pos.x>vec[1].x || pos.z > vec[1].z || pos.z < vec[2].z)
 	{
-		objVec2 = objVec1;
+		pos = posOld;
 	}
-
-	return objVec2;
 }
 
 //======================

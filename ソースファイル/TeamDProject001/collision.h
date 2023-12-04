@@ -35,14 +35,14 @@ namespace collision
 
 	// 今後実装予定のブロックの当たり判定
 	void BlockCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth);		// ブロックの当たり判定
-	void BlockRectangleCollision(CBlock& block, D3DXVECTOR3& pos, const D3DXVECTOR3& posOld);	// ブロックの矩形の当たり判定
+	void BlockRectangleCollision(CBlock& block, D3DXVECTOR3& pos, const D3DXVECTOR3& posOld,int& nCollision);	// ブロックの矩形の当たり判定
 	void BlockCircleCollision(CBlock& block, D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fRadius, const float fHeight);	// ブロックの円形の当たり判定
 
 	// 起伏地面の当たり判定
 	bool ElevOutRangeCollision(D3DXVECTOR3* pPos, const D3DXVECTOR3& posOld, const float fWidth);			// 起伏地面の範囲外の当たり判定
 
 	//壁との当たり判定
-	D3DXVECTOR3 WallCollision(D3DXVECTOR3& objVec1, D3DXVECTOR3& objVec2);
+	void WallCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld);
 
 	// アイテムとの当たり判定
 	void ItemCollision(CPlayer& pPlayer, const int nHave);		// ネコとアイテムとの当たり判定

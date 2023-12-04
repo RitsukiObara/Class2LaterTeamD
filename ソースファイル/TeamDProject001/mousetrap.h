@@ -25,6 +25,14 @@ class CMouseTrap : public CObstacle
 {
 public:			// 誰でもアクセスできる
 
+	// 列挙型定義(状態)
+	enum STATE
+	{
+		STATE_NONE = 0,		// 通常状態
+		STATE_MOVE,			// 移動状態
+		STATE_MAX			// この列挙型の総数
+	};
+
 	CMouseTrap();			// コンストラクタ
 	~CMouseTrap();			// デストラクタ
 
@@ -48,6 +56,7 @@ private:		// 自分だけアクセスできる
 	// メンバ変数
 	CTrapIron* m_pIron;			// 鉄部分
 	CDangerMark* m_pMark;		// 危険マークの情報
+	STATE m_state;				// 状態
 };
 
 #endif

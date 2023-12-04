@@ -87,7 +87,7 @@ void CPlayer::Box(void)
 	m_pRessrectionFan = nullptr;		// ‰~‚Ì”ÍˆÍ‚Ìî•ñ
 	m_pRecoveringUI = nullptr;			// ‰ñ•œ’†‚ÌUI‚Ìî•ñ
 	m_pSpeechMessage = nullptr;			// “`’BƒƒbƒZ[ƒW‚Ìî•ñ
-	m_pDeathArrow = nullptr;			// Ž€–S–îˆó‚Ìî•ñ
+	m_pDeathArrow[MAX_PLAY] = {};		// Ž€–S–îˆó‚Ìî•ñ
 	m_move = NONE_D3DXVECTOR3;			// ˆÚ“®—Ê
 	m_sizeColl = NONE_D3DXVECTOR3;		// “–‚½‚è”»’è‚ÌƒTƒCƒY
 	m_type = TYPE_CAT;					// Ží—Þ
@@ -128,7 +128,7 @@ HRESULT CPlayer::Init(void)
 	m_pRessrectionFan = nullptr;		// ‰~‚Ì”ÍˆÍ‚Ìî•ñ
 	m_pRecoveringUI = nullptr;			// ‰ñ•œ’†‚ÌUI‚Ìî•ñ
 	m_pSpeechMessage = nullptr;			// “`’BƒƒbƒZ[ƒW‚Ìî•ñ
-	m_pDeathArrow = nullptr;			// Ž€–S–îˆó‚Ìî•ñ
+	m_pDeathArrow[MAX_PLAY] = {};		// Ž€–S–îˆó‚Ìî•ñ
 	m_move = NONE_D3DXVECTOR3;			// ˆÚ“®—Ê
 	m_sizeColl = NONE_D3DXVECTOR3;		// “–‚½‚è”»’è‚ÌƒTƒCƒY
 	m_type = TYPE_CAT;					// Ží—Þ
@@ -183,7 +183,6 @@ void CPlayer::Uninit(void)
 	{ // ‰~‚Ì”ÍˆÍ‚ª NULL ‚¶‚á‚È‚¢ê‡
 
 		//‰~‚Ì”ÍˆÍ‚ÌI—¹ˆ—
-		//m_pRessrectionFan->Uninit();
 		m_pRessrectionFan = nullptr;
 	}
 
@@ -202,12 +201,15 @@ void CPlayer::Uninit(void)
 		m_pSpeechMessage = nullptr;
 	}
 
-	if (m_pDeathArrow != nullptr)
-	{ // Ž€–S–îˆó‚ª NULL ‚¶‚á‚È‚¢‚Æ‚«
+	for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
+	{
+		if (m_pDeathArrow[nCnt] != nullptr)
+		{ // Ž€–S–îˆó‚ª NULL ‚¶‚á‚È‚¢‚Æ‚«
 
-		//Ž€–S–îˆó‚ÌI—¹ˆ—
-		m_pDeathArrow->Uninit();
-		m_pDeathArrow = nullptr;
+			//Ž€–S–îˆó‚ÌI—¹ˆ—
+			m_pDeathArrow[nCnt]->Uninit();
+			m_pDeathArrow[nCnt] = nullptr;
+		}
 	}
 
 	for (int nCnt = 0; nCnt < LOG_MAX; nCnt++)
@@ -233,9 +235,6 @@ void CPlayer::Update(void)
 {
 	// áŠQ•¨‚Æ‚Ì“–‚½‚è”»’è
 	collision::ObstacleHit(this, m_sizeColl.x, m_sizeColl.y, m_sizeColl.z, m_type);
-
-	//•Ç‚Æ‚Ì“–‚½‚è”»’è
-	SetPos(collision::WallCollision(GetPosOld(), GetPos()));
 
 	// áŠQ•¨‚Æ‚Ì“–‚½‚è”»’è
 	ObstacleCollision();
@@ -668,7 +667,7 @@ void CPlayer::ObstacleCollision(void)
 //=======================================
 // ‹Câˆ—
 //=======================================
-void CPlayer::Stun(int StunTime)
+bool CPlayer::Stun(int StunTime)
 {
 	if (m_StunState == STUNSTATE_NONE &&
 		m_State == STATE_NONE)
@@ -684,6 +683,15 @@ void CPlayer::Stun(int StunTime)
 
 		// ‹Câ‰‰o‚ÌÝ’èˆ—
 		SetStun(GetPos());
+
+		// true(‹Câ‚Å‚«‚½) ‚ð•Ô‚·
+		return true;
+	}
+	else
+	{ // ã‹LˆÈŠO
+
+		// false(‹CâŽ¸”s) ‚ð•Ô‚·
+		return false;
 	}
 
 	////”L‚ÆƒlƒYƒ~‚Å‹Câ‚ÌŽd—l‚ð•Ï‚¦‚éê‡‚ÍŽg‚Á‚Ä
@@ -1077,43 +1085,43 @@ void CPlayer::DeleteSpeechMessage(void)
 //=======================================
 // Ž€–S–îˆó‚ÌÝ’èˆ—
 //=======================================
-void CPlayer::SetDeathArrow(const D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& rot)
+void CPlayer::SetDeathArrow(const D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& rot, const int nIdx)
 {
-	if (m_pDeathArrow == nullptr)
+	if (m_pDeathArrow[nIdx] == nullptr)
 	{ // Ž€–S–îˆó‚ª NULL ‚ÌŽž
 
-		// Ž€–S–îˆó‚Ì¶¬
-		m_pDeathArrow = CDeathArrow::Create(pos, posOld, rot);
+	  // Ž€–S–îˆó‚Ì¶¬
+		m_pDeathArrow[nIdx] = CDeathArrow::Create(pos, posOld, rot);
 	}
-	else if (m_pDeathArrow != nullptr)
+	else if (m_pDeathArrow[nIdx] != nullptr)
 	{ // Ž€–S–îˆó‚ª NULL ‚¶‚á‚È‚¢‚Æ‚«
 
-		m_pDeathArrow->SetPos(pos);			// ˆÊ’uÝ’è
-		m_pDeathArrow->SetPosOld(posOld);	// ‘O‰ñ‚ÌˆÊ’uÝ’è
-		m_pDeathArrow->SetRot(rot);			// Œü‚«Ý’è
+		m_pDeathArrow[nIdx]->SetPos(pos);			// ˆÊ’uÝ’è
+		m_pDeathArrow[nIdx]->SetPosOld(posOld);		// ‘O‰ñ‚ÌˆÊ’uÝ’è
+		m_pDeathArrow[nIdx]->SetRot(rot);			// Œü‚«Ý’è
 	}
 }
 
 //=======================================
 // Ž€–S–îˆó‚ÌŽæ“¾ˆ—
 //=======================================
-CDeathArrow* CPlayer::GetDeathArrow(void)
+CDeathArrow* CPlayer::GetDeathArrow(const int nIdx)
 {
 	// Ž€–S–îˆó‚Ìî•ñ‚ð•Ô‚·
-	return m_pDeathArrow;
+	return m_pDeathArrow[nIdx];
 }
 
 //=======================================
 // Ž€–S–îˆó‚ÌÁ‹Žˆ—
 //=======================================
-void CPlayer::DeleteDeathArrow(void)
+void CPlayer::DeleteDeathArrow(const int nIdx)
 {
-	if (m_pDeathArrow != nullptr)
+	if (m_pDeathArrow[nIdx] != nullptr)
 	{ // Ž€–S–îˆó‚ª NULL ‚¶‚á‚È‚¢Žž
 
-		// Ž€–S–îˆó‚ÌI—¹ˆ—
-		m_pDeathArrow->Uninit();
-		m_pDeathArrow = nullptr;
+	  // Ž€–S–îˆó‚ÌI—¹ˆ—
+		m_pDeathArrow[nIdx]->Uninit();
+		m_pDeathArrow[nIdx] = nullptr;
 	}
 }
 

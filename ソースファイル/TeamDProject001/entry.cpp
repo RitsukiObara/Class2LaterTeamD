@@ -12,7 +12,7 @@
 #include "renderer.h"
 #include "fade.h"
 #include "Objectmesh.h"
-
+#include "debugproc.h"
 #include "entry_UI.h"
 #include "entry_team.h"
 #include "input.h"
@@ -21,7 +21,11 @@
 //--------------------------------------------
 // 静的メンバ変数
 //--------------------------------------------
-int CEntry::m_nCatIdx = 0;		// ネコをやるプレイヤー
+int CEntry::m_nCatIdx = 0;						// ネコをやるプレイヤー
+int CEntry::m_nCatOldIdx = 0;					// 差分用ID
+int CEntry::m_EntryId[MAX_PLAY] = {};			// 全体のID
+CPlayer* CEntry::m_apPlayer[MAX_PLAY] = {};		// プレイヤーのモデル情報
+CEntryUI* CEntry::m_apUI[MAX_PLAY] = {};		// エントリーUIの情報
 
 //=========================================
 // コンストラクタ
@@ -30,9 +34,11 @@ CEntry::CEntry() : CScene(TYPE_SCENE, PRIORITY_BG)
 {
 	// 全ての値をクリアする
 	m_nCatIdx = 0;					// ネコをやるプレイヤー
+	m_nCatOldIdx = 0;				// 差分用ID
 	for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
 	{
 		m_apUI[nCnt] = nullptr;		// エントリーUIの情報
+		m_apPlayer[nCnt] = nullptr;	// プレイヤーのモデル情報
 	}
 }
 
@@ -51,6 +57,7 @@ HRESULT CEntry::Init(void)
 {
 	// 全ての値を初期化する
 	m_nCatIdx = 0;					// ネコをやるプレイヤー
+	m_nCatOldIdx = 0;				// 差分用ID
 
 	//　シーンの初期化
 	CScene::Init();
@@ -65,13 +72,23 @@ HRESULT CEntry::Init(void)
 
 			// エントリーUIの生成処理
 			m_apUI[nCnt] = CEntryUI::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f + (300.0f * nCnt) - 450.0f, SCREEN_HEIGHT * 0.45f, 0.0f), nCnt, CPlayer::TYPE_CAT);
+
+			// ネコの生成処理
+			m_apPlayer[nCnt] = CPlayer::Create(D3DXVECTOR3(-500.0f + (350.0f*nCnt), -100.0f, -150.0f), nCnt, CPlayer::TYPE_CAT);
+
 		}
 		else
 		{ // 上記以外
 
 			// エントリーUIの生成処理
 			m_apUI[nCnt] = CEntryUI::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f + (300.0f * nCnt) - 450.0f, SCREEN_HEIGHT * 0.45f, 0.0f), nCnt, CPlayer::TYPE_RAT);
+
+			// ラットの生成処理
+			m_apPlayer[nCnt] = CPlayer::Create(D3DXVECTOR3(-500.0f + (350.0f*nCnt), -100.0f, -150.0f), nCnt, CPlayer::TYPE_RAT);
+
 		}
+		// ID代入
+		m_EntryId[nCnt] = nCnt;
 	}
 
 	// 成功を返す
@@ -93,6 +110,7 @@ void CEntry::Uninit(void)
 			m_apUI[nCnt]->Uninit();
 			m_apUI[nCnt] = nullptr;
 		}
+		m_apPlayer[nCnt] = nullptr;		// ネズミの情報
 	}
 
 	// 終了処理
@@ -130,12 +148,14 @@ void CEntry::Update(void)
 
 				// ネコに設定する
 				m_apUI[nCnt]->GetTeam()->SetType(CPlayer::TYPE_CAT);
+
 			}
 			else
 			{ // 上記以外
 
 				// ネズミに設定する
 				m_apUI[nCnt]->GetTeam()->SetType(CPlayer::TYPE_RAT);
+
 			}
 		}
 	}
@@ -153,14 +173,33 @@ void CEntry::Update(void)
 
 				// ネコに設定する
 				m_apUI[nCnt]->GetTeam()->SetType(CPlayer::TYPE_CAT);
+
 			}
 			else
 			{ // 上記以外
 
 				// ネズミに設定する
 				m_apUI[nCnt]->GetTeam()->SetType(CPlayer::TYPE_RAT);
+
 			}
 		}
+	}
+
+	// ID並べ替え処理
+	if (m_nCatOldIdx != m_nCatIdx)
+	{
+		int nKeepID = 0;	// 保存用引数
+ 		nKeepID = m_EntryId[m_nCatIdx];
+		m_EntryId[m_nCatIdx] = m_EntryId[m_nCatOldIdx];
+		m_EntryId[m_nCatOldIdx] = nKeepID;
+		m_nCatOldIdx = m_nCatIdx;
+	}
+
+	// 位置設定&移動量リセット
+	for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
+	{
+		m_apPlayer[nCnt]->SetMove(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		m_apPlayer[m_EntryId[nCnt]]->SetPos(D3DXVECTOR3(-500.0f + (350.0f * nCnt), -100.0f, -150.0f));
 	}
 
 	// レンダラーの更新

@@ -75,7 +75,7 @@ public:			// 誰でもアクセスできる
 
 	virtual void Hit(void) = 0;						// ヒット処理
 	void Smash(const float fAngle);					// 吹き飛び状態
-	void Stun(int StunTime);						// 気絶状態
+	bool Stun(int StunTime);						// 気絶状態
 	virtual void MotionManager(void) = 0;			// モーションマネージャー
 	virtual void GetItem(const CItem::TYPE type);	// アイテムの取得処理
 
@@ -107,9 +107,9 @@ public:			// 誰でもアクセスできる
 	CSpeechMessage* GetSpeechMessage(void);		// 伝達メッセージの取得処理
 	void DeleteSpeechMessage(void);				// 伝達メッセージの消去処理
 
-	void SetDeathArrow(const D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& rot);		// 死亡矢印の設定処理
-	CDeathArrow* GetDeathArrow(void);			// 死亡矢印の取得処理
-	void DeleteDeathArrow(void);				// 死亡矢印の消去処理
+	void SetDeathArrow(const D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& rot, const int nIdx);		// 死亡矢印の設定処理
+	CDeathArrow* GetDeathArrow(const int nIdx);			// 死亡矢印の取得処理
+	void DeleteDeathArrow(const int nIdx);				// 死亡矢印の消去処理
 
 	void SetMove(const D3DXVECTOR3& move);		// 移動量の設定処理
 	D3DXVECTOR3 GetMove(void) const;			// 移動量の取得処理
@@ -173,7 +173,7 @@ private:		// 自分だけアクセスできる
 	CRessrectionFan* m_pRessrectionFan;		// 円の範囲の情報
 	CRecoveringUI* m_pRecoveringUI;			// 回復中のUIの情報
 	CSpeechMessage* m_pSpeechMessage;		// 伝達メッセージの情報
-	CDeathArrow* m_pDeathArrow;	// 死亡矢印の情報
+	CDeathArrow* m_pDeathArrow[MAX_PLAY];	// 死亡矢印の情報
 	D3DXVECTOR3 m_move;			// 移動量
 	D3DXVECTOR3 m_sizeColl;		// 当たり判定のサイズ
 	TYPE m_type;				// 種類

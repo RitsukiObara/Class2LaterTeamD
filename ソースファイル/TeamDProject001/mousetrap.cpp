@@ -13,7 +13,9 @@
 #include "mousetrap_iron.h"
 #include "danger_mark.h"
 #include "useful.h"
-#include <cmath>
+
+#include "manager.h"
+#include "input.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -29,6 +31,7 @@ CMouseTrap::CMouseTrap() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_B
 	// 全ての値をクリアする
 	m_pIron = nullptr;			// 鉄部分
 	m_pMark = nullptr;			// 危険マークの情報
+	m_state = STATE_NONE;		// 状態
 	SetCatUse(true);
 }
 
@@ -55,6 +58,7 @@ HRESULT CMouseTrap::Init(void)
 	// 全ての値をクリアする
 	m_pIron = nullptr;			// 鉄部分
 	m_pMark = nullptr;			// 危険マークの情報
+	m_state = STATE_NONE;		// 状態
 
 	// 値を返す
 	return S_OK;
@@ -96,8 +100,36 @@ void CMouseTrap::Update(void)
 		// 鉄部分の位置設定処理
 		IronPosSet();
 
-		// 鉄部分の更新処理
-		m_pIron->Update();
+		switch (m_state)
+		{
+		case CMouseTrap::STATE_NONE:
+
+			// 特になし
+
+			break;
+
+		case CMouseTrap::STATE_MOVE:
+
+			// 移動処理
+			if (m_pIron->Move() == true)
+			{ // ネズミ捕りの状態遷移が終了した場合
+
+				// 終了処理
+				Uninit();
+
+				// この先の処理を行わない
+				return;
+			}
+
+			break;
+
+		default:
+
+			// 停止
+			assert(false);
+
+			break;
+		}
 	}
 }
 
@@ -130,7 +162,7 @@ void CMouseTrap::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const T
 	{ // 鉄部分が NULL の場合
 
 		// 鉄部分を生成
-		m_pIron = CTrapIron::Create(D3DXVECTOR3(pos.x, pos.y + IRON_SHIFT, pos.z));
+		m_pIron = CTrapIron::Create(D3DXVECTOR3(pos.x, pos.y + IRON_SHIFT, pos.z), rot);
 	}
 
 	if (m_pMark == nullptr)
@@ -139,6 +171,7 @@ void CMouseTrap::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const T
 		// 危険マークの生成
 		m_pMark = CDangerMark::Create(D3DXVECTOR3(pos.x, pos.y + DANGER_SHIFT, pos.z), D3DXVECTOR3(50.0f, 50.0f, 0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
 	}
+	m_state = STATE_NONE;		// 状態
 }
 
 //=====================================
@@ -249,6 +282,10 @@ bool CMouseTrap::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHe
 		//上からの判定
 		if (bInside[0] == bInside[1] && bInside[1] == bInside[2] && bInside[2] == bInside[3] && objpos.y + GetFileData().vtxMax.y > pos.y)
 		{
+			// 移動状態にする
+			m_state = STATE_MOVE;
+
+			// true を返す
 			return true;
 		}
 	}

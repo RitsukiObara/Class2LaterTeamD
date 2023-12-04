@@ -40,11 +40,11 @@ HRESULT CMap::Init(void)
 	//モデルの初期化
 	//================================
 	//キッチンの生成と初期化
-	m_Model[0]= CBlock::Create(D3DXVECTOR3(-500, 0, 850), D3DXVECTOR3(0, 0, 0),CBlock::TYPE::TYPE_KITCHEN);
+	m_Model[0]= CBlock::Create(D3DXVECTOR3(-630, 0, 900), D3DXVECTOR3(0, 0, 0),CBlock::TYPE::TYPE_KITCHEN);
 	m_Model[0]->SetFileData(CXFile::TYPE_KITCHEN);
 
 	//冷蔵庫の生成と初期化
-	m_Model[1]= CBlock::Create(D3DXVECTOR3(-1450, 0, 850), D3DXVECTOR3(0, 0, 0), CBlock::TYPE::TYPE_REIZOUKO);
+	m_Model[1]= CBlock::Create(D3DXVECTOR3(-1480, 0, 900), D3DXVECTOR3(0, 0, 0), CBlock::TYPE::TYPE_REIZOUKO);
 	m_Model[1]->SetFileData(CXFile::TYPE_REIZOUKO);
 
 	//テーブルの生成と初期化
