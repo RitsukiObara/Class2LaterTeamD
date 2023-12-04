@@ -92,6 +92,16 @@ void CPetbottle::Update(void)
 		// 重力処理
 		Gravity();
 
+		if (MagicWall() == true)
+		{ // 部屋の端に当たった場合
+
+			// 終了処理
+			Uninit();
+
+			// この先の処理を行わない
+			return;
+		}
+
 		break;
 
 	default:
@@ -349,4 +359,46 @@ void CPetbottle::Collapse(const D3DXVECTOR3& posPlayer)
 
 	// 向きを適用する
 	SetRot(rot);
+}
+
+//=====================================
+// 魔法の壁処理
+//=====================================
+bool CPetbottle::MagicWall(void)
+{
+	// 位置を取得する
+	D3DXVECTOR3 pos = GetPos();
+	D3DXVECTOR3 Max = GetFileData().vtxMax;
+	D3DXVECTOR3 Min = GetFileData().vtxMin;
+
+	if (pos.x + Min.x <= -1600.0f)
+	{ // 位置が左から出そうな場合
+
+		// true を返す
+		return true;
+	}
+
+	if (pos.x + Max.x >= 1600.0f)
+	{ // 位置が右から出そうな場合
+
+		// true を返す
+		return true;
+	}
+
+	if (pos.z + Min.z <= -1000.0f)
+	{ // 位置が右から出そうな場合
+
+		// true を返す
+		return true;
+	}
+
+	if (pos.z + Max.z >= 1000.0f)
+	{ // 位置が右から出そうな場合
+
+		// true を返す
+		return true;
+	}
+
+	// false を返す
+	return false;
 }
