@@ -300,6 +300,7 @@ void CPlayer::Update(void)
 
 		// 位置を設定する
 		m_pPlayerID->SetPos(D3DXVECTOR3(pos.x, pos.y + ID_HEIGHT, pos.z));
+		m_pPlayerID->Update();
 	}
 
 	for (int nCnt = 0; nCnt < LOG_MAX; nCnt++)
@@ -327,6 +328,15 @@ void CPlayer::Draw(void)
 		if (m_apLog[nCnt] != NULL)
 		{
 			m_apLog[nCnt]->Draw();
+		}
+	}
+
+	if (m_pPlayerID != nullptr)
+	{ // プレイヤーのID表示が NULL じゃない場合
+
+		if (m_nPlayerIdx != CObject::GetDrawIdx())
+		{
+			m_pPlayerID->Draw();
 		}
 	}
 }
