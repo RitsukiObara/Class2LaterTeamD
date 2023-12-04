@@ -26,6 +26,13 @@ public:			// 誰でもアクセス出来る
 		SOUND_LABEL_SE_SELECT,			// 選択音
 		SOUND_LABEL_SE_DECIDE,			// 決定音
 		SOUND_LABEL_SE_NEWRECORD,		// 新記録の音
+		SOUND_LABEL_SE_VICTORY,			//勝利の音
+		SOUND_LABEL_SE_CATATTACK,		//ネコが攻撃した時の音
+		SOUND_LABEL_SE_CATATTACK_HIT,	//ネコの攻撃がネズミにヒットした音
+		SOUND_LABEL_SE_CATWALK,			//ネコが歩く音
+		SOUND_LABEL_SE_MOUSEWALK,		//ネズミが歩く音
+		SOUND_LABEL_SE_MOUSETRAP_ADDICTED,//ネズミ捕りにハマる音
+		SOUND_LABEL_SE_THE_CUP_FALLS,	//コップが落ちた音
 		SOUND_LABEL_MAX					// この列挙型の総数
 	};
 
