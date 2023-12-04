@@ -130,6 +130,9 @@ public:			// 誰でもアクセスできる
 		TYPE_WINCAT_TEXT,		// ねこのかちテキスト
 		TYPE_WINRAT_TEXT,		// ねずみのかちテキスト
 
+		// 当たり判定モデル
+		TYPE_COLLISION,			// 当たり判定のエディットモデル
+
 		// エディットモデル
 		TYPE_MAX,				// 全モデルの総数
 	};
