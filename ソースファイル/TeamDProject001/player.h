@@ -143,9 +143,12 @@ public:			// 誰でもアクセスできる
 	void SetState(STATE State);							// 状態の設定処理
 	STATE GetState(void) { return m_State; }			// 状態の取得処理
 
+	void SetLogPlayer(int LogPlayer) { m_nLogPlayer = LogPlayer; }		// 状態の設定処理
+	int GetLogPlayer(void) { return m_nLogPlayer; }						// 状態の取得処理
+
 	void SetStateCount(const int nCount) { m_StateCount = nCount; };		// 状態カウントの設定処理
 
-	void SetLog(CLog::TYPE Type);				// ログの生成と生成番号の加算
+	void SetLog(int PlayerIdx, CLog::TYPE Type);				// ログの生成と生成番号の加算
 	void DelLogNumber(int nLogIdex);			// ログの生成番号の減算
 
 	// 静的メンバ関数
@@ -156,6 +159,7 @@ protected:		// 自分と派生クラスだけがアクセスできる
 	// メンバ関数
 	void MoveControl(void);		// 移動操作処理
 	void Move(void);			// 移動処理
+	void RotNormalize(void);	// 向きの補正処理
 
 private:		// 自分だけアクセスできる
 
@@ -179,6 +183,8 @@ private:		// 自分だけアクセスできる
 	TYPE m_type;				// 種類
 	int m_nPlayerIdx;			// プレイヤーのインデックス
 	float m_fSpeed;				// 速度
+	float m_fRotDest;			// 目標
+	float m_fRotDiff;			// 差分
 	bool m_bAttack;				// 攻撃したか
 	bool m_bMove;				// 移動しているか
 	bool m_bDeath;				// 死亡しているか
@@ -189,6 +195,7 @@ private:		// 自分だけアクセスできる
 	D3DXVECTOR3 m_CameraRot;	// カメラの向き
 	int m_nResurrectionTime;	// 復活するまでの時間
 	CLog *m_apLog[LOG_MAX];		// ログ
+	int m_nLogPlayer;			// ログに表示するプレイヤーの番号
 	int m_nLogNumber;			// ログの生成番号
 };
 

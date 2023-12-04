@@ -262,7 +262,10 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 				pPlayer->Stun(60);
 
 				break;
-
+			case CObstacle::TYPE_GARBAGECAN:
+				// ˆÚ“®—Ê‚ðÝ’è‚·‚é
+				pPlayer->SetPos(pPlayer->GetPos() +pPlayer->GetMove()*10.0f);
+				break;
 			default:
 
 				//“Á‚É‚È‚µ

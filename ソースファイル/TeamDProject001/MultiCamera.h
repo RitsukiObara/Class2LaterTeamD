@@ -51,6 +51,9 @@ public:			// 誰でもアクセス出来る
 	void SetDistance(const float fDis);			// 距離の設定処理
 	float GetDistance(void) const;				// 距離の取得処理
 
+	void SetIdx(const int Idx) { m_nDrawIdx = Idx; }	// 距離の設定処理
+	int GetIdx(void) { return m_nDrawIdx; }		// 自分の番号の取得処理
+
 	void SetType(const TYPE type);				// 種類の設定処理
 
 	void ChangeControl(void);					// カメラの操作状況の切り替え処理
@@ -88,6 +91,7 @@ private:		// 自分だけアクセス出来る
 	D3DXVECTOR3 m_VecU;				// 上方向ベクトル
 	D3DXVECTOR3 m_rot;				// 向き
 	D3DVIEWPORT9 m_viewport;		// ビューポート
+	int m_nDrawIdx;					// 描画番号
 	TYPE m_type;					// 種類
 	float m_rotDest;				// 目的の向き
 	float m_Dis;					// 距離

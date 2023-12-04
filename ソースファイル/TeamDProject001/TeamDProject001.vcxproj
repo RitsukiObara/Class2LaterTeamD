@@ -199,6 +199,7 @@
     <ClCompile Include="game.cpp" />
     <ClCompile Include="game_finish.cpp" />
     <ClCompile Include="game_timer.cpp" />
+    <ClCompile Include="garbagecan.cpp" />
     <ClCompile Include="ground.cpp" />
     <ClCompile Include="hairball.cpp" />
     <ClCompile Include="Himo.cpp" />
@@ -338,6 +339,7 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="game_finish.h" />
     <ClInclude Include="game_timer.h" />
+    <ClInclude Include="garbagecan.h" />
     <ClInclude Include="ground.h" />
     <ClInclude Include="hairball.h" />
     <ClInclude Include="Himo.h" />

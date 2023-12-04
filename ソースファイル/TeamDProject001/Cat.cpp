@@ -47,7 +47,7 @@ namespace
 		D3DXVECTOR3(SCREEN_WIDTH - 70.0f,SCREEN_HEIGHT * 0.5f + 50.0f,0.0f)
 	};
 	static const float MOVE_SPEED = 20.0f;			// 移動速度
-	static const float ATTACK_DISTANCE = 160.0f;	// 攻撃範囲までの距離
+	static const float ATTACK_DISTANCE = 100.0f;	// 攻撃範囲までの距離
 	static const D3DXVECTOR3 CAT_SIZE = D3DXVECTOR3(70.0f, 200.0f, 70.0f);		// 当たり判定のサイズ
 	static const float GRAVITY = 1.0f;				// 重力
 }
@@ -55,7 +55,7 @@ namespace
 //--------------------------------------------
 // マクロ定義
 //--------------------------------------------
-#define ATTACK_SIZE		(D3DXVECTOR3(98.0f, 50.0f, 98.0f))		// 攻撃の判定の大きさ
+#define ATTACK_SIZE		(D3DXVECTOR3(95.0f, 50.0f, 95.0f))		// 攻撃の判定の大きさ
 
 //=========================================
 // コンストラクタ
@@ -221,6 +221,9 @@ void CCat::Update(void)
 
 	// 起伏地面の当たり判定
 	Elevation();
+
+	// 角度の正規化
+	RotNormalize();
 
 	// 更新処理
 	CPlayer::Update();

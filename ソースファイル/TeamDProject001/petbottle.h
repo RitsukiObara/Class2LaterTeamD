@@ -45,9 +45,11 @@ public:			// 誰でもアクセスできる
 private:		// 自分だけアクセスできる
 
 	// メンバ関数
-	void Cycle(void);			// 回転処理
-	void Gravity(void);			// 重力処理
-	void Elevation(void);		// 起伏地面の当たり判定
+	void Cycle(void);								// 回転処理
+	void Gravity(void);								// 重力処理
+	void Elevation(void);							// 起伏地面の当たり判定
+	void Collapse(const D3DXVECTOR3& posPlayer);	// 倒れる処理
+	bool MagicWall(void);							// 魔法の壁処理
 
 	// メンバ変数
 	D3DXVECTOR3 m_move;			// 移動量

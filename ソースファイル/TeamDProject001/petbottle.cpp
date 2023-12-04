@@ -92,6 +92,16 @@ void CPetbottle::Update(void)
 		// 重力処理
 		Gravity();
 
+		if (MagicWall() == true)
+		{ // 部屋の端に当たった場合
+
+			// 終了処理
+			Uninit();
+
+			// この先の処理を行わない
+			return;
+		}
+
 		break;
 
 	default:
@@ -178,18 +188,42 @@ bool CPetbottle::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHe
 	D3DXVECTOR3 vtxMax = D3DXVECTOR3(fWidth, fHeight, fDepth);
 	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-fWidth, 0.0f, -fDepth);
 
-	if (m_state == STATE_COLLAPSE &&
-		type == CPlayer::TYPE_RAT)
-	{ // 倒れ状態の場合
+	switch (m_state)
+	{
+	case CPetbottle::STATE_STAND:
 
-		if (useful::RectangleCollisionXY(GetPos(), pos, GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true &&
+		if (type == CPlayer::TYPE_CAT &&
+			pos.y <= GetPos().y + GetFileData().vtxMax.y &&
+			pos.y + fHeight >= GetPos().y + GetFileData().vtxMin.y &&
+			useful::CylinderInner(pos, GetPos(), GetFileData().vtxMax.x + fWidth) == true)
+		{ // ペットボトルに衝突した場合
+
+			// 倒れる処理
+			Collapse(pos);
+		}
+
+		break;
+
+	case CPetbottle::STATE_COLLAPSE:
+
+		if (type == CPlayer::TYPE_RAT &&
+			useful::RectangleCollisionXY(GetPos(), pos, GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true &&
 			useful::RectangleCollisionXZ(GetPos(), pos, GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true &&
 			useful::RectangleCollisionYZ(GetPos(), pos, GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true)
-		{ // 当たり判定が true の場合
+		{ // 倒れ状態かつ、当たり判定が true の場合
 
 			// true を返す
 			return true;
 		}
+
+		break;
+
+	default:
+
+		// 停止
+		assert(false);
+
+		break;
 	}
 
 	// false を返す
@@ -209,18 +243,20 @@ void CPetbottle::Action(void)
 //=====================================
 void CPetbottle::Cycle(void)
 {
-	// 移動量を設定する
-	m_move.x = -10.0f;
-
 	// 情報を取得する
 	D3DXVECTOR3 pos = GetPos();		// 位置
 	D3DXVECTOR3 rot = GetRot();		// 向き
+
+	// 移動量を設定する
+	m_move.x = sinf(rot.y - (D3DX_PI * 0.5f)) * 8.0f;
+	m_move.z = cosf(rot.y - (D3DX_PI * 0.5f)) * 8.0f;
 
 	// 向きを加算する
 	rot.z += 0.01f;
 
 	// 位置を移動する
 	pos.x += m_move.x;
+	pos.z += m_move.z;
 
 	// 情報を適用する
 	SetPos(pos);		// 位置
@@ -271,4 +307,98 @@ void CPetbottle::Elevation(void)
 
 	// 位置を更新する
 	SetPos(pos);
+}
+
+//=====================================
+// 倒れる処理
+//=====================================
+void CPetbottle::Collapse(const D3DXVECTOR3& posPlayer)
+{
+	// 位置と向きと方向を宣言する
+	D3DXVECTOR3 pos = GetPos();
+	D3DXVECTOR3 rot = GetRot();
+	float fAngle = 0.0f;
+
+	// 倒れ状態にする
+	m_state = STATE_COLLAPSE;
+
+	// 方向を設定する
+	fAngle = atan2f((pos.x - posPlayer.x), (pos.z - posPlayer.z));
+
+	// 向きを設定する
+	rot.x = 0.0f;
+	rot.z = 0.0f;
+
+	if (fAngle >= D3DX_PI * -0.25f &&
+		fAngle <= D3DX_PI * 0.25f)
+	{ // 方向が手前からの場合
+
+		// 向きを設定する
+		rot.y = D3DX_PI * 0.5f;
+	}
+	else if (fAngle >= D3DX_PI * 0.25f &&
+		fAngle <= D3DX_PI * 0.75f)
+	{ // 方向が左からの場合
+
+		// 向きを設定する
+		rot.y = D3DX_PI;
+	}
+	else if (fAngle >= D3DX_PI * -0.75f &&
+		fAngle <= D3DX_PI * -0.25f)
+	{ // 方向が右からの場合
+
+		// 向きを設定する
+		rot.y = 0.0f;
+	}
+	else
+	{ // 上記以外(方向が奥からの場合)
+
+		// 向きを設定する
+		rot.y = D3DX_PI * -0.5f;
+	}
+
+	// 向きを適用する
+	SetRot(rot);
+}
+
+//=====================================
+// 魔法の壁処理
+//=====================================
+bool CPetbottle::MagicWall(void)
+{
+	// 位置を取得する
+	D3DXVECTOR3 pos = GetPos();
+	D3DXVECTOR3 Max = GetFileData().vtxMax;
+	D3DXVECTOR3 Min = GetFileData().vtxMin;
+
+	if (pos.x + Min.x <= -1600.0f)
+	{ // 位置が左から出そうな場合
+
+		// true を返す
+		return true;
+	}
+
+	if (pos.x + Max.x >= 1600.0f)
+	{ // 位置が右から出そうな場合
+
+		// true を返す
+		return true;
+	}
+
+	if (pos.z + Min.z <= -1000.0f)
+	{ // 位置が右から出そうな場合
+
+		// true を返す
+		return true;
+	}
+
+	if (pos.z + Max.z >= 1000.0f)
+	{ // 位置が右から出そうな場合
+
+		// true を返す
+		return true;
+	}
+
+	// false を返す
+	return false;
 }

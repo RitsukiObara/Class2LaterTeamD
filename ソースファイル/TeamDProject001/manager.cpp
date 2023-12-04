@@ -157,6 +157,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 
 		  // カメラのメモリを確保する
 			m_pMultiCamera[nCnt] = new CMultiCamera;
+			m_pMultiCamera[nCnt]->SetIdx(nCnt);
 		}
 		else
 		{ // ポインタが使われていた場合
@@ -595,7 +596,8 @@ void CManager::Update(void)
 		m_pInputGamePad->Update();
 	}
 
-	if (m_pScene->GetMode() == CScene::MODE_GAME)
+	if (m_pScene->GetMode() == CScene::MODE_GAME || 
+		m_pScene->GetMode() == CScene::MODE_TUTORIAL)
 	{
 		for (int nCnt = 0; nCnt < 4; nCnt++)
 		{

@@ -30,13 +30,17 @@ public:
 
 	void SetData(const D3DXVECTOR3& pos, const int nID);				// 情報の設定処理
 
+	// セット・ゲット関係
+	void SetEnableDisp(const bool bDisp);		// 描画状況の設定処理
+	bool IsDisp(void) const;					// 描画状況の取得処理
+
 	// 静的メンバ関数
 	static CPlayerID* Create(const D3DXVECTOR3& pos, const int nID);	// 生成処理
 
 private:
 
 	// メンバ変数
-
+	bool m_bDisp;		// 描画状況
 };
 
 #endif

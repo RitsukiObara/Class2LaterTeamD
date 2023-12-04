@@ -103,6 +103,8 @@ public:			// 誰でもアクセスできる
 		TYPE_PIN,				// 画鋲
 		TYPE_ELECFAN,			// 扇風機(本体)
 		TYPE_CUP,				// コップ
+		TYPE_GARBAGECAN,		//ゴミ箱
+		TYPE_GARBAGE,			//ゴミ
 
 		//ネズミモデル
 		TYPE_RAT_BODY,			// 体

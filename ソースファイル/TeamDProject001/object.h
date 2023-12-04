@@ -108,6 +108,8 @@ public:			// 誰でもアクセスできる
 	void SetType(const TYPE type);		// 種類の設定処理
 	TYPE GetType(void) const;			// 種類の取得処理
 
+	static int GetDrawIdx(void) { return m_DrawIdx; }
+
 	// 静的メンバ関数
 	static void ReleaseAll(void);		// 全ての破棄処理
 	static void UpdateAll(void);		// 全ての更新処理
@@ -139,6 +141,7 @@ private:		// 自分だけアクセスできる
 	TYPE m_type;						// 種類
 	PRIORITY m_priority;				// オブジェクトの優先順位
 	bool m_bDeath;						// 死亡フラグ
+	static int m_DrawIdx;				// 描画番号
 	
 	// 静的メンバ変数
 	static CObject* m_apTop[PRIORITY_MAX];				// 先頭のオブジェクトへのポインタ

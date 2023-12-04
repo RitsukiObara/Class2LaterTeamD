@@ -361,44 +361,49 @@ void CHairBall::MagicWall(void)
 {
 	// 位置を取得する
 	D3DXVECTOR3 pos = GetPos();
+	D3DXVECTOR3 Max = GetFileData().vtxMax;
+	D3DXVECTOR3 Min = GetFileData().vtxMin;
 
-	if (pos.x <= -1600.0f)
+	if (pos.x + Min.x <= -1600.0f)
 	{ // 位置が左から出そうな場合
 
 		// 位置を設定する
-		pos.x = -1600.0f;
+		pos.x = -1600.0f - Min.x;
 
 		// 移動量を逆にする
 		m_move.x *= -1;
 	}
 
-	if (pos.x >= 1600.0f)
+	if (pos.x + Max.x >= 1600.0f)
 	{ // 位置が右から出そうな場合
 
 		// 位置を設定する
-		pos.x = 1600.0f;
+		pos.x = 1600.0f - Max.x;
 
 		// 移動量を逆にする
 		m_move.x *= -1;
 	}
 
-	if (pos.z <= -1000.0f)
+	if (pos.z + Min.z <= -1000.0f)
 	{ // 位置が右から出そうな場合
 
 		// 位置を設定する
-		pos.z = -1000.0f;
+		pos.z = -1000.0f - Min.z;
 
 		// 移動量を逆にする
 		m_move.z *= -1;
 	}
 
-	if (pos.z >= 1000.0f)
+	if (pos.z + Max.z >= 1000.0f)
 	{ // 位置が右から出そうな場合
 
 		// 位置を設定する
-		pos.z = 1000.0f;
+		pos.z = 1000.0f - Max.z;
 
 		// 移動量を逆にする
 		m_move.z *= -1;
 	}
+
+	// 位置を適用する
+	SetPos(pos);
 }

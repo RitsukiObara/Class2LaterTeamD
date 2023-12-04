@@ -135,36 +135,43 @@ HRESULT CGame::Init(void)
 
 #ifdef _DEBUG	//障害物テスト用
 
-	CObstacle *pObstacle = NULL;
+	//CObstacle *pObstacle = NULL;
 
-	// ルンバの生成処理
-	CObstacle::Create(D3DXVECTOR3(-600.0f, 0.0f, -400.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_ROOMBA);
-	CObstacle::Create(D3DXVECTOR3(600.0f, 0.0f, 400.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_ROOMBA);
+	//// ルンバの生成処理
+	//CObstacle::Create(D3DXVECTOR3(-600.0f, 0.0f, -400.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_ROOMBA);
+	//CObstacle::Create(D3DXVECTOR3(600.0f, 0.0f, 400.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_ROOMBA);
 
-	// ひもの生成処理
-	CObstacle::Create(D3DXVECTOR3(-600.0f, 650.0f, 0.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_HIMO);
+	//// ひもの生成処理
+	//CObstacle::Create(D3DXVECTOR3(-600.0f, 650.0f, 0.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_HIMO);
 
-	// スピーカーの生成処理
-	pObstacle = CObstacle::Create(D3DXVECTOR3(900.0f, 0.0f, 900.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_SPEAKER);
-	pObstacle->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.25f, 0.0f));
+	//// スピーカーの生成処理
+	//pObstacle = CObstacle::Create(D3DXVECTOR3(900.0f, 0.0f, 900.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_SPEAKER);
+	//pObstacle->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.25f, 0.0f));
 
-	pObstacle = CObstacle::Create(D3DXVECTOR3(1000.0f, 0.0f, 900.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_SPEAKER);
-	pObstacle->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.0f, 0.0f));
+	//pObstacle = CObstacle::Create(D3DXVECTOR3(1000.0f, 0.0f, 900.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_SPEAKER);
+	//pObstacle->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.0f, 0.0f));
 
-	// リードの生成処理
-	pObstacle = CObstacle::Create(D3DXVECTOR3(400.0f, 0.0f, -600.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_LEASH);
-	pObstacle->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
+	//// リードの生成処理
+	//pObstacle = CObstacle::Create(D3DXVECTOR3(400.0f, 0.0f, -600.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_LEASH);
+	//pObstacle->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
 
-	// 画鋲の生成処理
-	CObstacle::Create(D3DXVECTOR3(-200.0f, 200.0f, -120.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_PIN);
+	//// 画鋲の生成処理
+	//CObstacle::Create(D3DXVECTOR3(-200.0f, 200.0f, -120.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_PIN);
 
-	// 扇風機の生成処理
-	CObstacle::Create(D3DXVECTOR3(0.0f, 200.0f, 900.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_FAN);
+	//// 扇風機の生成処理
+	//CObstacle::Create(D3DXVECTOR3(0.0f, 200.0f, 900.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_FAN);
 
-	// コップの生成処理
-	CObstacle::Create(D3DXVECTOR3(-200.0f, 200.0f, 100.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_CUP);
-	pObstacle = CObstacle::Create(D3DXVECTOR3(400.0f, 200.0f, 100.0f), D3DXVECTOR3(0.0f, D3DX_PI * 1.0f, 0.0f), CObstacle::TYPE::TYPE_CUP);
-	pObstacle->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 1.0f, 0.0f));
+	//// コップの生成処理
+	//CObstacle::Create(D3DXVECTOR3(-200.0f, 200.0f, 100.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_CUP);
+	//pObstacle = CObstacle::Create(D3DXVECTOR3(400.0f, 200.0f, 100.0f), D3DXVECTOR3(0.0f, D3DX_PI * 1.0f, 0.0f), CObstacle::TYPE::TYPE_CUP);
+	//pObstacle->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 1.0f, 0.0f));
+
+	//ゴミ箱の生成
+	CObstacle::Create(D3DXVECTOR3(-600.0f, 0, 0.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_GARBAGECAN);
+
+	CObstacle::Create(D3DXVECTOR3(-400.0f, 0.0f, 400.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_PETBOTTLE);
+	
+	CObstacle::Create(D3DXVECTOR3(-400.0f, 0.0f, 400.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_TOYCAR);
 
 #endif // _DEBUG
 
