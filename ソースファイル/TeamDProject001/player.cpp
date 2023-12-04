@@ -46,6 +46,7 @@
 #define SMASH_WAIT			(40)			// 吹き飛び状態のカウント数
 #define CAT_CAMERA_HEIGHT	(200.0f)		// 猫のカメラの高さ
 #define CAT_CAMERA_DIS		(300.0f)		// 猫のカメラの視点と注視点の高さの差分(角度)
+#define RAT_CAMERA_HEIGHT	(100.0f)		// 猫のカメラの高さ
 #define RAT_CAMERA_DIS		(60.0f)			// ネズミのカメラの視点と注視点の高さの差分(角度)
 #define DIFF_ROT			(0.2f)			// 角度に足す差分の割合
 
@@ -831,9 +832,9 @@ void CPlayer::StunStateManager(void)
 		m_StunStateCount--;
 
 		{ // カウントが一定数以下になった場合
-
-		break;
-
+			m_StunState = STUNSTATE_NONE;
+			break;
+		}
 	default:
 
 		// 停止
