@@ -17,11 +17,11 @@
 //-------------------------------------------
 // マクロ定義
 //-------------------------------------------
-#define LOGSIZE_BG				(D3DXVECTOR3(75.0f, 10.0f, 10.0f))		// ログの背景の大きさ
+#define LOGSIZE_BG				(D3DXVECTOR3(65.0f, 10.0f, 10.0f))		// ログの背景の大きさ
 #define LOGSIZE_PLAYERID		(D3DXVECTOR3(15.0f, 10.0f, 10.0f))		// ログのプレイヤーIDの大きさ
 #define LOGSIZE_MESSAGE			(D3DXVECTOR3(75.0f, 10.0f, 10.0f))		// ログのメッセージの大きさ
-#define LOGDISTANCE_PLAYERID	(-60.0f)								// ログのプレイヤーIDのX位置
-#define LOGDISTANCE_MESSAGE		(-15.0f)								// ログのメッセージのX位置
+#define LOGDISTANCE_PLAYERID	(-50.0f)								// ログのプレイヤーIDのX位置
+#define LOGDISTANCE_MESSAGE		(-25.0f)								// ログのメッセージのX位置
 #define LOGTIME					(500)									// ログの表示時間
 #define LOGSPEED_IN				(5.0f)									// ログの登場速度
 #define LOGSPEED_DOWN			(1.0f)									// ログの落下速度
@@ -264,9 +264,9 @@ void CLog::StateManager(void)
 //=====================================
 // 情報の設定処理
 //=====================================
-void CLog::SetData(int nIdex, int nCreateNumber, CLog::TYPE Type)
+void CLog::SetData(int DrawIdx, int LogIdx, int nCreateNumber, CLog::TYPE Type)
 {
-	m_nPlayerNumber = nIdex;
+	m_nPlayerNumber = DrawIdx;
 	m_CreateNumber = nCreateNumber;
 	m_Type = Type;
 	m_nLife = LOGTIME;
@@ -290,11 +290,29 @@ void CLog::SetData(int nIdex, int nCreateNumber, CLog::TYPE Type)
 		m_pLogPlayerID->SetPosOld(LogPos);
 		m_pLogPlayerID->SetRot(NONE_D3DXVECTOR3);
 		m_pLogPlayerID->SetSize(LOGSIZE_PLAYERID);
-		m_pLogPlayerID->SetVtxTextureAnim(0.25f, nIdex);
 		m_pLogPlayerID->SetLength();
 		m_pLogPlayerID->SetAngle();
 		m_pLogPlayerID->SetVertex();
-		m_pLogPlayerID->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\PlayerID.png"));
+
+		switch (LogIdx)
+		{
+		case 0:
+			m_pLogPlayerID->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\PlayerID_1P.png"));
+			break;
+		case 1:
+			m_pLogPlayerID->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\PlayerID_2P.png"));
+			break;
+		case 2:
+			m_pLogPlayerID->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\PlayerID_3P.png"));
+			break;
+		case 3:
+			m_pLogPlayerID->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\PlayerID_4P.png"));
+			break;
+
+		default:
+			assert(false);
+			break;
+		}
 	}
 	if (m_pLogMessage == NULL)
 	{
@@ -310,10 +328,13 @@ void CLog::SetData(int nIdex, int nCreateNumber, CLog::TYPE Type)
 		switch (m_Type)
 		{
 		case CLog::TYPE_DEATH:
-			m_pLogMessage->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\log.2.png"));
+			m_pLogMessage->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\log_2.png"));
 			break;
 		case CLog::TYPE_STUN:
-			m_pLogMessage->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\log.1.png"));
+			m_pLogMessage->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\log_1.png"));
+			break;
+		case CLog::TYPE_REVIVAL:
+			m_pLogMessage->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\log_3.png"));
 			break;
 		default:
 			break;
@@ -352,7 +373,7 @@ void CLog::SetData(int nIdex, int nCreateNumber, CLog::TYPE Type)
 //=======================================
 // 生成処理
 //=======================================
-CLog* CLog::Create(int nIdex, int nCreateNumber, CLog::TYPE Type)
+CLog* CLog::Create(int DrawIdx, int LogIdx, int nCreateNumber, CLog::TYPE Type)
 {
 	// ローカルオブジェクトを生成
 	CLog* pSample = nullptr;	// サンプルのインスタンスを生成
@@ -388,7 +409,7 @@ CLog* CLog::Create(int nIdex, int nCreateNumber, CLog::TYPE Type)
 		}
 
 		// 情報の設定処理
-		pSample->SetData(nIdex, nCreateNumber, Type);
+		pSample->SetData(DrawIdx, LogIdx, nCreateNumber, Type);
 	}
 	else
 	{ // オブジェクトが NULL の場合
