@@ -492,6 +492,9 @@
     <ClCompile Include="answer.cpp">
       <Filter>Scene\Tutorial</Filter>
     </ClCompile>
+    <ClCompile Include="garbagecan.cpp">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -895,6 +898,9 @@
     </ClInclude>
     <ClInclude Include="answer.h">
       <Filter>Scene\Tutorial</Filter>
+    </ClInclude>
+    <ClInclude Include="garbagecan.h">
+      <Filter>Gimmick\Obstacle</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

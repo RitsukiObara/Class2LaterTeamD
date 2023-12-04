@@ -31,6 +31,7 @@
 #include "electricfan.h"
 #include "cup.h"
 
+#include "garbagecan.h"
 //==============================
 // コンストラクタ
 //==============================
@@ -315,6 +316,10 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, con
 
 			break;
 
+		case CObstacle::TYPE_GARBAGECAN:		// 起動系
+			pObstacle = new CGarbage;
+
+			break;
 		default:
 
 			//停止

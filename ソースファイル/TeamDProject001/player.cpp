@@ -143,6 +143,7 @@ HRESULT CPlayer::Init(void)
 	m_bAttack = false;					// 攻撃したか
 	m_bMove = false;					// 移動しているか
 	m_nResurrectionTime = 0;			// 復活するまでの時間
+	m_nLogPlayer = 0;
 
 	// 値を返す
 	return S_OK;
@@ -275,12 +276,12 @@ void CPlayer::Update(void)
 
 	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_1))
 	{
-		SetLog(CLog::TYPE::TYPE_DEATH);
+		SetLog(m_nPlayerIdx ,CLog::TYPE::TYPE_DEATH);
 	}
 
 	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_2))
 	{
-		SetLog(CLog::TYPE::TYPE_STUN);
+		SetLog(m_nPlayerIdx, CLog::TYPE::TYPE_STUN);
 	}
 
 #endif // _DEBUG
@@ -730,14 +731,14 @@ bool CPlayer::Stun(int StunTime)
 		{
 			for (int nCnt = 0; nCnt < 4; nCnt++)
 			{
-				CTutorial::GetPlayer(nCnt)->SetLog(CLog::TYPE::TYPE_STUN);
+				CTutorial::GetPlayer(nCnt)->SetLog(m_nPlayerIdx, CLog::TYPE::TYPE_STUN);
 			}
 		}
 		else if (CManager::Get()->GetMode() == CScene::MODE_GAME)
 		{
 			for (int nCnt = 0; nCnt < 4; nCnt++)
 			{
-				CGame::GetPlayer(nCnt)->SetLog(CLog::TYPE::TYPE_STUN);
+				CGame::GetPlayer(nCnt)->SetLog(m_nPlayerIdx, CLog::TYPE::TYPE_STUN);
 			}
 		}
 
@@ -798,14 +799,14 @@ void CPlayer::StunStateManager(void)
 			{
 				for (int nCnt = 0; nCnt < 4; nCnt++)
 				{
-					CTutorial::GetPlayer(nCnt)->SetLog(CLog::TYPE::TYPE_STUN);
+					CTutorial::GetPlayer(nCnt)->SetLog(m_nPlayerIdx, CLog::TYPE::TYPE_STUN);
 				}
 			}
 			else if (CManager::Get()->GetMode() == CScene::MODE_GAME)
 			{
 				for (int nCnt = 0; nCnt < 4; nCnt++)
 				{
-					CGame::GetPlayer(nCnt)->SetLog(CLog::TYPE::TYPE_STUN);
+					CGame::GetPlayer(nCnt)->SetLog(m_nPlayerIdx, CLog::TYPE::TYPE_STUN);
 				}
 			}
 
@@ -880,6 +881,39 @@ void CPlayer::StateManager(void)
 
 	case STATE_DEATH:	//死亡状態
 
+		D3DXVECTOR3 pos = GetPos();		// 位置取得
+
+		if (m_pRatGhost != nullptr)
+		{ // 幽霊ネズミが NULL じゃないとき
+
+			// 幽霊ネズミの位置設定
+			m_pRatGhost->SetPos(pos);
+		}
+
+		if (m_pRessrectionFan != nullptr)
+		{ // 円の範囲が NULL じゃないとき
+
+			// 円の範囲の位置設定
+			m_pRessrectionFan->SetPos(D3DXVECTOR3(pos.x, pos.y + 10.0f, pos.z));
+		}
+
+		if (m_pRecoveringUI != nullptr)
+		{ // 回復中UIが NULL じゃないとき
+
+			// 回復中UIの位置設定
+			m_pRecoveringUI->SetPos(D3DXVECTOR3(pos.x + 80.0f, pos.y + 100.0f, pos.z));
+
+			// 回復中UIの前回の位置設定
+			m_pRecoveringUI->SetPosOld(GetPosOld());
+
+		}
+
+		if (m_pSpeechMessage != nullptr)
+		{ // 伝達メッセージが NULL じゃないとき
+
+			// 伝達メッセージの位置設定
+			m_pSpeechMessage->SetPos(D3DXVECTOR3(pos.x, pos.y + 120.0f, pos.z));
+		}
 
 		break;
 	}
@@ -888,13 +922,13 @@ void CPlayer::StateManager(void)
 //=======================================
 // ログの生成番号の加算
 //=======================================
-void CPlayer::SetLog(CLog::TYPE Type)
+void CPlayer::SetLog(int PlayerIdx, CLog::TYPE Type)
 {
 	for (int nCnt = 0; nCnt < LOG_MAX; nCnt++)
 	{
 		if (m_apLog[nCnt] == NULL)
 		{
-			m_apLog[nCnt] = CLog::Create(m_nPlayerIdx, m_nLogNumber, Type);
+			m_apLog[nCnt] = CLog::Create(m_nPlayerIdx, PlayerIdx, m_nLogNumber, Type);
 			m_apLog[nCnt]->SetLogIdx(nCnt);
 			m_apLog[nCnt]->SetMain(this);
 			break;
@@ -939,7 +973,14 @@ void CPlayer::SetState(STATE State)
 		{
 			for (int nCnt = 0; nCnt < 4; nCnt++)
 			{
-				CTutorial::GetPlayer(nCnt)->SetLog(CLog::TYPE::TYPE_DEATH);
+				CTutorial::GetPlayer(nCnt)->SetLog(m_nPlayerIdx, CLog::TYPE::TYPE_DEATH);
+			}
+		}
+		else if (State == STATE_INVINCIBLE)
+		{
+			for (int nCnt = 0; nCnt < 4; nCnt++)
+			{
+				CTutorial::GetPlayer(nCnt)->SetLog(m_nPlayerIdx, CLog::TYPE::TYPE_REVIVAL);
 			}
 		}
 	}
@@ -949,9 +990,17 @@ void CPlayer::SetState(STATE State)
 		{
 			for (int nCnt = 0; nCnt < 4; nCnt++)
 			{
-				CGame::GetPlayer(nCnt)->SetLog(CLog::TYPE::TYPE_DEATH);
+				CGame::GetPlayer(nCnt)->SetLog(m_nPlayerIdx, CLog::TYPE::TYPE_DEATH);
 			}
 		}
+		else if (State == STATE_INVINCIBLE)
+		{
+			for (int nCnt = 0; nCnt < 4; nCnt++)
+			{
+				CGame::GetPlayer(nCnt)->SetLog(m_nPlayerIdx, CLog::TYPE::TYPE_REVIVAL);
+			}
+		}
+
 	}
 }
 

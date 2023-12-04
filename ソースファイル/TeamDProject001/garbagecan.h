@@ -4,8 +4,8 @@
 // Author 小原立暉
 //
 //===================================
-#ifndef _HONEY_H_
-#define _HONEY_H_
+#ifndef _GARBAGECAN_H_
+#define _GARBAGECAN_H_
 
 //***********************************
 // インクルードファイル
@@ -15,20 +15,20 @@
 //-----------------------------------
 // クラス定義(蜂蜜)
 //-----------------------------------
-class CHoney : public CObstacle
+class CGarbage : public CObstacle
 {
 public:			// 誰でもアクセスできる
 
 	// 列挙型定義(状態)
 	enum State
 	{
-		STATE_HONEYBOTTLE = 0,	// ボトル
-		STATE_HONEY,			// 液体
+		STATE_GARBAGECAN = 0,	// ボトル
+		STATE_GARBAGE,			// 液体
 		STATE_MAX				// この列挙型の総数
 	};
 
-	CHoney();				// コンストラクタ
-	~CHoney();				// デストラクタ
+	CGarbage();				// コンストラクタ
+	~CGarbage();				// デストラクタ
 
 	// メンバ関数
 	HRESULT Init(void);		// 初期化処理
