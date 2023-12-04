@@ -36,8 +36,8 @@
 //-------------------------------------------
 // マクロ定義
 //-------------------------------------------
-#define GRAVITY				(1.0f)			// 重力
-#define ADD_MOVE_Y			(20.0f)			// ジャンプ力
+#define GRAVITY				(0.55f)			// 重力
+#define ADD_MOVE_Y			(10.0f)			// ジャンプ力
 #define NONE_RATIDX			(-1)			// ネズミの番号の初期値
 #define ATTACK_DISTANCE		(230.0f)		// 攻撃範囲までの距離
 #define SPEED				(15.0f)			// 速度
@@ -445,7 +445,7 @@ void CRat::Hit(void)
 		CPlayer::SetRecoveringUI(pos, GetPosOld());
 
 		// 伝達メッセージの表示
-		CPlayer::SetSpeechMessage(D3DXVECTOR3(pos.x, pos.y + 120.0f, pos.z), D3DXVECTOR3(80.0f, 80.0f, 0.0f), -1, CSpeechMessage::TYPE_HELP);
+		CPlayer::SetSpeechMessage(D3DXVECTOR3(pos.x, pos.y + 120.0f, pos.z), D3DXVECTOR3(50.0f, 50.0f, 0.0f), -1, CSpeechMessage::TYPE_HELP);
 
 		for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
 		{

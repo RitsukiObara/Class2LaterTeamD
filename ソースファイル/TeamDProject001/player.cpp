@@ -852,6 +852,39 @@ void CPlayer::StateManager(void)
 
 	case STATE_DEATH:	//死亡状態
 
+		D3DXVECTOR3 pos = GetPos();		// 位置取得
+
+		if (m_pRatGhost != nullptr)
+		{ // 幽霊ネズミが NULL じゃないとき
+
+			// 幽霊ネズミの位置設定
+			m_pRatGhost->SetPos(pos);
+		}
+
+		if (m_pRessrectionFan != nullptr)
+		{ // 円の範囲が NULL じゃないとき
+
+			// 円の範囲の位置設定
+			m_pRessrectionFan->SetPos(D3DXVECTOR3(pos.x, pos.y + 10.0f, pos.z));
+		}
+
+		if (m_pRecoveringUI != nullptr)
+		{ // 回復中UIが NULL じゃないとき
+
+			// 回復中UIの位置設定
+			m_pRecoveringUI->SetPos(D3DXVECTOR3(pos.x + 80.0f, pos.y + 100.0f, pos.z));
+
+			// 回復中UIの前回の位置設定
+			m_pRecoveringUI->SetPosOld(GetPosOld());
+
+		}
+
+		if (m_pSpeechMessage != nullptr)
+		{ // 伝達メッセージが NULL じゃないとき
+
+			// 伝達メッセージの位置設定
+			m_pSpeechMessage->SetPos(D3DXVECTOR3(pos.x, pos.y + 120.0f, pos.z));
+		}
 
 		break;
 	}
