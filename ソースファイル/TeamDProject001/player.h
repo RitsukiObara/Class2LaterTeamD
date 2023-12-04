@@ -143,9 +143,12 @@ public:			// 誰でもアクセスできる
 	void SetState(STATE State);							// 状態の設定処理
 	STATE GetState(void) { return m_State; }			// 状態の取得処理
 
+	void SetLogPlayer(int LogPlayer) { m_nLogPlayer = LogPlayer; }		// 状態の設定処理
+	int GetLogPlayer(void) { return m_nLogPlayer; }						// 状態の取得処理
+
 	void SetStateCount(const int nCount) { m_StateCount = nCount; };		// 状態カウントの設定処理
 
-	void SetLog(CLog::TYPE Type);				// ログの生成と生成番号の加算
+	void SetLog(int PlayerIdx, CLog::TYPE Type);				// ログの生成と生成番号の加算
 	void DelLogNumber(int nLogIdex);			// ログの生成番号の減算
 
 	// 静的メンバ関数
@@ -192,6 +195,7 @@ private:		// 自分だけアクセスできる
 	D3DXVECTOR3 m_CameraRot;	// カメラの向き
 	int m_nResurrectionTime;	// 復活するまでの時間
 	CLog *m_apLog[LOG_MAX];		// ログ
+	int m_nLogPlayer;			// ログに表示するプレイヤーの番号
 	int m_nLogNumber;			// ログの生成番号
 };
 

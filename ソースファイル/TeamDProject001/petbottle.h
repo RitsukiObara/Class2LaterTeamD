@@ -49,6 +49,7 @@ private:		// 自分だけアクセスできる
 	void Gravity(void);								// 重力処理
 	void Elevation(void);							// 起伏地面の当たり判定
 	void Collapse(const D3DXVECTOR3& posPlayer);	// 倒れる処理
+	bool MagicWall(void);							// 魔法の壁処理
 
 	// メンバ変数
 	D3DXVECTOR3 m_move;			// 移動量

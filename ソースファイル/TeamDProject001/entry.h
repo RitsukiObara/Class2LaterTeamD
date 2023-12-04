@@ -46,6 +46,8 @@ private:					// 自分だけアクセスできる
 	static int m_EntryId[MAX_PLAY];			// 全体のID
 	static CEntryUI* m_apUI[MAX_PLAY];		// エントリーUIの情報
 	static CPlayer*  m_apPlayer[MAX_PLAY];	// モデル情報
+	bool m_bEnter;							// エンターを押したかどうか
+	int m_nSceneCnt;						// 遷移までのカウント
 };
 
 #endif

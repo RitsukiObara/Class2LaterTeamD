@@ -170,6 +170,8 @@ HRESULT CGame::Init(void)
 	CObstacle::Create(D3DXVECTOR3(-600.0f, 0, 0.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_GARBAGECAN);
 
 	CObstacle::Create(D3DXVECTOR3(-400.0f, 0.0f, 400.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_PETBOTTLE);
+	
+	CObstacle::Create(D3DXVECTOR3(-400.0f, 0.0f, 400.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_TOYCAR);
 
 #endif // _DEBUG
 

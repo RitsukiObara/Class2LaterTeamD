@@ -36,6 +36,7 @@ public:			// 誰でもアクセスできる
 	{
 		TYPE_DEATH = 0,
 		TYPE_STUN,
+		TYPE_REVIVAL,
 		TYPE_MAX,
 	};
 
@@ -45,14 +46,14 @@ public:			// 誰でもアクセスできる
 	void Update(void);		// 更新処理
 	void Draw(void);		// 描画処理
 
-	void SetData(int nIdex, int nCreateNumber, CLog::TYPE Type);		// 情報の設定処理
+	void SetData(int DrawIdx, int LogIdx, int nCreateNumber, CLog::TYPE Type);		// 情報の設定処理
 	void SetLogIdx(int nIdx) { m_nLogIdx = nIdx; }
 
 	void SetMain(CPlayer *pMain) { m_pMain = pMain; }		// 自分の事を使用しているオブジェクトのポインタを設定する
 	void DelCreateNumber(void) { m_CreateNumber--; }
 
 	// 静的メンバ関数
-	static CLog* Create(int nIdex, int nCreateNumber, CLog::TYPE Type);		// 生成処理
+	static CLog* Create(int DrawIdx, int LogIdx, int nCreateNumber, CLog::TYPE Type);		// 生成処理
 
 private:		// 自分だけアクセスできる
 	void StateManager(void);
