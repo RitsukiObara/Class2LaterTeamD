@@ -41,6 +41,11 @@ public:			// 誰でもアクセスできる
 
 	void SetData(const D3DXVECTOR3& pos);					// 情報の設定処理
 
+	// セット・ゲット関係
+	CModel* GetModel(const int nNum) const;		// モデルの情報の取得処理
+	D3DXVECTOR3 GetPosInit(void) const;			// 初期位置の取得処理
+	int GetNumColl(void) const;					// 総数の取得処理
+
 	// 静的メンバ関数
 	static CCollisionEdit* Create(const D3DXVECTOR3& pos);	// 生成処理
 
@@ -49,7 +54,12 @@ private:		// 自分だけアクセスできる
 	// メンバ関数
 	void Move(void);			// 移動処理
 	void Adjust(void);			// 微調整処理
+	void IdxChange(void);		// インデックスの切り替え処理
 	void PosReset(void);		// 位置のリセット処理
+	void NumSet(void);			// 総数の設定処理
+	void Scaling(void);			// 拡縮処理
+	void ScalingAdjust(void);	// 拡縮微調整処理
+	void Save(void);			// セーブ処理
 
 	// メンバ変数
 	CModel* m_apModel[MAX_NUMCOLL];		// 当たり判定の情報

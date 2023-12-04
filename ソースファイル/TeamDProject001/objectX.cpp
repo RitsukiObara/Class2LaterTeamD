@@ -117,6 +117,9 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	// 3Dテキストモデル
 	"data\\MODEL\\cat_win.x",			// ねこのかちテキスト
 	"data\\MODEL\\rat_win.x",			// ねずみのかちテキスト
+
+	// 当たり判定モデル
+	"data\\MODEL\\Collision.x",			// 当たり判定エディットモデル
 };
 
 //------------------------------------------------------------
