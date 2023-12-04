@@ -198,6 +198,9 @@ void CRat::Update(void)
 		collision::ObstacleAction(this, SIZE.x * 2.0f, CPlayer::TYPE_RAT);
 	}
 
+	// 角度の正規化
+	RotNormalize();
+
 	// プレイヤーの更新処理
 	CPlayer::Update();
 

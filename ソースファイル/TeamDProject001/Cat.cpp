@@ -222,6 +222,9 @@ void CCat::Update(void)
 	// 起伏地面の当たり判定
 	Elevation();
 
+	// 角度の正規化
+	RotNormalize();
+
 	// 更新処理
 	CPlayer::Update();
 
