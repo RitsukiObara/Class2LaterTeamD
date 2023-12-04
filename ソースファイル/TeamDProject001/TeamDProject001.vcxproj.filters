@@ -483,6 +483,15 @@
     <ClCompile Include="collision_edit.cpp">
       <Filter>Edit</Filter>
     </ClCompile>
+    <ClCompile Include="tutorial.cpp">
+      <Filter>Scene\Tutorial</Filter>
+    </ClCompile>
+    <ClCompile Include="explanation.cpp">
+      <Filter>Scene\Tutorial</Filter>
+    </ClCompile>
+    <ClCompile Include="answer.cpp">
+      <Filter>Scene\Tutorial</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -877,6 +886,15 @@
     </ClInclude>
     <ClInclude Include="collision_edit.h">
       <Filter>Edit</Filter>
+    </ClInclude>
+    <ClInclude Include="tutorial.h">
+      <Filter>Scene\Tutorial</Filter>
+    </ClInclude>
+    <ClInclude Include="explanation.h">
+      <Filter>Scene\Tutorial</Filter>
+    </ClInclude>
+    <ClInclude Include="answer.h">
+      <Filter>Scene\Tutorial</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -25,6 +25,7 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\Cage.x",				// 武器小屋
 	"data\\MODEL\\flowerFrac.x",		// 花瓶の破片
 	"data\\MODEL\\plasticFrac.x",		// プラスチックケースの破片
+	"data\\MODEL\\attackFrac.x",		// 猫の攻撃の破片
 	"data\\MODEL\\Honey.x",				// 蜂蜜
 	"data\\MODEL\\ToyCarScrew.x",		// おもちゃの車(ネジ)
 	"data\\MODEL\\TitleWall.x",			// タイトルの壁
