@@ -63,6 +63,7 @@ private:		// 自分だけアクセスできる
 	STATE m_State;				// 状態
 	int m_nLife;				// 寿命
 	int m_nLogIdx;				// ログの使用番号
+	float m_fLogStopPosY;			// ログが停止する位置
 	TYPE m_Type;				// ログの種類
 	CObject2D *m_pLogBG;		// ログの背景パーツ
 	CObject2D *m_pLogPlayerID;	// ログのプレイヤーIDパーツ

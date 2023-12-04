@@ -140,7 +140,7 @@ public:			// 誰でもアクセスできる
 	void SetDispRecoveringUI(const bool bRez);	// 回復中UIの表示判定
 	bool IsDispRecoveringUI(void);				// 回復中UIの表示取得
 
-	void SetState(STATE State) { m_State = State; }		// 状態の設定処理
+	void SetState(STATE State);							// 状態の設定処理
 	STATE GetState(void) { return m_State; }			// 状態の取得処理
 
 	void SetStateCount(const int nCount) { m_StateCount = nCount; };		// 状態カウントの設定処理
