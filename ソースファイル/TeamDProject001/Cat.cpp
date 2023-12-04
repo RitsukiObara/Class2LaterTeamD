@@ -32,6 +32,7 @@
 #include "obstacle_manager.h"
 #include "rat.h"
 #include "itemUI.h"
+#include "fraction.h"
 
 //--------------------------------------------
 // 無名名前空間
@@ -54,7 +55,7 @@ namespace
 //--------------------------------------------
 // マクロ定義
 //--------------------------------------------
-
+#define ATTACK_SIZE		(D3DXVECTOR3(90.0f, 50.0f, 90.0f))		// 攻撃の判定の大きさ
 
 //=========================================
 // コンストラクタ
@@ -280,16 +281,16 @@ void CCat::Attack(void)
 
 				if (useful::RectangleCollisionXY(D3DXVECTOR3(pos.x + sinf(rot.y) * -ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * -ATTACK_DISTANCE),
 					pPlayer->GetPos(),
+					ATTACK_SIZE,
 					D3DXVECTOR3(30.0f, 50.0f, 30.0f),
-					D3DXVECTOR3(30.0f, 50.0f, 30.0f),
-					D3DXVECTOR3(-30.0f, -50.0f, -30.0f),
+					D3DXVECTOR3(-ATTACK_SIZE.x, -ATTACK_SIZE.y, -ATTACK_SIZE.z),
 					D3DXVECTOR3(-30.0f, -50.0f, -30.0f)) == true)
 				{ // XYの矩形に当たってたら
 
 					if (useful::RectangleCollisionXZ(D3DXVECTOR3(pos.x + sinf(rot.y) * -ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * -ATTACK_DISTANCE),
 						pPlayer->GetPos(),
-						D3DXVECTOR3(30.0f, 50.0f, 30.0f), D3DXVECTOR3(30.0f, 50.0f, 30.0f),
-						D3DXVECTOR3(-30.0f, -50.0f, -30.0f), D3DXVECTOR3(-30.0f, -50.0f, -30.0f)) == true)
+						ATTACK_SIZE, D3DXVECTOR3(30.0f, 50.0f, 30.0f),
+						D3DXVECTOR3(-ATTACK_SIZE.x, -ATTACK_SIZE.y, -ATTACK_SIZE.z), D3DXVECTOR3(-30.0f, -50.0f, -30.0f)) == true)
 					{ // XZの矩形に当たってたら
 
 						// プレイヤーのヒット処理
@@ -322,8 +323,18 @@ void CCat::AttackStateManager(void)
 
 		if (m_nAtkStateCount <= 0)
 		{//状態カウントが0になった時
+
+			D3DXVECTOR3 pos = GetPos();
+			D3DXVECTOR3 rot = GetRot();
+
 			m_AttackState = ATTACKSTATE_ATTACK;
 			m_nAtkStateCount = 10;
+
+			for (int nCnt = 0; nCnt < 10; nCnt++)
+			{
+				// 破片の生成
+				CFraction::Create(D3DXVECTOR3(pos.x + sinf(rot.y) * -ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * -ATTACK_DISTANCE), CFraction::TYPE_FLOWERVASE);
+			}
 		}
 		break;
 
