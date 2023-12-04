@@ -205,6 +205,13 @@ void CFraction::SetData(const D3DXVECTOR3& pos, const TYPE type)
 
 		break;
 
+	case TYPE_CAT_ATTACK:		// ”L‚ÌUŒ‚
+
+		// ƒ‚ƒfƒ‹î•ñ‚ğİ’è‚·‚é
+		SetFileData(CXFile::TYPE_CAT_ATTACK);
+
+		break;
+
 	default:
 
 		// ’â~
