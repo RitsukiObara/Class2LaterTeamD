@@ -20,7 +20,7 @@
 //=========================
 // コンストラクタ
 //=========================
-CPlayerID::CPlayerID() : CBillboard(CObject::TYPE_PLAYERID, CObject::PRIORITY_PLAYER)
+CPlayerID::CPlayerID() : CBillboard(CObject::TYPE_NONE, CObject::PRIORITY_PLAYER)
 {
 	// 全ての値をクリアする
 	m_bDisp = true;		// 描画状況

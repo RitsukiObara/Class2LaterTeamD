@@ -44,7 +44,6 @@
 #define SIZE				(D3DXVECTOR3(30.0f, 50.0f, 30.0f))		// 当たり判定でのサイズ
 #define STUN_HEIGHT			(80.0f)			// 気絶演出が出てくる高さ
 #define SMASH_MOVE			(D3DXVECTOR3(10.0f, 20.0f, 10.0f))		// 吹き飛び状態の移動量
-#define TIME_RESURRECTION	(60 * 4)		// 復活時間
 #define INVINCIBLE_COUNT	(60)			// 無敵カウント
 #define ARROW_DISTANCE		(100.0f)		// このネズミの矢印の距離
 
@@ -620,7 +619,7 @@ void CRat::ResurrectionCollision(void)
 
 					pPlayer->SetResurrectionTime(m_nRezCounter);
 
-					if (pPlayer->GetResurrectionTime() >= TIME_RESURRECTION)
+					if (pPlayer->GetResurrectionTime() >= NUM_REZ_ANGLE)
 					{ // 一定時間経ったら
 
 						// 無敵状態にする

@@ -23,6 +23,7 @@
 CObject* CObject::m_apTop[PRIORITY_MAX] = {};	// 先頭のオブジェクトへのポインタ
 CObject* CObject::m_apCur[PRIORITY_MAX] = {};	// 最後尾オブジェクトへのポインタ
 int CObject::m_nNumAll = 0;						// オブジェクトの総数
+int CObject::m_DrawIdx = 0;						// オブジェクトの総数
 
 //=========================================
 // コンストラクタ
@@ -483,12 +484,14 @@ void CObject::DrawAll(void)
 //===========================================
 void CObject::DrawNormal(void)
 {
-	if (CManager::Get()->GetMode() == CScene::MODE_GAME)
+	if (CManager::Get()->GetMode() == CScene::MODE_GAME ||
+		CManager::Get()->GetMode() == CScene::MODE_TUTORIAL)
 	{
 		for (int nCnt = 0; nCnt < 4; nCnt++)
 		{
 			// カメラの設定処理
 			CManager::Get()->GetMlutiCamera(nCnt)->Set(nCnt);
+			m_DrawIdx = nCnt;
 
 			// ローカル変数宣言
 			CObject* pObj = nullptr;		// 現在のオブジェクトのポインタ
@@ -574,7 +577,8 @@ void CObject::DrawNormal(void)
 //===========================================
 void CObject::DrawGame(void)
 {
-	if (CManager::Get()->GetMode() == CScene::MODE_GAME)
+	if (CManager::Get()->GetMode() == CScene::MODE_GAME ||
+		CManager::Get()->GetMode() == CScene::MODE_TUTORIAL)
 	{
 		for (int nCnt = 0; nCnt < 4; nCnt++)
 		{

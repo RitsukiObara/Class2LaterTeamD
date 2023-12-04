@@ -12,6 +12,7 @@
 #include "logo.h"
 #include "title.h"
 #include "entry.h"
+#include "tutorial.h"
 #include "game.h"
 #include "result.h"
 #include "sound.h"
@@ -193,6 +194,13 @@ CScene* CScene::Create(const MODE mode)
 
 			// エントリー画面を生成する
 			pScene = new CEntry;
+
+			break;
+
+		case MODE_TUTORIAL:
+
+			// エントリー画面を生成する
+			pScene = new CTutorial;
 
 			break;
 

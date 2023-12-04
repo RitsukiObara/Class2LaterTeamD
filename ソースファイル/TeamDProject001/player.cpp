@@ -10,6 +10,7 @@
 #include "main.h"
 #include "player.h"
 #include "game.h"
+#include "tutorial.h"
 #include "result.h"
 #include "input.h"
 #include "manager.h"
@@ -45,7 +46,7 @@
 #define SMASH_WAIT			(40)			// 吹き飛び状態のカウント数
 #define CAT_CAMERA_HEIGHT	(200.0f)		// 猫のカメラの高さ
 #define CAT_CAMERA_DIS		(300.0f)		// 猫のカメラの視点と注視点の高さの差分(角度)
-#define RAT_CAMERA_HEIGHT	(30.0f)			// ネズミのカメラの高さ
+#define RAT_CAMERA_HEIGHT	(100.0f)		// 猫のカメラの高さ
 #define RAT_CAMERA_DIS		(60.0f)			// ネズミのカメラの視点と注視点の高さの差分(角度)
 #define DIFF_ROT			(0.2f)			// 角度に足す差分の割合
 
@@ -299,6 +300,7 @@ void CPlayer::Update(void)
 
 		// 位置を設定する
 		m_pPlayerID->SetPos(D3DXVECTOR3(pos.x, pos.y + ID_HEIGHT, pos.z));
+		m_pPlayerID->Update();
 	}
 
 	for (int nCnt = 0; nCnt < LOG_MAX; nCnt++)
@@ -326,6 +328,15 @@ void CPlayer::Draw(void)
 		if (m_apLog[nCnt] != NULL)
 		{
 			m_apLog[nCnt]->Draw();
+		}
+	}
+
+	if (m_pPlayerID != nullptr)
+	{ // プレイヤーのID表示が NULL じゃない場合
+
+		if (m_nPlayerIdx != CObject::GetDrawIdx())
+		{
+			m_pPlayerID->Draw();
 		}
 	}
 }
@@ -714,9 +725,20 @@ bool CPlayer::Stun(int StunTime)
 		// 気絶状態にする
 		m_StunState = STUNSTATE_STUN;
 		m_StunStateCount = StunTime;
-		for (int nCnt = 0; nCnt < 4; nCnt++)
+
+		if (CManager::Get()->GetMode() == CScene::MODE_TUTORIAL)
 		{
-			CGame::GetPlayer(nCnt)->SetLog(CLog::TYPE::TYPE_STUN);
+			for (int nCnt = 0; nCnt < 4; nCnt++)
+			{
+				CTutorial::GetPlayer(nCnt)->SetLog(CLog::TYPE::TYPE_STUN);
+			}
+		}
+		else if (CManager::Get()->GetMode() == CScene::MODE_GAME)
+		{
+			for (int nCnt = 0; nCnt < 4; nCnt++)
+			{
+				CGame::GetPlayer(nCnt)->SetLog(CLog::TYPE::TYPE_STUN);
+			}
 		}
 
 		// 気絶演出の設定処理
@@ -771,9 +793,20 @@ void CPlayer::StunStateManager(void)
 			// 気絶状態にする
 			m_StunState = STUNSTATE_STUN;
 			m_StunStateCount = STUN_WAIT;
-			for (int nCnt = 0; nCnt < 4; nCnt++)
+
+			if (CManager::Get()->GetMode() == CScene::MODE_TUTORIAL)
 			{
-				CGame::GetPlayer(nCnt)->SetLog(CLog::TYPE::TYPE_STUN);
+				for (int nCnt = 0; nCnt < 4; nCnt++)
+				{
+					CTutorial::GetPlayer(nCnt)->SetLog(CLog::TYPE::TYPE_STUN);
+				}
+			}
+			else if (CManager::Get()->GetMode() == CScene::MODE_GAME)
+			{
+				for (int nCnt = 0; nCnt < 4; nCnt++)
+				{
+					CGame::GetPlayer(nCnt)->SetLog(CLog::TYPE::TYPE_STUN);
+				}
 			}
 
 			// 気絶演出の設定処理
@@ -806,17 +839,12 @@ void CPlayer::StunStateManager(void)
 
 	case STUNSTATE_WAIT:	//障害物のみ無敵状態
 
-		// カウントを減算する
 		m_StunStateCount--;
 
-		if (m_StunStateCount <= 0)
 		{ // カウントが一定数以下になった場合
-
-			// 無状態にする
 			m_StunState = STUNSTATE_NONE;
+			break;
 		}
-		break;
-
 	default:
 
 		// 停止
@@ -905,11 +933,24 @@ void CPlayer::SetState(STATE State)
 {
 	m_State = State;
 
-	if (State == STATE_DEATH)
+	if (CManager::Get()->GetMode() == CScene::MODE_TUTORIAL)
 	{
-		for (int nCnt = 0; nCnt < 4; nCnt++)
+		if (State == STATE_DEATH)
 		{
-			CGame::GetPlayer(nCnt)->SetLog(CLog::TYPE::TYPE_DEATH);
+			for (int nCnt = 0; nCnt < 4; nCnt++)
+			{
+				CTutorial::GetPlayer(nCnt)->SetLog(CLog::TYPE::TYPE_DEATH);
+			}
+		}
+	}
+	else if (CManager::Get()->GetMode() == CScene::MODE_GAME)
+	{
+		if (State == STATE_DEATH)
+		{
+			for (int nCnt = 0; nCnt < 4; nCnt++)
+			{
+				CGame::GetPlayer(nCnt)->SetLog(CLog::TYPE::TYPE_DEATH);
+			}
 		}
 	}
 }
