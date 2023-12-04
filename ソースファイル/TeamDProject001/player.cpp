@@ -259,7 +259,8 @@ void CPlayer::Update(void)
 	CameraUpdate();
 #endif // CAMERA
 
-	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_E))
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_E) ||
+		CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_B,m_nPlayerIdx) == true)
 	{
 		collision::ObstacleAction(this, m_sizeColl.x, m_type);
 	}
@@ -597,11 +598,13 @@ void CPlayer::CameraUpdate(void)
 			Pos.z + cosf(m_CameraRot.y + (D3DX_PI * 1.0f)) * 200.0f));
 	}
 
-	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LSHIFT) == true)
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LSHIFT) == true ||
+		CManager::Get()->GetInputGamePad()->GetPress(CInputGamePad::JOYKEY_LB,m_nPlayerIdx) == true)
 	{
 		m_CameraRot.y -= 0.05f;
 	}
-	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_RSHIFT) == true)
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_RSHIFT) == true ||
+		CManager::Get()->GetInputGamePad()->GetPress(CInputGamePad::JOYKEY_RB, m_nPlayerIdx) == true)
 	{
 		m_CameraRot.y += 0.05f;
 	}

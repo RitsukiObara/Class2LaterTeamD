@@ -158,6 +158,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="2DUI_edit.cpp" />
+    <ClCompile Include="answer.cpp" />
     <ClCompile Include="block.cpp" />
     <ClCompile Include="block_manager.cpp" />
     <ClCompile Include="camera.cpp" />
@@ -188,6 +189,7 @@
     <ClCompile Include="entry_ID.cpp" />
     <ClCompile Include="entry_team.cpp" />
     <ClCompile Include="entry_UI.cpp" />
+    <ClCompile Include="explanation.cpp" />
     <ClCompile Include="fade.cpp" />
     <ClCompile Include="fan_blade.cpp" />
     <ClCompile Include="fan_wind.cpp" />
@@ -285,6 +287,7 @@
     <ClCompile Include="title_press.cpp" />
     <ClCompile Include="title_wall.cpp" />
     <ClCompile Include="toycar.cpp" />
+    <ClCompile Include="tutorial.cpp" />
     <ClCompile Include="useful.cpp" />
     <ClCompile Include="wall.cpp" />
     <ClCompile Include="consent.cpp" />
@@ -294,6 +297,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2DUI_edit.h" />
+    <ClInclude Include="answer.h" />
     <ClInclude Include="block.h" />
     <ClInclude Include="block_manager.h" />
     <ClInclude Include="camera.h" />
@@ -324,6 +328,7 @@
     <ClInclude Include="entry_ID.h" />
     <ClInclude Include="entry_team.h" />
     <ClInclude Include="entry_UI.h" />
+    <ClInclude Include="explanation.h" />
     <ClInclude Include="fade.h" />
     <ClInclude Include="fan_blade.h" />
     <ClInclude Include="fan_wind.h" />
@@ -418,6 +423,7 @@
     <ClInclude Include="title_press.h" />
     <ClInclude Include="title_wall.h" />
     <ClInclude Include="toycar.h" />
+    <ClInclude Include="tutorial.h" />
     <ClInclude Include="useful.h" />
     <ClInclude Include="wall.h" />
     <ClInclude Include="consent.h" />

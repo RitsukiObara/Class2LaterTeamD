@@ -49,6 +49,7 @@ private:		// 自分だけアクセスできる
 	void Gravity(void);			// 重力処理
 	void Elevation(void);		// 起伏地面の当たり判定
 	void Block(void);			// ブロックの当たり判定
+	void MagicWall(void);		// 魔法の壁
 
 	// メンバ変数
 	D3DXVECTOR3 m_move;			// 移動量
