@@ -503,7 +503,7 @@ HRESULT CFile::SaveCollision(void)
 
 				// ‚‚³‚ð‘‚«ž‚Þ
 				fprintf(pFile, "\tHEIGHT = ");
-				fprintf(pFile, "%.1f\n", pEdit->GetModel(nCnt)->GetPos().y - pEdit->GetPosInit().y);
+				fprintf(pFile, "%.1f\n\n", pEdit->GetModel(nCnt)->GetPos().y - pEdit->GetPosInit().y);
 			}
 
 			// •¶Žš—ñ‚ð‘‚«ž‚Þ
