@@ -677,6 +677,10 @@ void CPlayer::Stun(int StunTime)
 		// 気絶状態にする
 		m_StunState = STUNSTATE_STUN;
 		m_StunStateCount = StunTime;
+		for (int nCnt = 0; nCnt < 4; nCnt++)
+		{
+			CGame::GetPlayer(nCnt)->SetLog(CLog::TYPE::TYPE_STUN);
+		}
 
 		// 気絶演出の設定処理
 		SetStun(GetPos());
@@ -721,6 +725,10 @@ void CPlayer::StunStateManager(void)
 			// 気絶状態にする
 			m_StunState = STUNSTATE_STUN;
 			m_StunStateCount = STUN_WAIT;
+			for (int nCnt = 0; nCnt < 4; nCnt++)
+			{
+				CGame::GetPlayer(nCnt)->SetLog(CLog::TYPE::TYPE_STUN);
+			}
 
 			// 気絶演出の設定処理
 			SetStun(GetPos());
@@ -840,6 +848,22 @@ void CPlayer::DelLogNumber(int nLogIdex)
 		if (m_apLog[nCnt] != NULL)
 		{
 			m_apLog[nCnt]->DelCreateNumber();
+		}
+	}
+}
+
+//=======================================
+// 状態の設定処理
+//=======================================
+void CPlayer::SetState(STATE State)
+{
+	m_State = State;
+
+	if (State == STATE_DEATH)
+	{
+		for (int nCnt = 0; nCnt < 4; nCnt++)
+		{
+			CGame::GetPlayer(nCnt)->SetLog(CLog::TYPE::TYPE_DEATH);
 		}
 	}
 }

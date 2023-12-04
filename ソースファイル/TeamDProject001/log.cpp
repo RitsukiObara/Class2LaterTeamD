@@ -17,13 +17,17 @@
 //-------------------------------------------
 // マクロ定義
 //-------------------------------------------
-#define LOGSIZE_BG			(D3DXVECTOR3(10.0f, 20.0f, 10.0f))		// ログの背景の大きさ
-#define LOGSIZE_PLAYERID	(D3DXVECTOR3(10.0f, 20.0f, 10.0f))		// ログのプレイヤーIDの大きさ
-#define LOGSIZE_MESSAGE		(D3DXVECTOR3(10.0f, 20.0f, 10.0f))		// ログのメッセージの大きさ
-#define STUN_WAIT			(300)			// ログの表示時間
-#define CAT_CAMERA_HEIGHT	(200.0f)		// ログの出現スピード
-#define CAT_CAMERA_HEIGHT	(200.0f)		// ログの落下速度
-#define CAT_CAMERA_HEIGHT	(200.0f)		// ログの
+#define LOGSIZE_BG				(D3DXVECTOR3(75.0f, 10.0f, 10.0f))		// ログの背景の大きさ
+#define LOGSIZE_PLAYERID		(D3DXVECTOR3(15.0f, 10.0f, 10.0f))		// ログのプレイヤーIDの大きさ
+#define LOGSIZE_MESSAGE			(D3DXVECTOR3(75.0f, 10.0f, 10.0f))		// ログのメッセージの大きさ
+#define LOGDISTANCE_PLAYERID	(-60.0f)								// ログのプレイヤーIDのX位置
+#define LOGDISTANCE_MESSAGE		(-15.0f)								// ログのメッセージのX位置
+#define LOGTIME					(500)									// ログの表示時間
+#define LOGSPEED_IN				(5.0f)									// ログの登場速度
+#define LOGSPEED_DOWN			(1.0f)									// ログの落下速度
+#define LOGSPEED_OUT			(5.0f)									// ログの退場速度
+#define LOGPOS_IN				(100.0f)								// ログの登場位置
+#define LOGPOS_DOWN				(200.0f)								// ログの停止位置
 //-------------------------------------------
 // 静的メンバ変数宣言
 //-------------------------------------------
@@ -40,6 +44,8 @@ CLog::CLog() : CObject(CObject::TYPE_2DUI, CObject::PRIORITY_UI)
 	m_State = STATE_IN;
 	m_nLife = 0;
 	m_Type = TYPE_DEATH;
+	m_nLogIdx = -1;
+	m_fLogStopPosY = 0.0f;
 	m_pLogBG = NULL;
 	m_pLogPlayerID = NULL;
 	m_pLogMessage = NULL;
@@ -118,11 +124,11 @@ void CLog::Update(void)
 	}
 	if (m_pLogPlayerID != NULL)
 	{
-		m_pLogPlayerID->SetPos(D3DXVECTOR3(LogPos.x - 40.0f, LogPos.y, 0.0f));
+		m_pLogPlayerID->SetPos(D3DXVECTOR3(LogPos.x + LOGDISTANCE_PLAYERID, LogPos.y, 0.0f));
 	}
 	if (m_pLogMessage != NULL)
 	{
-		m_pLogMessage->SetPos(D3DXVECTOR3(LogPos.x + 40.0f, LogPos.y, 0.0f));
+		m_pLogMessage->SetPos(D3DXVECTOR3(LogPos.x + LOGDISTANCE_MESSAGE, LogPos.y, 0.0f));
 	}
 }
 
@@ -153,48 +159,104 @@ void CLog::StateManager(void)
 {
 	m_nLife--;
 
-	switch (m_State)
+	switch (m_nPlayerNumber)
 	{
-	case CLog::STATE_IN:
-		if (LogPos.x <= 200.0f)
+		//画面左側のプレイヤーの場合
+	case 0:
+	case 2:
+		switch (m_State)
 		{
-			LogPos.x += 10.0f;
-		}
-		else
-		{
-			LogPos.x = 200.0f;
-			m_State = STATE_DOWN;
+		case CLog::STATE_IN:
+			if (LogPos.x < LOGSIZE_BG.x)
+			{
+				LogPos.x += LOGSPEED_IN;
+			}
+			else
+			{
+				LogPos.x = LOGSIZE_BG.x;
+				m_State = STATE_DOWN;
+			}
+			break;
+		case CLog::STATE_DOWN:
+
+			if (LogPos.y < m_fLogStopPosY - (m_CreateNumber * LOGSIZE_BG.y * 2.0f))
+			{
+				LogPos.y += LOGSPEED_DOWN;
+			}
+			else
+			{
+				LogPos.y = m_fLogStopPosY - (m_CreateNumber * LOGSIZE_BG.y * 2.0f);
+			}
+
+			if (m_nLife <= 0)
+			{
+				m_State = STATE_OUT;
+			}
+
+			break;
+		case CLog::STATE_OUT:
+			if (LogPos.x > -LOGSIZE_BG.x)
+			{
+				LogPos.x -= LOGSPEED_OUT;
+			}
+			else
+			{
+				m_pMain->DelLogNumber(m_nLogIdx);
+			}
+			break;
+		default:
+			assert(false);
+			break;
 		}
 		break;
-	case CLog::STATE_DOWN:
 
-		if (LogPos.y < 200.0f)
+		//画面右側のプレイヤーの場合
+	case 1:
+	case 3:
+		switch (m_State)
 		{
-			LogPos.y += 10.0f;
-		}
-		else
-		{
-			LogPos.y = 200.0f;
-		}
+		case CLog::STATE_IN:
+			if (LogPos.x > -LOGSIZE_BG.x + SCREEN_WIDTH)
+			{
+				LogPos.x -= LOGSPEED_IN;
+			}
+			else
+			{
+				LogPos.x = -LOGSIZE_BG.x + SCREEN_WIDTH;
+				m_State = STATE_DOWN;
+			}
+			break;
+		case CLog::STATE_DOWN:
 
-		if (m_nLife <= 0)
-		{
-			m_State = STATE_OUT;
-		}
+			if (LogPos.y < m_fLogStopPosY - (m_CreateNumber * LOGSIZE_BG.y * 2.0f))
+			{
+				LogPos.y += LOGSPEED_DOWN;
+			}
+			else
+			{
+				LogPos.y = m_fLogStopPosY - (m_CreateNumber * LOGSIZE_BG.y * 2.0f);
+			}
 
-		break;
-	case CLog::STATE_OUT:
-		if (LogPos.x >= -200.0f)
-		{
-			LogPos.x -= 2.0f;
+			if (m_nLife <= 0)
+			{
+				m_State = STATE_OUT;
+			}
+
+			break;
+		case CLog::STATE_OUT:
+			if (LogPos.x < LOGSIZE_BG.x + SCREEN_WIDTH)
+			{
+				LogPos.x += LOGSPEED_OUT;
+			}
+			else
+			{
+				m_pMain->DelLogNumber(m_nLogIdx);
+			}
+			break;
+		default:
+			assert(false);
+			break;
 		}
-		else
-		{
-			m_pMain->DelLogNumber(m_nLogIdx);
-		}
-		break;
-	default:
-		assert(false);
 		break;
 	}
 }
@@ -207,9 +269,7 @@ void CLog::SetData(int nIdex, int nCreateNumber, CLog::TYPE Type)
 	m_nPlayerNumber = nIdex;
 	m_CreateNumber = nCreateNumber;
 	m_Type = Type;
-	m_nLife = 120;
-
-	LogPos = D3DXVECTOR3(-200.0f, 100.0f, 0.0f);
+	m_nLife = LOGTIME;
 
 	if (m_pLogBG == NULL)
 	{
@@ -217,7 +277,7 @@ void CLog::SetData(int nIdex, int nCreateNumber, CLog::TYPE Type)
 		m_pLogBG->SetPos(D3DXVECTOR3(LogPos.x, LogPos.y, 0.0f));
 		m_pLogBG->SetPosOld(LogPos);
 		m_pLogBG->SetRot(NONE_D3DXVECTOR3);
-		m_pLogBG->SetSize(D3DXVECTOR3(100.0f, 50.0f, 0.0f));
+		m_pLogBG->SetSize(LOGSIZE_BG);
 		m_pLogBG->SetLength();
 		m_pLogBG->SetAngle();
 		m_pLogBG->SetVertex();
@@ -226,10 +286,10 @@ void CLog::SetData(int nIdex, int nCreateNumber, CLog::TYPE Type)
 	if (m_pLogPlayerID == NULL)
 	{
 		m_pLogPlayerID = CObject2D::Create(CObject2D::TYPE::TYPE_NONE, CObject::TYPE::TYPE_NONE, CObject::PRIORITY::PRIORITY_UI);
-		m_pLogPlayerID->SetPos(D3DXVECTOR3(LogPos.x - 40.0f, LogPos.y, 0.0f));
+		m_pLogPlayerID->SetPos(D3DXVECTOR3(LogPos.x + LOGDISTANCE_PLAYERID, LogPos.y, 0.0f));
 		m_pLogPlayerID->SetPosOld(LogPos);
 		m_pLogPlayerID->SetRot(NONE_D3DXVECTOR3);
-		m_pLogPlayerID->SetSize(D3DXVECTOR3(40.0f, 30.0f, 0.0f));
+		m_pLogPlayerID->SetSize(LOGSIZE_PLAYERID);
 		m_pLogPlayerID->SetVtxTextureAnim(0.25f, nIdex);
 		m_pLogPlayerID->SetLength();
 		m_pLogPlayerID->SetAngle();
@@ -239,10 +299,10 @@ void CLog::SetData(int nIdex, int nCreateNumber, CLog::TYPE Type)
 	if (m_pLogMessage == NULL)
 	{
 		m_pLogMessage = CObject2D::Create(CObject2D::TYPE::TYPE_NONE, CObject::TYPE::TYPE_NONE, CObject::PRIORITY::PRIORITY_UI);
-		m_pLogMessage->SetPos(D3DXVECTOR3(LogPos.x + 40.0f, LogPos.y, 0.0f));
+		m_pLogMessage->SetPos(D3DXVECTOR3(LogPos.x + LOGDISTANCE_MESSAGE, LogPos.y, 0.0f));
 		m_pLogMessage->SetPosOld(LogPos);
 		m_pLogMessage->SetRot(NONE_D3DXVECTOR3);
-		m_pLogMessage->SetSize(D3DXVECTOR3(40.0f, 30.0f, 0.0f));
+		m_pLogMessage->SetSize(LOGSIZE_MESSAGE);
 		m_pLogMessage->SetLength();
 		m_pLogMessage->SetAngle();
 		m_pLogMessage->SetVertex();
@@ -263,19 +323,28 @@ void CLog::SetData(int nIdex, int nCreateNumber, CLog::TYPE Type)
 	switch (m_nPlayerNumber)
 	{
 	case 0:
-		LogPos = D3DXVECTOR3(100.0f, -100.0f, 0.0f);
+		LogPos = D3DXVECTOR3(-200.0f, LOGPOS_IN, 0.0f);
+		m_fLogStopPosY = LOGPOS_DOWN;
 		break;
-	case 1:
-		break;
-	case 2:
-		break;
-	case 3:
-		break;
-	default:
 
+	case 1:
+		LogPos = D3DXVECTOR3(SCREEN_WIDTH + 200.0f, LOGPOS_IN, 0.0f);
+		m_fLogStopPosY = LOGPOS_DOWN;
+		break;
+
+	case 2:
+		LogPos = D3DXVECTOR3(-200.0f, LOGPOS_IN + 360.0f, 0.0f);
+		m_fLogStopPosY = LOGPOS_DOWN + 360.0f;
+		break;
+
+	case 3:
+		LogPos = D3DXVECTOR3(SCREEN_WIDTH + 200.0f, LOGPOS_IN + 360.0f, 0.0f);
+		m_fLogStopPosY = LOGPOS_DOWN + 360.0f;
+		break;
+
+	default:
 		// 明らかにエラーでごわす
 		assert(false);
-
 		break;
 	}
 }
