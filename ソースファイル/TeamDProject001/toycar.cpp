@@ -201,7 +201,10 @@ bool CToyCar::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float
 	vtxMin = D3DXVECTOR3(-fWidth, 0.0f, -fDepth);
 
 	// ˜Z–Ê‘Ì‚Ì“–‚½‚è”»’è
-	collision::HexahedronCollision(pos, GetPos(), posOld, GetPosOld(), vtxMin, GetFileData().vtxMin, vtxMax, GetFileData().vtxMax);
+	if (collision::HexahedronCollision(pos, GetPos(), posOld, GetPosOld(), vtxMin, GetFileData().vtxMin, vtxMax, GetFileData().vtxMax) == true)
+	{
+		int n = 0;
+	}
 
 	// false ‚ð•Ô‚·
 	return false;

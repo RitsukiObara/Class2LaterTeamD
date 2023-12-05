@@ -57,9 +57,12 @@ void collision::ShadowCollision(const D3DXVECTOR3& pos, int nIdx)
 //===============================
 // 障害物の当たり判定
 //===============================
-void collision::ObstacleCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
+void collision::ObstacleCollision(CPlayer& player, const float fWidth, const float fHeight, const float fDepth)
 {
 	// ローカル変数宣言
+	D3DXVECTOR3 pos = player.GetPos();								// 位置
+	D3DXVECTOR3 posOld = player.GetPosOld();						// 前回の位置
+	CPlayer::TYPE type = player.GetType();							// 種類
 	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を取得する
 
 	while (pObstacle != nullptr)
@@ -108,18 +111,22 @@ void collision::ObstacleCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, c
 		// 次のオブジェクトを代入する
 		pObstacle = pObstacle->GetNext();
 	}
+
+	// 位置を適用する
+	player.SetPos(pos);
 }
 
 //===============================
 // 障害物の当たり判定
 //===============================
-void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
+void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fHeight, const float fDepth)
 {
 	// ローカル変数宣言
-	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を取得する
-	CObstacle* pObstacleNext = nullptr;				// 次の障害物を取得する
-	D3DXVECTOR3 pos = pPlayer->GetPos();			// 位置を取得する
-	float fAngle;								// 吹き飛ぶ方向
+	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物
+	CObstacle* pObstacleNext = nullptr;				// 次の障害物
+	D3DXVECTOR3 pos = pPlayer->GetPos();			// 位置
+	CPlayer::TYPE type = pPlayer->GetType();		// 種類
+	float fAngle;									// 吹き飛ぶ方向
 
 	while (pObstacle != nullptr)
 	{ // ブロックの情報が NULL じゃない場合
@@ -282,12 +289,13 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 //===============================
 // 障害物の起動判定
 //===============================
-void collision::ObstacleAction(CPlayer* pPlayer, const float Radius, const CPlayer::TYPE type)
+void collision::ObstacleAction(CPlayer* pPlayer, const float Radius)
 {
 	// ローカル変数宣言
-	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を取得する
-	D3DXVECTOR3 pos = pPlayer->GetPos();			// 位置を取得する
-	float fAngle;								// 吹き飛ぶ方向
+	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();	// 先頭の障害物
+	D3DXVECTOR3 pos = pPlayer->GetPos();						// 位置
+	CPlayer::TYPE type = pPlayer->GetType();					// 種類
+	float fAngle;												// 吹き飛ぶ方向
 
 	while (pObstacle != nullptr)
 	{ // ブロックの情報が NULL じゃない場合
@@ -321,12 +329,14 @@ void collision::ObstacleAction(CPlayer* pPlayer, const float Radius, const CPlay
 //===========================================
 // 起動可能障害物や警告を出す障害物のサーチ
 //===========================================
-void collision::ObstacleSearch(CPlayer* pPlayer, const float Radius, const CPlayer::TYPE type, int Player_Idx)
+void collision::ObstacleSearch(CPlayer* pPlayer, const float Radius)
 {
 	// ローカル変数宣言
-	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を取得する
-	D3DXVECTOR3 pos = pPlayer->GetPos();			// 位置を取得する
-	float fAngle;								// 吹き飛ぶ方向
+	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物
+	D3DXVECTOR3 pos = pPlayer->GetPos();							// 位置
+	CPlayer::TYPE type = pPlayer->GetType();						// 種類
+	int nIdx = pPlayer->GetPlayerIdx();								// インデックス
+	float fAngle;													// 吹き飛ぶ方向
 
 	while (pObstacle != nullptr)
 	{ // ブロックの情報が NULL じゃない場合
@@ -337,11 +347,11 @@ void collision::ObstacleSearch(CPlayer* pPlayer, const float Radius, const CPlay
 			{
 				if (pObstacle->HitCircle(pos, Radius, type) == true)
 				{ // 障害物の当たり判定が通った場合
-					pObstacle->GimmickUI(true, Player_Idx);
+					pObstacle->GimmickUI(true, nIdx);
 				}
 				else
 				{
-					pObstacle->GimmickUI(false, Player_Idx);
+					pObstacle->GimmickUI(false, nIdx);
 				}
 			}
 		}
@@ -351,11 +361,11 @@ void collision::ObstacleSearch(CPlayer* pPlayer, const float Radius, const CPlay
 			{
 				if (pObstacle->HitCircle(pos, Radius, type) == true)
 				{ // 障害物の当たり判定が通った場合
-					pObstacle->GimmickUI(true, Player_Idx);
+					pObstacle->GimmickUI(true, nIdx);
 				}
 				else
 				{
-					pObstacle->GimmickUI(false, Player_Idx);
+					pObstacle->GimmickUI(false, nIdx);
 				}
 			}
 		}

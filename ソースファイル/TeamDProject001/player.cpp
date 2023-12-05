@@ -241,7 +241,7 @@ void CPlayer::Uninit(void)
 void CPlayer::Update(void)
 {
 	// 障害物との当たり判定
-	collision::ObstacleHit(this, m_sizeColl.x, m_sizeColl.y, m_sizeColl.z, m_type);
+	collision::ObstacleHit(this, m_sizeColl.x, m_sizeColl.y, m_sizeColl.z);
 
 	// 障害物との当たり判定
 	ObstacleCollision();
@@ -254,11 +254,11 @@ void CPlayer::Update(void)
 
 	if (m_type == TYPE_CAT)
 	{
-		collision::ObstacleSearch(this, 30.0f * 2.0f, m_type, m_nPlayerIdx);
+		collision::ObstacleSearch(this, 30.0f * 2.0f);
 	}
 	else if (m_type == TYPE_RAT)
 	{
-		collision::ObstacleSearch(this, 30.0f * 2.0f, m_type, m_nPlayerIdx);
+		collision::ObstacleSearch(this, 30.0f * 2.0f);
 	}
 
 #if CAMERA != 0
@@ -269,7 +269,7 @@ void CPlayer::Update(void)
 	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_E) ||
 		CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_B,m_nPlayerIdx) == true)
 	{
-		collision::ObstacleAction(this, m_sizeColl.x, m_type);
+		collision::ObstacleAction(this, m_sizeColl.x);
 	}
 
 #ifdef _DEBUG
@@ -701,14 +701,8 @@ void CPlayer::RotNormalize(void)
 //=======================================
 void CPlayer::ObstacleCollision(void)
 {
-	// 位置を取得する
-	D3DXVECTOR3 pos = GetPos();
-
 	// 障害物との衝突判定
-	collision::ObstacleCollision(pos, GetPosOld(), m_sizeColl.x, m_sizeColl.y, m_sizeColl.z, m_type);
-
-	// 位置を設定する
-	SetPos(pos);
+	collision::ObstacleCollision(*this, m_sizeColl.x, m_sizeColl.y, m_sizeColl.z);
 
 	// ブロックとの当たり判定
 	collision::BlockCollision(*this, m_sizeColl.x, m_sizeColl.y, m_sizeColl.z);
