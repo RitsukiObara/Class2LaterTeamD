@@ -15,8 +15,9 @@
 #include "objectX.h"
 #include "input.h"
 #include "effect.h"
+#include "collision.h"
 
-#define ACTION_TIME (120)
+#define ACTION_TIME (240)
 #define WAIT_TIME (20)
 
 //==============================
@@ -28,6 +29,8 @@ CLeash::CLeash() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 	m_move = NONE_D3DXVECTOR3;
 	ActionPosHead = NONE_D3DXVECTOR3;
 	ActionPosToes = NONE_D3DXVECTOR3;
+	m_vtxMax = NONE_D3DXVECTOR3;			// 最大値
+	m_vtxMin = NONE_D3DXVECTOR3;			// 最小値
 	m_State = STATE_FALSE;
 	m_bSetHead = false;
 	m_bSetToes = false;
@@ -193,6 +196,53 @@ void CLeash::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE 
 {
 	// 情報の設定処理
 	CObstacle::SetData(pos,rot, type);
+
+	// 当たり判定の設定処理
+	CollisionSetting();
+}
+
+//=====================================
+// 当たり判定の設定処理
+//=====================================
+void CLeash::CollisionSetting(void)
+{
+	// 位置と向きと最小値と最大値を取得する
+	D3DXVECTOR3 pos = GetPos();
+	D3DXVECTOR3 rot = GetRot();
+	D3DXVECTOR3 vtxMin = GetFileData().vtxMin;
+	D3DXVECTOR3 vtxMax = GetFileData().vtxMax;
+
+	if (rot.y >= D3DX_PI * -0.25f &&
+		rot.y <= D3DX_PI * 0.25f)
+	{ // 方向が手前からの場合
+
+		// 最大値と最小値を設定する
+		m_vtxMax = D3DXVECTOR3(0.0f, vtxMax.y, vtxMax.z);
+		m_vtxMin = D3DXVECTOR3(0.0f, vtxMin.y, vtxMin.z);
+	}
+	else if (rot.y >= D3DX_PI * 0.25f &&
+		rot.y <= D3DX_PI * 0.75f)
+	{ // 方向が左からの場合
+
+		// 最大値と最小値を設定する
+		m_vtxMax = D3DXVECTOR3(vtxMax.z, vtxMax.y, 0.0f);
+		m_vtxMin = D3DXVECTOR3(vtxMin.z, vtxMin.y, 0.0f);
+	}
+	else if (rot.y >= D3DX_PI * -0.75f &&
+		rot.y <= D3DX_PI * -0.25f)
+	{ // 方向が右からの場合
+
+		// 最大値と最小値を設定する
+		m_vtxMax = D3DXVECTOR3(-vtxMin.z, vtxMax.y, 0.0f);
+		m_vtxMin = D3DXVECTOR3(-vtxMax.z, vtxMin.y, 0.0f);
+	}
+	else
+	{ // 上記以外(方向が奥からの場合)
+
+		// 最大値と最小値を設定する
+		m_vtxMax = D3DXVECTOR3(0.0f, vtxMax.y, -vtxMin.z);
+		m_vtxMin = D3DXVECTOR3(0.0f, vtxMin.y, -vtxMax.z);
+	}
 }
 
 //=====================================
@@ -209,8 +259,23 @@ bool CLeash::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float 
 //=====================================
 bool CLeash::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
-	//// 終了処理
-	//Uninit();
+	// 最大値と最小値を設定する
+	D3DXVECTOR3 vtxMax = D3DXVECTOR3(fWidth, fHeight, fDepth);
+	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-fWidth, 0.0f, -fDepth);
+
+	if (type == CPlayer::TYPE_CAT)
+	{ // ネコの場合
+
+		if (m_State != STATE_FALSE &&
+			useful::RectangleCollisionXY(pos, GetPos(), vtxMax, m_vtxMax, vtxMin, m_vtxMin) == true &&
+			useful::RectangleCollisionXZ(pos, GetPos(), vtxMax, m_vtxMax, vtxMin, m_vtxMin) == true &&
+			useful::RectangleCollisionYZ(pos, GetPos(), vtxMax, m_vtxMax, vtxMin, m_vtxMin) == true)
+		{ // 停止状態以外かつ、当たり判定の中に入った場合
+
+			// true を返す
+			return true;
+		}
+	}
 
 	// false を返す
 	return false;

@@ -42,6 +42,7 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\Senpuki_Fan.x",		// 扇風機(羽根)
 	"data\\MODEL\\consent.x",			// コンセント
 	"data\\MODEL\\arrow.x",				// 死亡矢印
+	"data\\MODEL\\banana_peel.x",		// バナナの皮
 
 	// ブロックモデル
 	"data\\MODEL\\cardboard.x",			// 段ボール
@@ -64,9 +65,9 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\picture_frames.x",	// 写真立て
 	"data\\MODEL\\shelf.x",				// 戸棚
 	"data\\MODEL\\pullshelf.x",			// 引き出し棚
-	"data\\MODEL\\Kitchen.x",			//キッチン
-	"data\\MODEL\\Reizouko.x",			//冷蔵庫
-	"data\\MODEL\\Table000.x",			//テーブル
+	"data\\MODEL\\Kitchen.x",			// キッチン
+	"data\\MODEL\\Reizouko.x",			// 冷蔵庫
+	"data\\MODEL\\Table000.x",			// テーブル
 	"data\\MODEL\\Table_Chair000.x",	// 机の椅子
 	"data\\MODEL\\corkboard.x",			// コルクボード
 	"data\\MODEL\\desk.x",				// デスク
@@ -91,8 +92,7 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\pin_box.x",			// 画鋲
 	"data\\MODEL\\Senpuki_Body.x",		// 扇風機(本体)
 	"data\\MODEL\\cup.x",				// コップ
-	"data\\MODEL\\garbage_can.x",			//ゴミ箱
-	"data\\MODEL\\garbage.x",				//ゴミ
+	"data\\MODEL\\Garbage_can.x",		// ゴミ箱
 
 
 	// ネズミモデル
