@@ -49,6 +49,7 @@
 #define RAT_CAMERA_HEIGHT	(100.0f)		// 猫のカメラの高さ
 #define RAT_CAMERA_DIS		(60.0f)			// ネズミのカメラの視点と注視点の高さの差分(角度)
 #define DIFF_ROT			(0.2f)			// 角度に足す差分の割合
+#define CAMERA_ROT_MOVE		(0.05f)			// カメラの向きの移動量
 
 //==============================
 // コンストラクタ
@@ -627,14 +628,14 @@ void CPlayer::CameraUpdate(void)
 	{ // 右スティックを右に倒した場合
 
 		// カメラの向きを減算する
-		m_CameraRot.y -= 0.05f;
+		m_CameraRot.y -= CAMERA_ROT_MOVE;
 	}
 	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_RSHIFT) == true ||
 		CManager::Get()->GetInputGamePad()->GetGameStickRXPress(m_nPlayerIdx) > 0)
 	{ // 右スティックを右に倒した場合
 
 		// カメラの向きを加算する
-		m_CameraRot.y += 0.05f;
+		m_CameraRot.y += CAMERA_ROT_MOVE;
 	}
 
 	// 向きの正規化
