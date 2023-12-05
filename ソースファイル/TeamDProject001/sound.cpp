@@ -18,7 +18,25 @@ CSound::SOUNDINFO CSound::m_aSoundInfo[CSound::SOUND_LABEL_MAX] =
 	{ "data\\BGM\\RankingBGM.wav",-1 },		// ランキングBGM
 	{ "data\\SE\\Select.wav",0 },			// 選択音
 	{ "data\\SE\\Decide.wav",0 },			// 決定音
+	{ "data\\SE\\victory.wav",0 },			//勝利音
 	{ "data\\SE\\NewRecord.wav",0 },		// 新記録の音
+	{"data\\SE\\Cat_Attack.wav",0},			//ネコの攻撃
+	{"data\\SE\\Cat_Attack_Hit.wav",0},	//ネコの攻撃がネズミにヒットしたときの音
+	{"data\\SE\\walk09.wav",0},//ネコの歩行音
+	{"data\\SE\\walk05.wav",0},//ネズミの歩行音
+	{"data\\SE\\mousetrap_HIT.wav",0},//ネズミ取りにハマる音
+	{ "data\\SE\\the_cup_falls.wav",0 },//コップが落ちる音
+	{ "data\\SE\\TV_sandstorm.wav",0 },//テレビの砂嵐
+	{ "data\\SE\\press the switch.wav",0 },//スイッチを押した時の音
+	{"data\\SE\\se1.wav",0},//設置音
+	{ "data\\SE\\cleaning.wav",0 },//掃除機(ルンバ)
+	{ "data\\SE\\Fan.wav",0 },//扇風機
+	{"data\\SE\\med - bottle04.wav",0 }, //画鋲
+	{"data\\SE\\Terai_Hit.wav",0,},//タライが頭に当たる
+	{ "data\\SE\\plastic_bottles_rolling.wav",0 },//ペットボトルが転がる音
+	{ "data\\SE\\plastic_bottle_falls_over.wav",0 },//ペットボトルが倒れる音
+	{ "data\\SE\\se2.wav",0 },//拾った音
+
 };
 
 //=============================================================================
