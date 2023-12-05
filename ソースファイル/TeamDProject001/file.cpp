@@ -16,7 +16,6 @@
 #include "block_manager.h"
 #include "game.h"
 #include "edit.h"
-#include "collision_edit.h"
 
 //--------------------------------------------
 // マクロ定義
@@ -24,8 +23,6 @@
 #define OBSTACLE_TXT		"data\\TXT\\Obstacle.txt"		// 障害物のテキスト
 #define CARROUTE_TXT		"data\\TXT\\CarRoute.txt"		// 車の経路のテキスト
 #define BLOCK_TXT			"data\\TXT\\Block.txt"			// ブロックのテキスト
-#define COLLISION_TXT		"data\\TXT\\Collision.txt"		// 当たり判定のテキスト
-#define COLLISIONSAVE_TXT	"data\\TXT\\CollSave.txt"		// 当たり判定セーブのテキスト
 
 //--------------------------------------------
 // 静的メンバ変数宣言
@@ -57,21 +54,6 @@ CFile::CFile()
 		m_BlockInfo.type[nCntInfo] = CBlock::TYPE_CARDBOARD;	// 種類
 	}
 
-	for (int nCntBlock = 0; nCntBlock < CBlock::TYPE_MAX; nCntBlock++)
-	{
-		for (int nCntColl = 0; nCntColl < MAX_NUMCOLL; nCntColl++)
-		{
-			m_CollInfo.aData[nCntBlock].vtxMax[nCntColl] = NONE_D3DXVECTOR3;	// 最大値
-			m_CollInfo.aData[nCntBlock].vtxMin[nCntColl] = NONE_D3DXVECTOR3;	// 最小値
-			m_CollInfo.aData[nCntBlock].fAngle[nCntColl] = 0.0f;				// 方向
-			m_CollInfo.aData[nCntBlock].fLength[nCntColl] = 0.0f;				// 長さ
-			m_CollInfo.aData[nCntBlock].fHeight[nCntColl] = 0.0f;				// 高さ
-		}
-		m_CollInfo.aData[nCntBlock].nNum = 0;			// 総数
-		m_CollInfo.aData[nCntBlock].bSuccess = false;	// 成功状況
-	}
-
-
 	// 総数をクリアする
 	m_ObstacleInfo.nNum = 0;			// 障害物
 	m_CarRouteInfo.nNum = 0;			// 車の経路
@@ -81,7 +63,6 @@ CFile::CFile()
 	m_ObstacleInfo.bSuccess = false;	// 障害物
 	m_CarRouteInfo.bSuccess = false;	// 車の経路
 	m_BlockInfo.bSuccess = false;		// ブロック
-	m_CollInfo.bSuccess = false;		// 当たり判定
 }
 
 //===========================================
@@ -115,18 +96,6 @@ HRESULT CFile::Save(const TYPE type)
 
 		// ブロックのセーブ処理
 		if (FAILED(SaveBlock()))
-		{ // 失敗した場合
-
-			// 失敗を返す
-			return E_FAIL;
-		}
-
-		break;
-
-	case TYPE_COLLISION:
-
-		// 当たり判定のセーブ処理
-		if (FAILED(SaveCollision()))
 		{ // 失敗した場合
 
 			// 失敗を返す
@@ -182,18 +151,6 @@ HRESULT CFile::Load(const TYPE type)
 
 		// ブロックのロード処理
 		if (FAILED(LoadBlock()))
-		{ // 失敗した場合
-
-			// 失敗を返す
-			return E_FAIL;
-		}
-
-		break;
-
-	case TYPE_COLLISION:
-
-		// 当たり判定のロード処理
-		if (FAILED(LoadCollision()))
 		{ // 失敗した場合
 
 			// 失敗を返す
@@ -288,21 +245,6 @@ HRESULT CFile::Init(void)
 		m_BlockInfo.type[nCntInfo] = CBlock::TYPE_CARDBOARD;	// 種類
 	}
 
-	for (int nCntBlock = 0; nCntBlock < CBlock::TYPE_MAX; nCntBlock++)
-	{
-		for (int nCntColl = 0; nCntColl < MAX_NUMCOLL; nCntColl++)
-		{
-			m_CollInfo.aData[nCntBlock].vtxMax[nCntColl] = NONE_D3DXVECTOR3;	// 最大値
-			m_CollInfo.aData[nCntBlock].vtxMin[nCntColl] = NONE_D3DXVECTOR3;	// 最小値
-			m_CollInfo.aData[nCntBlock].fAngle[nCntColl] = 0.0f;				// 方向
-			m_CollInfo.aData[nCntBlock].fLength[nCntColl] = 0.0f;				// 長さ
-			m_CollInfo.aData[nCntBlock].fHeight[nCntColl] = 0.0f;				// 高さ
-		}
-		m_CollInfo.aData[nCntBlock].nNum = 0;			// 総数
-		m_CollInfo.aData[nCntBlock].bSuccess = false;	// 成功状況
-	}
-
-
 	// 総数をクリアする
 	m_ObstacleInfo.nNum = 0;			// 障害物
 	m_CarRouteInfo.nNum = 0;			// 車の経路
@@ -312,7 +254,6 @@ HRESULT CFile::Init(void)
 	m_ObstacleInfo.bSuccess = false;	// 障害物
 	m_CarRouteInfo.bSuccess = false;	// 車の経路
 	m_BlockInfo.bSuccess = false;		// ブロック
-	m_CollInfo.bSuccess = false;		// 当たり判定
 
 	// 成功を返す
 	return S_OK;
@@ -430,106 +371,6 @@ HRESULT CFile::SaveBlock(void)
 		// 失敗を返す
 		return E_FAIL;
 	}
-
-	// 成功を返す
-	return S_OK;
-}
-
-//===========================================
-// 当たり判定のセーブ処理
-//===========================================
-HRESULT CFile::SaveCollision(void)
-{
-// デバッグ版のみ
-#ifdef _DEBUG
-
-	// ローカル変数宣言
-	CCollisionEdit* pEdit = CGame::GetEdit()->GetCollEdit();	// 当たり判定エディットを代入する
-	D3DXVECTOR3 vtxMax;		// 最大値
-	D3DXVECTOR3 vtxMin;		// 最小値
-	float fAngle;			// 方向
-	float fLength;			// 長さ
-
-	// ポインタを宣言
-	FILE *pFile;				// ファイルポインタ
-
-	// ファイルを読み込み形式で開く
-	pFile = fopen(COLLISIONSAVE_TXT, "w");
-
-	if (pFile != nullptr)
-	{ // ファイルが開けた場合
-
-		if (pEdit != nullptr)
-		{ // オブジェクトへのポインタが NULL じゃなかった場合
-
-			// 文字列を書き込む
-			fprintf(pFile, "SET_COLLISION\n");		// 当たり判定の設定を書き込む
-
-			// 文字列を書き込む
-			fprintf(pFile, "BLOCK_TYPE = ");							// ブロックの種類を書き込む
-			fprintf(pFile, "%d\n", CGame::GetEdit()->GetBlockType());	// 種類を書き込む
-
-			// 文字列を書き込む
-			fprintf(pFile, "COLL_NUM = ");								// 当たり判定の総数を書き込む
-			fprintf(pFile, "%d\n\n", pEdit->GetNumColl());				// 総数を書き込む
-
-			for (int nCnt = 0; nCnt < pEdit->GetNumColl(); nCnt++)
-			{
-				// 方向を算出する
-				fAngle = atan2f(pEdit->GetModel(nCnt)->GetPos().x - pEdit->GetPosInit().x, pEdit->GetModel(nCnt)->GetPos().z - pEdit->GetPosInit().z);
-
-				// 長さを算出する
-				fLength = sqrtf((pEdit->GetModel(nCnt)->GetPos().x - pEdit->GetPosInit().x) * (pEdit->GetModel(nCnt)->GetPos().x - pEdit->GetPosInit().x) + (pEdit->GetModel(nCnt)->GetPos().z - pEdit->GetPosInit().z) * (pEdit->GetModel(nCnt)->GetPos().z - pEdit->GetPosInit().z));
-
-				// 最大値を設定
-				vtxMax.x = pEdit->GetModel(nCnt)->GetFileData().vtxMax.x * pEdit->GetModel(nCnt)->GetScale().x;
-				vtxMax.y = pEdit->GetModel(nCnt)->GetFileData().vtxMax.y * pEdit->GetModel(nCnt)->GetScale().y;
-				vtxMax.z = pEdit->GetModel(nCnt)->GetFileData().vtxMax.z * pEdit->GetModel(nCnt)->GetScale().z;
-
-				// 最小値を設定
-				vtxMin.x = pEdit->GetModel(nCnt)->GetFileData().vtxMin.x * pEdit->GetModel(nCnt)->GetScale().x;
-				vtxMin.y = pEdit->GetModel(nCnt)->GetFileData().vtxMin.y * pEdit->GetModel(nCnt)->GetScale().y;
-				vtxMin.z = pEdit->GetModel(nCnt)->GetFileData().vtxMin.z * pEdit->GetModel(nCnt)->GetScale().z;
-
-				// 最大値を書き込む
-				fprintf(pFile, "\tMAX = ");
-				fprintf(pFile, "%.1f %.1f %.1f\n", vtxMax.x, vtxMax.y, vtxMax.z);
-
-				// 最小値を書き込む
-				fprintf(pFile, "\tMIN = ");
-				fprintf(pFile, "%.1f %.1f %.1f\n", vtxMin.x, vtxMin.y, vtxMin.z);
-
-				// 方向を書き込む
-				fprintf(pFile, "\tANGLE = ");
-				fprintf(pFile, "%.1f\n", fAngle);
-
-				// 長さを書き込む
-				fprintf(pFile, "\tLENGTH = ");
-				fprintf(pFile, "%.1f\n", fLength);
-
-				// 高さを書き込む
-				fprintf(pFile, "\tHEIGHT = ");
-				fprintf(pFile, "%.1f\n\n", pEdit->GetModel(nCnt)->GetPos().y - pEdit->GetPosInit().y);
-			}
-
-			// 文字列を書き込む
-			fprintf(pFile, "END_SET_COLLISION\n\n");	// 当たり判定の設定の終了を書き込む
-		}
-
-		// ファイルを閉じる
-		fclose(pFile);
-	}
-	else
-	{ // ファイルが開けなかった場合
-
-		// 停止
-		assert(false);
-
-		// 失敗を返す
-		return E_FAIL;
-	}
-
-#endif
 
 	// 成功を返す
 	return S_OK;
@@ -787,13 +628,4 @@ HRESULT CFile::LoadBlock(void)
 
 	// 成功を返す
 	return S_OK;
-}
-
-//===========================================
-// 当たり判定のロード処理
-//===========================================
-HRESULT CFile::LoadCollision(void)
-{
-	// 失敗を返す
-	return E_FAIL;
 }
