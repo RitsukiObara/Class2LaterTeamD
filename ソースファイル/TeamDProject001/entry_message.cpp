@@ -1,6 +1,6 @@
 //===========================================
 //
-// エントリー画面の説明のメイン処理[entry_message.cpp]
+// エントリー画面の操作説明のメイン処理[entry_message.cpp]
 // Author 佐藤根詩音
 //
 //===========================================
@@ -15,6 +15,9 @@
 //-------------------------------------------
 // マクロ定義
 //-------------------------------------------
+#define POS_SWITCH		(45)		// 位置の上下変更する時間
+#define RESIZE_SCALE	(0.0004f)	// リザイズのスケール
+#define COLOR_ALPHA		(0.0007f)	// 色の透明度
 
 //-------------------------------------------
 // 静的メンバ変数宣言
@@ -26,6 +29,8 @@
 CEntryMessage::CEntryMessage() : CObject2D(CObject::TYPE_ENTRYMESSAGEUI, CObject::PRIORITY_UI)
 {
 	// 全ての値をクリアする
+	m_nScaleSwitchCounter = 0;		// スケールの上下変更カウンター
+	m_nScaleSwitch = 1;				// スケールの上下変更
 }
 
 //==============================
@@ -37,7 +42,7 @@ CEntryMessage::~CEntryMessage()
 }
 
 //==============================
-// 破片の初期化処理
+// エントリー画面の操作説明の初期化処理
 //==============================
 HRESULT CEntryMessage::Init(void)
 {
@@ -49,13 +54,15 @@ HRESULT CEntryMessage::Init(void)
 	}
 
 	// 全ての値を初期化する
+	m_nScaleSwitchCounter = 0;		// スケールの上下変更カウンター
+	m_nScaleSwitch = 1;				// スケールの上下変更
 
 	// 値を返す
 	return S_OK;
 }
 
 //========================================
-// 破片の終了処理
+// エントリー画面の操作説明の終了処理
 //========================================
 void CEntryMessage::Uninit(void)
 {
@@ -64,15 +71,40 @@ void CEntryMessage::Uninit(void)
 }
 
 //=====================================
-// 破片の更新処理
+// エントリー画面の操作説明の更新処理
 //=====================================
 void CEntryMessage::Update(void)
 {
+	D3DXVECTOR3 size = GetSize();	// サイズ取得
 
+	// 前回の位置設定
+	SetPosOld(GetPos());
+
+	// カウンター加算
+	m_nScaleSwitchCounter++;
+
+	if ((m_nScaleSwitchCounter % POS_SWITCH) == 0)
+	{ // 一定時間経過したら
+
+		// スケールの増減変更
+		m_nScaleSwitch *= -1;
+
+		// カウンター初期化
+		m_nScaleSwitchCounter = 0;
+	}
+
+	// サイズ加算
+	size = D3DXVECTOR3(size.x + (size.x * m_nScaleSwitch * RESIZE_SCALE), size.y + (size.y * m_nScaleSwitch * RESIZE_SCALE), 0.0f);
+
+	//サイズ設定
+	SetSize(size);
+
+	// 頂点座標の設定処理
+	SetVertex();
 }
 
 //=====================================
-// 破片の描画処理
+// エントリー画面の操作説明の描画処理
 //=====================================
 void CEntryMessage::Draw(void)
 {

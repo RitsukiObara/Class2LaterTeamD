@@ -1,6 +1,6 @@
 //===================================
 //
-// エントリー画面の説明ヘッダー[entry_message.h]
+// エントリー画面の操作説明ヘッダー[entry_message.h]
 // Author 佐藤根詩音
 //
 //===================================
@@ -13,7 +13,7 @@
 #include "object2D.h"
 
 //-----------------------------------
-// クラス(エントリー画面の説明クラス)
+// クラス(エントリー画面の操作説明クラス)
 //-----------------------------------
 class CEntryMessage : public CObject2D
 {
@@ -34,6 +34,9 @@ public:			// 誰でもアクセスできる
 	static CEntryMessage* Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& size);		// 生成処理
 
 private:		// 自分だけアクセスできる
+
+	int m_nScaleSwitchCounter;		// スケールの増減変更カウンター
+	int m_nScaleSwitch;				// スケールの増減変更
 
 };
 
