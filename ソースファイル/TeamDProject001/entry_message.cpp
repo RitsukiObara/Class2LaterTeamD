@@ -10,6 +10,7 @@
 #include "main.h"
 #include "manager.h"
 #include "entry_message.h"
+#include "texture.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -87,41 +88,18 @@ void CEntryMessage::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, c
 	// 設定処理に便利なマクロ定義
 	//NONE_D3DXVECTOR3					// 向きを傾けない時とかに使用する
 	//NONE_SCALE						// 拡大率を変更しないときとかに使う
-	// 情報の設定処理
 
-	//==========================================================================
-	// 2Dポリゴン
-	//==========================================================================
-	SetPos(pos);			// 位置
-	SetPosOld(posOld);		// 前回の位置
-	SetRot(NONE_D3DXVECTOR3);			// 向き
-	SetSize(size);		// サイズ
-	SetLength();		// 長さ
-	SetAngle();			// 方向
-	//BindTexture(CManager::Get()->GetTexture()->Regist(テクスチャの名前));		// テクスチャの割り当て処理
+	// 情報の設定処理
+	SetPos(pos);				// 位置
+	SetPosOld(posOld);			// 前回の位置
+	SetRot(NONE_D3DXVECTOR3);	// 向き
+	SetSize(size);				// サイズ
+	SetLength();				// 長さ
+	SetAngle();					// 方向
+	BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\entry_message00.png"));		// テクスチャの割り当て処理
 
 	// 頂点座標の設定処理
 	SetVertex();
-
-	//==========================================================================
-	// アニメーション系
-	//==========================================================================
-	//SetPos(位置を入れる);			// 位置
-	//SetPosOld(位置を入れる);		// 前回の位置
-	//SetRot(向きを入れる);			// 向き
-	//SetSize(サイズを入れる);		// サイズ
-	//SetLength(引数無し);			// 長さ
-	//SetAngle(引数無し);			// 方向
-	//BindTexture(CManager::Get()->GetTexture()->Regist(テクスチャの名前));		// テクスチャの割り当て処理
-
-	// アニメーションの設定処理
-	//SetAnim(カウントを入れる, パターン数を入れる);
-
-	//// 頂点座標の設定処理
-	//SetVertex();
-
-	// テクスチャの設定(アニメーションバージョン)
-	//SetVtxTextureAnim(アニメーションの総パターン数を入れる, 0);
 }
 
 //=======================================
