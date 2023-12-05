@@ -13,7 +13,6 @@
 #include "main.h"
 #include "obstacle.h"
 #include "block.h"
-#include "collision_edit.h"
 
 //--------------------------------------------
 // マクロ定義
@@ -34,7 +33,6 @@ public:			// 誰でもアクセスできる
 		TYPE_OBSTACLE = 0,	// 障害物
 		TYPE_CARROUTE,		// 車の経路
 		TYPE_BLOCK,			// ブロック
-		TYPE_COLLISION,		// 当たり判定
 		TYPE_MAX			// この列挙型の総数
 	};
 
@@ -60,27 +58,9 @@ public:			// 誰でもアクセスできる
 	struct SBlockInfo
 	{
 		D3DXVECTOR3 pos[MAX_FILE_DATA];			// 位置
-		D3DXVECTOR3 rot[MAX_FILE_DATA];			// 向き
+		CBlock::ROTTYPE rotType[MAX_FILE_DATA];	// 向きの種類
 		CBlock::TYPE type[MAX_FILE_DATA];		// 種類
 		int nNum;								// 総数
-		bool bSuccess;							// 成功状況
-	};
-
-	// 当たり判定のデータ
-	struct SCollData
-	{
-		D3DXVECTOR3 vtxMax[MAX_NUMCOLL];		// 最大値
-		D3DXVECTOR3 vtxMin[MAX_NUMCOLL];		// 最小値
-		float fAngle[MAX_NUMCOLL];				// 方向
-		float fLength[MAX_NUMCOLL];				// 長さ
-		float fHeight[MAX_NUMCOLL];				// 高さ
-		int nNum;								// 総数
-	};
-
-	// 当たり判定の情報
-	struct SCollisionInfo
-	{
-		SCollData aData[CBlock::TYPE_MAX];		// データ
 		bool bSuccess;							// 成功状況
 	};
 
@@ -105,19 +85,16 @@ private:		// 自分のみアクセスできる
 	// メンバ関数(セーブ関係)
 	HRESULT SaveObstacle(void);		// 障害物のセーブ処理
 	HRESULT SaveBlock(void);		// ブロックのセーブ処理
-	HRESULT SaveCollision(void);	// 当たり判定のセーブ処理
 
 	// メンバ関数(ロード関係)
 	HRESULT LoadObstacle(void);		// 障害物のロード処理
 	HRESULT LoadCarRoute(void);		// 車の経路のロード処理
 	HRESULT LoadBlock(void);		// ブロックのロード処理
-	HRESULT LoadCollision(void);	// 当たり判定のロード処理
 
 	// メンバ変数
 	SObstacleInfo m_ObstacleInfo;	// 障害物の情報
 	SCarRouteInfo m_CarRouteInfo;	// 車のルートの情報
 	SBlockInfo m_BlockInfo;			// ブロックの情報
-	SCollisionInfo m_CollInfo;		// 当たり判定の情報
 
 	// 静的メンバ変数
 	static const char* c_apBooleanDisp[2];			// bool型の表示

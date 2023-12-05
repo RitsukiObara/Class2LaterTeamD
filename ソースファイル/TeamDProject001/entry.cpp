@@ -17,6 +17,14 @@
 #include "entry_team.h"
 #include "input.h"
 #include "player.h"
+#include "sound.h"
+#include "entry_message.h"
+
+//--------------------------------------------
+// マクロ定義
+//--------------------------------------------
+#define POS_MESSAGEUI			(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 675.0f, 0.0f))		// 操作説明UIの位置
+#define SIZE_MESSAGEUI			(D3DXVECTOR3(500.0f, 50.0f, 0.0f))						// 操作説明UIのサイズ
 
 //--------------------------------------------
 // 静的メンバ変数
@@ -94,6 +102,11 @@ HRESULT CEntry::Init(void)
 		m_EntryId[nCnt] = nCnt;
 	}
 
+	// エントリー画面の操作説明UIの生成
+	CEntryMessage::Create(POS_MESSAGEUI, POS_MESSAGEUI, SIZE_MESSAGEUI);
+
+	CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_BGM_ENTRY);
+
 	// 成功を返す
 	return S_OK;
 }
@@ -116,6 +129,8 @@ void CEntry::Uninit(void)
 		m_apPlayer[nCnt] = nullptr;		// ネズミの情報
 	}
 
+	CManager::Get()->GetSound()->Stop();
+
 	// 終了処理
 	CScene::Uninit();
 }
@@ -132,6 +147,7 @@ void CEntry::Update(void)
 		CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_A, 2) == true ||
 		CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_A, 3) == true)
 	{ // ENTERキーを押した場合またはAボタンを押した場合
+		CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_DECIDE);
 
 		if (m_bEnter == false)
 		{
@@ -151,6 +167,7 @@ void CEntry::Update(void)
 		if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_D) == true ||
 			CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_RIGHT, 0) == true)
 		{ // 右キーを押した場合
+			CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_SELECT);
 
 			// ネコをやるプレイヤーを設定
 			m_nCatIdx = (m_nCatIdx + 1) % MAX_PLAY;
@@ -177,6 +194,8 @@ void CEntry::Update(void)
 		if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_A) == true ||
 			CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_LEFT, 0) == true)
 		{ // 左キーを押した場合
+
+			CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_SELECT);
 
 			// ネコをやるプレイヤーを設定
 			m_nCatIdx = (m_nCatIdx + MAX_PLAY - 1) % MAX_PLAY;

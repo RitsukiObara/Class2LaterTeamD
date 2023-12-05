@@ -15,11 +15,6 @@
 #include "block.h"
 
 //-----------------------------------
-// 前方宣言
-//-----------------------------------
-class CCollisionEdit;		// 当たり判定のエディット
-
-//-----------------------------------
 // クラス定義(エディット)
 //-----------------------------------
 class CEdit : public CModel
@@ -45,9 +40,6 @@ public:			// 誰でもアクセスできる
 
 	void SetData(void);				// 情報の設定処理
 
-	// セット・ゲット関係
-	CCollisionEdit* GetCollEdit(void) const;	// 当たり判定エディットの取得処理
-	
 	// 静的メンバ関数
 	static CEdit* Create(void);		// 生成処理
 
@@ -60,11 +52,11 @@ private:		// 自分だけアクセスできる
 	void HeightMove(void);		// 縦移動処理
 	void HeightAdjust(void);	// 縦微調整処理
 	void RotMove(void);			// 向きの移動処理
+	void BlockRotMove(void);	// ブロックの向きの移動処理
 	void Set(void);				// 設置処理
 	void Reset(void);			// リセット処理
 	void Delete(void);			// 消去処理
 	void Type(void);			// 種類の変更処理
-	void CollEdit(void);		// 当たり判定の切り替え処理
 
 	// それぞれの種類ごとのメンバ関数
 	void ObstacleProcess(void);	// 障害物の処理
@@ -78,8 +70,7 @@ private:		// 自分だけアクセスできる
 	TYPE m_type;					// 種類
 	CObstacle::TYPE m_obstacleType;	// 障害物の種類
 	CBlock::TYPE m_blockType;		// ブロックの種類
-	CCollisionEdit* m_pCollEdit;	// 当たり判定のエディットの情報
-	bool m_bCollEdit;				// 当たり判定エディット状況
+	CBlock::ROTTYPE m_rotType;		// 向きの種類
 };
 
 #endif

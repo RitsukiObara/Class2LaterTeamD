@@ -40,7 +40,7 @@
 #define NONE_PLAYERIDX		(-1)			// プレイヤーの番号の初期値
 #define STUN_HEIGHT			(80.0f)			// 気絶演出が出てくる高さ
 #define ID_HEIGHT			(150.0f)		// IDが出てくる高さ
-#define SMASH_MOVE			(D3DXVECTOR3(10.0f, 20.0f, 10.0f))		// 吹き飛び状態の移動量
+#define SMASH_MOVE			(D3DXVECTOR3(10.0f, 11.0f, 10.0f))		// 吹き飛び状態の移動量
 #define STUN_WAIT			(120)			// オブジェクト無効の待機時間
 #define DEATH_WAIT			(120)			// 死亡時の待機時間
 #define SMASH_WAIT			(40)			// 吹き飛び状態のカウント数
@@ -241,7 +241,7 @@ void CPlayer::Uninit(void)
 void CPlayer::Update(void)
 {
 	// 障害物との当たり判定
-	collision::ObstacleHit(this, m_sizeColl.x, m_sizeColl.y, m_sizeColl.z, m_type);
+	collision::ObstacleHit(this, m_sizeColl.x, m_sizeColl.y, m_sizeColl.z);
 
 	// 障害物との当たり判定
 	ObstacleCollision();
@@ -254,11 +254,11 @@ void CPlayer::Update(void)
 
 	if (m_type == TYPE_CAT)
 	{
-		collision::ObstacleSearch(this, 30.0f * 2.0f, m_type, m_nPlayerIdx);
+		collision::ObstacleSearch(this, 30.0f * 2.0f);
 	}
 	else if (m_type == TYPE_RAT)
 	{
-		collision::ObstacleSearch(this, 30.0f * 2.0f, m_type, m_nPlayerIdx);
+		collision::ObstacleSearch(this, 30.0f * 2.0f);
 	}
 
 #if CAMERA != 0
@@ -269,7 +269,7 @@ void CPlayer::Update(void)
 	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_E) ||
 		CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_B,m_nPlayerIdx) == true)
 	{
-		collision::ObstacleAction(this, m_sizeColl.x, m_type);
+		collision::ObstacleAction(this, m_sizeColl.x);
 	}
 
 #ifdef _DEBUG
@@ -701,17 +701,11 @@ void CPlayer::RotNormalize(void)
 //=======================================
 void CPlayer::ObstacleCollision(void)
 {
-	// 位置を取得する
-	D3DXVECTOR3 pos = GetPos();
-
 	// 障害物との衝突判定
-	collision::ObstacleCollision(pos, GetPosOld(), m_sizeColl.x, m_sizeColl.y, m_sizeColl.z, m_type);
+	collision::ObstacleCollision(*this, m_sizeColl.x, m_sizeColl.y, m_sizeColl.z);
 
 	// ブロックとの当たり判定
-	collision::BlockCollision(pos, GetPosOld(), m_sizeColl.x, m_sizeColl.y, m_sizeColl.z);
-
-	// 位置を設定する
-	SetPos(pos);
+	collision::BlockCollision(*this, m_sizeColl.x, m_sizeColl.y, m_sizeColl.z);
 }
 
 //=======================================
