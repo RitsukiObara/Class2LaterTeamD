@@ -15,7 +15,7 @@
 
 #include "fan_blade.h"
 #include "Effect.h"
-#include "input.h"
+#include "collision.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -90,25 +90,6 @@ void CElecFan::Uninit(void)
 //=====================================
 void CElecFan::Update(void)
 {
-	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_0) == true)
-	{
-		// 電源を設定する
-		m_bPower = !m_bPower;
-
-		if (m_bPower == true)
-		{ // 電源ONの場合
-
-			// 目的の向きの移動量を設定する
-			m_pFan->SetRotMoveDest(FAN_MOVE_ON);
-		}
-		else
-		{ // 上記以外
-
-			// 目的の向きの移動量を設定する
-			m_pFan->SetRotMoveDest(FAN_MOVE_OFF);
-		}
-	}
-
 	if (m_bPower == true)
 	{ // 電源がついている場合
 
@@ -183,6 +164,20 @@ void CElecFan::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYP
 //=====================================
 bool CElecFan::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
+	// 最大値と最小値を設定する
+	D3DXVECTOR3 vtxMax = D3DXVECTOR3(GetFileData().fRadius, GetFileData().vtxMax.y, GetFileData().fRadius);
+	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-GetFileData().fRadius, GetFileData().vtxMin.y, -GetFileData().fRadius);
+	D3DXVECTOR3 playMax = D3DXVECTOR3(fWidth, fHeight, fDepth);
+	D3DXVECTOR3 playMin = D3DXVECTOR3(-fWidth, 0.0f, -fDepth);
+
+	// 六面体の当たり判定
+	if (collision::HexahedronCollision(pos, GetPos(), posOld, GetPosOld(), playMin, vtxMin, playMax, vtxMax) == true)
+	{ // 当たり判定が true の場合
+
+		// true を返す
+		return true;
+	}
+
 	// false を返す
 	return false;
 }
@@ -234,6 +229,19 @@ bool CElecFan::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlay
 //=====================================
 void CElecFan::Action(void)
 {
-	// 電源OFFにする
-	m_bPower = false;
+	// 電源を設定する
+	m_bPower = !m_bPower;
+
+	if (m_bPower == true)
+	{ // 電源ONの場合
+
+		// 目的の向きの移動量を設定する
+		m_pFan->SetRotMoveDest(FAN_MOVE_ON);
+	}
+	else
+	{ // 上記以外
+
+		// 目的の向きの移動量を設定する
+		m_pFan->SetRotMoveDest(FAN_MOVE_OFF);
+	}
 }

@@ -50,6 +50,7 @@
 #define RAT_CAMERA_DIS		(60.0f)			// ネズミのカメラの視点と注視点の高さの差分(角度)
 #define DIFF_ROT			(0.2f)			// 角度に足す差分の割合
 #define CAMERA_ROT_MOVE		(0.05f)			// カメラの向きの移動量
+#define ADD_ACTION_RADIUS	(40.0f)			// サーチ時の半径の追加数
 
 //==============================
 // コンストラクタ
@@ -255,24 +256,18 @@ void CPlayer::Update(void)
 	// 状態の管理
 	StateManager();
 
-	if (m_type == TYPE_CAT)
-	{
-		collision::ObstacleSearch(this, 30.0f * 2.0f);
-	}
-	else if (m_type == TYPE_RAT)
-	{
-		collision::ObstacleSearch(this, 30.0f * 2.0f);
-	}
+	// 起動可能障害物や警告を出す障害物のサーチ
+	collision::ObstacleSearch(this, m_sizeColl.x + ADD_ACTION_RADIUS);
 
 #if CAMERA != 0
 	//カメラ情報の更新
 	CameraUpdate();
 #endif // CAMERA
 
-	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_E) ||
+	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_E) ||
 		CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_B,m_nPlayerIdx) == true)
 	{
-		collision::ObstacleAction(this, m_sizeColl.x);
+		collision::ObstacleAction(this, m_sizeColl.x + ADD_ACTION_RADIUS);
 	}
 
 #ifdef _DEBUG

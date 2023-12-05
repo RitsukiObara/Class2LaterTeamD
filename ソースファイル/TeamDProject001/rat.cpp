@@ -192,11 +192,6 @@ void CRat::Update(void)
 	// ‹N•š’n–Ê‚Ì“–‚½‚è”»’è
 	Elevation();
 
-	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_E))
-	{
-		collision::ObstacleAction(this, SIZE.x * 2.0f);
-	}
-
 	// Šp“x‚Ì³‹K‰»
 	RotNormalize();
 
