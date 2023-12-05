@@ -23,6 +23,13 @@ CBlock::CBlock() : CModel(CObject::TYPE_BLOCK, CObject::PRIORITY_BLOCK)
 	m_collision = COLLISION_SQUARE;	// 当たり判定の種類
 	m_rotType = ROTTYPE_FRONT;		// 向きの種類
 	m_type = TYPE_CARDBOARD;		// 種類
+	for (int nCnt = 0; nCnt < MAX_NUMCOLL; nCnt++)
+	{
+		m_collBox.pos[nCnt] = NONE_D3DXVECTOR3;		// 位置
+		m_collBox.vtxMax[nCnt] = NONE_D3DXVECTOR3;	// 最大値
+		m_collBox.vtxMin[nCnt] = NONE_D3DXVECTOR3;	// 最小値
+	}
+	m_collBox.nNum = 0;				// 総数
 	m_pPrev = nullptr;				// 前のへのポインタ
 	m_pNext = nullptr;				// 次のへのポインタ
 
@@ -94,6 +101,13 @@ HRESULT CBlock::Init(void)
 	m_collision = COLLISION_SQUARE;	// 当たり判定の種類
 	m_rotType = ROTTYPE_FRONT;		// 向きの種類
 	m_type = TYPE_CARDBOARD;		// 種類
+	for (int nCnt = 0; nCnt < MAX_NUMCOLL; nCnt++)
+	{
+		m_collBox.pos[nCnt] = NONE_D3DXVECTOR3;		// 位置
+		m_collBox.vtxMax[nCnt] = NONE_D3DXVECTOR3;	// 最大値
+		m_collBox.vtxMin[nCnt] = NONE_D3DXVECTOR3;	// 最小値
+	}
+	m_collBox.nNum = 0;				// 総数
 
 	// 値を返す
 	return S_OK;
@@ -209,6 +223,25 @@ void CBlock::SetData(const D3DXVECTOR3& pos, const ROTTYPE rotType, const TYPE t
 
 		// 円の当たり判定を設定する
 		m_collision = COLLISION_CIRCLE;
+	}
+	else if (m_type == TYPE_BEAR ||
+		m_type == TYPE_HEADPHONE ||
+		m_type == TYPE_ACADAPTER ||
+		m_type == TYPE_TABLE ||
+		m_type == TYPE_CHAIR ||
+		m_type == TYPE_DESK)
+	{ // 一定の数値の場合
+
+		// 四角
+		m_collision = COLLISION_SQUARE;
+
+		for (int nCnt = 0; nCnt < MAX_NUMCOLL; nCnt++)
+		{
+			m_collBox.pos[nCnt] = NONE_D3DXVECTOR3;		// 位置
+			m_collBox.vtxMax[nCnt] = NONE_D3DXVECTOR3;	// 最大値
+			m_collBox.vtxMin[nCnt] = NONE_D3DXVECTOR3;	// 最小値
+		}
+		m_collBox.nNum = 0;				// 総数
 	}
 	else
 	{ // 上記以外

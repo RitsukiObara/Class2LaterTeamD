@@ -22,6 +22,7 @@
 #define NORMAL_MOVE			(10.0f)		// 通常の移動量
 #define ADJUST_MOVE			(1.0f)		// 微調整時の移動量
 #define SCALE_MOVE			(0.01f)		// 拡大率の移動量
+#define MIN_NUMCOLL			(1)			// 当たり判定の最小数
 
 //==============================
 // コンストラクタ
