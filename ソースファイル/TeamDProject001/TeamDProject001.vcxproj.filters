@@ -480,9 +480,6 @@
     <ClCompile Include="log.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="collision_edit.cpp">
-      <Filter>Edit</Filter>
-    </ClCompile>
     <ClCompile Include="tutorial.cpp">
       <Filter>Scene\Tutorial</Filter>
     </ClCompile>
@@ -494,6 +491,9 @@
     </ClCompile>
     <ClCompile Include="garbagecan.cpp">
       <Filter>Gimmick\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="entry_message.cpp">
+      <Filter>Scene\Entry</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -887,9 +887,6 @@
     <ClInclude Include="log.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="collision_edit.h">
-      <Filter>Edit</Filter>
-    </ClInclude>
     <ClInclude Include="tutorial.h">
       <Filter>Scene\Tutorial</Filter>
     </ClInclude>
@@ -901,6 +898,9 @@
     </ClInclude>
     <ClInclude Include="garbagecan.h">
       <Filter>Gimmick\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="entry_message.h">
+      <Filter>Scene\Entry</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

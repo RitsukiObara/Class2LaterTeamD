@@ -57,9 +57,12 @@ void collision::ShadowCollision(const D3DXVECTOR3& pos, int nIdx)
 //===============================
 // 障害物の当たり判定
 //===============================
-void collision::ObstacleCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
+void collision::ObstacleCollision(CPlayer& player, const float fWidth, const float fHeight, const float fDepth)
 {
 	// ローカル変数宣言
+	D3DXVECTOR3 pos = player.GetPos();								// 位置
+	D3DXVECTOR3 posOld = player.GetPosOld();						// 前回の位置
+	CPlayer::TYPE type = player.GetType();							// 種類
 	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を取得する
 
 	while (pObstacle != nullptr)
@@ -108,18 +111,22 @@ void collision::ObstacleCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, c
 		// 次のオブジェクトを代入する
 		pObstacle = pObstacle->GetNext();
 	}
+
+	// 位置を適用する
+	player.SetPos(pos);
 }
 
 //===============================
 // 障害物の当たり判定
 //===============================
-void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
+void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fHeight, const float fDepth)
 {
 	// ローカル変数宣言
-	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を取得する
-	CObstacle* pObstacleNext = nullptr;				// 次の障害物を取得する
-	D3DXVECTOR3 pos = pPlayer->GetPos();			// 位置を取得する
-	float fAngle;								// 吹き飛ぶ方向
+	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物
+	CObstacle* pObstacleNext = nullptr;				// 次の障害物
+	D3DXVECTOR3 pos = pPlayer->GetPos();			// 位置
+	CPlayer::TYPE type = pPlayer->GetType();		// 種類
+	float fAngle;									// 吹き飛ぶ方向
 
 	while (pObstacle != nullptr)
 	{ // ブロックの情報が NULL じゃない場合
@@ -282,12 +289,13 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 //===============================
 // 障害物の起動判定
 //===============================
-void collision::ObstacleAction(CPlayer* pPlayer, const float Radius, const CPlayer::TYPE type)
+void collision::ObstacleAction(CPlayer* pPlayer, const float Radius)
 {
 	// ローカル変数宣言
-	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を取得する
-	D3DXVECTOR3 pos = pPlayer->GetPos();			// 位置を取得する
-	float fAngle;								// 吹き飛ぶ方向
+	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();	// 先頭の障害物
+	D3DXVECTOR3 pos = pPlayer->GetPos();						// 位置
+	CPlayer::TYPE type = pPlayer->GetType();					// 種類
+	float fAngle;												// 吹き飛ぶ方向
 
 	while (pObstacle != nullptr)
 	{ // ブロックの情報が NULL じゃない場合
@@ -321,12 +329,14 @@ void collision::ObstacleAction(CPlayer* pPlayer, const float Radius, const CPlay
 //===========================================
 // 起動可能障害物や警告を出す障害物のサーチ
 //===========================================
-void collision::ObstacleSearch(CPlayer* pPlayer, const float Radius, const CPlayer::TYPE type, int Player_Idx)
+void collision::ObstacleSearch(CPlayer* pPlayer, const float Radius)
 {
 	// ローカル変数宣言
-	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を取得する
-	D3DXVECTOR3 pos = pPlayer->GetPos();			// 位置を取得する
-	float fAngle;								// 吹き飛ぶ方向
+	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物
+	D3DXVECTOR3 pos = pPlayer->GetPos();							// 位置
+	CPlayer::TYPE type = pPlayer->GetType();						// 種類
+	int nIdx = pPlayer->GetPlayerIdx();								// インデックス
+	float fAngle;													// 吹き飛ぶ方向
 
 	while (pObstacle != nullptr)
 	{ // ブロックの情報が NULL じゃない場合
@@ -337,11 +347,11 @@ void collision::ObstacleSearch(CPlayer* pPlayer, const float Radius, const CPlay
 			{
 				if (pObstacle->HitCircle(pos, Radius, type) == true)
 				{ // 障害物の当たり判定が通った場合
-					pObstacle->GimmickUI(true, Player_Idx);
+					pObstacle->GimmickUI(true, nIdx);
 				}
 				else
 				{
-					pObstacle->GimmickUI(false, Player_Idx);
+					pObstacle->GimmickUI(false, nIdx);
 				}
 			}
 		}
@@ -351,11 +361,11 @@ void collision::ObstacleSearch(CPlayer* pPlayer, const float Radius, const CPlay
 			{
 				if (pObstacle->HitCircle(pos, Radius, type) == true)
 				{ // 障害物の当たり判定が通った場合
-					pObstacle->GimmickUI(true, Player_Idx);
+					pObstacle->GimmickUI(true, nIdx);
 				}
 				else
 				{
-					pObstacle->GimmickUI(false, Player_Idx);
+					pObstacle->GimmickUI(false, nIdx);
 				}
 			}
 		}
@@ -368,318 +378,89 @@ void collision::ObstacleSearch(CPlayer* pPlayer, const float Radius, const CPlay
 //===============================
 // ブロックの当たり判定
 //===============================
-void collision::BlockCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth)
+void collision::BlockCollision(CPlayer& player, const float fWidth, const float fHeight, const float fDepth)
 {
 	// 先頭のブロックの情報を取得する
 	CBlock* pBlock = CBlockManager::Get()->GetTop();
 	int nCollision = 0;
 
 	while (pBlock != nullptr)
-	{ // ブロックが NULL の場合	
-		if (pBlock->GetCollision() == CBlock::COLLISION_SQUARE)
-		{ // 矩形の当たり判定の場合
+	{ // ブロックが NULL の場合
+
+		switch (pBlock->GetCollision())
+		{
+		case CBlock::COLLISION_SQUARE:
 
 			// 矩形の当たり判定
-			BlockRectangleCollision(*pBlock, pos, posOld, nCollision);
+			BlockRectangleCollision(*pBlock, player, fWidth, fHeight, fDepth);
 
-		}
-		else
-		{ // 上記以外
+			break;
+
+		case CBlock::COLLISION_CIRCLE:
 
 			// 円の当たり判定
-			BlockCircleCollision(*pBlock, pos, posOld, fWidth, fHeight);
+			BlockCircleCollision(*pBlock, player, fWidth, fHeight);
+
+			break;
 		}
 
 		// 次のブロックの情報を取得する
 		pBlock = pBlock->GetNext();
 	}
-	while (pBlock != nullptr)
-	{ // ブロックが NULL の場合	
-		if (pBlock->GetCollision() == CBlock::COLLISION_SQUARE)
-		{ // 矩形の当たり判定の場合
-
-		  // 矩形の当たり判定
-			BlockRectangleCollision(*pBlock, pos, posOld, nCollision);
-
-		}
-
-		// 次のブロックの情報を取得する
-		pBlock = pBlock->GetNext();
-	}
-WallCollision(pos, posOld);
 }
+
 //===============================
 // ブロックの矩形の当たり判定
 //===============================
-void collision::BlockRectangleCollision(CBlock& block, D3DXVECTOR3& pos, const D3DXVECTOR3& posOld,int& nCollision)
+void collision::BlockRectangleCollision(CBlock& block, CPlayer& player, const float fWidth, const float fHeight, const float fDepth)
 {
-	bool bPosbool = false, bPosOldbool = false, bVecbool = false, bVecboolOld = false;
-	bool bZeroVec = false;
-	bool bInside[4] = {};
+	// 当たり判定の変数を宣言
+	SCollision collision = {};
 
-	D3DXVECTOR3 vecLine, vecMove, vecToPos, vecToPosOld, posOldToVec, posOldToVecOld;
-	D3DXVECTOR3 vec[4];
+	// ブロックの当たり判定に必要な変数を宣言
+	D3DXVECTOR3 pos = player.GetPos();								// 位置
+	D3DXVECTOR3 posOld = player.GetPosOld();						// 前回の位置
+	D3DXVECTOR3 move = player.GetMove();							// 移動量
+	D3DXVECTOR3 vtxMax = D3DXVECTOR3(fWidth, fHeight, fDepth);		// 最大値
+	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-fWidth, 0.0f, -fDepth);		// 最小値
 
-	D3DXVECTOR3 objpos = block.GetPos();
-	D3DXVECTOR3 rot = block.GetRot();
-	D3DXVECTOR3 vtxMax = block.GetFileData().vtxMax;
-	D3DXVECTOR3 vtxMin = block.GetFileData().vtxMin;
+	// 六面体の当たり判定
+	collision = HexahedronClush
+	(
+		pos,
+		block.GetPos(),
+		posOld,
+		block.GetPosOld(),
+		vtxMin,
+		block.GetFileData().vtxMin,
+		vtxMax,
+		block.GetFileData().vtxMax
+	);
 
-	float fAngle[4];
-	fAngle[0] = atan2f(vtxMin.x, vtxMax.z);
-	fAngle[1] = atan2f(vtxMax.x, vtxMax.z);
-	fAngle[2] = atan2f(vtxMax.x, vtxMin.z);
-	fAngle[3] = atan2f(vtxMin.x, vtxMin.z);
+	if (collision.bTop == true)
+	{ // 上に乗った場合
 
-	float fDistance[4];
-	fDistance[0] = sqrtf(powf(vtxMin.x, 2) + powf(vtxMax.z, 2));
-	fDistance[1] = sqrtf(powf(vtxMax.x, 2) + powf(vtxMax.z, 2));
-	fDistance[2] = sqrtf(powf(vtxMax.x, 2) + powf(vtxMin.z, 2));
-	fDistance[3] = sqrtf(powf(vtxMin.x, 2) + powf(vtxMin.z, 2));
-
-	vec[0] = D3DXVECTOR3(objpos.x - sinf(-D3DX_PI + fAngle[0] + rot.y)*fDistance[0], 0, objpos.z - cosf(-D3DX_PI + fAngle[0] + rot.y)* fDistance[0]);
-	vec[1] = D3DXVECTOR3(objpos.x - sinf(-D3DX_PI + fAngle[1] + rot.y)*fDistance[1], 0, objpos.z - cosf(-D3DX_PI + fAngle[1] + rot.y)* fDistance[1]);
-	vec[2] = D3DXVECTOR3(objpos.x - sinf(-D3DX_PI + fAngle[2] + rot.y)*fDistance[2], 0, objpos.z - cosf(-D3DX_PI + fAngle[2] + rot.y)* fDistance[2]);
-	vec[3] = D3DXVECTOR3(objpos.x - sinf(-D3DX_PI + fAngle[3] + rot.y)*fDistance[3], 0, objpos.z - cosf(-D3DX_PI + fAngle[3] + rot.y)* fDistance[3]);
-
-
-
-	for (int nCnt = 0; nCnt < 4; nCnt++)
-	{
-		int nCnt2 = nCnt + 1;
-
-		if (nCnt2 >= 4)
-		{
-			nCnt2 = 0;
-		}
-
-		//ベクトル化
-		vecLine = vec[nCnt2] - vec[nCnt];
-
-		vecMove = pos - posOld;
-
-		vecToPos = pos - vec[nCnt];
-
-
-		//各ベクトルの算出と交差判定
-		if (0 < (vecLine.z*vecToPos.x) - (vecLine.x*vecToPos.z))
-		{
-			bPosbool = true;
-		}
-		else if (0 > (vecLine.z*vecToPos.x) - (vecLine.x*vecToPos.z))
-		{
-			bPosbool = false;
-		}
-		
-
-		vecToPosOld = posOld - vec[nCnt];
-
-		if (0 < (vecLine.z*vecToPosOld.x) - (vecLine.x*vecToPosOld.z))
-		{
-			bPosOldbool = true;
-		}
-		else if (0 > (vecLine.z*vecToPosOld.x) - (vecLine.x*vecToPosOld.z))
-		{
-			bPosOldbool = false;
-		}
-
-		posOldToVec = vec[nCnt2] - posOld;
-
-		if (0 < (vecMove.z*posOldToVec.x) - (vecMove.x*posOldToVec.z))
-		{
-			bVecbool = true;
-		}
-		else if (0 > (vecMove.z*posOldToVec.x) - (vecMove.x*posOldToVec.z))
-		{
-			bVecbool = false;
-		}
-		
-
-		posOldToVecOld = vec[nCnt] - posOld;
-
-		if (0 < (vecMove.z*posOldToVecOld.x) - (vecMove.x*posOldToVecOld.z))
-		{
-			bVecboolOld = true;
-		}
-		else if (0 > (vecMove.z*posOldToVecOld.x) - (vecMove.x*posOldToVecOld.z))
-		{
-			bVecboolOld = false;
-		}
-
-		bInside[nCnt] = bPosbool;
-
-		if (bPosbool != bPosOldbool&&bVecbool != bVecboolOld&&objpos.y + vtxMax.y > posOld.y)
-		{
-			//ベクトルの正規化
-			float fmagnitude = sqrtf(vecLine.x*vecLine.x + vecLine.y*vecLine.y + vecLine.z*vecLine.z);
-
-
-			D3DXVECTOR3 NorVecLine;
-			if (fmagnitude != 0)
-			{
-				float fMove = sqrtf(powf(vecMove.x, 2) + powf(vecMove.z, 2));
-
-				//標準化
-				float sum = std::abs(vecLine.x) + std::abs(vecLine.y) + std::abs(vecLine.z);
-				if (sum != 0.0f)
-				{
-					NorVecLine.x = /*std::abs*/(vecLine.x / sum);
-					NorVecLine.y = /*std::abs*/(vecLine.y / sum);
-					NorVecLine.z = /*std::abs*/(vecLine.z / sum);
-				}
-
-				//vecMoveのvecLineへの入射角が90よりどちらに傾いているかで移動ベクトルに正負を与える
-				// ベクトルの内積を計算する関数
-				float fdotProduct = vecLine.x * vecMove.x + vecLine.z * vecMove.z;
-
-				//// ベクトルの大きさを計算する関数
-				//float fmagnitudeLine = sqrt(vecLine.x * vecLine.x + vecLine.z * vecLine.z);
-				//float fmagnitudeMove= sqrt(vecMove.x * vecMove.x + vecMove.z * vecMove.z);
-				//
-				//// ベクトルAとベクトルBのなす角を計算（ラジアン）
-				//float angleRad = acos(fdotProduct / (fmagnitudeLine * fmagnitudeMove));
-				float fLength = D3DXVec3Length(&vecToPosOld);
-				float fLength2 = D3DXVec3Length(&(posOld - vec[nCnt2]));
-				// 判定と出力
-				if (nCollision>=2)
-				{
-					pos = posOld;
-				}
-				else if (fLength > 20.0f&&fLength2>20.0f)
-				{
-					if (fdotProduct > 0.005)
-					{
-						NorVecLine *= 1;
-						
-					}
-					else if (fdotProduct < -0.005)
-					{
-						NorVecLine *= -1;
-						
-
-					}
-					else
-					{
-						NorVecLine *= 0;
-					}
-					D3DXVECTOR3 move = D3DXVECTOR3(fMove*NorVecLine.x, pos.y, fMove*NorVecLine.z);
-
-					D3DXVECTOR3 SetPos = D3DXVECTOR3(posOld.x + move.x, pos.y, posOld.z + move.z);
-
-					pos = SetPos;
-				}
-				else
-				{
-					if (fdotProduct > 0.0f)
-					{
-						NorVecLine *= 1;
-						
-
-					}
-					else
-					{
-						NorVecLine *= -0.5;
-						
-
-					}
-					D3DXVECTOR3 move = D3DXVECTOR3(fMove*NorVecLine.x, pos.y, fMove*NorVecLine.z);
-
-					D3DXVECTOR3 SetPos = D3DXVECTOR3(posOld.x + move.x, pos.y, posOld.z + move.z);
-
-					pos = SetPos;
-				}
-
-				
-			}
-		
-		}
-	}
-	//上からの判定
-	if (bInside[0] == bInside[1] && bInside[1] == bInside[2] && bInside[2] == bInside[3] && objpos.y + vtxMax.y > pos.y&&objpos.y + vtxMax.y <= posOld.y)
-	{
-		pos .y= objpos.y + vtxMax.y;
-	}
-	if (bInside[0] == bInside[1] && bInside[1] == bInside[2] && bInside[2] == bInside[3]&& objpos.y + vtxMax.y > posOld.y)
-	{
-		nCollision++;
+		// 重力を0.0fにする
+		move.y = 0.0f;
 	}
 
-
-	//if (block.GetPos().y + block.GetFileData().vtxMax.y >= pos.y &&
-	//	block.GetPos().y + block.GetFileData().vtxMin.y <= pos.y + fHeight &&
-	//	block.GetPos().z + block.GetFileData().vtxMax.z >= pos.z - fDepth&&
-	//	block.GetPos().z + block.GetFileData().vtxMin.z <= pos.z + fDepth)
-	//{ // X軸の判定に入れる場合
-
-	//	if (block.GetPosOld().x + block.GetFileData().vtxMax.x <= posOld.x - fWidth &&
-	//		block.GetPos().x + block.GetFileData().vtxMax.x >= pos.x - fWidth)
-	//	{ // 右にぶつかった場合
-
-	//		// 位置を設定する
-	//		pos.x = block.GetPos().x + block.GetFileData().vtxMax.x + (fWidth + COLLISION_ADD_DIFF_LENGTH);
-	//	}
-	//	else if (block.GetPosOld().x + block.GetFileData().vtxMin.x >= posOld.x + fWidth &&
-	//		block.GetPos().x + block.GetFileData().vtxMin.x <= pos.x + fWidth)
-	//	{ // 左にぶつかった場合
-
-	//		// 位置を設定する
-	//		pos.x = block.GetPos().x + block.GetFileData().vtxMin.x - (fWidth + COLLISION_ADD_DIFF_LENGTH);
-	//	}
-	//}
-
-	//if (block.GetPos().x + block.GetFileData().vtxMax.x >= pos.x - fWidth &&
-	//	block.GetPos().x + block.GetFileData().vtxMin.x <= pos.x + fWidth &&
-	//	block.GetPos().y + block.GetFileData().vtxMax.y >= pos.y &&
-	//	block.GetPos().y + block.GetFileData().vtxMin.y <= pos.y + fHeight)
-	//{ // Z軸の判定に入れる場合
-
-	//	if (block.GetPosOld().z + block.GetFileData().vtxMax.z <= posOld.z - fDepth &&
-	//		block.GetPos().z + block.GetFileData().vtxMax.z >= pos.z - fDepth)
-	//	{ // 奥にぶつかった場合
-
-	//		// 位置を設定する
-	//		pos.z = block.GetPos().z + block.GetFileData().vtxMax.z + (fDepth + COLLISION_ADD_DIFF_LENGTH);
-	//	}
-	//	else if (block.GetPosOld().z + block.GetFileData().vtxMin.z >= posOld.z + fDepth &&
-	//		block.GetPos().z + block.GetFileData().vtxMin.z <= pos.z + fDepth)
-	//	{ // 手前にぶつかった場合
-
-	//		// 位置を設定する
-	//		pos.z = block.GetPos().z + block.GetFileData().vtxMin.z - (fDepth + COLLISION_ADD_DIFF_LENGTH);
-	//	}
-	//}
-
-	//if (block.GetPos().x + block.GetFileData().vtxMax.x >= pos.x - fWidth &&
-	//	block.GetPos().x + block.GetFileData().vtxMin.x <= pos.x + fWidth &&
-	//	block.GetPos().z + block.GetFileData().vtxMax.z >= pos.z &&
-	//	block.GetPos().z + block.GetFileData().vtxMin.z <= pos.z + fDepth)
-	//{ // Y軸の判定に入れる場合
-
-	//	if (block.GetPosOld().y + block.GetFileData().vtxMax.y <= posOld.y &&
-	//		block.GetPos().y + block.GetFileData().vtxMax.y >= pos.y)
-	//	{ // 上にぶつかった場合
-
-	//		// 位置を設定する
-	//		pos.y = block.GetPos().y + block.GetFileData().vtxMax.y + COLLISION_ADD_DIFF_LENGTH;
-	//	}
-	//	else if (block.GetPosOld().y + block.GetFileData().vtxMin.y >= posOld.y + fHeight &&
-	//		block.GetPos().y + block.GetFileData().vtxMin.y <= pos.y + fHeight)
-	//	{ // 下にぶつかった場合
-
-	//		// 位置を設定する
-	//		pos.y = block.GetPos().y + block.GetFileData().vtxMin.y - (fHeight + COLLISION_ADD_DIFF_LENGTH);
-	//	}
-	//}
+	// 位置と移動量を適用する
+	player.SetPos(pos);			// 位置
+	player.SetMove(move);		// 移動量
 }
 
 //===============================
 // ブロックの円形の当たり判定
 //===============================
-void collision::BlockCircleCollision(CBlock& block, D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fRadius, const float fHeight)
+void collision::BlockCircleCollision(CBlock& block, CPlayer& player, const float fRadius, const float fHeight)
 {
+	// 位置と前回の位置を取得する
+	D3DXVECTOR3 pos = player.GetPos();
+	D3DXVECTOR3 posOld = player.GetPosOld();
+
 	if (pos.y <= block.GetPos().y + block.GetFileData().vtxMax.y &&
 		pos.y + fHeight >= block.GetPos().y + block.GetFileData().vtxMin.y)
-	{ // 毬と衝突した場合
+	{ // ブロックと衝突した場合
 
 		if (useful::CylinderInner(pos, block.GetPos(), block.GetFileData().fRadius + fRadius) == true)
 		{ // 円柱の内側にいた場合
@@ -703,6 +484,10 @@ void collision::BlockCircleCollision(CBlock& block, D3DXVECTOR3& pos, const D3DX
 		// 円柱の当たり判定処理
 		useful::CylinderCollision(&pos, block.GetPos(), block.GetFileData().fRadius + fRadius);
 	}
+
+	// 位置と前回の位置を適用する
+	player.SetPos(pos);
+	player.SetPosOld(posOld);
 }
 
 //===============================
@@ -996,4 +781,100 @@ bool collision::HexahedronCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posBloc
 
 	// false を返す
 	return false;
+}
+
+//======================
+// 六面体の当たり判定(どの面に乗ったかの判定付き)
+//======================
+collision::SCollision collision::HexahedronClush(D3DXVECTOR3& pos, const D3DXVECTOR3& posBlock, const D3DXVECTOR3& posOld, const D3DXVECTOR3& posOldBlock, const D3DXVECTOR3& min, const D3DXVECTOR3& minBlock, const D3DXVECTOR3& max, const D3DXVECTOR3& maxBlock)
+{
+	// 当たり判定の変数を宣言
+	SCollision collision = { false,false,false,false,false,false };
+
+	if (posBlock.y + maxBlock.y >= pos.y + min.y &&
+		posBlock.y + minBlock.y <= pos.y + max.y &&
+		posBlock.z + maxBlock.z >= pos.z + min.z &&
+		posBlock.z + minBlock.z <= pos.z + max.z)
+	{ // X軸の判定に入れる場合
+
+		if (posOldBlock.x + maxBlock.x <= posOld.x + min.x &&
+			posBlock.x + maxBlock.x >= pos.x + min.x)
+		{ // 右にぶつかった場合
+
+			// 位置を設定する
+			pos.x = posBlock.x + maxBlock.x - (min.x - COLLISION_ADD_DIFF_LENGTH);
+
+			// 右の当たり判定を true にする
+			collision.bRight = true;
+		}
+		else if (posOldBlock.x + minBlock.x >= posOld.x + max.x &&
+			posBlock.x + minBlock.x <= pos.x + max.x)
+		{ // 左にぶつかった場合
+
+			// 位置を設定する
+			pos.x = posBlock.x + minBlock.x - (max.x + COLLISION_ADD_DIFF_LENGTH);
+
+			// 左の当たり判定を true にする
+			collision.bLeft = true;
+		}
+	}
+
+	if (posBlock.x + maxBlock.x >= pos.x + min.x &&
+		posBlock.x + minBlock.x <= pos.x + max.x &&
+		posBlock.y + maxBlock.y >= pos.y + min.y &&
+		posBlock.y + minBlock.y <= pos.y + max.y)
+	{ // Z軸の判定に入れる場合
+
+		if (posOldBlock.z + maxBlock.z <= posOld.z + min.z &&
+			posBlock.z + maxBlock.z >= pos.z + min.z)
+		{ // 奥にぶつかった場合
+
+			// 位置を設定する
+			pos.z = posBlock.z + maxBlock.z - (min.z - COLLISION_ADD_DIFF_LENGTH);
+
+			// 奥の当たり判定を true にする
+			collision.bFar = true;
+		}
+		else if (posOldBlock.z + minBlock.z >= posOld.z + max.z &&
+			posBlock.z + minBlock.z <= pos.z + max.z)
+		{ // 手前にぶつかった場合
+
+			// 位置を設定する
+			pos.z = posBlock.z + minBlock.z - (max.z + COLLISION_ADD_DIFF_LENGTH);
+
+			// 手前の当たり判定を true にする
+			collision.bNear = true;
+		}
+	}
+
+	if (posBlock.x + maxBlock.x >= pos.x + min.x &&
+		posBlock.x + minBlock.x <= pos.x + max.x &&
+		posBlock.z + maxBlock.z >= pos.z + min.z &&
+		posBlock.z + minBlock.z <= pos.z + max.z)
+	{ // Y軸の判定に入れる場合
+
+		if (posOldBlock.y + maxBlock.y <= posOld.y + min.y &&
+			posBlock.y + maxBlock.y >= pos.y + min.y)
+		{ // 上にぶつかった場合
+
+			// 位置を設定する
+			pos.y = posBlock.y + maxBlock.y - (min.y - COLLISION_ADD_DIFF_LENGTH);
+
+			// 上の当たり判定を true にする
+			collision.bTop = true;
+		}
+		else if (posOldBlock.y + minBlock.y >= posOld.y + max.y &&
+			posBlock.y + minBlock.y <= pos.y + max.y)
+		{ // 下にぶつかった場合
+
+			// 位置を設定する
+			pos.y = posBlock.y + minBlock.y - (max.y + COLLISION_ADD_DIFF_LENGTH);
+
+			// 下の当たり判定を true にする
+			collision.bBottom = true;
+		}
+	}
+
+	// 当たり判定の変数を返す
+	return collision;
 }
