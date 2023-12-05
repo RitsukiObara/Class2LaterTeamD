@@ -34,6 +34,7 @@ public:			// 誰でもアクセスできる
 	{
 		COLLISION_SQUARE = 0,		// 四角
 		COLLISION_CIRCLE,			// 円
+		COLLISION_MAKE,				// 作られた当たり判定
 		COLLISION_MAX				// この列挙型の総数
 	};
 

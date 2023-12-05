@@ -707,11 +707,11 @@ void CPlayer::ObstacleCollision(void)
 	// 障害物との衝突判定
 	collision::ObstacleCollision(pos, GetPosOld(), m_sizeColl.x, m_sizeColl.y, m_sizeColl.z, m_type);
 
-	// ブロックとの当たり判定
-	collision::BlockCollision(pos, GetPosOld(), m_sizeColl.x, m_sizeColl.y, m_sizeColl.z);
-
 	// 位置を設定する
 	SetPos(pos);
+
+	// ブロックとの当たり判定
+	collision::BlockCollision(*this, m_sizeColl.x, m_sizeColl.y, m_sizeColl.z);
 }
 
 //=======================================
