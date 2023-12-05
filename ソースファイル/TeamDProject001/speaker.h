@@ -12,7 +12,10 @@
 //***********************************
 #include "obstacle.h"
 
-#define MAX_NOTE (64)	//音符が画面の中に存在できる最大数
+//-----------------------------------
+// マクロ定義
+//-----------------------------------
+#define MAX_NOTE	 (64)		//音符が画面の中に存在できる最大数
 
 //-----------------------------------
 // 前方宣言
@@ -26,8 +29,17 @@ class CSpeaker : public CObstacle
 {
 public:			// 誰でもアクセスできる
 
+	// 列挙型定義(状態)
+	enum STATE
+	{
+		STATE_STOP = 0,		// 停止状態
+		STATE_SHRINK,		// 縮み状態
+		STATE_EXTEND,		// 伸び状態
+		STATE_MAX			// この列挙型の総数
+	};
+
 	CSpeaker();				// コンストラクタ
-	~CSpeaker();				// デストラクタ
+	~CSpeaker();			// デストラクタ
 
 	// メンバ関数
 	HRESULT Init(void);		// 初期化処理
@@ -45,12 +57,19 @@ public:			// 誰でもアクセスできる
 	static void NULLNote(int Idx) { m_apNote[Idx] = NULL; }
 
 private:		// 自分だけアクセスできる
+
+	// メンバ関数
+	void State(void);		// 状態による処理
 	void SetNote(void);
 
-	static CNote *m_apNote[MAX_NOTE];
+	// メンバ変数
+	STATE m_state;				// 状態
 	bool m_bmySet[MAX_NOTE];
 	bool m_bAction;
 	int m_nNoteCount;
+
+	// 静的メンバ変数
+	static CNote *m_apNote[MAX_NOTE];
 };
 
 #endif

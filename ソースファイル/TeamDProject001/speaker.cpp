@@ -8,20 +8,33 @@
 // インクルードファイル
 //*******************************************
 #include "main.h"
-#include "manager.h"
-#include "renderer.h"
 #include "speaker.h"
+#include "manager.h"
 #include "useful.h"
-#include "objectX.h"
+
 #include "note.h"
-#include "input.h"
+#include "collision.h"
 
-#define SPEAKER_RADIUS (50.0f)	//音符の出現間隔(フレーム)
-#define NOTE_INTERVAL (20)	//音符の出現間隔(フレーム)
-#define NOTE_LIFE (120)		//音符の寿命
-#define NOTE_SPEED (15.0f)	//音符の速さ
+//-------------------------------------------
+// マクロ定義
+//-------------------------------------------
+#define SPEAKER_RADIUS	(50.0f)		// 音符の出現間隔(フレーム)
+#define NOTE_INTERVAL	(20)		// 音符の出現間隔(フレーム)
+#define NOTE_LIFE		(120)		// 音符の寿命
+#define NOTE_SPEED		(15.0f)		// 音符の速さ
+#define NOTE_HEIGHT		(100.0f)	// 音符の高さ
+#define NOTE_SHIFT		(100.0f)	// 音符のずらす幅
+#define STOP_SCALE		(1.0f)		// 通常時の拡大率
+#define SHRINK_SCALE	(0.85f)		// 縮み状態の拡大率
+#define EXTEND_SCALE	(1.15f)		// 伸び状態の拡大率
+#define ADD_SCALE		(0.05f)		// 拡大率の加算数
+#define ADD_HIT_RADIUS	(40.0f)		// 追加の当たり判定の半径
 
-CNote* CSpeaker::m_apNote[MAX_NOTE] = {};							// 音符の情報
+//-------------------------------------------
+// 静的メンバ変数宣言
+//-------------------------------------------
+CNote* CSpeaker::m_apNote[MAX_NOTE] = {};		// 音符の情報
+
 //==============================
 // コンストラクタ
 //==============================
@@ -33,6 +46,7 @@ CSpeaker::CSpeaker() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK
 		m_apNote[nCnt] = NULL;
 		m_bmySet[nCnt] = false;
 	}
+	m_state = STATE_STOP;		// 状態
 	m_bAction = false;
 	m_nNoteCount = 0;
 	SetCatUse(true);
@@ -94,10 +108,11 @@ void CSpeaker::Update(void)
 	{
 		SetNote();
 	}
+	else
+	{ // 上記以外
 
-	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_0) == true)
-	{ // Aボタンを押した場合
-		m_bAction = m_bAction ? false : true;
+		// 停止状態にする
+		m_state = STATE_STOP;
 	}
 
 	for (int nCnt = 0; nCnt < MAX_NOTE; nCnt++)
@@ -112,6 +127,9 @@ void CSpeaker::Update(void)
 	}
 
 	SetPos(pos);
+
+	// 状態による処理
+	State();
 }
 
 //=====================================
@@ -147,7 +165,7 @@ void CSpeaker::SetNote(void)
 				D3DXVECTOR3 pos = GetPos();
 				D3DXVECTOR3 rot = GetRot();
 
-				m_apNote[nCnt] = CNote::Create(D3DXVECTOR3(pos.x, pos.y + 100.0f, pos.z));
+				m_apNote[nCnt] = CNote::Create(D3DXVECTOR3(pos.x - (sinf(rot.y) * NOTE_SHIFT), pos.y + NOTE_HEIGHT, pos.z - (cosf(rot.y) * NOTE_SHIFT)));
 				m_apNote[nCnt]->SetMain(this);
 				m_apNote[nCnt]->SetIndex(nCnt);
 				m_apNote[nCnt]->SetLife(NOTE_LIFE);
@@ -163,11 +181,15 @@ void CSpeaker::SetNote(void)
 }
 
 //=====================================
-// 紐を引っ張られた時の処理
+// アクション処理
 //=====================================
 void CSpeaker::Action(void)
 {
-	m_bAction = true;
+	// アクション状況を入れ替える
+	m_bAction = !m_bAction;
+
+	// 縮み状態にする
+	m_state = STATE_SHRINK;
 }
 
 //=====================================
@@ -177,6 +199,9 @@ void CSpeaker::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYP
 {
 	// 情報の設定処理
 	CObstacle::SetData(pos, rot, type);
+
+	// 全ての値を設定する
+	m_state = STATE_STOP;		// 状態
 }
 
 //=====================================
@@ -184,6 +209,28 @@ void CSpeaker::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYP
 //=====================================
 bool CSpeaker::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
+	// 最小値と最大値を設定する
+	D3DXVECTOR3 vtxMax = D3DXVECTOR3(fWidth, fHeight, fDepth);
+	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-fWidth, 0.0f, -fDepth);
+
+	// 六面体の当たり判定
+	if (collision::HexahedronCollision
+	(
+		pos,					// プレイヤーの位置
+		GetPos(),				// 位置
+		posOld,					// プレイヤーの前回の位置
+		GetPosOld(),			// 前回の位置
+		vtxMin,					// プレイヤーの最小値
+		GetFileData().vtxMin,	// 最小値
+		vtxMax,					// プレイヤーの最大値
+		GetFileData().vtxMax	// 最大値
+	) == true)
+	{ // 当たった場合
+
+		// true を返す
+		return true;
+	}
+
 	// false を返す
 	return false;
 }
@@ -218,11 +265,70 @@ bool CSpeaker::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeig
 //=====================================
 bool CSpeaker::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type)
 {
-	if (useful::CircleCollisionXZ(pos, GetPos(), Radius, GetFileData().fRadius) == true)
-	{//円の範囲内の場合tureを返す
+	if (useful::CircleCollisionXZ(pos, GetPos(), Radius, GetFileData().fRadius + ADD_HIT_RADIUS) == true)
+	{ // 円の範囲内にいた場合
+
+		// true を返す
 		return true;
 	}
 
 	// false を返す
 	return false;
+}
+
+//=====================================
+// 状態による処理
+//=====================================
+void CSpeaker::State(void)
+{
+	// 拡大率を取得する
+	D3DXVECTOR3 scale = GetScale();
+
+	switch (m_state)
+	{
+	case CSpeaker::STATE_STOP:		// 停止状態
+
+		// 均等な数値の補正
+		useful::FrameCorrect(STOP_SCALE, &scale.y, ADD_SCALE);
+
+		break;
+
+	case CSpeaker::STATE_SHRINK:	// 縮み状態
+
+		if (useful::FrameCorrect(SHRINK_SCALE,&scale.y, ADD_SCALE) == true)
+		{ // 拡大率が一定数になった場合
+
+			// 拡大率を固定する
+			scale.y = SHRINK_SCALE;
+
+			// 伸び状態にする
+			m_state = STATE_EXTEND;
+		}
+
+		break;
+
+	case CSpeaker::STATE_EXTEND:	// 伸び状態
+
+		if (useful::FrameCorrect(EXTEND_SCALE,&scale.y, ADD_SCALE) == true)
+		{ // 拡大率が一定数になった場合
+
+			// 拡大率を固定する
+			scale.y = EXTEND_SCALE;
+
+			// 縮み状態にする
+			m_state = STATE_SHRINK;
+		}
+
+		break;
+
+	default:
+
+		// 停止
+		assert(false);
+
+		break;
+	}
+
+	// 拡大率を適用する
+	SetScale(scale);
 }
