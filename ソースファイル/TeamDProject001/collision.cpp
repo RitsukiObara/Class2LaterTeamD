@@ -432,9 +432,9 @@ void collision::BlockRectangleCollision(CBlock& block, CPlayer& player, const fl
 		posOld,
 		block.GetPosOld(),
 		vtxMin,
-		block.GetFileData().vtxMin,
+		block.GetVtxMin(),
 		vtxMax,
-		block.GetFileData().vtxMax
+		block.GetVtxMax()
 	);
 
 	if (collision.bTop == true)

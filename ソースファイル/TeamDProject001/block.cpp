@@ -23,6 +23,8 @@ CBlock::CBlock() : CModel(CObject::TYPE_BLOCK, CObject::PRIORITY_BLOCK)
 	m_collision = COLLISION_SQUARE;	// 当たり判定の種類
 	m_rotType = ROTTYPE_FRONT;		// 向きの種類
 	m_type = TYPE_CARDBOARD;		// 種類
+	m_vtxMax = NONE_D3DXVECTOR3;	// 最大値
+	m_vtxMin = NONE_D3DXVECTOR3;	// 最小値
 	m_pPrev = nullptr;				// 前のへのポインタ
 	m_pNext = nullptr;				// 次のへのポインタ
 
@@ -94,6 +96,8 @@ HRESULT CBlock::Init(void)
 	m_collision = COLLISION_SQUARE;	// 当たり判定の種類
 	m_rotType = ROTTYPE_FRONT;		// 向きの種類
 	m_type = TYPE_CARDBOARD;		// 種類
+	m_vtxMax = NONE_D3DXVECTOR3;	// 最大値
+	m_vtxMin = NONE_D3DXVECTOR3;	// 最小値
 
 	// 値を返す
 	return S_OK;
@@ -203,7 +207,6 @@ void CBlock::SetData(const D3DXVECTOR3& pos, const ROTTYPE rotType, const TYPE t
 
 	if (m_type == TYPE_PENHOLDER ||
 		m_type == TYPE_RUBBISH ||
-		m_type == TYPE_CUP ||
 		m_type == TYPE_HEADPHONE)
 	{ // 一定の数値の場合
 
@@ -215,6 +218,9 @@ void CBlock::SetData(const D3DXVECTOR3& pos, const ROTTYPE rotType, const TYPE t
 
 		// 四角の当たり判定を設定する
 		m_collision = COLLISION_SQUARE;
+
+		// 向きによる最大値・最小値の設定処理
+		CollisionSetting();
 	}
 }
 
@@ -307,4 +313,74 @@ CBlock::TYPE CBlock::GetType(void) const
 {
 	// 種類を返す
 	return m_type;
+}
+
+//=====================================
+// 最大値の取得処理
+//=====================================
+D3DXVECTOR3 CBlock::GetVtxMax(void) const
+{
+	// 最大値を返す
+	return m_vtxMax;
+}
+
+//=====================================
+// 最小値の取得処理
+//=====================================
+D3DXVECTOR3 CBlock::GetVtxMin(void) const
+{
+	// 最小値を返す
+	return m_vtxMin;
+}
+
+//=====================================
+// 向きによる最大値・最小値の設定処理
+//=====================================
+void CBlock::CollisionSetting(void)
+{
+	// 最小値と最大値を取得する
+	D3DXVECTOR3 vtxMin = GetFileData().vtxMin;
+	D3DXVECTOR3 vtxMax = GetFileData().vtxMax;
+
+	switch (m_rotType)
+	{
+	case CBlock::ROTTYPE_FRONT:		// 正面
+
+		// 最大値と最小値を設定する
+		m_vtxMax = vtxMax;			// 最大値
+		m_vtxMin = vtxMin;			// 最小値
+
+		break;
+
+	case CBlock::ROTTYPE_RIGHT:		// 右
+
+		// 最大値と最小値を設定する
+		m_vtxMax = D3DXVECTOR3(-vtxMin.z, vtxMax.y, vtxMax.x);
+		m_vtxMin = D3DXVECTOR3(-vtxMax.z, vtxMin.y, vtxMin.x);
+
+		break;
+
+	case CBlock::ROTTYPE_BACK:		// 後ろ
+
+		// 最大値と最小値を設定する
+		m_vtxMax = D3DXVECTOR3(-vtxMin.x, vtxMax.y, -vtxMin.z);
+		m_vtxMin = D3DXVECTOR3(-vtxMax.x, vtxMin.y, -vtxMax.z);
+
+		break;
+
+	case CBlock::ROTTYPE_LEFT:		// 左
+
+		// 最大値と最小値を設定する
+		m_vtxMax = D3DXVECTOR3(vtxMax.z, vtxMax.y, -vtxMin.x);
+		m_vtxMin = D3DXVECTOR3(vtxMin.z, vtxMin.y, -vtxMax.x);
+
+		break;
+
+	default:
+
+		// 停止
+		assert(false);
+
+		break;
+	}
 }
