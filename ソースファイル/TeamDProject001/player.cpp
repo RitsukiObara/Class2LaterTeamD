@@ -93,6 +93,7 @@ void CPlayer::Box(void)
 	m_pDeathArrow[MAX_PLAY] = {};		// 死亡矢印の情報
 	m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_sizeColl = NONE_D3DXVECTOR3;		// 当たり判定のサイズ
+	m_col = D3DXCOLOR(1.0f,1.0f,1.0f,1.0f);				// 色
 	m_type = TYPE_CAT;					// 種類
 	m_nPlayerIdx = NONE_PLAYERIDX;		// プレイヤーのインデックス
 	m_fSpeed = 0.0f;					// 速度
@@ -136,6 +137,7 @@ HRESULT CPlayer::Init(void)
 	m_pDeathArrow[MAX_PLAY] = {};		// 死亡矢印の情報
 	m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_sizeColl = NONE_D3DXVECTOR3;		// 当たり判定のサイズ
+	m_col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);				// 色
 	m_type = TYPE_CAT;					// 種類
 	m_nPlayerIdx = NONE_PLAYERIDX;		// プレイヤーのインデックス
 	m_fSpeed = 0.0f;					// 速度
@@ -322,8 +324,16 @@ void CPlayer::Update(void)
 //=====================================
 void CPlayer::Draw(void)
 {
-	// 描画処理
-	CCharacter::Draw();
+	if (m_StunState == STUNSTATE_NONE && m_State == STATE_NONE)
+	{
+		// 描画処理
+		CCharacter::Draw();
+	}
+	else
+	{
+		//描画処理(色)
+		CCharacter::Draw(m_col);
+	}
 
 	for (int nCnt = 0; nCnt < LOG_MAX; nCnt++)
 	{
@@ -778,6 +788,11 @@ void CPlayer::StunStateManager(void)
 		break;
 
 	case STUNSTATE_SMASH:	// 吹き飛び状態
+#ifdef _DEBUG
+
+		// 色の設定
+		m_col = D3DXCOLOR(0.0f, 0.5f, 1.0f, 1.0f);
+#endif
 
 		// カウントを減算する
 		m_StunStateCount--;
@@ -811,6 +826,11 @@ void CPlayer::StunStateManager(void)
 		break;
 
 	case STUNSTATE_STUN:	//気絶状態
+#ifdef _DEBUG
+
+		// 色の設定
+		m_col = D3DXCOLOR(0.5f, 0.5f, 0.0f, 1.0f);
+#endif
 
 		// カウントを減算する
 		m_StunStateCount--;
@@ -834,12 +854,21 @@ void CPlayer::StunStateManager(void)
 
 	case STUNSTATE_WAIT:	//障害物のみ無敵状態
 
+#ifdef _DEBUG
+
+		// 色の設定
+		m_col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
+#endif
+
 		m_StunStateCount--;
 
+		if (m_StunStateCount <= 0)
 		{ // カウントが一定数以下になった場合
 			m_StunState = STUNSTATE_NONE;
-			break;
 		}
+
+		break;
+
 	default:
 
 		// 停止
@@ -861,6 +890,11 @@ void CPlayer::StateManager(void)
 		break;
 
 	case STATE_INVINCIBLE:	//無敵状態
+#ifdef _DEBUG
+
+		// 色の設定
+		m_col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
+#endif
 
 		// カウントを減算する
 		m_StateCount--;
@@ -876,6 +910,12 @@ void CPlayer::StateManager(void)
 	case STATE_DEATH:	//死亡状態
 
 		D3DXVECTOR3 pos = GetPos();		// 位置取得
+
+#ifdef _DEBUG
+		// 色の設定
+		m_col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
+
+#endif
 
 		if (m_pRatGhost != nullptr)
 		{ // 幽霊ネズミが NULL じゃないとき
