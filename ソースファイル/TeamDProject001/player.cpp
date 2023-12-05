@@ -40,7 +40,7 @@
 #define NONE_PLAYERIDX		(-1)			// プレイヤーの番号の初期値
 #define STUN_HEIGHT			(80.0f)			// 気絶演出が出てくる高さ
 #define ID_HEIGHT			(150.0f)		// IDが出てくる高さ
-#define SMASH_MOVE			(D3DXVECTOR3(10.0f, 20.0f, 10.0f))		// 吹き飛び状態の移動量
+#define SMASH_MOVE			(D3DXVECTOR3(10.0f, 11.0f, 10.0f))		// 吹き飛び状態の移動量
 #define STUN_WAIT			(120)			// オブジェクト無効の待機時間
 #define DEATH_WAIT			(120)			// 死亡時の待機時間
 #define SMASH_WAIT			(40)			// 吹き飛び状態のカウント数
