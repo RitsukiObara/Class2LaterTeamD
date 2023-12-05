@@ -378,7 +378,7 @@ void collision::ObstacleSearch(CPlayer* pPlayer, const float Radius)
 //===============================
 // ブロックの当たり判定
 //===============================
-void collision::BlockCollision(CPlayer& player, const float fWidth, const float fHeight, const float fDepth)
+void collision::BlockCollision(CPlayer* player, const float fWidth, const float fHeight, const float fDepth)
 {
 	// 先頭のブロックの情報を取得する
 	CBlock* pBlock = CBlockManager::Get()->GetTop();
@@ -407,20 +407,23 @@ void collision::BlockCollision(CPlayer& player, const float fWidth, const float 
 		// 次のブロックの情報を取得する
 		pBlock = pBlock->GetNext();
 	}
+
+	// 壁の当たり判定
+	WallCollision(player, fWidth, fHeight, fDepth);
 }
 
 //===============================
 // ブロックの矩形の当たり判定
 //===============================
-void collision::BlockRectangleCollision(CBlock& block, CPlayer& player, const float fWidth, const float fHeight, const float fDepth)
+void collision::BlockRectangleCollision(const CBlock& block, CPlayer* player, const float fWidth, const float fHeight, const float fDepth)
 {
 	// 当たり判定の変数を宣言
 	SCollision collision = {};
 
 	// ブロックの当たり判定に必要な変数を宣言
-	D3DXVECTOR3 pos = player.GetPos();								// 位置
-	D3DXVECTOR3 posOld = player.GetPosOld();						// 前回の位置
-	D3DXVECTOR3 move = player.GetMove();							// 移動量
+	D3DXVECTOR3 pos = player->GetPos();								// 位置
+	D3DXVECTOR3 posOld = player->GetPosOld();						// 前回の位置
+	D3DXVECTOR3 move = player->GetMove();							// 移動量
 	D3DXVECTOR3 vtxMax = D3DXVECTOR3(fWidth, fHeight, fDepth);		// 最大値
 	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-fWidth, 0.0f, -fDepth);		// 最小値
 
@@ -445,18 +448,18 @@ void collision::BlockRectangleCollision(CBlock& block, CPlayer& player, const fl
 	}
 
 	// 位置と移動量を適用する
-	player.SetPos(pos);			// 位置
-	player.SetMove(move);		// 移動量
+	player->SetPos(pos);		// 位置
+	player->SetMove(move);		// 移動量
 }
 
 //===============================
 // ブロックの円形の当たり判定
 //===============================
-void collision::BlockCircleCollision(CBlock& block, CPlayer& player, const float fRadius, const float fHeight)
+void collision::BlockCircleCollision(CBlock& block, CPlayer* player, const float fRadius, const float fHeight)
 {
 	// 位置と前回の位置を取得する
-	D3DXVECTOR3 pos = player.GetPos();
-	D3DXVECTOR3 posOld = player.GetPosOld();
+	D3DXVECTOR3 pos = player->GetPos();
+	D3DXVECTOR3 posOld = player->GetPosOld();
 
 	if (pos.y <= block.GetPos().y + block.GetFileData().vtxMax.y &&
 		pos.y + fHeight >= block.GetPos().y + block.GetFileData().vtxMin.y)
@@ -486,8 +489,8 @@ void collision::BlockCircleCollision(CBlock& block, CPlayer& player, const float
 	}
 
 	// 位置と前回の位置を適用する
-	player.SetPos(pos);
-	player.SetPosOld(posOld);
+	player->SetPos(pos);
+	player->SetPosOld(posOld);
 }
 
 //===============================
@@ -537,121 +540,58 @@ bool collision::ElevOutRangeCollision(D3DXVECTOR3* pPos, const D3DXVECTOR3& posO
 	return bCollision;
 }
 //===============================
-//壁との当たり判定（壁ずり有）
+//壁との当たり判定
 //===============================
-void collision::WallCollision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld)
+void collision::WallCollision(CPlayer* player, const float fWidth, const float fHeight, const float fDepth)
 {
-	bool bPosbool = false, bPosOldbool = false, bVecbool = false, bVecboolOld = false;
+	// 位置と前回の位置と移動量を取得する
+	D3DXVECTOR3 pos = player->GetPos();
+	D3DXVECTOR3 posOld = player->GetPosOld();
+	D3DXVECTOR3 move = player->GetMove();
 
-	D3DXVECTOR3 vecLine, vecMove, vecToPos, vecToPosOld, posOldToVec, posOldToVecOld;
+	if (pos.x + fWidth >= MAP_SIZE.x)
+	{ // 右から出そうになった場合
 
-	//CWall* pWall = CMap::GetWall();
+		// 位置を設定する
+		pos.x = MAP_SIZE.x - fWidth;
 
-	D3DXVECTOR3 vec[4];
-
-	//壁の頂点（ベタ打ち）
-	vec[0] = D3DXVECTOR3(-MAP_SIZE.x, 0, MAP_SIZE.z);
-	vec[1] = D3DXVECTOR3(MAP_SIZE.x, 0, MAP_SIZE.z);
-	vec[2] = D3DXVECTOR3(MAP_SIZE.x, 0, -MAP_SIZE.z);
-	vec[3] = D3DXVECTOR3(-MAP_SIZE.x, 0, -MAP_SIZE.z);
-
-	for (int nCnt = 0; nCnt < WALL_NUM; nCnt++)
-	{
-		int nCnt2 = nCnt + 1;
-
-		if (nCnt2 >= WALL_NUM)
-		{
-			nCnt2 = 0;
-		}
-
-		//ベクトル化
-		vecLine = vec[nCnt2] - vec[nCnt];
-
-		vecMove = pos - posOld;
-
-		vecToPos = pos - vec[nCnt];
-
-
-		//各ベクトルの算出と交差判定
-		if (0 <= (vecLine.z*vecToPos.x) - (vecLine.x*vecToPos.z))
-		{
-			bPosbool = true;
-		}
-		else if (0 > (vecLine.z*vecToPos.x) - (vecLine.x*vecToPos.z))
-		{
-			bPosbool = false;
-		}
-
-		vecToPosOld = posOld - vec[nCnt];
-
-		if (0 <= (vecLine.z*vecToPosOld.x) - (vecLine.x*vecToPosOld.z))
-		{
-			bPosOldbool = true;
-		}
-		else if (0 > (vecLine.z*vecToPosOld.x) - (vecLine.x*vecToPosOld.z))
-		{
-			bPosOldbool = false;
-		}
-
-		posOldToVec = vec[nCnt2] - posOld;
-
-		if (0 <= (vecMove.z*posOldToVec.x) - (vecMove.x*posOldToVec.z))
-		{
-			bVecbool = true;
-		}
-		else if (0 > (vecMove.z*posOldToVec.x) - (vecMove.x*posOldToVec.z))
-		{
-			bVecbool = false;
-		}
-
-		posOldToVecOld = vec[nCnt] - posOld;
-
-		if (0 <= (vecMove.z*posOldToVecOld.x) - (vecMove.x*posOldToVecOld.z))
-		{
-			bVecboolOld = true;
-		}
-		else if (0 > (vecMove.z*posOldToVecOld.x) - (vecMove.x*posOldToVecOld.z))
-		{
-			bVecboolOld = false;
-		}
-
-		//交差判定
-		if (bPosbool != bPosOldbool&&bVecbool != bVecboolOld)
-		{
-			//ベクトルの正規化
-			float fmagnitude = sqrtf(vecLine.x*vecLine.x + vecLine.y*vecLine.y + vecLine.z*vecLine.z);
-
-			D3DXVECTOR3 NorVecLine;
-			if (fmagnitude != 0)
-			{
-				NorVecLine = D3DXVECTOR3(std::abs(vecLine.x / fmagnitude), std::abs(vecLine.y / fmagnitude), std::abs(vecLine.z / fmagnitude));
-
-				D3DXVECTOR3 move = D3DXVECTOR3((pos.x - posOld.x)*NorVecLine.x, (pos.y - posOld.y)*NorVecLine.y, (pos.z - posOld.z)*NorVecLine.z);
-
-				D3DXVECTOR3 SetPos = posOld + move;
-
-
-				//四隅貫通防止の例外処理
-				if (SetPos.x<vec[0].x || SetPos.x>vec[1].x || SetPos.z > vec[1].z || SetPos.z < vec[2].z)
-				{
-					SetPos = posOld;
-				}
-
-				SetPos.y = pos.y;
-
-				pos=SetPos;
-			}
-			else
-			{
-				pos= posOld;
-			}
-		}
+		// 移動量を設定する
+		move.x = 0.0f;
 	}
-	//四隅貫通防止の例外処理
-	if (pos.x<vec[0].x || pos.x>vec[1].x || pos.z > vec[1].z || pos.z < vec[2].z)
-	{
-		pos = posOld;
+
+	if (pos.x - fWidth <= -MAP_SIZE.x)
+	{ // 左から出そうになった場合
+
+		// 位置を設定する
+		pos.x = -MAP_SIZE.x + fWidth;
+
+		// 移動量を設定する
+		move.x = 0.0f;
 	}
+
+	if (pos.z + fDepth >= MAP_SIZE.z)
+	{ // 奥から出そうになった場合
+
+		// 位置を設定する
+		pos.z = MAP_SIZE.z - fDepth;
+
+		// 移動量を設定する
+		move.z = 0.0f;
+	}
+
+	if (pos.z - fDepth <= -MAP_SIZE.z)
+	{ // 手前から出そうになった場合
+
+		// 位置を設定する
+		pos.z = -MAP_SIZE.z + fDepth;
+
+		// 移動量を設定する
+		move.z = 0.0f;
+	}
+
+	// 位置と移動量を適用する
+	player->SetPos(pos);
+	player->SetMove(move);
 }
 
 //======================

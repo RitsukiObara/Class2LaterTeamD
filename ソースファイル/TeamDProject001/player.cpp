@@ -49,6 +49,7 @@
 #define RAT_CAMERA_HEIGHT	(100.0f)		// 猫のカメラの高さ
 #define RAT_CAMERA_DIS		(60.0f)			// ネズミのカメラの視点と注視点の高さの差分(角度)
 #define DIFF_ROT			(0.2f)			// 角度に足す差分の割合
+#define CAMERA_ROT_MOVE		(0.05f)			// カメラの向きの移動量
 
 //==============================
 // コンストラクタ
@@ -623,15 +624,22 @@ void CPlayer::CameraUpdate(void)
 	}
 
 	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LSHIFT) == true ||
-		CManager::Get()->GetInputGamePad()->GetPress(CInputGamePad::JOYKEY_LB,m_nPlayerIdx) == true)
-	{
-		m_CameraRot.y -= 0.05f;
+		CManager::Get()->GetInputGamePad()->GetGameStickRXPress(m_nPlayerIdx) < 0)
+	{ // 右スティックを右に倒した場合
+
+		// カメラの向きを減算する
+		m_CameraRot.y -= CAMERA_ROT_MOVE;
 	}
 	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_RSHIFT) == true ||
-		CManager::Get()->GetInputGamePad()->GetPress(CInputGamePad::JOYKEY_RB, m_nPlayerIdx) == true)
-	{
-		m_CameraRot.y += 0.05f;
+		CManager::Get()->GetInputGamePad()->GetGameStickRXPress(m_nPlayerIdx) > 0)
+	{ // 右スティックを右に倒した場合
+
+		// カメラの向きを加算する
+		m_CameraRot.y += CAMERA_ROT_MOVE;
 	}
+
+	// 向きの正規化
+	useful::RotNormalize(&m_CameraRot.y);
 }
 
 //=======================================
@@ -639,21 +647,13 @@ void CPlayer::CameraUpdate(void)
 //=======================================
 void CPlayer::RotNormalize(void)
 {
-	D3DXVECTOR3 rot = GetRot();			// 向きの取得
+	// 向きを取得する
+	D3DXVECTOR3 rot = GetRot();
 
-	// 向きの差分を求める
-	m_fRotDiff = m_fRotDest - rot.y;
+	// 向きの補正処理
+	useful::RotCorrect(m_fRotDest, &rot.y, DIFF_ROT);
 
-	// 目標の方向までの差分を修正
-	useful::RotNormalize(&m_fRotDiff);
-
-	// 差分足す
-	rot.y += m_fRotDiff * DIFF_ROT;
-
-	// 現在の方向修正
-	useful::RotNormalize(&rot.y);
-
-	// 向きの設定
+	// 向きを適用する
 	SetRot(rot);
 }
 
@@ -705,7 +705,7 @@ void CPlayer::ObstacleCollision(void)
 	collision::ObstacleCollision(*this, m_sizeColl.x, m_sizeColl.y, m_sizeColl.z);
 
 	// ブロックとの当たり判定
-	collision::BlockCollision(*this, m_sizeColl.x, m_sizeColl.y, m_sizeColl.z);
+	collision::BlockCollision(this, m_sizeColl.x, m_sizeColl.y, m_sizeColl.z);
 }
 
 //=======================================
