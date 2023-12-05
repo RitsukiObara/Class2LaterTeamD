@@ -170,7 +170,6 @@
     <ClCompile Include="chara_infoUI.cpp" />
     <ClCompile Include="chara_state.cpp" />
     <ClCompile Include="collision.cpp" />
-    <ClCompile Include="collision_edit.cpp" />
     <ClCompile Include="collpolygon.cpp" />
     <ClCompile Include="confetti.cpp" />
     <ClCompile Include="countdown.cpp" />
@@ -311,7 +310,6 @@
     <ClInclude Include="chara_infoUI.h" />
     <ClInclude Include="chara_state.h" />
     <ClInclude Include="collision.h" />
-    <ClInclude Include="collision_edit.h" />
     <ClInclude Include="collpolygon.h" />
     <ClInclude Include="confetti.h" />
     <ClInclude Include="countdown.h" />

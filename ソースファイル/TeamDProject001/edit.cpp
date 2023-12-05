@@ -16,7 +16,6 @@
 
 #include "obstacle_manager.h"
 #include "block_manager.h"
-#include "collision_edit.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -35,8 +34,6 @@ CEdit::CEdit() : CModel(CObject::TYPE_EDIT, CObject::PRIORITY_UI)
 	m_obstacleType = CObstacle::TYPE_HONEY;		// 障害物の種類
 	m_blockType = CBlock::TYPE_CARDBOARD;		// ブロックの種類
 	m_rotType = CBlock::ROTTYPE_FRONT;			// 向きの種類
-	m_pCollEdit = nullptr;						// 当たり判定のエディットの情報
-	m_bCollEdit = false;						// 当たり判定エディット状況
 }
 
 //==============================
@@ -64,8 +61,6 @@ HRESULT CEdit::Init(void)
 	m_obstacleType = CObstacle::TYPE_HONEY;	// 障害物の種類
 	m_blockType = CBlock::TYPE_CARDBOARD;	// ブロックの種類
 	m_rotType = CBlock::ROTTYPE_FRONT;		// 向きの種類
-	m_pCollEdit = nullptr;					// 当たり判定のエディットの情報
-	m_bCollEdit = false;					// 当たり判定エディット状況
 
 	// 値を返す
 	return S_OK;
@@ -85,61 +80,38 @@ void CEdit::Uninit(void)
 //=====================================
 void CEdit::Update(void)
 {
-	if (m_bCollEdit == false)
-	{ // 当たり判定エディット以外
+	// 種類ごとの処理
+	TypeProcess();
 
-		// 種類ごとの処理
-		TypeProcess();
+	// 種類の設定処理 
+	Type();
 
-		// 種類の設定処理 
-		Type();
+	// 移動処理
+	Move();
 
-		// 移動処理
-		Move();
+	// 縦移動処理
+	HeightMove();
 
-		// 縦移動処理
-		HeightMove();
+	// 微調整移動処理
+	Adjust();
 
-		// 微調整移動処理
-		Adjust();
+	// 縦微調整移動処理
+	HeightAdjust();
 
-		// 縦微調整移動処理
-		HeightAdjust();
+	// リセット処理
+	Reset();
 
-		// リセット処理
-		Reset();
+	// 消去処理
+	Delete();
 
-		// 消去処理
-		Delete();
+	// 設置処理
+	Set();
 
-		// 設置処理
-		Set();
-
-		// デバッグ表示
-		CManager::Get()->GetDebugProc()->Print("位置：%f %f %f\n向き：%f %f %f\nスタイル：%d\n"
-			"LSHIFTキー：微調整キー\nW/A/S/Dキー：移動\n右キー：右回転\n左キー：左回転\n下キー：向きの初期化\n"
-			"9キー：消去\n0キー：設置\nSPACEキー：種類変更\nU/Mキー：縦移動"
-			, GetPos().x, GetPos().y, GetPos().z, GetRot().x, GetRot().y, GetRot().z, m_type);
-	}
-	else
-	{ // 上記以外
-
-		if (m_pCollEdit != nullptr)
-		{ // 当たり判定が NULL じゃない場合
-
-			// 更新処理
-			m_pCollEdit->Update();
-		}
-		else
-		{ // 上記以外
-
-			// 停止
-			assert(false);
-		}
-	}
-
-	// 当たり判定エディットの切り替え処理
-	CollEdit();
+	// デバッグ表示
+	CManager::Get()->GetDebugProc()->Print("位置：%f %f %f\n向き：%f %f %f\nスタイル：%d\n"
+		"LSHIFTキー：微調整キー\nW/A/S/Dキー：移動\n右キー：右回転\n左キー：左回転\n下キー：向きの初期化\n"
+		"9キー：消去\n0キー：設置\nSPACEキー：種類変更\nU/Mキー：縦移動"
+		, GetPos().x, GetPos().y, GetPos().z, GetRot().x, GetRot().y, GetRot().z, m_type);
 }
 
 //=====================================
@@ -149,24 +121,6 @@ void CEdit::Draw(void)
 {
 	// 描画処理
 	CModel::Draw();
-}
-
-//=====================================
-// ブロックの種類の取得処理
-//=====================================
-CBlock::TYPE CEdit::GetBlockType(void) const
-{
-	// ブロックの種類を返す
-	return m_blockType;
-}
-
-//=====================================
-// 当たり判定エディットの取得処理
-//=====================================
-CCollisionEdit* CEdit::GetCollEdit(void) const
-{
-	// 当たり判定の情報を返す
-	return m_pCollEdit;
 }
 
 //=====================================
@@ -185,8 +139,6 @@ void CEdit::SetData(void)
 	m_type = TYPE::TYPE_OBSTACLE;			// 種類
 	m_obstacleType = CObstacle::TYPE_HONEY;	// 障害物の種類
 	m_blockType = CBlock::TYPE_CARDBOARD;	// ブロックの種類
-	m_pCollEdit = nullptr;					// 当たり判定のエディットの情報
-	m_bCollEdit = false;					// 当たり判定エディット状況
 }
 
 //=======================================
@@ -685,53 +637,6 @@ void CEdit::Type(void)
 
 		// 種類を変更する
 		m_type = (CEdit::TYPE)((m_type + 1) % CEdit::TYPE_MAX);
-	}
-}
-
-//=======================================
-// 当たり判定の切り替え処理
-//=======================================
-void CEdit::CollEdit(void)
-{
-	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_RETURN) == true)
-	{ // ENTERキーを押した場合
-
-		// 当たり判定エディット状況を切り替える
-		m_bCollEdit = !m_bCollEdit;
-
-		if (m_bCollEdit == true)
-		{ // true にした場合
-
-			if (m_pCollEdit == nullptr)
-			{ // エディットが NULL の場合
-
-				// 当たり判定エディットを生成する
-				m_pCollEdit = CCollisionEdit::Create(GetPos());
-			}
-			else
-			{ // 上記以外
-
-				// 停止
-				assert(false);
-			}
-		}
-		else
-		{ // 上記以外
-
-			if (m_pCollEdit != nullptr)
-			{ // エディットが NULL じゃない場合
-
-				// 当たり判定エディットの終了処理
-				m_pCollEdit->Uninit();
-				m_pCollEdit = nullptr;
-			}
-			else
-			{ // 上記以外
-
-				// 停止
-				assert(false);
-			}
-		}
 	}
 }
 

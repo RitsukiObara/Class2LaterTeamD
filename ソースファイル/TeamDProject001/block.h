@@ -13,11 +13,6 @@
 #include "model.h"
 
 //-----------------------------------
-// マクロ定義
-//-----------------------------------
-#define MAX_NUMCOLL			(10)		// 当たり判定の最大数
-
-//-----------------------------------
 // クラス定義(地形用ブロック)
 //-----------------------------------
 class CBlock : public CModel
@@ -39,7 +34,6 @@ public:			// 誰でもアクセスできる
 	{
 		COLLISION_SQUARE = 0,		// 四角
 		COLLISION_CIRCLE,			// 円
-		COLLISION_MAKE,				// 作られた当たり判定
 		COLLISION_MAX				// この列挙型の総数
 	};
 
@@ -81,15 +75,6 @@ public:			// 誰でもアクセスできる
 		TYPE_MAX				// この列挙型の総数
 	};
 
-	// 当たり判定のボックス
-	struct SCollBox
-	{
-		D3DXVECTOR3 pos[MAX_NUMCOLL];		// 位置
-		D3DXVECTOR3 vtxMax[MAX_NUMCOLL];	// 最大値
-		D3DXVECTOR3 vtxMin[MAX_NUMCOLL];	// 最小値
-		int nNum;							// 総数
-	};
-
 	CBlock();			// コンストラクタ
 	~CBlock();			// デストラクタ
 
@@ -122,7 +107,6 @@ private:		// 自分だけアクセスできる
 	COLLISION m_collision;	// 当たり判定の種類
 	ROTTYPE m_rotType;		// 向きの種類
 	TYPE m_type;			// 種類
-	SCollBox m_collBox;		// 当たり判定の情報
 
 	// リスト構造関係
 	CBlock* m_pPrev;	// 前へのポインタ

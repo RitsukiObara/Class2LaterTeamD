@@ -402,10 +402,6 @@ void collision::BlockCollision(CPlayer& player, const float fWidth, const float 
 			BlockCircleCollision(*pBlock, player, fWidth, fHeight);
 
 			break;
-
-		case CBlock::COLLISION_MAKE:
-
-			break;
 		}
 
 		// Ÿ‚ÌƒuƒƒbƒN‚Ìî•ñ‚ğæ“¾‚·‚é
