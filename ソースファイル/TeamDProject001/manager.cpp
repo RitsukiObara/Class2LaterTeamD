@@ -397,7 +397,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 #ifdef _DEBUG
 
 		// フェードのメモリを確保する
-		m_pFade = m_pFade->Create(CScene::MODE_GAME);
+		m_pFade = m_pFade->Create(CScene::MODE_ENTRY);
 #else
 
 		// シーンのメモリを確保する
@@ -841,6 +841,8 @@ void CManager::SetMode(const CScene::MODE mode)
 	if (m_pScene == nullptr)
 	{ // シーンが NULL じゃない場合
 
+		// モード情報代入
+		m_ModeNow = mode;
 		// 生成処理
 		m_pScene = m_pScene->Create(mode);
 	}
@@ -852,7 +854,7 @@ void CManager::SetMode(const CScene::MODE mode)
 CScene::MODE CManager::GetMode(void)
 {
 	// モードを返す
-	return m_pScene->GetMode();
+	return m_ModeNow;
 }
 
 //======================================

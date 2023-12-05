@@ -1,6 +1,6 @@
 //===========================================
 //
-// エントリー画面の説明のメイン処理[entry_message.cpp]
+// エントリー画面の操作説明のメイン処理[entry_message.cpp]
 // Author 佐藤根詩音
 //
 //===========================================
@@ -10,10 +10,14 @@
 #include "main.h"
 #include "manager.h"
 #include "entry_message.h"
+#include "texture.h"
 
 //-------------------------------------------
 // マクロ定義
 //-------------------------------------------
+#define POS_SWITCH		(45)		// 位置の上下変更する時間
+#define RESIZE_SCALE	(0.0004f)	// リザイズのスケール
+#define COLOR_ALPHA		(0.0007f)	// 色の透明度
 
 //-------------------------------------------
 // 静的メンバ変数宣言
@@ -25,6 +29,8 @@
 CEntryMessage::CEntryMessage() : CObject2D(CObject::TYPE_ENTRYMESSAGEUI, CObject::PRIORITY_UI)
 {
 	// 全ての値をクリアする
+	m_nScaleSwitchCounter = 0;		// スケールの上下変更カウンター
+	m_nScaleSwitch = 1;				// スケールの上下変更
 }
 
 //==============================
@@ -36,7 +42,7 @@ CEntryMessage::~CEntryMessage()
 }
 
 //==============================
-// 破片の初期化処理
+// エントリー画面の操作説明の初期化処理
 //==============================
 HRESULT CEntryMessage::Init(void)
 {
@@ -48,13 +54,15 @@ HRESULT CEntryMessage::Init(void)
 	}
 
 	// 全ての値を初期化する
+	m_nScaleSwitchCounter = 0;		// スケールの上下変更カウンター
+	m_nScaleSwitch = 1;				// スケールの上下変更
 
 	// 値を返す
 	return S_OK;
 }
 
 //========================================
-// 破片の終了処理
+// エントリー画面の操作説明の終了処理
 //========================================
 void CEntryMessage::Uninit(void)
 {
@@ -63,15 +71,40 @@ void CEntryMessage::Uninit(void)
 }
 
 //=====================================
-// 破片の更新処理
+// エントリー画面の操作説明の更新処理
 //=====================================
 void CEntryMessage::Update(void)
 {
+	D3DXVECTOR3 size = GetSize();	// サイズ取得
 
+	// 前回の位置設定
+	SetPosOld(GetPos());
+
+	// カウンター加算
+	m_nScaleSwitchCounter++;
+
+	if ((m_nScaleSwitchCounter % POS_SWITCH) == 0)
+	{ // 一定時間経過したら
+
+		// スケールの増減変更
+		m_nScaleSwitch *= -1;
+
+		// カウンター初期化
+		m_nScaleSwitchCounter = 0;
+	}
+
+	// サイズ加算
+	size = D3DXVECTOR3(size.x + (size.x * m_nScaleSwitch * RESIZE_SCALE), size.y + (size.y * m_nScaleSwitch * RESIZE_SCALE), 0.0f);
+
+	//サイズ設定
+	SetSize(size);
+
+	// 頂点座標の設定処理
+	SetVertex();
 }
 
 //=====================================
-// 破片の描画処理
+// エントリー画面の操作説明の描画処理
 //=====================================
 void CEntryMessage::Draw(void)
 {
@@ -87,41 +120,18 @@ void CEntryMessage::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, c
 	// 設定処理に便利なマクロ定義
 	//NONE_D3DXVECTOR3					// 向きを傾けない時とかに使用する
 	//NONE_SCALE						// 拡大率を変更しないときとかに使う
-	// 情報の設定処理
 
-	//==========================================================================
-	// 2Dポリゴン
-	//==========================================================================
-	SetPos(pos);			// 位置
-	SetPosOld(posOld);		// 前回の位置
-	SetRot(NONE_D3DXVECTOR3);			// 向き
-	SetSize(size);		// サイズ
-	SetLength();		// 長さ
-	SetAngle();			// 方向
-	//BindTexture(CManager::Get()->GetTexture()->Regist(テクスチャの名前));		// テクスチャの割り当て処理
+	// 情報の設定処理
+	SetPos(pos);				// 位置
+	SetPosOld(posOld);			// 前回の位置
+	SetRot(NONE_D3DXVECTOR3);	// 向き
+	SetSize(size);				// サイズ
+	SetLength();				// 長さ
+	SetAngle();					// 方向
+	BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\entry_message00.png"));		// テクスチャの割り当て処理
 
 	// 頂点座標の設定処理
 	SetVertex();
-
-	//==========================================================================
-	// アニメーション系
-	//==========================================================================
-	//SetPos(位置を入れる);			// 位置
-	//SetPosOld(位置を入れる);		// 前回の位置
-	//SetRot(向きを入れる);			// 向き
-	//SetSize(サイズを入れる);		// サイズ
-	//SetLength(引数無し);			// 長さ
-	//SetAngle(引数無し);			// 方向
-	//BindTexture(CManager::Get()->GetTexture()->Regist(テクスチャの名前));		// テクスチャの割り当て処理
-
-	// アニメーションの設定処理
-	//SetAnim(カウントを入れる, パターン数を入れる);
-
-	//// 頂点座標の設定処理
-	//SetVertex();
-
-	// テクスチャの設定(アニメーションバージョン)
-	//SetVtxTextureAnim(アニメーションの総パターン数を入れる, 0);
 }
 
 //=======================================
