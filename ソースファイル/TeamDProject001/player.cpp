@@ -705,7 +705,7 @@ void CPlayer::ObstacleCollision(void)
 	collision::ObstacleCollision(*this, m_sizeColl.x, m_sizeColl.y, m_sizeColl.z);
 
 	// ÉuÉçÉbÉNÇ∆ÇÃìñÇΩÇËîªíË
-	collision::BlockCollision(*this, m_sizeColl.x, m_sizeColl.y, m_sizeColl.z);
+	collision::BlockCollision(this, m_sizeColl.x, m_sizeColl.y, m_sizeColl.z);
 }
 
 //=======================================
