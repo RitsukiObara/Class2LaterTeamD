@@ -279,7 +279,7 @@ void CCat::Attack(void)
 	D3DXVECTOR3 rot = GetRot();
 
 	// ÉQÅ[ÉÄÉÇÅ[ÉhÇÃéûÇæÇØçUåÇ
-	if (CManager::Get()->GetMode() == CScene::MODE_GAME)
+	if (CManager::Get()->GetMode() == CScene::MODE_GAME || CManager::Get()->GetMode() == CScene::MODE_TUTORIAL)
 	{
 		if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_RETURN) == true ||
 			CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_A, GetPlayerIdx()) == true)
@@ -319,8 +319,6 @@ void CCat::Attack(void)
 			}
 		}
 	}
-
-	//m_bAttack = true;		// çUåÇÇµÇΩèÛë‘Ç…Ç∑ÇÈ
 }
 
 //===========================================
@@ -346,6 +344,7 @@ void CCat::AttackStateManager(void)
 			D3DXVECTOR3 pos = GetPos();
 			D3DXVECTOR3 rot = GetRot();
 
+			m_bAttack = true;		// çUåÇÇµÇΩèÛë‘Ç…Ç∑ÇÈ
 			m_AttackState = ATTACKSTATE_ATTACK;
 			m_nAtkStateCount = 10;
 
@@ -369,6 +368,7 @@ void CCat::AttackStateManager(void)
 		if (m_nAtkStateCount <= 0)
 		{//èÛë‘ÉJÉEÉìÉgÇ™0Ç…Ç»Ç¡ÇΩéû
 			m_AttackState = ATTACKSTATE_MOVE;
+			m_bAttack = false;		// çUåÇÇµÇƒÇ»Ç¢èÛë‘Ç…Ç∑ÇÈ
 		}
 		break;
 	}
