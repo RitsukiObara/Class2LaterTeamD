@@ -38,6 +38,7 @@
 namespace
 {
 	static const D3DXVECTOR3 SMASH_MOVE = D3DXVECTOR3(10.0f, 11.0f, 10.0f);		// 吹き飛び状態の移動量
+	static const D3DXCOLOR SMASH_COLOR = D3DXCOLOR(0.9f, 0.0f, 0.1f, 0.7f);		// 吹き飛び状態の時の色
 	static const float GRAVITY = 1.0f;					// 重力
 	static const float ADD_MOVE_Y = 30.0f;				// 浮力
 	static const float CAT_CAMERA_HEIGHT = 200.0f;		// 猫のカメラの高さ
@@ -319,21 +320,17 @@ void CPlayer::Draw(void)
 	if (m_bDisp == true)
 	{ // 表示状態のとき
 
-		if ((m_StunState == STUNSTATE_NONE || m_StunState == STUNSTATE_WAIT || m_StunState == STUNSTATE_STUN) &&
-			(m_State == STATE_NONE || m_State == STATE_INVINCIBLE))
-		{ // 何もしてない || 無敵状態のとき
+		if (m_bDispSmash == true)
+		{ // 吹き飛ばされてるとき
+
+			// 描画処理(色)
+			CCharacter::Draw(m_col);
+		}
+		else
+		{ // それ以外のとき
 
 			// 描画処理
 			CCharacter::Draw();
-		}
-		else
-		{
-			if (m_bDispSmash == true)
-			{ // 吹き飛ばされてるとき
-
-				//描画処理(色)
-				CCharacter::Draw(m_col);
-			}
 		}
 	}
 
@@ -792,13 +789,18 @@ void CPlayer::StunStateManager(void)
 	case STUNSTATE_SMASH:	// 吹き飛び状態
 
 		// 色の設定
-		m_col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
+		m_col = SMASH_COLOR;
 
-		if ((m_StunStateCount % FLASH_INTERVAL) == 0)
-		{ // 一定時間経ったら
+		if (m_StunStateCount >= 38)
+		{ // 一定時間以上だったら
 
-			// 表示状態切り替え
-			m_bDispSmash = m_bDispSmash ? false : true;
+			m_bDispSmash = true;
+		}
+		else if (m_bDispSmash == true)
+		{ // 色付きで表示してたら
+
+			// 色を表示しない状態にする
+			m_bDispSmash = false;
 		}
 
 		// カウントを減算する
@@ -833,12 +835,6 @@ void CPlayer::StunStateManager(void)
 		break;
 
 	case STUNSTATE_STUN:	//気絶状態
-
-#ifdef _DEBUG
-
-		// 色の設定
-		m_col = D3DXCOLOR(0.5f, 0.5f, 0.0f, 1.0f);
-#endif
 
 		// カウントを減算する
 		m_StunStateCount--;
