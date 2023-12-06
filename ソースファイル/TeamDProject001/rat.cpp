@@ -326,13 +326,19 @@ void CRat::SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 		// 初期化処理
 		GetHierarchy(nCntData)->SetPos(pos);										// 位置
 		GetHierarchy(nCntData)->SetPosOld(pos);										// 前回の位置
-		GetHierarchy(nCntData)->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));				// 向き
+		GetHierarchy(nCntData)->SetRot(NONE_D3DXVECTOR3);							// 向き
 		GetHierarchy(nCntData)->SetScale(NONE_SCALE);								// 拡大率
 		GetHierarchy(nCntData)->SetFileData(CXFile::TYPE(INIT_RAT + nCntData));		// データの設定処理
 	}
 
 	// モーションの設定処理
 	GetMotion()->Set(MOTIONTYPE_NEUTRAL);
+
+	// 強制モーション処理
+	GetMotion()->SetForcibly();
+
+	// モーションの更新処理(やらないと魑魅魍魎が誕生する)
+	GetMotion()->Update();
 }
 
 //=======================================

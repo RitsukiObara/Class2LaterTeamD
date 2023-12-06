@@ -527,6 +527,11 @@ void CCat::SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 	// モーションの設定処理
 	GetMotion()->Set(MOTIONTYPE_NEUTRAL);
 
+	// 強制モーション処理
+	GetMotion()->SetForcibly();
+
+	// モーションの更新処理(やらないと魑魅魍魎が誕生する)
+	GetMotion()->Update();
 
 	// ゲームモードの時だけUIを生成
 	if (CManager::Get()->GetMode() == CScene::MODE_GAME)

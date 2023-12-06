@@ -121,6 +121,7 @@ public:			// 誰でもアクセスできる
 	static void DeathDecision(const int nCnt);		// 死亡判別処理
 
 	static void UpdateNormal(void);		// 通常更新処理
+	static void UpdateCountdown(void);	// カウントダウン中の更新処理
 	static void UpdateGame(void);		// ゲームの更新処理
 
 	static void DrawNormal(void);		// 通常描画処理
