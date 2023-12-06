@@ -19,17 +19,6 @@
 #define COUNTDOWN_TIME		(5)										// カウントダウンの時間
 #define COUNTDOWN_TEXTURE	"data\\TEXTURE\\Number.png"				// カウントダウンのテクスチャ
 
-// デバッグ版
-#ifdef _DEBUG
-
-#define COUNT_FRAME			(1)										// 1カウントごとのフレーム数
-
-#else
-
-#define COUNT_FRAME			(50)									// 1カウントごとのフレーム数
-
-#endif // _DEBUG
-
 //=========================
 // コンストラクタ
 //=========================
@@ -40,6 +29,7 @@ CCountdown::CCountdown() : CNumber(CObject::TYPE_COUNTDOWN, CObject::PRIORITY_UI
 	m_sizeInit = NONE_D3DXVECTOR3;		// 初期サイズ
 	m_nFrame = 0;						// 経過フレーム数
 	m_nSecond = 0;						// 秒数
+	m_nProgressCount = 0;				// 経過させるカウント
 }
 
 //=========================
@@ -67,6 +57,7 @@ HRESULT CCountdown::Init(void)
 	m_sizeInit = NONE_D3DXVECTOR3;		// 初期サイズ
 	m_nFrame = 0;						// 経過フレーム数
 	m_nSecond = 0;						// 秒数
+	m_nProgressCount = 0;				// 経過させるカウント
 
 	// 成功を返す
 	return S_OK;
@@ -130,7 +121,7 @@ void CCountdown::Draw(void)
 //=========================
 // 情報の設定処理
 //=========================
-void CCountdown::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size)
+void CCountdown::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const int nCount)
 {
 	// 数字の設定処理
 	SetPos(pos);				// 位置
@@ -147,6 +138,14 @@ void CCountdown::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size)
 	m_sizeInit = size * 0.6f;	// 初期サイズ
 	m_nFrame = 0;				// 経過フレーム数
 	m_nSecond = COUNTDOWN_TIME;	// 秒数
+	m_nProgressCount = nCount;	// 経過させるカウント
+
+	if (m_nProgressCount < 0)
+	{ // 経過させるカウントが0未満の場合
+
+		// 最低数を入力する
+		m_nProgressCount = 1;
+	}
 
 	// 頂点座標の設定処理
 	SetVertexRot();
@@ -161,7 +160,7 @@ void CCountdown::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size)
 //=========================
 // 生成処理
 //=========================
-CCountdown* CCountdown::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& size)
+CCountdown* CCountdown::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const int nCount)
 {
 	// ローカルオブジェクトを生成
 	CCountdown* pCountdown = nullptr;	// プレイヤーのインスタンスを生成
@@ -197,7 +196,7 @@ CCountdown* CCountdown::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& size)
 		}
 
 		// 情報の設定処理
-		pCountdown->SetData(pos, size);
+		pCountdown->SetData(pos, size, nCount);
 	}
 	else
 	{ // オブジェクトが NULL の場合
@@ -221,7 +220,7 @@ void CCountdown::Calculate(void)
 	// 時間の経過を加算する
 	m_nFrame++;
 
-	if ((m_nFrame % COUNT_FRAME) == 0)
+	if ((m_nFrame % m_nProgressCount) == 0)
 	{ // 1秒経ったら
 
 		// 1秒減らす

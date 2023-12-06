@@ -33,23 +33,28 @@
 #include "rat.h"
 
 //-------------------------------------------
-// マクロ定義
+// 無名名前空間
 //-------------------------------------------
-#define GRAVITY				(1.0f)			// 重力
-#define ADD_MOVE_Y			(30.0f)			// 浮力
-#define NONE_PLAYERIDX		(-1)			// プレイヤーの番号の初期値
-#define STUN_HEIGHT			(80.0f)			// 気絶演出が出てくる高さ
-#define ID_HEIGHT			(150.0f)		// IDが出てくる高さ
-#define SMASH_MOVE			(D3DXVECTOR3(10.0f, 11.0f, 10.0f))		// 吹き飛び状態の移動量
-#define STUN_WAIT			(120)			// オブジェクト無効の待機時間
-#define DEATH_WAIT			(120)			// 死亡時の待機時間
-#define SMASH_WAIT			(40)			// 吹き飛び状態のカウント数
-#define CAT_CAMERA_HEIGHT	(200.0f)		// 猫のカメラの高さ
-#define CAT_CAMERA_DIS		(300.0f)		// 猫のカメラの視点と注視点の高さの差分(角度)
-#define RAT_CAMERA_HEIGHT	(100.0f)		// 猫のカメラの高さ
-#define RAT_CAMERA_DIS		(60.0f)			// ネズミのカメラの視点と注視点の高さの差分(角度)
-#define DIFF_ROT			(0.2f)			// 角度に足す差分の割合
-#define CAMERA_ROT_MOVE		(0.05f)			// カメラの向きの移動量
+namespace
+{
+	static const D3DXVECTOR3 SMASH_MOVE = D3DXVECTOR3(10.0f, 11.0f, 10.0f);		// 吹き飛び状態の移動量
+	static const D3DXCOLOR SMASH_COLOR = D3DXCOLOR(0.9f, 0.0f, 0.1f, 0.7f);		// 吹き飛び状態の時の色
+	static const float GRAVITY = 1.0f;					// 重力
+	static const float ADD_MOVE_Y = 30.0f;				// 浮力
+	static const float CAT_CAMERA_HEIGHT = 200.0f;		// 猫のカメラの高さ
+	static const float CAT_CAMERA_DIS = 300.0f;			// 猫のカメラの視点と注視点の高さの差分(角度)
+	static const float RAT_CAMERA_HEIGHT = 100.0f;		// 猫のカメラの高さ
+	static const float RAT_CAMERA_DIS = 60.0f;			// ネズミのカメラの視点と注視点の高さの差分(角度)
+	static const float DIFF_ROT = 0.2f;					// 角度に足す差分の割合
+	static const float CAMERA_ROT_MOVE = 0.05f;			// カメラの向きの移動量
+	static const float ADD_ACTION_RADIUS = 40.0f;		// サーチ時の半径の追加数
+	static const int NONE_PLAYERIDX = -1;				// プレイヤーの番号の初期値
+	static const int STUN_WAIT = 120;					// オブジェクト無効の待機時間
+	static const int DEATH_WAIT = 120;					// 死亡時の待機時間
+	static const int SMASH_WAIT = 40;					// 吹き飛び状態のカウント数
+	static const int STUN_FLASH_INTERVAL = 12;				// プレイヤーの点滅間隔
+	static const int DEATH_FLASH_INTERVAL = 4;				// プレイヤーの点滅間隔
+}
 
 //==============================
 // コンストラクタ
@@ -93,15 +98,21 @@ void CPlayer::Box(void)
 	m_pDeathArrow[MAX_PLAY] = {};		// 死亡矢印の情報
 	m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_sizeColl = NONE_D3DXVECTOR3;		// 当たり判定のサイズ
+	m_col = D3DXCOLOR(1.0f,1.0f,1.0f,1.0f);				// 色
 	m_type = TYPE_CAT;					// 種類
 	m_nPlayerIdx = NONE_PLAYERIDX;		// プレイヤーのインデックス
 	m_fSpeed = 0.0f;					// 速度
 	m_fRotDest = 0.0f;					// 目標
 	m_fRotDiff = 0.0f;					// 差分
+	m_fStunHeight = 0.0f;				// 気絶が出る高さ
 	m_bAttack = false;					// 攻撃したか
 	m_bMove = false;					// 移動しているか
+	m_bDisp = true;						// 表示するか
+	m_bDispSmash = false;				// 吹き飛び用の表示するか
 	m_CameraRot = NONE_D3DXVECTOR3;		// カメラの向き
 	m_nResurrectionTime = 0;			// 復活するまでの時間
+	m_bTutorial = false;
+	m_bKill = false;
 
 	for (int nCnt = 0; nCnt < LOG_MAX; nCnt++)
 	{
@@ -136,13 +147,17 @@ HRESULT CPlayer::Init(void)
 	m_pDeathArrow[MAX_PLAY] = {};		// 死亡矢印の情報
 	m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_sizeColl = NONE_D3DXVECTOR3;		// 当たり判定のサイズ
+	m_col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);				// 色
 	m_type = TYPE_CAT;					// 種類
 	m_nPlayerIdx = NONE_PLAYERIDX;		// プレイヤーのインデックス
 	m_fSpeed = 0.0f;					// 速度
 	m_fRotDest = 0.0f;					// 目標
 	m_fRotDiff = 0.0f;					// 差分
+	m_fStunHeight = 0.0f;				// 気絶が出る高さ
 	m_bAttack = false;					// 攻撃したか
 	m_bMove = false;					// 移動しているか
+	m_bDisp = true;						// 表示するか
+	m_bDispSmash = false;				// 吹き飛び用の表示するか
 	m_nResurrectionTime = 0;			// 復活するまでの時間
 	m_nLogPlayer = 0;
 
@@ -229,8 +244,16 @@ void CPlayer::Uninit(void)
 		}
 	}
 
-	// プレイヤーを消去する
-	CGame::DeletePlayer(m_nPlayerIdx);
+	if (CManager::Get()->GetMode() == CScene::MODE_TUTORIAL)
+	{
+		// プレイヤーを消去する
+		CTutorial::DeletePlayer(m_nPlayerIdx);
+	}
+	else
+	{
+		// プレイヤーを消去する
+		CGame::DeletePlayer(m_nPlayerIdx);
+	}
 
 	// 終了処理
 	CCharacter::Uninit();
@@ -253,24 +276,18 @@ void CPlayer::Update(void)
 	// 状態の管理
 	StateManager();
 
-	if (m_type == TYPE_CAT)
-	{
-		collision::ObstacleSearch(this, 30.0f * 2.0f);
-	}
-	else if (m_type == TYPE_RAT)
-	{
-		collision::ObstacleSearch(this, 30.0f * 2.0f);
-	}
+	// 起動可能障害物や警告を出す障害物のサーチ
+	collision::ObstacleSearch(this, m_sizeColl.x + ADD_ACTION_RADIUS);
 
 #if CAMERA != 0
 	//カメラ情報の更新
 	CameraUpdate();
 #endif // CAMERA
 
-	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_E) ||
-		CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_B,m_nPlayerIdx) == true)
+	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_E) ||
+		CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_B, m_nPlayerIdx) == true)
 	{
-		collision::ObstacleAction(this, m_sizeColl.x);
+		collision::ObstacleAction(this, m_sizeColl.x + ADD_ACTION_RADIUS);
 	}
 
 #ifdef _DEBUG
@@ -294,17 +311,6 @@ void CPlayer::Update(void)
 		m_pMotion->Update();
 	}
 
-	if (m_pPlayerID != nullptr)
-	{ // プレイヤーのID表示が NULL じゃない場合
-
-		// 位置情報の取得
-		D3DXVECTOR3 pos = GetPos();
-
-		// 位置を設定する
-		m_pPlayerID->SetPos(D3DXVECTOR3(pos.x, pos.y + ID_HEIGHT, pos.z));
-		m_pPlayerID->Update();
-	}
-
 	for (int nCnt = 0; nCnt < LOG_MAX; nCnt++)
 	{
 		if (m_apLog[nCnt] != NULL)
@@ -322,8 +328,22 @@ void CPlayer::Update(void)
 //=====================================
 void CPlayer::Draw(void)
 {
-	// 描画処理
-	CCharacter::Draw();
+	if (m_bDisp == true)
+	{ // 表示状態のとき
+
+		if (m_bDispSmash == true)
+		{ // 吹き飛ばされてるとき
+
+			// 描画処理(色)
+			CCharacter::Draw(m_col);
+		}
+		else
+		{ // それ以外のとき
+
+			// 描画処理
+			CCharacter::Draw();
+		}
+	}
 
 	for (int nCnt = 0; nCnt < LOG_MAX; nCnt++)
 	{
@@ -397,7 +417,7 @@ void CPlayer::SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 	{ // プレイヤーのID表示が NULL の場合
 
 		// プレイヤーのID表示の生成処理
-		m_pPlayerID = CPlayerID::Create(D3DXVECTOR3(pos.x, pos.y + ID_HEIGHT, pos.z), nID);
+		m_pPlayerID = CPlayerID::Create(pos, nID);
 	}
 }
 
@@ -779,6 +799,21 @@ void CPlayer::StunStateManager(void)
 
 	case STUNSTATE_SMASH:	// 吹き飛び状態
 
+		// 色の設定
+		m_col = SMASH_COLOR;
+
+		if (m_StunStateCount >= 38)
+		{ // 一定時間以上だったら
+
+			m_bDispSmash = true;
+		}
+		else if (m_bDispSmash == true)
+		{ // 色付きで表示してたら
+
+			// 色を表示しない状態にする
+			m_bDispSmash = false;
+		}
+
 		// カウントを減算する
 		m_StunStateCount--;
 
@@ -834,12 +869,23 @@ void CPlayer::StunStateManager(void)
 
 	case STUNSTATE_WAIT:	//障害物のみ無敵状態
 
+		if ((m_StunStateCount % STUN_FLASH_INTERVAL) == 0)
+		{ // 一定時間経ったら
+
+			// 表示状態切り替え
+			m_bDisp = m_bDisp ? false : true;
+		}
+
 		m_StunStateCount--;
 
+		if (m_StunStateCount <= 0)
 		{ // カウントが一定数以下になった場合
 			m_StunState = STUNSTATE_NONE;
-			break;
+			m_bDisp = true;		// 表示する状態にする
 		}
+
+		break;
+
 	default:
 
 		// 停止
@@ -865,17 +911,27 @@ void CPlayer::StateManager(void)
 		// カウントを減算する
 		m_StateCount--;
 
+		if ((m_StateCount % DEATH_FLASH_INTERVAL) == 0)
+		{ // 一定時間経ったら
+
+			// 表示状態切り替え
+			m_bDisp = m_bDisp ? false : true;
+		}
+
 		if (m_StateCount <= 0)
 		{ // カウントが一定数以下になった場合
 			
 			// 無状態にする
 			m_State = STATE_NONE;
+			m_bDisp = true;		// 表示する状態にする
 		}
 		break;
 
 	case STATE_DEATH:	//死亡状態
 
 		D3DXVECTOR3 pos = GetPos();		// 位置取得
+
+		m_bDisp = false;		// 表示しない状態にする
 
 		if (m_pRatGhost != nullptr)
 		{ // 幽霊ネズミが NULL じゃないとき
@@ -1034,7 +1090,7 @@ void CPlayer::SetStun(const D3DXVECTOR3& pos)
 	{ // 気絶演出が NULL の場合
 
 		// 気絶演出を生成する
-		m_pStun = CStun::Create(D3DXVECTOR3(pos.x, pos.y + STUN_HEIGHT, pos.z));
+		m_pStun = CStun::Create(D3DXVECTOR3(pos.x, pos.y + m_fStunHeight, pos.z));
 	}
 }
 
@@ -1317,6 +1373,15 @@ float CPlayer::GetSpeed(void) const
 {
 	// 速度を返す
 	return m_fSpeed;
+}
+
+//=======================================
+// 気絶の出る高さの設定処理
+//=======================================
+void CPlayer::SetStunHeight(const float fHeight)
+{
+	// 気絶の出る高さを設定する
+	m_fStunHeight = fHeight;
 }
 
 //=======================================

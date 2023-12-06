@@ -80,6 +80,7 @@ public:			// 誰でもアクセスできる
 	virtual void GetItem(const CItem::TYPE type);	// アイテムの取得処理
 
 	virtual void SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type);		// 情報の設定処理
+	void CameraUpdate(void);			// カメラ情報の更新
 
 	// セット・ゲット関係
 	void SetMotion(CMotion* pMotion);			// モーションの設定処理
@@ -124,11 +125,16 @@ public:			// 誰でもアクセスできる
 	void SetSpeed(const float fSpeed);			// 速度の設定処理
 	float GetSpeed(void) const;					// 速度の取得処理
 
+	void SetStunHeight(const float fHeight);	// 気絶の出る高さの設定処理
+
 	void SetEnableAttack(const bool bAttack);	// 攻撃判定の設定処理
 	bool IsAttack(void) const;					// 攻撃判定の取得処理
 
 	void SetEnableMove(const bool bMove);		// 移動状況の設定処理
 	bool IsMove(void) const;					// 移動状況の取得処理
+
+	void SetTutorial(const bool bTutorial) { m_bTutorial = bTutorial; }	// 移動状況の設定処理
+	bool GetTutorial(void) { return m_bTutorial; }						// 移動状況の取得処理
 
 	void SetResurrectionTime(const int nRezTime);	// 死んだネズミの復活時間の合計設定
 	void AddResurrectionTime(const int nRezTime);	// 死んだネズミの復活時間の合計追加
@@ -145,6 +151,19 @@ public:			// 誰でもアクセスできる
 
 	void SetLogPlayer(int LogPlayer) { m_nLogPlayer = LogPlayer; }		// 状態の設定処理
 	int GetLogPlayer(void) { return m_nLogPlayer; }						// 状態の取得処理
+
+	//チュートリアル用ゲット関数-----------------------------------------
+	void SetBMove(bool Set) { m_bMove = Set; }			// 移動状態の設定処理
+	bool GetBMove(void) { return m_bMove; }				// 移動状態の取得処理
+	virtual bool GetAttack_Jump(void) { return false; }	// アタックジャンプ状態の取得処理
+	void SetRatKill(bool Set) { m_bKill = Set; }		// キルの設定処理
+	bool GetRatKill(void) { return m_bKill; }			// キルの取得処理
+	void SetRatRescue(bool Set) { m_bRescue = Set; }	// 救助の設定処理
+	bool GetRatRescue(void) { return m_bRescue; }		// 救助の取得処理
+	void SetUseAction(bool Set) { m_bAction = Set; }	// 起動の設定処理
+	bool GetUseAction(void) { return m_bAction; }		// 起動の取得処理
+	virtual bool GetItem_MultiAction(void) { return false; }	// アイテム使用と連携起動の取得処理
+	//-------------------------------------------------------------------
 
 	void SetStateCount(const int nCount) { m_StateCount = nCount; };		// 状態カウントの設定処理
 
@@ -167,7 +186,6 @@ private:		// 自分だけアクセスできる
 	void ObstacleCollision(void);		// 障害物との当たり判定
 	void StunStateManager(void);		// 気絶状態の管理
 	void StateManager(void);			// 状態の管理
-	void CameraUpdate(void);			// カメラ情報の更新
 
 	// メンバ変数
 	CMotion* m_pMotion;			// モーションの情報
@@ -180,14 +198,18 @@ private:		// 自分だけアクセスできる
 	CDeathArrow* m_pDeathArrow[MAX_PLAY];	// 死亡矢印の情報
 	D3DXVECTOR3 m_move;			// 移動量
 	D3DXVECTOR3 m_sizeColl;		// 当たり判定のサイズ
+	D3DXCOLOR m_col;			// 色
 	TYPE m_type;				// 種類
 	int m_nPlayerIdx;			// プレイヤーのインデックス
 	float m_fSpeed;				// 速度
 	float m_fRotDest;			// 目標
 	float m_fRotDiff;			// 差分
+	float m_fStunHeight;		// 気絶が出る高さ
 	bool m_bAttack;				// 攻撃したか
 	bool m_bMove;				// 移動しているか
 	bool m_bDeath;				// 死亡しているか
+	bool m_bDisp;				// 表示するか
+	bool m_bDispSmash;			// 吹き飛び用の表示するか
 	STUNSTATE m_StunState;		// 気絶の状態管理
 	int m_StunStateCount;		// 状態管理用カウント
 	STATE m_State;				// 状態管理
@@ -197,6 +219,10 @@ private:		// 自分だけアクセスできる
 	CLog *m_apLog[LOG_MAX];		// ログ
 	int m_nLogPlayer;			// ログに表示するプレイヤーの番号
 	int m_nLogNumber;			// ログの生成番号
+	bool m_bTutorial;			// チュートリアル状態かどうか
+	bool m_bKill;				// キルを行ったかどうか
+	bool m_bRescue;				// 救助を行ったかどうか
+	bool m_bAction;				// 起動を行ったかどうか
 };
 
 #endif

@@ -314,18 +314,28 @@ void CObject::UpdateAll(void)
 	if (CManager::Get()->GetMode() == CScene::MODE_GAME)
 	{ // ゲームモードの場合
 
-		if (CGame::GetPause() != nullptr &&
-			CGame::GetPause()->GetPause() == true)
-		{ // ポーズ中の場合
+		if (CGame::GetState() == CGame::STATE_PLAY)
+		{ // プレイモードの場合
 
-			// ゲームの更新処理
-			UpdateGame();
+			if (CGame::GetPause() != nullptr &&
+				CGame::GetPause()->GetPause() == true)
+			{ // ポーズ中の場合
+
+				// ゲームの更新処理
+				UpdateGame();
+			}
+			else
+			{ // ポーズ以外の場合
+
+				// 通常更新処理
+				UpdateNormal();
+			}
 		}
 		else
-		{ // ポーズ以外の場合
+		{ // 上記以外
 
-			// 通常更新処理
-			UpdateNormal();
+			// カウントダウンの更新処理
+			UpdateCountdown();
 		}
 	}
 	else
@@ -361,6 +371,56 @@ void CObject::UpdateNormal(void)
 				pObj->GetType() != TYPE_SCENE &&
 				pObj->m_bDeath == false)
 			{ // オブジェクトの種類が NONEとPAUSE以外かつ、死亡フラグがfalseの場合
+
+				// オブジェクトの更新
+				pObj->Update();
+
+				if (pObj != nullptr &&
+					pObj->m_pNext == nullptr)
+				{ // 次のオブジェクトが NULL の場合
+
+					// 次のオブジェクトを NULL にする
+					pObjNext = nullptr;
+				}
+			}
+
+			// 次のオブジェクトを代入する
+			pObj = pObjNext;
+		}
+
+		for (int nCnt = 0; nCnt < PRIORITY_MAX; nCnt++)
+		{
+			// 死亡判定処理
+			DeathDecision(nCnt);
+		}
+	}
+}
+
+//===========================================
+// カウントダウン中の更新処理
+//===========================================
+void CObject::UpdateCountdown(void)
+{
+	// ローカル変数宣言
+	CObject* pObj = nullptr;		// 現在のオブジェクトのポインタ
+	CObject* pObjNext = nullptr;	// 次のオブジェクトのポインタ
+
+	for (int nCntPriority = 0; nCntPriority < PRIORITY_MAX; nCntPriority++)
+	{
+		// オブジェクトを代入する
+		pObj = m_apTop[nCntPriority];
+
+		while (pObj != nullptr)
+		{ // オブジェクトが NULL じゃない限り回す
+
+			// 次のオブジェクトを代入する
+			pObjNext = pObj->m_pNext;
+
+			if ((pObj->GetType() == TYPE_COUNTDOWN || pObj->GetType() == TYPE_FINISHUI) &&
+				pObj->GetType() != TYPE_NONE &&
+				pObj->GetType() != TYPE_SCENE &&
+				pObj->m_bDeath == false)
+			{ // オブジェクトの種類が PAUSEかTIMEかCOUNTDOWN かつ、死亡フラグがfalseの場合
 
 				// オブジェクトの更新
 				pObj->Update();
@@ -584,6 +644,7 @@ void CObject::DrawGame(void)
 		{
 			// カメラの設定処理
 			CManager::Get()->GetMlutiCamera(nCnt)->Set(nCnt);
+			m_DrawIdx = nCnt;
 
 			// ローカル変数宣言
 			CObject* pObj = nullptr;		// 現在のオブジェクトのポインタ

@@ -1,45 +1,39 @@
 //===================================
 //
-// スピーカーヘッダー[Himo.h]
-// Author 坂本翔唯
+// テレビヘッダー[cup.h]
+// Author 堀川萩大
 //
 //===================================
-#ifndef _SPEAKER_H_
-#define _SPEAKER_H_
+#ifndef _TV_H_
+#define _TV_H_
 
 //***********************************
 // インクルードファイル
 //***********************************
 #include "obstacle.h"
 
+class CConsent;
+class CObject3D;
+class CBlock;
 //-----------------------------------
-// マクロ定義
+// クラス定義(コップ)
 //-----------------------------------
-#define MAX_NOTE	 (64)		//音符が画面の中に存在できる最大数
-
-//-----------------------------------
-// 前方宣言
-//-----------------------------------
-class CNote;		// 音符
-
-//-----------------------------------
-// クラス定義(スピーカー)
-//-----------------------------------
-class CSpeaker : public CObstacle
+class CTv : public CObstacle
 {
 public:			// 誰でもアクセスできる
 
-	// 列挙型定義(状態)
+	CTv();				// コンストラクタ
+	~CTv();				// デストラクタ
+
+							// 列挙型定義(状態)
 	enum STATE
 	{
-		STATE_STOP = 0,		// 停止状態
-		STATE_SHRINK,		// 縮み状態
-		STATE_EXTEND,		// 伸び状態
-		STATE_MAX			// この列挙型の総数
+		STATE_NONE = 0,	// アイテム取得可能状態
+		STATE_COOLDOWN,	// クールタイム状態
+		STATE_TRAP,		// ネズミ捕り画面だった場合
+		STATE_BOMB,		// 爆弾画面だった場合
+		STATE_MAX		// この列挙型の総数
 	};
-
-	CSpeaker();				// コンストラクタ
-	~CSpeaker();			// デストラクタ
 
 	// メンバ関数
 	HRESULT Init(void);		// 初期化処理
@@ -52,24 +46,20 @@ public:			// 誰でもアクセスできる
 	bool Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type);	// 当たり判定処理
 	bool Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type);		// ヒット処理
 	bool HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type);
-	void Action(void) override;
-	void MySetIdx(int Idx){ m_bmySet[Idx] = false; }
-	static void NULLNote(int Idx) { m_apNote[Idx] = NULL; }
-
+	bool HitRemocon(void);
+	void Action(void) override;		// アクション
+	void PowerAction(void);			// 電源処理
+	void VisionChange(void);		// テレビ画面切り替え
 private:		// 自分だけアクセスできる
+	void StateManager(void);		// 状態管理マネージャー
 
-	// メンバ関数
-	void State(void);		// 状態による処理
-	void SetNote(void);
-
-	// メンバ変数
-	STATE m_state;				// 状態
-	bool m_bmySet[MAX_NOTE];
-	bool m_bAction;
-	int m_nNoteCount;
-
-	// 静的メンバ変数
-	static CNote *m_apNote[MAX_NOTE];
+	bool m_bPower;
+	int m_nCoolTime;			// クールタイム
+	int m_nChangeVision;		// 画面変化処理
+	STATE m_State;				// テレビの状態
+	CObject3D *m_pVision;		// ポリゴン情報
+	D3DXVECTOR3 m_VisionSize;	// ポリゴンサイズ
+	CBlock* m_pRemocn;			// リモコンのモデル情報
 };
 
 #endif

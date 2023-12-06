@@ -15,8 +15,11 @@
 #include "objectX.h"
 #include "input.h"
 #include "effect.h"
+#include "collision.h"
+#include "debugproc.h"
+#include "tutorial.h"
 
-#define ACTION_TIME (120)
+#define ACTION_TIME (240)
 #define WAIT_TIME (20)
 
 //==============================
@@ -28,9 +31,15 @@ CLeash::CLeash() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 	m_move = NONE_D3DXVECTOR3;
 	ActionPosHead = NONE_D3DXVECTOR3;
 	ActionPosToes = NONE_D3DXVECTOR3;
+	m_vtxMax = NONE_D3DXVECTOR3;			// 最大値
+	m_vtxMin = NONE_D3DXVECTOR3;			// 最小値
 	m_State = STATE_FALSE;
-	m_bSetHead = false;
-	m_bSetToes = false;
+	for (int nCnt = 0; nCnt < 4; nCnt++)
+	{
+		m_bSetHead[nCnt] = false;
+		m_bSetToes[nCnt] = false;
+	}
+	m_bAction = false;
 	m_StateCount = 0;
 	SetRatUse(true);
 }
@@ -77,10 +86,43 @@ void CLeash::Update(void)
 	D3DXVECTOR3 rot = GetRot();
 
 	//ギミック起動時の処理
-	if ((m_bSetHead == true && m_bSetToes == true) && m_State == STATE_FALSE)
+	if (((m_bSetHead[0] == true || m_bSetHead[1] == true || m_bSetHead[2] == true || m_bSetHead[3] == true) && 
+		(m_bSetToes[0] == true || m_bSetToes[1] == true || m_bSetToes[2] == true || m_bSetToes[3] == true)) &&
+		m_State == STATE_FALSE)
 	{//起動していない時にネズミが両端を持ったら
 		Action();
+		m_bAction = true;
+		if (CManager::Get()->GetMode() == CScene::MODE_TUTORIAL)
+		{
+			CTutorial::SetMultiAction(true);
+		}
 	}
+
+	CManager::Get()->GetDebugProc()->Print("\n");
+	for (int nCnt = 0; nCnt < 4; nCnt++)
+	{
+		if (m_bSetHead[nCnt] == true)
+		{
+			CManager::Get()->GetDebugProc()->Print("オン:");
+		}
+		else
+		{
+			CManager::Get()->GetDebugProc()->Print("オフ:");
+		}
+	}
+	CManager::Get()->GetDebugProc()->Print("\n");
+	for (int nCnt = 0; nCnt < 4; nCnt++)
+	{
+		if (m_bSetToes[nCnt] == true)
+		{
+			CManager::Get()->GetDebugProc()->Print("オン:");
+		}
+		else
+		{
+			CManager::Get()->GetDebugProc()->Print("オフ:");
+		}
+	}
+	CManager::Get()->GetDebugProc()->Print("\n");
 
 	StateManager(&pos);
 
@@ -100,8 +142,8 @@ void CLeash::Update(void)
 
 	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_0) == true)
 	{ // Aボタンを押した場合
-		m_bSetHead = true;
-		m_bSetToes = true;
+		m_bSetHead[0] = true;
+		m_bSetToes[0] = true;
 	}
 
 	SetPos(pos);
@@ -178,8 +220,12 @@ void CLeash::StateManager(D3DXVECTOR3 *pos)
 		if (m_StateCount <= 0)
 		{
 			m_State = STATE_FALSE;
-			m_bSetHead = false;
-			m_bSetToes = false;
+			for (int nCnt = 0; nCnt < 4; nCnt++)
+			{
+				m_bSetHead[nCnt] = false;
+				m_bSetToes[nCnt] = false;
+			}
+			m_bAction = false;
 			SetFileData(CXFile::TYPE_LEASH);
 		}
 		break;
@@ -193,6 +239,53 @@ void CLeash::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE 
 {
 	// 情報の設定処理
 	CObstacle::SetData(pos,rot, type);
+
+	// 当たり判定の設定処理
+	CollisionSetting();
+}
+
+//=====================================
+// 当たり判定の設定処理
+//=====================================
+void CLeash::CollisionSetting(void)
+{
+	// 位置と向きと最小値と最大値を取得する
+	D3DXVECTOR3 pos = GetPos();
+	D3DXVECTOR3 rot = GetRot();
+	D3DXVECTOR3 vtxMin = GetFileData().vtxMin;
+	D3DXVECTOR3 vtxMax = GetFileData().vtxMax;
+
+	if (rot.y >= D3DX_PI * -0.25f &&
+		rot.y <= D3DX_PI * 0.25f)
+	{ // 方向が手前からの場合
+
+		// 最大値と最小値を設定する
+		m_vtxMax = D3DXVECTOR3(0.0f, vtxMax.y, vtxMax.z);
+		m_vtxMin = D3DXVECTOR3(0.0f, vtxMin.y, vtxMin.z);
+	}
+	else if (rot.y >= D3DX_PI * 0.25f &&
+		rot.y <= D3DX_PI * 0.75f)
+	{ // 方向が左からの場合
+
+		// 最大値と最小値を設定する
+		m_vtxMax = D3DXVECTOR3(vtxMax.z, vtxMax.y, 0.0f);
+		m_vtxMin = D3DXVECTOR3(vtxMin.z, vtxMin.y, 0.0f);
+	}
+	else if (rot.y >= D3DX_PI * -0.75f &&
+		rot.y <= D3DX_PI * -0.25f)
+	{ // 方向が右からの場合
+
+		// 最大値と最小値を設定する
+		m_vtxMax = D3DXVECTOR3(-vtxMin.z, vtxMax.y, 0.0f);
+		m_vtxMin = D3DXVECTOR3(-vtxMax.z, vtxMin.y, 0.0f);
+	}
+	else
+	{ // 上記以外(方向が奥からの場合)
+
+		// 最大値と最小値を設定する
+		m_vtxMax = D3DXVECTOR3(0.0f, vtxMax.y, -vtxMin.z);
+		m_vtxMin = D3DXVECTOR3(0.0f, vtxMin.y, -vtxMax.z);
+	}
 }
 
 //=====================================
@@ -209,9 +302,74 @@ bool CLeash::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float 
 //=====================================
 bool CLeash::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
 {
-	//// 終了処理
-	//Uninit();
+	// 最大値と最小値を設定する
+	D3DXVECTOR3 vtxMax = D3DXVECTOR3(fWidth, fHeight, fDepth);
+	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-fWidth, 0.0f, -fDepth);
+
+	if (type == CPlayer::TYPE_CAT)
+	{ // ネコの場合
+
+		if (m_State != STATE_FALSE &&
+			useful::RectangleCollisionXY(pos, GetPos(), vtxMax, m_vtxMax, vtxMin, m_vtxMin) == true &&
+			useful::RectangleCollisionXZ(pos, GetPos(), vtxMax, m_vtxMax, vtxMin, m_vtxMin) == true &&
+			useful::RectangleCollisionYZ(pos, GetPos(), vtxMax, m_vtxMax, vtxMin, m_vtxMin) == true)
+		{ // 停止状態以外かつ、当たり判定の中に入った場合
+
+			// true を返す
+			return true;
+		}
+	}
 
 	// false を返す
 	return false;
+}
+
+//=====================================
+// ヒット処理
+//=====================================
+bool CLeash::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type)
+{
+	if (useful::CircleCollisionXZ(pos, ActionPosHead, Radius, GetFileData().fRadius) == true)
+	{//円の範囲内の場合tureを返す
+		return true;
+	}
+
+	if (useful::CircleCollisionXZ(pos, ActionPosToes, Radius, GetFileData().fRadius) == true)
+	{//円の範囲内の場合tureを返す
+		return true;
+	}
+
+	return false;
+}
+
+//=====================================
+// ヒット処理
+//=====================================
+void CLeash::HitMultiCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type, int nIdx, bool bInput)
+{
+	if (useful::CircleCollisionXZ(pos, ActionPosHead, Radius, GetFileData().fRadius) == true)
+	{//円の範囲内の場合tureを返す
+
+		if (bInput == true)
+		{//起動入力がある時
+			m_bSetHead[nIdx] = true;
+		}
+	}
+	else
+	{
+		m_bSetHead[nIdx] = false;
+	}
+
+	if (useful::CircleCollisionXZ(pos, ActionPosToes, Radius, GetFileData().fRadius) == true)
+	{//円の範囲内の場合tureを返す
+
+		if (bInput == true)
+		{//起動入力がある時
+			m_bSetToes[nIdx] = true;
+		}
+	}
+	else
+	{
+		m_bSetToes[nIdx] = false;
+	}
 }

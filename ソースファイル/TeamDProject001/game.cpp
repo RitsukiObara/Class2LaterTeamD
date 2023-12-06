@@ -51,6 +51,7 @@ namespace
 		D3DXVECTOR3(SCREEN_WIDTH - 90.0f, SCREEN_HEIGHT - 80.0f, 0.0f),
 	};
 	static const int TRANS_COUNT = 80;				// 遷移カウント
+	static const int START_COUNT = 5;				// 開始のカウント
 }
 
 //--------------------------------------------
@@ -122,7 +123,7 @@ HRESULT CGame::Init(void)
 	CManager::Get()->GetFile()->SetMap();
 
 	// カウントダウンの生成処理
-	CCountdown::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f), D3DXVECTOR3(200.0f, 250.0f, 0.0f));
+	CCountdown::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f), D3DXVECTOR3(200.0f, 250.0f, 0.0f), START_COUNT);
 
 	// メッシュのテキスト読み込み
 	//CMesh::TxtSet();
@@ -172,6 +173,9 @@ HRESULT CGame::Init(void)
 	CObstacle::Create(D3DXVECTOR3(-400.0f, 0.0f, 400.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_PETBOTTLE);
 	
 	CObstacle::Create(D3DXVECTOR3(-400.0f, 0.0f, 400.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_TOYCAR);
+
+	// コップの生成処理
+	CObstacle::Create(D3DXVECTOR3(-200.0f, 0.0f, 100.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_ROOMBA);
 
 #endif // _DEBUG
 
@@ -299,9 +303,6 @@ void CGame::Update(void)
 	{
 	case CGame::STATE_START:
 
-		// ポーズ処理
-		Pause();
-
 		break;
 
 	case CGame::STATE_PLAY:
@@ -316,6 +317,16 @@ void CGame::Update(void)
 		// 遷移処理
 		Transition();
 
+		for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
+		{
+			if (m_apPlayer[nCnt] != nullptr)
+			{ // プレイヤーが NULL じゃない場合
+
+				// カメラの更新処理
+				m_apPlayer[nCnt]->CameraUpdate();
+			}
+		}
+
 		break;
 
 	case CGame::STATE_CAT_WIN:
@@ -326,6 +337,16 @@ void CGame::Update(void)
 			m_pFinish->SetFinish(true);
 		}
 		Transition();
+
+		for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
+		{
+			if (m_apPlayer[nCnt] != nullptr)
+			{ // プレイヤーが NULL じゃない場合
+
+				// カメラの更新処理
+				m_apPlayer[nCnt]->CameraUpdate();
+			}
+		}
 
 		break;
 

@@ -50,6 +50,8 @@ public:			// 誰でもアクセスできる
 	void Hit(void);					// ヒット処理
 	void MotionManager(void);		// モーションの管理
 
+	bool GetAttack_Jump(void) { return m_bJump; }	// アタックジャンプ状態の取得処理
+
 	void SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type);	// 情報の設定処理
 
 private:		// 自分だけアクセスできる
@@ -68,7 +70,6 @@ private:		// 自分だけアクセスできる
 
 	// 静的メンバ関数
 	static bool m_bResurrection;	// 復活させてるのか
-
 };
 
 #endif

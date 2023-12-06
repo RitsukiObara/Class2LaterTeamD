@@ -10,7 +10,6 @@
 #include "main.h"
 #include "manager.h"
 #include "resurrection_fan.h"
-#include "object3Dfan.h"
 #include "model.h"
 #include "texture.h"
 #include "player.h"
@@ -20,9 +19,8 @@
 // マクロ定義
 //-------------------------------------------
 #define RADIUS			(100.0f)	// 半径
-#define DEFAULT_COLOR	(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f))		// 初期色
-#define REZ_COLOR		(D3DXCOLOR(0.3f, 0.7f, 0.7f, 0.5f))		// 回復の色
-
+#define DEFAULT_COLOR	(D3DXCOLOR(0.2f, 0.5f, 0.5f, 0.2f))		// 初期色
+#define REZ_COLOR		(D3DXCOLOR(0.0f, 1.0f, 0.2f, 0.6f))		// 回復の色
 
 //-------------------------------------------
 // 静的メンバ変数宣言
@@ -31,7 +29,7 @@
 //==============================
 // コンストラクタ
 //==============================
-CRessrectionFan::CRessrectionFan()
+CRessrectionFan::CRessrectionFan() : CObject3DFan(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 {
 	// 全ての値をクリアする
 	m_nRezTime = 0;			// 回復時間

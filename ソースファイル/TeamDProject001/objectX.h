@@ -54,6 +54,7 @@ public:			// 誰でもアクセスできる
 		TYPE_FANBLADE,			// 扇風機(羽根)
 		TYPE_CONSENT,			// コンセント
 		TYPE_DEATHARROW,		// 死亡矢印
+		TYPE_GARBAGE,			// ゴミ
 
 		// ブロックモデル
 		TYPE_CARDBOARD,			// 段ボール
@@ -76,9 +77,9 @@ public:			// 誰でもアクセスできる
 		TYPE_PICTUREFRAME,		// 写真立て
 		TYPE_SHELF,				// 戸棚
 		TYPE_PULLSHELF,			// 引き出し棚
-		TYPE_KITCHEN,			//キッチン
-		TYPE_REIZOUKO,			//冷蔵庫
-		TYPE_TABLE,				//テーブル
+		TYPE_KITCHEN,			// キッチン
+		TYPE_REIZOUKO,			// 冷蔵庫
+		TYPE_TABLE,				// テーブル
 		TYPE_CHAIR,				// 机の椅子
 		TYPE_CORKBOARD,			// コルクボード
 		TYPE_DESK,				// デスク
@@ -103,8 +104,7 @@ public:			// 誰でもアクセスできる
 		TYPE_PIN,				// 画鋲
 		TYPE_ELECFAN,			// 扇風機(本体)
 		TYPE_CUP,				// コップ
-		TYPE_GARBAGECAN,		//ゴミ箱
-		TYPE_GARBAGE,			//ゴミ
+		TYPE_GARBAGECAN,		// ゴミ箱
 
 		//ネズミモデル
 		TYPE_RAT_BODY,			// 体

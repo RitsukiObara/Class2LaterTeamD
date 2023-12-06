@@ -68,6 +68,8 @@ void CObstacle::Box(void)
 	m_pPrev = nullptr;		// 前のへのポインタ
 	m_pNext = nullptr;		// 次のへのポインタ
 	m_pGimmickUI = NULL;
+	m_pMultiGimmickUI[0] = NULL;
+	m_pMultiGimmickUI[1] = NULL;
 	for (int nCnt = 0; nCnt < 4; nCnt++)
 	{
 		m_pGimmickUIFalse[nCnt] = false;
@@ -159,6 +161,15 @@ void CObstacle::Uninit(void)
 		m_pGimmickUI = NULL;
 	}
 
+	for (int nCnt = 0; nCnt < 2; nCnt++)
+	{
+		if (m_pMultiGimmickUI[nCnt] != NULL)
+		{
+			m_pMultiGimmickUI[nCnt]->Uninit();
+			m_pMultiGimmickUI[nCnt] = NULL;
+		}
+	}
+
 	// リスト構造関係のポインタを NULL にする
 	m_pPrev = nullptr;
 	m_pNext = nullptr;
@@ -173,6 +184,14 @@ void CObstacle::Update(void)
 	{
 		m_pGimmickUI->Update();
 	}
+
+	for (int nCnt = 0; nCnt < 2; nCnt++)
+	{
+		if (m_pMultiGimmickUI[nCnt] != NULL)
+		{
+			m_pMultiGimmickUI[nCnt]->Update();
+		}
+	}
 }
 
 //=====================================
@@ -186,6 +205,14 @@ void CObstacle::Draw(void)
 	if (m_pGimmickUI != NULL)
 	{
 		m_pGimmickUI->Draw();
+	}
+
+	for (int nCnt = 0; nCnt < 2; nCnt++)
+	{
+		if (m_pMultiGimmickUI[nCnt] != NULL)
+		{
+			m_pMultiGimmickUI[nCnt]->Draw();
+		}
 	}
 }
 
@@ -375,11 +402,13 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, con
 void CObstacle::GimmickUI(bool Set, int Player_Idx)
 {
 	if (Set == true)
-	{
+	{//UI表示の範囲内にいる場合
 		if (m_pGimmickUI == NULL)
 		{
+			//自分のUI表示状態をONにする
 			m_pGimmickUIFalse[Player_Idx] = true;
 
+			//UIの表示
 			m_pGimmickUI = CBillboard::Create(TYPE_NONE);
 			m_pGimmickUI->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\UI_GimmickOn.png"));
 			m_pGimmickUI->SetSize(D3DXVECTOR3(50.0f, 50.0f, 0.0f));
@@ -395,10 +424,13 @@ void CObstacle::GimmickUI(bool Set, int Player_Idx)
 		}
 	}
 	else
-	{
+	{//UI表示の範囲内にいない場合
+
+		//自分のUI表示状態をOFFにする
 		m_pGimmickUIFalse[Player_Idx] = false;
 	}
 
+	//全てのプレイヤーの表示状態がOFFのとき削除する
 	if (m_pGimmickUIFalse[0] == false &&
 		m_pGimmickUIFalse[1] == false &&
 		m_pGimmickUIFalse[2] == false &&
@@ -408,6 +440,71 @@ void CObstacle::GimmickUI(bool Set, int Player_Idx)
 		{
 			m_pGimmickUI->Uninit();
 			m_pGimmickUI = NULL;
+		}
+	}
+}
+
+//=====================================
+// ギミック起動UIの表示
+//=====================================
+void CObstacle::MultiGimmickUI(bool Set, int Player_Idx)
+{
+	for (int nCnt = 0; nCnt < 2; nCnt++)
+	{
+		if (Set == true)
+		{//UI表示の範囲内にいる場合
+			if (m_pMultiGimmickUI[nCnt] == NULL)
+			{
+				//自分のUI表示状態をONにする
+				m_pGimmickUIFalse[Player_Idx] = true;
+
+				//UIの表示
+				m_pMultiGimmickUI[nCnt] = CBillboard::Create(TYPE_NONE);
+				m_pMultiGimmickUI[nCnt]->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\UI_GimmickOn.png"));
+				m_pMultiGimmickUI[nCnt]->SetSize(D3DXVECTOR3(50.0f, 50.0f, 0.0f));
+				if (nCnt == 0)
+				{
+					m_pMultiGimmickUI[nCnt]->SetPos(D3DXVECTOR3(
+						GetPosHead().x,
+						GetPosHead().y + 50.0f,
+						GetPosHead().z));
+					m_pMultiGimmickUI[nCnt]->SetPosOld(D3DXVECTOR3(
+						GetPosHead().x,
+						GetPosHead().y + 50.0f,
+						GetPosHead().z));
+				}
+				else if (nCnt == 1)
+				{
+					m_pMultiGimmickUI[nCnt]->SetPos(D3DXVECTOR3(
+						GetPosToes().x,
+						GetPosToes().y + 50.0f,
+						GetPosToes().z));
+					m_pMultiGimmickUI[nCnt]->SetPosOld(D3DXVECTOR3(
+						GetPosToes().x,
+						GetPosToes().y + 50.0f,
+						GetPosToes().z));
+				}
+				m_pMultiGimmickUI[nCnt]->SetVertex();
+			}
+		}
+		else
+		{//UI表示の範囲内にいない場合
+
+		 //自分のUI表示状態をOFFにする
+			m_pGimmickUIFalse[Player_Idx] = false;
+		}
+
+		//全てのプレイヤーの表示状態がOFFのとき削除する
+		if (m_pGimmickUIFalse[0] == false &&
+			m_pGimmickUIFalse[1] == false &&
+			m_pGimmickUIFalse[2] == false &&
+			m_pGimmickUIFalse[3] == false)
+		{
+			if (m_pMultiGimmickUI[nCnt] != NULL)
+			{
+				m_pMultiGimmickUI[nCnt]->Uninit();
+				m_pMultiGimmickUI[nCnt] = NULL;
+			}
 		}
 	}
 }

@@ -184,6 +184,7 @@
     <ClCompile Include="electricfan.cpp" />
     <ClCompile Include="elevation_manager.cpp" />
     <ClCompile Include="entry.cpp" />
+    <ClCompile Include="entry_BG.cpp" />
     <ClCompile Include="entry_frame.cpp" />
     <ClCompile Include="entry_ID.cpp" />
     <ClCompile Include="entry_message.cpp" />
@@ -289,6 +290,7 @@
     <ClCompile Include="title_wall.cpp" />
     <ClCompile Include="toycar.cpp" />
     <ClCompile Include="tutorial.cpp" />
+    <ClCompile Include="tv.cpp" />
     <ClCompile Include="useful.cpp" />
     <ClCompile Include="wall.cpp" />
     <ClCompile Include="consent.cpp" />
@@ -324,6 +326,7 @@
     <ClInclude Include="electricfan.h" />
     <ClInclude Include="elevation_manager.h" />
     <ClInclude Include="entry.h" />
+    <ClInclude Include="entry_BG.h" />
     <ClInclude Include="entry_frame.h" />
     <ClInclude Include="entry_ID.h" />
     <ClInclude Include="entry_message.h" />
@@ -426,6 +429,7 @@
     <ClInclude Include="title_wall.h" />
     <ClInclude Include="toycar.h" />
     <ClInclude Include="tutorial.h" />
+    <ClInclude Include="tv.h" />
     <ClInclude Include="useful.h" />
     <ClInclude Include="wall.h" />
     <ClInclude Include="consent.h" />

@@ -107,7 +107,7 @@ bool useful::CircleCollisionXY(const D3DXVECTOR3& pos0, const D3DXVECTOR3& pos1,
 	// 円の範囲を算出
 	fLength = (pos1.x - pos0.x) * (pos1.x - pos0.x) + (pos1.y - pos0.y) * (pos1.y - pos0.y);
 
-	if (fLength <= (fRadius0 * fRadius1))
+	if (fLength <= (fRadius0 + fRadius1) * (fRadius0 + fRadius1))
 	{ // オブジェクトが当たった場合
 
 		// true を返す
@@ -132,7 +132,7 @@ bool useful::CircleCollisionXZ(const D3DXVECTOR3& pos0, const D3DXVECTOR3& pos1,
 	// 円の範囲を算出
 	fLength = (pos1.x - pos0.x) * (pos1.x - pos0.x) + (pos1.z - pos0.z) * (pos1.z - pos0.z);
 
-	if (fLength <= (fRadius0 * fRadius1))
+	if (fLength <= (fRadius0 + fRadius1) * (fRadius0 + fRadius1))
 	{ // オブジェクトが当たった場合
 
 		// true を返す
@@ -157,7 +157,7 @@ bool useful::CircleCollisionYZ(const D3DXVECTOR3& pos0, const D3DXVECTOR3& pos1,
 	// 円の範囲を算出
 	fLength = (pos1.y - pos0.y) * (pos1.y - pos0.y) + (pos1.z - pos0.z) * (pos1.z - pos0.z);
 
-	if (fLength <= (fRadius0 * fRadius1))
+	if (fLength <= (fRadius0 + fRadius1) * (fRadius0 + fRadius1))
 	{ // オブジェクトが当たった場合
 
 		// true を返す
@@ -487,10 +487,6 @@ bool useful::CylinderInner(const D3DXVECTOR3& TargetPos, const D3DXVECTOR3& Obje
 {
 	// ローカル変数宣言
 	float fLength = 0.0f;			// 距離
-	float fAngle = 0.0f;			// 向き
-
-	// 向きを取る
-	fAngle = atan2f((TargetPos.x - ObjectPos.x), (TargetPos.z - ObjectPos.z));
 
 	// 半径を測る
 	fLength = sqrtf((TargetPos.x - ObjectPos.x) * (TargetPos.x - ObjectPos.x) + (TargetPos.z - ObjectPos.z) * (TargetPos.z - ObjectPos.z));

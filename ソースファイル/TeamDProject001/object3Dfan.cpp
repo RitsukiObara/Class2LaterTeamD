@@ -17,17 +17,17 @@
 //=========================================
 CObject3DFan::CObject3DFan() : CObject(CObject::TYPE_3DPOLYGON, CObject::PRIORITY_BG)
 {
-	// 全ての値をクリアする
-	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// 位置
-	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 前回の位置
-	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// 向き
-	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// サイズ
-	m_col = D3DXCOLOR(1.0f,1.0f,1.0f,1.0f);			// 色
-	m_pVtxBuff = nullptr;							// 頂点バッファのポインタ
-	ZeroMemory(&m_mtxWorld, sizeof(m_mtxWorld));	// ワールドマトリックス
-	m_nNumAngle = 0;								// 角度の数
-	m_fRadius = 0.0f;								// 半径
-	m_nTexIdx = NONE_TEXIDX;						// テクスチャのインデックス
+	// コンストラクタの箱
+	Box();
+}
+
+//=========================================
+// オーバーロードコンストラクタ
+//=========================================
+CObject3DFan::CObject3DFan(CObject::TYPE type, PRIORITY priority) : CObject(type, priority)
+{
+	// コンストラクタの箱
+	Box();
 }
 
 //=========================================
@@ -36,6 +36,24 @@ CObject3DFan::CObject3DFan() : CObject(CObject::TYPE_3DPOLYGON, CObject::PRIORIT
 CObject3DFan::~CObject3DFan()
 {
 
+}
+
+//==============================
+// コンストラクタの箱
+//==============================
+void CObject3DFan::Box(void)
+{
+	// 全ての値をクリアする
+	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// 位置
+	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 前回の位置
+	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// 向き
+	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// サイズ
+	m_col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);		// 色
+	m_pVtxBuff = nullptr;							// 頂点バッファのポインタ
+	ZeroMemory(&m_mtxWorld, sizeof(m_mtxWorld));	// ワールドマトリックス
+	m_nNumAngle = 0;								// 角度の数
+	m_fRadius = 0.0f;								// 半径
+	m_nTexIdx = NONE_TEXIDX;						// テクスチャのインデックス
 }
 
 //===========================================
@@ -281,7 +299,7 @@ void CObject3DFan::SetVtxColor(const D3DXCOLOR& normalCol, const D3DXCOLOR& rezC
 
 	for (int nCnt = 0; nCnt < m_nNumAngle; nCnt++)
 	{
-		if (nCnt <= nEndResVtx)
+		if (nCnt < nEndResVtx)
 		{ // 回復してる範囲の頂点のとき
 
 			// 頂点座標の設定

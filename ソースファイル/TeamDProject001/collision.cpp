@@ -126,7 +126,8 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 	CObstacle* pObstacleNext = nullptr;				// 次の障害物
 	D3DXVECTOR3 pos = pPlayer->GetPos();			// 位置
 	CPlayer::TYPE type = pPlayer->GetType();		// 種類
-	float fAngle;									// 吹き飛ぶ方向
+	float fAngle;				// 吹き飛ぶ方向
+	bool bHitMove = false;		// ヒット状況
 
 	while (pObstacle != nullptr)
 	{ // ブロックの情報が NULL じゃない場合
@@ -144,6 +145,9 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 				// 移動量を設定する
 				pPlayer->SetSpeed(pPlayer->GetSpeed() * 0.3f);
 
+				// ヒットした
+				bHitMove = true;
+
 				break;
 
 			case CObstacle::TYPE_SLIME:
@@ -155,6 +159,9 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 				{
 					CParticle::Create(pos, CParticle::TYPE_SLIME);
 				}
+
+				// ヒットした
+				bHitMove = true;
 
 				break;
 
@@ -270,9 +277,32 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 
 				break;
 			case CObstacle::TYPE_GARBAGECAN:
-				// 移動量を設定する
-				pPlayer->SetPos(pPlayer->GetPos() +pPlayer->GetMove()*10.0f);
+
+				// 気絶状態
+				pPlayer->Stun(60);
+
+				// 向きを算出する
+				fAngle = atan2f(pos.x - pObstacle->GetPos().x, pos.z - pObstacle->GetPos().z);
+
+				{ // 移動量の設定処理
+
+					// 移動量を取得する
+					D3DXVECTOR3 move = pPlayer->GetMove();
+
+					// 移動量を算出する
+					move.x = sinf(fAngle) * 10.0f;
+					move.y = 0.0f;
+					move.z = cosf(fAngle) * 10.0f;
+
+					// 移動量を設定する
+					pPlayer->SetMove(move);
+				}
+
+				// ヒットした
+				bHitMove = true;
+
 				break;
+
 			default:
 
 				//特になし
@@ -306,7 +336,12 @@ void collision::ObstacleAction(CPlayer* pPlayer, const float Radius)
 			{
 				if (pObstacle->HitCircle(pos, Radius, type) == true)
 				{ // 障害物の当たり判定が通った場合
+
+					//起動状態にする
 					pObstacle->Action();
+
+					//ネズミがアクションを行った判定(チュートリアル用)
+					pPlayer->SetUseAction(true);
 				}
 			}
 		}
@@ -314,9 +349,21 @@ void collision::ObstacleAction(CPlayer* pPlayer, const float Radius)
 		{
 			if (pObstacle->GetRatUse() == true)
 			{
-				if (pObstacle->HitCircle(pos, Radius, type) == true)
-				{ // 障害物の当たり判定が通った場合
-					pObstacle->Action();
+				if (pObstacle->GetType() == CObstacle::TYPE::TYPE_LEASH)
+				{//リードのとき
+					pObstacle->HitMultiCircle(pos, Radius, type, pPlayer->GetPlayerIdx(), true);
+				}
+				else
+				{//リード以外のとき
+					if (pObstacle->HitCircle(pos, Radius, type) == true)
+					{ // 障害物の当たり判定が通った場合
+
+					  //起動状態にする
+						pObstacle->Action();
+
+						//ネズミがアクションを行った判定(チュートリアル用)
+						pPlayer->SetUseAction(true);
+					}
 				}
 			}
 		}
@@ -361,11 +408,26 @@ void collision::ObstacleSearch(CPlayer* pPlayer, const float Radius)
 			{
 				if (pObstacle->HitCircle(pos, Radius, type) == true)
 				{ // 障害物の当たり判定が通った場合
-					pObstacle->GimmickUI(true, nIdx);
+					if (pObstacle->GetType() == CObstacle::TYPE::TYPE_LEASH)
+					{//リードのとき
+						pObstacle->MultiGimmickUI(true, nIdx);
+					}
+					else
+					{//リード以外のとき
+						pObstacle->GimmickUI(true, nIdx);
+					}
 				}
 				else
 				{
-					pObstacle->GimmickUI(false, nIdx);
+					if (pObstacle->GetType() == CObstacle::TYPE::TYPE_LEASH)
+					{//リードのとき
+						pObstacle->MultiGimmickUI(false, nIdx);
+						pObstacle->HitMultiCircle(pos, Radius, type, pPlayer->GetPlayerIdx(), false);
+					}
+					else
+					{//リード以外のとき
+						pObstacle->GimmickUI(false, nIdx);
+					}
 				}
 			}
 		}

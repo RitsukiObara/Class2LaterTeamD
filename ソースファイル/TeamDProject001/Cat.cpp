@@ -10,6 +10,7 @@
 #include "Cat.h"
 #include "manager.h"
 #include "game.h"
+#include "tutorial.h"
 #include "result.h"
 #include "renderer.h"
 #include "debugproc.h"
@@ -34,6 +35,7 @@
 #include "rat.h"
 #include "itemUI.h"
 #include "fraction.h"
+#include "player_idUI.h"
 
 //--------------------------------------------
 // 無名名前空間
@@ -47,10 +49,12 @@ namespace
 		D3DXVECTOR3(70.0f,SCREEN_HEIGHT * 0.5f + 50.0f,0.0f),
 		D3DXVECTOR3(SCREEN_WIDTH - 70.0f,SCREEN_HEIGHT * 0.5f + 50.0f,0.0f)
 	};
+	static const D3DXVECTOR3 CAT_SIZE = D3DXVECTOR3(70.0f, 280.0f, 70.0f);		// 当たり判定のサイズ
 	static const float MOVE_SPEED = 20.0f;			// 移動速度
 	static const float ATTACK_DISTANCE = 100.0f;	// 攻撃範囲までの距離
-	static const D3DXVECTOR3 CAT_SIZE = D3DXVECTOR3(70.0f, 200.0f, 70.0f);		// 当たり判定のサイズ
 	static const float GRAVITY = 0.55f;				// 重力
+	static const float STUN_HEIGHT = 300.0f;		// 気絶演出が出てくる高さ
+	static const float ID_HEIGHT = 350.0f;			// IDが出てくる高さ
 }
 
 //--------------------------------------------
@@ -186,24 +190,26 @@ void CCat::Update(void)
 		// 速度を設定する
 		SetSpeed(MOVE_SPEED);
 
-		if (GetStunState() != STUNSTATE_SMASH)
-		{ // 吹き飛び状態以外の場合
+		if (GetTutorial() != true)
+		{
+			if (GetStunState() != STUNSTATE_SMASH)
+			{ // 吹き飛び状態以外の場合
 
-			// 移動操作処理
-			MoveControl();
+				// 移動操作処理
+				MoveControl();
 
-			// アイテムの設置処理
-			ItemSet();
+				// アイテムの設置処理
+				ItemSet();
+			}
+
+			// 攻撃入力の処理
+			Attack();
+
+			// 移動処理
+			Move();
 		}
-
-		// 攻撃入力の処理
-		Attack();
-
 		// モーション状態の管理
 		MotionManager();
-
-		// 移動処理
-		Move();
 	}
 	else
 	{
@@ -225,6 +231,14 @@ void CCat::Update(void)
 
 	// 角度の正規化
 	RotNormalize();
+
+	if (GetPlayerID() != nullptr)
+	{ // プレイヤーのID表示が NULL じゃない場合
+
+		// 位置を設定する
+		GetPlayerID()->SetPos(D3DXVECTOR3(GetPos().x, GetPos().y + ID_HEIGHT, GetPos().z));
+		GetPlayerID()->Update();
+	}
 
 	// 更新処理
 	CPlayer::Update();
@@ -268,7 +282,7 @@ void CCat::Attack(void)
 	D3DXVECTOR3 rot = GetRot();
 
 	// ゲームモードの時だけ攻撃
-	if (CManager::Get()->GetMode() == CScene::MODE_GAME)
+	if (CManager::Get()->GetMode() == CScene::MODE_GAME || CManager::Get()->GetMode() == CScene::MODE_TUTORIAL)
 	{
 		if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_RETURN) == true ||
 			CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_A, GetPlayerIdx()) == true)
@@ -279,8 +293,16 @@ void CCat::Attack(void)
 			m_nAtkStateCount = 20;
 			for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
 			{
-				// プレイヤーの情報を取得する
-				pPlayer = CGame::GetPlayer(nCnt);
+				if (CManager::Get()->GetMode() == CScene::MODE_GAME)
+				{
+					// プレイヤーの情報を取得する
+					pPlayer = CGame::GetPlayer(nCnt);
+				}
+				if (CManager::Get()->GetMode() == CScene::MODE_TUTORIAL)
+				{
+					// プレイヤーの情報を取得する
+					pPlayer = CTutorial::GetPlayer(nCnt);
+				}
 
 				if (pPlayer != nullptr &&
 					pPlayer->GetType() == CPlayer::TYPE_RAT)
@@ -302,14 +324,13 @@ void CCat::Attack(void)
 
 							// プレイヤーのヒット処理
 							pPlayer->Hit();
+							SetRatKill(true);
 						}
 					}
 				}
 			}
 		}
 	}
-
-	//m_bAttack = true;		// 攻撃した状態にする
 }
 
 //===========================================
@@ -335,6 +356,7 @@ void CCat::AttackStateManager(void)
 			D3DXVECTOR3 pos = GetPos();
 			D3DXVECTOR3 rot = GetRot();
 
+			m_bAttack = true;		// 攻撃した状態にする
 			m_AttackState = ATTACKSTATE_ATTACK;
 			m_nAtkStateCount = 10;
 
@@ -358,6 +380,7 @@ void CCat::AttackStateManager(void)
 		if (m_nAtkStateCount <= 0)
 		{//状態カウントが0になった時
 			m_AttackState = ATTACKSTATE_MOVE;
+			m_bAttack = false;		// 攻撃してない状態にする
 		}
 		break;
 	}
@@ -422,6 +445,7 @@ void CCat::ItemSet(void)
 
 				// アイテムを設置する
 				CObstacle::Create(GetPos(), GetRot(), CObstacle::TYPE::TYPE_MOUSETRAP);
+				m_bItem = true;
 
 				break;
 
@@ -473,6 +497,16 @@ void CCat::SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 	// 情報の設定処理
 	CPlayer::SetData(pos, nID, type);
 
+	if (GetPlayerID() != nullptr)
+	{ // プレイヤーのIDが NULL じゃない場合
+
+		// 位置を設定する
+		GetPlayerID()->SetPos(D3DXVECTOR3(pos.x, pos.y + ID_HEIGHT, pos.z));
+	}
+
+	// 気絶が出る高さの設定
+	SetStunHeight(STUN_HEIGHT);
+
 	// 当たり判定のサイズの設定
 	SetSizeColl(CAT_SIZE);
 
@@ -506,9 +540,14 @@ void CCat::SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 	// モーションの設定処理
 	GetMotion()->Set(MOTIONTYPE_NEUTRAL);
 
+	// 強制モーション処理
+	GetMotion()->SetForcibly();
+
+	// モーションの更新処理(やらないと魑魅魍魎が誕生する)
+	GetMotion()->Update();
 
 	// ゲームモードの時だけUIを生成
-	if (CManager::Get()->GetMode() == CScene::MODE_GAME)
+	if (CManager::Get()->GetMode() == CScene::MODE_GAME || CManager::Get()->GetMode() == CScene::MODE_TUTORIAL)
 	{
 		// アイテムUIの生成処理
 		SetItemUI();

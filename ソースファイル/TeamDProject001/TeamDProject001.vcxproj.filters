@@ -495,6 +495,12 @@
     <ClCompile Include="entry_message.cpp">
       <Filter>Scene\Entry</Filter>
     </ClCompile>
+    <ClCompile Include="tv.cpp">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="entry_BG.cpp">
+      <Filter>Scene\Entry</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -900,6 +906,12 @@
       <Filter>Gimmick\Obstacle</Filter>
     </ClInclude>
     <ClInclude Include="entry_message.h">
+      <Filter>Scene\Entry</Filter>
+    </ClInclude>
+    <ClInclude Include="tv.h">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="entry_BG.h">
       <Filter>Scene\Entry</Filter>
     </ClInclude>
   </ItemGroup>

@@ -41,21 +41,35 @@ public:			// 誰でもアクセスできる
 
 	bool Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type);	// 当たり判定処理
 	bool Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type);		// ヒット処理
-	void CollisionHead(bool Set) { m_bSetHead = Set; }
-	void CollisionToes(bool Set) { m_bSetToes = Set; }
+	bool HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type);
+	void HitMultiCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type, int nIdx, bool bInput);
+	//void CollisionHead(bool Set) { m_bSetHead = Set; }
+	//void CollisionToes(bool Set) { m_bSetToes = Set; }
+	void SetAction(bool Set) { m_bAction = Set; }
+	bool GetAction(void) { return m_bAction; }
 	void Action(void) override;
 
+	D3DXVECTOR3 GetPosHead(void) { return ActionPosHead; }
+	D3DXVECTOR3 GetPosToes(void) { return ActionPosToes; }
+
 private:		// 自分だけアクセスできる
+
+	// メンバ関数
 	void StateManager(D3DXVECTOR3 *pos);
 	void SetActionPos(D3DXVECTOR3 pos, D3DXVECTOR3 rot);
+	void CollisionSetting(void);			// 当たり判定の設定処理
 
-	D3DXVECTOR3 m_move;			//移動量
-	D3DXVECTOR3 ActionPosHead;	//先端の位置
-	D3DXVECTOR3 ActionPosToes;	//末端の位置
-	STATE m_State;				//状態
-	int m_StateCount;			//状態管理用のカウント
-	bool m_bSetHead;			//先端の準備完了
-	bool m_bSetToes;			//末端の準備完了
+	// メンバ変数
+	D3DXVECTOR3 m_move;			// 移動量
+	D3DXVECTOR3 ActionPosHead;	// 先端の位置
+	D3DXVECTOR3 ActionPosToes;	// 末端の位置
+	D3DXVECTOR3 m_vtxMax;		// 最大値
+	D3DXVECTOR3 m_vtxMin;		// 最小値
+	STATE m_State;				// 状態
+	int m_StateCount;			// 状態管理用のカウント
+	bool m_bSetHead[4];			// 先端の準備完了
+	bool m_bSetToes[4];			// 末端の準備完了
+	bool m_bAction;				// アクションの発生
 };
 
 #endif

@@ -17,7 +17,9 @@ class CObject3DFan : public CObject
 public:			// 誰でもアクセスできる
 
 	CObject3DFan();			// コンストラクタ
+	CObject3DFan(CObject::TYPE type, PRIORITY priority = PRIORITY_PLAYER);			// オーバーロードコンストラクタ
 	virtual ~CObject3DFan();		// デストラクタ
+	void Box(void);			// コンストラクタの箱
 
 	// メンバ関数
 	virtual HRESULT Init(void);		// 初期化処理
