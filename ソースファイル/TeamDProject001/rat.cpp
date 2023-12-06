@@ -45,7 +45,7 @@ namespace
 	static const float SPEED = 15.0f;					// 速度
 	static const float ARROW_DISTANCE = 100.0f;			// このネズミの矢印の距離
 	static const float STUN_HEIGHT = 80.0f;				// 気絶演出が出てくる高さ
-	static const float ID_HEIGHT = 160.0f;				// IDが出てくる高さ
+	static const float ID_HEIGHT = 110.0f;				// IDが出てくる高さ
 	static const int INVINCIBLE_COUNT = 60;				// 無敵カウント
 }
 
