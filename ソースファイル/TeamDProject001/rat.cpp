@@ -42,7 +42,7 @@ namespace
 	static const float GRAVITY = 0.55f;					// 重力
 	static const float ADD_MOVE_Y = 10.0f;				// ジャンプ力
 	static const float ATTACK_DISTANCE = 80.0f;			// 攻撃範囲までの距離
-	static const float SPEED = 15.0f;					// 速度
+	static const float MOVE_SPEED = 15.0f;				// 速度
 	static const float ARROW_DISTANCE = 100.0f;			// このネズミの矢印の距離
 	static const float STUN_HEIGHT = 80.0f;				// 気絶演出が出てくる高さ
 	static const float ID_HEIGHT = 110.0f;				// IDが出てくる高さ
@@ -156,7 +156,7 @@ void CRat::Update(void)
 	SetPosOld(GetPos());
 
 	// 移動量を設定する(移動量を常に一定にするため)
-	SetSpeed(SPEED);
+	SetSpeed(MOVE_SPEED);
 
 	// 重力処理
 	Gravity();
