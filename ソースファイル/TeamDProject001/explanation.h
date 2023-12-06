@@ -45,6 +45,8 @@ private:		// 自分だけアクセスできる
 	CObject2D *m_pRatBG;
 	CObject2D *m_pRatText;
 	CObject2D *m_apImage[3];
+	D3DXCOLOR m_ColorKing;
+	D3DXCOLOR m_ColorText;
 };
 
 #endif
