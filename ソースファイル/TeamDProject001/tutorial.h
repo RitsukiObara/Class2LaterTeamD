@@ -107,7 +107,7 @@ private:					// 自分だけアクセスできる
 	static bool m_bPlay;					// プレイ中かどうか
 	static CAnswer* m_pAnswer;				// 返答リアクションの情報
 	static CExplanation* m_pExplanation;	// 説明の情報
-	static bool m_MultiAction;			// 連携起動の状態
+	static bool m_MultiAction;				// 連携起動の状態
 
 	// デバッグ版
 #ifdef _DEBUG

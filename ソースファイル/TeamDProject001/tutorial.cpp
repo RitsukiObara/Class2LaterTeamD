@@ -68,12 +68,12 @@ CTutorial::TUTORIAL CTutorial::m_Tutorial = TUTORIAL_MOVE;			// チュートリアルの
 bool CTutorial::m_bPlay = false;									// チュートリアルのプレイ中か否か
 CAnswer*  CTutorial::m_pAnswer = nullptr;							// 返答リアクション
 CExplanation*  CTutorial::m_pExplanation = nullptr;					// 説明
+bool CTutorial::m_MultiAction = false;							// 連携起動の状態
 
 // デバッグ版
 #ifdef _DEBUG
 CEdit* CTutorial::m_pEdit = nullptr;							// エディットの情報
 bool CTutorial::m_bEdit = false;								// エディット状況
-bool CTutorial::m_MultiAction = false;							// 連携起動の状態
 #endif
 
 //=========================================

@@ -17,7 +17,7 @@
 //-------------------------------------------
 // マクロ定義
 //-------------------------------------------
-#define SET_SIDE		(200.0f)
+#define SET_SIDE		(100.0f)
 #define CAT_KING_POS	(D3DXVECTOR3(-SET_SIDE,360.0f,0.0f))
 #define CAT_KING_SIZE	(D3DXVECTOR3(100.0f,600.0f,0.0f))
 #define CAT_BG_POS		(D3DXVECTOR3(-SET_SIDE,150.0f,0.0f))
@@ -38,6 +38,9 @@
 #define RAT_KING_STOP	(1280.0f - 150.0f)
 #define RAT_BG_STOP		(1280.0f - 500.0f)
 #define RAT_TEXT_STOP	(1280.0f - 500.0f)
+#define SIDE_MOVESPEED	(5.0f)
+#define A_PLUS_KING		(0.013f)
+#define A_PLUS_TEXT		(0.015f)
 
 //-------------------------------------------
 // 静的メンバ変数宣言
@@ -56,6 +59,8 @@ CExplanation::CExplanation() : CObject/*親クラス*/(/*ここにタイプを入れる*/CObje
 	m_pRatKing = NULL;
 	m_pRatBG = NULL;
 	m_pRatText = NULL;
+	m_ColorKing = D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f);
+	m_ColorText = D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f);;
 	for (int nCnt = 0; nCnt < 3; nCnt++)
 	{
 		m_apImage[nCnt] = NULL;
@@ -145,18 +150,32 @@ void CExplanation::Uninit(void)
 //=====================================
 void CExplanation::Update(void)
 {
+	m_ColorKing.a += A_PLUS_KING;
+
+	if (m_ColorKing.a > 1.0f)
+	{
+		m_ColorKing.a = 1.0f;
+		m_ColorText.a += A_PLUS_TEXT;
+	}
+	if (m_ColorText.a > 1.0f)
+	{
+		m_ColorText.a = 1.0f;
+	}
+
 	if (m_pCatKing != NULL)
 	{
 		m_pCatKing->Update();
 
 		D3DXVECTOR3 pos = m_pCatKing->GetPos();
-		pos.x += 2.0f;
+
+		pos.x += SIDE_MOVESPEED;
 
 		if (pos.x > CAT_KING_STOP)
 		{
 			pos.x = CAT_KING_STOP;
 		}
 
+		m_pCatKing->SetVtxColor(m_ColorKing);
 		m_pCatKing->SetPos(pos);
 	}
 	if (m_pCatBG != NULL)
@@ -164,13 +183,14 @@ void CExplanation::Update(void)
 		m_pCatBG->Update();
 
 		D3DXVECTOR3 pos = m_pCatBG->GetPos();
-		pos.x += 2.0f;
+		pos.x += SIDE_MOVESPEED;
 
 		if (pos.x > CAT_BG_STOP)
 		{
 			pos.x = CAT_BG_STOP;
 		}
 
+		m_pCatBG->SetVtxColor(m_ColorText);
 		m_pCatBG->SetPos(pos);
 	}
 	if (m_pCatText != NULL)
@@ -178,13 +198,14 @@ void CExplanation::Update(void)
 		m_pCatText->Update();
 
 		D3DXVECTOR3 pos = m_pCatText->GetPos();
-		pos.x += 2.0f;
+		pos.x += SIDE_MOVESPEED;
 
 		if (pos.x > CAT_TEXT_STOP)
 		{
 			pos.x = CAT_TEXT_STOP;
 		}
 
+		m_pCatText->SetVtxColor(m_ColorText);
 		m_pCatText->SetPos(pos);
 	}
 	if (m_pRatKing != NULL)
@@ -192,13 +213,14 @@ void CExplanation::Update(void)
 		m_pRatKing->Update();
 
 		D3DXVECTOR3 pos = m_pRatKing->GetPos();
-		pos.x -= 2.0f;
+		pos.x -= SIDE_MOVESPEED;
 
 		if (pos.x < RAT_KING_STOP)
 		{
 			pos.x = RAT_KING_STOP;
 		}
 
+		m_pRatKing->SetVtxColor(m_ColorKing);
 		m_pRatKing->SetPos(pos);
 	}
 	if (m_pRatBG != NULL)
@@ -206,13 +228,14 @@ void CExplanation::Update(void)
 		m_pRatBG->Update();
 
 		D3DXVECTOR3 pos = m_pRatBG->GetPos();
-		pos.x -= 2.0f;
+		pos.x -= SIDE_MOVESPEED;
 
 		if (pos.x < RAT_BG_STOP)
 		{
 			pos.x = RAT_BG_STOP;
 		}
 
+		m_pRatBG->SetVtxColor(m_ColorText);
 		m_pRatBG->SetPos(pos);
 	}
 	if (m_pRatText != NULL)
@@ -220,13 +243,14 @@ void CExplanation::Update(void)
 		m_pRatText->Update();
 
 		D3DXVECTOR3 pos = m_pRatText->GetPos();
-		pos.x -= 2.0f;
+		pos.x -= SIDE_MOVESPEED;
 
 		if (pos.x < RAT_TEXT_STOP)
 		{
 			pos.x = RAT_TEXT_STOP;
 		}
 
+		m_pRatText->SetVtxColor(m_ColorText);
 		m_pRatText->SetPos(pos);
 	}
 	for (int nCnt = 0; nCnt < 3; nCnt++)
@@ -309,6 +333,7 @@ void CExplanation::SetData(CTutorial::TUTORIAL Tutorial)
 		m_pCatKing->SetSize(CAT_KING_SIZE);			// サイズ
 		m_pCatKing->SetLength();					// 長さ
 		m_pCatKing->SetAngle();						// 方向
+		m_pCatKing->SetVtxColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));	// 色
 		m_pCatKing->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\image.png"));		// テクスチャの割り当て処理
 		
 		// 頂点座標の設定処理
@@ -324,6 +349,7 @@ void CExplanation::SetData(CTutorial::TUTORIAL Tutorial)
 		m_pCatBG->SetSize(CAT_BG_SIZE);				// サイズ
 		m_pCatBG->SetLength();						// 長さ
 		m_pCatBG->SetAngle();						// 方向
+		m_pCatBG->SetVtxColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));	// 色
 		m_pCatBG->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\image.png"));		// テクスチャの割り当て処理
 
 		// 頂点座標の設定処理
@@ -338,6 +364,7 @@ void CExplanation::SetData(CTutorial::TUTORIAL Tutorial)
 		m_pCatText->SetSize(CAT_TEXT_SIZE);			// サイズ
 		m_pCatText->SetLength();					// 長さ
 		m_pCatText->SetAngle();						// 方向
+		m_pCatText->SetVtxColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));	// 色
 		m_pCatText->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\image.png"));		// テクスチャの割り当て処理
 
 		// 頂点座標の設定処理
@@ -352,6 +379,7 @@ void CExplanation::SetData(CTutorial::TUTORIAL Tutorial)
 		m_pRatKing->SetSize(RAT_KING_SIZE);			// サイズ
 		m_pRatKing->SetLength();					// 長さ
 		m_pRatKing->SetAngle();						// 方向
+		m_pRatKing->SetVtxColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));	// 色
 		m_pRatKing->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\image.png"));		// テクスチャの割り当て処理
 
 		// 頂点座標の設定処理
@@ -366,6 +394,7 @@ void CExplanation::SetData(CTutorial::TUTORIAL Tutorial)
 		m_pRatBG->SetSize(RAT_BG_SIZE);				// サイズ
 		m_pRatBG->SetLength();						// 長さ
 		m_pRatBG->SetAngle();						// 方向
+		m_pRatBG->SetVtxColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));	// 色
 		m_pRatBG->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\image.png"));		// テクスチャの割り当て処理
 
 		// 頂点座標の設定処理
@@ -380,6 +409,7 @@ void CExplanation::SetData(CTutorial::TUTORIAL Tutorial)
 		m_pRatText->SetSize(RAT_TEXT_SIZE);			// サイズ
 		m_pRatText->SetLength();					// 長さ
 		m_pRatText->SetAngle();						// 方向
+		m_pRatText->SetVtxColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));	// 色
 		m_pRatText->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\image.png"));		// テクスチャの割り当て処理
 
 		// 頂点座標の設定処理
@@ -439,77 +469,6 @@ void CExplanation::SetData(CTutorial::TUTORIAL Tutorial)
 
 		break;
 	}
-
-	// 設定処理に便利なマクロ定義
-	//NONE_D3DXVECTOR3					// 向きを傾けない時とかに使用する
-	//NONE_SCALE						// 拡大率を変更しないときとかに使う
-	// 情報の設定処理
-
-	//==========================================================================
-	// 2Dポリゴン
-	//==========================================================================
-	//SetPos(位置を入れる);			// 位置
-	//SetPosOld(位置を入れる);		// 前回の位置
-	//SetRot(向きを入れる);			// 向き
-	//SetSize(サイズを入れる);		// サイズ
-	//SetLength(引数無し);			// 長さ
-	//SetAngle(引数無し);			// 方向
-	//BindTexture(CManager::Get()->GetTexture()->Regist(テクスチャの名前));		// テクスチャの割り当て処理
-
-	//// 頂点座標の設定処理
-	//SetVertex();
-
-	//==========================================================================
-	// 3Dポリゴン
-	//==========================================================================
-	//SetPos(位置を入れる);			// 位置
-	//SetPosOld(位置を入れる);		// 前回の位置
-	//SetRot(向きを入れる);			// 向き
-	//SetSize(サイズを入れる);		// サイズ
-	//BindTexture(CManager::Get()->GetTexture()->Regist(テクスチャの名前));		// テクスチャの割り当て処理
-
-	//// 頂点座標の設定処理
-	//SetVertex();
-
-	//==========================================================================
-	// ビルボード
-	//==========================================================================
-	//SetPos(位置を入れる);			// 位置
-	//SetPosOld(位置を入れる);		// 前回の位置
-	//SetSize(サイズを入れる);		// サイズ
-	//BindTexture(CManager::Get()->GetTexture()->Regist(テクスチャの名前));		// テクスチャの割り当て処理
-
-	//// 頂点座標の設定処理
-	//SetVertex();
-
-	//==========================================================================
-	// アニメーション系
-	//==========================================================================
-	//SetPos(位置を入れる);			// 位置
-	//SetPosOld(位置を入れる);		// 前回の位置
-	//SetRot(向きを入れる);			// 向き
-	//SetSize(サイズを入れる);		// サイズ
-	//SetLength(引数無し);			// 長さ
-	//SetAngle(引数無し);			// 方向
-	//BindTexture(CManager::Get()->GetTexture()->Regist(テクスチャの名前));		// テクスチャの割り当て処理
-
-	// アニメーションの設定処理
-	//SetAnim(カウントを入れる, パターン数を入れる);
-
-	//// 頂点座標の設定処理
-	//SetVertex();
-
-	// テクスチャの設定(アニメーションバージョン)
-	//SetVtxTextureAnim(アニメーションの総パターン数を入れる, 0);
-
-	//==========================================================================
-	// モデル
-	//==========================================================================
-	//SetPos(位置を入れる);					// 位置
-	//SetPosOld(位置を入れる);				// 前回の位置
-	//SetRot(向きを入れる);					// 向き
-	//SetScale(拡大率を入れる);				// 拡大率
-	//SetFileData(モデルの種類を入れる);	// モデルの情報
 }
 
 //=======================================
