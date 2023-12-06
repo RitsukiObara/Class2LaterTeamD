@@ -177,8 +177,26 @@ void CAnswer::SetData(void)
 			if (m_apAnswer[nCnt] == NULL)
 			{
 				m_apAnswer[nCnt] = CObject2D::Create(CObject2D::TYPE::TYPE_NONE, CObject::TYPE::TYPE_NONE, CObject::PRIORITY_UI);
-				m_apAnswer[nCnt]->SetPos(D3DXVECTOR3(100.0f + 100.0f * nCnt, 600.0f, 0.0f));		// 位置
-				m_apAnswer[nCnt]->SetPosOld(D3DXVECTOR3(100.0f + 100.0f * nCnt, 600.0f, 0.0f));		// 前回の位置
+				
+				switch (nCnt)
+				{
+				case 0:
+					m_apAnswer[nCnt]->SetPos(D3DXVECTOR3(100.0f, 240.0f, 0.0f));		// 位置
+					m_apAnswer[nCnt]->SetPosOld(D3DXVECTOR3(100.0f, 240.0f, 0.0f));		// 前回の位置
+					break;
+				case 1:
+					m_apAnswer[nCnt]->SetPos(D3DXVECTOR3(1200.0f, 240.0f, 0.0f));		// 位置
+					m_apAnswer[nCnt]->SetPosOld(D3DXVECTOR3(1180.0f, 240.0f, 0.0f));		// 前回の位置
+					break;
+				case 2:
+					m_apAnswer[nCnt]->SetPos(D3DXVECTOR3(100.0f, 360.0f + 240.0f, 0.0f));		// 位置
+					m_apAnswer[nCnt]->SetPosOld(D3DXVECTOR3(100.0f, 360.0f + 240.0f, 0.0f));		// 前回の位置
+					break;
+				case 3:
+					m_apAnswer[nCnt]->SetPos(D3DXVECTOR3(1200.0f, 360.0f + 240.0f, 0.0f));		// 位置
+					m_apAnswer[nCnt]->SetPosOld(D3DXVECTOR3(1180.0f, 360.0f + 240.0f, 0.0f));		// 前回の位置
+					break;
+				}
 				m_apAnswer[nCnt]->SetRot(NONE_D3DXVECTOR3);							// 向き
 				m_apAnswer[nCnt]->SetSize(D3DXVECTOR3(30.0f, 30.0f, 0.0f));			// サイズ
 				m_apAnswer[nCnt]->SetLength();										// 長さ
@@ -197,12 +215,12 @@ void CAnswer::SetData(void)
 			if (m_apAnswer[nCnt] == NULL)
 			{
 				m_apAnswer[nCnt] = CObject2D::Create(CObject2D::TYPE::TYPE_NONE, CObject::TYPE::TYPE_NONE, CObject::PRIORITY_UI);
-				m_apAnswer[nCnt]->SetPos(D3DXVECTOR3(200.0f + 200.0f * nCnt, 550.0f, 0.0f));		// 位置
-				m_apAnswer[nCnt]->SetPosOld(D3DXVECTOR3(200.0f + 200.0f * nCnt, 550.0f, 0.0f));		// 前回の位置
-				m_apAnswer[nCnt]->SetRot(NONE_D3DXVECTOR3);							// 向き
-				m_apAnswer[nCnt]->SetSize(D3DXVECTOR3(100.0f, 100.0f, 0.0f));		// サイズ
-				m_apAnswer[nCnt]->SetLength();										// 長さ
-				m_apAnswer[nCnt]->SetAngle();										// 方向
+				m_apAnswer[nCnt]->SetPos(D3DXVECTOR3(1000.0f + 50.0f * nCnt, 75.0f, 0.0f));		// 位置
+				m_apAnswer[nCnt]->SetPosOld(D3DXVECTOR3(1000.0f + 50.0f * nCnt, 75.0f, 0.0f));	// 前回の位置
+				m_apAnswer[nCnt]->SetRot(NONE_D3DXVECTOR3);										// 向き
+				m_apAnswer[nCnt]->SetSize(D3DXVECTOR3(20.0f, 20.0f, 0.0f));						// サイズ
+				m_apAnswer[nCnt]->SetLength();													// 長さ
+				m_apAnswer[nCnt]->SetAngle();													// 方向
 				m_apAnswer[nCnt]->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\no_check.png"));		// テクスチャの割り当て処理
 
 																																	// 頂点座標の設定処理
@@ -215,10 +233,10 @@ void CAnswer::SetData(void)
 			if (m_apPlayerID[nCnt] == NULL)
 			{
 				m_apPlayerID[nCnt] = CObject2D::Create(CObject2D::TYPE::TYPE_NONE, CObject::TYPE::TYPE_NONE, CObject::PRIORITY_UI);
-				m_apPlayerID[nCnt]->SetPos(D3DXVECTOR3(200.0f + 200.0f * nCnt, 500.0f, 0.0f));		// 位置
-				m_apPlayerID[nCnt]->SetPosOld(D3DXVECTOR3(200.0f + 200.0f * nCnt, 500.0f, 0.0f));	// 前回の位置
+				m_apPlayerID[nCnt]->SetPos(D3DXVECTOR3(1000.0f + 50.0f * nCnt, 50.0f, 0.0f));		// 位置
+				m_apPlayerID[nCnt]->SetPosOld(D3DXVECTOR3(1000.0f + 50.0f * nCnt, 50.0f, 0.0f));	// 前回の位置
 				m_apPlayerID[nCnt]->SetRot(NONE_D3DXVECTOR3);						// 向き
-				m_apPlayerID[nCnt]->SetSize(D3DXVECTOR3(100.0f, 100.0f, 0.0f));		// サイズ
+				m_apPlayerID[nCnt]->SetSize(D3DXVECTOR3(20.0f, 20.0f, 0.0f));		// サイズ
 				m_apPlayerID[nCnt]->SetLength();									// 長さ
 				m_apPlayerID[nCnt]->SetAngle();										// 方向
 

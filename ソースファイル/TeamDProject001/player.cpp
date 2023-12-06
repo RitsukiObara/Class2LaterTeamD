@@ -52,7 +52,8 @@ namespace
 	static const int STUN_WAIT = 120;					// オブジェクト無効の待機時間
 	static const int DEATH_WAIT = 120;					// 死亡時の待機時間
 	static const int SMASH_WAIT = 40;					// 吹き飛び状態のカウント数
-	static const int FLASH_INTERVAL = 4;				// プレイヤーの点滅間隔
+	static const int STUN_FLASH_INTERVAL = 12;				// プレイヤーの点滅間隔
+	static const int DEATH_FLASH_INTERVAL = 4;				// プレイヤーの点滅間隔
 }
 
 //==============================
@@ -868,7 +869,7 @@ void CPlayer::StunStateManager(void)
 
 	case STUNSTATE_WAIT:	//障害物のみ無敵状態
 
-		if ((m_StunStateCount % FLASH_INTERVAL) == 0)
+		if ((m_StunStateCount % STUN_FLASH_INTERVAL) == 0)
 		{ // 一定時間経ったら
 
 			// 表示状態切り替え
@@ -910,7 +911,7 @@ void CPlayer::StateManager(void)
 		// カウントを減算する
 		m_StateCount--;
 
-		if ((m_StateCount % FLASH_INTERVAL) == 0)
+		if ((m_StateCount % DEATH_FLASH_INTERVAL) == 0)
 		{ // 一定時間経ったら
 
 			// 表示状態切り替え

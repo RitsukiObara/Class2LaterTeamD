@@ -17,6 +17,7 @@
 #include "effect.h"
 #include "collision.h"
 #include "debugproc.h"
+#include "tutorial.h"
 
 #define ACTION_TIME (240)
 #define WAIT_TIME (20)
@@ -38,6 +39,7 @@ CLeash::CLeash() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 		m_bSetHead[nCnt] = false;
 		m_bSetToes[nCnt] = false;
 	}
+	m_bAction = false;
 	m_StateCount = 0;
 	SetRatUse(true);
 }
@@ -89,6 +91,11 @@ void CLeash::Update(void)
 		m_State == STATE_FALSE)
 	{//起動していない時にネズミが両端を持ったら
 		Action();
+		m_bAction = true;
+		if (CManager::Get()->GetMode() == CScene::MODE_TUTORIAL)
+		{
+			CTutorial::SetMultiAction(true);
+		}
 	}
 
 	CManager::Get()->GetDebugProc()->Print("\n");
@@ -218,6 +225,7 @@ void CLeash::StateManager(D3DXVECTOR3 *pos)
 				m_bSetHead[nCnt] = false;
 				m_bSetToes[nCnt] = false;
 			}
+			m_bAction = false;
 			SetFileData(CXFile::TYPE_LEASH);
 		}
 		break;

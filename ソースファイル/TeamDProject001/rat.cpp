@@ -444,8 +444,7 @@ void CRat::Hit(void)
 	STUNSTATE stunState = GetStunState();	// 気絶状態を取得する
 	int nCntDeath = 0;						// 死亡した数
 
-	if (state == STATE_NONE &&
-		stunState != STUNSTATE_WAIT)
+	if (state == STATE_NONE)
 	{ // ダメージ受ける状態だった場合
 
 		CParticle::Create(pos, CParticle::TYPE_ENEMYDEATH); //パーティクル

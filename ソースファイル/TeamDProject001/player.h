@@ -151,7 +151,7 @@ public:			// 誰でもアクセスできる
 	void SetLogPlayer(int LogPlayer) { m_nLogPlayer = LogPlayer; }		// 状態の設定処理
 	int GetLogPlayer(void) { return m_nLogPlayer; }						// 状態の取得処理
 
-	//チュートリアル用ゲット関数
+	//チュートリアル用ゲット関数-----------------------------------------
 	void SetBMove(bool Set) { m_bMove = Set; }			// 移動状態の設定処理
 	bool GetBMove(void) { return m_bMove; }				// 移動状態の取得処理
 	virtual bool GetAttack_Jump(void) { return false; }	// アタックジャンプ状態の取得処理
@@ -161,6 +161,8 @@ public:			// 誰でもアクセスできる
 	bool GetRatRescue(void) { return m_bRescue; }		// 救助の取得処理
 	void SetUseAction(bool Set) { m_bAction = Set; }	// 起動の設定処理
 	bool GetUseAction(void) { return m_bAction; }		// 起動の取得処理
+	virtual bool GetItem_MultiAction(void) { return false; }	// アイテム使用と連携起動の取得処理
+	//-------------------------------------------------------------------
 
 	void SetStateCount(const int nCount) { m_StateCount = nCount; };		// 状態カウントの設定処理
 
@@ -221,7 +223,6 @@ private:		// 自分だけアクセスできる
 	bool m_bKill;				// キルを行ったかどうか
 	bool m_bRescue;				// 救助を行ったかどうか
 	bool m_bAction;				// 起動を行ったかどうか
-	bool m_bItem_MultiAction;	// アイテム使用と連携起動
 };
 
 #endif

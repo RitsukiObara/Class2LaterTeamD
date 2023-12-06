@@ -74,6 +74,8 @@ public:						// 誰でもアクセスできる
 	static void SetPlay(const bool bPlay) { m_bPlay = bPlay; }		// プレイ中かどうかの進行状態の設定処理
 	static bool GetPlay(void) { return m_bPlay; }					// プレイ中かどうかの進行状態の取得処理
 
+	static void SetMultiAction(const bool bPlay) { m_MultiAction = bPlay; }		// プレイ中かどうかの進行状態の設定処理
+
 	static CPlayer* GetPlayer(const int nID);		// プレイヤーの取得処理
 
 	// NULL化処理
@@ -105,6 +107,7 @@ private:					// 自分だけアクセスできる
 	static bool m_bPlay;					// プレイ中かどうか
 	static CAnswer* m_pAnswer;				// 返答リアクションの情報
 	static CExplanation* m_pExplanation;	// 説明の情報
+	static bool m_MultiAction;			// 連携起動の状態
 
 	// デバッグ版
 #ifdef _DEBUG

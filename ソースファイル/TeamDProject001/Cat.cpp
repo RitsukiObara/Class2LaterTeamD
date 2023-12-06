@@ -448,6 +448,7 @@ void CCat::ItemSet(void)
 
 				// アイテムを設置する
 				CObstacle::Create(GetPos(), GetRot(), CObstacle::TYPE::TYPE_MOUSETRAP);
+				m_bItem = true;
 
 				break;
 

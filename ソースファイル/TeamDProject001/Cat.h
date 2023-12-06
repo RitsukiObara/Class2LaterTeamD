@@ -62,6 +62,7 @@ public:			// 誰でもアクセスできる
 	void DeleteItemUI(void);			// アイテムUIの消去処理
 
 	bool GetAttack_Jump(void) { return m_bAttack; }	// アタックジャンプ状態の取得処理
+	bool GetItem_MultiAction(void) { return m_bItem; }
 
 	void SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type);		// 情報の設定処理
 
@@ -86,6 +87,7 @@ private:		// 自分だけアクセスできる
 	ATTACKSTATE m_AttackState;		// 攻撃の状態
 	int m_nAtkStateCount;			// 攻撃の状態のカウント
 	bool m_bAttack;					// 攻撃をしているかどうか
+	bool m_bItem;					// アイテムを使用しているか
 };
 
 #endif

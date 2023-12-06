@@ -45,6 +45,8 @@ public:			// 誰でもアクセスできる
 	void HitMultiCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type, int nIdx, bool bInput);
 	//void CollisionHead(bool Set) { m_bSetHead = Set; }
 	//void CollisionToes(bool Set) { m_bSetToes = Set; }
+	void SetAction(bool Set) { m_bAction = Set; }
+	bool GetAction(void) { return m_bAction; }
 	void Action(void) override;
 
 	D3DXVECTOR3 GetPosHead(void) { return ActionPosHead; }
@@ -67,6 +69,7 @@ private:		// 自分だけアクセスできる
 	int m_StateCount;			// 状態管理用のカウント
 	bool m_bSetHead[4];			// 先端の準備完了
 	bool m_bSetToes[4];			// 末端の準備完了
+	bool m_bAction;				// アクションの発生
 };
 
 #endif

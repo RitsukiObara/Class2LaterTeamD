@@ -73,6 +73,7 @@ CExplanation*  CTutorial::m_pExplanation = nullptr;					// 説明
 #ifdef _DEBUG
 CEdit* CTutorial::m_pEdit = nullptr;							// エディットの情報
 bool CTutorial::m_bEdit = false;								// エディット状況
+bool CTutorial::m_MultiAction = false;							// 連携起動の状態
 #endif
 
 //=========================================
@@ -89,6 +90,7 @@ CTutorial::CTutorial() : CScene(TYPE_SCENE, PRIORITY_BG)
 	m_bPlay = false;
 	m_pAnswer = nullptr;
 	m_pExplanation = nullptr;
+	m_MultiAction = false;
 
 	for (int nCntPlay = 0; nCntPlay < MAX_PLAY; nCntPlay++)
 	{
@@ -604,6 +606,32 @@ void CTutorial::PlayFalse(void)
 
 		break;
 	case CTutorial::TUTORIAL_ITEM_MULTI:
+
+		if (m_MultiAction == true)
+		{
+			for (int nCnt = 0; nCnt < 4; nCnt++)
+			{
+				if (m_apPlayer[nCnt]->GetType() == CPlayer::TYPE::TYPE_RAT)
+				{
+					if (m_pAnswer != NULL)
+					{
+						m_pAnswer->SetAnswer(true, nCnt);
+					}
+				}
+			}
+		}
+
+		for (int nCnt = 0; nCnt < 4; nCnt++)
+		{
+			if (CTutorial::GetPlayer(nCnt)->GetItem_MultiAction() == true)
+			{
+				if (m_pAnswer != NULL)
+				{
+					m_pAnswer->SetAnswer(true, nCnt);
+				}
+			}
+		}
+
 		break;
 	case CTutorial::TUTORIAL_GIMMICK:
 		break;

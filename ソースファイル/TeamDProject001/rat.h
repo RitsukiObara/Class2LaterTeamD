@@ -70,7 +70,6 @@ private:		// 自分だけアクセスできる
 
 	// 静的メンバ関数
 	static bool m_bResurrection;	// 復活させてるのか
-
 };
 
 #endif
