@@ -289,6 +289,7 @@
     <ClCompile Include="title_wall.cpp" />
     <ClCompile Include="toycar.cpp" />
     <ClCompile Include="tutorial.cpp" />
+    <ClCompile Include="tv.cpp" />
     <ClCompile Include="useful.cpp" />
     <ClCompile Include="wall.cpp" />
     <ClCompile Include="consent.cpp" />
@@ -426,6 +427,7 @@
     <ClInclude Include="title_wall.h" />
     <ClInclude Include="toycar.h" />
     <ClInclude Include="tutorial.h" />
+    <ClInclude Include="tv.h" />
     <ClInclude Include="useful.h" />
     <ClInclude Include="wall.h" />
     <ClInclude Include="consent.h" />
