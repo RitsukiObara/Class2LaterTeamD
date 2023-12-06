@@ -144,17 +144,17 @@ void CPetbottle::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const T
 //=====================================
 // 当たり判定処理
 //=====================================
-bool CPetbottle::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
+bool CPetbottle::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
 {
 	if (m_state == STATE_STAND)
 	{ // 直立状態の場合
 
 		if (pos.y <= GetPos().y + GetFileData().vtxMax.y &&
-			pos.y + fHeight >= GetPos().y + GetFileData().vtxMin.y)
+			pos.y + collSize.y >= GetPos().y + GetFileData().vtxMin.y)
 		{ // ペットボトルと衝突した場合
 
 			// 円柱の当たり判定処理
-			if (useful::CylinderCollision(&pos, GetPos(), GetFileData().vtxMax.x + fWidth) == true)
+			if (useful::CylinderCollision(&pos, GetPos(), GetFileData().vtxMax.x + collSize.x) == true)
 			{ // 当たり判定が false の場合
 
 				if (posOld.y >= GetPos().y + GetFileData().vtxMax.y &&
@@ -164,12 +164,12 @@ bool CPetbottle::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const fl
 					// 縦の位置を設定する
 					pos.y = GetPos().y + GetFileData().vtxMax.y + 0.01f;
 				}
-				else if (posOld.y + fHeight <= GetPos().y + GetFileData().vtxMin.y &&
-					pos.y + fHeight >= GetPos().y + GetFileData().vtxMin.y)
+				else if (posOld.y + collSize.y <= GetPos().y + GetFileData().vtxMin.y &&
+					pos.y + collSize.y >= GetPos().y + GetFileData().vtxMin.y)
 				{ // 下からの当たり判定
 
 					// 縦の位置を設定する
-					pos.y = GetPos().y + GetFileData().vtxMin.y - fHeight - 0.01f;
+					pos.y = GetPos().y + GetFileData().vtxMin.y - collSize.y - 0.01f;
 				}
 			}
 		}
@@ -182,11 +182,11 @@ bool CPetbottle::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const fl
 //=====================================
 // ヒット処理
 //=====================================
-bool CPetbottle::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
+bool CPetbottle::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
 {
 	// 最大値と最小値を設定する
-	D3DXVECTOR3 vtxMax = D3DXVECTOR3(fWidth, fHeight, fDepth);
-	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-fWidth, 0.0f, -fDepth);
+	D3DXVECTOR3 vtxMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);
+	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);
 
 	switch (m_state)
 	{
@@ -194,8 +194,8 @@ bool CPetbottle::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHe
 
 		if (type == CPlayer::TYPE_CAT &&
 			pos.y <= GetPos().y + GetFileData().vtxMax.y &&
-			pos.y + fHeight >= GetPos().y + GetFileData().vtxMin.y &&
-			useful::CylinderInner(pos, GetPos(), GetFileData().vtxMax.x + fWidth) == true)
+			pos.y + collSize.y >= GetPos().y + GetFileData().vtxMin.y &&
+			useful::CylinderInner(pos, GetPos(), GetFileData().vtxMax.x + collSize.x) == true)
 		{ // ペットボトルに衝突した場合
 
 			// 倒れる処理
@@ -228,14 +228,6 @@ bool CPetbottle::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHe
 
 	// false を返す
 	return false;
-}
-
-//=====================================
-// ギミック起動処理
-//=====================================
-void CPetbottle::Action(void)
-{
-
 }
 
 //=====================================

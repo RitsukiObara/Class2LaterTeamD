@@ -154,25 +154,16 @@ void CPin::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE ty
 }
 
 //=====================================
-// 当たり判定処理
-//=====================================
-bool CPin::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
-{
-	// false を返す
-	return false;
-}
-
-//=====================================
 // ヒット処理
 //=====================================
-bool CPin::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
+bool CPin::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
 {
 	if (m_State == STATE_TRUE)
 	{ // ギミック発動状態の場合
 
 		// 最大値と最小値を設定する
-		D3DXVECTOR3 vtxMax = D3DXVECTOR3(fWidth, fHeight, fDepth);
-		D3DXVECTOR3 vtxMin = D3DXVECTOR3(-fWidth, 0.0f, -fDepth);
+		D3DXVECTOR3 vtxMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);
+		D3DXVECTOR3 vtxMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);
 
 		if (useful::RectangleCollisionXY(pos, GetPos(), vtxMax, GetFileData().vtxMax, vtxMin, GetFileData().vtxMin) == true &&
 			useful::RectangleCollisionXZ(pos, GetPos(), vtxMax, GetFileData().vtxMax, vtxMin, GetFileData().vtxMin) == true &&

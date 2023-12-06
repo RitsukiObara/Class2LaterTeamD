@@ -39,10 +39,9 @@ public:			// 誰でもアクセスできる
 
 	void SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type);			// 情報の設定処理
 
-	bool Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type);	// 当たり判定処理
-	bool Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type);		// ヒット処理
-	bool HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type);
-	void HitMultiCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type, int nIdx, bool bInput);
+	bool Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlayer::TYPE type) override;		// ヒット処理
+	bool HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type) override;
+	void HitMultiCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type, int nIdx, bool bInput) override;
 	//void CollisionHead(bool Set) { m_bSetHead = Set; }
 	//void CollisionToes(bool Set) { m_bSetToes = Set; }
 	void SetAction(bool Set) { m_bAction = Set; }

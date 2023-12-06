@@ -165,23 +165,23 @@ void CRoomba::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE
 //=====================================
 // 当たり判定処理
 //=====================================
-bool CRoomba::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
+bool CRoomba::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
 {
-	//// 位置、半径、高さを取得する
-	//D3DXVECTOR3 objPos = GetPos();
-	//float objRadius = GetFileData().fRadius;
-	//float objHeight = GetFileData().vtxMax.y;
+	// 位置、半径、高さを取得する
+	D3DXVECTOR3 objPos = GetPos();
+	float objRadius = GetFileData().fRadius;
+	float objHeight = GetFileData().vtxMax.y;
 
-	//if (objPos.y <= pos.y + fHeight &&
-	//	objPos.y + objHeight >= pos.y)
-	//{
-	//	if (useful::CylinderCollision(pos, objPos, fWidth + objRadius))
-	//	{ // 円の中に入る場合
+	if (objPos.y <= pos.y + collSize.y &&
+		objPos.y + objHeight >= pos.y)
+	{
+		if (useful::CylinderCollision(&pos, objPos, collSize.x + objRadius))
+		{ // 円の中に入る場合
 
-	//		// true を返す
-	//		return true;
-	//	}
-	//}
+			// true を返す
+			return true;
+		}
+	}
 
 	// false を返す
 	return false;
@@ -190,16 +190,16 @@ bool CRoomba::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float
 //=====================================
 // ヒット処理
 //=====================================
-bool CRoomba::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
+bool CRoomba::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
 {
 	// 位置、半径、高さを取得する
 	D3DXVECTOR3 objPos = GetPos();
 	float objRadius = GetFileData().fRadius;
 	float objHeight = GetFileData().vtxMax.y;
 
-	if (objPos.y <= pos.y + fHeight &&
+	if (objPos.y <= pos.y + collSize.y &&
 		objPos.y + objHeight >= pos.y &&
-		useful::CylinderInner(pos, objPos, fWidth + objRadius) &&
+		useful::CylinderInner(pos, objPos, collSize.x + objRadius) &&
 		type == CPlayer::TYPE_RAT)
 	{ // ネズミが円の中に入った場合
 
@@ -209,12 +209,4 @@ bool CRoomba::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeigh
 
 	// false を返す
 	return false;
-}
-
-//=====================================
-// ギミック起動処理
-//=====================================
-void CRoomba::Action(void)
-{
-
 }

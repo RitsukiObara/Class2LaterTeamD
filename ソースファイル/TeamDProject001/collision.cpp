@@ -62,6 +62,7 @@ void collision::ObstacleCollision(CPlayer& player, const float fWidth, const flo
 	// ローカル変数宣言
 	D3DXVECTOR3 pos = player.GetPos();								// 位置
 	D3DXVECTOR3 posOld = player.GetPosOld();						// 前回の位置
+	D3DXVECTOR3 collSize = D3DXVECTOR3(fWidth, fHeight, fDepth);	// 当たり判定のサイズ
 	CPlayer::TYPE type = player.GetType();							// 種類
 	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を取得する
 
@@ -69,7 +70,7 @@ void collision::ObstacleCollision(CPlayer& player, const float fWidth, const flo
 	{ // ブロックの情報が NULL じゃない場合
 
 		// 当たり判定処理
-		if (pObstacle->Collision(pos, posOld, fWidth, fHeight, fDepth, type) == true)
+		if (pObstacle->Collision(pos, posOld, collSize, type) == true)
 		{
 			switch (pObstacle->GetType())
 			{
@@ -125,6 +126,7 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物
 	CObstacle* pObstacleNext = nullptr;				// 次の障害物
 	D3DXVECTOR3 pos = pPlayer->GetPos();			// 位置
+	D3DXVECTOR3 collSize = D3DXVECTOR3(fWidth, fHeight, fDepth);	// 当たり判定のサイズ
 	CPlayer::TYPE type = pPlayer->GetType();		// 種類
 	float fAngle;				// 吹き飛ぶ方向
 	bool bHitMove = false;		// ヒット状況
@@ -135,7 +137,7 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 		// 障害物の次のポインタを取得する
 		pObstacleNext = pObstacle->GetNext();
 
-		if (pObstacle->Hit(pos, fWidth, fHeight, fDepth, type) == true)
+		if (pObstacle->Hit(pos, collSize, type) == true)
 		{ // 障害物の当たり判定が通った場合
 
 			switch (pObstacle->GetType())

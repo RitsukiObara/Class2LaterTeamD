@@ -162,13 +162,13 @@ void CElecFan::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYP
 //=====================================
 // 当たり判定処理
 //=====================================
-bool CElecFan::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
+bool CElecFan::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
 {
 	// 最大値と最小値を設定する
 	D3DXVECTOR3 vtxMax = D3DXVECTOR3(GetFileData().fRadius, GetFileData().vtxMax.y, GetFileData().fRadius);
 	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-GetFileData().fRadius, GetFileData().vtxMin.y, -GetFileData().fRadius);
-	D3DXVECTOR3 playMax = D3DXVECTOR3(fWidth, fHeight, fDepth);
-	D3DXVECTOR3 playMin = D3DXVECTOR3(-fWidth, 0.0f, -fDepth);
+	D3DXVECTOR3 playMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);
+	D3DXVECTOR3 playMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);
 
 	// 六面体の当たり判定
 	if (collision::HexahedronCollision(pos, GetPos(), posOld, GetPosOld(), playMin, vtxMin, playMax, vtxMax) == true)
@@ -185,7 +185,7 @@ bool CElecFan::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const floa
 //=====================================
 // ヒット処理
 //=====================================
-bool CElecFan::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
+bool CElecFan::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
 {
 	if (m_bPower == true)
 	{ // 電源状況が true の場合
@@ -193,8 +193,8 @@ bool CElecFan::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeig
 		// 各最大値・最小値を宣言
 		D3DXVECTOR3 vtxMin = D3DXVECTOR3(sinf(GetRot().y) * -WIND_RANGE, 0.0f, cosf(GetRot().y) * -WIND_RANGE);
 		D3DXVECTOR3 vtxMax = D3DXVECTOR3(0.0f, GetFileData().vtxMax.y, 0.0f);
-		D3DXVECTOR3 playerMin = D3DXVECTOR3(-fWidth, 0.0f, -fDepth);
-		D3DXVECTOR3 playerMax = D3DXVECTOR3(fWidth, fHeight, fDepth);
+		D3DXVECTOR3 playerMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);
+		D3DXVECTOR3 playerMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);
 
 		if (useful::RectangleCollisionXY(pos, GetPos(), playerMax, vtxMax, playerMin, vtxMin) == true &&
 			useful::RectangleCollisionXZ(pos, GetPos(), playerMax, vtxMax, playerMin, vtxMin) == true &&

@@ -207,11 +207,11 @@ void CSpeaker::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYP
 //=====================================
 // 当たり判定処理
 //=====================================
-bool CSpeaker::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
+bool CSpeaker::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
 {
 	// 最小値と最大値を設定する
-	D3DXVECTOR3 vtxMax = D3DXVECTOR3(fWidth, fHeight, fDepth);
-	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-fWidth, 0.0f, -fDepth);
+	D3DXVECTOR3 vtxMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);
+	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);
 
 	// 六面体の当たり判定
 	if (collision::HexahedronCollision
@@ -238,7 +238,7 @@ bool CSpeaker::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const floa
 //=====================================
 // ヒット処理
 //=====================================
-bool CSpeaker::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
+bool CSpeaker::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
 {
 	for (int nCntNote = 0; nCntNote < MAX_NOTE; nCntNote++)
 	{
@@ -246,8 +246,8 @@ bool CSpeaker::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeig
 		{ // 音符が NULL じゃない場合
 
 			if (pos.y <= m_apNote[nCntNote]->GetPos().y + m_apNote[nCntNote]->GetFileData().vtxMax.y &&
-				pos.y + fHeight >= m_apNote[nCntNote]->GetPos().y + m_apNote[nCntNote]->GetFileData().vtxMin.y &&
-				useful::CylinderInner(pos,m_apNote[nCntNote]->GetPos(),m_apNote[nCntNote]->GetFileData().fRadius + fWidth) == true)
+				pos.y + collSize.y >= m_apNote[nCntNote]->GetPos().y + m_apNote[nCntNote]->GetFileData().vtxMin.y &&
+				useful::CylinderInner(pos,m_apNote[nCntNote]->GetPos(),m_apNote[nCntNote]->GetFileData().fRadius + collSize.x) == true)
 			{ // 当たり判定の中に入った場合
 
 				// true を返す

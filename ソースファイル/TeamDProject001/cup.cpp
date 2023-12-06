@@ -219,18 +219,9 @@ void CCup::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE ty
 }
 
 //=====================================
-// “–‚½‚è”»’èˆ—
-//=====================================
-bool CCup::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
-{
-	// false ‚ð•Ô‚·
-	return false;
-}
-
-//=====================================
 // ƒqƒbƒgˆ—
 //=====================================
-bool CCup::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
+bool CCup::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
 {
 	if (m_pWater != nullptr)
 	{ // …‚ª NULL ‚¶‚á‚È‚¢ê‡
@@ -240,7 +231,7 @@ bool CCup::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, 
 		float radiusWater = m_pWater->GetSize().x;
 
 		if (posWater.y >= pos.y &&
-			posWater.y <= pos.y + fHeight &&
+			posWater.y <= pos.y + collSize.y &&
 			useful::CylinderInner(pos, posWater, radiusWater) == true)
 		{ // “–‚½‚è”»’è‚Ì’†‚É“ü‚Á‚½ê‡
 

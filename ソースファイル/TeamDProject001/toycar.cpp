@@ -191,19 +191,20 @@ void CToyCar::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE
 //=====================================
 // 当たり判定処理
 //=====================================
-bool CToyCar::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
+bool CToyCar::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
 {
 	// 最小値と最大値を宣言
 	D3DXVECTOR3 vtxMin, vtxMax;
 
 	// 最小値と最大値を設定する
-	vtxMax = D3DXVECTOR3(fWidth, fHeight, fDepth);
-	vtxMin = D3DXVECTOR3(-fWidth, 0.0f, -fDepth);
+	vtxMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);
+	vtxMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);
 
 	// 六面体の当たり判定
 	if (collision::HexahedronCollision(pos, GetPos(), posOld, GetPosOld(), vtxMin, GetFileData().vtxMin, vtxMax, GetFileData().vtxMax) == true)
 	{
-		int n = 0;
+		// true を返す
+		return true;
 	}
 
 	// false を返す
@@ -213,14 +214,14 @@ bool CToyCar::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float
 //=====================================
 // ヒット処理
 //=====================================
-bool CToyCar::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
+bool CToyCar::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
 {
 	// 最小値と最大値を宣言
 	D3DXVECTOR3 vtxMin, vtxMax;
 
 	// 最小値と最大値を設定する
-	vtxMax = D3DXVECTOR3(fWidth, fHeight, fDepth);
-	vtxMin = D3DXVECTOR3(-fWidth, 0.0f, -fDepth);
+	vtxMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);
+	vtxMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);
 
 	if (type == CPlayer::TYPE_RAT &&
 		m_state == STATE_DRIVE)
@@ -238,14 +239,6 @@ bool CToyCar::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeigh
 
 	// false を返す
 	return false;
-}
-
-//=====================================
-// ギミック起動処理
-//=====================================
-void CToyCar::Action(void)
-{
-
 }
 
 //=====================================

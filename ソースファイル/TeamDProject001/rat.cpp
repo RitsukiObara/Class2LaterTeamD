@@ -447,7 +447,6 @@ void CRat::Hit(void)
 	CPlayer *pPlayer;						// ネズミの情報
 	D3DXVECTOR3 pos = GetPos();				// 位置を取得する
 	STATE state = GetState();				// 状態を取得する
-	STUNSTATE stunState = GetStunState();	// 気絶状態を取得する
 	int nCntDeath = 0;						// 死亡した数
 
 	if (state == STATE_NONE)
@@ -509,7 +508,6 @@ void CRat::DeathArrow(void)
 	STATE state = GetState();				// 状態を取得する
 	D3DXVECTOR3 pos = GetPos();				// 位置取得
 	D3DXVECTOR3 posOld = GetPosOld();		// 前回の位置取得
-	int nIdx = -1;							// プレイヤーの番号
 	bool abRez[MAX_PLAY];					// 復活してるか
 
 	for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
