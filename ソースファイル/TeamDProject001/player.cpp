@@ -51,6 +51,7 @@ namespace
 	static const int STUN_WAIT = 120;					// オブジェクト無効の待機時間
 	static const int DEATH_WAIT = 120;					// 死亡時の待機時間
 	static const int SMASH_WAIT = 40;					// 吹き飛び状態のカウント数
+	static const int FLASH_INTERVAL = 4;				// プレイヤーの点滅間隔
 }
 
 //==============================
@@ -104,6 +105,8 @@ void CPlayer::Box(void)
 	m_fStunHeight = 0.0f;				// 気絶が出る高さ
 	m_bAttack = false;					// 攻撃したか
 	m_bMove = false;					// 移動しているか
+	m_bDisp = true;						// 表示するか
+	m_bDispSmash = false;				// 吹き飛び用の表示するか
 	m_CameraRot = NONE_D3DXVECTOR3;		// カメラの向き
 	m_nResurrectionTime = 0;			// 復活するまでの時間
 
@@ -149,6 +152,8 @@ HRESULT CPlayer::Init(void)
 	m_fStunHeight = 0.0f;				// 気絶が出る高さ
 	m_bAttack = false;					// 攻撃したか
 	m_bMove = false;					// 移動しているか
+	m_bDisp = true;						// 表示するか
+	m_bDispSmash = false;				// 吹き飛び用の表示するか
 	m_nResurrectionTime = 0;			// 復活するまでの時間
 	m_nLogPlayer = 0;
 
@@ -311,15 +316,25 @@ void CPlayer::Update(void)
 //=====================================
 void CPlayer::Draw(void)
 {
-	if (m_StunState == STUNSTATE_NONE && m_State == STATE_NONE)
-	{
-		// 描画処理
-		CCharacter::Draw();
-	}
-	else
-	{
-		//描画処理(色)
-		CCharacter::Draw(m_col);
+	if (m_bDisp == true)
+	{ // 表示状態のとき
+
+		if ((m_StunState == STUNSTATE_NONE || m_StunState == STUNSTATE_WAIT || m_StunState == STUNSTATE_STUN) &&
+			(m_State == STATE_NONE || m_State == STATE_INVINCIBLE))
+		{ // 何もしてない || 無敵状態のとき
+
+			// 描画処理
+			CCharacter::Draw();
+		}
+		else
+		{
+			if (m_bDispSmash == true)
+			{ // 吹き飛ばされてるとき
+
+				//描画処理(色)
+				CCharacter::Draw(m_col);
+			}
+		}
 	}
 
 	for (int nCnt = 0; nCnt < LOG_MAX; nCnt++)
@@ -775,11 +790,16 @@ void CPlayer::StunStateManager(void)
 		break;
 
 	case STUNSTATE_SMASH:	// 吹き飛び状態
-#ifdef _DEBUG
 
 		// 色の設定
-		m_col = D3DXCOLOR(0.0f, 0.5f, 1.0f, 1.0f);
-#endif
+		m_col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
+
+		if ((m_StunStateCount % FLASH_INTERVAL) == 0)
+		{ // 一定時間経ったら
+
+			// 表示状態切り替え
+			m_bDispSmash = m_bDispSmash ? false : true;
+		}
 
 		// カウントを減算する
 		m_StunStateCount--;
@@ -813,6 +833,7 @@ void CPlayer::StunStateManager(void)
 		break;
 
 	case STUNSTATE_STUN:	//気絶状態
+
 #ifdef _DEBUG
 
 		// 色の設定
@@ -841,17 +862,19 @@ void CPlayer::StunStateManager(void)
 
 	case STUNSTATE_WAIT:	//障害物のみ無敵状態
 
-#ifdef _DEBUG
+		if ((m_StunStateCount % FLASH_INTERVAL) == 0)
+		{ // 一定時間経ったら
 
-		// 色の設定
-		m_col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
-#endif
+			// 表示状態切り替え
+			m_bDisp = m_bDisp ? false : true;
+		}
 
 		m_StunStateCount--;
 
 		if (m_StunStateCount <= 0)
 		{ // カウントが一定数以下になった場合
 			m_StunState = STUNSTATE_NONE;
+			m_bDisp = true;		// 表示する状態にする
 		}
 
 		break;
@@ -877,20 +900,23 @@ void CPlayer::StateManager(void)
 		break;
 
 	case STATE_INVINCIBLE:	//無敵状態
-#ifdef _DEBUG
-
-		// 色の設定
-		m_col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
-#endif
 
 		// カウントを減算する
 		m_StateCount--;
+
+		if ((m_StateCount % FLASH_INTERVAL) == 0)
+		{ // 一定時間経ったら
+
+			// 表示状態切り替え
+			m_bDisp = m_bDisp ? false : true;
+		}
 
 		if (m_StateCount <= 0)
 		{ // カウントが一定数以下になった場合
 			
 			// 無状態にする
 			m_State = STATE_NONE;
+			m_bDisp = true;		// 表示する状態にする
 		}
 		break;
 
@@ -898,11 +924,7 @@ void CPlayer::StateManager(void)
 
 		D3DXVECTOR3 pos = GetPos();		// 位置取得
 
-#ifdef _DEBUG
-		// 色の設定
-		m_col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
-
-#endif
+		m_bDisp = false;		// 表示しない状態にする
 
 		if (m_pRatGhost != nullptr)
 		{ // 幽霊ネズミが NULL じゃないとき

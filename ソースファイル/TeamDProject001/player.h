@@ -192,6 +192,8 @@ private:		// 自分だけアクセスできる
 	bool m_bAttack;				// 攻撃したか
 	bool m_bMove;				// 移動しているか
 	bool m_bDeath;				// 死亡しているか
+	bool m_bDisp;				// 表示するか
+	bool m_bDispSmash;			// 吹き飛び用の表示するか
 	STUNSTATE m_StunState;		// 気絶の状態管理
 	int m_StunStateCount;		// 状態管理用カウント
 	STATE m_State;				// 状態管理
