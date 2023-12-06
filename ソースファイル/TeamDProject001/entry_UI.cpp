@@ -6,7 +6,6 @@
 //=======================================
 #include "manager.h"
 #include "entry_UI.h"
-#include "manager.h"
 #include "input.h"
 #include "texture.h"
 
