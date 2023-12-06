@@ -126,7 +126,8 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 	CObstacle* pObstacleNext = nullptr;				// ŽŸ‚ÌáŠQ•¨
 	D3DXVECTOR3 pos = pPlayer->GetPos();			// ˆÊ’u
 	CPlayer::TYPE type = pPlayer->GetType();		// Ží—Þ
-	float fAngle;									// ‚«”ò‚Ô•ûŒü
+	float fAngle;				// ‚«”ò‚Ô•ûŒü
+	bool bHitMove = false;		// ƒqƒbƒgó‹µ
 
 	while (pObstacle != nullptr)
 	{ // ƒuƒƒbƒN‚Ìî•ñ‚ª NULL ‚¶‚á‚È‚¢ê‡
@@ -144,6 +145,9 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 				// ˆÚ“®—Ê‚ðÝ’è‚·‚é
 				pPlayer->SetSpeed(pPlayer->GetSpeed() * 0.3f);
 
+				// ƒqƒbƒg‚µ‚½
+				bHitMove = true;
+
 				break;
 
 			case CObstacle::TYPE_SLIME:
@@ -155,6 +159,9 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 				{
 					CParticle::Create(pos, CParticle::TYPE_SLIME);
 				}
+
+				// ƒqƒbƒg‚µ‚½
+				bHitMove = true;
 
 				break;
 
@@ -270,9 +277,32 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 
 				break;
 			case CObstacle::TYPE_GARBAGECAN:
-				// ˆÚ“®—Ê‚ðÝ’è‚·‚é
-				pPlayer->SetPos(pPlayer->GetPos() +pPlayer->GetMove()*10.0f);
+
+				// ‹Câó‘Ô
+				pPlayer->Stun(60);
+
+				// Œü‚«‚ðŽZo‚·‚é
+				fAngle = atan2f(pos.x - pObstacle->GetPos().x, pos.z - pObstacle->GetPos().z);
+
+				{ // ˆÚ“®—Ê‚ÌÝ’èˆ—
+
+					// ˆÚ“®—Ê‚ðŽæ“¾‚·‚é
+					D3DXVECTOR3 move = pPlayer->GetMove();
+
+					// ˆÚ“®—Ê‚ðŽZo‚·‚é
+					move.x = sinf(fAngle) * 10.0f;
+					move.y = 0.0f;
+					move.z = cosf(fAngle) * 10.0f;
+
+					// ˆÚ“®—Ê‚ðÝ’è‚·‚é
+					pPlayer->SetMove(move);
+				}
+
+				// ƒqƒbƒg‚µ‚½
+				bHitMove = true;
+
 				break;
+
 			default:
 
 				//“Á‚É‚È‚µ

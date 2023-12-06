@@ -22,8 +22,8 @@ public:			// 誰でもアクセスできる
 	// 列挙型定義(状態)
 	enum State
 	{
-		STATE_GARBAGECAN = 0,	// ボトル
-		STATE_GARBAGE,			// 液体
+		STATE_GARBAGECAN = 0,	// ゴミ箱
+		STATE_BANANA,			// バナナの皮
 		STATE_MAX				// この列挙型の総数
 	};
 
@@ -40,6 +40,7 @@ public:			// 誰でもアクセスできる
 
 	bool Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type);	// 当たり判定処理
 	bool Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type);		// ヒット処理
+	bool HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type);			// ヒットの円処理
 	void Action(void) override;										// ギミック起動処理
 
 private:		// 自分だけアクセスできる
