@@ -20,6 +20,8 @@ class CPause;			// ポーズ
 class CEdit;			// エディット
 class CPlayer;			// プレイヤー
 class CGameFinish;		// フィニッシュ
+class CAnswer;			// 返答リアクション
+class CExplanation;		// 説明
 
 //--------------------------------------------
 // クラス(チュートリアルクラス)
@@ -38,10 +40,24 @@ public:						// 誰でもアクセスできる
 		STATE_MAX			// この列挙型の総数
 	};
 
+	// チュートリアルの進行状態
+	enum TUTORIAL
+	{
+		TUTORIAL_MOVE = 0,		// 移動
+		TUTORIAL_ATTACK_JAMP,	// アタック＆ジャンプ
+		TUTORIAL_CAT_KILL,		// ネコのキル
+		TUTORIAL_RAT_RESCUE,	// ネズミの救助
+		TUTORIAL_ACTION,		// アクション
+		TUTORIAL_ITEM_MULTI,	// アイテム＆マルチアクション
+		TUTORIAL_GIMMICK,		// ギミック説明
+		TUTORIAL_LETS_GO,		// 勝利条件と画面遷移
+		TUTORIAL_MAX			// この列挙型の総数
+	};
+
 	CTutorial();				// コンストラクタ
 	~CTutorial();				// デストラクタ
 
-							// メンバ関数
+	// メンバ関数
 	HRESULT Init(void);		// 初期化処理
 	void Uninit(void);		// 終了処理
 	void Update(void);		// 更新処理
@@ -55,11 +71,17 @@ public:						// 誰でもアクセスできる
 	static void SetState(const STATE state);		// チュートリアルの進行状態の設定処理
 	static STATE GetState(void);					// チュートリアルの進行状態の取得処理
 
+	static void SetPlay(const bool bPlay) { m_bPlay = bPlay; }		// プレイ中かどうかの進行状態の設定処理
+	static bool GetPlay(void) { return m_bPlay; }					// プレイ中かどうかの進行状態の取得処理
+
 	static CPlayer* GetPlayer(const int nID);		// プレイヤーの取得処理
 
-													// NULL化処理
+	// NULL化処理
 	static void DeletePause(void);		// ポーズのNULL化処理
 	static void DeletePlayer(int nIdx);	// プレイヤーのNULL化処理
+
+	static void PlayTrue(void);
+	static void PlayFalse(void);
 
 										// デバッグ版
 #ifdef _DEBUG
@@ -79,6 +101,10 @@ private:					// 自分だけアクセスできる
 	static CGameFinish* m_pFinish;			// フィニッシュの情報
 	static STATE m_GameState;				// チュートリアルの進行状態
 	static int m_nFinishCount;				// 終了カウント
+	static TUTORIAL m_Tutorial;				// チュートリアルの項目
+	static bool m_bPlay;					// プレイ中かどうか
+	static CAnswer* m_pAnswer;				// 返答リアクションの情報
+	static CExplanation* m_pExplanation;	// 説明の情報
 
 	// デバッグ版
 #ifdef _DEBUG
