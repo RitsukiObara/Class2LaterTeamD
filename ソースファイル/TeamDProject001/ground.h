@@ -4,7 +4,7 @@
 #include "main.h"
 #include "Object3D.h"
 
-#define MAP_SIZE (D3DXVECTOR3(1600,0,1000))
+#define MAP_SIZE (D3DXVECTOR3(1600.0f, 0.0f, 1000.0f))
 
 class CGround :public CObject3D
 {

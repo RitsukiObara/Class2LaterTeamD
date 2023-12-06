@@ -39,7 +39,7 @@ public:			// 誰でもアクセスできる
 		TYPE_PIN,			// 画鋲
 		TYPE_FAN,			// 扇風機
 		TYPE_CUP,			// コップ
-		TYPE_GARBAGECAN,	//ゴミ
+		TYPE_GARBAGECAN,	// ゴミ
 		TYPE_MAX			// この列挙型の総数
 	};
 
@@ -86,9 +86,9 @@ private:		// 自分だけアクセスできる
 	// メンバ変数
 	TYPE m_type;		// 種類
 	CBillboard *m_pGimmickUI;
-	bool m_pGimmickUIFalse[4];		//全部[False]の時にUIを削除する
-	bool m_bCatUse;					//猫が起動できるかどうか
-	bool m_bRatUse;					//ネズミが起動できるかどうか
+	bool m_pGimmickUIFalse[MAX_PLAY];	//全部[False]の時にUIを削除する
+	bool m_bCatUse;						//猫が起動できるかどうか
+	bool m_bRatUse;						//ネズミが起動できるかどうか
 
 	// リスト構造関係
 	CObstacle* m_pPrev;	// 前へのポインタ

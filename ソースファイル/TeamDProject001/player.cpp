@@ -40,7 +40,7 @@
 #define NONE_PLAYERIDX		(-1)			// プレイヤーの番号の初期値
 #define STUN_HEIGHT			(80.0f)			// 気絶演出が出てくる高さ
 #define ID_HEIGHT			(150.0f)		// IDが出てくる高さ
-#define SMASH_MOVE			(D3DXVECTOR3(10.0f, 20.0f, 10.0f))		// 吹き飛び状態の移動量
+#define SMASH_MOVE			(D3DXVECTOR3(10.0f, 11.0f, 10.0f))		// 吹き飛び状態の移動量
 #define STUN_WAIT			(120)			// オブジェクト無効の待機時間
 #define DEATH_WAIT			(120)			// 死亡時の待機時間
 #define SMASH_WAIT			(40)			// 吹き飛び状態のカウント数
@@ -49,6 +49,8 @@
 #define RAT_CAMERA_HEIGHT	(100.0f)		// 猫のカメラの高さ
 #define RAT_CAMERA_DIS		(60.0f)			// ネズミのカメラの視点と注視点の高さの差分(角度)
 #define DIFF_ROT			(0.2f)			// 角度に足す差分の割合
+#define CAMERA_ROT_MOVE		(0.05f)			// カメラの向きの移動量
+#define ADD_ACTION_RADIUS	(40.0f)			// サーチ時の半径の追加数
 
 //==============================
 // コンストラクタ
@@ -92,6 +94,7 @@ void CPlayer::Box(void)
 	m_pDeathArrow[MAX_PLAY] = {};		// 死亡矢印の情報
 	m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_sizeColl = NONE_D3DXVECTOR3;		// 当たり判定のサイズ
+	m_col = D3DXCOLOR(1.0f,1.0f,1.0f,1.0f);				// 色
 	m_type = TYPE_CAT;					// 種類
 	m_nPlayerIdx = NONE_PLAYERIDX;		// プレイヤーのインデックス
 	m_fSpeed = 0.0f;					// 速度
@@ -136,6 +139,7 @@ HRESULT CPlayer::Init(void)
 	m_pDeathArrow[MAX_PLAY] = {};		// 死亡矢印の情報
 	m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_sizeColl = NONE_D3DXVECTOR3;		// 当たり判定のサイズ
+	m_col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);				// 色
 	m_type = TYPE_CAT;					// 種類
 	m_nPlayerIdx = NONE_PLAYERIDX;		// プレイヤーのインデックス
 	m_fSpeed = 0.0f;					// 速度
@@ -250,7 +254,7 @@ void CPlayer::Uninit(void)
 void CPlayer::Update(void)
 {
 	// 障害物との当たり判定
-	collision::ObstacleHit(this, m_sizeColl.x, m_sizeColl.y, m_sizeColl.z, m_type);
+	collision::ObstacleHit(this, m_sizeColl.x, m_sizeColl.y, m_sizeColl.z);
 
 	// 障害物との当たり判定
 	ObstacleCollision();
@@ -261,24 +265,18 @@ void CPlayer::Update(void)
 	// 状態の管理
 	StateManager();
 
-	if (m_type == TYPE_CAT)
-	{
-		collision::ObstacleSearch(this, 30.0f * 2.0f, m_type, m_nPlayerIdx);
-	}
-	else if (m_type == TYPE_RAT)
-	{
-		collision::ObstacleSearch(this, 30.0f * 2.0f, m_type, m_nPlayerIdx);
-	}
+	// 起動可能障害物や警告を出す障害物のサーチ
+	collision::ObstacleSearch(this, m_sizeColl.x + ADD_ACTION_RADIUS);
 
 #if CAMERA != 0
 	//カメラ情報の更新
 	CameraUpdate();
 #endif // CAMERA
 
-	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_E) ||
+	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_E) ||
 		CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_B,m_nPlayerIdx) == true)
 	{
-		collision::ObstacleAction(this, m_sizeColl.x, m_type);
+		collision::ObstacleAction(this, m_sizeColl.x + ADD_ACTION_RADIUS);
 	}
 
 #ifdef _DEBUG
@@ -330,8 +328,16 @@ void CPlayer::Update(void)
 //=====================================
 void CPlayer::Draw(void)
 {
-	// 描画処理
-	CCharacter::Draw();
+	if (m_StunState == STUNSTATE_NONE && m_State == STATE_NONE)
+	{
+		// 描画処理
+		CCharacter::Draw();
+	}
+	else
+	{
+		//描画処理(色)
+		CCharacter::Draw(m_col);
+	}
 
 	for (int nCnt = 0; nCnt < LOG_MAX; nCnt++)
 	{
@@ -632,15 +638,22 @@ void CPlayer::CameraUpdate(void)
 	}
 
 	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LSHIFT) == true ||
-		CManager::Get()->GetInputGamePad()->GetPress(CInputGamePad::JOYKEY_LB,m_nPlayerIdx) == true)
-	{
-		m_CameraRot.y -= 0.05f;
+		CManager::Get()->GetInputGamePad()->GetGameStickRXPress(m_nPlayerIdx) < 0)
+	{ // 右スティックを右に倒した場合
+
+		// カメラの向きを減算する
+		m_CameraRot.y -= CAMERA_ROT_MOVE;
 	}
 	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_RSHIFT) == true ||
-		CManager::Get()->GetInputGamePad()->GetPress(CInputGamePad::JOYKEY_RB, m_nPlayerIdx) == true)
-	{
-		m_CameraRot.y += 0.05f;
+		CManager::Get()->GetInputGamePad()->GetGameStickRXPress(m_nPlayerIdx) > 0)
+	{ // 右スティックを右に倒した場合
+
+		// カメラの向きを加算する
+		m_CameraRot.y += CAMERA_ROT_MOVE;
 	}
+
+	// 向きの正規化
+	useful::RotNormalize(&m_CameraRot.y);
 }
 
 //=======================================
@@ -648,21 +661,13 @@ void CPlayer::CameraUpdate(void)
 //=======================================
 void CPlayer::RotNormalize(void)
 {
-	D3DXVECTOR3 rot = GetRot();			// 向きの取得
+	// 向きを取得する
+	D3DXVECTOR3 rot = GetRot();
 
-	// 向きの差分を求める
-	m_fRotDiff = m_fRotDest - rot.y;
+	// 向きの補正処理
+	useful::RotCorrect(m_fRotDest, &rot.y, DIFF_ROT);
 
-	// 目標の方向までの差分を修正
-	useful::RotNormalize(&m_fRotDiff);
-
-	// 差分足す
-	rot.y += m_fRotDiff * DIFF_ROT;
-
-	// 現在の方向修正
-	useful::RotNormalize(&rot.y);
-
-	// 向きの設定
+	// 向きを適用する
 	SetRot(rot);
 }
 
@@ -710,17 +715,11 @@ void CPlayer::RotNormalize(void)
 //=======================================
 void CPlayer::ObstacleCollision(void)
 {
-	// 位置を取得する
-	D3DXVECTOR3 pos = GetPos();
-
 	// 障害物との衝突判定
-	collision::ObstacleCollision(pos, GetPosOld(), m_sizeColl.x, m_sizeColl.y, m_sizeColl.z, m_type);
+	collision::ObstacleCollision(*this, m_sizeColl.x, m_sizeColl.y, m_sizeColl.z);
 
 	// ブロックとの当たり判定
-	collision::BlockCollision(pos, GetPosOld(), m_sizeColl.x, m_sizeColl.y, m_sizeColl.z);
-
-	// 位置を設定する
-	SetPos(pos);
+	collision::BlockCollision(this, m_sizeColl.x, m_sizeColl.y, m_sizeColl.z);
 }
 
 //=======================================
@@ -793,6 +792,11 @@ void CPlayer::StunStateManager(void)
 		break;
 
 	case STUNSTATE_SMASH:	// 吹き飛び状態
+#ifdef _DEBUG
+
+		// 色の設定
+		m_col = D3DXCOLOR(0.0f, 0.5f, 1.0f, 1.0f);
+#endif
 
 		// カウントを減算する
 		m_StunStateCount--;
@@ -826,6 +830,11 @@ void CPlayer::StunStateManager(void)
 		break;
 
 	case STUNSTATE_STUN:	//気絶状態
+#ifdef _DEBUG
+
+		// 色の設定
+		m_col = D3DXCOLOR(0.5f, 0.5f, 0.0f, 1.0f);
+#endif
 
 		// カウントを減算する
 		m_StunStateCount--;
@@ -849,12 +858,21 @@ void CPlayer::StunStateManager(void)
 
 	case STUNSTATE_WAIT:	//障害物のみ無敵状態
 
+#ifdef _DEBUG
+
+		// 色の設定
+		m_col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
+#endif
+
 		m_StunStateCount--;
 
+		if (m_StunStateCount <= 0)
 		{ // カウントが一定数以下になった場合
 			m_StunState = STUNSTATE_NONE;
-			break;
 		}
+
+		break;
+
 	default:
 
 		// 停止
@@ -876,6 +894,11 @@ void CPlayer::StateManager(void)
 		break;
 
 	case STATE_INVINCIBLE:	//無敵状態
+#ifdef _DEBUG
+
+		// 色の設定
+		m_col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
+#endif
 
 		// カウントを減算する
 		m_StateCount--;
@@ -891,6 +914,12 @@ void CPlayer::StateManager(void)
 	case STATE_DEATH:	//死亡状態
 
 		D3DXVECTOR3 pos = GetPos();		// 位置取得
+
+#ifdef _DEBUG
+		// 色の設定
+		m_col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
+
+#endif
 
 		if (m_pRatGhost != nullptr)
 		{ // 幽霊ネズミが NULL じゃないとき

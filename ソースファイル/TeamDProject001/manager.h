@@ -86,6 +86,7 @@ private:					// 自分だけアクセスできる
 	CTexture* m_pTexture;					// テクスチャの情報
 	CScene* m_pScene;						// シーンの情報
 	CFade* m_pFade;							// フェードの情報
+	CScene::MODE m_ModeNow;					// 現在のモード情報
 
 #ifdef _DEBUG		// デバッグ時のみ
 

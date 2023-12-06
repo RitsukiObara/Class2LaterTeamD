@@ -196,11 +196,6 @@ void CRat::Update(void)
 	// 起伏地面の当たり判定
 	Elevation();
 
-	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_E))
-	{
-		collision::ObstacleAction(this, SIZE.x * 2.0f, CPlayer::TYPE_RAT);
-	}
-
 	// 角度の正規化
 	RotNormalize();
 
@@ -432,7 +427,7 @@ void CRat::Hit(void)
 	int nCntDeath = 0;						// 死亡した数
 
 	if (state == STATE_NONE &&
-		stunState == STUNSTATE_NONE)
+		stunState != STUNSTATE_WAIT)
 	{ // ダメージ受ける状態だった場合
 
 		CParticle::Create(pos, CParticle::TYPE_ENEMYDEATH); //パーティクル

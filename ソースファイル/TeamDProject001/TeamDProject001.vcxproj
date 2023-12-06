@@ -170,7 +170,6 @@
     <ClCompile Include="chara_infoUI.cpp" />
     <ClCompile Include="chara_state.cpp" />
     <ClCompile Include="collision.cpp" />
-    <ClCompile Include="collision_edit.cpp" />
     <ClCompile Include="collpolygon.cpp" />
     <ClCompile Include="confetti.cpp" />
     <ClCompile Include="countdown.cpp" />
@@ -187,6 +186,7 @@
     <ClCompile Include="entry.cpp" />
     <ClCompile Include="entry_frame.cpp" />
     <ClCompile Include="entry_ID.cpp" />
+    <ClCompile Include="entry_message.cpp" />
     <ClCompile Include="entry_team.cpp" />
     <ClCompile Include="entry_UI.cpp" />
     <ClCompile Include="explanation.cpp" />
@@ -310,7 +310,6 @@
     <ClInclude Include="chara_infoUI.h" />
     <ClInclude Include="chara_state.h" />
     <ClInclude Include="collision.h" />
-    <ClInclude Include="collision_edit.h" />
     <ClInclude Include="collpolygon.h" />
     <ClInclude Include="confetti.h" />
     <ClInclude Include="countdown.h" />
@@ -327,6 +326,7 @@
     <ClInclude Include="entry.h" />
     <ClInclude Include="entry_frame.h" />
     <ClInclude Include="entry_ID.h" />
+    <ClInclude Include="entry_message.h" />
     <ClInclude Include="entry_team.h" />
     <ClInclude Include="entry_UI.h" />
     <ClInclude Include="explanation.h" />

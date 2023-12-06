@@ -19,6 +19,7 @@
 #include "sound.h"
 #include "useful.h"
 #include "texture.h"
+#include "scene.h"
 
 #include "camera.h"
 #include "collision.h"
@@ -49,14 +50,14 @@ namespace
 	};
 	static const float MOVE_SPEED = 20.0f;			// 移動速度
 	static const float ATTACK_DISTANCE = 100.0f;	// 攻撃範囲までの距離
-	static const D3DXVECTOR3 CAT_SIZE = D3DXVECTOR3(70.0f, 200.0f, 70.0f);		// 当たり判定のサイズ
-	static const float GRAVITY = 1.0f;				// 重力
+	static const D3DXVECTOR3 CAT_SIZE = D3DXVECTOR3(70.0f, 250.0f, 70.0f);		// 当たり判定のサイズ
+	static const float GRAVITY = 0.55f;				// 重力
 }
 
 //--------------------------------------------
 // マクロ定義
 //--------------------------------------------
-#define ATTACK_SIZE		(D3DXVECTOR3(95.0f, 50.0f, 95.0f))		// 攻撃の判定の大きさ
+#define ATTACK_SIZE		(D3DXVECTOR3(95.0f, 150.0f, 95.0f))		// 攻撃の判定の大きさ
 
 //=========================================
 // コンストラクタ
@@ -269,9 +270,12 @@ void CCat::Attack(void)
 	D3DXVECTOR3 pos = GetPos();
 	D3DXVECTOR3 rot = GetRot();
 
-	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_RETURN) == true ||
-		CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_A, GetPlayerIdx()) == true)
-	{ // ENTERキー(Aボタン)を押していた場合
+	// ゲームモードの時だけ攻撃
+	if (CManager::Get()->GetMode() == CScene::MODE_GAME)
+	{
+		if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_RETURN) == true ||
+			CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_A, GetPlayerIdx()) == true)
+		{ // ENTERキー(Aボタン)を押していた場合
 
 		// 状態を攻撃準備にする
 		m_AttackState = ATTACKSTATE_STANDBY;
@@ -289,26 +293,27 @@ void CCat::Attack(void)
 				pPlayer = CGame::GetPlayer(nCnt);
 			}
 
-			if (pPlayer != nullptr &&
-				pPlayer->GetType() == CPlayer::TYPE_RAT)
-			{ // プレイヤーがネズミの場合
+				if (pPlayer != nullptr &&
+					pPlayer->GetType() == CPlayer::TYPE_RAT)
+				{ // プレイヤーがネズミの場合
 
-				if (useful::RectangleCollisionXY(D3DXVECTOR3(pos.x + sinf(rot.y) * -ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * -ATTACK_DISTANCE),
-					pPlayer->GetPos(),
-					ATTACK_SIZE,
-					D3DXVECTOR3(30.0f, 50.0f, 30.0f),
-					D3DXVECTOR3(-ATTACK_SIZE.x, -ATTACK_SIZE.y, -ATTACK_SIZE.z),
-					D3DXVECTOR3(-30.0f, -50.0f, -30.0f)) == true)
-				{ // XYの矩形に当たってたら
-
-					if (useful::RectangleCollisionXZ(D3DXVECTOR3(pos.x + sinf(rot.y) * -ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * -ATTACK_DISTANCE),
+					if (useful::RectangleCollisionXY(D3DXVECTOR3(pos.x + sinf(rot.y) * -ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * -ATTACK_DISTANCE),
 						pPlayer->GetPos(),
-						ATTACK_SIZE, D3DXVECTOR3(30.0f, 50.0f, 30.0f),
-						D3DXVECTOR3(-ATTACK_SIZE.x, -ATTACK_SIZE.y, -ATTACK_SIZE.z), D3DXVECTOR3(-30.0f, -50.0f, -30.0f)) == true)
-					{ // XZの矩形に当たってたら
+						ATTACK_SIZE,
+						D3DXVECTOR3(30.0f, 50.0f, 30.0f),
+						D3DXVECTOR3(-ATTACK_SIZE.x, -ATTACK_SIZE.y, -ATTACK_SIZE.z),
+						D3DXVECTOR3(-30.0f, -50.0f, -30.0f)) == true)
+					{ // XYの矩形に当たってたら
 
-						// プレイヤーのヒット処理
-						pPlayer->Hit();
+						if (useful::RectangleCollisionXZ(D3DXVECTOR3(pos.x + sinf(rot.y) * -ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * -ATTACK_DISTANCE),
+							pPlayer->GetPos(),
+							ATTACK_SIZE, D3DXVECTOR3(30.0f, 50.0f, 30.0f),
+							D3DXVECTOR3(-ATTACK_SIZE.x, -ATTACK_SIZE.y, -ATTACK_SIZE.z), D3DXVECTOR3(-30.0f, -50.0f, -30.0f)) == true)
+						{ // XZの矩形に当たってたら
+
+							// プレイヤーのヒット処理
+							pPlayer->Hit();
+						}
 					}
 				}
 			}
@@ -414,34 +419,37 @@ void CCat::Elevation(void)
 //===========================================
 void CCat::ItemSet(void)
 {
-	if (m_nItemCount > 0 &&
-		m_pItemUI->GetItemUI(CItemUI::ORDER_FRONT).pMark != nullptr &&
-		(CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_TAB) == true ||
-		CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_Y, GetPlayerIdx()) == true))
-	{ // アイテムを持っている状態でYボタンが押された場合
+	if (m_pItemUI != nullptr)
+	{ // アイテムUIの情報が NULL じゃない場合
+		if (m_nItemCount > 0 &&
+			m_pItemUI->GetItemUI(CItemUI::ORDER_FRONT).pMark != nullptr &&
+			(CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_TAB) == true ||
+				CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_Y, GetPlayerIdx()) == true))
+		{ // アイテムを持っている状態でYボタンが押された場合
 
-		switch (m_pItemUI->GetItemUI(CItemUI::ORDER_FRONT).type)
-		{
-		case CItem::TYPE_MOUSETRAP:		// ネズミ捕り
+			switch (m_pItemUI->GetItemUI(CItemUI::ORDER_FRONT).type)
+			{
+			case CItem::TYPE_MOUSETRAP:		// ネズミ捕り
 
-			// アイテムを設置する
-			CObstacle::Create(GetPos(), GetRot(), CObstacle::TYPE::TYPE_MOUSETRAP);
+				// アイテムを設置する
+				CObstacle::Create(GetPos(), GetRot(), CObstacle::TYPE::TYPE_MOUSETRAP);
 
-			break;
+				break;
 
-		default:
+			default:
 
-			// 停止
-			assert(false);
+				// 停止
+				assert(false);
 
-			break;
+				break;
+			}
+
+			// 情報のソート処理
+			m_pItemUI->SortInfo();
+
+			// アイテムのカウント数を減算する
+			m_nItemCount--;
 		}
-
-		// 情報のソート処理
-		m_pItemUI->SortInfo();
-
-		// アイテムのカウント数を減算する
-		m_nItemCount--;
 	}
 }
 
@@ -509,8 +517,13 @@ void CCat::SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 	// モーションの設定処理
 	GetMotion()->Set(MOTIONTYPE_NEUTRAL);
 
-	// アイテムUIの生成処理
-	SetItemUI();
+
+	// ゲームモードの時だけUIを生成
+	if (CManager::Get()->GetMode() == CScene::MODE_GAME)
+	{
+		// アイテムUIの生成処理
+		SetItemUI();
+	}
 }
 
 //=====================================
