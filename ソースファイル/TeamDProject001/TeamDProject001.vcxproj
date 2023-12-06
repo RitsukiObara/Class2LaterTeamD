@@ -184,6 +184,7 @@
     <ClCompile Include="electricfan.cpp" />
     <ClCompile Include="elevation_manager.cpp" />
     <ClCompile Include="entry.cpp" />
+    <ClCompile Include="entry_BG.cpp" />
     <ClCompile Include="entry_frame.cpp" />
     <ClCompile Include="entry_ID.cpp" />
     <ClCompile Include="entry_message.cpp" />
@@ -325,6 +326,7 @@
     <ClInclude Include="electricfan.h" />
     <ClInclude Include="elevation_manager.h" />
     <ClInclude Include="entry.h" />
+    <ClInclude Include="entry_BG.h" />
     <ClInclude Include="entry_frame.h" />
     <ClInclude Include="entry_ID.h" />
     <ClInclude Include="entry_message.h" />

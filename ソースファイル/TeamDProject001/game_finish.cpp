@@ -23,6 +23,7 @@
 #define INIT_FINISH_POS		(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 360.0f, 0.0f))	// 「FINISH」の初期位置
 #define NORMAL_SIZE			(1.0f)								// 通常サイズ
 #define VISIBLE_COLOR		(D3DXCOLOR(1.0f,1.0f,1.0f,1.0f))	// 通常カラー
+#define FINISH_COUNT		(60)								// フィニッシュカウント
 
 //--------------------------------------------
 // 静的メンバ変数
@@ -127,7 +128,7 @@ void CGameFinish::Update(void)
 		{
 			if (m_pCountdown == nullptr && m_pGameTime->GetSeconds() == 5)	
 			{// 残り５秒＆カウントダウンポインターがnullの時
-				m_pCountdown = CCountdown::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f), D3DXVECTOR3(50.0f, 80.0f, 0.0f));
+				m_pCountdown = CCountdown::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f), D3DXVECTOR3(50.0f, 80.0f, 0.0f), FINISH_COUNT);
 			}
 			if (m_pGameTime->GetSeconds() == 0)
 			{// カウントダウンが0になった時
