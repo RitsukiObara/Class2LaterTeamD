@@ -187,6 +187,11 @@ void CRat::Update(void)
 		//ˆÚ“®ˆ—
 		Move();
 	}
+	else
+	{
+		// ˆÚ“®—Ê‚ğ‰Šú‰»‚·‚é
+		SetMove(NONE_D3DXVECTOR3);
+	}
 
 	// €–S–îˆó‚Ìˆ—
 	DeathArrow();
