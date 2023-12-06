@@ -51,6 +51,7 @@ namespace
 		D3DXVECTOR3(SCREEN_WIDTH - 90.0f, SCREEN_HEIGHT - 80.0f, 0.0f),
 	};
 	static const int TRANS_COUNT = 80;				// 遷移カウント
+	static const int START_COUNT = 5;				// 開始のカウント
 }
 
 //--------------------------------------------
@@ -122,7 +123,7 @@ HRESULT CGame::Init(void)
 	CManager::Get()->GetFile()->SetMap();
 
 	// カウントダウンの生成処理
-	CCountdown::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f), D3DXVECTOR3(200.0f, 250.0f, 0.0f));
+	CCountdown::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f), D3DXVECTOR3(200.0f, 250.0f, 0.0f), START_COUNT);
 
 	// メッシュのテキスト読み込み
 	//CMesh::TxtSet();
