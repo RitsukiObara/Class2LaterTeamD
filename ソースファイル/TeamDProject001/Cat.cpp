@@ -35,6 +35,7 @@
 #include "rat.h"
 #include "itemUI.h"
 #include "fraction.h"
+#include "player_idUI.h"
 
 //--------------------------------------------
 // 無名名前空間
@@ -48,10 +49,12 @@ namespace
 		D3DXVECTOR3(70.0f,SCREEN_HEIGHT * 0.5f + 50.0f,0.0f),
 		D3DXVECTOR3(SCREEN_WIDTH - 70.0f,SCREEN_HEIGHT * 0.5f + 50.0f,0.0f)
 	};
+	static const D3DXVECTOR3 CAT_SIZE = D3DXVECTOR3(70.0f, 280.0f, 70.0f);		// 当たり判定のサイズ
 	static const float MOVE_SPEED = 20.0f;			// 移動速度
 	static const float ATTACK_DISTANCE = 100.0f;	// 攻撃範囲までの距離
-	static const D3DXVECTOR3 CAT_SIZE = D3DXVECTOR3(70.0f, 250.0f, 70.0f);		// 当たり判定のサイズ
 	static const float GRAVITY = 0.55f;				// 重力
+	static const float STUN_HEIGHT = 300.0f;		// 気絶演出が出てくる高さ
+	static const float ID_HEIGHT = 350.0f;			// IDが出てくる高さ
 }
 
 //--------------------------------------------
@@ -228,6 +231,14 @@ void CCat::Update(void)
 
 	// 角度の正規化
 	RotNormalize();
+
+	if (GetPlayerID() != nullptr)
+	{ // プレイヤーのID表示が NULL じゃない場合
+
+		// 位置を設定する
+		GetPlayerID()->SetPos(D3DXVECTOR3(GetPos().x, GetPos().y + ID_HEIGHT, GetPos().z));
+		GetPlayerID()->Update();
+	}
 
 	// 更新処理
 	CPlayer::Update();
@@ -487,6 +498,16 @@ void CCat::SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 {
 	// 情報の設定処理
 	CPlayer::SetData(pos, nID, type);
+
+	if (GetPlayerID() != nullptr)
+	{ // プレイヤーのIDが NULL じゃない場合
+
+		// 位置を設定する
+		GetPlayerID()->SetPos(D3DXVECTOR3(pos.x, pos.y + ID_HEIGHT, pos.z));
+	}
+
+	// 気絶が出る高さの設定
+	SetStunHeight(STUN_HEIGHT);
 
 	// 当たり判定のサイズの設定
 	SetSizeColl(CAT_SIZE);

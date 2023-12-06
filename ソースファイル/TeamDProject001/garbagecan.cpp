@@ -21,7 +21,12 @@
 //==============================
 CGarbage::CGarbage() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 {
-	m_State = STATE_GARBAGECAN;
+	// 全ての値をクリアする
+	m_State = STATE_GARBAGECAN;		// 状態
+
+	// ネズミだけ動かせるようにする
+	SetCatUse(false);
+	SetRatUse(true);
 }
 
 //==============================
@@ -65,10 +70,9 @@ void CGarbage::Update(void)
 	//状態管理
 	StateManager();
 
-	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_RETURN) == true)
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_0) == true)
 	{ // ENTERキーを押していた場合
-		//破壊時処理
-		Break();
+
 	}
 }
 
@@ -88,12 +92,12 @@ void CGarbage::StateManager(void)
 {
 	switch (m_State)
 	{
-	case CGarbage::STATE_GARBAGECAN:
+	case CGarbage::STATE_GARBAGECAN:	// ゴミ箱
 
 
 
 		break;
-	case CGarbage::STATE_GARBAGE:
+	case CGarbage::STATE_BANANA:		// バナナの皮
 
 		break;
 	}
@@ -105,15 +109,12 @@ void CGarbage::StateManager(void)
 void CGarbage::Break(void)
 {
 	if (m_State == STATE_GARBAGECAN)
-	{
-		m_State = STATE_GARBAGE;
+	{ // ゴミ箱状態の場合
 
-		CFraction::Create(GetPos(), CFraction::TYPE_FLOWERVASE);
+		m_State = STATE_BANANA;
 
 		// モデルの情報を設定する
 		SetFileData(CXFile::TYPE_GARBAGE);
-
-		SetScale(D3DXVECTOR3(2, 1.0f, 2));
 	}
 }
 
@@ -151,13 +152,11 @@ bool CGarbage::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const floa
 			return false;
 		}
 	}
-	else
-	{ // 上記以外
 
-		// false を返す
-		return false;
-	}
+	// false を返す
+	return false;
 }
+
 //=====================================
 // ヒット処理
 //=====================================
@@ -167,70 +166,35 @@ bool CGarbage::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeig
 	D3DXVECTOR3 vtxMax = D3DXVECTOR3(fWidth, fHeight, fDepth);		// サイズの最大値
 	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-fWidth, 0.0f, -fDepth);		// サイズの最小値
 
-	if (m_State == STATE_GARBAGECAN)
-	{ // 蜂蜜ボトル状態の場合
+	if (m_State == STATE_BANANA &&
+		type == CPlayer::TYPE_CAT &&
+		useful::RectangleCollisionXY(GetPos(), pos, GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true &&
+		useful::RectangleCollisionXZ(GetPos(), pos, GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true &&
+		useful::RectangleCollisionYZ(GetPos(), pos, GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true)
+	{ // ネコがバナナの皮に引っかかった場合
 
-		if (type == CPlayer::TYPE_RAT)
-		{ // ネコの場合
-
-			if (useful::RectangleCollisionXY(pos, GetPos(), vtxMax, GetFileData().vtxMax, vtxMin, GetFileData().vtxMin) == true &&
-				useful::RectangleCollisionYZ(pos, GetPos(), vtxMax, GetFileData().vtxMax, vtxMin, GetFileData().vtxMin) == true)
-			{ // 矩形の当たり判定に通った場合
-
-				// 破壊時処理
-				Break();
-
-				// true を返す
-				return false;
-			}
-			else
-			{ // 上記以外
-
-				// false を返す
-				return false;
-			}
-		}
-		else
-		{ // 上記以外
-
-			// false を返す
-			return false;
-		}
+		// true を返す
+		return true;
 	}
-	else if (m_State == STATE_GARBAGE)
-	{ // 蜂蜜状態の場合
 
-		if (useful::RectangleCollisionXY(GetPos(), pos, GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true &&
-			useful::RectangleCollisionXZ(GetPos(), pos, GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true &&
-			useful::RectangleCollisionYZ(GetPos(), pos, GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true)
-		{ // 四角の当たり判定の中に入っていた場合
-			if (type == CPlayer::TYPE_CAT)
-			{
-				// true を返す
-				return true;
-			}
-			else
-			{
-				// false を返す
-				return false;
-			}
-		}
-		else
-		{ // 上記以外
+	// false を返す
+	return false;
+}
 
-			// false を返す
-			return false;
-		}
+//=====================================
+// ヒットの円処理
+//=====================================
+bool CGarbage::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type)
+{
+	if (useful::CircleCollisionXZ(pos, GetPos(), Radius, GetFileData().fRadius) == true)
+	{ // 範囲内に入っている場合
+
+		// true を返す
+		return true;
 	}
-	else
-	{ // 上記以外
 
-		// 停止
-		assert(false);
-
-		// false を返す
-		return false;
-	}
+	// false を返す
+	return false;
 }
 
 //=====================================
@@ -238,5 +202,6 @@ bool CGarbage::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeig
 //=====================================
 void CGarbage::Action(void)
 {
-
+	//破壊時処理
+	Break();
 }
