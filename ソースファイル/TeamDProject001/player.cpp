@@ -105,6 +105,7 @@ void CPlayer::Box(void)
 	m_CameraRot = NONE_D3DXVECTOR3;		// ƒJƒƒ‰‚ÌŒü‚«
 	m_nResurrectionTime = 0;			// •œŠˆ‚·‚é‚Ü‚Å‚ÌŠÔ
 	m_bTutorial = false;
+	m_bKill = false;
 
 	for (int nCnt = 0; nCnt < LOG_MAX; nCnt++)
 	{
@@ -274,7 +275,7 @@ void CPlayer::Update(void)
 #endif // CAMERA
 
 	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_E) ||
-		CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_B,m_nPlayerIdx) == true)
+		CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_B, m_nPlayerIdx) == true)
 	{
 		collision::ObstacleAction(this, m_sizeColl.x + ADD_ACTION_RADIUS);
 	}

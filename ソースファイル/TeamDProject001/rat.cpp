@@ -179,15 +179,15 @@ void CRat::Update(void)
 			// UŒ‚ˆ—
 			Attack();
 
-			// ƒ‚[ƒVƒ‡ƒ“‚ÌÝ’èˆ—
-			MotionManager();
-
 			// ¶‚«•Ô‚è‚Ì“–‚½‚è”»’è
 			ResurrectionCollision();
 
 			//ˆÚ“®ˆ—
 			Move();
 		}
+
+		// ƒ‚[ƒVƒ‡ƒ“‚ÌÝ’èˆ—
+		MotionManager();
 	}
 
 	// Ž€–S–îˆó‚Ìˆ—
@@ -649,6 +649,7 @@ void CRat::ResurrectionCollision(void)
 						// –³“Gó‘Ô‚É‚·‚é
 						pPlayer->SetState(STATE_INVINCIBLE);
 						pPlayer->SetStateCount(INVINCIBLE_COUNT);
+						SetRatRescue(true);
 
 						// ‰~‚Ì”ÍˆÍ‚Ì”jŠü
 						pPlayer->DeleteRessrectionFan();

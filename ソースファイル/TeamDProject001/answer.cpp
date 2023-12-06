@@ -96,11 +96,20 @@ void CAnswer::Uninit(void)
 //=====================================
 void CAnswer::Update(void)
 {
-	for (int nCnt = 0; nCnt < 4; nCnt++)
-	{
-		if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_RETURN) == true)
+	if (CTutorial::GetPlay() == false)
+	{//説明のプレイ状態
+		for (int nCnt = 0; nCnt < 4; nCnt++)
 		{
-			m_abPressAnswer[nCnt] = true;
+			//入力でチェックを入れる
+			if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_RETURN) == true)
+			{
+				m_abPressAnswer[nCnt] = true;
+			}
+
+			if (CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_A, nCnt))
+			{
+				m_abPressAnswer[nCnt] = true;
+			}
 		}
 	}
 
@@ -168,10 +177,10 @@ void CAnswer::SetData(void)
 			if (m_apAnswer[nCnt] == NULL)
 			{
 				m_apAnswer[nCnt] = CObject2D::Create(CObject2D::TYPE::TYPE_NONE, CObject::TYPE::TYPE_NONE, CObject::PRIORITY_UI);
-				m_apAnswer[nCnt]->SetPos(D3DXVECTOR3(100.0f, 100.0f, 0.0f));		// 位置
-				m_apAnswer[nCnt]->SetPosOld(D3DXVECTOR3(100.0f, 100.0f, 0.0f));		// 前回の位置
+				m_apAnswer[nCnt]->SetPos(D3DXVECTOR3(100.0f + 100.0f * nCnt, 600.0f, 0.0f));		// 位置
+				m_apAnswer[nCnt]->SetPosOld(D3DXVECTOR3(100.0f + 100.0f * nCnt, 600.0f, 0.0f));		// 前回の位置
 				m_apAnswer[nCnt]->SetRot(NONE_D3DXVECTOR3);							// 向き
-				m_apAnswer[nCnt]->SetSize(D3DXVECTOR3(100.0f, 100.0f, 0.0f));		// サイズ
+				m_apAnswer[nCnt]->SetSize(D3DXVECTOR3(30.0f, 30.0f, 0.0f));			// サイズ
 				m_apAnswer[nCnt]->SetLength();										// 長さ
 				m_apAnswer[nCnt]->SetAngle();										// 方向
 				m_apAnswer[nCnt]->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\no_check.png"));		// テクスチャの割り当て処理

@@ -66,8 +66,10 @@ public:			// 誰でもアクセスできる
 	virtual bool Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type) = 0;								// ヒット処理
 	virtual bool HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type) { return false; }													// ヒット処理
 	virtual void Action(void) = 0;											// ギミック起動処理
+	virtual void HitMultiCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type, int nIdx, bool bInput) {}															// ヒット処理
 	virtual void MultiAction(void) {}										// ギミック同時起動処理
-	void GimmickUI(bool Set, int Player_Idx);												// ギミック起動UIの表示
+	void GimmickUI(bool Set, int Player_Idx);								// ギミック起動UIの表示
+	void MultiGimmickUI(bool Set, int Player_Idx);							// ギミック起動UIの表示
 
 	// セット・ゲット関係
 	void SetType(const TYPE type);		// 種類の設定処理
@@ -78,6 +80,9 @@ public:			// 誰でもアクセスできる
 	void SetRatUse(const bool Set) { m_bRatUse = Set; }		// 起動可能の設定処理
 	bool GetRatUse(void) { return m_bRatUse; }				// 起動可能の取得処理
 
+	virtual D3DXVECTOR3 GetPosHead(void) { return NONE_D3DXVECTOR3; }
+	virtual D3DXVECTOR3 GetPosToes(void) { return NONE_D3DXVECTOR3; }
+
 	// 静的メンバ関数
 	static CObstacle* Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type);		// 生成処理
 
@@ -86,6 +91,7 @@ private:		// 自分だけアクセスできる
 	// メンバ変数
 	TYPE m_type;		// 種類
 	CBillboard *m_pGimmickUI;
+	CBillboard *m_pMultiGimmickUI[2];
 	bool m_pGimmickUIFalse[MAX_PLAY];	//全部[False]の時にUIを削除する
 	bool m_bCatUse;						//猫が起動できるかどうか
 	bool m_bRatUse;						//ネズミが起動できるかどうか

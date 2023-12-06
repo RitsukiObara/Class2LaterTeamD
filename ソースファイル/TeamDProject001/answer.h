@@ -33,6 +33,9 @@ public:			// 誰でもアクセスできる
 
 	void SetData(void/*引数*/);		// 情報の設定処理
 
+	void SetAnswer(bool Set, int Idx) { m_abPressAnswer[Idx] = Set; }
+	bool GetAnswer(int Idx) { return m_abPressAnswer[Idx]; }
+
 	// 静的メンバ関数
 	static CAnswer* Create(void/*引数*/);		// 生成処理
 

@@ -125,7 +125,7 @@ HRESULT CTutorial::Init(void)
 	//CMesh::TxtSet();
 
 	// マップの情報をロードする
-	CManager::Get()->GetFile()->Load(CFile::TYPE_OBSTACLE);
+	//CManager::Get()->GetFile()->Load(CFile::TYPE_OBSTACLE);
 	CManager::Get()->GetFile()->Load(CFile::TYPE_CARROUTE);
 	CManager::Get()->GetFile()->Load(CFile::TYPE_BLOCK);
 
@@ -163,8 +163,7 @@ HRESULT CTutorial::Init(void)
 	pObstacle->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.0f, 0.0f));
 
 	// リードの生成処理
-	pObstacle = CObstacle::Create(D3DXVECTOR3(400.0f, 0.0f, -600.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_LEASH);
-	pObstacle->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
+	pObstacle = CObstacle::Create(D3DXVECTOR3(400.0f, 0.0f, -600.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CObstacle::TYPE_LEASH);
 
 	// 画鋲の生成処理
 	CObstacle::Create(D3DXVECTOR3(-200.0f, 200.0f, -120.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_PIN);
@@ -340,6 +339,21 @@ void CTutorial::Update(void)
 			m_pAnswer->Update();
 		}
 	}
+	else
+	{
+		if (m_pAnswer == NULL)
+		{
+			m_pAnswer = CAnswer::Create();
+		}
+
+		if (m_pAnswer != NULL)
+		{
+			m_pAnswer->Update();
+		}
+
+		//プレイ状態への移行
+		PlayFalse();
+	}
 
 	switch (m_GameState)
 	{
@@ -451,7 +465,7 @@ void CTutorial::Draw(void)
 }
 
 //======================================
-// 情
+// プレイ状態への移行
 //======================================
 void CTutorial::PlayTrue(void)
 {
@@ -462,23 +476,165 @@ void CTutorial::PlayTrue(void)
 		m_pExplanation->Uninit();
 		m_pExplanation = NULL;
 	}
+	if (m_pAnswer != NULL)
+	{
+		m_pAnswer->Uninit();
+		m_pAnswer = NULL;
+	}
 
 	for (int nCnt = 0; nCnt < 4; nCnt++)
 	{
-		CTutorial::GetPlayer(nCnt)->SetTutorial(false);
-	}
+		m_bPlay = true;
 
-	int mTutorialNumber = (int)m_Tutorial;
-	mTutorialNumber++;
-	m_Tutorial = (TUTORIAL)mTutorialNumber;
+		if (m_Tutorial == CTutorial::TUTORIAL_CAT_KILL)
+		{
+			if (CTutorial::GetPlayer(nCnt)->GetType() == CPlayer::TYPE::TYPE_CAT)
+			{
+				CTutorial::GetPlayer(nCnt)->SetTutorial(false);
+				CTutorial::GetPlayer(nCnt)->SetRatKill(false);
+			}
+		}
+		else if (m_Tutorial == CTutorial::TUTORIAL_RAT_RESCUE)
+		{
+			if (CTutorial::GetPlayer(nCnt)->GetType() == CPlayer::TYPE::TYPE_RAT)
+			{
+				CTutorial::GetPlayer(nCnt)->SetTutorial(false);
+				CTutorial::GetPlayer(nCnt)->SetRatRescue(false);
+			}
+		}
+		else if (m_Tutorial == CTutorial::TUTORIAL_ACTION)
+		{
+			CTutorial::GetPlayer(nCnt)->SetTutorial(false);
+			CTutorial::GetPlayer(nCnt)->SetUseAction(false);
+		}
+		else
+		{
+			CTutorial::GetPlayer(nCnt)->SetTutorial(false);
+		}
+	}
 }
 
 //======================================
-// 情
+// 説明状態への移行
 //======================================
 void CTutorial::PlayFalse(void)
 {
+	switch (m_Tutorial)
+	{
+	case CTutorial::TUTORIAL_MOVE:
 
+		for (int nCnt = 0; nCnt < 4; nCnt++)
+		{
+			if (m_apPlayer[nCnt]->GetBMove() == true)
+			{
+				if (m_pAnswer != NULL)
+				{
+					m_pAnswer->SetAnswer(true, nCnt);
+				}
+			}
+		}
+
+		break;
+	case CTutorial::TUTORIAL_ATTACK_JAMP:
+
+		for (int nCnt = 0; nCnt < 4; nCnt++)
+		{
+			if (m_apPlayer[nCnt]->GetAttack_Jump() == true)
+			{
+				if (m_pAnswer != NULL)
+				{
+					m_pAnswer->SetAnswer(true, nCnt);
+				}
+			}
+		}
+
+		break;
+	case CTutorial::TUTORIAL_CAT_KILL:
+
+		for (int nCntPlaeyr = 0; nCntPlaeyr < 4; nCntPlaeyr++)
+		{
+			if (CTutorial::GetPlayer(nCntPlaeyr)->GetType() == CPlayer::TYPE::TYPE_CAT)
+			{
+				if (CTutorial::GetPlayer(nCntPlaeyr)->GetRatKill() == true)
+				{
+					for (int nCnt = 0; nCnt < 4; nCnt++)
+					{
+						if (m_pAnswer != NULL)
+						{
+							m_pAnswer->SetAnswer(true, nCnt);
+						}
+					}
+				}
+			}
+		}
+
+		break;
+	case CTutorial::TUTORIAL_RAT_RESCUE:
+
+		for (int nCntPlaeyr = 0; nCntPlaeyr < 4; nCntPlaeyr++)
+		{
+			if (CTutorial::GetPlayer(nCntPlaeyr)->GetType() == CPlayer::TYPE::TYPE_RAT)
+			{
+				if (CTutorial::GetPlayer(nCntPlaeyr)->GetRatRescue() == true)
+				{
+					for (int nCnt = 0; nCnt < 4; nCnt++)
+					{
+						if (m_pAnswer != NULL)
+						{
+							m_pAnswer->SetAnswer(true, nCnt);
+						}
+					}
+				}
+			}
+		}
+
+		break;
+	case CTutorial::TUTORIAL_ACTION:
+
+		for (int nCnt = 0; nCnt < 4; nCnt++)
+		{
+			if (CTutorial::GetPlayer(nCnt)->GetUseAction() == true)
+			{
+				if (m_pAnswer != NULL)
+				{
+					m_pAnswer->SetAnswer(true, nCnt);
+				}
+			}
+		}
+
+		break;
+	case CTutorial::TUTORIAL_ITEM_MULTI:
+		break;
+	case CTutorial::TUTORIAL_GIMMICK:
+		break;
+	case CTutorial::TUTORIAL_LETS_GO:
+		break;
+	case CTutorial::TUTORIAL_MAX:
+		break;
+	default:
+		break;
+	}
+
+	if (m_pAnswer != NULL)
+	{
+		if (m_pAnswer->GetAnswer(0) == true &&
+			m_pAnswer->GetAnswer(1) == true &&
+			m_pAnswer->GetAnswer(2) == true &&
+			m_pAnswer->GetAnswer(3) == true)
+		{
+			m_bPlay = false;
+
+			int mTutorialNumber = (int)m_Tutorial;
+			mTutorialNumber++;
+			m_Tutorial = (TUTORIAL)mTutorialNumber;
+
+			if (m_pAnswer != NULL)
+			{
+				m_pAnswer->Uninit();
+				m_pAnswer = NULL;
+			}
+		}
+	}
 }
 
 //======================================

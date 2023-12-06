@@ -201,12 +201,12 @@ void CCat::Update(void)
 			// 攻撃入力の処理
 			Attack();
 
-			// モーション状態の管理
-			MotionManager();
-
 			// 移動処理
 			Move();
 		}
+
+		// モーション状態の管理
+		MotionManager();
 	}
 	else
 	{
@@ -270,8 +270,8 @@ void CCat::Attack(void)
 	D3DXVECTOR3 pos = GetPos();
 	D3DXVECTOR3 rot = GetRot();
 
-	// ゲームモードの時だけ攻撃
-	if (CManager::Get()->GetMode() == CScene::MODE_GAME)
+	// ゲームモードまたはチュートリアルモードの時だけ攻撃
+	if (CManager::Get()->GetMode() == CScene::MODE_GAME || CManager::Get()->GetMode() == CScene::MODE_TUTORIAL)
 	{
 		if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_RETURN) == true ||
 			CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_A, GetPlayerIdx()) == true)
@@ -313,6 +313,8 @@ void CCat::Attack(void)
 
 							// プレイヤーのヒット処理
 							pPlayer->Hit();
+
+							SetRatKill(true);
 						}
 					}
 				}
@@ -347,6 +349,7 @@ void CCat::AttackStateManager(void)
 			D3DXVECTOR3 rot = GetRot();
 
 			m_AttackState = ATTACKSTATE_ATTACK;
+			m_bAttack = true;
 			m_nAtkStateCount = 10;
 
 			for (int nCnt = 0; nCnt < 10; nCnt++)
@@ -369,6 +372,7 @@ void CCat::AttackStateManager(void)
 		if (m_nAtkStateCount <= 0)
 		{//状態カウントが0になった時
 			m_AttackState = ATTACKSTATE_MOVE;
+			m_bAttack = false;
 		}
 		break;
 	}
@@ -517,9 +521,8 @@ void CCat::SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 	// モーションの設定処理
 	GetMotion()->Set(MOTIONTYPE_NEUTRAL);
 
-
 	// ゲームモードの時だけUIを生成
-	if (CManager::Get()->GetMode() == CScene::MODE_GAME)
+	if (CManager::Get()->GetMode() == CScene::MODE_GAME || CManager::Get()->GetMode() == CScene::MODE_TUTORIAL)
 	{
 		// アイテムUIの生成処理
 		SetItemUI();

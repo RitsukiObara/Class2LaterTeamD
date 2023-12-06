@@ -306,7 +306,12 @@ void collision::ObstacleAction(CPlayer* pPlayer, const float Radius)
 			{
 				if (pObstacle->HitCircle(pos, Radius, type) == true)
 				{ // 障害物の当たり判定が通った場合
+
+					//起動状態にする
 					pObstacle->Action();
+
+					//ネズミがアクションを行った判定(チュートリアル用)
+					pPlayer->SetUseAction(true);
 				}
 			}
 		}
@@ -314,9 +319,21 @@ void collision::ObstacleAction(CPlayer* pPlayer, const float Radius)
 		{
 			if (pObstacle->GetRatUse() == true)
 			{
-				if (pObstacle->HitCircle(pos, Radius, type) == true)
-				{ // 障害物の当たり判定が通った場合
-					pObstacle->Action();
+				if (pObstacle->GetType() == CObstacle::TYPE::TYPE_LEASH)
+				{//リードのとき
+					pObstacle->HitMultiCircle(pos, Radius, type, pPlayer->GetPlayerIdx(), true);
+				}
+				else
+				{//リード以外のとき
+					if (pObstacle->HitCircle(pos, Radius, type) == true)
+					{ // 障害物の当たり判定が通った場合
+
+					  //起動状態にする
+						pObstacle->Action();
+
+						//ネズミがアクションを行った判定(チュートリアル用)
+						pPlayer->SetUseAction(true);
+					}
 				}
 			}
 		}
@@ -361,11 +378,26 @@ void collision::ObstacleSearch(CPlayer* pPlayer, const float Radius)
 			{
 				if (pObstacle->HitCircle(pos, Radius, type) == true)
 				{ // 障害物の当たり判定が通った場合
-					pObstacle->GimmickUI(true, nIdx);
+					if (pObstacle->GetType() == CObstacle::TYPE::TYPE_LEASH)
+					{//リードのとき
+						pObstacle->MultiGimmickUI(true, nIdx);
+					}
+					else
+					{//リード以外のとき
+						pObstacle->GimmickUI(true, nIdx);
+					}
 				}
 				else
 				{
-					pObstacle->GimmickUI(false, nIdx);
+					if (pObstacle->GetType() == CObstacle::TYPE::TYPE_LEASH)
+					{//リードのとき
+						pObstacle->MultiGimmickUI(false, nIdx);
+						pObstacle->HitMultiCircle(pos, Radius, type, pPlayer->GetPlayerIdx(), false);
+					}
+					else
+					{//リード以外のとき
+						pObstacle->GimmickUI(false, nIdx);
+					}
 				}
 			}
 		}

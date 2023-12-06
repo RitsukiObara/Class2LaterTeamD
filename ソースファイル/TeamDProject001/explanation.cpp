@@ -389,22 +389,54 @@ void CExplanation::SetData(CTutorial::TUTORIAL Tutorial)
 	switch (Tutorial)
 	{
 	case CTutorial::TUTORIAL_MOVE:
+		if (m_pCatText != NULL)
+		{
+			m_pCatText->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\Move.png"));		// テクスチャの割り当て処理
+		}
+		if (m_pRatText != NULL)
+		{
+			m_pRatText->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\Move.png"));		// テクスチャの割り当て処理
+		}
+
 		break;
+
 	case CTutorial::TUTORIAL_ATTACK_JAMP:
+		if (m_pCatText != NULL)
+		{
+			m_pCatText->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\jump&Attack.png"));		// テクスチャの割り当て処理
+		}
+		if (m_pRatText != NULL)
+		{
+			m_pRatText->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\jump&Attack.png"));		// テクスチャの割り当て処理
+		}
 		break;
+
 	case CTutorial::TUTORIAL_CAT_KILL:
+
 		break;
+
 	case CTutorial::TUTORIAL_RAT_RESCUE:
+
 		break;
+
 	case CTutorial::TUTORIAL_ACTION:
+
 		break;
+
 	case CTutorial::TUTORIAL_ITEM_MULTI:
+
 		break;
+
 	case CTutorial::TUTORIAL_GIMMICK:
+
 		break;
+
 	case CTutorial::TUTORIAL_LETS_GO:
+
 		break;
+
 	default:
+
 		break;
 	}
 
