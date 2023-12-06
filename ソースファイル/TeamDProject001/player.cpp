@@ -33,24 +33,25 @@
 #include "rat.h"
 
 //-------------------------------------------
-// マクロ定義
+// 無名名前空間
 //-------------------------------------------
-#define GRAVITY				(1.0f)			// 重力
-#define ADD_MOVE_Y			(30.0f)			// 浮力
-#define NONE_PLAYERIDX		(-1)			// プレイヤーの番号の初期値
-#define STUN_HEIGHT			(80.0f)			// 気絶演出が出てくる高さ
-#define ID_HEIGHT			(150.0f)		// IDが出てくる高さ
-#define SMASH_MOVE			(D3DXVECTOR3(10.0f, 11.0f, 10.0f))		// 吹き飛び状態の移動量
-#define STUN_WAIT			(120)			// オブジェクト無効の待機時間
-#define DEATH_WAIT			(120)			// 死亡時の待機時間
-#define SMASH_WAIT			(40)			// 吹き飛び状態のカウント数
-#define CAT_CAMERA_HEIGHT	(200.0f)		// 猫のカメラの高さ
-#define CAT_CAMERA_DIS		(300.0f)		// 猫のカメラの視点と注視点の高さの差分(角度)
-#define RAT_CAMERA_HEIGHT	(100.0f)		// 猫のカメラの高さ
-#define RAT_CAMERA_DIS		(60.0f)			// ネズミのカメラの視点と注視点の高さの差分(角度)
-#define DIFF_ROT			(0.2f)			// 角度に足す差分の割合
-#define CAMERA_ROT_MOVE		(0.05f)			// カメラの向きの移動量
-#define ADD_ACTION_RADIUS	(40.0f)			// サーチ時の半径の追加数
+namespace
+{
+	static const D3DXVECTOR3 SMASH_MOVE = D3DXVECTOR3(10.0f, 11.0f, 10.0f);		// 吹き飛び状態の移動量
+	static const float GRAVITY = 1.0f;					// 重力
+	static const float ADD_MOVE_Y = 30.0f;				// 浮力
+	static const float CAT_CAMERA_HEIGHT = 200.0f;		// 猫のカメラの高さ
+	static const float CAT_CAMERA_DIS = 300.0f;			// 猫のカメラの視点と注視点の高さの差分(角度)
+	static const float RAT_CAMERA_HEIGHT = 100.0f;		// 猫のカメラの高さ
+	static const float RAT_CAMERA_DIS = 60.0f;			// ネズミのカメラの視点と注視点の高さの差分(角度)
+	static const float DIFF_ROT = 0.2f;					// 角度に足す差分の割合
+	static const float CAMERA_ROT_MOVE = 0.05f;			// カメラの向きの移動量
+	static const float ADD_ACTION_RADIUS = 40.0f;		// サーチ時の半径の追加数
+	static const int NONE_PLAYERIDX = -1;				// プレイヤーの番号の初期値
+	static const int STUN_WAIT = 120;					// オブジェクト無効の待機時間
+	static const int DEATH_WAIT = 120;					// 死亡時の待機時間
+	static const int SMASH_WAIT = 40;					// 吹き飛び状態のカウント数
+}
 
 //==============================
 // コンストラクタ
@@ -100,6 +101,7 @@ void CPlayer::Box(void)
 	m_fSpeed = 0.0f;					// 速度
 	m_fRotDest = 0.0f;					// 目標
 	m_fRotDiff = 0.0f;					// 差分
+	m_fStunHeight = 0.0f;				// 気絶が出る高さ
 	m_bAttack = false;					// 攻撃したか
 	m_bMove = false;					// 移動しているか
 	m_CameraRot = NONE_D3DXVECTOR3;		// カメラの向き
@@ -144,6 +146,7 @@ HRESULT CPlayer::Init(void)
 	m_fSpeed = 0.0f;					// 速度
 	m_fRotDest = 0.0f;					// 目標
 	m_fRotDiff = 0.0f;					// 差分
+	m_fStunHeight = 0.0f;				// 気絶が出る高さ
 	m_bAttack = false;					// 攻撃したか
 	m_bMove = false;					// 移動しているか
 	m_nResurrectionTime = 0;			// 復活するまでの時間
@@ -291,17 +294,6 @@ void CPlayer::Update(void)
 		m_pMotion->Update();
 	}
 
-	if (m_pPlayerID != nullptr)
-	{ // プレイヤーのID表示が NULL じゃない場合
-
-		// 位置情報の取得
-		D3DXVECTOR3 pos = GetPos();
-
-		// 位置を設定する
-		m_pPlayerID->SetPos(D3DXVECTOR3(pos.x, pos.y + ID_HEIGHT, pos.z));
-		m_pPlayerID->Update();
-	}
-
 	for (int nCnt = 0; nCnt < LOG_MAX; nCnt++)
 	{
 		if (m_apLog[nCnt] != NULL)
@@ -402,7 +394,7 @@ void CPlayer::SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 	{ // プレイヤーのID表示が NULL の場合
 
 		// プレイヤーのID表示の生成処理
-		m_pPlayerID = CPlayerID::Create(D3DXVECTOR3(pos.x, pos.y + ID_HEIGHT, pos.z), nID);
+		m_pPlayerID = CPlayerID::Create(pos, nID);
 	}
 }
 
@@ -1069,7 +1061,7 @@ void CPlayer::SetStun(const D3DXVECTOR3& pos)
 	{ // 気絶演出が NULL の場合
 
 		// 気絶演出を生成する
-		m_pStun = CStun::Create(D3DXVECTOR3(pos.x, pos.y + STUN_HEIGHT, pos.z));
+		m_pStun = CStun::Create(D3DXVECTOR3(pos.x, pos.y + m_fStunHeight, pos.z));
 	}
 }
 
@@ -1352,6 +1344,15 @@ float CPlayer::GetSpeed(void) const
 {
 	// 速度を返す
 	return m_fSpeed;
+}
+
+//=======================================
+// 気絶の出る高さの設定処理
+//=======================================
+void CPlayer::SetStunHeight(const float fHeight)
+{
+	// 気絶の出る高さを設定する
+	m_fStunHeight = fHeight;
 }
 
 //=======================================
