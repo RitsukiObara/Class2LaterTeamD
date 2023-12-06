@@ -80,6 +80,7 @@ public:			// 誰でもアクセスできる
 	virtual void GetItem(const CItem::TYPE type);	// アイテムの取得処理
 
 	virtual void SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type);		// 情報の設定処理
+	void CameraUpdate(void);			// カメラ情報の更新
 
 	// セット・ゲット関係
 	void SetMotion(CMotion* pMotion);			// モーションの設定処理
@@ -185,7 +186,6 @@ private:		// 自分だけアクセスできる
 	void ObstacleCollision(void);		// 障害物との当たり判定
 	void StunStateManager(void);		// 気絶状態の管理
 	void StateManager(void);			// 状態の管理
-	void CameraUpdate(void);			// カメラ情報の更新
 
 	// メンバ変数
 	CMotion* m_pMotion;			// モーションの情報

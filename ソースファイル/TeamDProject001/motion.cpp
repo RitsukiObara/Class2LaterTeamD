@@ -167,6 +167,23 @@ void CMotion::Set(int nType)
 }
 
 //============================================================
+// モーションの種類の強制設定処理
+//============================================================
+void CMotion::SetForcibly(void)
+{
+	for (int nCntModel = 0; nCntModel < m_nNumModel; nCntModel++)
+	{
+		// パーツの位置・向きを設定
+		m_posPast[nCntModel].x = m_aInfo[m_nType].aKeyInfo[m_nKey].aKey[nCntModel].fPosX;
+		m_posPast[nCntModel].y = m_aInfo[m_nType].aKeyInfo[m_nKey].aKey[nCntModel].fPosY;
+		m_posPast[nCntModel].z = m_aInfo[m_nType].aKeyInfo[m_nKey].aKey[nCntModel].fPosZ;
+		m_rotPast[nCntModel].x = m_aInfo[m_nType].aKeyInfo[m_nKey].aKey[nCntModel].fRotX;
+		m_rotPast[nCntModel].y = m_aInfo[m_nType].aKeyInfo[m_nKey].aKey[nCntModel].fRotY;
+		m_rotPast[nCntModel].z = m_aInfo[m_nType].aKeyInfo[m_nKey].aKey[nCntModel].fRotZ;
+	}
+}
+
+//============================================================
 // モーションの更新処理
 //============================================================
 void CMotion::Update(void)

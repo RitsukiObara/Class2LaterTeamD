@@ -302,9 +302,6 @@ void CGame::Update(void)
 	{
 	case CGame::STATE_START:
 
-		// ポーズ処理
-		Pause();
-
 		break;
 
 	case CGame::STATE_PLAY:
@@ -319,6 +316,16 @@ void CGame::Update(void)
 		// 遷移処理
 		Transition();
 
+		for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
+		{
+			if (m_apPlayer[nCnt] != nullptr)
+			{ // プレイヤーが NULL じゃない場合
+
+				// カメラの更新処理
+				m_apPlayer[nCnt]->CameraUpdate();
+			}
+		}
+
 		break;
 
 	case CGame::STATE_CAT_WIN:
@@ -329,6 +336,16 @@ void CGame::Update(void)
 			m_pFinish->SetFinish(true);
 		}
 		Transition();
+
+		for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
+		{
+			if (m_apPlayer[nCnt] != nullptr)
+			{ // プレイヤーが NULL じゃない場合
+
+				// カメラの更新処理
+				m_apPlayer[nCnt]->CameraUpdate();
+			}
+		}
 
 		break;
 
