@@ -132,6 +132,9 @@ public:			// 誰でもアクセスできる
 	void SetEnableMove(const bool bMove);		// 移動状況の設定処理
 	bool IsMove(void) const;					// 移動状況の取得処理
 
+	void SetTutorial(const bool bTutorial) { m_bTutorial = bTutorial; }	// 移動状況の設定処理
+	bool GetTutorial(void) { return m_bTutorial; }						// 移動状況の取得処理
+
 	void SetResurrectionTime(const int nRezTime);	// 死んだネズミの復活時間の合計設定
 	void AddResurrectionTime(const int nRezTime);	// 死んだネズミの復活時間の合計追加
 	int GetResurrectionTime(void);					// 死んだネズミの復活時間の合計取得
@@ -147,6 +150,17 @@ public:			// 誰でもアクセスできる
 
 	void SetLogPlayer(int LogPlayer) { m_nLogPlayer = LogPlayer; }		// 状態の設定処理
 	int GetLogPlayer(void) { return m_nLogPlayer; }						// 状態の取得処理
+
+	//チュートリアル用ゲット関数
+	void SetBMove(bool Set) { m_bMove = Set; }			// 移動状態の設定処理
+	bool GetBMove(void) { return m_bMove; }				// 移動状態の取得処理
+	virtual bool GetAttack_Jump(void) { return false; }	// アタックジャンプ状態の取得処理
+	void SetRatKill(bool Set) { m_bKill = Set; }		// キルの設定処理
+	bool GetRatKill(void) { return m_bKill; }			// キルの取得処理
+	void SetRatRescue(bool Set) { m_bRescue = Set; }	// 救助の設定処理
+	bool GetRatRescue(void) { return m_bRescue; }		// 救助の取得処理
+	void SetUseAction(bool Set) { m_bAction = Set; }	// 起動の設定処理
+	bool GetUseAction(void) { return m_bAction; }		// 起動の取得処理
 
 	void SetStateCount(const int nCount) { m_StateCount = nCount; };		// 状態カウントの設定処理
 
@@ -203,6 +217,11 @@ private:		// 自分だけアクセスできる
 	CLog *m_apLog[LOG_MAX];		// ログ
 	int m_nLogPlayer;			// ログに表示するプレイヤーの番号
 	int m_nLogNumber;			// ログの生成番号
+	bool m_bTutorial;			// チュートリアル状態かどうか
+	bool m_bKill;				// キルを行ったかどうか
+	bool m_bRescue;				// 救助を行ったかどうか
+	bool m_bAction;				// 起動を行ったかどうか
+	bool m_bItem_MultiAction;	// アイテム使用と連携起動
 };
 
 #endif

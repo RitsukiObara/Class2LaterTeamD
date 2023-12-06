@@ -10,6 +10,7 @@
 #include "Cat.h"
 #include "manager.h"
 #include "game.h"
+#include "tutorial.h"
 #include "result.h"
 #include "renderer.h"
 #include "debugproc.h"
@@ -185,28 +186,30 @@ void CCat::Update(void)
 		CPlayer::GetState() != CPlayer::STATE_DEATH &&
 		m_AttackState == ATTACKSTATE_MOVE)
 	{// 移動状態の時
+		if (GetTutorial() != true)
+		{
+			// 速度を設定する
+			SetSpeed(MOVE_SPEED);
 
-		// 速度を設定する
-		SetSpeed(MOVE_SPEED);
+			if (GetStunState() != STUNSTATE_SMASH)
+			{ // 吹き飛び状態以外の場合
 
-		if (GetStunState() != STUNSTATE_SMASH)
-		{ // 吹き飛び状態以外の場合
+			  // 移動操作処理
+				MoveControl();
 
-			// 移動操作処理
-			MoveControl();
+				// アイテムの設置処理
+				ItemSet();
+			}
 
-			// アイテムの設置処理
-			ItemSet();
+			// 攻撃入力の処理
+			Attack();
+
+			// 移動処理
+			Move();
 		}
-
-		// 攻撃入力の処理
-		Attack();
 
 		// モーション状態の管理
 		MotionManager();
-
-		// 移動処理
-		Move();
 	}
 	else
 	{
@@ -278,20 +281,28 @@ void CCat::Attack(void)
 	D3DXVECTOR3 pos = GetPos();
 	D3DXVECTOR3 rot = GetRot();
 
-	// ゲームモードの時だけ攻撃
-	if (CManager::Get()->GetMode() == CScene::MODE_GAME)
+	// ゲームモードまたはチュートリアルモードの時だけ攻撃
+	if (CManager::Get()->GetMode() == CScene::MODE_GAME || CManager::Get()->GetMode() == CScene::MODE_TUTORIAL)
 	{
 		if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_RETURN) == true ||
 			CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_A, GetPlayerIdx()) == true)
 		{ // ENTERキー(Aボタン)を押していた場合
 
-			// 状態を攻撃準備にする
-			m_AttackState = ATTACKSTATE_STANDBY;
-			m_nAtkStateCount = 20;
-			for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
+		// 状態を攻撃準備にする
+		m_AttackState = ATTACKSTATE_STANDBY;
+		m_nAtkStateCount = 20;
+		for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
+		{
+			if (CManager::Get()->GetMode() == CScene::MODE_TUTORIAL)
+			{
+				// プレイヤーの情報を取得する
+				pPlayer = CTutorial::GetPlayer(nCnt);
+			}
+			else
 			{
 				// プレイヤーの情報を取得する
 				pPlayer = CGame::GetPlayer(nCnt);
+			}
 
 				if (pPlayer != nullptr &&
 					pPlayer->GetType() == CPlayer::TYPE_RAT)
@@ -313,6 +324,8 @@ void CCat::Attack(void)
 
 							// プレイヤーのヒット処理
 							pPlayer->Hit();
+
+							SetRatKill(true);
 						}
 					}
 				}
@@ -347,6 +360,7 @@ void CCat::AttackStateManager(void)
 			D3DXVECTOR3 rot = GetRot();
 
 			m_AttackState = ATTACKSTATE_ATTACK;
+			m_bAttack = true;
 			m_nAtkStateCount = 10;
 
 			for (int nCnt = 0; nCnt < 10; nCnt++)
@@ -369,6 +383,7 @@ void CCat::AttackStateManager(void)
 		if (m_nAtkStateCount <= 0)
 		{//状態カウントが0になった時
 			m_AttackState = ATTACKSTATE_MOVE;
+			m_bAttack = false;
 		}
 		break;
 	}
@@ -527,9 +542,8 @@ void CCat::SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 	// モーションの設定処理
 	GetMotion()->Set(MOTIONTYPE_NEUTRAL);
 
-
 	// ゲームモードの時だけUIを生成
-	if (CManager::Get()->GetMode() == CScene::MODE_GAME)
+	if (CManager::Get()->GetMode() == CScene::MODE_GAME || CManager::Get()->GetMode() == CScene::MODE_TUTORIAL)
 	{
 		// アイテムUIの生成処理
 		SetItemUI();

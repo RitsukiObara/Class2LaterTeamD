@@ -11,6 +11,7 @@
 #include "rat.h"
 #include "player.h"
 #include "game.h"
+#include "tutorial.h"
 #include "result.h"
 #include "input.h"
 #include "manager.h"
@@ -165,27 +166,30 @@ void CRat::Update(void)
 		CPlayer::GetState() != CPlayer::STATE_DEATH)
 	{ // 気絶状態or死亡状態じゃない場合
 
-		// ジャンプ処理
-		Jump();
+		if (GetTutorial() != true)
+		{
+			// ジャンプ処理
+			Jump();
 
-		if (GetStunState() != STUNSTATE_SMASH)
-		{ // 吹き飛び状態の場合
+			if (GetStunState() != STUNSTATE_SMASH)
+			{ // 吹き飛び状態の場合
 
-			// 移動操作処理
-			MoveControl();
+				// 移動操作処理
+				MoveControl();
+			}
+
+			// 攻撃処理
+			Attack();
+
+			// 生き返りの当たり判定
+			ResurrectionCollision();
+
+			//移動処理
+			Move();
 		}
-
-		// 攻撃処理
-		Attack();
 
 		// モーションの設定処理
 		MotionManager();
-
-		// 生き返りの当たり判定
-		ResurrectionCollision();
-
-		//移動処理
-		Move();
 	}
 	else
 	{
@@ -462,8 +466,16 @@ void CRat::Hit(void)
 
 		for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
 		{
-			// プレイヤーの情報を取得する
-			pPlayer = CGame::GetPlayer(nCnt);
+			if (CManager::Get()->GetMode() == CScene::MODE_TUTORIAL)
+			{
+				// プレイヤーの情報を取得する
+				pPlayer = CTutorial::GetPlayer(nCnt);
+			}
+			else
+			{
+				// プレイヤーの情報を取得する
+				pPlayer = CGame::GetPlayer(nCnt);
+			}
 
 			if (pPlayer != nullptr &&
 				pPlayer->GetType() == TYPE_RAT && 
@@ -497,8 +509,17 @@ void CRat::DeathArrow(void)
 
 	for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
 	{
-		// プレイヤーの情報を取得する
-		pPlayer = CGame::GetPlayer(nCnt);
+		if (CManager::Get()->GetMode() == CScene::MODE_TUTORIAL)
+		{
+			// プレイヤーの情報を取得する
+			pPlayer = CTutorial::GetPlayer(nCnt);
+		}
+		else
+		{
+			// プレイヤーの情報を取得する
+			pPlayer = CGame::GetPlayer(nCnt);
+		}
+
 		abRez[nCnt] = false;
 
 		if (pPlayer != nullptr &&
@@ -577,7 +598,7 @@ void CRat::Elevation(void)
 //=======================================
 void CRat::ResurrectionCollision(void)
 {
-	CPlayer *pPlayer;						// ネズミの情報
+	CPlayer *pPlayer = nullptr;				// ネズミの情報
 	bool bCollXY = false;					// XYの範囲に入ったか
 	bool bCollXZ = false;					// XZの範囲に入ったか
 	bool abRez[MAX_PLAY];					// 回復してるか
@@ -586,8 +607,16 @@ void CRat::ResurrectionCollision(void)
 
 	for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
 	{
-		// プレイヤーの情報を取得する
-		pPlayer = CGame::GetPlayer(nCnt);
+		if (CManager::Get()->GetMode() == CScene::MODE_TUTORIAL)
+		{
+			// プレイヤーの情報を取得する
+			pPlayer = CTutorial::GetPlayer(nCnt);
+		}
+		else
+		{
+			// プレイヤーの情報を取得する
+			pPlayer = CGame::GetPlayer(nCnt);
+		}
 		abRez[nCnt] = false;
 
 		if (pPlayer != nullptr &&
@@ -638,6 +667,7 @@ void CRat::ResurrectionCollision(void)
 						// 無敵状態にする
 						pPlayer->SetState(STATE_INVINCIBLE);
 						pPlayer->SetStateCount(INVINCIBLE_COUNT);
+						SetRatRescue(true);
 
 						// 円の範囲の破棄
 						pPlayer->DeleteRessrectionFan();
