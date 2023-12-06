@@ -10,6 +10,7 @@
 #include "Cat.h"
 #include "manager.h"
 #include "game.h"
+#include "tutorial.h"
 #include "result.h"
 #include "renderer.h"
 #include "debugproc.h"
@@ -181,28 +182,30 @@ void CCat::Update(void)
 		CPlayer::GetState() != CPlayer::STATE_DEATH &&
 		m_AttackState == ATTACKSTATE_MOVE)
 	{// 移動状態の時
+		if (GetTutorial() != true)
+		{
+			// 速度を設定する
+			SetSpeed(MOVE_SPEED);
 
-		// 速度を設定する
-		SetSpeed(MOVE_SPEED);
+			if (GetStunState() != STUNSTATE_SMASH)
+			{ // 吹き飛び状態以外の場合
 
-		if (GetStunState() != STUNSTATE_SMASH)
-		{ // 吹き飛び状態以外の場合
+			  // 移動操作処理
+				MoveControl();
 
-			// 移動操作処理
-			MoveControl();
+				// アイテムの設置処理
+				ItemSet();
+			}
 
-			// アイテムの設置処理
-			ItemSet();
+			// 攻撃入力の処理
+			Attack();
+
+			// モーション状態の管理
+			MotionManager();
+
+			// 移動処理
+			Move();
 		}
-
-		// 攻撃入力の処理
-		Attack();
-
-		// モーション状態の管理
-		MotionManager();
-
-		// 移動処理
-		Move();
 	}
 	else
 	{
@@ -275,8 +278,16 @@ void CCat::Attack(void)
 		m_nAtkStateCount = 20;
 		for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
 		{
-			// プレイヤーの情報を取得する
-			pPlayer = CGame::GetPlayer(nCnt);
+			if (CManager::Get()->GetMode() == CScene::MODE_TUTORIAL)
+			{
+				// プレイヤーの情報を取得する
+				pPlayer = CTutorial::GetPlayer(nCnt);
+			}
+			else
+			{
+				// プレイヤーの情報を取得する
+				pPlayer = CGame::GetPlayer(nCnt);
+			}
 
 			if (pPlayer != nullptr &&
 				pPlayer->GetType() == CPlayer::TYPE_RAT)

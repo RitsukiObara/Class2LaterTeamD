@@ -101,6 +101,7 @@ void CPlayer::Box(void)
 	m_bMove = false;					// 移動しているか
 	m_CameraRot = NONE_D3DXVECTOR3;		// カメラの向き
 	m_nResurrectionTime = 0;			// 復活するまでの時間
+	m_bTutorial = false;
 
 	for (int nCnt = 0; nCnt < LOG_MAX; nCnt++)
 	{
@@ -228,8 +229,16 @@ void CPlayer::Uninit(void)
 		}
 	}
 
-	// プレイヤーを消去する
-	CGame::DeletePlayer(m_nPlayerIdx);
+	if (CManager::Get()->GetMode() == CScene::MODE_TUTORIAL)
+	{
+		// プレイヤーを消去する
+		CTutorial::DeletePlayer(m_nPlayerIdx);
+	}
+	else
+	{
+		// プレイヤーを消去する
+		CGame::DeletePlayer(m_nPlayerIdx);
+	}
 
 	// 終了処理
 	CCharacter::Uninit();

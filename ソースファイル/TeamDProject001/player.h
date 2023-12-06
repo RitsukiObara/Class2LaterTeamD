@@ -130,6 +130,9 @@ public:			// 誰でもアクセスできる
 	void SetEnableMove(const bool bMove);		// 移動状況の設定処理
 	bool IsMove(void) const;					// 移動状況の取得処理
 
+	void SetTutorial(const bool bTutorial) { m_bTutorial = bTutorial; }	// 移動状況の設定処理
+	bool GetTutorial(void) { return m_bTutorial; }						// 移動状況の取得処理
+
 	void SetResurrectionTime(const int nRezTime);	// 死んだネズミの復活時間の合計設定
 	void AddResurrectionTime(const int nRezTime);	// 死んだネズミの復活時間の合計追加
 	int GetResurrectionTime(void);					// 死んだネズミの復活時間の合計取得
@@ -197,6 +200,7 @@ private:		// 自分だけアクセスできる
 	CLog *m_apLog[LOG_MAX];		// ログ
 	int m_nLogPlayer;			// ログに表示するプレイヤーの番号
 	int m_nLogNumber;			// ログの生成番号
+	bool m_bTutorial;			// チュートリアル状態かどうか
 };
 
 #endif

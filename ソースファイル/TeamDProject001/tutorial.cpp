@@ -38,6 +38,9 @@
 #include "obstacle_manager.h"
 #include "chara_infoUI.h"
 
+#include "answer.h"
+#include "explanation.h"
+
 //--------------------------------------------
 // 無名名前空間
 //--------------------------------------------
@@ -56,13 +59,17 @@ namespace
 //--------------------------------------------
 // 静的メンバ変数宣言
 //--------------------------------------------
-CPause* CTutorial::m_pPause = nullptr;							// ポーズの情報
-CPlayer* CTutorial::m_apPlayer[MAX_PLAY] = {};					// プレイヤーの情報
-CTutorial::STATE CTutorial::m_GameState = CTutorial::STATE_START;		// チュートリアルの進行状態
-int CTutorial::m_nFinishCount = 0;								// 終了カウント
-CGameFinish* CTutorial::m_pFinish = nullptr;					// フィニッシュの情報
+CPause* CTutorial::m_pPause = nullptr;								// ポーズの情報
+CPlayer* CTutorial::m_apPlayer[MAX_PLAY] = {};						// プレイヤーの情報
+CTutorial::STATE CTutorial::m_GameState = CTutorial::STATE_START;	// チュートリアルの進行状態
+int CTutorial::m_nFinishCount = 0;									// 終了カウント
+CGameFinish* CTutorial::m_pFinish = nullptr;						// フィニッシュの情報
+CTutorial::TUTORIAL CTutorial::m_Tutorial = TUTORIAL_MOVE;			// チュートリアルの項目
+bool CTutorial::m_bPlay = false;									// チュートリアルのプレイ中か否か
+CAnswer*  CTutorial::m_pAnswer = nullptr;							// 返答リアクション
+CExplanation*  CTutorial::m_pExplanation = nullptr;					// 説明
 
-															// デバッグ版
+// デバッグ版
 #ifdef _DEBUG
 CEdit* CTutorial::m_pEdit = nullptr;							// エディットの情報
 bool CTutorial::m_bEdit = false;								// エディット状況
@@ -78,6 +85,10 @@ CTutorial::CTutorial() : CScene(TYPE_SCENE, PRIORITY_BG)
 	m_pFinish = nullptr;		// フィニッシュ
 	m_nFinishCount = 0;			// 終了カウント
 	m_GameState = STATE_START;	// 状態
+	m_Tutorial = TUTORIAL_MOVE;
+	m_bPlay = false;
+	m_pAnswer = nullptr;
+	m_pExplanation = nullptr;
 
 	for (int nCntPlay = 0; nCntPlay < MAX_PLAY; nCntPlay++)
 	{
@@ -239,6 +250,18 @@ void CTutorial::Uninit(void)
 	// 再生中のサウンドの停止
 	CManager::Get()->GetSound()->Stop();
 
+	if (m_pExplanation != NULL)
+	{
+		m_pExplanation->Uninit();
+		m_pExplanation = NULL;
+	}
+
+	if (m_pAnswer != NULL)
+	{
+		m_pAnswer->Uninit();
+		m_pAnswer = NULL;
+	}
+
 	// 終了処理
 	CScene::Uninit();
 }
@@ -287,6 +310,36 @@ void CTutorial::Update(void)
 	}
 
 #endif
+
+	if (m_bPlay == false)
+	{
+		//存在しない場合生成--------------------------------------------------------------------------
+		if (m_pExplanation == NULL)
+		{
+			m_pExplanation = CExplanation::Create(m_Tutorial);
+
+			for (int nCnt = 0; nCnt < 4; nCnt++)
+			{
+				CTutorial::GetPlayer(nCnt)->SetTutorial(true);
+			}
+		}
+
+		if (m_pAnswer == NULL)
+		{
+			m_pAnswer = CAnswer::Create();
+		}
+
+		//更新
+		if (m_pExplanation != NULL)
+		{
+			m_pExplanation->Update();
+		}
+
+		if (m_pAnswer != NULL)
+		{
+			m_pAnswer->Update();
+		}
+	}
 
 	switch (m_GameState)
 	{
@@ -385,6 +438,45 @@ void CTutorial::Update(void)
 //描画処理
 //======================================
 void CTutorial::Draw(void)
+{
+	if (m_pExplanation != NULL)
+	{
+		m_pExplanation->Draw();
+	}
+
+	if (m_pAnswer != NULL)
+	{
+		m_pAnswer->Draw();
+	}
+}
+
+//======================================
+// 情
+//======================================
+void CTutorial::PlayTrue(void)
+{
+	m_bPlay = true;
+	
+	if (m_pExplanation != NULL)
+	{
+		m_pExplanation->Uninit();
+		m_pExplanation = NULL;
+	}
+
+	for (int nCnt = 0; nCnt < 4; nCnt++)
+	{
+		CTutorial::GetPlayer(nCnt)->SetTutorial(false);
+	}
+
+	int mTutorialNumber = (int)m_Tutorial;
+	mTutorialNumber++;
+	m_Tutorial = (TUTORIAL)mTutorialNumber;
+}
+
+//======================================
+// 情
+//======================================
+void CTutorial::PlayFalse(void)
 {
 
 }

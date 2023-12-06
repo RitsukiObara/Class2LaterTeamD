@@ -584,6 +584,7 @@ void CObject::DrawGame(void)
 		{
 			// カメラの設定処理
 			CManager::Get()->GetMlutiCamera(nCnt)->Set(nCnt);
+			m_DrawIdx = nCnt;
 
 			// ローカル変数宣言
 			CObject* pObj = nullptr;		// 現在のオブジェクトのポインタ
