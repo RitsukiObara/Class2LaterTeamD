@@ -48,12 +48,12 @@ namespace
 		D3DXVECTOR3(70.0f,SCREEN_HEIGHT * 0.5f + 50.0f,0.0f),
 		D3DXVECTOR3(SCREEN_WIDTH - 70.0f,SCREEN_HEIGHT * 0.5f + 50.0f,0.0f)
 	};
-	static const D3DXVECTOR3 CAT_SIZE = D3DXVECTOR3(70.0f, 250.0f, 70.0f);		// 当たり判定のサイズ
+	static const D3DXVECTOR3 CAT_SIZE = D3DXVECTOR3(70.0f, 280.0f, 70.0f);		// 当たり判定のサイズ
 	static const float MOVE_SPEED = 20.0f;			// 移動速度
 	static const float ATTACK_DISTANCE = 100.0f;	// 攻撃範囲までの距離
 	static const float GRAVITY = 0.55f;				// 重力
-	static const float STUN_HEIGHT = 200.0f;		// 気絶演出が出てくる高さ
-	static const float ID_HEIGHT = 240.0f;			// IDが出てくる高さ
+	static const float STUN_HEIGHT = 300.0f;		// 気絶演出が出てくる高さ
+	static const float ID_HEIGHT = 350.0f;			// IDが出てくる高さ
 }
 
 //--------------------------------------------
