@@ -30,6 +30,8 @@
 #include "Pin.h"
 #include "electricfan.h"
 #include "cup.h"
+#include "tv.h"
+#include "dynamite.h"
 
 #include "garbagecan.h"
 //==============================
@@ -346,6 +348,14 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, con
 		case CObstacle::TYPE_GARBAGECAN:		// ‹N“®Œn
 			pObstacle = new CGarbage;
 
+			break;
+		case CObstacle::TYPE_TV:		// ƒeƒŒƒr
+			pObstacle = new CTv;
+
+		case CObstacle::TYPE_DYNAMITE:		// ”š’e
+			pObstacle = new CDynamite;
+
+			break;
 			break;
 		default:
 

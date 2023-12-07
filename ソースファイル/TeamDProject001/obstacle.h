@@ -40,6 +40,8 @@ public:			// 誰でもアクセスできる
 		TYPE_FAN,			// 扇風機
 		TYPE_CUP,			// コップ
 		TYPE_GARBAGECAN,	// ゴミ
+		TYPE_TV,			// テレビ
+		TYPE_DYNAMITE,		// ダイナマイト
 		TYPE_MAX			// この列挙型の総数
 	};
 
