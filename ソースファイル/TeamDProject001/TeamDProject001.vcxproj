@@ -179,6 +179,7 @@
     <ClCompile Include="death_arrow.cpp" />
     <ClCompile Include="debugproc.cpp" />
     <ClCompile Include="destruction.cpp" />
+    <ClCompile Include="dynamite.cpp" />
     <ClCompile Include="edit.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="effect2D.cpp" />
@@ -322,6 +323,7 @@
     <ClInclude Include="death_arrow.h" />
     <ClInclude Include="debugproc.h" />
     <ClInclude Include="destruction.h" />
+    <ClInclude Include="dynamite.h" />
     <ClInclude Include="edit.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="effect2D.h" />
