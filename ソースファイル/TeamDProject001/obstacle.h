@@ -42,6 +42,7 @@ public:			// 誰でもアクセスできる
 		TYPE_GARBAGECAN,	// ゴミ
 		TYPE_TV,			// テレビ
 		TYPE_DYNAMITE,		// ダイナマイト
+		TYPE_BOOK,			// 本
 		TYPE_MAX			// この列挙型の総数
 	};
 

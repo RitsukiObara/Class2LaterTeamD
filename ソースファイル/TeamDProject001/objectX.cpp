@@ -43,6 +43,9 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\consent.x",				// コンセント
 	"data\\MODEL\\arrow.x",					// 死亡矢印
 	"data\\MODEL\\banana_peel.x",			// バナナの皮
+	"data\\MODEL\\Book001.x",				// 本(青)
+	"data\\MODEL\\Book002.x",				// 本(緑)
+	"data\\MODEL\\Book003.x",				// 本(黄)
 
 	// ブロックモデル
 	"data\\MODEL\\cardboard.x",				// 段ボール
@@ -95,6 +98,7 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\GarbageBox.x",			// ゴミ箱
 	"data\\MODEL\\TV.x",					// テレビ
 	"data\\MODEL\\Dynamite.x",				// 爆弾
+	"data\\MODEL\\Book000.x",				// 本(赤)
 
 	// ネズミモデル
 	"data\\MODEL\\rat\\00_rat_body.x",		// 体

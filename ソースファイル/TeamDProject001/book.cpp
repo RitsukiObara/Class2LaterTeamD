@@ -11,6 +11,12 @@
 #include "manager.h"
 #include "book.h"
 #include "useful.h"
+#include "collision.h"
+
+//-------------------------------------------
+// マクロ定義
+//-------------------------------------------
+#define BOOK_SHIFT_HEIGHT		(27.5f)			// 本のずらす高さ
 
 //==============================
 // コンストラクタ
@@ -22,6 +28,7 @@ CBook::CBook() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 	{
 		m_apBook[nCnt] = nullptr;
 	}
+	m_state = STATE_STOP;	// 状態
 	SetCatUse(true);		// ネコの使用条件
 	SetRatUse(true);		// ネズミの使用条件
 }
@@ -56,6 +63,7 @@ HRESULT CBook::Init(void)
 			m_apBook[nCnt] = new CModel(TYPE_NONE, PRIORITY_BLOCK);
 		}
 	}
+	m_state = STATE_STOP;	// 状態
 
 	// 値を返す
 	return S_OK;
@@ -86,7 +94,8 @@ void CBook::Uninit(void)
 //=====================================
 void CBook::Update(void)
 {
-
+	// 前回の位置を設定する
+	SetPosOld(GetPos());
 }
 
 //=====================================
@@ -109,14 +118,6 @@ void CBook::Draw(void)
 }
 
 //=====================================
-// 両端起動時の処理
-//=====================================
-void CBook::Action(void)
-{
-
-}
-
-//=====================================
 // 情報の設定処理
 //=====================================
 void CBook::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type)
@@ -124,19 +125,26 @@ void CBook::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE t
 	// 情報の設定処理
 	CObstacle::SetData(pos,rot, type);
 
+	// 向きの変数を宣言する
+	float fRot;
+
 	for (int nCnt = 0; nCnt < MAX_BOOK; nCnt++)
 	{
 		if (m_apBook[nCnt] != nullptr)
 		{ // 本の情報が NULL じゃない場合
 
+			// 向きをランダムで算出
+			fRot = (rand() % 81 - 40) * 0.01f;
+
 			// 情報を設定する
-			m_apBook[nCnt]->SetPos(D3DXVECTOR3(pos.x, pos.y + (nCnt * 50.0f), pos.z));
+			m_apBook[nCnt]->SetPos(D3DXVECTOR3(pos.x, pos.y + ((nCnt + 1) * BOOK_SHIFT_HEIGHT), pos.z));
 			m_apBook[nCnt]->SetPosOld(m_apBook[nCnt]->GetPos());
-			m_apBook[nCnt]->SetRot(NONE_D3DXVECTOR3);
+			m_apBook[nCnt]->SetRot(D3DXVECTOR3(0.0f, fRot, 0.0f));
 			m_apBook[nCnt]->SetScale(NONE_SCALE);
-			m_apBook[nCnt]->SetFileData(CXFile::TYPE_ACADAPTER);
+			m_apBook[nCnt]->SetFileData((CXFile::TYPE)(CXFile::TYPE_BOOKBLUE + nCnt));
 		}
 	}
+	m_state = STATE_STOP;	// 状態
 }
 
 //=====================================
@@ -144,6 +152,28 @@ void CBook::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE t
 //=====================================
 bool CBook::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
 {
+	D3DXVECTOR3 vtxMax = collSize;
+	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);
+	D3DXVECTOR3 objMax = D3DXVECTOR3(GetFileData().vtxMax.x, GetFileData().vtxMax.y + (GetFileData().collsize.y * MAX_BOOK), GetFileData().vtxMax.z);
+
+	// 六面体の当たり判定
+	if (collision::HexahedronCollision
+	(
+		&pos,					// 位置
+		GetPos(),				// 本の位置
+		posOld,					// 前回の位置
+		GetPosOld(),			// 本の前回の位置
+		vtxMin,					// 最小値
+		GetFileData().vtxMin,	// 本の最小値
+		vtxMax,					// 最大値
+		objMax					// 本の最小値
+	) == true)
+	{ // 当たり判定に当たった場合
+
+		// true を返す
+		return true;
+	}
+
 	// false を返す
 	return false;
 }
@@ -171,4 +201,12 @@ bool CBook::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer:
 
 	// false を返す
 	return false;
+}
+
+//=====================================
+// 起動時の処理
+//=====================================
+void CBook::Action(void)
+{
+
 }

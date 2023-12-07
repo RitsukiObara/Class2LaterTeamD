@@ -100,8 +100,8 @@ void CPlayer::Box(void)
 	m_type = TYPE_CAT;					// 種類
 	m_nPlayerIdx = NONE_PLAYERIDX;		// プレイヤーのインデックス
 	m_fSpeed = 0.0f;					// 速度
+	m_fSpeedCopy = 0.0f;				// 速度のコピー
 	m_fRotDest = 0.0f;					// 目標
-	m_fRotDiff = 0.0f;					// 差分
 	m_fStunHeight = 0.0f;				// 気絶が出る高さ
 	m_bAttack = false;					// 攻撃したか
 	m_bMove = false;					// 移動しているか
@@ -149,8 +149,8 @@ HRESULT CPlayer::Init(void)
 	m_type = TYPE_CAT;					// 種類
 	m_nPlayerIdx = NONE_PLAYERIDX;		// プレイヤーのインデックス
 	m_fSpeed = 0.0f;					// 速度
+	m_fSpeedCopy = 0.0f;				// 速度のコピー
 	m_fRotDest = 0.0f;					// 目標
-	m_fRotDiff = 0.0f;					// 差分
 	m_fStunHeight = 0.0f;				// 気絶が出る高さ
 	m_bAttack = false;					// 攻撃したか
 	m_bMove = false;					// 移動しているか
@@ -408,6 +408,7 @@ void CPlayer::SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 	m_type = type;						// 種類
 	m_nPlayerIdx = nID;					// プレイヤーのインデックス
 	m_fSpeed = 0.0f;					// 速度
+	m_fSpeedCopy = 0.0f;				// 速度のコピー
 	m_bAttack = false;					// 攻撃したか
 	m_bMove = false;					// 移動しているか
 
@@ -587,10 +588,6 @@ void CPlayer::MoveControl(void)
 		// 速度を設定する
 		m_fSpeed = 0.0f;
 	}
-
-	// 移動量を設定する
-	m_move.x = -sinf(rot.y) * m_fSpeed;
-	m_move.z = -cosf(rot.y) * m_fSpeed;
 }
 
 //=======================================
@@ -600,6 +597,10 @@ void CPlayer::Move(void)
 {
 	// 位置を取得する
 	D3DXVECTOR3 pos = GetPos();
+
+	// 移動量を設定する
+	m_move.x = -sinf(m_fRotDest) * m_fSpeed;
+	m_move.z = -cosf(m_fRotDest) * m_fSpeed;
 
 	// 移動量を加算する
 	pos += m_move;
@@ -1377,6 +1378,24 @@ float CPlayer::GetSpeed(void) const
 {
 	// 速度を返す
 	return m_fSpeed;
+}
+
+//=======================================
+// 速度のコピーの設定処理
+//=======================================
+void CPlayer::SetSpeedCopy(const float fSpeed)
+{
+	// 速度のコピーを設定する
+	m_fSpeedCopy = fSpeed;
+}
+
+//=======================================
+// 速度のコピーの取得処理
+//=======================================
+float CPlayer::GetSpeedCopy(void) const
+{
+	// 速度のコピーを返す
+	return m_fSpeedCopy;
 }
 
 //=======================================

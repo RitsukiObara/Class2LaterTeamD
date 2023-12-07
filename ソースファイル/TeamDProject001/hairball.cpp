@@ -333,7 +333,7 @@ void CHairBall::Block(void)
 	while (pBlock != nullptr)
 	{ // ’n–Ê‚Ìî•ñ‚ª‚ ‚éŒÀ‚è‰ñ‚·
 
-		if (collision::HexahedronCollision(pos, pBlock->GetPos(), GetPosOld(), pBlock->GetPosOld(), GetFileData().vtxMin, pBlock->GetFileData().vtxMin, GetFileData().vtxMax, pBlock->GetFileData().vtxMax) == true)
+		if (collision::HexahedronCollision(&pos, pBlock->GetPos(), GetPosOld(), pBlock->GetPosOld(), GetFileData().vtxMin, pBlock->GetFileData().vtxMin, GetFileData().vtxMax, pBlock->GetFileData().vtxMax) == true)
 		{ // “–‚½‚è”»’è‚ª true ‚Ìê‡
 
 		}

@@ -56,6 +56,9 @@ public:			// 誰でもアクセスできる
 		TYPE_CONSENT,				// コンセント
 		TYPE_DEATHARROW,			// 死亡矢印
 		TYPE_GARBAGE,				// ゴミ
+		TYPE_BOOKBLUE,				// 本(青)
+		TYPE_BOOKGREEN,				// 本(緑)
+		TYPE_BOOKYELLOW,			// 本(黄)
 
 		// ブロックモデル
 		TYPE_CARDBOARD,				// 段ボール
@@ -108,6 +111,7 @@ public:			// 誰でもアクセスできる
 		TYPE_GARBAGECAN,			// ゴミ箱
 		TYPE_TV,					// テレビ
 		TYPE_DYNAMITE,				// 爆弾
+		TYPE_BOOKRED,				// 本(赤)
 
 		//ネズミモデル
 		TYPE_RAT_BODY,				// 体

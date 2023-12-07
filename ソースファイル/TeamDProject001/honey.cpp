@@ -148,7 +148,7 @@ bool CHoney::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVE
 	if (m_State == STATE_HONEYBOTTLE)
 	{ // –I–¨ƒ{ƒgƒ‹ó‘Ô‚Ìê‡
 
-		if (collision::HexahedronCollision(pos, GetPos(), posOld, GetPosOld(), vtxMin, GetFileData().vtxMin, vtxMax, GetFileData().vtxMax) == true)
+		if (collision::HexahedronCollision(&pos, GetPos(), posOld, GetPosOld(), vtxMin, GetFileData().vtxMin, vtxMax, GetFileData().vtxMax) == true)
 		{ // ˜Z–Ê‘Ì‚Ì“–‚½‚è”»’è‚ª true ‚Ìê‡
 
 			// true ‚ğ•Ô‚·

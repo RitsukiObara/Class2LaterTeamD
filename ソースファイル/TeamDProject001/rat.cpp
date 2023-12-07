@@ -156,9 +156,6 @@ void CRat::Update(void)
 	// 前回の位置を設定する
 	SetPosOld(GetPos());
 
-	// 移動量を設定する(移動量を常に一定にするため)
-	SetSpeed(MOVE_SPEED);
-
 	// 重力処理
 	Gravity();
 
@@ -206,14 +203,6 @@ void CRat::Update(void)
 	// 角度の正規化
 	RotNormalize();
 
-	if (GetPlayerID() != nullptr)
-	{ // プレイヤーのID表示が NULL じゃない場合
-
-		// 位置を設定する
-		GetPlayerID()->SetPos(D3DXVECTOR3(GetPos().x, GetPos().y + ID_HEIGHT, GetPos().z));
-		GetPlayerID()->Update();
-	}
-
 	// プレイヤーの更新処理
 	CPlayer::Update();
 
@@ -223,6 +212,14 @@ void CRat::Update(void)
 
 		// ジャンプ状況を false にする
 		m_bJump = false;
+	}
+
+	if (GetPlayerID() != nullptr)
+	{ // プレイヤーのID表示が NULL じゃない場合
+
+		// 位置を設定する
+		GetPlayerID()->SetPos(D3DXVECTOR3(GetPos().x, GetPos().y + ID_HEIGHT, GetPos().z));
+		GetPlayerID()->Update();
 	}
 
 	// デバッグ表示
@@ -329,6 +326,10 @@ void CRat::SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 
 	// 当たり判定のサイズの設定
 	SetSizeColl(COLLSIZE);
+
+	// 移動量を設定する
+	SetSpeed(MOVE_SPEED);
+	SetSpeedCopy(GetSpeed());
 
 	// 情報を設定する
 	m_bJump = false;				// ジャンプしたか

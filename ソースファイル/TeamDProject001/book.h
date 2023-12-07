@@ -15,7 +15,7 @@
 //-----------------------------------
 // マクロ定義
 //-----------------------------------
-#define MAX_BOOK	(2)		// 本の最大数
+#define MAX_BOOK	(3)		// 本の最大数
 
 //-----------------------------------
 // 前方宣言
@@ -28,6 +28,14 @@ class CModel;			// モデル
 class CBook : public CObstacle
 {
 public:			// 誰でもアクセスできる
+
+	// 列挙型定義(状態)
+	enum STATE
+	{
+		STATE_STOP = 0,		// 停止状態
+		STATE_COLLAPSE,		// 倒れ状態
+		STATE_MAX			// この列挙型の総数
+	};
 
 	CBook();				// コンストラクタ
 	~CBook();				// デストラクタ
@@ -49,6 +57,7 @@ private:		// 自分だけアクセスできる
 
 	// メンバ変数
 	CModel* m_apBook[MAX_BOOK];		// 上に載っている本の情報
+	STATE m_state;					// 状態
 };
 
 #endif
