@@ -93,6 +93,8 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\Senpuki_Body.x",			// 扇風機(本体)
 	"data\\MODEL\\cup.x",					// コップ
 	"data\\MODEL\\GarbageBox.x",			// ゴミ箱
+	"data\\MODEL\\TV.x",					// テレビ
+	"data\\MODEL\\Dynamite.x",				// 爆弾
 
 	// ネズミモデル
 	"data\\MODEL\\rat\\00_rat_body.x",		// 体

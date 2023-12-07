@@ -106,6 +106,8 @@ public:			// 誰でもアクセスできる
 		TYPE_ELECFAN,				// 扇風機(本体)
 		TYPE_CUP,					// コップ
 		TYPE_GARBAGECAN,			// ゴミ箱
+		TYPE_TV,					// テレビ
+		TYPE_DYNAMITE,				// 爆弾
 
 		//ネズミモデル
 		TYPE_RAT_BODY,				// 体
