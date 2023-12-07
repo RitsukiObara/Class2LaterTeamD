@@ -116,6 +116,7 @@ public:			// 誰でもアクセスできる
 	D3DXVECTOR3 GetMove(void) const;			// 移動量の取得処理
 
 	void SetSizeColl(const D3DXVECTOR3& size);	// 当たり判定サイズの設定処理
+	D3DXVECTOR3 GetSizeColl(void) const;		// 当たり判定サイズの取得処理
 
 	void SetType(const TYPE type);				// 種類の設定処理
 	TYPE GetType(void) const;					// 種類の取得処理

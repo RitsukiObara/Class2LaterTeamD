@@ -45,15 +45,15 @@ namespace collision
 	void ObstacleSearch(CPlayer* pPlayer, const float Radius);				// 起動可能障害物や警告を出す障害物のサーチ
 
 	// 今後実装予定のブロックの当たり判定
-	void BlockCollision(CPlayer* player, const float fWidth, const float fHeight, const float fDepth);							// ブロックの当たり判定
-	void BlockRectangleCollision(const CBlock& block, CPlayer* player, const float fWidth, const float fHeight, const float fDepth);	// ブロックの矩形の当たり判定
-	void BlockCircleCollision(CBlock& block, CPlayer* player, const float fRadius, const float fHeight);						// ブロックの円形の当たり判定
+	bool BlockCollision(CPlayer* player, const D3DXVECTOR3& collSize);							// ブロックの当たり判定
+	void BlockRectangleCollision(const CBlock& block, CPlayer* player, const D3DXVECTOR3& collSize, bool* pJump);			// ブロックの矩形の当たり判定
+	void BlockCircleCollision(CBlock& block, CPlayer* player, const float fRadius, const float fHeight, bool* pJump);		// ブロックの円形の当たり判定
 
 	// 起伏地面の当たり判定
 	bool ElevOutRangeCollision(D3DXVECTOR3* pPos, const D3DXVECTOR3& posOld, const float fWidth);			// 起伏地面の範囲外の当たり判定
 
 	//壁との当たり判定
-	void WallCollision(CPlayer* player, const float fWidth, const float fHeight, const float fDepth);
+	void WallCollision(CPlayer* player, const D3DXVECTOR3& collSize);
 
 	// アイテムとの当たり判定
 	void ItemCollision(CPlayer& pPlayer, const int nHave);		// ネコとアイテムとの当たり判定
