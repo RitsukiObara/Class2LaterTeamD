@@ -81,22 +81,13 @@ void CSlime::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE 
 }
 
 //=====================================
-// 当たり判定処理
-//=====================================
-bool CSlime::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
-{
-	// false を返す
-	return false;
-}
-
-//=====================================
 // ヒット処理
 //=====================================
-bool CSlime::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
+bool CSlime::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
 {
 	// ローカル変数宣言
-	D3DXVECTOR3 max = D3DXVECTOR3(fWidth, fHeight, fDepth);		// サイズの最大値
-	D3DXVECTOR3 min = D3DXVECTOR3(-fWidth, 0.0f, -fDepth);		// サイズの最小値
+	D3DXVECTOR3 max = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);		// サイズの最大値
+	D3DXVECTOR3 min = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);		// サイズの最小値
 
 	if (useful::RectangleCollisionXY(GetPos(), pos, GetFileData().vtxMax, max, GetFileData().vtxMin, min) == true &&
 		useful::RectangleCollisionXZ(GetPos(), pos, GetFileData().vtxMax, max, GetFileData().vtxMin, min) == true &&
@@ -112,12 +103,4 @@ bool CSlime::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight
 		// false を返す
 		return false;
 	}
-}
-
-//=====================================
-// ギミック起動処理
-//=====================================
-void CSlime::Action(void)
-{
-
 }

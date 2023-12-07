@@ -397,6 +397,24 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, con
 }
 
 //=====================================
+// 当たり判定処理
+//=====================================
+bool CObstacle::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+{
+	// false を返す
+	return false;
+}
+
+//=====================================
+// ヒット処理
+//=====================================
+bool CObstacle::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+{
+	// false を返す
+	return false;
+}
+
+//=====================================
 // ギミック起動UIの表示
 //=====================================
 void CObstacle::GimmickUI(bool Set, int Player_Idx)

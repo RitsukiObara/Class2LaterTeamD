@@ -74,6 +74,7 @@ public:			// 誰でもアクセスできる
 		TYPE_ITEMUI,			// アイテムUI
 		TYPE_DEATHARROW,		// 死亡矢印
 		TYPE_ENTRYMESSAGEUI,	// エントリーの説明UI
+		TYPE_ENTRYBG,			// エントリー画面の背景
 		TYPE_MAX				// この列挙型の総数
 	};
 

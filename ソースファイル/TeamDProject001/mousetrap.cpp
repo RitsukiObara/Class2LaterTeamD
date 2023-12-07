@@ -175,19 +175,9 @@ void CMouseTrap::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const T
 }
 
 //=====================================
-// 当たり判定処理
-//=====================================
-bool CMouseTrap::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
-{
-	
-	// false を返す
-	return false;
-}
-
-//=====================================
 // ヒット処理
 //=====================================
-bool CMouseTrap::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
+bool CMouseTrap::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
 {
 	if (type == CPlayer::TYPE_RAT)
 	{ // 種類がネズミの場合
@@ -291,14 +281,6 @@ bool CMouseTrap::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHe
 	}
 	// false を返す
 	return false;
-}
-
-//=====================================
-// ギミック起動処理
-//=====================================
-void CMouseTrap::Action(void)
-{
-
 }
 
 //=====================================

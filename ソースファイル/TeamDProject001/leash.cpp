@@ -289,22 +289,13 @@ void CLeash::CollisionSetting(void)
 }
 
 //=====================================
-// 当たり判定処理
-//=====================================
-bool CLeash::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
-{
-	// false を返す
-	return false;
-}
-
-//=====================================
 // ヒット処理
 //=====================================
-bool CLeash::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
+bool CLeash::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
 {
 	// 最大値と最小値を設定する
-	D3DXVECTOR3 vtxMax = D3DXVECTOR3(fWidth, fHeight, fDepth);
-	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-fWidth, 0.0f, -fDepth);
+	D3DXVECTOR3 vtxMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);
+	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);
 
 	if (type == CPlayer::TYPE_CAT)
 	{ // ネコの場合

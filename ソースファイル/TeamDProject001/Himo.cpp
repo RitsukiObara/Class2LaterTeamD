@@ -181,27 +181,18 @@ void CHimo::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE t
 }
 
 //=====================================
-// 当たり判定処理
-//=====================================
-bool CHimo::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
-{
-	// false を返す
-	return false;
-}
-
-//=====================================
 // ヒット処理
 //=====================================
-bool CHimo::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
+bool CHimo::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
 {
 	for (int nCntTarai = 0; nCntTarai < MAX_TARAI; nCntTarai++)
 	{
 		if (m_apTarai[nCntTarai] != nullptr)
 		{ // タライが NULL じゃない場合
 
-			if (pos.y + fHeight <= m_apTarai[nCntTarai]->GetPosOld().y + m_apTarai[nCntTarai]->GetFileData().vtxMin.y &&
-				pos.y + fHeight >= m_apTarai[nCntTarai]->GetPos().y + m_apTarai[nCntTarai]->GetFileData().vtxMin.y &&
-				useful::CylinderInner(pos, m_apTarai[nCntTarai]->GetPos(), m_apTarai[nCntTarai]->GetFileData().fRadius + fWidth) == true)
+			if (pos.y + collSize.y <= m_apTarai[nCntTarai]->GetPosOld().y + m_apTarai[nCntTarai]->GetFileData().vtxMin.y &&
+				pos.y + collSize.y >= m_apTarai[nCntTarai]->GetPos().y + m_apTarai[nCntTarai]->GetFileData().vtxMin.y &&
+				useful::CylinderInner(pos, m_apTarai[nCntTarai]->GetPos(), m_apTarai[nCntTarai]->GetFileData().fRadius + collSize.x) == true)
 			{ // タライが頭上に落ちてきた場合
 
 				// true を返す

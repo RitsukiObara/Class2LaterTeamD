@@ -93,46 +93,6 @@ void CFlowerVase::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const 
 }
 
 //=====================================
-// 当たり判定処理
-//=====================================
-bool CFlowerVase::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
-{
-	// false を返す
-	return false;
-}
-
-//=====================================
-// ヒット処理
-//=====================================
-bool CFlowerVase::Hit(const D3DXVECTOR3& pos, const float fWidth, const float fHeight, const float fDepth, const CPlayer::TYPE type)
-{
-	//// 破片の出る高さ
-	//float fFracHeight;
-
-	//for (int nCnt = 0; nCnt < 20; nCnt++)
-	//{
-	//	fFracHeight = (float)(rand() % (int)(GetFileData().vtxMax.y) - (int)(GetFileData().vtxMin.y));
-
-	//	// 破片を生成
-	//	CFraction::Create(D3DXVECTOR3(GetPos().x, GetPos().y + fFracHeight, GetPos().z), CFraction::TYPE::TYPE_FLOWERVASE);
-	//}
-
-	//// 終了処理
-	//Uninit();
-
-	// false を返す
-	return false;
-}
-
-//=====================================
-// ギミック起動処理
-//=====================================
-void CFlowerVase::Action(void)
-{
-
-}
-
-//=====================================
 // 起伏地面の当たり判定
 //=====================================
 void CFlowerVase::Elevation(void)
