@@ -217,6 +217,14 @@ void CRat::Update(void)
 	// プレイヤーの更新処理
 	CPlayer::Update();
 
+	// ブロックとの当たり判定
+	if (collision::BlockCollision(this, GetSizeColl()) == true)
+	{ // 上に乗った場合
+
+		// ジャンプ状況を false にする
+		m_bJump = false;
+	}
+
 	// デバッグ表示
 	CManager::Get()->GetDebugProc()->Print("蘇生カウント：%d\n", CPlayer::GetResurrectionTime());
 }

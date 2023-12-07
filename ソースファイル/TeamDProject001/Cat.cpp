@@ -243,6 +243,9 @@ void CCat::Update(void)
 	// 更新処理
 	CPlayer::Update();
 
+	// ブロックとの当たり判定
+	collision::BlockCollision(this, GetSizeColl());
+
 	// デバッグ表示
 	DebugMessage();
 }

@@ -29,6 +29,9 @@ public:
 	{
 		TYPE_FLOOR = 0,		// °
 		TYPE_WALL,			// •Ç
+		TYPE_SHOEBOX,		// ŒC” 
+		TYPE_DOOR,			// ƒhƒA
+		TYPE_FARWALL,		// ‰œ‚Ì•Ç
 		TYPE_MAX			// ‚±‚Ì—ñ‹“Œ^‚Ì‘”
 	};
 

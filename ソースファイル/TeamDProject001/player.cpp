@@ -723,9 +723,6 @@ void CPlayer::ObstacleCollision(void)
 {
 	// 障害物との衝突判定
 	collision::ObstacleCollision(*this, m_sizeColl.x, m_sizeColl.y, m_sizeColl.z);
-
-	// ブロックとの当たり判定
-	collision::BlockCollision(this, m_sizeColl.x, m_sizeColl.y, m_sizeColl.z);
 }
 
 //=======================================
@@ -1328,6 +1325,15 @@ void CPlayer::SetSizeColl(const D3DXVECTOR3& size)
 {
 	// 当たり判定のサイズを設定する
 	m_sizeColl = size;
+}
+
+//=======================================
+// 当たり判定サイズの取得処理
+//=======================================
+D3DXVECTOR3 CPlayer::GetSizeColl(void) const
+{
+	// 当たり判定サイズを返す
+	return m_sizeColl;
 }
 
 //=======================================
