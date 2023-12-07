@@ -19,111 +19,119 @@
 const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 {
 	// オブジェクトモデル
-	"data\\MODEL\\Ripple.x",			// 波紋
-	"data\\MODEL\\Kari001.x",			// 仮プレイヤー
-	"data\\MODEL\\WoodBlock.x",			// 木箱
-	"data\\MODEL\\Cage.x",				// 武器小屋
-	"data\\MODEL\\flowerFrac.x",		// 花瓶の破片
-	"data\\MODEL\\plasticFrac.x",		// プラスチックケースの破片
-	"data\\MODEL\\attackFrac.x",		// 猫の攻撃の破片
-	"data\\MODEL\\Honey.x",				// 蜂蜜
-	"data\\MODEL\\ToyCarScrew.x",		// おもちゃの車(ネジ)
-	"data\\MODEL\\TitleWall.x",			// タイトルの壁
-	"data\\MODEL\\Roomba_Sub.x",		// ルンバのプロペラ
-	"data\\MODEL\\Tarai.x",				// たらい
-	"data\\MODEL\\note4.x",				// 4分音符
-	"data\\MODEL\\note8.x",				// 8分音符
-	"data\\MODEL\\note16.x",			// 16分音符
-	"data\\MODEL\\mousetrap_iron.x",	// ネズミ捕りの鉄部分
-	"data\\MODEL\\TrapItem.x",			// ネズミ捕り(アイテム)
-	"data\\MODEL\\leashSet.x",			// 設置状態のリード
-	"data\\MODEL\\pin_floor.x",			// 設置状態の画鋲
-	"data\\MODEL\\pin_one.x",			// 破片用の画鋲
-	"data\\MODEL\\Senpuki_Fan.x",		// 扇風機(羽根)
-	"data\\MODEL\\consent.x",			// コンセント
-	"data\\MODEL\\arrow.x",				// 死亡矢印
-	"data\\MODEL\\banana_peel.x",		// バナナの皮
+	"data\\MODEL\\Ripple.x",				// 波紋
+	"data\\MODEL\\Kari001.x",				// 仮プレイヤー
+	"data\\MODEL\\WoodBlock.x",				// 木箱
+	"data\\MODEL\\Cage.x",					// 武器小屋
+	"data\\MODEL\\flowerFrac.x",			// 花瓶の破片
+	"data\\MODEL\\plasticFrac.x",			// プラスチックケースの破片
+	"data\\MODEL\\attackFrac.x",			// 猫の攻撃の破片
+	"data\\MODEL\\Honey.x",					// 蜂蜜
+	"data\\MODEL\\ToyCarScrew.x",			// おもちゃの車(ネジ)
+	"data\\MODEL\\TitleWall.x",				// タイトルの壁
+	"data\\MODEL\\Roomba_Sub.x",			// ルンバのプロペラ
+	"data\\MODEL\\Tarai.x",					// たらい
+	"data\\MODEL\\note4.x",					// 4分音符
+	"data\\MODEL\\note8.x",					// 8分音符
+	"data\\MODEL\\note16.x",				// 16分音符
+	"data\\MODEL\\mousetrap_iron.x",		// ネズミ捕りの鉄部分
+	"data\\MODEL\\TrapItem.x",				// ネズミ捕り(アイテム)
+	"data\\MODEL\\leashSet.x",				// 設置状態のリード
+	"data\\MODEL\\pin_floor.x",				// 設置状態の画鋲
+	"data\\MODEL\\pin_one.x",				// 破片用の画鋲
+	"data\\MODEL\\Senpuki_Fan.x",			// 扇風機(羽根)
+	"data\\MODEL\\consent.x",				// コンセント
+	"data\\MODEL\\arrow.x",					// 死亡矢印
+	"data\\MODEL\\banana_peel.x",			// バナナの皮
 
 	// ブロックモデル
-	"data\\MODEL\\cardboard.x",			// 段ボール
-	"data\\MODEL\\TissueBox.x",			// ティッシュ箱
-	"data\\MODEL\\PenHolder.x",			// ペン立て
-	"data\\MODEL\\RemoCon.x",			// リモコン
-	"data\\MODEL\\bear.x",				// テディベア
-	"data\\MODEL\\Clock.x",				// 時計
-	"data\\MODEL\\rubbish.x",			// チリ紙
-	"data\\MODEL\\milk_carton.x",		// 牛乳パック
-	"data\\MODEL\\obaphone.x",			// オバフォン
-	"data\\MODEL\\wii.x",				// Wii
-	"data\\MODEL\\ds.x",				// DS
-	"data\\MODEL\\HeadPhone.x",			// ヘッドフォン
-	"data\\MODEL\\Pen.x",				// ペン
-	"data\\MODEL\\AC_adapter.x",		// ACアダプター
-	"data\\MODEL\\building_blocks.x",	// 積み木
-	"data\\MODEL\\obaglasses.x",		// 眼鏡ケース
-	"data\\MODEL\\pencil.x",			// 鉛筆
-	"data\\MODEL\\picture_frames.x",	// 写真立て
-	"data\\MODEL\\shelf.x",				// 戸棚
-	"data\\MODEL\\pullshelf.x",			// 引き出し棚
-	"data\\MODEL\\Kitchen.x",			// キッチン
-	"data\\MODEL\\Reizouko.x",			// 冷蔵庫
-	"data\\MODEL\\Table000.x",			// テーブル
-	"data\\MODEL\\Table_Chair000.x",	// 机の椅子
-	"data\\MODEL\\corkboard.x",			// コルクボード
-	"data\\MODEL\\desk.x",				// デスク
-	"data\\MODEL\\deskbook.x",			// デスク用の本
-	"data\\MODEL\\fire_extingisher.x",	// 消火器
-	"data\\MODEL\\Katen.x",				// カーテン
-	"data\\MODEL\\KatenRail.x",			// カーテンのレール
-	"data\\MODEL\\Tansu002.x",			// たんす
+	"data\\MODEL\\cardboard.x",				// 段ボール
+	"data\\MODEL\\TissueBox.x",				// ティッシュ箱
+	"data\\MODEL\\PenHolder.x",				// ペン立て
+	"data\\MODEL\\RemoCon.x",				// リモコン
+	"data\\MODEL\\bear.x",					// テディベア
+	"data\\MODEL\\Clock.x",					// 時計
+	"data\\MODEL\\rubbish.x",				// チリ紙
+	"data\\MODEL\\milk_carton.x",			// 牛乳パック
+	"data\\MODEL\\obaphone.x",				// オバフォン
+	"data\\MODEL\\wii.x",					// Wii
+	"data\\MODEL\\ds.x",					// DS
+	"data\\MODEL\\HeadPhone.x",				// ヘッドフォン
+	"data\\MODEL\\Pen.x",					// ペン
+	"data\\MODEL\\AC_adapter.x",			// ACアダプター
+	"data\\MODEL\\building_blocks.x",		// 積み木
+	"data\\MODEL\\obaglasses.x",			// 眼鏡ケース
+	"data\\MODEL\\pencil.x",				// 鉛筆
+	"data\\MODEL\\picture_frames.x",		// 写真立て
+	"data\\MODEL\\shelf.x",					// 戸棚
+	"data\\MODEL\\pullshelf.x",				// 引き出し棚
+	"data\\MODEL\\Kitchen.x",				// キッチン
+	"data\\MODEL\\Reizouko.x",				// 冷蔵庫
+	"data\\MODEL\\Table000.x",				// テーブル
+	"data\\MODEL\\Table_Chair000.x",		// 机の椅子
+	"data\\MODEL\\corkboard.x",				// コルクボード
+	"data\\MODEL\\desk.x",					// デスク
+	"data\\MODEL\\deskbook.x",				// デスク用の本
+	"data\\MODEL\\fire_extingisher.x",		// 消火器
+	"data\\MODEL\\Katen.x",					// カーテン
+	"data\\MODEL\\KatenRail.x",				// カーテンのレール
+	"data\\MODEL\\Tansu002.x",				// たんす
 
 	// 障害物モデル
-	"data\\MODEL\\HoneyBottle.x",		// 蜂蜜のボトル
-	"data\\MODEL\\Slime.x",				// スライム
-	"data\\MODEL\\HairBall.x",			// 毬
-	"data\\MODEL\\flowervase.x",		// 花瓶
-	"data\\MODEL\\Pettobotoru.x",		// ペットボトル
-	"data\\MODEL\\ToyCarBody.x",		// おもちゃの車(本体)
-	"data\\MODEL\\Roomba_Main.x",		// ルンバの本体
-	"data\\MODEL\\Himo.x",				// ひも
-	"data\\MODEL\\speaker.x",			// スピーカー
-	"data\\MODEL\\mousetrap.x",			// ネズミ捕り
-	"data\\MODEL\\leash.x",				// リード
-	"data\\MODEL\\pin_box.x",			// 画鋲
-	"data\\MODEL\\Senpuki_Body.x",		// 扇風機(本体)
-	"data\\MODEL\\cup.x",				// コップ
-	"data\\MODEL\\GarbageBox.x",		// ゴミ箱
-
+	"data\\MODEL\\HoneyBottle.x",			// 蜂蜜のボトル
+	"data\\MODEL\\Slime.x",					// スライム
+	"data\\MODEL\\HairBall.x",				// 毬
+	"data\\MODEL\\flowervase.x",			// 花瓶
+	"data\\MODEL\\Pettobotoru.x",			// ペットボトル
+	"data\\MODEL\\ToyCarBody.x",			// おもちゃの車(本体)
+	"data\\MODEL\\Roomba_Main.x",			// ルンバの本体
+	"data\\MODEL\\Himo.x",					// ひも
+	"data\\MODEL\\speaker.x",				// スピーカー
+	"data\\MODEL\\mousetrap.x",				// ネズミ捕り
+	"data\\MODEL\\leash.x",					// リード
+	"data\\MODEL\\pin_box.x",				// 画鋲
+	"data\\MODEL\\Senpuki_Body.x",			// 扇風機(本体)
+	"data\\MODEL\\cup.x",					// コップ
+	"data\\MODEL\\GarbageBox.x",			// ゴミ箱
 
 	// ネズミモデル
-	"data\\MODEL\\rat\\00_rat_body.x",	// 体
-	"data\\MODEL\\rat\\01_rat_head.x",	// 頭
-	"data\\MODEL\\rat\\02_rat_Lhand.x",	// 左手
-	"data\\MODEL\\rat\\03_rat_Rhand.x",	// 右手
-	"data\\MODEL\\rat\\04_rat_Lleg.x",	// 左足
-	"data\\MODEL\\rat\\05_rat_Rleg.x",	// 右足
+	"data\\MODEL\\rat\\00_rat_body.x",		// 体
+	"data\\MODEL\\rat\\01_rat_head.x",		// 頭
+	"data\\MODEL\\rat\\02_rat_Lhand.x",		// 左手
+	"data\\MODEL\\rat\\03_rat_Rhand.x",		// 右手
+	"data\\MODEL\\rat\\04_rat_Lleg.x",		// 左足
+	"data\\MODEL\\rat\\05_rat_Rleg.x",		// 右足
 
 	//猫モデル
-	"data\\MODEL\\cat\\00_cat_body.x",	//体
-	"data\\MODEL\\cat\\01_cat_head.x",	//頭
-	"data\\MODEL\\cat\\02_cat_Larm.x",	//左腕
-	"data\\MODEL\\cat\\03_cat_Lhand.x",	//左手
-	"data\\MODEL\\cat\\04_cat_Rarm.x",	//右腕
-	"data\\MODEL\\cat\\05_cat_Rhand.x",	//右手
-	"data\\MODEL\\cat\\06_cat_Lfoot.x",	//左腿
-	"data\\MODEL\\cat\\07_cat_Lleg.x",	//左足
-	"data\\MODEL\\cat\\08_cat_Rfoot.x",	//右腿
-	"data\\MODEL\\cat\\09_cat_Rleg.x",	//右足
+	"data\\MODEL\\cat\\00_cat_body.x",		//体
+	"data\\MODEL\\cat\\01_cat_head.x",		//頭
+	"data\\MODEL\\cat\\02_cat_Larm.x",		//左腕
+	"data\\MODEL\\cat\\03_cat_Lhand.x",		//左手
+	"data\\MODEL\\cat\\04_cat_Rarm.x",		//右腕
+	"data\\MODEL\\cat\\05_cat_Rhand.x",		//右手
+	"data\\MODEL\\cat\\06_cat_Lfoot.x",		//左腿
+	"data\\MODEL\\cat\\07_cat_Lleg.x",		//左足
+	"data\\MODEL\\cat\\08_cat_Rfoot.x",		//右腿
+	"data\\MODEL\\cat\\09_cat_Rleg.x",		//右足
 
 	// ネズミモデル
-	"data\\MODEL\\rat\\rat_Ghost.x",	// 幽霊の姿
+	"data\\MODEL\\rat\\rat_Ghost.x",		// 幽霊の姿
 
 	// 3Dテキストモデル
-	"data\\MODEL\\cat_win.x",			// ねこのかちテキスト
-	"data\\MODEL\\rat_win.x",			// ねずみのかちテキスト
+	"data\\MODEL\\cat_win.x",				// ねこのかちテキスト
+	"data\\MODEL\\rat_win.x",				// ねずみのかちテキスト
+
+	// 玄関のモデル
+	"data\\MODEL\\Entry\\floor.x",			// 玄関の床
+	"data\\MODEL\\Entry\\entrance_wall.x",	// 玄関の壁
+	"data\\MODEL\\Entry\\shoe_box.x",		// 靴箱
+	"data\\MODEL\\Entry\\door.x",			// 玄関のドア
+	"data\\MODEL\\Entry\\front_wall.x",		// 玄関の奥の壁
+	"data\\MODEL\\Entry\\shoes_floor.x",	// 靴履き場の床
+	"data\\MODEL\\Entry\\side_wall.x",		// 横の壁
 
 	// 当たり判定モデル
-	"data\\MODEL\\Collision.x",			// 当たり判定エディットモデル
+	"data\\MODEL\\Collision.x",				// 当たり判定エディットモデル
 };
 
 //------------------------------------------------------------

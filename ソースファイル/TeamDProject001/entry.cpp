@@ -15,6 +15,7 @@
 #include "debugproc.h"
 #include "entry_UI.h"
 #include "entry_team.h"
+#include "entry_BG.h"
 #include "input.h"
 #include "player.h"
 #include "sound.h"
@@ -70,11 +71,12 @@ HRESULT CEntry::Init(void)
 	m_nCatOldIdx = 0;				// 差分用ID
 	m_nSceneCnt = 0;				// 遷移までのカウント
 	m_bEnter = false;				// エンターを押したかどうか
+
 	//　シーンの初期化
 	CScene::Init();
 
-	// テキスト読み込み処理
-	CMesh::TxtSet();
+	// 背景の生成処理
+	CEntryBG::Create();
 
 	for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
 	{

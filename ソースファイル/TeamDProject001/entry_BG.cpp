@@ -5,9 +5,27 @@
 //
 //=======================================
 #include "manager.h"
+#include "renderer.h"
 #include "entry_BG.h"
 
 #include "model.h"
+
+//---------------------------------------
+// 無名名前空間
+//---------------------------------------
+namespace
+{
+	static const D3DXVECTOR3 BG_POS[CEntryBG::TYPE_MAX] =		// 背景の位置
+	{
+		D3DXVECTOR3(0.0f, -100.0f, 2650.0f),
+		D3DXVECTOR3(900.0f, -300.0f, 200.0f),
+		D3DXVECTOR3(700.0f, -100.0f, -150.0f),
+		D3DXVECTOR3(0.0f, -100.0f, 1100.0f),
+		D3DXVECTOR3(0.0f, -100.0f, 1200.0f),
+		D3DXVECTOR3(0.0f, -130.0f, -250.0f),
+		D3DXVECTOR3(-900.0f, -130.0f, 450.0f),
+	};
+}
 
 //=========================
 // コンストラクタ
@@ -106,7 +124,20 @@ void CEntryBG::Draw(void)
 //=========================
 void CEntryBG::SetData(void)
 {
+	for (int nCnt = 0; nCnt < TYPE_MAX; nCnt++)
+	{
+		if (m_apModel[nCnt] != nullptr)
+		{ // モデルの情報が NULL の場合
 
+			// 情報を設定する
+			m_apModel[nCnt]->SetPos(BG_POS[nCnt]);								// 位置
+			m_apModel[nCnt]->SetPosOld(BG_POS[nCnt]);							// 前回の位置
+			m_apModel[nCnt]->SetRot(NONE_D3DXVECTOR3);							// 向き
+			m_apModel[nCnt]->SetScale(NONE_SCALE);								// 拡大率
+			m_apModel[nCnt]->SetFileData((CXFile::TYPE)(INIT_ENTRANCE + nCnt));	// モデルの情報
+		}
+		
+	}
 }
 
 //=========================
