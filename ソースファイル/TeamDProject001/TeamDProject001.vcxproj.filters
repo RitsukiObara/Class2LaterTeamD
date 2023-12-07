@@ -501,6 +501,12 @@
     <ClCompile Include="entry_BG.cpp">
       <Filter>Scene\Entry</Filter>
     </ClCompile>
+    <ClCompile Include="book.cpp">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="dynamite.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -913,6 +919,12 @@
     </ClInclude>
     <ClInclude Include="entry_BG.h">
       <Filter>Scene\Entry</Filter>
+    </ClInclude>
+    <ClInclude Include="book.h">
+      <Filter>Gimmick\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="dynamite.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
