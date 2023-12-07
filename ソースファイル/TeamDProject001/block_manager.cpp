@@ -13,7 +13,7 @@
 //--------------------------------------------
 // 静的メンバ変数宣言
 //--------------------------------------------
-CBlockManager* CBlockManager::m_pManager = nullptr;			// 障害物の変数
+CBlockManager* CBlockManager::m_pManager = nullptr;		// 障害物の変数
 
 //============================
 // コンストラクタ
@@ -93,6 +93,26 @@ void CBlockManager::Uninit(void)
 	// マネージャーのメモリを解放する
 	delete m_pManager;
 	m_pManager = nullptr;
+}
+
+//============================
+// 終了処理
+//============================
+void CBlockManager::UninitAll(void)
+{
+	// ローカル変数宣言
+	CBlock* pObj = m_pTop;		// 現在のオブジェクトのポインタ
+
+	while (pObj != nullptr)
+	{ // オブジェクトと引数が一致していない限り回す
+
+		CBlock* pUninitObj = pObj;
+
+		// 次のオブジェクトを代入する
+		pObj = pObj->GetNext();
+
+		pUninitObj->Uninit();
+	}
 }
 
 //============================
