@@ -55,8 +55,12 @@ public:			// 誰でもアクセスできる
 
 private:		// 自分だけアクセスできる
 
+	// メンバ関数
+	void StateManager(void);		// 状態マネージャー
+
 	// メンバ変数
 	CModel* m_apBook[MAX_BOOK];		// 上に載っている本の情報
+	D3DXVECTOR3 m_move;				// 移動量
 	STATE m_state;					// 状態
 };
 

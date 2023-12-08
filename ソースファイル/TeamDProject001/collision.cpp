@@ -283,26 +283,6 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 				// ‹Câó‘Ô
 				pPlayer->Stun(60);
 
-				// Œü‚«‚ðŽZo‚·‚é
-				fAngle = atan2f(pos.x - pObstacle->GetPos().x, pos.z - pObstacle->GetPos().z);
-
-				{ // ˆÚ“®—Ê‚ÌÝ’èˆ—
-
-					// ˆÚ“®—Ê‚ðŽæ“¾‚·‚é
-					D3DXVECTOR3 move = pPlayer->GetMove();
-
-					// ˆÚ“®—Ê‚ðŽZo‚·‚é
-					move.x = sinf(fAngle) * 10.0f;
-					move.y = 0.0f;
-					move.z = cosf(fAngle) * 10.0f;
-
-					// ˆÚ“®—Ê‚ðÝ’è‚·‚é
-					pPlayer->SetMove(move);
-				}
-
-				// ƒqƒbƒg‚µ‚½
-				bHitMove = true;
-
 				break;
 
 			default:
