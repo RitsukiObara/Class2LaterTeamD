@@ -37,6 +37,16 @@ public:			// 誰でもアクセスできる
 		STATE_MAX			// この列挙型の総数
 	};
 
+	// 構造体定義(本)
+	struct SBook
+	{
+		CModel* pBook;		// 上に載っている本の情報
+		D3DXVECTOR3 move;	// 移動量
+		float fGravity;		// 重力
+		float fRotMove;		// 向きの移動量
+		bool bDisp;			// 描画状況
+	};
+
 	CBook();				// コンストラクタ
 	~CBook();				// デストラクタ
 
@@ -57,11 +67,15 @@ private:		// 自分だけアクセスできる
 
 	// メンバ関数
 	void StateManager(void);		// 状態マネージャー
+	bool KillZ(void);				// Z軸による消去処理
 
 	// メンバ変数
-	CModel* m_apBook[MAX_BOOK];		// 上に載っている本の情報
-	D3DXVECTOR3 m_move;				// 移動量
-	STATE m_state;					// 状態
+	SBook m_aBook[MAX_BOOK];	// 本の構造体
+	D3DXVECTOR3 m_move;			// 移動量
+	STATE m_state;				// 状態
+	float m_fGravity;			// 重力
+	float m_fRotMove;			// 向きの移動量
+	bool m_bDisp;				// 描画状況
 };
 
 #endif

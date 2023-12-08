@@ -229,11 +229,11 @@ void CCat::Update(void)
 	// 角度の正規化
 	RotNormalize();
 
-	// 更新処理
-	CPlayer::Update();
-
 	// ブロックとの当たり判定
 	collision::BlockCollision(this, GetSizeColl());
+
+	// 更新処理
+	CPlayer::Update();
 
 	if (GetPlayerID() != nullptr)
 	{ // プレイヤーのID表示が NULL じゃない場合

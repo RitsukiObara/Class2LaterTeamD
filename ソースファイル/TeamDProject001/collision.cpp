@@ -278,6 +278,7 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 				pPlayer->Stun(60);
 
 				break;
+
 			case CObstacle::TYPE_GARBAGECAN:
 
 				// ‹Câó‘Ô
