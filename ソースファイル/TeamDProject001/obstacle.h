@@ -85,6 +85,7 @@ public:			// 誰でもアクセスできる
 
 	virtual D3DXVECTOR3 GetPosHead(void) { return NONE_D3DXVECTOR3; }
 	virtual D3DXVECTOR3 GetPosToes(void) { return NONE_D3DXVECTOR3; }
+	virtual void SlideOn(D3DXVECTOR3 pos, D3DXVECTOR3 move, CPlayer *pPlayer) {}
 
 	// 静的メンバ関数
 	static CObstacle* Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type);		// 生成処理

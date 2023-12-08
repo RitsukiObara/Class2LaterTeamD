@@ -843,6 +843,11 @@ void CPlayer::StunStateManager(void)
 
 	case STUNSTATE_STUN:	//気絶状態
 
+		if (m_pStun != NULL)
+		{
+			m_pStun->SetPos(D3DXVECTOR3(GetPos().x, GetPos().y + m_fStunHeight, GetPos().z));
+		}
+
 		// カウントを減算する
 		m_StunStateCount--;
 

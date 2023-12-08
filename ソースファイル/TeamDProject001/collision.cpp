@@ -281,8 +281,8 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 			case CObstacle::TYPE_GARBAGECAN:
 
 				// ‹Câó‘Ô
-				pPlayer->Stun(60);
-
+				pPlayer->Stun(90);
+				pObstacle->SlideOn(pPlayer->GetPos(), pPlayer->GetMove(), pPlayer);
 				break;
 
 			default:
