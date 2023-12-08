@@ -286,6 +286,13 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 				pObstacle->SlideOn(pPlayer->GetPos(), pPlayer->GetMove(), pPlayer);
 				break;
 
+			case CObstacle::TYPE_BOOK:
+
+				// ‹Câó‘Ô
+				pPlayer->Stun(60);
+
+				break;
+
 			default:
 
 				//“Á‚É‚È‚µ

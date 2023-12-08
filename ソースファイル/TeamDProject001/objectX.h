@@ -112,6 +112,7 @@ public:			// 誰でもアクセスできる
 		TYPE_TV,					// テレビ
 		TYPE_DYNAMITE,				// 爆弾
 		TYPE_BOOKRED,				// 本(赤)
+		TYPE_REDKATEN,				// 赤のカーテン
 
 		//ネズミモデル
 		TYPE_RAT_BODY,				// 体

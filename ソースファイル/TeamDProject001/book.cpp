@@ -18,11 +18,11 @@
 //-------------------------------------------
 #define SHIFT_HEIGHT			(27.5f)			// ずらす高さ
 #define COLLAPSE_RANGE			(80.0f)			// ヒット判定の範囲
-#define COLLAPSE_MOVE			(5.0f)			// 倒れ状態の移動量
-#define COLLAPSE_ROT_MOVE		(8)				// 倒れ状態の向きの移動量
-#define COLLAPSE_MIN_ROT_MOVE	(3)				// 倒れ状態の向きの移動量の最低値
+#define COLLAPSE_MOVE			(4.0f)			// 倒れ状態の移動量
 #define COLLAPSE_GRAVITY		(8)				// 倒れ状態の重力
 #define COLLAPSE_MIN_GRAVITY	(3)				// 倒れ状態の重力の最低値
+#define COLLAPSE_ROT_CORRECT	(0.05f)			// 倒れ状態の向きの補正値
+#define NEXT_MOVE_POS_Y			(20.0f)			// 次のオブジェクトが動き出す座標(Y軸)
 #define DEATH_POS_Y				(0.0f)			// 見えなくなる座標(Y軸)
 
 //==============================
@@ -36,14 +36,14 @@ CBook::CBook() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 		m_aBook[nCnt].pBook = nullptr;			// 本の情報
 		m_aBook[nCnt].move = NONE_D3DXVECTOR3;	// 移動量
 		m_aBook[nCnt].fGravity = 0.0f;			// 重力
-		m_aBook[nCnt].fRotMove = 0.0f;			// 向きの移動量
 		m_aBook[nCnt].bDisp = true;				// 描画状況
+		m_aBook[nCnt].bMove = false;			// 移動状況
 	}
 	m_move = NONE_D3DXVECTOR3;		// 移動量
 	m_state = STATE_STOP;			// 状態
 	m_fGravity = 0.0f;				// 重力
-	m_fRotMove = 0.0f;				// 向きの移動量
 	m_bDisp = true;					// 描画状況
+	m_bMove = false;				// 移動状況
 	SetCatUse(true);				// ネコの使用条件
 	SetRatUse(true);				// ネズミの使用条件
 }
@@ -79,15 +79,15 @@ HRESULT CBook::Init(void)
 		}
 		m_aBook[nCnt].move = NONE_D3DXVECTOR3;		// 移動量
 		m_aBook[nCnt].fGravity = 0.0f;				// 重力
-		m_aBook[nCnt].fRotMove = 0.0f;				// 向きの移動量
-		m_aBook[nCnt].bDisp = true;				// 描画状況
+		m_aBook[nCnt].bDisp = true;					// 描画状況
+		m_aBook[nCnt].bMove = false;			// 移動状況
 	}
 
 	m_move = NONE_D3DXVECTOR3;		// 移動量
 	m_state = STATE_STOP;			// 状態
 	m_fGravity = 0.0f;				// 重力
-	m_fRotMove = 0.0f;				// 向きの移動量
 	m_bDisp = true;					// 描画状況
+	m_bMove = false;				// 移動状況
 
 	// 値を返す
 	return S_OK;
@@ -189,7 +189,6 @@ void CBook::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE t
 	m_move = NONE_D3DXVECTOR3;		// 移動量
 	m_state = STATE_STOP;			// 状態
 	m_fGravity = 0.0f;				// 重力
-	m_fRotMove = 0.0f;				// 向きの移動量
 	m_bDisp = true;					// 描画状況
 }
 
@@ -214,33 +213,41 @@ void CBook::StateManager(void)
 
 	case CBook::STATE_COLLAPSE:		// 倒れ状態
 
-		// 向きの設定処理
-		rot.z += m_fRotMove;
+		if (m_bMove == true)
+		{ // 移動状況が true の場合
 
-		// 重力処理
-		useful::Gravity(&m_move.y, pos, m_fGravity);
+			// 向きの補正処理
+			useful::RotCorrect(D3DX_PI, &rot.z, COLLAPSE_ROT_CORRECT);
 
-		// 移動量を加算する
-		pos += m_move;
+			// 重力処理
+			useful::Gravity(&m_move.y, pos, m_fGravity);
+
+			// 移動量を加算する
+			pos += m_move;
+		}
 
 		for (int nCnt = 0; nCnt < MAX_BOOK; nCnt++)
 		{
-			// 位置と向きを取得する
-			objpos = m_aBook[nCnt].pBook->GetPos();
-			objrot = m_aBook[nCnt].pBook->GetRot();
+			if (m_aBook[nCnt].bMove == true)
+			{ // 移動状況が true の場合
 
-			// 向きの設定処理
-			objrot.z += m_aBook[nCnt].fRotMove;
+				// 位置と向きを取得する
+				objpos = m_aBook[nCnt].pBook->GetPos();
+				objrot = m_aBook[nCnt].pBook->GetRot();
 
-			// 重力処理
-			useful::Gravity(&m_move.y, objpos, m_aBook[nCnt].fGravity);
+				// 向きの補正処理
+				useful::RotCorrect(D3DX_PI, &objrot.z, COLLAPSE_ROT_CORRECT);
 
-			// 移動量を加算する
-			objpos += m_move;
+				// 重力処理
+				useful::Gravity(&m_aBook[nCnt].move.y, objpos, m_aBook[nCnt].fGravity);
 
-			// 位置と向きを設定する
-			m_aBook[nCnt].pBook->SetPos(objpos);
-			m_aBook[nCnt].pBook->SetRot(objrot);
+				// 移動量を加算する
+				objpos += m_aBook[nCnt].move;
+
+				// 位置と向きを設定する
+				m_aBook[nCnt].pBook->SetPos(objpos);
+				m_aBook[nCnt].pBook->SetRot(objrot);
+			}
 		}
 
 		break;
@@ -279,20 +286,25 @@ bool CBook::KillZ(void)
 		bHeight = false;
 	}
 
-	for (int nCnt = 0; nCnt < MAX_BOOK; nCnt++)
-	{
-		if (m_aBook[nCnt].pBook->GetPos().y <= DEATH_POS_Y)
-		{ // 位置が一定の位置以下になった場合
+	if (m_aBook[2].pBook->GetPos().y <= m_aBook[1].pBook->GetPos().y - NEXT_MOVE_POS_Y)
+	{ // 本が一定の位置まで落ちた場合
 
-			// 描画状況を false にする
-			m_aBook[nCnt].bDisp = false;
-		}
-		else
-		{ // 上記以外
+		// 移動状況を true にする
+		m_aBook[1].bMove = true;
+	}
 
-			// 高さ状況を false にする
-			bHeight = false;
-		}
+	if (m_aBook[1].pBook->GetPos().y <= m_aBook[0].pBook->GetPos().y - NEXT_MOVE_POS_Y)
+	{ // 本が一定の位置まで落ちた場合
+
+		// 移動状況を true にする
+		m_aBook[0].bMove = true;
+	}
+
+	if (m_aBook[0].pBook->GetPos().y <= GetPos().y - NEXT_MOVE_POS_Y)
+	{ // 本が一定の位置まで落ちた場合
+
+		// 移動状況を true にする
+		m_bMove = true;
 	}
 
 	// 高さ状況を返す
@@ -399,9 +411,6 @@ void CBook::Action(void)
 		// 重力を設定する
 		m_fGravity = (float)((rand() % COLLAPSE_GRAVITY + COLLAPSE_MIN_GRAVITY) * 0.01f);
 
-		// 向きの移動量を設定する
-		m_fRotMove = (float)((rand() % COLLAPSE_ROT_MOVE + COLLAPSE_MIN_ROT_MOVE) * 0.01f);
-
 		for (int nCnt = 0; nCnt < MAX_BOOK; nCnt++)
 		{
 			// 移動量を設定する
@@ -410,9 +419,9 @@ void CBook::Action(void)
 
 			// 重力を設定する
 			m_aBook[nCnt].fGravity = (float)((rand() % COLLAPSE_GRAVITY + COLLAPSE_MIN_GRAVITY) * 0.01f);
-
-			// 向きの移動量を設定する
-			m_aBook[nCnt].fRotMove = (float)((rand() % COLLAPSE_ROT_MOVE + COLLAPSE_MIN_ROT_MOVE) * 0.01f);
 		}
+
+		// 移動状況を true にする(動き始める)
+		m_aBook[2].bMove = true;
 	}
 }

@@ -43,6 +43,7 @@ public:			// 誰でもアクセスできる
 		TYPE_TV,			// テレビ
 		TYPE_DYNAMITE,		// ダイナマイト
 		TYPE_BOOK,			// 本
+		TYPE_REDKATEN,		// 赤のカーテン
 		TYPE_MAX			// この列挙型の総数
 	};
 
