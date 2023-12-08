@@ -34,6 +34,7 @@
 #include "tv.h"
 #include "dynamite.h"
 #include "book.h"
+#include "curtain.h"
 
 //==============================
 // コンストラクタ
@@ -371,6 +372,13 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, con
 
 			// 本を生成する
 			pObstacle = new CBook;
+
+			break;
+
+		case CObstacle::TYPE_REDKATEN:
+
+			// カーテンを生成する
+			pObstacle = new CCurtain;
 
 			break;
 
