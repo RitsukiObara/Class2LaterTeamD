@@ -75,7 +75,7 @@ HRESULT CBook::Init(void)
 		{ // –{‚Ìî•ñ‚ª NULL ‚Ìê‡
 
 			// –{‚ð¶¬‚·‚é
-			m_aBook[nCnt].pBook = new CModel(TYPE_NONE, PRIORITY_BLOCK);
+			m_aBook[nCnt].pBook = CModel::Create(TYPE_NONE, PRIORITY_BLOCK);
 		}
 		m_aBook[nCnt].move = NONE_D3DXVECTOR3;		// ˆÚ“®—Ê
 		m_aBook[nCnt].fGravity = 0.0f;				// d—Í

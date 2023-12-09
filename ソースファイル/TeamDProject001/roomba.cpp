@@ -188,7 +188,7 @@ void CRoomba::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE
 		{ // プロペラが NULL の場合
 
 			// モデルを生成する
-			m_apSub[nCnt] = new CModel(TYPE_NONE, PRIORITY_BLOCK);
+			m_apSub[nCnt] = CModel::Create(TYPE_NONE, PRIORITY_BLOCK);
 
 			if (m_apSub[nCnt] != NULL)
 			{ // プロペラが NULL の場合

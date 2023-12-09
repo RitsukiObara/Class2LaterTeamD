@@ -1,6 +1,6 @@
 //===========================================
 //
-// 蜂蜜のメイン処理[garbage.cpp]
+// ゴミ箱のメイン処理[garbage.cpp]
 // Author 小原立暉
 //
 //===========================================
@@ -10,7 +10,6 @@
 #include "main.h"
 #include "manager.h"
 #include "collision.h"
-#include "input.h"
 #include "fraction.h"
 #include "renderer.h"
 #include "garbagecan.h"
@@ -114,11 +113,6 @@ void CGarbage::Update(void)
 		{
 			Uninit();
 		}
-	}
-
-	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_0) == true)
-	{ // ENTERキーを押していた場合
-
 	}
 }
 

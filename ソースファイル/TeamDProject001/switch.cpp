@@ -9,14 +9,21 @@
 //*******************************************
 #include "main.h"
 #include "switch.h"
+#include "model.h"
 #include "useful.h"
 
 //==============================
 // コンストラクタ
 //==============================
-CSwitch::CSwitch() : CModel(CObject::TYPE_NONE, CObject::PRIORITY_BLOCK)
+CSwitch::CSwitch() : CObject(CObject::TYPE_NONE, CObject::PRIORITY_BLOCK)
 {
-
+	// 全ての値をクリアする
+	for (int nCnt = 0; nCnt < TYPE_MAX; nCnt++)
+	{
+		m_apModel[nCnt] = nullptr;		// モデルの情報
+	}
+	m_bMove = false;					// 移動状況
+	m_bBoot = false;					// 起動状況
 }
 
 //==============================
@@ -32,12 +39,18 @@ CSwitch::~CSwitch()
 //==============================
 HRESULT CSwitch::Init(void)
 {
-	if (FAILED(CModel::Init()))
-	{ // 初期化処理に失敗した場合
+	// 全ての値を初期化する
+	for (int nCnt = 0; nCnt < TYPE_MAX; nCnt++)
+	{
+		if (m_apModel[nCnt] == nullptr)
+		{ // モデルの情報が NULL の場合
 
-		// 失敗を返す
-		return E_FAIL;
+			// モデルの生成処理
+			m_apModel[nCnt] = CModel::Create(TYPE_NONE, PRIORITY_BLOCK);
+		}
 	}
+	m_bMove = false;					// 移動状況
+	m_bBoot = false;					// 起動状況
 
 	// 値を返す
 	return S_OK;
@@ -48,8 +61,19 @@ HRESULT CSwitch::Init(void)
 //========================================
 void CSwitch::Uninit(void)
 {
-	// 終了処理
-	CModel::Uninit();
+	for (int nCnt = 0; nCnt < TYPE_MAX; nCnt++)
+	{
+		if (m_apModel[nCnt] != nullptr)
+		{ // モデルの情報が NULL じゃない場合
+
+			// モデルの終了処理
+			m_apModel[nCnt]->Uninit();
+			m_apModel[nCnt] = nullptr;
+		}
+	}
+
+	// 本体の終了処理
+	Release();
 }
 
 //=====================================
@@ -65,8 +89,15 @@ void CSwitch::Update(void)
 //=====================================
 void CSwitch::Draw(void)
 {
-	// 描画処理
-	CModel::Draw();
+	for (int nCnt = 0; nCnt < TYPE_MAX; nCnt++)
+	{
+		if (m_apModel[nCnt] != nullptr)
+		{ // モデルが NULL じゃない場合
+
+			// モデルの描画処理
+			m_apModel[nCnt]->Draw();
+		}
+	}
 }
 
 //=====================================
@@ -74,12 +105,22 @@ void CSwitch::Draw(void)
 //=====================================
 void CSwitch::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot)
 {
-	// 情報の設定処理
-	SetPos(pos);								// 位置
-	SetPosOld(pos);								// 前回の位置
-	SetRot(rot);								// 向き
-	SetScale(NONE_SCALE);						// 拡大率
-	SetFileData(CXFile::TYPE_TRAPIRON);			// モデル情報
+	// 全ての値を設定する
+	for (int nCnt = 0; nCnt < TYPE_MAX; nCnt++)
+	{
+		if (m_apModel[nCnt] != nullptr)
+		{ // モデルが NULL じゃない場合
+
+			// 情報の設定処理
+			m_apModel[nCnt]->SetPos(pos);							// 位置
+			m_apModel[nCnt]->SetPosOld(pos);						// 前回の位置
+			m_apModel[nCnt]->SetRot(rot);							// 向き
+			m_apModel[nCnt]->SetScale(NONE_SCALE);					// 拡大率
+			m_apModel[nCnt]->SetFileData(CXFile::TYPE_TRAPIRON);	// モデル情報
+		}
+	}
+	m_bMove = false;					// 移動状況
+	m_bBoot = false;					// 起動状況
 }
 
 //=======================================
@@ -135,4 +176,22 @@ CSwitch* CSwitch::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot)
 
 	// スイッチのポインタを返す
 	return pSwitch;
+}
+
+//=======================================
+// 起動状況の設定処理
+//=======================================
+void CSwitch::SetBoot(const bool bBoot)
+{
+	// 起動状況を設定する
+	m_bBoot = bBoot;
+}
+
+//=======================================
+// 起動状況の取得処理
+//=======================================
+bool CSwitch::GetBoot(void) const
+{
+	// 起動状況を返す
+	return m_bBoot;
 }

@@ -13,9 +13,26 @@
 #include "useful.h"
 #include "input.h"
 
+#include "switch.h"
+
 //-------------------------------------------
-// マクロ定義
+// 無名名前空間
 //-------------------------------------------
+namespace
+{
+	static const D3DXVECTOR3 SWITCH_POS[MAX_SWITCH] =		// スイッチの位置
+	{
+		NONE_D3DXVECTOR3,
+		NONE_D3DXVECTOR3,
+		NONE_D3DXVECTOR3,
+	};
+	static const D3DXVECTOR3  SWITCH_ROT[MAX_SWITCH] =		// スイッチの向き
+	{
+		NONE_D3DXVECTOR3,
+		NONE_D3DXVECTOR3,
+		NONE_D3DXVECTOR3,
+	};
+}
 #define CLOSE_SCALE		(0.03f)		// 閉じた状態の拡大率
 #define SCALE_CORRECT	(0.01f)		// 拡大率の補正率
 #define OPEN_SCALE		(1.0f)		// 開いた状態の拡大率
@@ -26,9 +43,13 @@
 CCurtain::CCurtain() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 {
 	// 全ての値をクリアする
-	m_state = STATE_CLOSE;			// 状態
-	SetCatUse(false);				// ネコの使用条件
-	SetRatUse(true);				// ネズミの使用条件
+	for (int nCnt = 0; nCnt < MAX_SWITCH; nCnt++)
+	{
+		m_apSwitch[nCnt] = nullptr;		// スイッチの情報
+	}
+	m_state = STATE_CLOSE;				// 状態
+	SetCatUse(false);					// ネコの使用条件
+	SetRatUse(true);					// ネズミの使用条件
 }
 
 //==============================
@@ -52,7 +73,11 @@ HRESULT CCurtain::Init(void)
 	}
 
 	// 全ての値を初期化する
-	m_state = STATE_CLOSE;			// 状態
+	m_state = STATE_CLOSE;				// 状態
+	for (int nCnt = 0; nCnt < MAX_SWITCH; nCnt++)
+	{
+		m_apSwitch[nCnt] = nullptr;		// モデルの情報
+	}
 
 	// 値を返す
 	return S_OK;
@@ -63,6 +88,17 @@ HRESULT CCurtain::Init(void)
 //========================================
 void CCurtain::Uninit(void)
 {
+	for (int nCnt = 0; nCnt < MAX_SWITCH; nCnt++)
+	{
+		if (m_apSwitch[nCnt] != nullptr)
+		{ // スイッチの情報が NULL じゃない場合
+
+			// スイッチの終了処理
+			m_apSwitch[nCnt]->Uninit();
+			m_apSwitch[nCnt] = nullptr;
+		}
+	}
+
 	// 終了処理
 	CObstacle::Uninit();
 }
@@ -77,6 +113,16 @@ void CCurtain::Update(void)
 
 	// 状態マネージャー
 	StateManager();
+
+	for (int nCnt = 0; nCnt < MAX_SWITCH; nCnt++)
+	{
+		if (m_apSwitch[nCnt] != nullptr)
+		{ // スイッチの情報が NULL じゃない場合
+
+			// スイッチの更新処理
+			m_apSwitch[nCnt]->Update();
+		}
+	}
 
 	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_0) == true)
 	{ // 0キーを押した場合
@@ -93,6 +139,16 @@ void CCurtain::Draw(void)
 {
 	// 描画処理
 	CObstacle::Draw();
+
+	for (int nCnt = 0; nCnt < MAX_SWITCH; nCnt++)
+	{
+		if (m_apSwitch[nCnt] != nullptr)
+		{ // スイッチの情報が NULL じゃない場合
+
+			// スイッチの描画処理
+			m_apSwitch[nCnt]->Draw();
+		}
+	}
 }
 
 //=====================================
@@ -107,6 +163,15 @@ void CCurtain::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYP
 	SetScale(D3DXVECTOR3(1.0f, 1.0f, CLOSE_SCALE));
 
 	// 全ての値を設定する
+	for (int nCnt = 0; nCnt < MAX_SWITCH; nCnt++)
+	{
+		if (m_apSwitch[nCnt] != nullptr)
+		{ // モデルが NULL じゃない場合
+
+			// スイッチの生成処理
+			m_apSwitch[nCnt] = CSwitch::Create(SWITCH_POS[nCnt], SWITCH_ROT[nCnt]);
+		}
+	}
 	m_state = STATE_CLOSE;		// 状態
 }
 
