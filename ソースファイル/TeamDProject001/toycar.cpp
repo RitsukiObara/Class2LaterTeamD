@@ -191,7 +191,7 @@ void CToyCar::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE
 //=====================================
 // “–‚½‚è”»’èˆ—
 //=====================================
-bool CToyCar::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CToyCar::Collision(D3DXVECTOR3* pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
 {
 	// Å¬’l‚ÆÅ‘å’l‚ğéŒ¾
 	D3DXVECTOR3 vtxMin, vtxMax;
@@ -201,7 +201,7 @@ bool CToyCar::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXV
 	vtxMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);
 
 	// ˜Z–Ê‘Ì‚Ì“–‚½‚è”»’è
-	if (collision::HexahedronCollision(&pos, GetPos(), posOld, GetPosOld(), vtxMin, GetFileData().vtxMin, vtxMax, GetFileData().vtxMax) == true)
+	if (collision::HexahedronCollision(pos, GetPos(), posOld, GetPosOld(), vtxMin, GetFileData().vtxMin, vtxMax, GetFileData().vtxMax) == true)
 	{
 		// true ‚ğ•Ô‚·
 		return true;

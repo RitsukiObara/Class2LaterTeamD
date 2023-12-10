@@ -12,6 +12,7 @@
 #include "curtain.h"
 #include "useful.h"
 #include "input.h"
+#include "collision.h"
 
 #include "switch.h"
 
@@ -26,16 +27,16 @@ namespace
 		NONE_D3DXVECTOR3,
 		NONE_D3DXVECTOR3,
 	};
-	static const D3DXVECTOR3  SWITCH_ROT[MAX_SWITCH] =		// スイッチの向き
+	static const D3DXVECTOR3 SWITCH_ROT[MAX_SWITCH] =		// スイッチの向き
 	{
 		NONE_D3DXVECTOR3,
 		NONE_D3DXVECTOR3,
 		NONE_D3DXVECTOR3,
 	};
+	static const float CLOSE_SCALE = 0.03f;					// 閉じた状態の拡大率
+	static const float SCALE_CORRECT = 0.01f;				// 拡大率の補正率
+	static const float OPEN_SCALE = 1.0f;					// 開いた状態の拡大率
 }
-#define CLOSE_SCALE		(0.03f)		// 閉じた状態の拡大率
-#define SCALE_CORRECT	(0.01f)		// 拡大率の補正率
-#define OPEN_SCALE		(1.0f)		// 開いた状態の拡大率
 
 //==============================
 // コンストラクタ
@@ -48,6 +49,7 @@ CCurtain::CCurtain() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK
 		m_apSwitch[nCnt] = nullptr;		// スイッチの情報
 	}
 	m_state = STATE_CLOSE;				// 状態
+	m_fVtxMinZ = 0.0f;					// Z軸の最小値
 	SetCatUse(false);					// ネコの使用条件
 	SetRatUse(true);					// ネズミの使用条件
 }
@@ -73,11 +75,12 @@ HRESULT CCurtain::Init(void)
 	}
 
 	// 全ての値を初期化する
-	m_state = STATE_CLOSE;				// 状態
 	for (int nCnt = 0; nCnt < MAX_SWITCH; nCnt++)
 	{
 		m_apSwitch[nCnt] = nullptr;		// モデルの情報
 	}
+	m_state = STATE_CLOSE;				// 状態
+	m_fVtxMinZ = 0.0f;					// Z軸の最小値
 
 	// 値を返す
 	return S_OK;
@@ -172,7 +175,59 @@ void CCurtain::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYP
 			m_apSwitch[nCnt] = CSwitch::Create(SWITCH_POS[nCnt], SWITCH_ROT[nCnt]);
 		}
 	}
-	m_state = STATE_CLOSE;		// 状態
+	m_state = STATE_CLOSE;			// 状態
+	m_fVtxMinZ = GetFileData().vtxMin.z * GetScale().z;		// Z軸の最小値
+}
+
+//=====================================
+// 当たり判定処理
+//=====================================
+bool CCurtain::Collision(D3DXVECTOR3* pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+{
+	D3DXVECTOR3 objMin = GetFileData().vtxMin;							// カーテンの最小値
+	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);	// 最小値
+	D3DXVECTOR3 vtxMax = collSize;										// 最大値
+
+	// カーテンの最小値(Z軸)を設定する
+	objMin.z = GetFileData().vtxMin.z * GetScale().z;
+
+	// 六面体の当たり判定
+	if (collision::HexahedronCollision
+	(
+		pos,
+		GetPos(),
+		posOld,
+		GetPosOld(),
+		vtxMin,
+		objMin,
+		vtxMax,
+		GetFileData().vtxMax
+		) == true)
+	{ // 当たった場合
+
+		// true を返す
+		return true;
+	}
+
+	// false を返す
+	return false;
+}
+
+//=====================================
+// 円のヒット処理
+//=====================================
+bool CCurtain::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type)
+{
+	// false を返す
+	return false;
+}
+
+//=====================================
+// ギミック起動処理
+//=====================================
+void CCurtain::Action(void)
+{
+
 }
 
 //=====================================

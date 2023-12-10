@@ -85,7 +85,7 @@ void CGarbage::Update(void)
 		pos += m_SlideMove;
 		m_pPlayer->SetPos(pos + m_PlayerPos);
 
-		if (Collision(pos, posold, GetFileData().vtxMax, CPlayer::TYPE::TYPE_CAT) == true)
+		if (Collision(&pos, posold, GetFileData().vtxMax, CPlayer::TYPE::TYPE_CAT) == true)
 		{
 			m_Slide = SLIDE_BREAK;
 			m_SlideMove = D3DXVECTOR3(-m_SlideMove.x * 0.1f, 30.0f, -m_SlideMove.z * 0.1f);
@@ -182,7 +182,7 @@ void CGarbage::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYP
 //=====================================
 // 当たり判定処理
 //=====================================
-bool CGarbage::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CGarbage::Collision(D3DXVECTOR3* pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
 {
 	// 最大値と最小値を設定する
 	D3DXVECTOR3 vtxMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);
@@ -191,7 +191,7 @@ bool CGarbage::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DX
 	if (m_State == STATE_GARBAGECAN)
 	{ //ゴミ箱状態の場合
 
-		if (collision::HexahedronCollision(&pos, GetPos(), posOld, GetPosOld(), vtxMin, GetFileData().vtxMin, vtxMax, GetFileData().vtxMax) == true)
+		if (collision::HexahedronCollision(pos, GetPos(), posOld, GetPosOld(), vtxMin, GetFileData().vtxMin, vtxMax, GetFileData().vtxMax) == true)
 		{ // 六面体の当たり判定が true の場合
 
 			// true を返す
@@ -213,7 +213,7 @@ bool CGarbage::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DX
 		while (pBlock != nullptr)
 		{ // ブロックが NULL の場合
 
-			if (collision::HexahedronCollision(&pos, pBlock->GetPos(), posOld, pBlock->GetPosOld(), vtxMin, pBlock->GetFileData().vtxMin, vtxMax, pBlock->GetFileData().vtxMax) == true)
+			if (collision::HexahedronCollision(pos, pBlock->GetPos(), posOld, pBlock->GetPosOld(), vtxMin, pBlock->GetFileData().vtxMin, vtxMax, pBlock->GetFileData().vtxMax) == true)
 			{ // 六面体の当たり判定が true の場合
 
 			  // true を返す

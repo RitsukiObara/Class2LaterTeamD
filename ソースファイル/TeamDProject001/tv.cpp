@@ -260,7 +260,7 @@ void CTv::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE typ
 //=====================================
 // ìñÇΩÇËîªíËèàóù
 //=====================================
-bool CTv::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CTv::Collision(D3DXVECTOR3* pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
 {
 	// false Çï‘Ç∑
 	return false;

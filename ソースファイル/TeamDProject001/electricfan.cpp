@@ -162,7 +162,7 @@ void CElecFan::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYP
 //=====================================
 // “–‚½‚è”»’èˆ—
 //=====================================
-bool CElecFan::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CElecFan::Collision(D3DXVECTOR3* pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
 {
 	// Å‘å’l‚ÆÅ¬’l‚ğİ’è‚·‚é
 	D3DXVECTOR3 vtxMax = D3DXVECTOR3(GetFileData().fRadius, GetFileData().vtxMax.y, GetFileData().fRadius);
@@ -171,7 +171,7 @@ bool CElecFan::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DX
 	D3DXVECTOR3 playMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);
 
 	// ˜Z–Ê‘Ì‚Ì“–‚½‚è”»’è
-	if (collision::HexahedronCollision(&pos, GetPos(), posOld, GetPosOld(), playMin, vtxMin, playMax, vtxMax) == true)
+	if (collision::HexahedronCollision(pos, GetPos(), posOld, GetPosOld(), playMin, vtxMin, playMax, vtxMax) == true)
 	{ // “–‚½‚è”»’è‚ª true ‚Ìê‡
 
 		// true ‚ğ•Ô‚·

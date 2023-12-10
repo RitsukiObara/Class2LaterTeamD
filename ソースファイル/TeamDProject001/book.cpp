@@ -314,7 +314,7 @@ bool CBook::KillZ(void)
 //=====================================
 // 当たり判定処理
 //=====================================
-bool CBook::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CBook::Collision(D3DXVECTOR3* pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
 {
 	D3DXVECTOR3 vtxMax = collSize;
 	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);
@@ -324,7 +324,7 @@ bool CBook::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVEC
 	if (m_state == STATE_STOP &&
 		collision::HexahedronCollision
 	(
-		&pos,					// 位置
+		pos,					// 位置
 		GetPos(),				// 本の位置
 		posOld,					// 前回の位置
 		GetPosOld(),			// 本の前回の位置

@@ -70,7 +70,7 @@ void collision::ObstacleCollision(CPlayer& player, const float fWidth, const flo
 	{ // ƒuƒƒbƒN‚Ìî•ñ‚ª NULL ‚¶‚á‚È‚¢ê‡
 
 		// “–‚½‚è”»’èˆ—
-		if (pObstacle->Collision(pos, posOld, collSize, type) == true)
+		if (pObstacle->Collision(&pos, posOld, collSize, type) == true)
 		{
 			switch (pObstacle->GetType())
 			{

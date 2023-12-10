@@ -207,7 +207,7 @@ void CSpeaker::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYP
 //=====================================
 // 当たり判定処理
 //=====================================
-bool CSpeaker::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CSpeaker::Collision(D3DXVECTOR3* pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
 {
 	// 最小値と最大値を設定する
 	D3DXVECTOR3 vtxMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);
@@ -216,7 +216,7 @@ bool CSpeaker::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DX
 	// 六面体の当たり判定
 	if (collision::HexahedronCollision
 	(
-		&pos,					// プレイヤーの位置
+		pos,					// プレイヤーの位置
 		GetPos(),				// 位置
 		posOld,					// プレイヤーの前回の位置
 		GetPosOld(),			// 前回の位置

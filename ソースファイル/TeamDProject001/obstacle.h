@@ -66,7 +66,7 @@ public:			// 誰でもアクセスできる
 
 	virtual void SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type);			// 情報の設定処理
 
-	virtual bool Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type);	// 当たり判定処理
+	virtual bool Collision(D3DXVECTOR3* pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type);	// 当たり判定処理
 	virtual bool Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlayer::TYPE type);			// ヒット処理
 	virtual bool HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type) { return false; }							// ヒット処理
 	virtual void Action(void) {}											// ギミック起動処理

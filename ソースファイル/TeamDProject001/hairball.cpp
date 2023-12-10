@@ -140,29 +140,29 @@ void CHairBall::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TY
 //=====================================
 // ìñÇΩÇËîªíËèàóù
 //=====================================
-bool CHairBall::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CHairBall::Collision(D3DXVECTOR3* pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
 {
-	if (pos.y <= GetPos().y + GetFileData().vtxMax.y &&
-		pos.y + collSize.y >= GetPos().y + GetFileData().vtxMin.y)
+	if (pos->y <= GetPos().y + GetFileData().vtxMax.y &&
+		pos->y + collSize.y >= GetPos().y + GetFileData().vtxMin.y)
 	{ // ü{Ç∆è’ìÀÇµÇΩèÍçá
 
 		// â~íåÇÃìñÇΩÇËîªíËèàóù
-		if (useful::CylinderCollision(&pos, GetPos(), GetFileData().fRadius + collSize.x) == true)
+		if (useful::CylinderCollision(pos, GetPos(), GetFileData().fRadius + collSize.x) == true)
 		{ // ìñÇΩÇËîªíËÇ™ false ÇÃèÍçá
 
 			if (posOld.y >= GetPos().y + GetFileData().vtxMax.y &&
-				pos.y <= GetPos().y + GetFileData().vtxMax.y)
+				pos->y <= GetPos().y + GetFileData().vtxMax.y)
 			{ // è„Ç©ÇÁÇÃìñÇΩÇËîªíË
 
 				// ècÇÃà íuÇê›íËÇ∑ÇÈ
-				pos.y = GetPos().y + GetFileData().vtxMax.y + 0.01f;
+				pos->y = GetPos().y + GetFileData().vtxMax.y + 0.01f;
 			}
 			else if (posOld.y + collSize.y <= GetPos().y + GetFileData().vtxMin.y &&
-				pos.y + collSize.y >= GetPos().y + GetFileData().vtxMin.y)
+				pos->y + collSize.y >= GetPos().y + GetFileData().vtxMin.y)
 			{ // â∫Ç©ÇÁÇÃìñÇΩÇËîªíË
 
 				// ècÇÃà íuÇê›íËÇ∑ÇÈ
-				pos.y = GetPos().y + GetFileData().vtxMin.y - collSize.y - 0.01f;
+				pos->y = GetPos().y + GetFileData().vtxMin.y - collSize.y - 0.01f;
 			}
 		}
 	}

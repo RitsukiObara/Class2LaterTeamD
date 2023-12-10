@@ -244,17 +244,17 @@ void CRoomba::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE
 //=====================================
 // “–‚½‚è”»’èˆ—
 //=====================================
-bool CRoomba::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CRoomba::Collision(D3DXVECTOR3* pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
 {
 	// ˆÊ’uA”¼ŒaA‚‚³‚ğæ“¾‚·‚é
 	D3DXVECTOR3 objPos = GetPos();
 	float objRadius = GetFileData().fRadius;
 	float objHeight = GetFileData().vtxMax.y;
 
-	if (objPos.y <= pos.y + collSize.y &&
-		objPos.y + objHeight >= pos.y)
+	if (objPos.y <= pos->y + collSize.y &&
+		objPos.y + objHeight >= pos->y)
 	{
-		if (useful::CylinderCollision(&pos, objPos, collSize.x + objRadius))
+		if (useful::CylinderCollision(pos, objPos, collSize.x + objRadius))
 		{ // ‰~‚Ì’†‚É“ü‚éê‡
 
 			// true ‚ğ•Ô‚·

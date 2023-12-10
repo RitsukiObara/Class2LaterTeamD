@@ -139,7 +139,7 @@ void CHoney::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE 
 //=====================================
 // 当たり判定処理
 //=====================================
-bool CHoney::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CHoney::Collision(D3DXVECTOR3* pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
 {
 	// 最大値と最小値を設定する
 	D3DXVECTOR3 vtxMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);
@@ -148,7 +148,7 @@ bool CHoney::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVE
 	if (m_State == STATE_HONEYBOTTLE)
 	{ // 蜂蜜ボトル状態の場合
 
-		if (collision::HexahedronCollision(&pos, GetPos(), posOld, GetPosOld(), vtxMin, GetFileData().vtxMin, vtxMax, GetFileData().vtxMax) == true)
+		if (collision::HexahedronCollision(pos, GetPos(), posOld, GetPosOld(), vtxMin, GetFileData().vtxMin, vtxMax, GetFileData().vtxMax) == true)
 		{ // 六面体の当たり判定が true の場合
 
 			// true を返す
