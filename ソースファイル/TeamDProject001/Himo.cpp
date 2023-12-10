@@ -16,6 +16,9 @@
 #include "tarai.h"
 #include "input.h"
 
+#define TARAI_FALL_AREA_X (3001)	//たらいの落下範囲(X)
+#define TARAI_FALL_AREA_Z (2001)	//たらいの落下範囲(Z)
+
 CTarai* CHimo::m_apTarai[MAX_TARAI] = {};							// たらいの情報
 //==============================
 // コンストラクタ
@@ -148,10 +151,10 @@ void CHimo::SetTarai(void)
 		{
 			if (m_apTarai[nCnt] == NULL)
 			{
-				int nRandX = rand() % 1001;
-				int nRandY = rand() % 1001;
+				int nRandX = rand() % TARAI_FALL_AREA_X;
+				int nRandY = rand() % TARAI_FALL_AREA_Z;
 
-				m_apTarai[nCnt] = CTarai::Create(D3DXVECTOR3((float)nRandX - 500.0f, 1000.0f, (float)nRandY - 500.0f));
+				m_apTarai[nCnt] = CTarai::Create(D3DXVECTOR3((float)nRandX - ((float)TARAI_FALL_AREA_X * 0.5f), 1000.0f, (float)nRandY - ((float)TARAI_FALL_AREA_Z * 0.5f)));
 				m_apTarai[nCnt]->SetIndex(nCnt);
 
 				break;

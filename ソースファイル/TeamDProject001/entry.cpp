@@ -165,79 +165,81 @@ void CEntry::Update(void)
 
 	if (m_bEnter == false)
 	{ // エントリーが終わっていない場合
+		for (int nCntPlayer = 0; nCntPlayer < 4; nCntPlayer++)
+		{
+			if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_D) == true ||
+				CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_RIGHT, nCntPlayer) == true)
+			{ // 右キーを押した場合
+				CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_SELECT);
 
-		if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_D) == true ||
-			CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_RIGHT, 0) == true)
-		{ // 右キーを押した場合
-			CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_SELECT);
+				// ネコをやるプレイヤーを設定
+				m_nCatIdx = (m_nCatIdx + 1) % MAX_PLAY;
 
-			// ネコをやるプレイヤーを設定
-			m_nCatIdx = (m_nCatIdx + 1) % MAX_PLAY;
+				for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
+				{
+					if (nCnt == m_nCatIdx)
+					{ // ネコをやるプレイヤーのみ
 
-			for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
-			{
-				if (nCnt == m_nCatIdx)
-				{ // ネコをやるプレイヤーのみ
+						// ネコに設定する
+						m_apUI[nCnt]->GetTeam()->SetType(CPlayer::TYPE_CAT);
 
-					// ネコに設定する
-					m_apUI[nCnt]->GetTeam()->SetType(CPlayer::TYPE_CAT);
+					}
+					else
+					{ // 上記以外
 
-				}
-				else
-				{ // 上記以外
+						// ネズミに設定する
+						m_apUI[nCnt]->GetTeam()->SetType(CPlayer::TYPE_RAT);
 
-					// ネズミに設定する
-					m_apUI[nCnt]->GetTeam()->SetType(CPlayer::TYPE_RAT);
-
-				}
-			}
-		}
-
-		if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_A) == true ||
-			CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_LEFT, 0) == true)
-		{ // 左キーを押した場合
-
-			CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_SELECT);
-
-			// ネコをやるプレイヤーを設定
-			m_nCatIdx = (m_nCatIdx + MAX_PLAY - 1) % MAX_PLAY;
-
-			for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
-			{
-				if (nCnt == m_nCatIdx)
-				{ // ネコをやるプレイヤーのみ
-
-					// ネコに設定する
-					m_apUI[nCnt]->GetTeam()->SetType(CPlayer::TYPE_CAT);
-
-				}
-				else
-				{ // 上記以外
-
-					// ネズミに設定する
-					m_apUI[nCnt]->GetTeam()->SetType(CPlayer::TYPE_RAT);
-
+					}
 				}
 			}
-		}
 
-		if (m_nCatOldIdx != m_nCatIdx)
-		{ // ID並べ替え処理
+			if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_A) == true ||
+				CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_LEFT, nCntPlayer) == true)
+			{ // 左キーを押した場合
 
-			int nKeepID = 0;	// 保存用引数
+				CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_SELECT);
 
-			nKeepID = m_EntryId[m_nCatIdx];
-			m_EntryId[m_nCatIdx] = m_EntryId[m_nCatOldIdx];
-			m_EntryId[m_nCatOldIdx] = nKeepID;
-			m_nCatOldIdx = m_nCatIdx;
-		}
+				// ネコをやるプレイヤーを設定
+				m_nCatIdx = (m_nCatIdx + MAX_PLAY - 1) % MAX_PLAY;
 
-		for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
-		{ // 位置設定&移動量リセット
+				for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
+				{
+					if (nCnt == m_nCatIdx)
+					{ // ネコをやるプレイヤーのみ
 
-			m_apPlayer[m_EntryId[nCnt]]->SetPos(D3DXVECTOR3(-500.0f + (350.0f * nCnt), -100.0f, -150.0f));	// 位置
-			m_apPlayer[m_EntryId[nCnt]]->SetMove(D3DXVECTOR3(0.0f, 0.0f, 0.0f));							// 移動量
-			m_apPlayer[m_EntryId[nCnt]]->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));								// 向き
+						// ネコに設定する
+						m_apUI[nCnt]->GetTeam()->SetType(CPlayer::TYPE_CAT);
+
+					}
+					else
+					{ // 上記以外
+
+						// ネズミに設定する
+						m_apUI[nCnt]->GetTeam()->SetType(CPlayer::TYPE_RAT);
+
+					}
+				}
+			}
+
+			if (m_nCatOldIdx != m_nCatIdx)
+			{ // ID並べ替え処理
+
+				int nKeepID = 0;	// 保存用引数
+
+				nKeepID = m_EntryId[m_nCatIdx];
+				m_EntryId[m_nCatIdx] = m_EntryId[m_nCatOldIdx];
+				m_EntryId[m_nCatOldIdx] = nKeepID;
+				m_nCatOldIdx = m_nCatIdx;
+			}
+
+			for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
+			{ // 位置設定&移動量リセット
+
+				m_apPlayer[m_EntryId[nCnt]]->SetPos(D3DXVECTOR3(-500.0f + (350.0f * nCnt), -100.0f, -150.0f));	// 位置
+				m_apPlayer[m_EntryId[nCnt]]->SetMove(D3DXVECTOR3(0.0f, 0.0f, 0.0f));							// 移動量
+				m_apPlayer[m_EntryId[nCnt]]->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));								// 向き
+			}
 		}
 	}
 	else

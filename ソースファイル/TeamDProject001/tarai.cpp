@@ -80,13 +80,10 @@ void CTarai::Update(void)
 	D3DXVECTOR3 pos = GetPos();
 
 	// 位置を加算する
-	m_move.y -= 0.98f;
+	m_move.y -= 0.8;
 
 	if (pos.y < 0.0f)
 	{
-		//m_move.y = 0.0f;
-		//m_move.y = -m_move.y * 0.5f;
-
 		CHimo::NULLTarai(m_nIndex);
 		Uninit();
 		return;
@@ -100,7 +97,7 @@ void CTarai::Update(void)
 
 	if (m_pShadow != NULL)
 	{
-		// 描画処理
+		// 更新処理
 		m_pShadow->Update();
 	}
 }
@@ -124,7 +121,7 @@ void CTarai::Draw(void)
 		pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
 
 		// 描画処理
-		m_pShadow->DrawLightOff();
+		m_pShadow->Draw();
 
 		//αブレンディングを元に戻す
 		pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
@@ -150,9 +147,10 @@ void CTarai::SetData(const D3DXVECTOR3& pos)
 		m_pShadow = CObject3D::Create(CObject::TYPE::TYPE_NONE);
 		m_pShadow->SetPos(D3DXVECTOR3(pos.x, 0.0f, pos.z));			// 位置
 		m_pShadow->SetPosOld(D3DXVECTOR3(pos.x, 0.0f, pos.z));		// 前回の位置
-		m_pShadow->SetRot(NONE_D3DXVECTOR3);			// 向き
-		m_pShadow->SetSize(D3DXVECTOR3(100.0f, 0.0f, 100.0f));		// サイズ
-		m_pShadow->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TXTURE\\shadow.jpg"));		// テクスチャの割り当て処理
+		m_pShadow->SetRot(D3DXVECTOR3(D3DX_PI * 0.0f, 0.0f, 0.0f));	// 向き
+		m_pShadow->SetSize(D3DXVECTOR3(150.0f, 0.0f, 150.0f));		// サイズ
+		m_pShadow->SetVtxColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));	// 色
+		m_pShadow->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\shadow.jpg"));		// テクスチャの割り当て処理
 
 		// 頂点座標の設定処理
 		m_pShadow->SetVertex();

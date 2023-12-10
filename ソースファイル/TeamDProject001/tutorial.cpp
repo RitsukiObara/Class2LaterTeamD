@@ -173,6 +173,8 @@ HRESULT CTutorial::Init(void)
 	// 扇風機の生成処理
 	CObstacle::Create(D3DXVECTOR3(100.0f, 0.0f, 900.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_FAN);
 
+	CObstacle::Create(D3DXVECTOR3(-1000.0f, 650.0f, 360.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CObstacle::TYPE_HIMO);
+
 	//// コップの生成処理
 	//CObstacle::Create(D3DXVECTOR3(-200.0f, 200.0f, 100.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_CUP);
 	//pObstacle = CObstacle::Create(D3DXVECTOR3(400.0f, 200.0f, 100.0f), D3DXVECTOR3(0.0f, D3DX_PI * 1.0f, 0.0f), CObstacle::TYPE::TYPE_CUP);
@@ -543,7 +545,7 @@ void CTutorial::PlayTrue(void)
 		CBlockManager::Get()->UninitAll();
 		CManager::Get()->GetFile()->Load(CFile::TYPE_TUTORIAL_ACTION);
 
-		// 画鋲の生成処理
+		// 画鋲と紐の生成処理
 		CObstacle::Create(D3DXVECTOR3(0.0f, 200.0f, 360.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CObstacle::TYPE_PIN);
 		CObstacle::Create(D3DXVECTOR3(520.0f, 200.0f, 360.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CObstacle::TYPE_PIN);
 		CObstacle::Create(D3DXVECTOR3(970.0f, 200.0f, 360.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CObstacle::TYPE_PIN);
