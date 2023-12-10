@@ -141,6 +141,7 @@ void CPin::Action(void)
 	if (m_State == STATE_FALSE)
 	{
 		m_State = STATE_FALLWAIT;
+		SetAction(true);
 	}
 }
 

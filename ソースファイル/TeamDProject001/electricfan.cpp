@@ -37,7 +37,6 @@ CElecFan::CElecFan() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK
 	m_pFan = nullptr;			// 扇風機のファン
 	m_bPower = false;			// 電源状況
 	SetCatUse(true);
-	SetRatUse(true);
 }
 
 //==============================
@@ -237,11 +236,15 @@ void CElecFan::Action(void)
 
 		// 目的の向きの移動量を設定する
 		m_pFan->SetRotMoveDest(FAN_MOVE_ON);
+		SetCatUse(false);
+		SetRatUse(true);
 	}
 	else
 	{ // 上記以外
 
 		// 目的の向きの移動量を設定する
 		m_pFan->SetRotMoveDest(FAN_MOVE_OFF);
+		SetCatUse(true);
+		SetRatUse(false);
 	}
 }

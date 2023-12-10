@@ -79,6 +79,8 @@ public:			// 誰でもアクセスできる
 	bool GetCatUse(void) { return m_bCatUse; }				// 起動可能の取得処理
 	void SetRatUse(const bool Set) { m_bRatUse = Set; }		// 起動可能の設定処理
 	bool GetRatUse(void) { return m_bRatUse; }				// 起動可能の取得処理
+	void SetAction(const bool Set) { m_bAction = Set; }		// 起動状態の設定処理
+	bool GetAction(void) { return m_bAction; }				// 起動状態の取得処理
 
 	virtual D3DXVECTOR3 GetPosHead(void) { return NONE_D3DXVECTOR3; }
 	virtual D3DXVECTOR3 GetPosToes(void) { return NONE_D3DXVECTOR3; }
@@ -95,6 +97,7 @@ private:		// 自分だけアクセスできる
 	bool m_pGimmickUIFalse[MAX_PLAY];	//全部[False]の時にUIを削除する
 	bool m_bCatUse;						//猫が起動できるかどうか
 	bool m_bRatUse;						//ネズミが起動できるかどうか
+	bool m_bAction;						//起動しているかどうか
 
 	// リスト構造関係
 	CObstacle* m_pPrev;	// 前へのポインタ

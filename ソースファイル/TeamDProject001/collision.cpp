@@ -403,6 +403,10 @@ void collision::ObstacleSearch(CPlayer* pPlayer, const float Radius)
 					pObstacle->GimmickUI(false, nIdx);
 				}
 			}
+			else
+			{
+				pObstacle->GimmickUI(false, nIdx);
+			}
 		}
 		else if (type == CPlayer::TYPE::TYPE_RAT)
 		{
@@ -431,6 +435,10 @@ void collision::ObstacleSearch(CPlayer* pPlayer, const float Radius)
 						pObstacle->GimmickUI(false, nIdx);
 					}
 				}
+			}
+			else
+			{
+				pObstacle->GimmickUI(false, nIdx);
 			}
 		}
 

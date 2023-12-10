@@ -189,13 +189,14 @@ void CCup::StateManager(D3DXVECTOR3 *pos, D3DXVECTOR3 *rot)
 }
 
 //=====================================
-// •R‚ğˆø‚Á’£‚ç‚ê‚½‚Ìˆ—
+// ƒRƒbƒv‚ª‚¨‚¿‚é‚Æ‚«‚Ìˆ—
 //=====================================
 void CCup::Action(void)
 {
 	if (m_State == STATE_FALSE)
 	{
 		m_State = STATE_FALLWAIT;
+		SetAction(true);
 	}
 }
 

@@ -190,6 +190,7 @@ void CSpeaker::Action(void)
 
 	// èkÇ›èÛë‘Ç…Ç∑ÇÈ
 	m_state = STATE_SHRINK;
+	SetAction(true);
 }
 
 //=====================================

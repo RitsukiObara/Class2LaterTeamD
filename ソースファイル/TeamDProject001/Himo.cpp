@@ -166,6 +166,7 @@ void CHimo::SetTarai(void)
 void CHimo::Action(void)
 {
 	m_bAction = true;
+	SetAction(true);
 }
 
 //=====================================

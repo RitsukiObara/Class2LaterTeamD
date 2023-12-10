@@ -76,6 +76,7 @@ void CObstacle::Box(void)
 	}
 	m_bCatUse = false;
 	m_bRatUse = false;
+	m_bAction = false;
 
 	if (CObstacleManager::Get() != nullptr)
 	{ // マネージャーが存在していた場合
@@ -204,7 +205,7 @@ void CObstacle::Draw(void)
 
 	if (m_pGimmickUI != NULL)
 	{
-		m_pGimmickUI->Draw();
+		m_pGimmickUI->DrawLightOff();
 	}
 
 	for (int nCnt = 0; nCnt < 2; nCnt++)
@@ -423,22 +424,41 @@ void CObstacle::GimmickUI(bool Set, int Player_Idx)
 	{//UI表示の範囲内にいる場合
 		if (m_pGimmickUI == NULL)
 		{
-			//自分のUI表示状態をONにする
-			m_pGimmickUIFalse[Player_Idx] = true;
+			if (m_bAction == false)
+			{
+				//自分のUI表示状態をONにする
+				m_pGimmickUIFalse[Player_Idx] = true;
 
-			//UIの表示
-			m_pGimmickUI = CBillboard::Create(TYPE_NONE);
-			m_pGimmickUI->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\UI_GimmickOn.png"));
-			m_pGimmickUI->SetSize(D3DXVECTOR3(50.0f, 50.0f, 0.0f));
-			m_pGimmickUI->SetPos(D3DXVECTOR3(
-				GetPos().x, 
-				GetPos().y + 50.0f, 
-				GetPos().z));
-			m_pGimmickUI->SetPosOld(D3DXVECTOR3(
-				GetPos().x,
-				GetPos().y + 50.0f,
-				GetPos().z));
-			m_pGimmickUI->SetVertex();
+				//UIの表示
+				m_pGimmickUI = CBillboard::Create(TYPE_NONE);
+				m_pGimmickUI->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\UI_GimmickOn.png"));
+				m_pGimmickUI->SetSize(D3DXVECTOR3(50.0f, 50.0f, 0.0f));
+
+				if (m_type == TYPE::TYPE_HIMO)
+				{
+					m_pGimmickUI->SetPos(D3DXVECTOR3(
+						GetPos().x,
+						GetPos().y - 400.0f,
+						GetPos().z));
+					m_pGimmickUI->SetPosOld(D3DXVECTOR3(
+						GetPos().x,
+						GetPos().y - 400.0f,
+						GetPos().z));
+					m_pGimmickUI->SetVertex();
+				}
+				else
+				{
+					m_pGimmickUI->SetPos(D3DXVECTOR3(
+						GetPos().x,
+						GetPos().y + 50.0f,
+						GetPos().z));
+					m_pGimmickUI->SetPosOld(D3DXVECTOR3(
+						GetPos().x,
+						GetPos().y + 50.0f,
+						GetPos().z));
+					m_pGimmickUI->SetVertex();
+				}
+			}
 		}
 	}
 	else

@@ -170,8 +170,8 @@ HRESULT CTutorial::Init(void)
 	//// 画鋲の生成処理
 	//CObstacle::Create(D3DXVECTOR3(-200.0f, 200.0f, -120.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_PIN);
 
-	//// 扇風機の生成処理
-	//CObstacle::Create(D3DXVECTOR3(0.0f, 200.0f, 900.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_FAN);
+	// 扇風機の生成処理
+	CObstacle::Create(D3DXVECTOR3(100.0f, 0.0f, 900.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_FAN);
 
 	//// コップの生成処理
 	//CObstacle::Create(D3DXVECTOR3(-200.0f, 200.0f, 100.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_CUP);
