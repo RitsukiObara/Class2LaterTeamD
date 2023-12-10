@@ -17,6 +17,7 @@
 #define INIT_CAT		(CXFile::TYPE_CAT_BODY)							// 猫モデルの開始位置
 #define INIT_BLOCK		(CXFile::TYPE_CARDBOARD)						// ブロックモデルの開始位置
 #define INIT_OBSTACLE	(CXFile::TYPE_HONEYBOTTLE)						// 障害物モデルの開始位置
+#define INIT_ENTRANCE	(CXFile::TYPE_ENTRANCE_FLOOR)					// 玄関モデルの開始位置
 
 //------------------------------------------------------------
 // クラス定義(Xファイル)
@@ -31,113 +32,129 @@ public:			// 誰でもアクセスできる
 	enum TYPE
 	{
 		// 通常モデル
-		TYPE_RIPPLE = 0,		// 波紋
-		TYPE_KARIPLAYER,		// 仮プレイヤー
-		TYPE_WOODBLOCK,			// 木箱
-		TYPE_WEAPONCAGE,		// 武器小屋
-		TYPE_FLOWERFRAC,		// 花瓶の破片
-		TYPE_PLASTICFRAC,		// プラスチックケース破片
-		TYPE_CAT_ATTACK,		// ネコの攻撃
-		TYPE_HONEY,				// 蜂蜜
-		TYPE_TOYCARSCREW,		// おもちゃの車(ネジ)
-		TYPE_TITLEWALL,			// タイトルの壁
-		TYPE_ROOMBA_SUB,		// ルンバのプロペラ
-		TYPE_TARAI,				// たらい
-		TYPE_NOTE4,				// 4分音符
-		TYPE_NOTE8,				// 8分音符
-		TYPE_NOTE16,			// 16分音符
-		TYPE_TRAPIRON,			// ネズミ捕りの鉄部分
-		TYPE_TRAPITEM,			// ネズミ捕り(アイテム)
-		TYPE_LEASHSET,			// 設置状態のリード
-		TYPE_PINSET,			// 設置状態の画鋲
-		TYPE_PINONE,			// 破片用の画鋲
-		TYPE_FANBLADE,			// 扇風機(羽根)
-		TYPE_CONSENT,			// コンセント
-		TYPE_DEATHARROW,		// 死亡矢印
-		TYPE_GARBAGE,			// ゴミ
+		TYPE_RIPPLE = 0,			// 波紋
+		TYPE_KARIPLAYER,			// 仮プレイヤー
+		TYPE_WOODBLOCK,				// 木箱
+		TYPE_WEAPONCAGE,			// 武器小屋
+		TYPE_FLOWERFRAC,			// 花瓶の破片
+		TYPE_PLASTICFRAC,			// プラスチックケース破片
+		TYPE_CAT_ATTACK,			// ネコの攻撃
+		TYPE_HONEY,					// 蜂蜜
+		TYPE_TOYCARSCREW,			// おもちゃの車(ネジ)
+		TYPE_TITLEWALL,				// タイトルの壁
+		TYPE_ROOMBA_SUB,			// ルンバのプロペラ
+		TYPE_TARAI,					// たらい
+		TYPE_NOTE4,					// 4分音符
+		TYPE_NOTE8,					// 8分音符
+		TYPE_NOTE16,				// 16分音符
+		TYPE_TRAPIRON,				// ネズミ捕りの鉄部分
+		TYPE_TRAPITEM,				// ネズミ捕り(アイテム)
+		TYPE_LEASHSET,				// 設置状態のリード
+		TYPE_PINSET,				// 設置状態の画鋲
+		TYPE_PINONE,				// 破片用の画鋲
+		TYPE_FANBLADE,				// 扇風機(羽根)
+		TYPE_CONSENT,				// コンセント
+		TYPE_DEATHARROW,			// 死亡矢印
+		TYPE_GARBAGE,				// ゴミ
+		TYPE_BOOKBLUE,				// 本(青)
+		TYPE_BOOKGREEN,				// 本(緑)
+		TYPE_BOOKYELLOW,			// 本(黄)
 
 		// ブロックモデル
-		TYPE_CARDBOARD,			// 段ボール
-		TYPE_TISSUEBOX,			// ティッシュ箱
-		TYPE_PENHOLDER,			// ペン立て
-		TYPE_REMOCON,			// リモコン
-		TYPE_BEAR,				// ブロック
-		TYPE_CLOCK,				// 時計
-		TYPE_RUBBISH,			// チリ紙
-		TYPE_MILKPACK,			// 牛乳パック
-		TYPE_OBAPHONE,			// オバフォン
-		TYPE_WII,				// Wii
-		TYPE_DS,				// DS
-		TYPE_HEADPHONE,			// ヘッドフォン
-		TYPE_PEN,				// ペン
-		TYPE_ACADAPTER,			// ACアダプター
-		TYPE_BUILDINGBLOCK,		// 積み木
-		TYPE_GLASSES,			// 眼鏡ケース
-		TYPE_PENCIL,			// 鉛筆
-		TYPE_PICTUREFRAME,		// 写真立て
-		TYPE_SHELF,				// 戸棚
-		TYPE_PULLSHELF,			// 引き出し棚
-		TYPE_KITCHEN,			// キッチン
-		TYPE_REIZOUKO,			// 冷蔵庫
-		TYPE_TABLE,				// テーブル
-		TYPE_CHAIR,				// 机の椅子
-		TYPE_CORKBOARD,			// コルクボード
-		TYPE_DESK,				// デスク
-		TYPE_DESKBOOK,			// デスク用の本
-		TYPE_EXTIMGISHER,		// 消火器
-		TYPE_KATEN,				// カーテン
-		TYPE_KATENRAIL,			// カーテンのレール
-		TYPE_TANSU02,			// たんす
+		TYPE_CARDBOARD,				// 段ボール
+		TYPE_TISSUEBOX,				// ティッシュ箱
+		TYPE_PENHOLDER,				// ペン立て
+		TYPE_REMOCON,				// リモコン
+		TYPE_BEAR,					// ブロック
+		TYPE_CLOCK,					// 時計
+		TYPE_RUBBISH,				// チリ紙
+		TYPE_MILKPACK,				// 牛乳パック
+		TYPE_OBAPHONE,				// オバフォン
+		TYPE_WII,					// Wii
+		TYPE_DS,					// DS
+		TYPE_HEADPHONE,				// ヘッドフォン
+		TYPE_PEN,					// ペン
+		TYPE_ACADAPTER,				// ACアダプター
+		TYPE_BUILDINGBLOCK,			// 積み木
+		TYPE_GLASSES,				// 眼鏡ケース
+		TYPE_PENCIL,				// 鉛筆
+		TYPE_PICTUREFRAME,			// 写真立て
+		TYPE_SHELF,					// 戸棚
+		TYPE_PULLSHELF,				// 引き出し棚
+		TYPE_KITCHEN,				// キッチン
+		TYPE_REIZOUKO,				// 冷蔵庫
+		TYPE_TABLE,					// テーブル
+		TYPE_CHAIR,					// 机の椅子
+		TYPE_CORKBOARD,				// コルクボード
+		TYPE_DESK,					// デスク
+		TYPE_DESKBOOK,				// デスク用の本
+		TYPE_EXTIMGISHER,			// 消火器
+		TYPE_KATEN,					// カーテン
+		TYPE_KATENRAIL,				// カーテンのレール
+		TYPE_TANSU02,				// たんす
 
 		// 障害物モデル
-		TYPE_HONEYBOTTLE,		// 蜂蜜のボトル
-		TYPE_SLIME,				// スライム
-		TYPE_HAIRBALL,			// 毬
-		TYPE_FLOWERVASE,		// 花瓶
-		TYPE_PETBOTTLE,			// ペットボトル
-		TYPE_TOYCARBODY,		// おもちゃの車(本体)
-		TYPE_ROOMBA_MAIN,		// ルンバの本体
-		TYPE_HIMO,				// ひも
-		TYPE_SPEAKER,			// スピーカー
-		TYPE_MOUSETRAP,			// ネズミ捕り
-		TYPE_LEASH,				// リード
-		TYPE_PIN,				// 画鋲
-		TYPE_ELECFAN,			// 扇風機(本体)
-		TYPE_CUP,				// コップ
-		TYPE_GARBAGECAN,		// ゴミ箱
+		TYPE_HONEYBOTTLE,			// 蜂蜜のボトル
+		TYPE_SLIME,					// スライム
+		TYPE_HAIRBALL,				// 毬
+		TYPE_FLOWERVASE,			// 花瓶
+		TYPE_PETBOTTLE,				// ペットボトル
+		TYPE_TOYCARBODY,			// おもちゃの車(本体)
+		TYPE_ROOMBA_MAIN,			// ルンバの本体
+		TYPE_HIMO,					// ひも
+		TYPE_SPEAKER,				// スピーカー
+		TYPE_MOUSETRAP,				// ネズミ捕り
+		TYPE_LEASH,					// リード
+		TYPE_PIN,					// 画鋲
+		TYPE_ELECFAN,				// 扇風機(本体)
+		TYPE_CUP,					// コップ
+		TYPE_GARBAGECAN,			// ゴミ箱
+		TYPE_TV,					// テレビ
+		TYPE_DYNAMITE,				// 爆弾
+		TYPE_BOOKRED,				// 本(赤)
+		TYPE_REDKATEN,				// 赤のカーテン
 
 		//ネズミモデル
-		TYPE_RAT_BODY,			// 体
-		TYPE_RAT_HEAD,			// 頭
-		TYPE_RAT_LHAND,			// 左手
-		TYPE_RAT_RHAND,			// 右手
-		TYPE_RAT_LLEG,			// 左足
-		TYPE_RAT_RLEG,			// 右足
+		TYPE_RAT_BODY,				// 体
+		TYPE_RAT_HEAD,				// 頭
+		TYPE_RAT_LHAND,				// 左手
+		TYPE_RAT_RHAND,				// 右手
+		TYPE_RAT_LLEG,				// 左足
+		TYPE_RAT_RLEG,				// 右足
 
 		//猫モデル
-		TYPE_CAT_BODY,			//体
-		TYPE_CAT_HEAD,			//頭
-		TYPE_CAT_LARM,			//左腕
-		TYPE_CAT_LHAND,			//左手
-		TYPE_CAT_RAEM,			//右腕
-		TYPE_CAT_RHAND,			//右手
-		TYPE_CAT_LFOOT,			//左腿
-		TYPE_CAT_LLEG,			//左足
-		TYPE_CAT_RFOOT,			//右腿
-		TYPE_CAT_RLEG,			//右足
+		TYPE_CAT_BODY,				//体
+		TYPE_CAT_HEAD,				//頭
+		TYPE_CAT_LARM,				//左腕
+		TYPE_CAT_LHAND,				//左手
+		TYPE_CAT_RAEM,				//右腕
+		TYPE_CAT_RHAND,				//右手
+		TYPE_CAT_LFOOT,				//左腿
+		TYPE_CAT_LLEG,				//左足
+		TYPE_CAT_RFOOT,				//右腿
+		TYPE_CAT_RLEG,				//右足
 
 		// ネズミモデル
-		TYPE_RAT_GHOST,			// 幽霊モデル
+		TYPE_RAT_GHOST,				// 幽霊モデル
 
 		// 3Dテキストモデル
-		TYPE_WINCAT_TEXT,		// ねこのかちテキスト
-		TYPE_WINRAT_TEXT,		// ねずみのかちテキスト
+		TYPE_WINCAT_TEXT,			// ねこのかちテキスト
+		TYPE_WINRAT_TEXT,			// ねずみのかちテキスト
+
+		// 玄関のモデル
+		TYPE_ENTRANCE_FLOOR,		// 玄関の床
+		TYPE_ENTRANCE_WALL,			// 玄関の壁
+		TYPE_SHOEBOX,				// 靴箱
+		TYPE_ENTRANCE_DOOR,			// 玄関のドア
+		TYPE_ENTRANCE_FRONT,		// 玄関の奥の壁
+		TYPE_ENTRANCE_SHOEFLOOR,	// 靴履き場の床
+		TYPE_ENTRANCE_SIDEWALL,		// 横の壁
 
 		// 当たり判定モデル
-		TYPE_COLLISION,			// 当たり判定のエディットモデル
+		TYPE_COLLISION,				// 当たり判定のエディットモデル
 
 		// エディットモデル
-		TYPE_MAX,				// 全モデルの総数
+		TYPE_MAX,					// 全モデルの総数
 	};
 
 	//************************************************************

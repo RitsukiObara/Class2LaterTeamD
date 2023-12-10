@@ -40,6 +40,10 @@ public:			// 誰でもアクセスできる
 		TYPE_FAN,			// 扇風機
 		TYPE_CUP,			// コップ
 		TYPE_GARBAGECAN,	// ゴミ
+		TYPE_TV,			// テレビ
+		TYPE_DYNAMITE,		// ダイナマイト
+		TYPE_BOOK,			// 本
+		TYPE_REDKATEN,		// 赤のカーテン
 		TYPE_MAX			// この列挙型の総数
 	};
 
@@ -62,7 +66,7 @@ public:			// 誰でもアクセスできる
 
 	virtual void SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type);			// 情報の設定処理
 
-	virtual bool Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type);	// 当たり判定処理
+	virtual bool Collision(D3DXVECTOR3* pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type);	// 当たり判定処理
 	virtual bool Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlayer::TYPE type);			// ヒット処理
 	virtual bool HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type) { return false; }							// ヒット処理
 	virtual void Action(void) {}											// ギミック起動処理
@@ -84,6 +88,7 @@ public:			// 誰でもアクセスできる
 
 	virtual D3DXVECTOR3 GetPosHead(void) { return NONE_D3DXVECTOR3; }
 	virtual D3DXVECTOR3 GetPosToes(void) { return NONE_D3DXVECTOR3; }
+	virtual void SlideOn(D3DXVECTOR3 pos, D3DXVECTOR3 move, CPlayer *pPlayer) {}
 
 	// 静的メンバ関数
 	static CObstacle* Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type);		// 生成処理

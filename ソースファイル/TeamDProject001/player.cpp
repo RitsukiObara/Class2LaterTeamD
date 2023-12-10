@@ -39,8 +39,6 @@ namespace
 {
 	static const D3DXVECTOR3 SMASH_MOVE = D3DXVECTOR3(10.0f, 11.0f, 10.0f);		// 吹き飛び状態の移動量
 	static const D3DXCOLOR SMASH_COLOR = D3DXCOLOR(0.9f, 0.0f, 0.1f, 0.7f);		// 吹き飛び状態の時の色
-	static const float GRAVITY = 1.0f;					// 重力
-	static const float ADD_MOVE_Y = 30.0f;				// 浮力
 	static const float CAT_CAMERA_HEIGHT = 200.0f;		// 猫のカメラの高さ
 	static const float CAT_CAMERA_DIS = 300.0f;			// 猫のカメラの視点と注視点の高さの差分(角度)
 	static const float RAT_CAMERA_HEIGHT = 100.0f;		// 猫のカメラの高さ
@@ -52,8 +50,8 @@ namespace
 	static const int STUN_WAIT = 120;					// オブジェクト無効の待機時間
 	static const int DEATH_WAIT = 120;					// 死亡時の待機時間
 	static const int SMASH_WAIT = 40;					// 吹き飛び状態のカウント数
-	static const int STUN_FLASH_INTERVAL = 12;				// プレイヤーの点滅間隔
-	static const int DEATH_FLASH_INTERVAL = 4;				// プレイヤーの点滅間隔
+	static const int STUN_FLASH_INTERVAL = 12;			// プレイヤーの点滅間隔
+	static const int DEATH_FLASH_INTERVAL = 4;			// プレイヤーの点滅間隔
 }
 
 //==============================
@@ -102,8 +100,8 @@ void CPlayer::Box(void)
 	m_type = TYPE_CAT;					// 種類
 	m_nPlayerIdx = NONE_PLAYERIDX;		// プレイヤーのインデックス
 	m_fSpeed = 0.0f;					// 速度
+	m_fSpeedCopy = 0.0f;				// 速度のコピー
 	m_fRotDest = 0.0f;					// 目標
-	m_fRotDiff = 0.0f;					// 差分
 	m_fStunHeight = 0.0f;				// 気絶が出る高さ
 	m_bAttack = false;					// 攻撃したか
 	m_bMove = false;					// 移動しているか
@@ -151,8 +149,8 @@ HRESULT CPlayer::Init(void)
 	m_type = TYPE_CAT;					// 種類
 	m_nPlayerIdx = NONE_PLAYERIDX;		// プレイヤーのインデックス
 	m_fSpeed = 0.0f;					// 速度
+	m_fSpeedCopy = 0.0f;				// 速度のコピー
 	m_fRotDest = 0.0f;					// 目標
-	m_fRotDiff = 0.0f;					// 差分
 	m_fStunHeight = 0.0f;				// 気絶が出る高さ
 	m_bAttack = false;					// 攻撃したか
 	m_bMove = false;					// 移動しているか
@@ -410,6 +408,7 @@ void CPlayer::SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 	m_type = type;						// 種類
 	m_nPlayerIdx = nID;					// プレイヤーのインデックス
 	m_fSpeed = 0.0f;					// 速度
+	m_fSpeedCopy = 0.0f;				// 速度のコピー
 	m_bAttack = false;					// 攻撃したか
 	m_bMove = false;					// 移動しているか
 
@@ -589,10 +588,6 @@ void CPlayer::MoveControl(void)
 		// 速度を設定する
 		m_fSpeed = 0.0f;
 	}
-
-	// 移動量を設定する
-	m_move.x = -sinf(rot.y) * m_fSpeed;
-	m_move.z = -cosf(rot.y) * m_fSpeed;
 }
 
 //=======================================
@@ -602,6 +597,10 @@ void CPlayer::Move(void)
 {
 	// 位置を取得する
 	D3DXVECTOR3 pos = GetPos();
+
+	// 移動量を設定する
+	m_move.x = -sinf(m_fRotDest) * m_fSpeed;
+	m_move.z = -cosf(m_fRotDest) * m_fSpeed;
 
 	// 移動量を加算する
 	pos += m_move;
@@ -843,6 +842,11 @@ void CPlayer::StunStateManager(void)
 		break;
 
 	case STUNSTATE_STUN:	//気絶状態
+
+		if (m_pStun != NULL)
+		{
+			m_pStun->SetPos(D3DXVECTOR3(GetPos().x, GetPos().y + m_fStunHeight, GetPos().z));
+		}
 
 		// カウントを減算する
 		m_StunStateCount--;
@@ -1379,6 +1383,24 @@ float CPlayer::GetSpeed(void) const
 {
 	// 速度を返す
 	return m_fSpeed;
+}
+
+//=======================================
+// 速度のコピーの設定処理
+//=======================================
+void CPlayer::SetSpeedCopy(const float fSpeed)
+{
+	// 速度のコピーを設定する
+	m_fSpeedCopy = fSpeed;
+}
+
+//=======================================
+// 速度のコピーの取得処理
+//=======================================
+float CPlayer::GetSpeedCopy(void) const
+{
+	// 速度のコピーを返す
+	return m_fSpeedCopy;
 }
 
 //=======================================

@@ -161,6 +161,7 @@
     <ClCompile Include="answer.cpp" />
     <ClCompile Include="block.cpp" />
     <ClCompile Include="block_manager.cpp" />
+    <ClCompile Include="book.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="car_gear.cpp" />
     <ClCompile Include="Cat.cpp" />
@@ -174,10 +175,12 @@
     <ClCompile Include="confetti.cpp" />
     <ClCompile Include="countdown.cpp" />
     <ClCompile Include="cup.cpp" />
+    <ClCompile Include="curtain.cpp" />
     <ClCompile Include="danger_mark.cpp" />
     <ClCompile Include="death_arrow.cpp" />
     <ClCompile Include="debugproc.cpp" />
     <ClCompile Include="destruction.cpp" />
+    <ClCompile Include="dynamite.cpp" />
     <ClCompile Include="edit.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="effect2D.cpp" />
@@ -279,6 +282,7 @@
     <ClCompile Include="speaker.cpp" />
     <ClCompile Include="speech_message.cpp" />
     <ClCompile Include="stun.cpp" />
+    <ClCompile Include="switch.cpp" />
     <ClCompile Include="tarai.cpp" />
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="time.cpp" />
@@ -303,6 +307,7 @@
     <ClInclude Include="answer.h" />
     <ClInclude Include="block.h" />
     <ClInclude Include="block_manager.h" />
+    <ClInclude Include="book.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="car_gear.h" />
     <ClInclude Include="Cat.h" />
@@ -316,10 +321,12 @@
     <ClInclude Include="confetti.h" />
     <ClInclude Include="countdown.h" />
     <ClInclude Include="cup.h" />
+    <ClInclude Include="curtain.h" />
     <ClInclude Include="danger_mark.h" />
     <ClInclude Include="death_arrow.h" />
     <ClInclude Include="debugproc.h" />
     <ClInclude Include="destruction.h" />
+    <ClInclude Include="dynamite.h" />
     <ClInclude Include="edit.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="effect2D.h" />
@@ -418,6 +425,7 @@
     <ClInclude Include="speaker.h" />
     <ClInclude Include="speech_message.h" />
     <ClInclude Include="stun.h" />
+    <ClInclude Include="switch.h" />
     <ClInclude Include="tarai.h" />
     <ClInclude Include="texture.h" />
     <ClInclude Include="time.h" />

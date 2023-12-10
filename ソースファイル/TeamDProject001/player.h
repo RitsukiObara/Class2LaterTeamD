@@ -126,6 +126,9 @@ public:			// 誰でもアクセスできる
 	void SetSpeed(const float fSpeed);			// 速度の設定処理
 	float GetSpeed(void) const;					// 速度の取得処理
 
+	void SetSpeedCopy(const float fSpeed);		// 速度のコピーの設定処理
+	float GetSpeedCopy(void) const;				// 速度のコピーの取得処理
+
 	void SetStunHeight(const float fHeight);	// 気絶の出る高さの設定処理
 
 	void SetEnableAttack(const bool bAttack);	// 攻撃判定の設定処理
@@ -203,8 +206,8 @@ private:		// 自分だけアクセスできる
 	TYPE m_type;				// 種類
 	int m_nPlayerIdx;			// プレイヤーのインデックス
 	float m_fSpeed;				// 速度
+	float m_fSpeedCopy;			// 速度のコピー
 	float m_fRotDest;			// 目標
-	float m_fRotDiff;			// 差分
 	float m_fStunHeight;		// 気絶が出る高さ
 	bool m_bAttack;				// 攻撃したか
 	bool m_bMove;				// 移動しているか

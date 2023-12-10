@@ -188,7 +188,7 @@ void CRoomba::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE
 		{ // プロペラが NULL の場合
 
 			// モデルを生成する
-			m_apSub[nCnt] = new CModel(TYPE_NONE, PRIORITY_BLOCK);
+			m_apSub[nCnt] = CModel::Create(TYPE_NONE, PRIORITY_BLOCK);
 
 			if (m_apSub[nCnt] != NULL)
 			{ // プロペラが NULL の場合
@@ -244,17 +244,17 @@ void CRoomba::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE
 //=====================================
 // 当たり判定処理
 //=====================================
-bool CRoomba::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CRoomba::Collision(D3DXVECTOR3* pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
 {
 	// 位置、半径、高さを取得する
 	D3DXVECTOR3 objPos = GetPos();
 	float objRadius = GetFileData().fRadius;
 	float objHeight = GetFileData().vtxMax.y;
 
-	if (objPos.y <= pos.y + collSize.y &&
-		objPos.y + objHeight >= pos.y)
+	if (objPos.y <= pos->y + collSize.y &&
+		objPos.y + objHeight >= pos->y)
 	{
-		if (useful::CylinderCollision(&pos, objPos, collSize.x + objRadius))
+		if (useful::CylinderCollision(pos, objPos, collSize.x + objRadius))
 		{ // 円の中に入る場合
 
 			// true を返す

@@ -30,8 +30,12 @@
 #include "Pin.h"
 #include "electricfan.h"
 #include "cup.h"
-
 #include "garbagecan.h"
+#include "tv.h"
+#include "dynamite.h"
+#include "book.h"
+#include "curtain.h"
+
 //==============================
 // コンストラクタ
 //==============================
@@ -345,9 +349,40 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, con
 			break;
 
 		case CObstacle::TYPE_GARBAGECAN:		// 起動系
+
+			// ゴミ箱を生成する
 			pObstacle = new CGarbage;
 
 			break;
+
+		case CObstacle::TYPE_TV:		// テレビ
+
+			// テレビを生成する
+			pObstacle = new CTv;
+
+			break;
+
+		case CObstacle::TYPE_DYNAMITE:		// 爆弾
+
+			// ダイナマイトを生成する
+			pObstacle = new CDynamite;
+
+			break;
+
+		case CObstacle::TYPE_BOOK:
+
+			// 本を生成する
+			pObstacle = new CBook;
+
+			break;
+
+		case CObstacle::TYPE_REDKATEN:
+
+			// カーテンを生成する
+			pObstacle = new CCurtain;
+
+			break;
+
 		default:
 
 			//停止
@@ -400,7 +435,7 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, con
 //=====================================
 // 当たり判定処理
 //=====================================
-bool CObstacle::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CObstacle::Collision(D3DXVECTOR3* pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
 {
 	// false を返す
 	return false;

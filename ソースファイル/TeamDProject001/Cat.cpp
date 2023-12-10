@@ -187,9 +187,6 @@ void CCat::Update(void)
 		m_AttackState == ATTACKSTATE_MOVE)
 	{// 移動状態の時
 
-		// 速度を設定する
-		SetSpeed(MOVE_SPEED);
-
 		if (GetTutorial() != true)
 		{
 			if (GetStunState() != STUNSTATE_SMASH)
@@ -232,6 +229,12 @@ void CCat::Update(void)
 	// 角度の正規化
 	RotNormalize();
 
+	// ブロックとの当たり判定
+	collision::BlockCollision(this, GetSizeColl());
+
+	// 更新処理
+	CPlayer::Update();
+
 	if (GetPlayerID() != nullptr)
 	{ // プレイヤーのID表示が NULL じゃない場合
 
@@ -239,12 +242,6 @@ void CCat::Update(void)
 		GetPlayerID()->SetPos(D3DXVECTOR3(GetPos().x, GetPos().y + ID_HEIGHT, GetPos().z));
 		GetPlayerID()->Update();
 	}
-
-	// 更新処理
-	CPlayer::Update();
-
-	// ブロックとの当たり判定
-	collision::BlockCollision(this, GetSizeColl());
 
 	// デバッグ表示
 	DebugMessage();
@@ -512,6 +509,10 @@ void CCat::SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 
 	// 当たり判定のサイズの設定
 	SetSizeColl(CAT_SIZE);
+
+	// 移動量を設定する
+	SetSpeed(MOVE_SPEED);
+	SetSpeedCopy(GetSpeed());
 
 	// 全ての値を初期化する
 	m_posDest = pos;		// 目的の位置

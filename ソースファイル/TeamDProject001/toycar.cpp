@@ -191,7 +191,7 @@ void CToyCar::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE
 //=====================================
 // “–‚½‚è”»’èˆ—
 //=====================================
-bool CToyCar::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CToyCar::Collision(D3DXVECTOR3* pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
 {
 	// Å¬’l‚ÆÅ‘å’l‚ğéŒ¾
 	D3DXVECTOR3 vtxMin, vtxMax;

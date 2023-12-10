@@ -139,7 +139,7 @@ void CHoney::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE 
 //=====================================
 // ìñÇΩÇËîªíËèàóù
 //=====================================
-bool CHoney::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CHoney::Collision(D3DXVECTOR3* pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
 {
 	// ç≈ëÂílÇ∆ç≈è¨ílÇê›íËÇ∑ÇÈ
 	D3DXVECTOR3 vtxMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);
