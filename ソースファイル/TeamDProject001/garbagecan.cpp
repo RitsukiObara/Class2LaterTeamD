@@ -18,6 +18,13 @@
 #include "block.h"
 #include "block_manager.h"
 
+//-------------------------------------------
+// マクロ定義
+//-------------------------------------------
+#define SPEED		(2.0f)		// 速度
+#define GRAVITY		(0.4f)		// 重力
+#define ROT_MOVE	(0.05f)		// 向きの移動量
+
 //==============================
 // コンストラクタ
 //==============================
@@ -27,6 +34,7 @@ CGarbage::CGarbage() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK
 	m_State = STATE_GARBAGECAN;		// 状態
 	m_Slide = SLIDE_STOP;
 	m_pPlayer = NULL;
+	m_move = NONE_D3DXVECTOR3;
 	m_SlideMove = NONE_D3DXVECTOR3;
 	m_PlayerPos = NONE_D3DXVECTOR3;
 
@@ -132,17 +140,67 @@ void CGarbage::Draw(void)
 //=====================================
 void CGarbage::StateManager(void)
 {
+	// 位置と向きを設定する
+	D3DXVECTOR3 pos = GetPos();
+	D3DXVECTOR3 rot = GetRot();
+
 	switch (m_State)
 	{
-	case CGarbage::STATE_GARBAGECAN:	// ゴミ箱
-
-
+	case STATE_GARBAGECAN:		// ゴミ箱
 
 		break;
-	case CGarbage::STATE_BANANA_NORMAL:		// バナナの皮
+
+	case STATE_FALL:			// 落下状態
+
+		// 移動量を減算する
+		m_move.y -= GRAVITY;
+
+		// 位置を移動する
+		pos += m_move;
+
+		// 向きを移動する
+		rot.z += ROT_MOVE;
+
+		// 向きの正規化
+		useful::RotNormalize(&rot.z);
+
+		if (pos.y <= 0.0f)
+		{ // 地面以下になった場合
+
+			// 移動量を初期化する
+			m_move = NONE_D3DXVECTOR3;
+
+			// 向きを初期化する
+			rot.z = 0.0f;
+
+			// バナナの皮状態にする
+			m_State = STATE_BANANA_NORMAL;
+
+			// モデルの情報を設定する
+			SetFileData(CXFile::TYPE_GARBAGE);
+		}
+
+		break;
+
+	case STATE_BANANA_NORMAL:	// バナナの皮
+
+		break;
+
+	case STATE_BANANA_SLIDE:	// バナナ滑り
+
+		break;
+
+	default:
+
+		// 停止
+		assert(false);
 
 		break;
 	}
+
+	// 位置を向きを適用する
+	SetPos(pos);
+	SetRot(rot);
 }
 
 //=====================================
@@ -222,10 +280,12 @@ void CGarbage::Break(void)
 	if (m_State == STATE_GARBAGECAN)
 	{ // ゴミ箱状態の場合
 
-		m_State = STATE_BANANA_NORMAL;
+		m_State = STATE_FALL;
 
-		// モデルの情報を設定する
-		SetFileData(CXFile::TYPE_GARBAGE);
+		// 移動量を設定する
+		m_move.x = sinf(GetRot().x + (D3DX_PI * -0.5f)) * SPEED;
+		m_move.y = 0.0f;
+		m_move.z = cosf(GetRot().x + (D3DX_PI * -0.5f)) * SPEED;
 	}
 
 	// アクション状況を true にする

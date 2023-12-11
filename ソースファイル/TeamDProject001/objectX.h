@@ -135,6 +135,7 @@ public:			// 誰でもアクセスできる
 		TYPE_CAT_LLEG,				//左足
 		TYPE_CAT_RFOOT,				//右腿
 		TYPE_CAT_RLEG,				//右足
+		TYPE_CAT_FLAG,				//白旗
 
 		// ネズミモデル
 		TYPE_RAT_GHOST,				// 幽霊モデル

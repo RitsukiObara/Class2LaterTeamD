@@ -12,6 +12,8 @@
 #include "useful.h"
 #include "motion.h"
 #include "manager.h"
+#include "result.h"
+#include "game.h"
 
 #include "debugproc.h"
 
@@ -372,8 +374,24 @@ void CMotion::Load(STYLE type)
 	{
 	case TYPE_CAT:			// 猫
 					
-		// 猫のモーションのロード処理
-		LoadMotion("data/TXT/motion_cat.txt");
+		if (CManager::Get()->GetMode() == CScene::MODE_RESULT)
+		{ // リザルト　ネコの負け
+			if (CResult::GetState() == CGame::STATE_RAT_WIN)
+			{
+				// 猫のモーションのロード処理
+				LoadMotion("data/TXT/motion_losecat.txt");
+			}
+			if (CResult::GetState() == CGame::STATE_CAT_WIN)
+			{
+				// 猫のモーションのロード処理
+				LoadMotion("data/TXT/motion_cat.txt");
+			}
+		}
+		else
+		{
+			// 猫のモーションのロード処理
+			LoadMotion("data/TXT/motion_cat.txt");
+		}
 
 		break;
 
