@@ -175,8 +175,8 @@ void CRat::Update(void)
 				MoveControl();
 			}
 
-			// UŒ‚ˆ—
-			Attack();
+			//// UŒ‚ˆ—
+			//Attack();
 
 			// ¶‚«•Ô‚è‚Ì“–‚½‚è”»’è
 			ResurrectionCollision();

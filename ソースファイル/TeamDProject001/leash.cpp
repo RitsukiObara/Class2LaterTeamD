@@ -73,7 +73,7 @@ HRESULT CLeash::Init(void)
 //========================================
 void CLeash::Uninit(void)
 {
-	// I—¹ˆ—
+	// I—¹ˆ—y
 	CObstacle::Uninit();
 }
 
