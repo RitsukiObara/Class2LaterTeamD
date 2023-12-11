@@ -101,8 +101,17 @@ HRESULT CCat::Init(void)
 		return E_FAIL;
 	}
 
-	// ベタ打ち
-	SetNumModel(10);
+	if (CManager::Get()->GetMode() == CScene::MODE_RESULT && CResult::GetState() == CGame::STATE_RAT_WIN)
+	{ // リザルト　ネコの負け
+		// ベタ打ち
+		SetNumModel(11);
+	}
+	else
+	{
+		// ベタ打ち
+		SetNumModel(10);
+
+	}
 
 	// データの設定処理
 	CCharacter::SetData();
@@ -571,9 +580,9 @@ void CCat::MotionManager(void)
 		if (CResult::GetState() == CGame::STATE_RAT_WIN)
 		{ // ねずみのかち
 
-			if (nMotionType != MOTIONTYPE_NEUTRAL)
+			if (nMotionType != MOTIONTYPE_LOSE)
 			{
-				nMotionType = MOTIONTYPE_NEUTRAL;
+				nMotionType = MOTIONTYPE_LOSE;
 
 				// モーションの設定処理
 				GetMotion()->Set(nMotionType);
@@ -582,9 +591,9 @@ void CCat::MotionManager(void)
 		else if (CResult::GetState() == CGame::STATE_CAT_WIN)
 		{ // ねこのかち
 
-			if (nMotionType != MOTIONTYPE_MOVE)
+			if (nMotionType != MOTIONTYPE_WIN)
 			{
-				nMotionType = MOTIONTYPE_MOVE;
+				nMotionType = MOTIONTYPE_WIN;
 
 				// モーションの設定処理
 				GetMotion()->Set(nMotionType);
@@ -593,12 +602,32 @@ void CCat::MotionManager(void)
 	}
 	else
 	{ // リザルト以外のとき
-
-		if (m_AttackState == ATTACKSTATE_STANDBY)
+		if (GetStunState() == STUNSTATE_STUN)
 		{
-			if (nMotionType != MOTIONTYPE_JUMP)
+			if (nMotionType != MOTIONTYPE_STUN)
 			{
-				nMotionType = MOTIONTYPE_JUMP;
+				nMotionType = MOTIONTYPE_STUN;
+
+				// モーションの設定処理
+				GetMotion()->Set(nMotionType);
+			}
+		}
+		else if (GetStunState() == STUNSTATE_SMASH)
+		{
+			if (nMotionType != MOTIONTYPE_KNOCKBACK)
+			{
+				nMotionType = MOTIONTYPE_KNOCKBACK;
+
+				// モーションの設定処理
+				GetMotion()->Set(nMotionType);
+			}
+		}
+
+		else if (m_AttackState == ATTACKSTATE_STANDBY)
+		{
+			if (nMotionType != MOTIONTYPE_ATTACK)
+			{
+				nMotionType = MOTIONTYPE_ATTACK;
 
 				// モーションの設定処理
 				GetMotion()->Set(nMotionType);
@@ -615,6 +644,7 @@ void CCat::MotionManager(void)
 				GetMotion()->Set(nMotionType);
 			}
 		}
+
 		else
 		{
 			if (nMotionType != MOTIONTYPE_NEUTRAL)
@@ -625,6 +655,7 @@ void CCat::MotionManager(void)
 				GetMotion()->Set(nMotionType);
 			}
 		}
+
 	}
 }
 

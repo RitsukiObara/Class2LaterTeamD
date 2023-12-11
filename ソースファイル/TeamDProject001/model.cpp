@@ -475,7 +475,7 @@ CXFile::SXFile CModel::GetFileData(void)
 D3DXMATERIAL CModel::GetMaterial(const int nCnt)
 {
 	// ポインタを宣言
-	D3DXMATERIAL     *pMat;						// マテリアルデータへのポインタ
+	D3DXMATERIAL *pMat;						// マテリアルデータへのポインタ
 
 	// マテリアルデータへのポインタを取得
 	pMat = (D3DXMATERIAL*)m_XFileData.pBuffMat->GetBufferPointer();

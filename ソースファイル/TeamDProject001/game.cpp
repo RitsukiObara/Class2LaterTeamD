@@ -148,8 +148,7 @@ HRESULT CGame::Init(void)
 	//CObstacle::Create(D3DXVECTOR3(-600.0f, 650.0f, 0.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_HIMO);
 
 	//// スピーカーの生成処理
-	//pObstacle = CObstacle::Create(D3DXVECTOR3(900.0f, 0.0f, 900.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_SPEAKER);
-	//pObstacle->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.25f, 0.0f));
+	CObstacle::Create(D3DXVECTOR3(900.0f, 0.0f, 900.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.25f, 0.0f), CObstacle::TYPE::TYPE_SPEAKER);
 
 	//pObstacle = CObstacle::Create(D3DXVECTOR3(1000.0f, 0.0f, 900.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_SPEAKER);
 	//pObstacle->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.0f, 0.0f));
