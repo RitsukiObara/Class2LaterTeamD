@@ -187,16 +187,16 @@ void CHimo::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE t
 //=====================================
 // ヒット処理
 //=====================================
-bool CHimo::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CHimo::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
 	for (int nCntTarai = 0; nCntTarai < MAX_TARAI; nCntTarai++)
 	{
 		if (m_apTarai[nCntTarai] != nullptr)
 		{ // タライが NULL じゃない場合
 
-			if (pos.y + collSize.y <= m_apTarai[nCntTarai]->GetPosOld().y + m_apTarai[nCntTarai]->GetFileData().vtxMin.y &&
-				pos.y + collSize.y >= m_apTarai[nCntTarai]->GetPos().y + m_apTarai[nCntTarai]->GetFileData().vtxMin.y &&
-				useful::CylinderInner(pos, m_apTarai[nCntTarai]->GetPos(), m_apTarai[nCntTarai]->GetFileData().fRadius + collSize.x) == true)
+			if (pPlayer->GetPos().y + collSize.y <= m_apTarai[nCntTarai]->GetPosOld().y + m_apTarai[nCntTarai]->GetFileData().vtxMin.y &&
+				pPlayer->GetPos().y + collSize.y >= m_apTarai[nCntTarai]->GetPos().y + m_apTarai[nCntTarai]->GetFileData().vtxMin.y &&
+				useful::CylinderInner(pPlayer->GetPos(), m_apTarai[nCntTarai]->GetPos(), m_apTarai[nCntTarai]->GetFileData().fRadius + collSize.x) == true)
 			{ // タライが頭上に落ちてきた場合
 
 				// true を返す
@@ -212,9 +212,9 @@ bool CHimo::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlay
 //=====================================
 // ヒット処理
 //=====================================
-bool CHimo::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type)
+bool CHimo::HitCircle(CPlayer* pPlayer, const float Radius)
 {
-	if (useful::CircleCollisionXZ(pos, GetPos(), Radius, GetFileData().fRadius) == true)
+	if (useful::CircleCollisionXZ(pPlayer->GetPos(), GetPos(), Radius, GetFileData().fRadius) == true)
 	{//円の範囲内の場合tureを返す
 		return true;
 	}

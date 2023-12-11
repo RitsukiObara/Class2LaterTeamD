@@ -177,9 +177,9 @@ void CMouseTrap::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const T
 //=====================================
 // ヒット処理
 //=====================================
-bool CMouseTrap::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CMouseTrap::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
-	if (type == CPlayer::TYPE_RAT)
+	if (pPlayer->GetType() == CPlayer::TYPE_RAT)
 	{ // 種類がネズミの場合
 
 		bool bPosbool = false, bPosOldbool = false, bVecbool = false, bVecboolOld = false;
@@ -219,9 +219,9 @@ bool CMouseTrap::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const 
 			//ベクトル化
 			vecLine = vec[nCnt2] - vec[nCnt];
 
-			vecMove = pos - GetPosOld();
+			vecMove = pPlayer->GetPos() - GetPosOld();
 
-			vecToPos = pos - vec[nCnt];
+			vecToPos = pPlayer->GetPos() - vec[nCnt];
 
 
 			//各ベクトルの算出と交差判定
@@ -270,7 +270,7 @@ bool CMouseTrap::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const 
 			bInside[nCnt] = bPosbool;
 		}
 		//上からの判定
-		if (bInside[0] == bInside[1] && bInside[1] == bInside[2] && bInside[2] == bInside[3] && objpos.y + GetFileData().vtxMax.y > pos.y)
+		if (bInside[0] == bInside[1] && bInside[1] == bInside[2] && bInside[2] == bInside[3] && objpos.y + GetFileData().vtxMax.y > pPlayer->GetPos().y)
 		{
 			// 移動状態にする
 			m_state = STATE_MOVE;

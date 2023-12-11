@@ -140,32 +140,38 @@ void CHairBall::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TY
 //=====================================
 // 当たり判定処理
 //=====================================
-bool CHairBall::Collision(D3DXVECTOR3* pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CHairBall::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
-	if (pos->y <= GetPos().y + GetFileData().vtxMax.y &&
-		pos->y + collSize.y >= GetPos().y + GetFileData().vtxMin.y)
+	// 位置を取得する
+	D3DXVECTOR3 pos = pPlayer->GetPos();
+
+	if (pos.y <= GetPos().y + GetFileData().vtxMax.y &&
+		pos.y + collSize.y >= GetPos().y + GetFileData().vtxMin.y)
 	{ // 毬と衝突した場合
 
 		// 円柱の当たり判定処理
-		if (useful::CylinderCollision(pos, GetPos(), GetFileData().fRadius + collSize.x) == true)
+		if (useful::CylinderCollision(&pos, GetPos(), GetFileData().fRadius + collSize.x) == true)
 		{ // 当たり判定が false の場合
 
-			if (posOld.y >= GetPos().y + GetFileData().vtxMax.y &&
-				pos->y <= GetPos().y + GetFileData().vtxMax.y)
+			if (pPlayer->GetPosOld().y >= GetPos().y + GetFileData().vtxMax.y &&
+				pos.y <= GetPos().y + GetFileData().vtxMax.y)
 			{ // 上からの当たり判定
 
 				// 縦の位置を設定する
-				pos->y = GetPos().y + GetFileData().vtxMax.y + 0.01f;
+				pos.y = GetPos().y + GetFileData().vtxMax.y + 0.01f;
 			}
-			else if (posOld.y + collSize.y <= GetPos().y + GetFileData().vtxMin.y &&
-				pos->y + collSize.y >= GetPos().y + GetFileData().vtxMin.y)
+			else if (pPlayer->GetPosOld().y + collSize.y <= GetPos().y + GetFileData().vtxMin.y &&
+				pos.y + collSize.y >= GetPos().y + GetFileData().vtxMin.y)
 			{ // 下からの当たり判定
 
 				// 縦の位置を設定する
-				pos->y = GetPos().y + GetFileData().vtxMin.y - collSize.y - 0.01f;
+				pos.y = GetPos().y + GetFileData().vtxMin.y - collSize.y - 0.01f;
 			}
 		}
 	}
+
+	// 位置を適用する
+	pPlayer->SetPos(pos);
 
 	// false の場合
 	return false;
@@ -174,18 +180,18 @@ bool CHairBall::Collision(D3DXVECTOR3* pos, const D3DXVECTOR3& posOld, const D3D
 //=====================================
 // ヒット処理
 //=====================================
-bool CHairBall::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CHairBall::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
 	// ターゲットの位置と方向を宣言
-	D3DXVECTOR3 Targetpos = pos;
+	D3DXVECTOR3 Targetpos = pPlayer->GetPos();
 	float fAngle = 0.0f;
 
-	if (type == CPlayer::TYPE_CAT)
+	if (pPlayer->GetType() == CPlayer::TYPE_CAT)
 	{ // ネコの場合
 
-		if (pos.y <= GetPos().y + GetFileData().vtxMax.y &&
-			pos.y + collSize.y >= GetPos().y + GetFileData().vtxMin.y &&
-			useful::CylinderInner(pos, GetPos(), GetFileData().fRadius + collSize.x) == true)
+		if (Targetpos.y <= GetPos().y + GetFileData().vtxMax.y &&
+			Targetpos.y + collSize.y >= GetPos().y + GetFileData().vtxMin.y &&
+			useful::CylinderInner(Targetpos, GetPos(), GetFileData().fRadius + collSize.x) == true)
 		{ // 毬と衝突した場合
 
 			// 吹き飛ばし状態にする
@@ -213,8 +219,8 @@ bool CHairBall::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const C
 	{ // 上記以外
 
 		if (m_state == STATE_SMASH &&
-			pos.y <= GetPos().y + GetFileData().vtxMax.y &&
-			pos.y + collSize.y >= GetPos().y + GetFileData().vtxMin.y &&
+			Targetpos.y <= GetPos().y + GetFileData().vtxMax.y &&
+			Targetpos.y + collSize.y >= GetPos().y + GetFileData().vtxMin.y &&
 			useful::CylinderCollision(&Targetpos, GetPos(), GetFileData().fRadius + collSize.x) == true)
 		{ // 毬と衝突した場合
 
@@ -255,7 +261,7 @@ void CHairBall::Gravity(void)
 	D3DXVECTOR3 pos = GetPos();
 
 	// 重力処理
-	useful::Gravity(&m_move.y, pos, GRAVITY);
+	useful::Gravity(&m_move.y, &pos.y, GRAVITY);
 	
 	// 位置を設定する
 	SetPos(pos);

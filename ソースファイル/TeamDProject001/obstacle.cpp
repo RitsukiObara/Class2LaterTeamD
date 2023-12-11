@@ -435,7 +435,7 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, con
 //=====================================
 // ìñÇΩÇËîªíËèàóù
 //=====================================
-bool CObstacle::Collision(D3DXVECTOR3* pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CObstacle::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
 	// false Çï‘Ç∑
 	return false;
@@ -444,7 +444,7 @@ bool CObstacle::Collision(D3DXVECTOR3* pos, const D3DXVECTOR3& posOld, const D3D
 //=====================================
 // ÉqÉbÉgèàóù
 //=====================================
-bool CObstacle::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CObstacle::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
 	// false Çï‘Ç∑
 	return false;
