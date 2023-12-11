@@ -208,18 +208,19 @@ void CSpeaker::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYP
 //=====================================
 // 当たり判定処理
 //=====================================
-bool CSpeaker::Collision(D3DXVECTOR3* pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CSpeaker::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
-	// 最小値と最大値を設定する
+	// 位置と最小値と最大値を設定する
+	D3DXVECTOR3 pos = pPlayer->GetPos();
 	D3DXVECTOR3 vtxMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);
 	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);
 
 	// 六面体の当たり判定
 	if (collision::HexahedronCollision
 	(
-		pos,					// プレイヤーの位置
+		&pos,					// プレイヤーの位置
 		GetPos(),				// 位置
-		posOld,					// プレイヤーの前回の位置
+		pPlayer->GetPosOld(),	// プレイヤーの前回の位置
 		GetPosOld(),			// 前回の位置
 		vtxMin,					// プレイヤーの最小値
 		GetFileData().vtxMin,	// 最小値
@@ -227,6 +228,9 @@ bool CSpeaker::Collision(D3DXVECTOR3* pos, const D3DXVECTOR3& posOld, const D3DX
 		GetFileData().vtxMax	// 最大値
 	) == true)
 	{ // 当たった場合
+
+		// 位置を適用する
+		pPlayer->SetPos(pos);
 
 		// true を返す
 		return true;
@@ -239,16 +243,16 @@ bool CSpeaker::Collision(D3DXVECTOR3* pos, const D3DXVECTOR3& posOld, const D3DX
 //=====================================
 // ヒット処理
 //=====================================
-bool CSpeaker::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CSpeaker::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
 	for (int nCntNote = 0; nCntNote < MAX_NOTE; nCntNote++)
 	{
 		if (m_apNote[nCntNote] != nullptr)
 		{ // 音符が NULL じゃない場合
 
-			if (pos.y <= m_apNote[nCntNote]->GetPos().y + m_apNote[nCntNote]->GetFileData().vtxMax.y &&
-				pos.y + collSize.y >= m_apNote[nCntNote]->GetPos().y + m_apNote[nCntNote]->GetFileData().vtxMin.y &&
-				useful::CylinderInner(pos,m_apNote[nCntNote]->GetPos(),m_apNote[nCntNote]->GetFileData().fRadius + collSize.x) == true)
+			if (pPlayer->GetPos().y <= m_apNote[nCntNote]->GetPos().y + m_apNote[nCntNote]->GetFileData().vtxMax.y &&
+				pPlayer->GetPos().y + collSize.y >= m_apNote[nCntNote]->GetPos().y + m_apNote[nCntNote]->GetFileData().vtxMin.y &&
+				useful::CylinderInner(pPlayer->GetPos(), m_apNote[nCntNote]->GetPos(), m_apNote[nCntNote]->GetFileData().fRadius + collSize.x) == true)
 			{ // 当たり判定の中に入った場合
 
 				// true を返す
@@ -264,9 +268,9 @@ bool CSpeaker::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CP
 //=====================================
 // ヒット処理
 //=====================================
-bool CSpeaker::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type)
+bool CSpeaker::HitCircle(CPlayer* pPlayer, const float Radius)
 {
-	if (useful::CircleCollisionXZ(pos, GetPos(), Radius, GetFileData().fRadius + ADD_HIT_RADIUS) == true)
+	if (useful::CircleCollisionXZ(pPlayer->GetPos(), GetPos(), Radius, GetFileData().fRadius + ADD_HIT_RADIUS) == true)
 	{ // 円の範囲内にいた場合
 
 		// true を返す

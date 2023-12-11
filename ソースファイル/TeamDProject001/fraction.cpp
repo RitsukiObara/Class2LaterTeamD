@@ -315,7 +315,7 @@ void CFraction::Move(void)
 	D3DXVECTOR3 pos = GetPos();		// 位置を取得する
 
 	// 重力処理
-	useful::Gravity(&m_move.y, pos, GRAVITY);
+	useful::Gravity(&m_move.y, &pos.y, GRAVITY);
 
 	// 位置を更新する
 	pos += m_move;

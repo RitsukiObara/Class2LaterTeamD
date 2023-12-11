@@ -83,15 +83,15 @@ void CSlime::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE 
 //=====================================
 // ヒット処理
 //=====================================
-bool CSlime::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CSlime::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
 	// ローカル変数宣言
 	D3DXVECTOR3 max = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);		// サイズの最大値
-	D3DXVECTOR3 min = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);		// サイズの最小値
+	D3DXVECTOR3 min = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);			// サイズの最小値
 
-	if (useful::RectangleCollisionXY(GetPos(), pos, GetFileData().vtxMax, max, GetFileData().vtxMin, min) == true &&
-		useful::RectangleCollisionXZ(GetPos(), pos, GetFileData().vtxMax, max, GetFileData().vtxMin, min) == true &&
-		useful::RectangleCollisionYZ(GetPos(), pos, GetFileData().vtxMax, max, GetFileData().vtxMin, min) == true)
+	if (useful::RectangleCollisionXY(GetPos(), pPlayer->GetPos(), GetFileData().vtxMax, max, GetFileData().vtxMin, min) == true &&
+		useful::RectangleCollisionXZ(GetPos(), pPlayer->GetPos(), GetFileData().vtxMax, max, GetFileData().vtxMin, min) == true &&
+		useful::RectangleCollisionYZ(GetPos(), pPlayer->GetPos(), GetFileData().vtxMax, max, GetFileData().vtxMin, min) == true)
 	{ // 四角の当たり判定の中に入っていた場合
 
 		// true を返す

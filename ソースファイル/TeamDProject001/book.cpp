@@ -220,7 +220,7 @@ void CBook::StateManager(void)
 			useful::RotCorrect(D3DX_PI, &rot.z, COLLAPSE_ROT_CORRECT);
 
 			// 重力処理
-			useful::Gravity(&m_move.y, pos, m_fGravity);
+			useful::Gravity(&m_move.y, &pos.y, m_fGravity);
 
 			// 移動量を加算する
 			pos += m_move;
@@ -239,7 +239,7 @@ void CBook::StateManager(void)
 				useful::RotCorrect(D3DX_PI, &objrot.z, COLLAPSE_ROT_CORRECT);
 
 				// 重力処理
-				useful::Gravity(&m_aBook[nCnt].move.y, objpos, m_aBook[nCnt].fGravity);
+				useful::Gravity(&m_aBook[nCnt].move.y, &objpos.y, m_aBook[nCnt].fGravity);
 
 				// 移動量を加算する
 				objpos += m_aBook[nCnt].move;
@@ -314,8 +314,9 @@ bool CBook::KillZ(void)
 //=====================================
 // 当たり判定処理
 //=====================================
-bool CBook::Collision(D3DXVECTOR3* pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CBook::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
+	D3DXVECTOR3 pos = pPlayer->GetPos();
 	D3DXVECTOR3 vtxMax = collSize;
 	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);
 	D3DXVECTOR3 objMax = D3DXVECTOR3(GetFileData().vtxMax.x, GetFileData().vtxMax.y + (GetFileData().collsize.y * MAX_BOOK), GetFileData().vtxMax.z);
@@ -324,9 +325,9 @@ bool CBook::Collision(D3DXVECTOR3* pos, const D3DXVECTOR3& posOld, const D3DXVEC
 	if (m_state == STATE_STOP &&
 		collision::HexahedronCollision
 	(
-		pos,					// 位置
+		&pos,					// 位置
 		GetPos(),				// 本の位置
-		posOld,					// 前回の位置
+		pPlayer->GetPosOld(),	// 前回の位置
 		GetPosOld(),			// 本の前回の位置
 		vtxMin,					// 最小値
 		GetFileData().vtxMin,	// 本の最小値
@@ -334,6 +335,9 @@ bool CBook::Collision(D3DXVECTOR3* pos, const D3DXVECTOR3& posOld, const D3DXVEC
 		objMax					// 本の最小値
 	) == true)
 	{ // 当たり判定に当たった場合
+
+		// 位置を適用する
+		pPlayer->SetPos(pos);
 
 		// true を返す
 		return true;
@@ -346,7 +350,7 @@ bool CBook::Collision(D3DXVECTOR3* pos, const D3DXVECTOR3& posOld, const D3DXVEC
 //=====================================
 // ヒット処理
 //=====================================
-bool CBook::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CBook::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
 	// 最大値と最小値を設定する
 	D3DXVECTOR3 vtxMax = collSize;
@@ -359,9 +363,9 @@ bool CBook::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlay
 		pBook = m_aBook[nCnt].pBook;
 
 		if (m_state == STATE_COLLAPSE &&
-			useful::RectangleCollisionXY(pos, pBook->GetPos(), vtxMax, pBook->GetFileData().vtxMax, vtxMin, pBook->GetFileData().vtxMin) == true && 
-			useful::RectangleCollisionXZ(pos, pBook->GetPos(), vtxMax, pBook->GetFileData().vtxMax, vtxMin, pBook->GetFileData().vtxMin) == true && 
-			useful::RectangleCollisionYZ(pos, pBook->GetPos(), vtxMax, pBook->GetFileData().vtxMax, vtxMin, pBook->GetFileData().vtxMin) == true)
+			useful::RectangleCollisionXY(pPlayer->GetPos(), pBook->GetPos(), vtxMax, pBook->GetFileData().vtxMax, vtxMin, pBook->GetFileData().vtxMin) == true && 
+			useful::RectangleCollisionXZ(pPlayer->GetPos(), pBook->GetPos(), vtxMax, pBook->GetFileData().vtxMax, vtxMin, pBook->GetFileData().vtxMin) == true && 
+			useful::RectangleCollisionYZ(pPlayer->GetPos(), pBook->GetPos(), vtxMax, pBook->GetFileData().vtxMax, vtxMin, pBook->GetFileData().vtxMin) == true)
 		{ // 倒れ状態で本に当たった場合
 
 			// true を返す
@@ -376,10 +380,10 @@ bool CBook::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlay
 //=====================================
 // ヒット処理
 //=====================================
-bool CBook::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type)
+bool CBook::HitCircle(CPlayer* pPlayer, const float Radius)
 {
 	if (m_state == STATE_STOP &&
-		useful::CircleCollisionXZ(pos, GetPos(), Radius, GetFileData().fRadius) == true)
+		useful::CircleCollisionXZ(pPlayer->GetPos(), GetPos(), Radius, GetFileData().fRadius) == true)
 	{ // 停止状態かつ、円の範囲内の場合
 
 		// true を返す

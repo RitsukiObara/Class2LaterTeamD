@@ -85,7 +85,7 @@ void CGarbage::Update(void)
 		pos += m_SlideMove;
 		m_pPlayer->SetPos(pos + m_PlayerPos);
 
-		if (Collision(&pos, posold, GetFileData().vtxMax, CPlayer::TYPE::TYPE_CAT) == true)
+		if (Collision(m_pPlayer, GetFileData().vtxMax) == true)
 		{
 			m_Slide = SLIDE_BREAK;
 			m_SlideMove = D3DXVECTOR3(-m_SlideMove.x * 0.1f, 30.0f, -m_SlideMove.z * 0.1f);
@@ -182,17 +182,21 @@ void CGarbage::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYP
 //=====================================
 // 当たり判定処理
 //=====================================
-bool CGarbage::Collision(D3DXVECTOR3* pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CGarbage::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
-	// 最大値と最小値を設定する
+	// 位置と最大値と最小値を設定する
+	D3DXVECTOR3 pos = pPlayer->GetPos();
 	D3DXVECTOR3 vtxMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);
 	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);
 
 	if (m_State == STATE_GARBAGECAN)
 	{ //ゴミ箱状態の場合
 
-		if (collision::HexahedronCollision(pos, GetPos(), posOld, GetPosOld(), vtxMin, GetFileData().vtxMin, vtxMax, GetFileData().vtxMax) == true)
+		if (collision::HexahedronCollision(&pos, GetPos(), pPlayer->GetPosOld(), GetPosOld(), vtxMin, GetFileData().vtxMin, vtxMax, GetFileData().vtxMax) == true)
 		{ // 六面体の当たり判定が true の場合
+
+			// 位置を適用する
+			pPlayer->SetPos(pos);
 
 			// true を返す
 			return true;
@@ -208,15 +212,17 @@ bool CGarbage::Collision(D3DXVECTOR3* pos, const D3DXVECTOR3& posOld, const D3DX
 	{
 		// 先頭のブロックの情報を取得する
 		CBlock* pBlock = CBlockManager::Get()->GetTop();
-		bool bJump = false;			// ジャンプ状況
 
 		while (pBlock != nullptr)
 		{ // ブロックが NULL の場合
 
-			if (collision::HexahedronCollision(pos, pBlock->GetPos(), posOld, pBlock->GetPosOld(), vtxMin, pBlock->GetFileData().vtxMin, vtxMax, pBlock->GetFileData().vtxMax) == true)
+			if (collision::HexahedronCollision(&pos, pBlock->GetPos(), pPlayer->GetPosOld(), pBlock->GetPosOld(), vtxMin, pBlock->GetFileData().vtxMin, vtxMax, pBlock->GetFileData().vtxMax) == true)
 			{ // 六面体の当たり判定が true の場合
 
-			  // true を返す
+				// 位置を適用する
+				pPlayer->SetPos(pos);
+
+				// true を返す
 				return true;
 			}
 
@@ -232,17 +238,17 @@ bool CGarbage::Collision(D3DXVECTOR3* pos, const D3DXVECTOR3& posOld, const D3DX
 //=====================================
 // ヒット処理
 //=====================================
-bool CGarbage::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CGarbage::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
 	// ローカル変数宣言
 	D3DXVECTOR3 vtxMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);		// サイズの最大値
 	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);		// サイズの最小値
 
 	if (m_State == STATE_BANANA_NORMAL &&
-		type == CPlayer::TYPE_CAT &&
-		useful::RectangleCollisionXY(GetPos(), pos, GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true &&
-		useful::RectangleCollisionXZ(GetPos(), pos, GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true &&
-		useful::RectangleCollisionYZ(GetPos(), pos, GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true)
+		pPlayer->GetType() == CPlayer::TYPE_CAT &&
+		useful::RectangleCollisionXY(GetPos(), pPlayer->GetPos(), GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true &&
+		useful::RectangleCollisionXZ(GetPos(), pPlayer->GetPos(), GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true &&
+		useful::RectangleCollisionYZ(GetPos(), pPlayer->GetPos(), GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true)
 	{ // ネコがバナナの皮に引っかかった場合
 
 		// true を返す
@@ -256,9 +262,9 @@ bool CGarbage::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CP
 //=====================================
 // ヒットの円処理
 //=====================================
-bool CGarbage::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type)
+bool CGarbage::HitCircle(CPlayer* pPlayer, const float Radius)
 {
-	if (useful::CircleCollisionXZ(pos, GetPos(), Radius, GetFileData().fRadius) == true)
+	if (useful::CircleCollisionXZ(pPlayer->GetPos(), GetPos(), Radius, GetFileData().fRadius) == true)
 	{ // 範囲内に入っている場合
 
 		// true を返す
