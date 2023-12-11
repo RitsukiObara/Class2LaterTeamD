@@ -51,7 +51,7 @@ namespace
 		D3DXVECTOR3(SCREEN_WIDTH - 90.0f, SCREEN_HEIGHT - 80.0f, 0.0f),
 	};
 	static const int TRANS_COUNT = 80;				// 遷移カウント
-	static const int START_COUNT = 5;				// 開始のカウント
+	static const int START_COUNT = 60;				// 開始のカウント
 }
 
 //--------------------------------------------
@@ -62,6 +62,7 @@ CPlayer* CGame::m_apPlayer[MAX_PLAY] = {};					// プレイヤーの情報
 CGame::STATE CGame::m_GameState = CGame::STATE_START;		// ゲームの進行状態
 int CGame::m_nFinishCount = 0;								// 終了カウント
 CGameFinish* CGame::m_pFinish = nullptr;					// フィニッシュの情報
+bool CGame::m_bCountDown = false;							// カウントダウンが使用されているか
 
 // デバッグ版
 #ifdef _DEBUG
@@ -79,6 +80,7 @@ CGame::CGame() : CScene(TYPE_SCENE, PRIORITY_BG)
 	m_pFinish = nullptr;		// フィニッシュ
 	m_nFinishCount = 0;			// 終了カウント
 	m_GameState = STATE_START;	// 状態
+	m_pFinish = false;
 
 	for (int nCntPlay = 0; nCntPlay < MAX_PLAY; nCntPlay++)
 	{
