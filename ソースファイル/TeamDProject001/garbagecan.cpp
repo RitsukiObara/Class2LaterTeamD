@@ -85,7 +85,7 @@ void CGarbage::Update(void)
 		pos += m_SlideMove;
 		m_pPlayer->SetPos(pos + m_PlayerPos);
 
-		if (Collision(m_pPlayer, GetFileData().vtxMax) == true)
+		if (Collision(m_pPlayer, GetFileData().vtxMax) == true || ((m_SlideMove.x <= 1.0f && m_SlideMove.x >= -1.0f) && (m_SlideMove.z <= 1.0f && m_SlideMove.z >= -1.0f)))
 		{
 			m_Slide = SLIDE_BREAK;
 			m_SlideMove = D3DXVECTOR3(-m_SlideMove.x * 0.1f, 30.0f, -m_SlideMove.z * 0.1f);
