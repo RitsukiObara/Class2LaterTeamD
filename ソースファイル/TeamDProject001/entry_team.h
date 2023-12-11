@@ -41,6 +41,8 @@ private:		// 自分だけアクセスできる
 
 	// メンバ変数
 	CPlayer::TYPE m_type;		// チームの種類
+	float m_fMove;				//UIの変形量
+	int m_nTimeCnt;				//UI変形のタイマー
 };
 
 #endif
