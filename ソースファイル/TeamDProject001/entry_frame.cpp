@@ -11,7 +11,7 @@
 //=======================================
 // マクロ定義
 //=======================================
-#define FRAME_SIZE		(D3DXVECTOR3(140.0f, 280.0f, 0.0f))		// 枠のサイズ
+#define FRAME_SIZE		(D3DXVECTOR3(155.0f, 310.0f, 0.0f))		// 枠のサイズ
 #define FRAME_TEXTURE	"data\\TEXTURE\\EntryFrame.png"			// 枠のテクスチャ
 
 //=========================

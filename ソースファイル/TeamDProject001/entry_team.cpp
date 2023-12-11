@@ -22,6 +22,9 @@ CEntryTeam::CEntryTeam() : CObject2D(CObject::TYPE_NONE, CObject::PRIORITY_UI)
 {
 	// 全ての値をクリアする
 	m_type = CPlayer::TYPE_CAT;		// チームの種類
+
+	 m_fMove=0.1f;
+	 m_nTimeCnt = 0;
 }
 
 //=========================
@@ -65,6 +68,17 @@ void CEntryTeam::Uninit(void)
 //=========================
 void CEntryTeam::Update(void)
 {
+	//UIの拡大・移動
+	m_nTimeCnt++;
+	if (m_nTimeCnt >= 60)
+	{
+		m_fMove *= -1.0f;
+		m_nTimeCnt = 0;
+	}
+
+	CObject2D::SetPos(CObject2D::GetPos()+D3DXVECTOR3(0,m_fMove,0));
+	CObject2D::SetSize(CObject2D::GetSize() + D3DXVECTOR3(m_fMove*-0.5f, m_fMove*-0.5f, 0));
+
 	// 頂点情報の初期化
 	SetVertex();
 
@@ -87,6 +101,7 @@ void CEntryTeam::Draw(void)
 void CEntryTeam::SetData(const D3DXVECTOR3& pos, const CPlayer::TYPE type)
 {
 	// スクロールの設定処理
+	
 	SetPos(pos);				// 位置設定
 	SetRot(NONE_D3DXVECTOR3);	// 向き設定
 	SetSize(TEAM_SIZE);			// サイズ設定
