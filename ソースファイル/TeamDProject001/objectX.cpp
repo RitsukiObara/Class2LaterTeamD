@@ -122,6 +122,7 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\cat\\07_cat_Lleg.x",		//左足
 	"data\\MODEL\\cat\\08_cat_Rfoot.x",		//右腿
 	"data\\MODEL\\cat\\09_cat_Rleg.x",		//右足
+	"data\\MODEL\\cat\\flag.x",				//白旗
 
 	// ネズミモデル
 	"data\\MODEL\\rat\\rat_Ghost.x",		// 幽霊の姿
