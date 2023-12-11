@@ -82,12 +82,12 @@ private:					// 自分だけアクセスできる
 	static CGameFinish* m_pFinish;			// フィニッシュの情報
 	static STATE m_GameState;				// ゲームの進行状態
 	static int m_nFinishCount;				// 終了カウント
+	static bool m_bCountDown;			// カウントダウンが使用されているかどうか
 
 // デバッグ版
 #ifdef _DEBUG
 	static CEdit* m_pEdit;				// エディットの情報
 	static bool m_bEdit;				// エディット状況
-	static bool m_bCountDown;			// カウントダウンが使用されているかどうか
 #endif
 };
 
