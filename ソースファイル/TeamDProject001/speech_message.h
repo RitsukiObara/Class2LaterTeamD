@@ -43,10 +43,10 @@ public:
 	void Update(void);		// 更新処理
 	void Draw(void);		// 描画処理
 
-	void SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const int nLife, const TYPE type);					// 情報の設定処理
+	void SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const int nLife, const TYPE type, int nIdx);					// 情報の設定処理
 
 	// 静的メンバ関数
-	static CSpeechMessage* Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const int nLife, const TYPE type);	// 生成処理
+	static CSpeechMessage* Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const int nLife, const TYPE type,int nIdx);	// 生成処理
 
 private:
 
@@ -57,6 +57,7 @@ private:
 	TYPE m_type;			// 種類
 	int m_nLife;			// 寿命
 	int m_nStateCount;		// 状態のカウント
+	int m_nPlayerIdx;		//プレイヤー番号
 };
 
 #endif
