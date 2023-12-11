@@ -701,7 +701,7 @@ void CRat::ResurrectionCollision(void)
 						m_bResurrection = false;
 					}
 				}
-				else if (m_bResurrection == false && (bCollXY == false || bCollXZ == true))
+				else if (m_bResurrection == false && (bCollXY == false || bCollXZ == false))
 				{ // •œŠˆ‚³‚¹‚Ä‚È‚¢ó‘Ô && ‰~‚Ì“–‚½‚è”»’è(XY•½–Ê)‚©(XZ•½–Ê)‚Ì”ÍˆÍ‚É‚¢‚È‚¢ê‡
 
 					// ‰ñ•œ’†UI•\¦İ’è
