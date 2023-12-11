@@ -322,14 +322,22 @@ void collision::ObstacleAction(CPlayer* pPlayer, const float Radius)
 		{
 			if (pObstacle->GetCatUse() == true)
 			{
-				if (pObstacle->HitCircle(pPlayer, Radius) == true)
-				{ // 障害物の当たり判定が通った場合
+				if (pObstacle->GetType() == CObstacle::TYPE::TYPE_LEASH ||
+					pObstacle->GetType() == CObstacle::TYPE::TYPE_REDKATEN)
+				{//リードのとき
+					pObstacle->HitMultiCircle(pPlayer, Radius, true);
+				}
+				else
+				{//リード以外のとき
+					if (pObstacle->HitCircle(pPlayer, Radius) == true)
+					{ // 障害物の当たり判定が通った場合
 
-					//起動状態にする
-					pObstacle->Action();
+						//起動状態にする
+						pObstacle->Action();
 
-					//ネズミがアクションを行った判定(チュートリアル用)
-					pPlayer->SetUseAction(true);
+						//ネズミがアクションを行った判定(チュートリアル用)
+						pPlayer->SetUseAction(true);
+					}
 				}
 			}
 		}
@@ -337,7 +345,8 @@ void collision::ObstacleAction(CPlayer* pPlayer, const float Radius)
 		{
 			if (pObstacle->GetRatUse() == true)
 			{
-				if (pObstacle->GetType() == CObstacle::TYPE::TYPE_LEASH)
+				if (pObstacle->GetType() == CObstacle::TYPE::TYPE_LEASH ||
+					pObstacle->GetType() == CObstacle::TYPE::TYPE_REDKATEN)
 				{//リードのとき
 					pObstacle->HitMultiCircle(pPlayer, Radius, true);
 				}

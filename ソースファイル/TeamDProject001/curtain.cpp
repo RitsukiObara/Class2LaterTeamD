@@ -23,9 +23,9 @@ namespace
 {
 	static const D3DXVECTOR3 SWITCH_POS[MAX_SWITCH] =		// スイッチの位置
 	{
+		D3DXVECTOR3(-500.0f,0.0f,0.0f),
 		NONE_D3DXVECTOR3,
-		NONE_D3DXVECTOR3,
-		NONE_D3DXVECTOR3,
+		D3DXVECTOR3(500.0f,0.0f,0.0f),
 	};
 	static const D3DXVECTOR3 SWITCH_ROT[MAX_SWITCH] =		// スイッチの向き
 	{
@@ -50,7 +50,7 @@ CCurtain::CCurtain() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK
 	}
 	m_state = STATE_CLOSE;				// 状態
 	m_fVtxMinZ = 0.0f;					// Z軸の最小値
-	SetCatUse(false);					// ネコの使用条件
+	SetCatUse(true);					// ネコの使用条件
 	SetRatUse(true);					// ネズミの使用条件
 }
 
@@ -127,6 +127,21 @@ void CCurtain::Update(void)
 		}
 	}
 
+	if (m_apSwitch[0]->GetBoot() == true &&
+		m_apSwitch[1]->GetBoot() == true &&
+		m_apSwitch[2]->GetBoot() == true)
+	{ // 全てスイッチが入っていた場合
+
+		// 開ける
+		m_state = STATE_OPEN;
+	}
+	else
+	{ // 上記以外
+
+		// 閉じる
+		m_state = STATE_CLOSE;
+	}
+
 	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_0) == true)
 	{ // 0キーを押した場合
 
@@ -168,7 +183,7 @@ void CCurtain::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYP
 	// 全ての値を設定する
 	for (int nCnt = 0; nCnt < MAX_SWITCH; nCnt++)
 	{
-		if (m_apSwitch[nCnt] != nullptr)
+		if (m_apSwitch[nCnt] == nullptr)
 		{ // モデルが NULL じゃない場合
 
 			// スイッチの生成処理
@@ -218,20 +233,62 @@ bool CCurtain::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 }
 
 //=====================================
-// 円のヒット処理
+// ヒット処理
 //=====================================
 bool CCurtain::HitCircle(CPlayer* pPlayer, const float Radius)
 {
+	for (int nCnt = 0; nCnt < MAX_SWITCH; nCnt++)
+	{
+		if (m_apSwitch[nCnt] != nullptr)
+		{ // スイッチの情報が NULL の場合
+
+			if (useful::CircleCollisionXZ
+			(
+				pPlayer->GetPos(),
+				m_apSwitch[nCnt]->GetModel(CSwitch::TYPE_BASE)->GetPos(),
+				Radius,
+				m_apSwitch[nCnt]->GetModel(CSwitch::TYPE_BASE)->GetFileData().fRadius
+			) == true)
+			{ // 円の当たり判定内に入った場合
+
+				// true を返す
+				return true;
+			}
+		}
+	}
+
 	// false を返す
 	return false;
 }
 
 //=====================================
-// ギミック起動処理
+// ヒット処理
 //=====================================
-void CCurtain::Action(void)
+void CCurtain::HitMultiCircle(CPlayer* pPlayer, const float Radius, bool bInput)
 {
+	for (int nCnt = 0; nCnt < MAX_SWITCH; nCnt++)
+	{
+		if (m_apSwitch[nCnt] != nullptr)
+		{ // スイッチの情報が NULL の場合
 
+			if (useful::CircleCollisionXZ
+			(
+				pPlayer->GetPos(),
+				m_apSwitch[nCnt]->GetModel(CSwitch::TYPE_BASE)->GetPos(),
+				Radius,
+				m_apSwitch[nCnt]->GetModel(CSwitch::TYPE_BASE)->GetFileData().fRadius
+			) == true)
+			{ // 円の当たり判定内に入った場合
+
+				if (bInput == true)
+				{ // 入力状況が true の場合
+
+					// スイッチの起動状況を true にする
+					m_apSwitch[nCnt]->SetBoot(true);
+				}
+			}
+		}
+	}
 }
 
 //=====================================
