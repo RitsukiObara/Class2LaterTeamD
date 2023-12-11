@@ -179,6 +179,15 @@ CSwitch* CSwitch::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot)
 }
 
 //=======================================
+// ƒ‚ƒfƒ‹‚Ìæ“¾ˆ—
+//=======================================
+CModel* CSwitch::GetModel(const TYPE type)
+{
+	// ƒ‚ƒfƒ‹‚Ìî•ñ‚ğ•Ô‚·
+	return m_apModel[type];
+}
+
+//=======================================
 // ‹N“®ó‹µ‚Ìİ’èˆ—
 //=======================================
 void CSwitch::SetBoot(const bool bBoot)

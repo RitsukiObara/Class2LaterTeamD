@@ -48,9 +48,9 @@ public:			// 誰でもアクセスできる
 
 	void SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type);			// 情報の設定処理
 
-	bool Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize) override;		// 当たり判定処理
-	bool HitCircle(CPlayer* pPlayer, const float Radius) override;				// 円のヒット処理
-	void Action(void) override;													// ギミック起動処理
+	bool Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize) override;					// 当たり判定処理
+	bool HitCircle(CPlayer* pPlayer, const float Radius);									// ヒット処理
+	void HitMultiCircle(CPlayer* pPlayer, const float Radius, bool bInput) override;		// ヒット処理
 
 private:		// 自分だけアクセスできる
 
