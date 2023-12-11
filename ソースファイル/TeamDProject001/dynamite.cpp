@@ -177,12 +177,12 @@ void CDynamite::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TY
 //=====================================
 // ƒqƒbƒgˆ—
 //=====================================
-bool CDynamite::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CDynamite::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
 	if (m_state == STATE_EXPLOSION)
 	{
 		D3DXVECTOR3 objPos = GetPos();
-		if (useful::CylinderInner(pos, objPos, collSize.x + EXPLOSION_RADIUS))
+		if (useful::CylinderInner(pPlayer->GetPos(), objPos, collSize.x + EXPLOSION_RADIUS))
 		{ // ‰~‚Ì’†‚É“ü‚Á‚½ê‡
 
 		  // true ‚ð•Ô‚·

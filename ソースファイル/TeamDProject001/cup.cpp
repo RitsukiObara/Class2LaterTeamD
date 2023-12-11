@@ -222,7 +222,7 @@ void CCup::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE ty
 //=====================================
 // ƒqƒbƒgˆ—
 //=====================================
-bool CCup::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CCup::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
 	if (m_pWater != nullptr)
 	{ // …‚ª NULL ‚¶‚á‚È‚¢ê‡
@@ -231,9 +231,9 @@ bool CCup::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlaye
 		D3DXVECTOR3 posWater = m_pWater->GetPos();
 		float radiusWater = m_pWater->GetSize().x;
 
-		if (posWater.y >= pos.y &&
-			posWater.y <= pos.y + collSize.y &&
-			useful::CylinderInner(pos, posWater, radiusWater) == true)
+		if (posWater.y >= pPlayer->GetPos().y &&
+			posWater.y <= pPlayer->GetPos().y + collSize.y &&
+			useful::CylinderInner(pPlayer->GetPos(), posWater, radiusWater) == true)
 		{ // “–‚½‚è”»’è‚Ì’†‚É“ü‚Á‚½ê‡
 
 			// true ‚ğ•Ô‚·
@@ -248,9 +248,9 @@ bool CCup::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlaye
 //=====================================
 // ƒqƒbƒgˆ—
 //=====================================
-bool CCup::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type)
+bool CCup::HitCircle(CPlayer* pPlayer, const float Radius)
 {
-	if (useful::CircleCollisionXZ(pos, GetPos(), Radius, GetFileData().fRadius) == true)
+	if (useful::CircleCollisionXZ(pPlayer->GetPos(), GetPos(), Radius, GetFileData().fRadius) == true)
 	{//‰~‚Ì”ÍˆÍ“à‚Ìê‡ture‚ğ•Ô‚·
 		return true;
 	}

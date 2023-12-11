@@ -182,8 +182,9 @@ void CCurtain::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYP
 //=====================================
 // 当たり判定処理
 //=====================================
-bool CCurtain::Collision(D3DXVECTOR3* pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CCurtain::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
+	D3DXVECTOR3 pos = pPlayer->GetPos();
 	D3DXVECTOR3 objMin = GetFileData().vtxMin;							// カーテンの最小値
 	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);	// 最小値
 	D3DXVECTOR3 vtxMax = collSize;										// 最大値
@@ -194,9 +195,9 @@ bool CCurtain::Collision(D3DXVECTOR3* pos, const D3DXVECTOR3& posOld, const D3DX
 	// 六面体の当たり判定
 	if (collision::HexahedronCollision
 	(
-		pos,
+		&pos,
 		GetPos(),
-		posOld,
+		pPlayer->GetPosOld(),
 		GetPosOld(),
 		vtxMin,
 		objMin,
@@ -204,6 +205,9 @@ bool CCurtain::Collision(D3DXVECTOR3* pos, const D3DXVECTOR3& posOld, const D3DX
 		GetFileData().vtxMax
 		) == true)
 	{ // 当たった場合
+
+		// 位置を適用する
+		pPlayer->SetPos(pos);
 
 		// true を返す
 		return true;
@@ -216,7 +220,7 @@ bool CCurtain::Collision(D3DXVECTOR3* pos, const D3DXVECTOR3& posOld, const D3DX
 //=====================================
 // 円のヒット処理
 //=====================================
-bool CCurtain::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type)
+bool CCurtain::HitCircle(CPlayer* pPlayer, const float Radius)
 {
 	// false を返す
 	return false;

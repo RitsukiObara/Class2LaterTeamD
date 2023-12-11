@@ -17,31 +17,32 @@
 //-------------------------------------------
 // マクロ定義
 //-------------------------------------------
-#define SET_SIDE		(100.0f)
-#define CAT_KING_POS	(D3DXVECTOR3(-SET_SIDE,360.0f,0.0f))
-#define CAT_KING_SIZE	(D3DXVECTOR3(100.0f,600.0f,0.0f))
-#define CAT_BG_POS		(D3DXVECTOR3(-SET_SIDE,150.0f,0.0f))
-#define CAT_BG_SIZE		(D3DXVECTOR3(300.0f,150.0f,0.0f))
-#define CAT_TEXT_POS	(D3DXVECTOR3(-SET_SIDE,150.0f,0.0f))
-#define CAT_TEXT_SIZE	(D3DXVECTOR3(250.0f,100.0f,0.0f))
+#define SET_SIDE		(100.0f)										//画面外に置いておくテクスチャの初期横位置
+#define CAT_SIDE		(280.0f)										//画面外に置いておくテクスチャの初期横位置
+#define RAT_SIDE		(350.0f)										//画面外に置いておくテクスチャの初期横位置
+#define CAT_KING_POS	(D3DXVECTOR3(-SET_SIDE,360.0f,0.0f))			//ネコ代表の位置
+#define CAT_KING_SIZE	(D3DXVECTOR3(100.0f,600.0f,0.0f))				//ネコ代表のサイズ
+#define CAT_BG_POS		(D3DXVECTOR3(-SET_SIDE + CAT_SIDE,170.0f,0.0f))			//猫背景の位置
+#define CAT_BG_SIZE		(D3DXVECTOR3(80.0f,80.0f,0.0f))				//猫背景のサイズ
+#define CAT_TEXT_POS	(D3DXVECTOR3(-SET_SIDE,200.0f,0.0f))			//猫テキストの位置
+#define CAT_TEXT_SIZE	(D3DXVECTOR3(400.0f,200.0f,0.0f))				//猫テキストのサイズ
+																		
+#define RAT_KING_POS	(D3DXVECTOR3(1280.0f + SET_SIDE,400,0.0f))		//ネズミ代表の位置
+#define RAT_KING_SIZE	(D3DXVECTOR3(100.0f,400.0f,0.0f))				//ネズミ代表のサイズ
+#define RAT_BG_POS		(D3DXVECTOR3(1280.0f + SET_SIDE - RAT_SIDE,550.0f,0.0f))	//ネズミ背景の位置
+#define RAT_BG_SIZE		(D3DXVECTOR3(50.0f,60.0f,0.0f))				//ネズミ背景のサイズ
+#define RAT_TEXT_POS	(D3DXVECTOR3(1280.0f + SET_SIDE,500.0f,0.0f))	//ネズミテキストの位置
+#define RAT_TEXT_SIZE	(D3DXVECTOR3(400.0f,200.0f,0.0f))				//ネズミテキストのサイズ
 
-#define RAT_KING_POS	(D3DXVECTOR3(1280.0f + SET_SIDE,400,0.0f))
-#define RAT_KING_SIZE	(D3DXVECTOR3(100.0f,400.0f,0.0f))
-#define RAT_BG_POS		(D3DXVECTOR3(1280.0f + SET_SIDE,500.0f,0.0f))
-#define RAT_BG_SIZE		(D3DXVECTOR3(300.0f,150.0f,0.0f))
-#define RAT_TEXT_POS	(D3DXVECTOR3(1280.0f + SET_SIDE,500.0f,0.0f))
-#define RAT_TEXT_SIZE	(D3DXVECTOR3(250.0f,100.0f,0.0f))
-
-#define CAT_KING_STOP	(150.0f)
-#define CAT_BG_STOP		(500.0f)
-#define CAT_TEXT_STOP	(500.0f)
-#define RAT_KING_STOP	(1280.0f - 150.0f)
-#define RAT_BG_STOP		(1280.0f - 500.0f)
-#define RAT_TEXT_STOP	(1280.0f - 500.0f)
-#define SIDE_MOVESPEED	(5.0f)
-#define A_PLUS_KING		(0.013f)
-#define A_PLUS_TEXT		(0.015f)
-
+#define CAT_KING_STOP	(150.0f)				// ネコ代表の停止位置
+#define CAT_BG_STOP		(630.0f + CAT_SIDE)		// 猫背景の停止位置
+#define CAT_TEXT_STOP	(630.0f)				// 猫テキストの停止位置
+#define RAT_KING_STOP	(1280.0f - 150.0f)		// ネズミ代表の停止位置
+#define RAT_BG_STOP		(1280.0f - 630.0f - RAT_SIDE)		// ネズミ背景の停止位置
+#define RAT_TEXT_STOP	(1280.0f - 630.0f)		// ネズミテキストの停止位置
+#define SIDE_MOVESPEED	(5.0f)					// 横移動の速度
+#define A_PLUS_KING		(0.013f)				// 代表のα値の加算
+#define A_PLUS_TEXT		(0.015f)				// テキストのα値の加算
 //-------------------------------------------
 // 静的メンバ変数宣言
 //-------------------------------------------
@@ -275,10 +276,6 @@ void CExplanation::Draw(void)
 	{
 		m_pCatKing->Draw();
 	}
-	if (m_pCatBG != NULL)
-	{
-		m_pCatBG->Draw();
-	}
 	if (m_pCatText != NULL)
 	{
 		m_pCatText->Draw();
@@ -287,13 +284,17 @@ void CExplanation::Draw(void)
 	{
 		m_pRatKing->Draw();
 	}
-	if (m_pRatBG != NULL)
-	{
-		m_pRatBG->Draw();
-	}
 	if (m_pRatText != NULL)
 	{
 		m_pRatText->Draw();
+	}
+	if (m_pCatBG != NULL)
+	{
+		m_pCatBG->Draw();
+	}
+	if (m_pRatBG != NULL)
+	{
+		m_pRatBG->Draw();
 	}
 	for (int nCnt = 0; nCnt < 3; nCnt++)
 	{
@@ -309,6 +310,8 @@ void CExplanation::Draw(void)
 //=====================================
 void CExplanation::SetData(CTutorial::TUTORIAL Tutorial)
 {
+	//Tutorial = CTutorial::TUTORIAL_ACTION;
+
 	if (m_pBG == NULL)
 	{
 		m_pBG = CObject2D::Create(CObject2D::TYPE::TYPE_NONE, CObject::TYPE::TYPE_NONE, CObject::PRIORITY_UI);
@@ -324,7 +327,7 @@ void CExplanation::SetData(CTutorial::TUTORIAL Tutorial)
 		m_pBG->SetVertex();
 
 	}
-	if (m_pCatKing == NULL)
+	if (m_pCatKing == NULL && Tutorial != CTutorial::TUTORIAL_RAT_RESCUE)
 	{
 		m_pCatKing = CObject2D::Create(CObject2D::TYPE::TYPE_NONE, CObject::TYPE::TYPE_NONE, CObject::PRIORITY_UI);
 		m_pCatKing->SetPos(CAT_KING_POS);			// 位置
@@ -340,7 +343,7 @@ void CExplanation::SetData(CTutorial::TUTORIAL Tutorial)
 		m_pCatKing->SetVertex();
 
 	}
-	if (m_pCatBG == NULL)
+	if (m_pCatBG == NULL && Tutorial == CTutorial::TUTORIAL_ACTION)
 	{
 		m_pCatBG = CObject2D::Create(CObject2D::TYPE::TYPE_NONE, CObject::TYPE::TYPE_NONE, CObject::PRIORITY_UI);
 		m_pCatBG->SetPos(CAT_BG_POS);				// 位置
@@ -350,12 +353,11 @@ void CExplanation::SetData(CTutorial::TUTORIAL Tutorial)
 		m_pCatBG->SetLength();						// 長さ
 		m_pCatBG->SetAngle();						// 方向
 		m_pCatBG->SetVtxColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));	// 色
-		m_pCatBG->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\image.png"));		// テクスチャの割り当て処理
 
 		// 頂点座標の設定処理
 		m_pCatBG->SetVertex();
 	}
-	if (m_pCatText == NULL)
+	if (m_pCatText == NULL && Tutorial != CTutorial::TUTORIAL_RAT_RESCUE)
 	{
 		m_pCatText = CObject2D::Create(CObject2D::TYPE::TYPE_NONE, CObject::TYPE::TYPE_NONE, CObject::PRIORITY_UI);
 		m_pCatText->SetPos(CAT_TEXT_POS);			// 位置
@@ -365,12 +367,11 @@ void CExplanation::SetData(CTutorial::TUTORIAL Tutorial)
 		m_pCatText->SetLength();					// 長さ
 		m_pCatText->SetAngle();						// 方向
 		m_pCatText->SetVtxColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));	// 色
-		m_pCatText->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\image.png"));		// テクスチャの割り当て処理
 
 		// 頂点座標の設定処理
 		m_pCatText->SetVertex();
 	}
-	if (m_pRatKing == NULL)
+	if (m_pRatKing == NULL && Tutorial != CTutorial::TUTORIAL_CAT_KILL)
 	{
 		m_pRatKing = CObject2D::Create(CObject2D::TYPE::TYPE_NONE, CObject::TYPE::TYPE_NONE, CObject::PRIORITY_UI);
 		m_pRatKing->SetPos(RAT_KING_POS);			// 位置
@@ -385,7 +386,7 @@ void CExplanation::SetData(CTutorial::TUTORIAL Tutorial)
 		// 頂点座標の設定処理
 		m_pRatKing->SetVertex();
 	}
-	if (m_pRatBG == NULL)
+	if (m_pRatBG == NULL && Tutorial == CTutorial::TUTORIAL_ACTION)
 	{
 		m_pRatBG = CObject2D::Create(CObject2D::TYPE::TYPE_NONE, CObject::TYPE::TYPE_NONE, CObject::PRIORITY_UI);
 		m_pRatBG->SetPos(RAT_BG_POS);				// 位置
@@ -395,12 +396,11 @@ void CExplanation::SetData(CTutorial::TUTORIAL Tutorial)
 		m_pRatBG->SetLength();						// 長さ
 		m_pRatBG->SetAngle();						// 方向
 		m_pRatBG->SetVtxColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));	// 色
-		m_pRatBG->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\image.png"));		// テクスチャの割り当て処理
 
 		// 頂点座標の設定処理
 		m_pRatBG->SetVertex();
 	}
-	if (m_pRatText == NULL)
+	if (m_pRatText == NULL && Tutorial != CTutorial::TUTORIAL_CAT_KILL)
 	{
 		m_pRatText = CObject2D::Create(CObject2D::TYPE::TYPE_NONE, CObject::TYPE::TYPE_NONE, CObject::PRIORITY_UI);
 		m_pRatText->SetPos(RAT_TEXT_POS);			// 位置
@@ -410,8 +410,7 @@ void CExplanation::SetData(CTutorial::TUTORIAL Tutorial)
 		m_pRatText->SetLength();					// 長さ
 		m_pRatText->SetAngle();						// 方向
 		m_pRatText->SetVtxColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));	// 色
-		m_pRatText->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\image.png"));		// テクスチャの割り当て処理
-
+		
 		// 頂点座標の設定処理
 		m_pRatText->SetVertex();
 	}
@@ -421,11 +420,11 @@ void CExplanation::SetData(CTutorial::TUTORIAL Tutorial)
 	case CTutorial::TUTORIAL_MOVE:
 		if (m_pCatText != NULL)
 		{
-			m_pCatText->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\Move.png"));		// テクスチャの割り当て処理
+			m_pCatText->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\tutorial_textcat00.png"));		// テクスチャの割り当て処理
 		}
 		if (m_pRatText != NULL)
 		{
-			m_pRatText->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\Move.png"));		// テクスチャの割り当て処理
+			m_pRatText->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\tutorial_textrat00.png"));		// テクスチャの割り当て処理
 		}
 
 		break;
@@ -433,28 +432,57 @@ void CExplanation::SetData(CTutorial::TUTORIAL Tutorial)
 	case CTutorial::TUTORIAL_ATTACK_JAMP:
 		if (m_pCatText != NULL)
 		{
-			m_pCatText->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\jump&Attack.png"));		// テクスチャの割り当て処理
+			m_pCatText->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\tutorial_textcat01.png"));		// テクスチャの割り当て処理
 		}
 		if (m_pRatText != NULL)
 		{
-			m_pRatText->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\jump&Attack.png"));		// テクスチャの割り当て処理
+			m_pRatText->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\tutorial_textrat01.png"));		// テクスチャの割り当て処理
 		}
 		break;
 
 	case CTutorial::TUTORIAL_CAT_KILL:
-
+		if (m_pCatText != NULL)
+		{
+			m_pCatText->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\tutorial_textcat02.png"));		// テクスチャの割り当て処理
+		}
 		break;
 
 	case CTutorial::TUTORIAL_RAT_RESCUE:
-
+		if (m_pRatText != NULL)
+		{
+			m_pRatText->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\tutorial_textrat02.png"));		// テクスチャの割り当て処理
+		}
 		break;
 
 	case CTutorial::TUTORIAL_ACTION:
+		if (m_pCatBG != NULL)
+		{
+			m_pCatBG->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\tutorial_action_Himo.png"));		// テクスチャの割り当て処理
+		}
+		if (m_pRatBG != NULL)
+		{
+			m_pRatBG->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\tutorial_action_pin.png"));		// テクスチャの割り当て処理
+		}
 
+		if (m_pCatText != NULL)
+		{
+			m_pCatText->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\tutorial_textcat03.png"));		// テクスチャの割り当て処理
+		}
+		if (m_pRatText != NULL)
+		{
+			m_pRatText->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\tutorial_textrat03.png"));		// テクスチャの割り当て処理
+		}
 		break;
 
 	case CTutorial::TUTORIAL_ITEM_MULTI:
-
+		if (m_pCatText != NULL)
+		{
+			m_pCatText->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\tutorial_textcat04.png"));		// テクスチャの割り当て処理
+		}
+		if (m_pRatText != NULL)
+		{
+			m_pRatText->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\tutorial_textrat04.png"));		// テクスチャの割り当て処理
+		}
 		break;
 
 	case CTutorial::TUTORIAL_GIMMICK:

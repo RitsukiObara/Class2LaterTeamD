@@ -80,7 +80,7 @@ void CTarai::Update(void)
 	D3DXVECTOR3 pos = GetPos();
 
 	// ˆÊ’u‚ð‰ÁŽZ‚·‚é
-	m_move.y -= 0.8;
+	m_move.y -= 0.8f;
 
 	if (pos.y < 0.0f)
 	{

@@ -134,8 +134,8 @@ HRESULT CTutorial::Init(void)
 	// マップの設定処理
 	CManager::Get()->GetFile()->SetMap();
 
-	// カウントダウンの生成処理
-	CCountdown::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f), D3DXVECTOR3(200.0f, 250.0f, 0.0f), 5);
+	//// カウントダウンの生成処理
+	//CCountdown::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f), D3DXVECTOR3(200.0f, 250.0f, 0.0f), 5);
 
 	// メッシュのテキスト読み込み
 	//CMesh::TxtSet();
@@ -170,10 +170,10 @@ HRESULT CTutorial::Init(void)
 	//// 画鋲の生成処理
 	//CObstacle::Create(D3DXVECTOR3(-200.0f, 200.0f, -120.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_PIN);
 
-	// 扇風機の生成処理
-	CObstacle::Create(D3DXVECTOR3(100.0f, 0.0f, 900.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_FAN);
+	//// 扇風機の生成処理
+	//CObstacle::Create(D3DXVECTOR3(100.0f, 0.0f, 900.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_FAN);
 
-	CObstacle::Create(D3DXVECTOR3(-1000.0f, 650.0f, 360.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CObstacle::TYPE_HIMO);
+	//CObstacle::Create(D3DXVECTOR3(-1000.0f, 650.0f, 360.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CObstacle::TYPE_HIMO);
 
 	//// コップの生成処理
 	//CObstacle::Create(D3DXVECTOR3(-200.0f, 200.0f, 100.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_CUP);
@@ -205,9 +205,9 @@ HRESULT CTutorial::Init(void)
 		}
 	}
 
-	// 生成処理
-	CGameTime::Create();
-	m_pFinish = CGameFinish::Create();
+	//// 生成処理
+	//CGameTime::Create();
+	//m_pFinish = CGameFinish::Create();
 
 	// キャラクターUIの生成処理
 	for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)

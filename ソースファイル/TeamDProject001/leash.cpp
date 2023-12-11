@@ -291,19 +291,19 @@ void CLeash::CollisionSetting(void)
 //=====================================
 // ƒqƒbƒgˆ—
 //=====================================
-bool CLeash::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CLeash::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
 	// Å‘å’l‚ÆÅ¬’l‚ðÝ’è‚·‚é
 	D3DXVECTOR3 vtxMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);
 	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);
 
-	if (type == CPlayer::TYPE_CAT)
+	if (pPlayer->GetType() == CPlayer::TYPE_CAT)
 	{ // ƒlƒR‚Ìê‡
 
 		if (m_State != STATE_FALSE &&
-			useful::RectangleCollisionXY(pos, GetPos(), vtxMax, m_vtxMax, vtxMin, m_vtxMin) == true &&
-			useful::RectangleCollisionXZ(pos, GetPos(), vtxMax, m_vtxMax, vtxMin, m_vtxMin) == true &&
-			useful::RectangleCollisionYZ(pos, GetPos(), vtxMax, m_vtxMax, vtxMin, m_vtxMin) == true)
+			useful::RectangleCollisionXY(pPlayer->GetPos(), GetPos(), vtxMax, m_vtxMax, vtxMin, m_vtxMin) == true &&
+			useful::RectangleCollisionXZ(pPlayer->GetPos(), GetPos(), vtxMax, m_vtxMax, vtxMin, m_vtxMin) == true &&
+			useful::RectangleCollisionYZ(pPlayer->GetPos(), GetPos(), vtxMax, m_vtxMax, vtxMin, m_vtxMin) == true)
 		{ // ’âŽ~ó‘ÔˆÈŠO‚©‚ÂA“–‚½‚è”»’è‚Ì’†‚É“ü‚Á‚½ê‡
 
 			// true ‚ð•Ô‚·
@@ -318,14 +318,14 @@ bool CLeash::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPla
 //=====================================
 // ƒqƒbƒgˆ—
 //=====================================
-bool CLeash::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type)
+bool CLeash::HitCircle(CPlayer* pPlayer, const float Radius)
 {
-	if (useful::CircleCollisionXZ(pos, ActionPosHead, Radius, GetFileData().fRadius) == true)
+	if (useful::CircleCollisionXZ(pPlayer->GetPos(), ActionPosHead, Radius, GetFileData().fRadius) == true)
 	{//‰~‚Ì”ÍˆÍ“à‚Ìê‡ture‚ð•Ô‚·
 		return true;
 	}
 
-	if (useful::CircleCollisionXZ(pos, ActionPosToes, Radius, GetFileData().fRadius) == true)
+	if (useful::CircleCollisionXZ(pPlayer->GetPos(), ActionPosToes, Radius, GetFileData().fRadius) == true)
 	{//‰~‚Ì”ÍˆÍ“à‚Ìê‡ture‚ð•Ô‚·
 		return true;
 	}
@@ -336,31 +336,31 @@ bool CLeash::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer
 //=====================================
 // ƒqƒbƒgˆ—
 //=====================================
-void CLeash::HitMultiCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type, int nIdx, bool bInput)
+void CLeash::HitMultiCircle(CPlayer* pPlayer, const float Radius, bool bInput)
 {
-	if (useful::CircleCollisionXZ(pos, ActionPosHead, Radius, GetFileData().fRadius) == true)
+	if (useful::CircleCollisionXZ(pPlayer->GetPos(), ActionPosHead, Radius, GetFileData().fRadius) == true)
 	{//‰~‚Ì”ÍˆÍ“à‚Ìê‡ture‚ð•Ô‚·
 
 		if (bInput == true)
 		{//‹N“®“ü—Í‚ª‚ ‚éŽž
-			m_bSetHead[nIdx] = true;
+			m_bSetHead[pPlayer->GetPlayerIdx()] = true;
 		}
 	}
 	else
 	{
-		m_bSetHead[nIdx] = false;
+		m_bSetHead[pPlayer->GetPlayerIdx()] = false;
 	}
 
-	if (useful::CircleCollisionXZ(pos, ActionPosToes, Radius, GetFileData().fRadius) == true)
+	if (useful::CircleCollisionXZ(pPlayer->GetPos(), ActionPosToes, Radius, GetFileData().fRadius) == true)
 	{//‰~‚Ì”ÍˆÍ“à‚Ìê‡ture‚ð•Ô‚·
 
 		if (bInput == true)
 		{//‹N“®“ü—Í‚ª‚ ‚éŽž
-			m_bSetToes[nIdx] = true;
+			m_bSetToes[pPlayer->GetPlayerIdx()] = true;
 		}
 	}
 	else
 	{
-		m_bSetToes[nIdx] = false;
+		m_bSetToes[pPlayer->GetPlayerIdx()] = false;
 	}
 }

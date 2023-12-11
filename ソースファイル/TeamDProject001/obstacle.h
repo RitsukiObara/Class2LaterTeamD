@@ -66,11 +66,11 @@ public:			// 誰でもアクセスできる
 
 	virtual void SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type);			// 情報の設定処理
 
-	virtual bool Collision(D3DXVECTOR3* pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type);	// 当たり判定処理
-	virtual bool Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlayer::TYPE type);			// ヒット処理
-	virtual bool HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type) { return false; }							// ヒット処理
+	virtual bool Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize);				// 当たり判定処理
+	virtual bool Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize);		// ヒット処理
+	virtual bool HitCircle(CPlayer* pPlayer, const float Radius) { return false; }							// ヒット処理
 	virtual void Action(void) {}											// ギミック起動処理
-	virtual void HitMultiCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type, int nIdx, bool bInput) {}				// ヒット処理
+	virtual void HitMultiCircle(CPlayer* pPlayer, const float Radius, bool bInput) {}				// ヒット処理
 	virtual void MultiAction(void) {}										// ギミック同時起動処理
 	void GimmickUI(bool Set, int Player_Idx);								// ギミック起動UIの表示
 	void MultiGimmickUI(bool Set, int Player_Idx);							// ギミック起動UIの表示

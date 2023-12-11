@@ -721,7 +721,7 @@ void CPlayer::RotNormalize(void)
 void CPlayer::ObstacleCollision(void)
 {
 	// è·äQï®Ç∆ÇÃè’ìÀîªíË
-	collision::ObstacleCollision(*this, m_sizeColl.x, m_sizeColl.y, m_sizeColl.z);
+	collision::ObstacleCollision(this, m_sizeColl.x, m_sizeColl.y, m_sizeColl.z);
 }
 
 //=======================================
