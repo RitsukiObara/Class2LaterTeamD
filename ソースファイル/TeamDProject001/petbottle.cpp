@@ -21,7 +21,9 @@
 // マクロ定義
 //-------------------------------------------
 #define STAND_ROT	(D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f))		// 直立状態の向き
-#define GRAVITY		(0.5f)											// 重力
+#define GRAVITY		(0.5f)			// 重力
+#define SPEED		(13.0f)			// 転がる速度
+#define ROT_MOVE	(0.01f)			// 向きの移動量
 
 //==============================
 // コンストラクタ
@@ -246,11 +248,11 @@ void CPetbottle::Cycle(void)
 	D3DXVECTOR3 rot = GetRot();		// 向き
 
 	// 移動量を設定する
-	m_move.x = sinf(rot.y - (D3DX_PI * 0.5f)) * 8.0f;
-	m_move.z = cosf(rot.y - (D3DX_PI * 0.5f)) * 8.0f;
+	m_move.x = sinf(rot.y - (D3DX_PI * 0.5f)) * SPEED;
+	m_move.z = cosf(rot.y - (D3DX_PI * 0.5f)) * SPEED;
 
 	// 向きを加算する
-	rot.z += 0.01f;
+	rot.z += ROT_MOVE;
 
 	// 位置を移動する
 	pos.x += m_move.x;

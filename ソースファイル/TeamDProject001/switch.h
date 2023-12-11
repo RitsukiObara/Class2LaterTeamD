@@ -44,6 +44,7 @@ public:			// 誰でもアクセスできる
 	void SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot);				// 情報の設定処理
 
 	// セット・ゲット関数
+	CModel* GetModel(const TYPE type);		// モデルの取得処理
 	void SetBoot(const bool bBoot);			// 起動状況の設定処理
 	bool GetBoot(void) const;				// 起動状況の取得処理
 
