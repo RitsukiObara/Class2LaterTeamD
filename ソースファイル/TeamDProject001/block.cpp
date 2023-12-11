@@ -123,6 +123,21 @@ void CBlock::Uninit(void)
 	m_pNext = nullptr;
 }
 
+//========================================
+// 終了処理
+//========================================
+void CBlock::UninitAll(void)
+{
+	// ローカル変数宣言
+	CBlock* pObj = nullptr;		// 現在のオブジェクトのポインタ
+
+	for (int nCnt = 0; nCnt < CObject::PRIORITY_MAX; nCnt++)
+	{
+		 pObj->GetTop(((CObject::PRIORITY)nCnt));
+	}
+	Uninit();
+}
+
 //=====================================
 // 更新処理
 //=====================================

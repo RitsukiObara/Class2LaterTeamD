@@ -149,6 +149,7 @@ void CMultiCamera::Update(void)
 		break;
 
 	case CScene::MODE_GAME:		// ゲームモード
+	case CScene::MODE_TUTORIAL:		// ゲームモード
 
 		if (CGame::GetPause() != nullptr &&
 			CGame::GetPause()->GetPause() == false)

@@ -40,6 +40,7 @@
 
 #include "answer.h"
 #include "explanation.h"
+#include "block_manager.h"
 
 //--------------------------------------------
 // 無名名前空間
@@ -68,7 +69,7 @@ CTutorial::TUTORIAL CTutorial::m_Tutorial = TUTORIAL_MOVE;			// チュートリアルの
 bool CTutorial::m_bPlay = false;									// チュートリアルのプレイ中か否か
 CAnswer*  CTutorial::m_pAnswer = nullptr;							// 返答リアクション
 CExplanation*  CTutorial::m_pExplanation = nullptr;					// 説明
-bool CTutorial::m_MultiAction = false;							// 連携起動の状態
+bool CTutorial::m_MultiAction = false;								// 連携起動の状態
 
 // デバッグ版
 #ifdef _DEBUG
@@ -127,15 +128,14 @@ HRESULT CTutorial::Init(void)
 	//CMesh::TxtSet();
 
 	// マップの情報をロードする
-	//CManager::Get()->GetFile()->Load(CFile::TYPE_OBSTACLE);
-	CManager::Get()->GetFile()->Load(CFile::TYPE_CARROUTE);
-	CManager::Get()->GetFile()->Load(CFile::TYPE_BLOCK);
+	CManager::Get()->GetFile()->Load(CFile::TYPE_TUTORIAL_DEFULT);
+	//CManager::Get()->GetFile()->Load(CFile::TYPE_TUTORIAL_KILL);
 
 	// マップの設定処理
 	CManager::Get()->GetFile()->SetMap();
 
-	// カウントダウンの生成処理
-	CCountdown::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f), D3DXVECTOR3(200.0f, 250.0f, 0.0f), 5);
+	//// カウントダウンの生成処理
+	//CCountdown::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f), D3DXVECTOR3(200.0f, 250.0f, 0.0f), 5);
 
 	// メッシュのテキスト読み込み
 	//CMesh::TxtSet();
@@ -148,35 +148,37 @@ HRESULT CTutorial::Init(void)
 
 #ifdef _DEBUG	//障害物テスト用
 
-	CObstacle *pObstacle = NULL;
+	//CObstacle *pObstacle = NULL;
 
-	// ルンバの生成処理
-	CObstacle::Create(D3DXVECTOR3(-600.0f, 0.0f, -400.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_ROOMBA);
-	CObstacle::Create(D3DXVECTOR3(600.0f, 0.0f, 400.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_ROOMBA);
+	//// ルンバの生成処理
+	//CObstacle::Create(D3DXVECTOR3(-600.0f, 0.0f, -400.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_ROOMBA);
+	//CObstacle::Create(D3DXVECTOR3(600.0f, 0.0f, 400.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_ROOMBA);
 
-	// ひもの生成処理
-	CObstacle::Create(D3DXVECTOR3(-600.0f, 650.0f, 0.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_HIMO);
+	//// ひもの生成処理
+	//CObstacle::Create(D3DXVECTOR3(-600.0f, 650.0f, 0.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_HIMO);
 
-	// スピーカーの生成処理
-	pObstacle = CObstacle::Create(D3DXVECTOR3(900.0f, 0.0f, 900.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_SPEAKER);
-	pObstacle->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.25f, 0.0f));
+	//// スピーカーの生成処理
+	//pObstacle = CObstacle::Create(D3DXVECTOR3(900.0f, 0.0f, 900.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_SPEAKER);
+	//pObstacle->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.25f, 0.0f));
 
-	pObstacle = CObstacle::Create(D3DXVECTOR3(1000.0f, 0.0f, 900.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_SPEAKER);
-	pObstacle->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.0f, 0.0f));
+	//pObstacle = CObstacle::Create(D3DXVECTOR3(1000.0f, 0.0f, 900.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_SPEAKER);
+	//pObstacle->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.0f, 0.0f));
 
-	// リードの生成処理
-	pObstacle = CObstacle::Create(D3DXVECTOR3(400.0f, 0.0f, -600.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CObstacle::TYPE_LEASH);
+	//// リードの生成処理
+	//pObstacle = CObstacle::Create(D3DXVECTOR3(400.0f, 0.0f, -600.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CObstacle::TYPE_LEASH);
 
-	// 画鋲の生成処理
-	CObstacle::Create(D3DXVECTOR3(-200.0f, 200.0f, -120.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_PIN);
+	//// 画鋲の生成処理
+	//CObstacle::Create(D3DXVECTOR3(-200.0f, 200.0f, -120.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_PIN);
 
-	// 扇風機の生成処理
-	CObstacle::Create(D3DXVECTOR3(0.0f, 200.0f, 900.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_FAN);
+	//// 扇風機の生成処理
+	//CObstacle::Create(D3DXVECTOR3(100.0f, 0.0f, 900.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_FAN);
 
-	// コップの生成処理
-	CObstacle::Create(D3DXVECTOR3(-200.0f, 200.0f, 100.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_CUP);
-	pObstacle = CObstacle::Create(D3DXVECTOR3(400.0f, 200.0f, 100.0f), D3DXVECTOR3(0.0f, D3DX_PI * 1.0f, 0.0f), CObstacle::TYPE::TYPE_CUP);
-	pObstacle->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 1.0f, 0.0f));
+	//CObstacle::Create(D3DXVECTOR3(-1000.0f, 650.0f, 360.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CObstacle::TYPE_HIMO);
+
+	//// コップの生成処理
+	//CObstacle::Create(D3DXVECTOR3(-200.0f, 200.0f, 100.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_CUP);
+	//pObstacle = CObstacle::Create(D3DXVECTOR3(400.0f, 200.0f, 100.0f), D3DXVECTOR3(0.0f, D3DX_PI * 1.0f, 0.0f), CObstacle::TYPE::TYPE_CUP);
+	//pObstacle->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 1.0f, 0.0f));
 
 #endif // _DEBUG
 
@@ -192,20 +194,20 @@ HRESULT CTutorial::Init(void)
 			{ // ネコ担当のプレイヤーの場合
 
 			  // プレイヤーの生成
-				m_apPlayer[nCntPlay] = CPlayer::Create(D3DXVECTOR3(500.0f * nCntPlay - 500.0f, 0.0f, 0.0f), nCntPlay, CPlayer::TYPE_CAT);
+				m_apPlayer[nCntPlay] = CPlayer::Create(D3DXVECTOR3(-500.0f, 0.0f, 0.0f), nCntPlay, CPlayer::TYPE_CAT);
 			}
 			else
 			{ // 上記以外
 
 			  // プレイヤーの生成
-				m_apPlayer[nCntPlay] = CPlayer::Create(D3DXVECTOR3(500.0f * nCntPlay - 500.0f, 0.0f, 0.0f), nCntPlay, CPlayer::TYPE_RAT);
+				m_apPlayer[nCntPlay] = CPlayer::Create(D3DXVECTOR3(250.0f * nCntPlay + 500.0f, 0.0f, 0.0f), nCntPlay, CPlayer::TYPE_RAT);
 			}
 		}
 	}
 
-	// 生成処理
-	CGameTime::Create();
-	m_pFinish = CGameFinish::Create();
+	//// 生成処理
+	//CGameTime::Create();
+	//m_pFinish = CGameFinish::Create();
 
 	// キャラクターUIの生成処理
 	for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
@@ -213,9 +215,9 @@ HRESULT CTutorial::Init(void)
 		CCharaInfoUI::Create(PLAYERUI_POS[nCnt], nCnt, m_apPlayer[nCnt]->GetType());
 	}
 
-	// ネズミ捕りの生成
-	CItem::Create(D3DXVECTOR3(0.0f, 0.0f, -700.0f), CItem::TYPE::TYPE_MOUSETRAP);
-	CItem::Create(D3DXVECTOR3(400.0f, 0.0f, -700.0f), CItem::TYPE::TYPE_MOUSETRAP);
+	//// ネズミ捕りの生成
+	//CItem::Create(D3DXVECTOR3(0.0f, 0.0f, -700.0f), CItem::TYPE::TYPE_MOUSETRAP);
+	//CItem::Create(D3DXVECTOR3(400.0f, 0.0f, -700.0f), CItem::TYPE::TYPE_MOUSETRAP);
 
 	//// 武器選択UIを生成
 	//CWeaponSelectUI::Create();
@@ -272,7 +274,6 @@ void CTutorial::Uninit(void)
 //======================================
 void CTutorial::Update(void)
 {
-
 	// デバッグ版
 #ifdef _DEBUG
 	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_F7) == true)
@@ -308,6 +309,11 @@ void CTutorial::Update(void)
 				assert(false);
 			}
 		}
+	}
+
+	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_F3) == true)
+	{ // F3キーを押した場合
+		CBlockManager::Get()->UninitAll();
 	}
 
 #endif
@@ -421,8 +427,9 @@ void CTutorial::Update(void)
 		{ // F9キーを押した場合
 
 		  // 情報をセーブする
-			CManager::Get()->GetFile()->Save(CFile::TYPE_OBSTACLE);		// 障害物
-			CManager::Get()->GetFile()->Save(CFile::TYPE_BLOCK);		// ブロック
+			//CManager::Get()->GetFile()->Save(CFile::TYPE_TUTORIAL_DEFULT);		// ブロック
+			//CManager::Get()->GetFile()->Save(CFile::TYPE_TUTORIAL_KILL);		// ブロック
+			CManager::Get()->GetFile()->Save(CFile::TYPE_TUTORIAL_ACTION);		// ブロック
 		}
 	}
 	else
@@ -514,6 +521,57 @@ void CTutorial::PlayTrue(void)
 			CTutorial::GetPlayer(nCnt)->SetTutorial(false);
 		}
 	}
+
+	if (m_Tutorial == CTutorial::TUTORIAL_CAT_KILL)
+	{
+		CBlockManager::Get()->UninitAll();
+		CManager::Get()->GetFile()->Load(CFile::TYPE_TUTORIAL_KILL);
+
+		// マップの設定処理
+		CManager::Get()->GetFile()->SetMap();
+
+		RatPosReset();
+	}
+	else if (m_Tutorial == CTutorial::TUTORIAL_RAT_RESCUE)
+	{
+		CBlockManager::Get()->UninitAll();
+		CManager::Get()->GetFile()->Load(CFile::TYPE_TUTORIAL_DEFULT);
+
+		// マップの設定処理
+		CManager::Get()->GetFile()->SetMap();
+	}
+	else if (m_Tutorial == CTutorial::TUTORIAL_ACTION)
+	{
+		CBlockManager::Get()->UninitAll();
+		CManager::Get()->GetFile()->Load(CFile::TYPE_TUTORIAL_ACTION);
+
+		// 画鋲と紐の生成処理
+		CObstacle::Create(D3DXVECTOR3(0.0f, 200.0f, 360.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CObstacle::TYPE_PIN);
+		CObstacle::Create(D3DXVECTOR3(520.0f, 200.0f, 360.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CObstacle::TYPE_PIN);
+		CObstacle::Create(D3DXVECTOR3(970.0f, 200.0f, 360.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CObstacle::TYPE_PIN);
+		CObstacle::Create(D3DXVECTOR3(-1000.0f, 650.0f, 360.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CObstacle::TYPE_HIMO);
+
+		CatPosReset();
+		RatPosReset();
+
+		// マップの設定処理
+		CManager::Get()->GetFile()->SetMap();
+	}
+	else if (m_Tutorial == CTutorial::TUTORIAL_ITEM_MULTI)
+	{
+		CBlockManager::Get()->UninitAll();
+		CManager::Get()->GetFile()->Load(CFile::TYPE_TUTORIAL_ACTION);
+
+		// リードの生成処理
+		CObstacle::Create(D3DXVECTOR3(520.0f, 200.0f, -500.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.0f, 0.0f), CObstacle::TYPE_LEASH);
+
+		// ネズミ捕りの生成
+		CItem::Create(D3DXVECTOR3(-1100.0f, 0.0f, -800.0f), CItem::TYPE::TYPE_MOUSETRAP);
+		CItem::Create(D3DXVECTOR3(-900.0f, 0.0f, -600.0f), CItem::TYPE::TYPE_MOUSETRAP);
+
+		// マップの設定処理
+		CManager::Get()->GetFile()->SetMap();
+	}
 }
 
 //======================================
@@ -600,6 +658,7 @@ void CTutorial::PlayFalse(void)
 				if (m_pAnswer != NULL)
 				{
 					m_pAnswer->SetAnswer(true, nCnt);
+					m_apPlayer[nCnt]->SetTutorial(true);
 				}
 			}
 		}
@@ -661,6 +720,34 @@ void CTutorial::PlayFalse(void)
 				m_pAnswer->Uninit();
 				m_pAnswer = NULL;
 			}
+		}
+	}
+}
+
+//======================================
+// ネコの位置をリセットする
+//======================================
+void CTutorial::CatPosReset(void)
+{
+	for (int nCnt = 0; nCnt < 4; nCnt++)
+	{
+		if (m_apPlayer[nCnt]->GetType() == CPlayer::TYPE_CAT)
+		{
+			m_apPlayer[nCnt]->SetPos(D3DXVECTOR3(-1000.0f, 0.0f, 0.0f));
+		}
+	}
+}
+
+//======================================
+// ネズミの位置をリセットする
+//======================================
+void CTutorial::RatPosReset(void)
+{
+	for (int nCnt = 0; nCnt < 4; nCnt++)
+	{
+		if (m_apPlayer[nCnt]->GetType() == CPlayer::TYPE_RAT)
+		{
+			m_apPlayer[nCnt]->SetPos(D3DXVECTOR3(250.0f * nCnt + 500.0f, 0.0f, 0.0f));
 		}
 	}
 }

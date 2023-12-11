@@ -162,14 +162,18 @@ void CSpeechMessage::Update(void)
 //=========================
 void CSpeechMessage::Draw(void)
 {
-	// 描画処理
-	CBillboard::DrawLightOff();
+	int nIdx = CObject::GetDrawIdx();
+	if (nIdx != m_nPlayerIdx)
+	{
+		// 描画処理
+		CBillboard::DrawLightOff();
+	}
 }
 
 //=========================
 // 情報の設定処理
 //=========================
-void CSpeechMessage::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const int nLife, const TYPE type)
+void CSpeechMessage::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const int nLife, const TYPE type, int nIdx)
 {
 	// スクロールの設定処理
 	SetPos(pos);			// 位置設定
@@ -182,7 +186,7 @@ void CSpeechMessage::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, co
 	m_type = type;				// 種類
 	m_nLife = nLife;			// 寿命
 	m_nStateCount = 0;			// 状態のカウント
-
+	m_nPlayerIdx = nIdx;		//プレイヤー番号
 	// 頂点情報の初期化
 	SetVertex();
 
@@ -206,7 +210,7 @@ void CSpeechMessage::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, co
 //=========================
 // 生成処理
 //=========================
-CSpeechMessage* CSpeechMessage::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const int nLife, const TYPE type)
+CSpeechMessage* CSpeechMessage::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const int nLife, const TYPE type,int nIdx)
 {
 	// ローカルオブジェクトを生成
 	CSpeechMessage* pMessage = nullptr;	// プレイヤーのインスタンスを生成
@@ -242,7 +246,7 @@ CSpeechMessage* CSpeechMessage::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3
 		}
 
 		// 情報の設定処理
-		pMessage->SetData(pos, size, nLife, type);
+		pMessage->SetData(pos, size, nLife, type,nIdx);
 	}
 	else
 	{ // オブジェクトが NULL の場合

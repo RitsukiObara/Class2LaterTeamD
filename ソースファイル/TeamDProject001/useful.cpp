@@ -32,13 +32,13 @@ void useful::RotNormalize(float *pRot)
 //======================
 // 重力処理
 //======================
-void useful::Gravity(float *fGravity, D3DXVECTOR3& pPos, const float fAdd)
+void useful::Gravity(float *fGravity, float* fPosY, const float fAdd)
 {
 	// 重力を加算する
 	*fGravity -= fAdd;
 
 	// 重力をかける
-	pPos.y += *fGravity;
+	*fPosY += *fGravity;
 }
 
 //======================
@@ -174,7 +174,7 @@ bool useful::CircleCollisionYZ(const D3DXVECTOR3& pos0, const D3DXVECTOR3& pos1,
 //======================
 // 外積の左右判断処理
 //======================
-float useful::LineOuterProductXZ(D3DXVECTOR3 posLeft, D3DXVECTOR3 posRight, D3DXVECTOR3 pos)
+float useful::LineOuterProductXZ(const D3DXVECTOR3& posLeft, const D3DXVECTOR3& posRight, const D3DXVECTOR3& pos)
 {
 	// 変数を宣言
 	D3DXVECTOR3 vecLine;	// 境界線ベクトル
@@ -193,7 +193,7 @@ float useful::LineOuterProductXZ(D3DXVECTOR3 posLeft, D3DXVECTOR3 posRight, D3DX
 //======================
 // 外積の左右判断処理(XY平面)
 //======================
-float useful::LineOuterProductXY(D3DXVECTOR3 posUp, D3DXVECTOR3 posDown, D3DXVECTOR3 pos)
+float useful::LineOuterProductXY(const D3DXVECTOR3& posUp, const D3DXVECTOR3& posDown, const D3DXVECTOR3& pos)
 {
 	// 変数を宣言
 	D3DXVECTOR3 vecLine;	// 境界線ベクトル
@@ -212,7 +212,7 @@ float useful::LineOuterProductXY(D3DXVECTOR3 posUp, D3DXVECTOR3 posDown, D3DXVEC
 //======================
 // 外積の左右判断処理(YZ平面)
 //======================
-float useful::LineOuterProductYZ(D3DXVECTOR3 posUp, D3DXVECTOR3 posDown, D3DXVECTOR3 pos)
+float useful::LineOuterProductYZ(const D3DXVECTOR3& posUp, const D3DXVECTOR3& posDown, const D3DXVECTOR3& pos)
 {
 	// 変数を宣言
 	D3DXVECTOR3 vecLine;	// 境界線ベクトル
@@ -251,7 +251,7 @@ void useful::NormalizeVector(D3DXVECTOR3& nor, const D3DXVECTOR3& posRight, cons
 //======================
 // 内積の判定処理
 //======================
-float useful::InnerProduct(const D3DXVECTOR3 VecMove, const D3DXVECTOR3 VecNor)
+float useful::InnerProduct(const D3DXVECTOR3& VecMove, const D3DXVECTOR3& VecNor)
 {
 	// ローカル変数宣言
 	float fDot = 0.0f;			// 内積

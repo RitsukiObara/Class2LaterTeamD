@@ -141,6 +141,7 @@ void CPin::Action(void)
 	if (m_State == STATE_FALSE)
 	{
 		m_State = STATE_FALLWAIT;
+		SetAction(true);
 	}
 }
 
@@ -156,7 +157,7 @@ void CPin::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE ty
 //=====================================
 // ヒット処理
 //=====================================
-bool CPin::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CPin::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
 	if (m_State == STATE_TRUE)
 	{ // ギミック発動状態の場合
@@ -165,9 +166,9 @@ bool CPin::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlaye
 		D3DXVECTOR3 vtxMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);
 		D3DXVECTOR3 vtxMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);
 
-		if (useful::RectangleCollisionXY(pos, GetPos(), vtxMax, GetFileData().vtxMax, vtxMin, GetFileData().vtxMin) == true &&
-			useful::RectangleCollisionXZ(pos, GetPos(), vtxMax, GetFileData().vtxMax, vtxMin, GetFileData().vtxMin) == true &&
-			useful::RectangleCollisionYZ(pos, GetPos(), vtxMax, GetFileData().vtxMax, vtxMin, GetFileData().vtxMin) == true)
+		if (useful::RectangleCollisionXY(pPlayer->GetPos(), GetPos(), vtxMax, GetFileData().vtxMax, vtxMin, GetFileData().vtxMin) == true &&
+			useful::RectangleCollisionXZ(pPlayer->GetPos(), GetPos(), vtxMax, GetFileData().vtxMax, vtxMin, GetFileData().vtxMin) == true &&
+			useful::RectangleCollisionYZ(pPlayer->GetPos(), GetPos(), vtxMax, GetFileData().vtxMax, vtxMin, GetFileData().vtxMin) == true)
 		{ // 範囲内に入った場合
 
 			// 終了処理
@@ -185,9 +186,9 @@ bool CPin::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlaye
 //=====================================
 // ヒット処理
 //=====================================
-bool CPin::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type)
+bool CPin::HitCircle(CPlayer* pPlayer, const float Radius)
 {
-	if (useful::CircleCollisionXZ(pos, GetPos(), Radius, GetFileData().fRadius) == true)
+	if (useful::CircleCollisionXZ(pPlayer->GetPos(), GetPos(), Radius, GetFileData().fRadius) == true)
 	{//円の範囲内の場合tureを返す
 		return true;
 	}

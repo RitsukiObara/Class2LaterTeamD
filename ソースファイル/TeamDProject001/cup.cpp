@@ -189,13 +189,14 @@ void CCup::StateManager(D3DXVECTOR3 *pos, D3DXVECTOR3 *rot)
 }
 
 //=====================================
-// 紐を引っ張られた時の処理
+// コップがおちるときの処理
 //=====================================
 void CCup::Action(void)
 {
 	if (m_State == STATE_FALSE)
 	{
 		m_State = STATE_FALLWAIT;
+		SetAction(true);
 	}
 }
 
@@ -221,7 +222,7 @@ void CCup::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE ty
 //=====================================
 // ヒット処理
 //=====================================
-bool CCup::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CCup::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
 	if (m_pWater != nullptr)
 	{ // 水が NULL じゃない場合
@@ -230,9 +231,9 @@ bool CCup::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlaye
 		D3DXVECTOR3 posWater = m_pWater->GetPos();
 		float radiusWater = m_pWater->GetSize().x;
 
-		if (posWater.y >= pos.y &&
-			posWater.y <= pos.y + collSize.y &&
-			useful::CylinderInner(pos, posWater, radiusWater) == true)
+		if (posWater.y >= pPlayer->GetPos().y &&
+			posWater.y <= pPlayer->GetPos().y + collSize.y &&
+			useful::CylinderInner(pPlayer->GetPos(), posWater, radiusWater) == true)
 		{ // 当たり判定の中に入った場合
 
 			// true を返す
@@ -247,9 +248,9 @@ bool CCup::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlaye
 //=====================================
 // ヒット処理
 //=====================================
-bool CCup::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type)
+bool CCup::HitCircle(CPlayer* pPlayer, const float Radius)
 {
-	if (useful::CircleCollisionXZ(pos, GetPos(), Radius, GetFileData().fRadius) == true)
+	if (useful::CircleCollisionXZ(pPlayer->GetPos(), GetPos(), Radius, GetFileData().fRadius) == true)
 	{//円の範囲内の場合tureを返す
 		return true;
 	}

@@ -33,6 +33,9 @@ public:			// 誰でもアクセスできる
 		TYPE_OBSTACLE = 0,	// 障害物
 		TYPE_CARROUTE,		// 車の経路
 		TYPE_BLOCK,			// ブロック
+		TYPE_TUTORIAL_DEFULT,	// チュートリアルのデフォルトブロック
+		TYPE_TUTORIAL_KILL,		// チュートリアルのキル用ブロック
+		TYPE_TUTORIAL_ACTION,	// チュートリアルのアクション用ブロック
 		TYPE_MAX			// この列挙型の総数
 	};
 
@@ -84,12 +87,12 @@ private:		// 自分のみアクセスできる
 
 	// メンバ関数(セーブ関係)
 	HRESULT SaveObstacle(void);		// 障害物のセーブ処理
-	HRESULT SaveBlock(void);		// ブロックのセーブ処理
+	HRESULT SaveBlock(const char *cFileName);		// ブロックのセーブ処理
 
 	// メンバ関数(ロード関係)
 	HRESULT LoadObstacle(void);		// 障害物のロード処理
 	HRESULT LoadCarRoute(void);		// 車の経路のロード処理
-	HRESULT LoadBlock(void);		// ブロックのロード処理
+	HRESULT LoadBlock(const char *cFileName);		// ブロックのロード処理
 
 	// メンバ変数
 	SObstacleInfo m_ObstacleInfo;	// 障害物の情報

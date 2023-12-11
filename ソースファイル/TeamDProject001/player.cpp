@@ -354,7 +354,7 @@ void CPlayer::Draw(void)
 	if (m_pPlayerID != nullptr)
 	{ // プレイヤーのID表示が NULL じゃない場合
 
-		if (m_nPlayerIdx != CObject::GetDrawIdx())
+		if (m_nPlayerIdx != CObject::GetDrawIdx() && (CManager::Get()->GetMode() == CScene::MODE_GAME || CManager::Get()->GetMode() == CScene::MODE_TUTORIAL))
 		{
 			m_pPlayerID->Draw();
 		}
@@ -721,7 +721,7 @@ void CPlayer::RotNormalize(void)
 void CPlayer::ObstacleCollision(void)
 {
 	// 障害物との衝突判定
-	collision::ObstacleCollision(*this, m_sizeColl.x, m_sizeColl.y, m_sizeColl.z);
+	collision::ObstacleCollision(this, m_sizeColl.x, m_sizeColl.y, m_sizeColl.z);
 }
 
 //=======================================
@@ -842,6 +842,11 @@ void CPlayer::StunStateManager(void)
 		break;
 
 	case STUNSTATE_STUN:	//気絶状態
+
+		if (m_pStun != NULL)
+		{
+			m_pStun->SetPos(D3DXVECTOR3(GetPos().x, GetPos().y + m_fStunHeight, GetPos().z));
+		}
 
 		// カウントを減算する
 		m_StunStateCount--;
@@ -1229,7 +1234,7 @@ void CPlayer::SetSpeechMessage(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, 
 	if (m_pSpeechMessage == nullptr)
 	{ // 伝達メッセージが NULLのとき
 
-		m_pSpeechMessage = CSpeechMessage::Create(pos, size, nLife, (CSpeechMessage::TYPE)type);
+		m_pSpeechMessage = CSpeechMessage::Create(pos, size, nLife, (CSpeechMessage::TYPE)type,(int)m_nPlayerIdx);
 	}
 }
 

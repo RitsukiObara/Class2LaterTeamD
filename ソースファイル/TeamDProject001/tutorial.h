@@ -94,6 +94,8 @@ public:						// 誰でもアクセスできる
 private:					// 自分だけアクセスできる
 
 	// メンバ関数
+	static void CatPosReset(void);			// ネコの位置をリセットする
+	static void RatPosReset(void);			// ネズミの位置をリセットする
 	void Pause(void);			// ポーズ処理
 	void Transition(void);		// 遷移処理
 

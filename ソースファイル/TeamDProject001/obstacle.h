@@ -43,6 +43,7 @@ public:			// 誰でもアクセスできる
 		TYPE_TV,			// テレビ
 		TYPE_DYNAMITE,		// ダイナマイト
 		TYPE_BOOK,			// 本
+		TYPE_REDKATEN,		// 赤のカーテン
 		TYPE_MAX			// この列挙型の総数
 	};
 
@@ -65,11 +66,11 @@ public:			// 誰でもアクセスできる
 
 	virtual void SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type);			// 情報の設定処理
 
-	virtual bool Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type);	// 当たり判定処理
-	virtual bool Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlayer::TYPE type);			// ヒット処理
-	virtual bool HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type) { return false; }							// ヒット処理
+	virtual bool Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize);				// 当たり判定処理
+	virtual bool Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize);		// ヒット処理
+	virtual bool HitCircle(CPlayer* pPlayer, const float Radius) { return false; }							// ヒット処理
 	virtual void Action(void) {}											// ギミック起動処理
-	virtual void HitMultiCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type, int nIdx, bool bInput) {}				// ヒット処理
+	virtual void HitMultiCircle(CPlayer* pPlayer, const float Radius, bool bInput) {}				// ヒット処理
 	virtual void MultiAction(void) {}										// ギミック同時起動処理
 	void GimmickUI(bool Set, int Player_Idx);								// ギミック起動UIの表示
 	void MultiGimmickUI(bool Set, int Player_Idx);							// ギミック起動UIの表示
@@ -82,9 +83,12 @@ public:			// 誰でもアクセスできる
 	bool GetCatUse(void) { return m_bCatUse; }				// 起動可能の取得処理
 	void SetRatUse(const bool Set) { m_bRatUse = Set; }		// 起動可能の設定処理
 	bool GetRatUse(void) { return m_bRatUse; }				// 起動可能の取得処理
+	void SetAction(const bool Set) { m_bAction = Set; }		// 起動状態の設定処理
+	bool GetAction(void) { return m_bAction; }				// 起動状態の取得処理
 
 	virtual D3DXVECTOR3 GetPosHead(void) { return NONE_D3DXVECTOR3; }
 	virtual D3DXVECTOR3 GetPosToes(void) { return NONE_D3DXVECTOR3; }
+	virtual void SlideOn(D3DXVECTOR3 pos, D3DXVECTOR3 move, CPlayer *pPlayer) {}
 
 	// 静的メンバ関数
 	static CObstacle* Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type);		// 生成処理
@@ -98,6 +102,7 @@ private:		// 自分だけアクセスできる
 	bool m_pGimmickUIFalse[MAX_PLAY];	//全部[False]の時にUIを削除する
 	bool m_bCatUse;						//猫が起動できるかどうか
 	bool m_bRatUse;						//ネズミが起動できるかどうか
+	bool m_bAction;						//起動しているかどうか
 
 	// リスト構造関係
 	CObstacle* m_pPrev;	// 前へのポインタ

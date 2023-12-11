@@ -23,7 +23,7 @@
 class CModel;			// モデル
 
 //-----------------------------------
-// クラス定義(リード)
+// クラス定義(本)
 //-----------------------------------
 class CBook : public CObstacle
 {
@@ -37,6 +37,16 @@ public:			// 誰でもアクセスできる
 		STATE_MAX			// この列挙型の総数
 	};
 
+	// 構造体定義(本)
+	struct SBook
+	{
+		CModel* pBook;		// 上に載っている本の情報
+		D3DXVECTOR3 move;	// 移動量
+		float fGravity;		// 重力
+		bool bDisp;			// 描画状況
+		bool bMove;			// 移動状況
+	};
+
 	CBook();				// コンストラクタ
 	~CBook();				// デストラクタ
 
@@ -48,20 +58,24 @@ public:			// 誰でもアクセスできる
 
 	void SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type);			// 情報の設定処理
 
-	bool Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type) override;	// 当たり判定処理
-	bool Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlayer::TYPE type) override;		// ヒット処理
-	bool HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type) override;
+	bool Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize) override;	// 当たり判定処理
+	bool Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize) override;		// ヒット処理
+	bool HitCircle(CPlayer* pPlayer, const float Radius) override;
 	void Action(void) override;
 
 private:		// 自分だけアクセスできる
 
 	// メンバ関数
-	void StateManager(void);		// 状態マネージャー
+	void StateManager(void);	// 状態マネージャー
+	bool KillZ(void);			// Z軸による消去処理
 
 	// メンバ変数
-	CModel* m_apBook[MAX_BOOK];		// 上に載っている本の情報
-	D3DXVECTOR3 m_move;				// 移動量
-	STATE m_state;					// 状態
+	SBook m_aBook[MAX_BOOK];	// 本の構造体
+	D3DXVECTOR3 m_move;			// 移動量
+	STATE m_state;				// 状態
+	float m_fGravity;			// 重力
+	bool m_bDisp;				// 描画状況
+	bool m_bMove;				// 移動状況
 };
 
 #endif

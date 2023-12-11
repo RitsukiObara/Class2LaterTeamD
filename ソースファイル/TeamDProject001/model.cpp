@@ -609,7 +609,7 @@ void CModel::SetFileData(const CXFile::SXFile filaData)
 //========================
 // 生成処理
 //========================
-CModel* CModel::Create(void)
+CModel* CModel::Create(const TYPE type, const PRIORITY priority)
 {
 	// ローカルオブジェクトを生成
 	CModel* pModel = nullptr;	// プレイヤーのインスタンスを生成
@@ -618,7 +618,7 @@ CModel* CModel::Create(void)
 	{ // オブジェクトが NULL の場合
 
 		// オブジェクトを生成
-		pModel = new CModel(TYPE_3DPOLYGON, PRIORITY_BG);
+		pModel = new CModel(type, priority);
 	}
 	else
 	{ // オブジェクトが NULL じゃない場合
