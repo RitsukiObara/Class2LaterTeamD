@@ -85,7 +85,9 @@ void CGarbage::Update(void)
 		pos += m_SlideMove;
 		m_pPlayer->SetPos(pos + m_PlayerPos);
 
-		if (Collision(m_pPlayer, GetFileData().vtxMax) == true || ((m_SlideMove.x <= 1.0f && m_SlideMove.x >= -1.0f) && (m_SlideMove.z <= 1.0f && m_SlideMove.z >= -1.0f)))
+		if (Collision(m_pPlayer, GetFileData().vtxMax) == true || 
+			MagicWall() == true ||
+			((m_SlideMove.x <= 1.0f && m_SlideMove.x >= -1.0f) && (m_SlideMove.z <= 1.0f && m_SlideMove.z >= -1.0f)))
 		{
 			m_Slide = SLIDE_BREAK;
 			m_SlideMove = D3DXVECTOR3(-m_SlideMove.x * 0.1f, 30.0f, -m_SlideMove.z * 0.1f);
@@ -144,6 +146,63 @@ void CGarbage::StateManager(void)
 }
 
 //=====================================
+// 魔法の壁
+//=====================================
+bool CGarbage::MagicWall(void)
+{
+	// 位置を取得する
+	D3DXVECTOR3 pos = GetPos();
+	D3DXVECTOR3 Max = GetFileData().vtxMax;
+	D3DXVECTOR3 Min = GetFileData().vtxMin;
+
+	if (pos.x + Min.x <= -1600.0f)
+	{ // 位置が左から出そうな場合
+
+		// 位置を設定する
+		pos.x = -1600.0f - Min.x;
+
+		// true を返す
+		return true;
+	}
+
+	if (pos.x + Max.x >= 1600.0f)
+	{ // 位置が右から出そうな場合
+
+		// 位置を設定する
+		pos.x = 1600.0f - Max.x;
+
+		// true を返す
+		return true;
+	}
+
+	if (pos.z + Min.z <= -1000.0f)
+	{ // 位置が右から出そうな場合
+
+		// 位置を設定する
+		pos.z = -1000.0f - Min.z;
+
+		// true を返す
+		return true;
+	}
+
+	if (pos.z + Max.z >= 1000.0f)
+	{ // 位置が右から出そうな場合
+
+		// 位置を設定する
+		pos.z = 1000.0f - Max.z;
+
+		// true を返す
+		return true;
+	}
+
+	// 位置を適用する
+	SetPos(pos);
+
+	// false を返す
+	return false;
+}
+
+//=====================================
 // 破壊時処理
 //=====================================
 void CGarbage::SlideOn(D3DXVECTOR3 pos, D3DXVECTOR3 move, CPlayer *pPlayer)
@@ -168,6 +227,9 @@ void CGarbage::Break(void)
 		// モデルの情報を設定する
 		SetFileData(CXFile::TYPE_GARBAGE);
 	}
+
+	// アクション状況を true にする
+	SetAction(true);
 }
 
 //=====================================
@@ -264,7 +326,8 @@ bool CGarbage::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 //=====================================
 bool CGarbage::HitCircle(CPlayer* pPlayer, const float Radius)
 {
-	if (useful::CircleCollisionXZ(pPlayer->GetPos(), GetPos(), Radius, GetFileData().fRadius) == true)
+	if (GetAction() == false &&
+		useful::CircleCollisionXZ(pPlayer->GetPos(), GetPos(), Radius, GetFileData().fRadius) == true)
 	{ // 範囲内に入っている場合
 
 		// true を返す

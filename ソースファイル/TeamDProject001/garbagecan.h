@@ -51,7 +51,6 @@ public:			// 誰でもアクセスできる
 	void SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type);			// 情報の設定処理
 
 	void SlideOn(D3DXVECTOR3 pos, D3DXVECTOR3 move, CPlayer *pPlayer);
-	void BlockCollision(void);	// 当たり判定処理
 	bool Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize) override;		// 当たり判定処理
 	bool Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize) override;			// ヒット処理
 	bool HitCircle(CPlayer* pPlayer, const float Radius) override;				// ヒットの円処理
@@ -60,6 +59,7 @@ public:			// 誰でもアクセスできる
 private:		// 自分だけアクセスできる
 	void Break(void);
 	void StateManager(void);
+	bool MagicWall(void);
 
 	State m_State;
 	SLIDE m_Slide;
