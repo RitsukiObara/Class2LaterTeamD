@@ -23,9 +23,9 @@ namespace
 {
 	static const D3DXVECTOR3 SWITCH_POS[MAX_SWITCH] =		// スイッチの位置
 	{
-		D3DXVECTOR3(-500.0f,0.0f,0.0f),
-		NONE_D3DXVECTOR3,
-		D3DXVECTOR3(500.0f,0.0f,0.0f),
+		D3DXVECTOR3(-500.0f,100.0f,0.0f),
+		D3DXVECTOR3(0.0f,100.0f,0.0f),
+		D3DXVECTOR3(500.0f,100.0f,0.0f),
 	};
 	static const D3DXVECTOR3 SWITCH_ROT[MAX_SWITCH] =		// スイッチの向き
 	{
@@ -283,8 +283,37 @@ void CCurtain::HitMultiCircle(CPlayer* pPlayer, const float Radius, bool bInput)
 				if (bInput == true)
 				{ // 入力状況が true の場合
 
-					// スイッチの起動状況を true にする
-					m_apSwitch[nCnt]->SetBoot(true);
+					switch (pPlayer->GetType())
+					{
+					case CPlayer::TYPE_CAT:		// ネコ
+
+						if (m_apSwitch[nCnt]->GetBoot() == true)
+						{ // 起動状況が false の場合
+
+							// 起動状況の入れ替え処理
+							m_apSwitch[nCnt]->ChangeBoot();
+						}
+
+						break;
+
+					case CPlayer::TYPE_RAT:		// ネズミ
+
+						if (m_apSwitch[nCnt]->GetBoot() == false)
+						{ // 起動状況が true の場合
+
+							// 起動状況の入れ替え処理
+							m_apSwitch[nCnt]->ChangeBoot();
+						}
+
+						break;
+
+					default:
+
+						// 停止
+						assert(false);
+
+						break;
+					}
 				}
 			}
 		}

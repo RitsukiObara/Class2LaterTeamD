@@ -276,10 +276,7 @@ void CCat::Gravity(void)
 //===========================================
 void CCat::Attack(void)
 {
-	// ローカル変数宣言
-	CPlayer* pPlayer = nullptr;
-	D3DXVECTOR3 pos = GetPos();
-	D3DXVECTOR3 rot = GetRot();
+	
 
 	// ゲームモードの時だけ攻撃
 	if (CManager::Get()->GetMode() == CScene::MODE_GAME || CManager::Get()->GetMode() == CScene::MODE_TUTORIAL)
@@ -291,8 +288,61 @@ void CCat::Attack(void)
 			// 状態を攻撃準備にする
 			m_AttackState = ATTACKSTATE_STANDBY;
 			m_nAtkStateCount = 20;
+		
+		}
+	}
+}
+
+//===========================================
+// 攻撃状態の管理
+//===========================================
+void CCat::AttackStateManager(void)
+{
+	// ローカル変数宣言
+	CPlayer* pPlayer = nullptr;
+	D3DXVECTOR3 pos = GetPos();
+	D3DXVECTOR3 rot = GetRot();
+
+	switch (m_AttackState)
+	{
+	case ATTACKSTATE_MOVE:
+
+		//CEffect::Create(m_AttackPos, NONE_D3DXVECTOR3, 1, 400.0f, CEffect::TYPE::TYPE_NONE, D3DXCOLOR(0.0f, 0.0f, 1.0f, 0.8f), true);
+
+		break;
+
+	case ATTACKSTATE_STANDBY:
+
+		//CEffect::Create(m_AttackPos, NONE_D3DXVECTOR3, 1, 400.0f, CEffect::TYPE::TYPE_NONE, D3DXCOLOR(1.0f, 1.0f, 0.0f, 0.5f), true);
+
+		if (m_nAtkStateCount <= 0)
+		{//状態カウントが0になった時
+
+			D3DXVECTOR3 pos = GetPos();
+			D3DXVECTOR3 rot = GetRot();
+
+			m_bAttack = true;		// 攻撃した状態にする
+			m_AttackState = ATTACKSTATE_ATTACK;
+			m_nAtkStateCount = 20;
+
+			for (int nCnt = 0; nCnt < 10; nCnt++)
+			{
+				// 破片の生成
+				CFraction::Create(D3DXVECTOR3(pos.x + sinf(rot.y) * -ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * -ATTACK_DISTANCE), CFraction::TYPE_CAT_ATTACK);
+			}
+		}
+		break;
+
+	case ATTACKSTATE_ATTACK:
+
+		//CEffect::Create(m_AttackPos, NONE_D3DXVECTOR3, 1, 400.0f, CEffect::TYPE::TYPE_NONE, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f), true);
+
+		if (useful::CircleCollisionXZ(m_AttackPos, m_AttackPos,10.0f,10.0f) == true)
+		{
 			for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
 			{
+
+
 				if (CManager::Get()->GetMode() == CScene::MODE_GAME)
 				{
 					// プレイヤーの情報を取得する
@@ -322,59 +372,13 @@ void CCat::Attack(void)
 							D3DXVECTOR3(-ATTACK_SIZE.x, -ATTACK_SIZE.y, -ATTACK_SIZE.z), D3DXVECTOR3(-30.0f, -50.0f, -30.0f)) == true)
 						{ // XZの矩形に当たってたら
 
-							// プレイヤーのヒット処理
+						  // プレイヤーのヒット処理
 							pPlayer->Hit();
 							SetRatKill(true);
 						}
 					}
 				}
 			}
-		}
-	}
-}
-
-//===========================================
-// 攻撃状態の管理
-//===========================================
-void CCat::AttackStateManager(void)
-{
-	switch (m_AttackState)
-	{
-	case ATTACKSTATE_MOVE:
-
-		//CEffect::Create(m_AttackPos, NONE_D3DXVECTOR3, 1, 400.0f, CEffect::TYPE::TYPE_NONE, D3DXCOLOR(0.0f, 0.0f, 1.0f, 0.8f), true);
-
-		break;
-
-	case ATTACKSTATE_STANDBY:
-
-		//CEffect::Create(m_AttackPos, NONE_D3DXVECTOR3, 1, 400.0f, CEffect::TYPE::TYPE_NONE, D3DXCOLOR(1.0f, 1.0f, 0.0f, 0.5f), true);
-
-		if (m_nAtkStateCount <= 0)
-		{//状態カウントが0になった時
-
-			D3DXVECTOR3 pos = GetPos();
-			D3DXVECTOR3 rot = GetRot();
-
-			m_bAttack = true;		// 攻撃した状態にする
-			m_AttackState = ATTACKSTATE_ATTACK;
-			m_nAtkStateCount = 10;
-
-			for (int nCnt = 0; nCnt < 10; nCnt++)
-			{
-				// 破片の生成
-				CFraction::Create(D3DXVECTOR3(pos.x + sinf(rot.y) * -ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * -ATTACK_DISTANCE), CFraction::TYPE_CAT_ATTACK);
-			}
-		}
-		break;
-
-	case ATTACKSTATE_ATTACK:
-
-		//CEffect::Create(m_AttackPos, NONE_D3DXVECTOR3, 1, 400.0f, CEffect::TYPE::TYPE_NONE, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f), true);
-
-		if (useful::CircleCollisionXZ(m_AttackPos, m_AttackPos,10.0f,10.0f) == true)
-		{
-
 		}
 
 		if (m_nAtkStateCount <= 0)
