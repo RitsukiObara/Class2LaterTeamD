@@ -46,7 +46,9 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\Book001.x",				// 本(青)
 	"data\\MODEL\\Book002.x",				// 本(緑)
 	"data\\MODEL\\Book003.x",				// 本(黄)
-
+	"data\\MODEL\\lever000.x",				// レバー(本体)
+	"data\\MODEL\\lever001.x",				// レバー(棒)
+	
 	// ブロックモデル
 	"data\\MODEL\\cardboard.x",				// 段ボール
 	"data\\MODEL\\TissueBox.x",				// ティッシュ箱
