@@ -283,8 +283,37 @@ void CCurtain::HitMultiCircle(CPlayer* pPlayer, const float Radius, bool bInput)
 				if (bInput == true)
 				{ // 入力状況が true の場合
 
-					// 起動状況の入れ替え処理
-					m_apSwitch[nCnt]->ChangeBoot();
+					switch (pPlayer->GetType())
+					{
+					case CPlayer::TYPE_CAT:		// ネコ
+
+						if (m_apSwitch[nCnt]->GetBoot() == true)
+						{ // 起動状況が false の場合
+
+							// 起動状況の入れ替え処理
+							m_apSwitch[nCnt]->ChangeBoot();
+						}
+
+						break;
+
+					case CPlayer::TYPE_RAT:		// ネズミ
+
+						if (m_apSwitch[nCnt]->GetBoot() == false)
+						{ // 起動状況が true の場合
+
+							// 起動状況の入れ替え処理
+							m_apSwitch[nCnt]->ChangeBoot();
+						}
+
+						break;
+
+					default:
+
+						// 停止
+						assert(false);
+
+						break;
+					}
 				}
 			}
 		}
