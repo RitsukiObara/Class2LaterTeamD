@@ -81,6 +81,7 @@ void CObstacle::Box(void)
 	m_bCatUse = false;
 	m_bRatUse = false;
 	m_bAction = false;
+	m_fAlpha = 1.0f;
 
 	if (CObstacleManager::Get() != nullptr)
 	{ // マネージャーが存在していた場合
@@ -206,6 +207,28 @@ void CObstacle::Draw(void)
 {
 	// 描画処理
 	CModel::Draw();
+
+	if (m_pGimmickUI != NULL)
+	{
+		m_pGimmickUI->DrawLightOff();
+	}
+
+	for (int nCnt = 0; nCnt < 2; nCnt++)
+	{
+		if (m_pMultiGimmickUI[nCnt] != NULL)
+		{
+			m_pMultiGimmickUI[nCnt]->Draw();
+		}
+	}
+}
+
+//=====================================
+// 破片の描画処理
+//=====================================
+void CObstacle::Draw(const float fAlpha)
+{
+	// 描画処理
+	CModel::Draw(fAlpha);
 
 	if (m_pGimmickUI != NULL)
 	{
