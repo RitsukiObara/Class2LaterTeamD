@@ -57,6 +57,9 @@ public:						// 誰でもアクセスできる
 
 	static CPlayer* GetPlayer(const int nID);		// プレイヤーの取得処理
 
+	static void SetCountDown(const bool Set) { m_bCountDown = Set; }		// ゲームの進行状態の設定処理
+	static bool GetCountDown(void) { return m_bCountDown; }					// ゲームの進行状態の取得処理
+
 	// NULL化処理
 	static void DeletePause(void);		// ポーズのNULL化処理
 	static void DeletePlayer(int nIdx);	// プレイヤーのNULL化処理
@@ -79,6 +82,7 @@ private:					// 自分だけアクセスできる
 	static CGameFinish* m_pFinish;			// フィニッシュの情報
 	static STATE m_GameState;				// ゲームの進行状態
 	static int m_nFinishCount;				// 終了カウント
+	static bool m_bCountDown;			// カウントダウンが使用されているかどうか
 
 // デバッグ版
 #ifdef _DEBUG

@@ -37,7 +37,6 @@ CElecFan::CElecFan() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK
 	m_pFan = nullptr;			// 扇風機のファン
 	m_bPower = false;			// 電源状況
 	SetCatUse(true);
-	SetRatUse(true);
 }
 
 //==============================
@@ -162,17 +161,21 @@ void CElecFan::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYP
 //=====================================
 // 当たり判定処理
 //=====================================
-bool CElecFan::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CElecFan::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
-	// 最大値と最小値を設定する
+	// 位置と最大値と最小値を設定する
+	D3DXVECTOR3 playPos = pPlayer->GetPos();
 	D3DXVECTOR3 vtxMax = D3DXVECTOR3(GetFileData().fRadius, GetFileData().vtxMax.y, GetFileData().fRadius);
 	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-GetFileData().fRadius, GetFileData().vtxMin.y, -GetFileData().fRadius);
 	D3DXVECTOR3 playMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);
 	D3DXVECTOR3 playMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);
 
 	// 六面体の当たり判定
-	if (collision::HexahedronCollision(&pos, GetPos(), posOld, GetPosOld(), playMin, vtxMin, playMax, vtxMax) == true)
+	if (collision::HexahedronCollision(&playPos, GetPos(), pPlayer->GetPosOld(), GetPosOld(), playMin, vtxMin, playMax, vtxMax) == true)
 	{ // 当たり判定が true の場合
+
+		// 位置を適用する
+		pPlayer->SetPos(playPos);
 
 		// true を返す
 		return true;
@@ -185,7 +188,7 @@ bool CElecFan::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DX
 //=====================================
 // ヒット処理
 //=====================================
-bool CElecFan::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CElecFan::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
 	if (m_bPower == true)
 	{ // 電源状況が true の場合
@@ -196,9 +199,9 @@ bool CElecFan::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CP
 		D3DXVECTOR3 playerMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);
 		D3DXVECTOR3 playerMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);
 
-		if (useful::RectangleCollisionXY(pos, GetPos(), playerMax, vtxMax, playerMin, vtxMin) == true &&
-			useful::RectangleCollisionXZ(pos, GetPos(), playerMax, vtxMax, playerMin, vtxMin) == true &&
-			useful::RectangleCollisionYZ(pos, GetPos(), playerMax, vtxMax, playerMin, vtxMin) == true)
+		if (useful::RectangleCollisionXY(pPlayer->GetPos(), GetPos(), playerMax, vtxMax, playerMin, vtxMin) == true &&
+			useful::RectangleCollisionXZ(pPlayer->GetPos(), GetPos(), playerMax, vtxMax, playerMin, vtxMin) == true &&
+			useful::RectangleCollisionYZ(pPlayer->GetPos(), GetPos(), playerMax, vtxMax, playerMin, vtxMin) == true)
 		{ // 当たり判定の中に入った場合
 
 			// true を返す
@@ -213,9 +216,9 @@ bool CElecFan::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CP
 //=====================================
 // ヒット処理
 //=====================================
-bool CElecFan::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type)
+bool CElecFan::HitCircle(CPlayer* pPlayer, const float Radius)
 {
-	if (useful::CircleCollisionXZ(pos, GetPos(), Radius, GetFileData().fRadius) == true)
+	if (useful::CircleCollisionXZ(pPlayer->GetPos(), GetPos(), Radius, GetFileData().fRadius) == true)
 	{//円の範囲内の場合trueを返す
 		return true;
 	}
@@ -237,11 +240,15 @@ void CElecFan::Action(void)
 
 		// 目的の向きの移動量を設定する
 		m_pFan->SetRotMoveDest(FAN_MOVE_ON);
+		SetCatUse(false);
+		SetRatUse(true);
 	}
 	else
 	{ // 上記以外
 
 		// 目的の向きの移動量を設定する
 		m_pFan->SetRotMoveDest(FAN_MOVE_OFF);
+		SetCatUse(true);
+		SetRatUse(false);
 	}
 }

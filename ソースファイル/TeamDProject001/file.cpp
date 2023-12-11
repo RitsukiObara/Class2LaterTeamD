@@ -23,6 +23,9 @@
 #define OBSTACLE_TXT		"data\\TXT\\Obstacle.txt"		// 障害物のテキスト
 #define CARROUTE_TXT		"data\\TXT\\CarRoute.txt"		// 車の経路のテキスト
 #define BLOCK_TXT			"data\\TXT\\Block.txt"			// ブロックのテキスト
+#define TUTORIAL_BLOCK_TXT	"data\\TXT\\Tutorial.txt"		// ブロックのテキスト
+#define TUTORIAL_KILL_TXT	"data\\TXT\\TutorialKill.txt"	// ブロックのテキスト
+#define TUTORIAL_ACTION_TXT	"data\\TXT\\TutorialAction.txt"	// ブロックのテキスト
 
 //--------------------------------------------
 // 静的メンバ変数宣言
@@ -95,10 +98,44 @@ HRESULT CFile::Save(const TYPE type)
 	case TYPE_BLOCK:
 
 		// ブロックのセーブ処理
-		if (FAILED(SaveBlock()))
+		if (FAILED(SaveBlock(BLOCK_TXT)))
 		{ // 失敗した場合
 
 			// 失敗を返す
+			return E_FAIL;
+		}
+
+	case TYPE_TUTORIAL_DEFULT:
+
+		// ブロックのセーブ処理
+		if (FAILED(SaveBlock(TUTORIAL_BLOCK_TXT)))
+		{ // 失敗した場合
+
+		  // 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
+	case TYPE_TUTORIAL_KILL:
+
+		// ブロックのセーブ処理
+		if (FAILED(SaveBlock(TUTORIAL_KILL_TXT)))
+		{ // 失敗した場合
+
+		  // 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
+	case TYPE_TUTORIAL_ACTION:
+
+		// ブロックのセーブ処理
+		if (FAILED(SaveBlock(TUTORIAL_ACTION_TXT)))
+		{ // 失敗した場合
+
+		  // 失敗を返す
 			return E_FAIL;
 		}
 
@@ -150,10 +187,46 @@ HRESULT CFile::Load(const TYPE type)
 	case TYPE_BLOCK:
 
 		// ブロックのロード処理
-		if (FAILED(LoadBlock()))
+		if (FAILED(LoadBlock(BLOCK_TXT)))
 		{ // 失敗した場合
 
 			// 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
+	case TYPE_TUTORIAL_DEFULT:
+
+		// ブロックのロード処理
+		if (FAILED(LoadBlock(TUTORIAL_BLOCK_TXT)))
+		{ // 失敗した場合
+
+		  // 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
+	case TYPE_TUTORIAL_KILL:
+
+		// ブロックのロード処理
+		if (FAILED(LoadBlock(TUTORIAL_KILL_TXT)))
+		{ // 失敗した場合
+
+		  // 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
+	case TYPE_TUTORIAL_ACTION:
+
+		// ブロックのロード処理
+		if (FAILED(LoadBlock(TUTORIAL_ACTION_TXT)))
+		{ // 失敗した場合
+
+		  // 失敗を返す
 			return E_FAIL;
 		}
 
@@ -323,7 +396,7 @@ HRESULT CFile::SaveObstacle(void)
 //===========================================
 // ブロックのセーブ処理
 //===========================================
-HRESULT CFile::SaveBlock(void)
+HRESULT CFile::SaveBlock(const char *cFileName)
 {
 	// ローカル変数宣言
 	CBlock* pBlock = CBlockManager::Get()->GetTop();		// 先頭のブロックを代入する
@@ -332,7 +405,7 @@ HRESULT CFile::SaveBlock(void)
 	FILE *pFile;				// ファイルポインタ
 
 	// ファイルを読み込み形式で開く
-	pFile = fopen(BLOCK_TXT, "w");
+	pFile = fopen(cFileName, "w");
 
 	if (pFile != nullptr)
 	{ // ファイルが開けた場合
@@ -547,7 +620,7 @@ HRESULT CFile::LoadCarRoute(void)
 //===========================================
 // ブロックのロード処理
 //===========================================
-HRESULT CFile::LoadBlock(void)
+HRESULT CFile::LoadBlock(const char *cFileName)
 {
 	// 変数を宣言
 	int nEnd;							// テキスト読み込み終了の確認用
@@ -559,7 +632,7 @@ HRESULT CFile::LoadBlock(void)
 	FILE *pFile;						// ファイルポインタ
 
 	// ファイルを読み込み形式で開く
-	pFile = fopen(BLOCK_TXT, "r");
+	pFile = fopen(cFileName, "r");
 
 	if (pFile != nullptr)
 	{ // ファイルが開けた場合

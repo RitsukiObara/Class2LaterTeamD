@@ -39,7 +39,7 @@ namespace collision
 	void ShadowCollision(const D3DXVECTOR3& pos, int nIdx);							// ŠÛ‰e‚Ì“–‚½‚è”»’è
 
 	// áŠQ•¨‚Ì“–‚½‚è”»’è
-	void ObstacleCollision(CPlayer& player, const float fWidth, const float fHeight, const float fDepth);	// áŠQ•¨‚ÌÕ“Ë”»’è
+	void ObstacleCollision(CPlayer* player, const float fWidth, const float fHeight, const float fDepth);	// áŠQ•¨‚ÌÕ“Ë”»’è
 	void ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fHeight, const float fDepth);		// áŠQ•¨‚Ì“–‚½‚è”»’è
 	void ObstacleAction(CPlayer* pPlayer, const float Radius);				// áŠQ•¨‚Ì‹N“®”»’è
 	void ObstacleSearch(CPlayer* pPlayer, const float Radius);				// ‹N“®‰Â”\áŠQ•¨‚âŒx‚ğo‚·áŠQ•¨‚ÌƒT[ƒ`

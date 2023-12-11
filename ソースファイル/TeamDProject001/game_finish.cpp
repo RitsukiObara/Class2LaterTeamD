@@ -8,6 +8,7 @@
 // インクルードファイル
 //********************************************
 #include "manager.h"
+#include "game.h"
 #include "game_finish.h"
 #include "object2D.h"
 #include "texture.h"
@@ -129,6 +130,7 @@ void CGameFinish::Update(void)
 			if (m_pCountdown == nullptr && m_pGameTime->GetSeconds() == 5)	
 			{// 残り５秒＆カウントダウンポインターがnullの時
 				m_pCountdown = CCountdown::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f), D3DXVECTOR3(50.0f, 80.0f, 0.0f), FINISH_COUNT);
+				CGame::SetCountDown(true);
 			}
 			if (m_pGameTime->GetSeconds() == 0)
 			{// カウントダウンが0になった時

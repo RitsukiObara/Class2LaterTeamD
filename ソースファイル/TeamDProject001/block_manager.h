@@ -30,6 +30,7 @@ public:				// 誰でもアクセスできる
 	// メンバ関数
 	void Regist(CBlock* pThis);		// 登録処理
 	void Uninit(void);					// 終了処理
+	void UninitAll(void);				// ALL終了処理
 	
 	CBlock* GetTop(void);				// 先頭の取得処理
 	void Pull(CBlock* pThis);			// リスト構造の引き抜き処理
@@ -41,8 +42,8 @@ public:				// 誰でもアクセスできる
 private:			// 自分だけアクセスできる
 
 	// メンバ変数
-	CBlock* m_pTop;	// 先頭のオブジェクト
-	int m_nNumAll;			// オブジェクトの総数
+	CBlock* m_pTop;		// 先頭のオブジェクト
+	int m_nNumAll;		// オブジェクトの総数
 
 	// 静的メンバ変数
 	static CBlockManager* m_pManager;		// マネージャーの変数

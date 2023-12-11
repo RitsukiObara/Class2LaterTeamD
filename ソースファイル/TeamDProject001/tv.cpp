@@ -260,7 +260,7 @@ void CTv::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE typ
 //=====================================
 // 当たり判定処理
 //=====================================
-bool CTv::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CTv::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
 	// false を返す
 	return false;
@@ -269,11 +269,11 @@ bool CTv::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTO
 //=====================================
 // ヒットサークル処理
 //=====================================
-bool CTv::HitCircle(const D3DXVECTOR3& pos, const float Radius, const CPlayer::TYPE type)
+bool CTv::HitCircle(CPlayer* pPlayer, const float Radius)
 {
 	if (m_bPower == true && m_State != STATE_COOLDOWN)
 	{
-		if (useful::CircleCollisionXZ(pos, GetPos(), Radius, GetFileData().fRadius) == true)
+		if (useful::CircleCollisionXZ(pPlayer->GetPos(), GetPos(), Radius, GetFileData().fRadius) == true)
 		{//円の範囲内の場合tureを返す
 			return true;
 		}

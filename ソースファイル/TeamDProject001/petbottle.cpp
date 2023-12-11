@@ -21,7 +21,9 @@
 // マクロ定義
 //-------------------------------------------
 #define STAND_ROT	(D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f))		// 直立状態の向き
-#define GRAVITY		(0.5f)											// 重力
+#define GRAVITY		(0.5f)			// 重力
+#define SPEED		(13.0f)			// 転がる速度
+#define ROT_MOVE	(0.01f)			// 向きの移動量
 
 //==============================
 // コンストラクタ
@@ -144,8 +146,11 @@ void CPetbottle::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const T
 //=====================================
 // 当たり判定処理
 //=====================================
-bool CPetbottle::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CPetbottle::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
+	// 位置を取得する
+	D3DXVECTOR3 pos = pPlayer->GetPos();
+
 	if (m_state == STATE_STAND)
 	{ // 直立状態の場合
 
@@ -157,14 +162,14 @@ bool CPetbottle::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3
 			if (useful::CylinderCollision(&pos, GetPos(), GetFileData().vtxMax.x + collSize.x) == true)
 			{ // 当たり判定が false の場合
 
-				if (posOld.y >= GetPos().y + GetFileData().vtxMax.y &&
+				if (pPlayer->GetPosOld().y >= GetPos().y + GetFileData().vtxMax.y &&
 					pos.y <= GetPos().y + GetFileData().vtxMax.y)
 				{ // 上からの当たり判定
 
 					// 縦の位置を設定する
 					pos.y = GetPos().y + GetFileData().vtxMax.y + 0.01f;
 				}
-				else if (posOld.y + collSize.y <= GetPos().y + GetFileData().vtxMin.y &&
+				else if (pPlayer->GetPosOld().y + collSize.y <= GetPos().y + GetFileData().vtxMin.y &&
 					pos.y + collSize.y >= GetPos().y + GetFileData().vtxMin.y)
 				{ // 下からの当たり判定
 
@@ -175,6 +180,9 @@ bool CPetbottle::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3
 		}
 	}
 
+	// 位置を適用する
+	pPlayer->SetPos(pos);
+
 	// false を返す
 	return false;
 }
@@ -182,7 +190,7 @@ bool CPetbottle::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3
 //=====================================
 // ヒット処理
 //=====================================
-bool CPetbottle::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CPetbottle::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
 	// 最大値と最小値を設定する
 	D3DXVECTOR3 vtxMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);
@@ -192,24 +200,24 @@ bool CPetbottle::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const 
 	{
 	case CPetbottle::STATE_STAND:
 
-		if (type == CPlayer::TYPE_CAT &&
-			pos.y <= GetPos().y + GetFileData().vtxMax.y &&
-			pos.y + collSize.y >= GetPos().y + GetFileData().vtxMin.y &&
-			useful::CylinderInner(pos, GetPos(), GetFileData().vtxMax.x + collSize.x) == true)
+		if (pPlayer->GetType() == CPlayer::TYPE_CAT &&
+			pPlayer->GetPos().y <= GetPos().y + GetFileData().vtxMax.y &&
+			pPlayer->GetPos().y + collSize.y >= GetPos().y + GetFileData().vtxMin.y &&
+			useful::CylinderInner(pPlayer->GetPos(), GetPos(), GetFileData().vtxMax.x + collSize.x) == true)
 		{ // ペットボトルに衝突した場合
 
 			// 倒れる処理
-			Collapse(pos);
+			Collapse(pPlayer->GetPos());
 		}
 
 		break;
 
 	case CPetbottle::STATE_COLLAPSE:
 
-		if (type == CPlayer::TYPE_RAT &&
-			useful::RectangleCollisionXY(GetPos(), pos, GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true &&
-			useful::RectangleCollisionXZ(GetPos(), pos, GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true &&
-			useful::RectangleCollisionYZ(GetPos(), pos, GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true)
+		if (pPlayer->GetType() == CPlayer::TYPE_RAT &&
+			useful::RectangleCollisionXY(GetPos(), pPlayer->GetPos(), GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true &&
+			useful::RectangleCollisionXZ(GetPos(), pPlayer->GetPos(), GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true &&
+			useful::RectangleCollisionYZ(GetPos(), pPlayer->GetPos(), GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true)
 		{ // 倒れ状態かつ、当たり判定が true の場合
 
 			// true を返す
@@ -240,11 +248,11 @@ void CPetbottle::Cycle(void)
 	D3DXVECTOR3 rot = GetRot();		// 向き
 
 	// 移動量を設定する
-	m_move.x = sinf(rot.y - (D3DX_PI * 0.5f)) * 8.0f;
-	m_move.z = cosf(rot.y - (D3DX_PI * 0.5f)) * 8.0f;
+	m_move.x = sinf(rot.y - (D3DX_PI * 0.5f)) * SPEED;
+	m_move.z = cosf(rot.y - (D3DX_PI * 0.5f)) * SPEED;
 
 	// 向きを加算する
-	rot.z += 0.01f;
+	rot.z += ROT_MOVE;
 
 	// 位置を移動する
 	pos.x += m_move.x;
@@ -264,7 +272,7 @@ void CPetbottle::Gravity(void)
 	D3DXVECTOR3 pos = GetPos();
 
 	// 重力処理
-	useful::Gravity(&m_move.y, pos, GRAVITY);
+	useful::Gravity(&m_move.y, &pos.y, GRAVITY);
 	
 	// 位置を設定する
 	SetPos(pos);

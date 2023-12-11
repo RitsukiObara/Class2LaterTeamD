@@ -59,7 +59,7 @@ HRESULT CEntryBG::Init(void)
 		{ // ƒ‚ƒfƒ‹‚Ìî•ñ‚ª NULL ‚Ìê‡
 
 			// ƒ‚ƒfƒ‹‚ð¶¬‚·‚é
-			m_apModel[nCnt] = new CModel(TYPE_NONE, PRIORITY_BLOCK);
+			m_apModel[nCnt] = CModel::Create(TYPE_NONE, PRIORITY_BLOCK);
 		}
 	}
 

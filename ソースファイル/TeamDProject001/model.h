@@ -65,7 +65,7 @@ public:			// 誰でもアクセスできる
 	D3DXMATERIAL GetMaterial(const int nCnt);	// マテリアル情報の取得処理
 
 	// 静的メンバ関数
-	static CModel* Create(void);				// 生成処理
+	static CModel* Create(const TYPE type, const PRIORITY priority);	// 生成処理
 
 private:		// 自分だけアクセスできる
 

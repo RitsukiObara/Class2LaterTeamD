@@ -191,18 +191,19 @@ void CToyCar::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE
 //=====================================
 // 当たり判定処理
 //=====================================
-bool CToyCar::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CToyCar::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
-	// 最小値と最大値を宣言
-	D3DXVECTOR3 vtxMin, vtxMax;
-
-	// 最小値と最大値を設定する
-	vtxMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);
-	vtxMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);
+	// 位置と最小値と最大値を宣言
+	D3DXVECTOR3 pos = pPlayer->GetPos();
+	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);;
+	D3DXVECTOR3 vtxMax = collSize;
 
 	// 六面体の当たり判定
-	if (collision::HexahedronCollision(&pos, GetPos(), posOld, GetPosOld(), vtxMin, GetFileData().vtxMin, vtxMax, GetFileData().vtxMax) == true)
+	if (collision::HexahedronCollision(&pos, GetPos(), pPlayer->GetPosOld(), GetPosOld(), vtxMin, GetFileData().vtxMin, vtxMax, GetFileData().vtxMax) == true)
 	{
+		// 位置を適用する
+		pPlayer->SetPos(pos);
+
 		// true を返す
 		return true;
 	}
@@ -214,22 +215,19 @@ bool CToyCar::Collision(D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXV
 //=====================================
 // ヒット処理
 //=====================================
-bool CToyCar::Hit(const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, const CPlayer::TYPE type)
+bool CToyCar::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
 	// 最小値と最大値を宣言
-	D3DXVECTOR3 vtxMin, vtxMax;
+	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);
+	D3DXVECTOR3	vtxMax = collSize;
 
-	// 最小値と最大値を設定する
-	vtxMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);
-	vtxMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);
-
-	if (type == CPlayer::TYPE_RAT &&
+	if (pPlayer->GetType() == CPlayer::TYPE_RAT &&
 		m_state == STATE_DRIVE)
 	{ // ネズミかつ、ドライブ状態の場合
 
-		if (useful::RectangleCollisionXY(GetPos(), pos, GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true &&
-			useful::RectangleCollisionXZ(GetPos(), pos, GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true &&
-			useful::RectangleCollisionYZ(GetPos(), pos, GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true)
+		if (useful::RectangleCollisionXY(GetPos(), pPlayer->GetPos(), GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true &&
+			useful::RectangleCollisionXZ(GetPos(), pPlayer->GetPos(), GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true &&
+			useful::RectangleCollisionYZ(GetPos(), pPlayer->GetPos(), GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true)
 		{ // 中にいる場合
 
 			// true を返す

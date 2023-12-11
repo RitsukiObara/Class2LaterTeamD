@@ -175,8 +175,8 @@ void CRat::Update(void)
 				MoveControl();
 			}
 
-			// 攻撃処理
-			Attack();
+			//// 攻撃処理
+			//Attack();
 
 			// 生き返りの当たり判定
 			ResurrectionCollision();
@@ -203,9 +203,6 @@ void CRat::Update(void)
 	// 角度の正規化
 	RotNormalize();
 
-	// プレイヤーの更新処理
-	CPlayer::Update();
-
 	// ブロックとの当たり判定
 	if (collision::BlockCollision(this, GetSizeColl()) == true)
 	{ // 上に乗った場合
@@ -213,6 +210,9 @@ void CRat::Update(void)
 		// ジャンプ状況を false にする
 		m_bJump = false;
 	}
+
+	// プレイヤーの更新処理
+	CPlayer::Update();
 
 	if (GetPlayerID() != nullptr)
 	{ // プレイヤーのID表示が NULL じゃない場合
@@ -701,7 +701,7 @@ void CRat::ResurrectionCollision(void)
 						m_bResurrection = false;
 					}
 				}
-				else if (m_bResurrection == false && (bCollXY == false || bCollXZ == true))
+				else if (m_bResurrection == false && (bCollXY == false || bCollXZ == false))
 				{ // 復活させてない状態 && 円の当たり判定(XY平面)か(XZ平面)の範囲にいない場合
 
 					// 回復中UI表示設定
