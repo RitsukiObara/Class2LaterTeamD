@@ -137,18 +137,21 @@ void CLog::Update(void)
 //=====================================
 void CLog::Draw(void)
 {
-	// •`‰æˆ—
-	if (m_pLogBG != NULL)
+	if (CManager::Get()->GetMode() == CScene::MODE_GAME)
 	{
-		m_pLogBG->Draw();
-	}
-	if (m_pLogPlayerID != NULL)
-	{
-		m_pLogPlayerID->Draw();
-	}
-	if (m_pLogMessage != NULL)
-	{
-		m_pLogMessage->Draw();
+		// •`‰æˆ—
+		if (m_pLogBG != NULL)
+		{
+			m_pLogBG->Draw();
+		}
+		if (m_pLogPlayerID != NULL)
+		{
+			m_pLogPlayerID->Draw();
+		}
+		if (m_pLogMessage != NULL)
+		{
+			m_pLogMessage->Draw();
+		}
 	}
 }
 

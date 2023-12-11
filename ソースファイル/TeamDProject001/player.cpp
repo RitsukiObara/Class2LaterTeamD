@@ -354,7 +354,7 @@ void CPlayer::Draw(void)
 	if (m_pPlayerID != nullptr)
 	{ // プレイヤーのID表示が NULL じゃない場合
 
-		if (m_nPlayerIdx != CObject::GetDrawIdx())
+		if (m_nPlayerIdx != CObject::GetDrawIdx() && (CManager::Get()->GetMode() == CScene::MODE_GAME || CManager::Get()->GetMode() == CScene::MODE_TUTORIAL))
 		{
 			m_pPlayerID->Draw();
 		}
@@ -1234,7 +1234,7 @@ void CPlayer::SetSpeechMessage(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, 
 	if (m_pSpeechMessage == nullptr)
 	{ // 伝達メッセージが NULLのとき
 
-		m_pSpeechMessage = CSpeechMessage::Create(pos, size, nLife, (CSpeechMessage::TYPE)type);
+		m_pSpeechMessage = CSpeechMessage::Create(pos, size, nLife, (CSpeechMessage::TYPE)type,(int)m_nPlayerIdx);
 	}
 }
 

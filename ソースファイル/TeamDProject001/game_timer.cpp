@@ -162,21 +162,24 @@ void CGameTime::Update(void)
 //========================
 void CGameTime::Draw(void)
 {
-	for (int nCnt = 0; nCnt < GAME_TIME_DIGIT; nCnt++)
-	{
-		if (m_apNumber[nCnt] != nullptr)
-		{ // ”Žš‚ª NULL ‚¶‚á‚È‚¢ê‡
+	if (CGame::GetState() != CGame::STATE_START && CGame::GetCountDown() == false)
+	{ // ˆê’è‚Ìó‘ÔˆÈŠO‚Ìê‡
+		for (int nCnt = 0; nCnt < GAME_TIME_DIGIT; nCnt++)
+		{
+			if (m_apNumber[nCnt] != nullptr)
+			{ // ”Žš‚ª NULL ‚¶‚á‚È‚¢ê‡
+
+				// •`‰æˆ—
+				m_apNumber[nCnt]->Draw();
+			}
+		}
+
+		if (m_pColon != nullptr)
+		{ // ƒRƒƒ“‚Ìî•ñ‚ª NULL ‚¶‚á‚È‚¢ê‡
 
 			// •`‰æˆ—
-			m_apNumber[nCnt]->Draw();
+			m_pColon->Draw();
 		}
-	}
-
-	if (m_pColon != nullptr)
-	{ // ƒRƒƒ“‚Ìî•ñ‚ª NULL ‚¶‚á‚È‚¢ê‡
-
-		// •`‰æˆ—
-		m_pColon->Draw();
 	}
 }
 
