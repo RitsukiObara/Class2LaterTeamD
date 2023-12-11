@@ -25,8 +25,9 @@ public:			// 誰でもアクセスできる
 	enum State
 	{
 		STATE_GARBAGECAN = 0,	// ゴミ箱
+		STATE_FALL,				// 落下状態
 		STATE_BANANA_NORMAL,	// バナナの皮
-		STATE_BANANA_SLIDE,	// バナナの皮
+		STATE_BANANA_SLIDE,		// バナナの皮
 		STATE_MAX				// この列挙型の総数
 	};
 
@@ -65,6 +66,7 @@ private:		// 自分だけアクセスできる
 	SLIDE m_Slide;
 	D3DXVECTOR3 m_PlayerPos;
 	D3DXVECTOR3 m_SlideMove;
+	D3DXVECTOR3 m_move;
 	CPlayer *m_pPlayer;
 };
 

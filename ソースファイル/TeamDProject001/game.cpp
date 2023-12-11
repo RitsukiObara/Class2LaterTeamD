@@ -51,7 +51,7 @@ namespace
 		D3DXVECTOR3(SCREEN_WIDTH - 90.0f, SCREEN_HEIGHT - 80.0f, 0.0f),
 	};
 	static const int TRANS_COUNT = 80;				// 遷移カウント
-	static const int START_COUNT = 60;				// 開始のカウント
+	static const int START_COUNT = 5;				// 開始のカウント
 }
 
 //--------------------------------------------
@@ -170,9 +170,7 @@ HRESULT CGame::Init(void)
 	//pObstacle->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 1.0f, 0.0f));
 
 	//ゴミ箱の生成
-	CObstacle::Create(D3DXVECTOR3(-600.0f, 0, 0.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_GARBAGECAN);
-	CObstacle::Create(D3DXVECTOR3(-100.0f, 0, 0.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_GARBAGECAN);
-	CObstacle::Create(D3DXVECTOR3(500.0f, 0, 0.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_GARBAGECAN);
+	CObstacle::Create(D3DXVECTOR3(-100.0f, 200.0f, 0.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_GARBAGECAN);
 
 	CObstacle::Create(D3DXVECTOR3(-400.0f, 0.0f, 400.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_PETBOTTLE);
 	
