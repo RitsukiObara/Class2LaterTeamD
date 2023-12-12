@@ -9,24 +9,14 @@
 //*******************************************
 #include "main.h"
 #include "manager.h"
-#include "garbagecan.h"
+#include "collision.h"
+#include "fraction.h"
 #include "renderer.h"
+#include "garbagecan.h"
 #include "useful.h"
-
 #include "player.h"
 #include "block.h"
 #include "block_manager.h"
-#include "obstacle_manager.h"
-#include "collision.h"
-#include "fraction.h"
-
-//-------------------------------------------
-// マクロ定義
-//-------------------------------------------
-#define SPEED		(2.0f)		// 速度
-#define GRAVITY		(0.4f)		// 重力
-#define ROT_MOVE	(0.05f)		// 向きの移動量
-#define CAT_SIZE	(D3DXVECTOR3(70.0f, 280.0f, 70.0f))		// 当たり判定のサイズ
 
 //==============================
 // コンストラクタ
@@ -37,7 +27,6 @@ CGarbage::CGarbage() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK
 	m_State = STATE_GARBAGECAN;		// 状態
 	m_Slide = SLIDE_STOP;
 	m_pPlayer = NULL;
-	m_move = NONE_D3DXVECTOR3;
 	m_SlideMove = NONE_D3DXVECTOR3;
 	m_PlayerPos = NONE_D3DXVECTOR3;
 
@@ -96,9 +85,7 @@ void CGarbage::Update(void)
 		pos += m_SlideMove;
 		m_pPlayer->SetPos(pos + m_PlayerPos);
 
-		if (Collision(m_pPlayer, GetFileData().vtxMax) == true || 
-			MagicWall() == true ||
-			((m_SlideMove.x <= 1.0f && m_SlideMove.x >= -1.0f) && (m_SlideMove.z <= 1.0f && m_SlideMove.z >= -1.0f)))
+		if (Collision(m_pPlayer, GetFileData().vtxMax) == true || ((m_SlideMove.x <= 1.0f && m_SlideMove.x >= -1.0f) && (m_SlideMove.z <= 1.0f && m_SlideMove.z >= -1.0f)))
 		{
 			m_Slide = SLIDE_BREAK;
 			m_SlideMove = D3DXVECTOR3(-m_SlideMove.x * 0.1f, 30.0f, -m_SlideMove.z * 0.1f);
@@ -143,127 +130,17 @@ void CGarbage::Draw(void)
 //=====================================
 void CGarbage::StateManager(void)
 {
-	// 位置と向きを設定する
-	D3DXVECTOR3 pos = GetPos();
-	D3DXVECTOR3 rot = GetRot();
-
 	switch (m_State)
 	{
-	case STATE_GARBAGECAN:		// ゴミ箱
+	case CGarbage::STATE_GARBAGECAN:	// ゴミ箱
+
+
 
 		break;
-
-	case STATE_FALL:			// 落下状態
-
-		// 移動量を減算する
-		m_move.y -= GRAVITY;
-
-		// 位置を移動する
-		pos += m_move;
-
-		// 向きを移動する
-		rot.z += ROT_MOVE;
-
-		// 向きの正規化
-		useful::RotNormalize(&rot.z);
-
-		if (pos.y <= 0.0f)
-		{ // 地面以下になった場合
-
-			// 位置を補正する
-			pos.y = 0.0f;
-
-			// 移動量を初期化する
-			m_move = NONE_D3DXVECTOR3;
-
-			// 向きを初期化する
-			rot.z = 0.0f;
-
-			// バナナの皮状態にする
-			m_State = STATE_BANANA_NORMAL;
-
-			// モデルの情報を設定する
-			SetFileData(CXFile::TYPE_GARBAGE);
-		}
-
-		break;
-
-	case STATE_BANANA_NORMAL:	// バナナの皮
-
-		break;
-
-	case STATE_BANANA_SLIDE:	// バナナ滑り
-
-		break;
-
-	default:
-
-		// 停止
-		assert(false);
+	case CGarbage::STATE_BANANA_NORMAL:		// バナナの皮
 
 		break;
 	}
-
-	// 位置を向きを適用する
-	SetPos(pos);
-	SetRot(rot);
-}
-
-//=====================================
-// 魔法の壁
-//=====================================
-bool CGarbage::MagicWall(void)
-{
-	// 位置を取得する
-	D3DXVECTOR3 pos = GetPos();
-	D3DXVECTOR3 Max = GetFileData().vtxMax;
-	D3DXVECTOR3 Min = GetFileData().vtxMin;
-
-	if (pos.x + Min.x <= -1600.0f)
-	{ // 位置が左から出そうな場合
-
-		// 位置を設定する
-		pos.x = -1600.0f - Min.x;
-
-		// true を返す
-		return true;
-	}
-
-	if (pos.x + Max.x >= 1600.0f)
-	{ // 位置が右から出そうな場合
-
-		// 位置を設定する
-		pos.x = 1600.0f - Max.x;
-
-		// true を返す
-		return true;
-	}
-
-	if (pos.z + Min.z <= -1000.0f)
-	{ // 位置が右から出そうな場合
-
-		// 位置を設定する
-		pos.z = -1000.0f - Min.z;
-
-		// true を返す
-		return true;
-	}
-
-	if (pos.z + Max.z >= 1000.0f)
-	{ // 位置が右から出そうな場合
-
-		// 位置を設定する
-		pos.z = 1000.0f - Max.z;
-
-		// true を返す
-		return true;
-	}
-
-	// 位置を適用する
-	SetPos(pos);
-
-	// false を返す
-	return false;
 }
 
 //=====================================
@@ -286,16 +163,11 @@ void CGarbage::Break(void)
 	if (m_State == STATE_GARBAGECAN)
 	{ // ゴミ箱状態の場合
 
-		m_State = STATE_FALL;
+		m_State = STATE_BANANA_NORMAL;
 
-		// 移動量を設定する
-		m_move.x = sinf(GetRot().x + (D3DX_PI * -0.5f)) * SPEED;
-		m_move.y = 0.0f;
-		m_move.z = cosf(GetRot().x + (D3DX_PI * -0.5f)) * SPEED;
+		// モデルの情報を設定する
+		SetFileData(CXFile::TYPE_GARBAGE);
 	}
-
-	// アクション状況を true にする
-	SetAction(true);
 }
 
 //=====================================
@@ -354,29 +226,8 @@ bool CGarbage::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 				return true;
 			}
 
-			// 次のブロックの情報を取得する
+		  // 次のブロックの情報を取得する
 			pBlock = pBlock->GetNext();
-		}
-
-		// 先頭の障害物の情報を取得する
-		CObstacle* pObstacle = CObstacleManager::Get()->GetTop();
-
-		while (pObstacle != nullptr)
-		{ // 障害物が NULL の場合
-
-			if (pObstacle != this &&
-				pObstacle->Collision(pPlayer, CAT_SIZE) == true)
-			{ // 六面体の当たり判定が true の場合
-
-				// 位置を適用する
-				pPlayer->SetPos(pos);
-
-				// true を返す
-				return true;
-			}
-
-			// 次の障害物の情報を取得する
-			pObstacle = pObstacle->GetNext();
 		}
 	}
 
@@ -413,8 +264,7 @@ bool CGarbage::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 //=====================================
 bool CGarbage::HitCircle(CPlayer* pPlayer, const float Radius)
 {
-	if (GetAction() == false &&
-		useful::CircleCollisionXZ(pPlayer->GetPos(), GetPos(), Radius, GetFileData().fRadius) == true)
+	if (useful::CircleCollisionXZ(pPlayer->GetPos(), GetPos(), Radius, GetFileData().fRadius) == true)
 	{ // 範囲内に入っている場合
 
 		// true を返す

@@ -51,7 +51,7 @@ namespace
 		D3DXVECTOR3(SCREEN_WIDTH - 90.0f, SCREEN_HEIGHT - 80.0f, 0.0f),
 	};
 	static const int TRANS_COUNT = 80;				// 遷移カウント
-	static const int START_COUNT = 5;				// 開始のカウント
+	static const int START_COUNT = 60;				// 開始のカウント
 }
 
 //--------------------------------------------
@@ -148,7 +148,8 @@ HRESULT CGame::Init(void)
 	//CObstacle::Create(D3DXVECTOR3(-600.0f, 650.0f, 0.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_HIMO);
 
 	//// スピーカーの生成処理
-	CObstacle::Create(D3DXVECTOR3(900.0f, 0.0f, 900.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.25f, 0.0f), CObstacle::TYPE::TYPE_SPEAKER);
+	//pObstacle = CObstacle::Create(D3DXVECTOR3(900.0f, 0.0f, 900.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_SPEAKER);
+	//pObstacle->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.25f, 0.0f));
 
 	//pObstacle = CObstacle::Create(D3DXVECTOR3(1000.0f, 0.0f, 900.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_SPEAKER);
 	//pObstacle->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.0f, 0.0f));
@@ -171,14 +172,15 @@ HRESULT CGame::Init(void)
 	//ゴミ箱の生成
 	CObstacle::Create(D3DXVECTOR3(-100.0f, 0.0f, -500.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_HONEY);
 
+	CObstacle::Create(D3DXVECTOR3(-600.0f, 0, 0.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_GARBAGECAN);
+	CObstacle::Create(D3DXVECTOR3(-100.0f, 0, 0.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_GARBAGECAN);
+	CObstacle::Create(D3DXVECTOR3(500.0f, 0, 0.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_GARBAGECAN);
+
 	CObstacle::Create(D3DXVECTOR3(-400.0f, 0.0f, 400.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_PETBOTTLE);
 	
 	CObstacle::Create(D3DXVECTOR3(-400.0f, 0.0f, 400.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_TOYCAR);
 
 	CObstacle::Create(D3DXVECTOR3(-200.0f, 0.0f, 100.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_REDKATEN);
-
-	// ひもの生成処理
-	CObstacle::Create(D3DXVECTOR3(-600.0f, 650.0f, 0.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_HIMO);
 
 #endif // _DEBUG
 

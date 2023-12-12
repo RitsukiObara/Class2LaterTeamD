@@ -59,8 +59,6 @@ public:			// 誰でもアクセスできる
 		TYPE_BOOKBLUE,				// 本(青)
 		TYPE_BOOKGREEN,				// 本(緑)
 		TYPE_BOOKYELLOW,			// 本(黄)
-		TYPE_LEVERBODY,				// レバー(本体)
-		TYPE_LEVERSTICK,			// レバー(棒)
 
 		// ブロックモデル
 		TYPE_CARDBOARD,				// 段ボール
@@ -135,7 +133,6 @@ public:			// 誰でもアクセスできる
 		TYPE_CAT_LLEG,				//左足
 		TYPE_CAT_RFOOT,				//右腿
 		TYPE_CAT_RLEG,				//右足
-		TYPE_CAT_FLAG,				//白旗
 
 		// ネズミモデル
 		TYPE_RAT_GHOST,				// 幽霊モデル

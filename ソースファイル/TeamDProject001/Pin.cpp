@@ -188,8 +188,7 @@ bool CPin::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 //=====================================
 bool CPin::HitCircle(CPlayer* pPlayer, const float Radius)
 {
-	if (GetAction() == false &&
-		useful::CircleCollisionXZ(pPlayer->GetPos(), GetPos(), Radius, GetFileData().fRadius) == true)
+	if (useful::CircleCollisionXZ(pPlayer->GetPos(), GetPos(), Radius, GetFileData().fRadius) == true)
 	{//‰~‚Ì”ÍˆÍ“à‚Ìê‡ture‚ğ•Ô‚·
 		return true;
 	}

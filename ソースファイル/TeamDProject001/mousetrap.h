@@ -49,14 +49,12 @@ public:			// 誰でもアクセスできる
 private:		// 自分だけアクセスできる
 
 	// メンバ関数
-	void Move(void);			// 移動処理
 	void IronPosSet(void);		// 鉄部分の位置の設定処理
 
 	// メンバ変数
 	CTrapIron* m_pIron;			// 鉄部分
 	CDangerMark* m_pMark;		// 危険マークの情報
 	STATE m_state;				// 状態
-	float m_fGravity;			// 重力
 };
 
 #endif

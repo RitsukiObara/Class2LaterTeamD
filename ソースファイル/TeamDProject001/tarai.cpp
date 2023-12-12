@@ -12,10 +12,9 @@
 #include "renderer.h"
 #include "tarai.h"
 #include "useful.h"
-#include "texture.h"
-
-#include "object3D.h"
 #include "Himo.h"
+#include "object3D.h"
+#include "texture.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -27,7 +26,6 @@
 //==============================
 CTarai::CTarai() : CModel(CObject::TYPE_NONE, CObject::PRIORITY_BLOCK)
 {
-	m_pHimo = nullptr;			// 紐のポインタ(生成はしない)
 	m_move = NONE_D3DXVECTOR3;
 	m_nIndex = -1;
 	m_pShadow = NULL;
@@ -53,9 +51,6 @@ HRESULT CTarai::Init(void)
 		return E_FAIL;
 	}
 
-	// 全ての値を初期化する
-	m_pHimo = nullptr;			// 紐のポインタ(生成はしない)
-
 	// 値を返す
 	return S_OK;
 }
@@ -65,13 +60,6 @@ HRESULT CTarai::Init(void)
 //========================================
 void CTarai::Uninit(void)
 {
-	if (m_pHimo != nullptr)
-	{ // 紐のポインタが NULL じゃない場合
-
-		// 紐を NULL にする
-		m_pHimo = nullptr;
-	}
-
 	// 終了処理
 	CModel::Uninit();
 
@@ -96,7 +84,7 @@ void CTarai::Update(void)
 
 	if (pos.y < 0.0f)
 	{
-		m_pHimo->NULLTarai(m_nIndex);
+		CHimo::NULLTarai(m_nIndex);
 		Uninit();
 		return;
 	}
@@ -145,7 +133,7 @@ void CTarai::Draw(void)
 //=====================================
 // 情報の設定処理
 //=====================================
-void CTarai::SetData(const D3DXVECTOR3& pos, CHimo* pHimo)
+void CTarai::SetData(const D3DXVECTOR3& pos)
 {
 	// 情報の設定処理
 	SetPos(pos);								// 位置
@@ -167,19 +155,12 @@ void CTarai::SetData(const D3DXVECTOR3& pos, CHimo* pHimo)
 		// 頂点座標の設定処理
 		m_pShadow->SetVertex();
 	}
-
-	if (m_pHimo == nullptr)
-	{ // 紐が NULL の場合
-
-		// 紐のポインタを入れる
-		m_pHimo = pHimo;
-	}
 }
 
 //=======================================
 // 生成処理
 //=======================================
-CTarai* CTarai::Create(const D3DXVECTOR3& pos, CHimo* pHimo)
+CTarai* CTarai::Create(const D3DXVECTOR3& pos)
 {
 	// ローカルオブジェクトを生成
 	CTarai* pTarai = nullptr;	// インスタンスを生成
@@ -215,7 +196,7 @@ CTarai* CTarai::Create(const D3DXVECTOR3& pos, CHimo* pHimo)
 		}
 
 		// 情報の設定処理
-		pTarai->SetData(pos, pHimo);
+		pTarai->SetData(pos);
 	}
 	else
 	{ // オブジェクトが NULL の場合

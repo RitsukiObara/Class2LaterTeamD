@@ -31,11 +31,7 @@ public:			// 誰でもアクセスできる
 	{
 		MOTIONTYPE_NEUTRAL = 0,		// 待機
 		MOTIONTYPE_MOVE,			// 移動
-		MOTIONTYPE_ATTACK,			// 攻撃
-		MOTIONTYPE_KNOCKBACK,		// 吹っ飛び
-		MOTIONTYPE_STUN,			// 気絶
-		MOTIONTYPE_WIN,				// 勝利
-		MOTIONTYPE_LOSE,			// 敗北
+		MOTIONTYPE_JUMP,			// ジャンプ
 		MOTIONTYPE_MAX				// この列挙型の総数
 	};
 
