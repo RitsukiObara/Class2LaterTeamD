@@ -78,7 +78,6 @@ public:			// 誰でもアクセスできる
 	bool Stun(int StunTime);						// 気絶状態
 	virtual void MotionManager(void) = 0;			// モーションマネージャー
 	virtual void GetItem(const CItem::TYPE type);	// アイテムの取得処理
-	virtual void SetEnableJump(const bool bJump);	// ジャンプ状況の設定処理
 
 	virtual void SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type);		// 情報の設定処理
 	void CameraUpdate(void);			// カメラ情報の更新
@@ -110,8 +109,8 @@ public:			// 誰でもアクセスできる
 	void DeleteSpeechMessage(void);				// 伝達メッセージの消去処理
 
 	void SetDeathArrow(const D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& rot, const int nIdx);		// 死亡矢印の設定処理
-	CDeathArrow* GetDeathArrow(const int nIdx);	// 死亡矢印の取得処理
-	void DeleteDeathArrow(const int nIdx);		// 死亡矢印の消去処理
+	CDeathArrow* GetDeathArrow(const int nIdx);			// 死亡矢印の取得処理
+	void DeleteDeathArrow(const int nIdx);				// 死亡矢印の消去処理
 
 	void SetMove(const D3DXVECTOR3& move);		// 移動量の設定処理
 	D3DXVECTOR3 GetMove(void) const;			// 移動量の取得処理

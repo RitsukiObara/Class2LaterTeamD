@@ -46,7 +46,9 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\Book001.x",				// 本(青)
 	"data\\MODEL\\Book002.x",				// 本(緑)
 	"data\\MODEL\\Book003.x",				// 本(黄)
-
+	"data\\MODEL\\lever000.x",				// レバー(本体)
+	"data\\MODEL\\lever001.x",				// レバー(棒)
+	
 	// ブロックモデル
 	"data\\MODEL\\cardboard.x",				// 段ボール
 	"data\\MODEL\\TissueBox.x",				// ティッシュ箱
@@ -120,6 +122,7 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\cat\\07_cat_Lleg.x",		//左足
 	"data\\MODEL\\cat\\08_cat_Rfoot.x",		//右腿
 	"data\\MODEL\\cat\\09_cat_Rleg.x",		//右足
+	"data\\MODEL\\cat\\flag.x",				//白旗
 
 	// ネズミモデル
 	"data\\MODEL\\rat\\rat_Ghost.x",		// 幽霊の姿
@@ -136,9 +139,6 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\Entry\\front_wall.x",		// 玄関の奥の壁
 	"data\\MODEL\\Entry\\shoes_floor.x",	// 靴履き場の床
 	"data\\MODEL\\Entry\\side_wall.x",		// 横の壁
-	"data\\MODEL\\boots.x",					//	ブーツ
-	"data\\MODEL\\sandal.x",				//	サンダル
-	"data\\MODEL\\leathershoes.x",			//	レザーシューズ
 
 	// 当たり判定モデル
 	"data\\MODEL\\Collision.x",				// 当たり判定エディットモデル

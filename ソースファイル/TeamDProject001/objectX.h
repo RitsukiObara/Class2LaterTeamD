@@ -59,6 +59,8 @@ public:			// 誰でもアクセスできる
 		TYPE_BOOKBLUE,				// 本(青)
 		TYPE_BOOKGREEN,				// 本(緑)
 		TYPE_BOOKYELLOW,			// 本(黄)
+		TYPE_LEVERBODY,				// レバー(本体)
+		TYPE_LEVERSTICK,			// レバー(棒)
 
 		// ブロックモデル
 		TYPE_CARDBOARD,				// 段ボール
@@ -133,6 +135,7 @@ public:			// 誰でもアクセスできる
 		TYPE_CAT_LLEG,				//左足
 		TYPE_CAT_RFOOT,				//右腿
 		TYPE_CAT_RLEG,				//右足
+		TYPE_CAT_FLAG,				//白旗
 
 		// ネズミモデル
 		TYPE_RAT_GHOST,				// 幽霊モデル
@@ -149,9 +152,6 @@ public:			// 誰でもアクセスできる
 		TYPE_ENTRANCE_FRONT,		// 玄関の奥の壁
 		TYPE_ENTRANCE_SHOEFLOOR,	// 靴履き場の床
 		TYPE_ENTRANCE_SIDEWALL,		// 横の壁
-		TYPE_BOOTS,					//ブーツ
-		TYPE_SANDAL,				//サンダル
-		TYPE_LESTHERSHOES,			//レザーシューズ
 
 		// 当たり判定モデル
 		TYPE_COLLISION,				// 当たり判定のエディットモデル

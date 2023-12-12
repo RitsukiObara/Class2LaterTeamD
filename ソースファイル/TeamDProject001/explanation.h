@@ -13,8 +13,9 @@
 #include "model.h"
 #include "tutorial.h"
 
-class CObject2D;
+#define IMAGE_MAX (5)
 
+class CObject2D;
 //-----------------------------------
 // クラス定義(返事入力のリアクション)
 //-----------------------------------
@@ -44,9 +45,11 @@ private:		// 自分だけアクセスできる
 	CObject2D *m_pRatKing;
 	CObject2D *m_pRatBG;
 	CObject2D *m_pRatText;
-	CObject2D *m_apImage[3];
+	CObject2D *m_apImage[IMAGE_MAX];
 	D3DXCOLOR m_ColorKing;
 	D3DXCOLOR m_ColorText;
+
+	float m_fStartAlpha;
 };
 
 #endif

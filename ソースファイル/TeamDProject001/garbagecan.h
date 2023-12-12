@@ -25,8 +25,9 @@ public:			// 誰でもアクセスできる
 	enum State
 	{
 		STATE_GARBAGECAN = 0,	// ゴミ箱
+		STATE_FALL,				// 落下状態
 		STATE_BANANA_NORMAL,	// バナナの皮
-		STATE_BANANA_SLIDE,	// バナナの皮
+		STATE_BANANA_SLIDE,		// バナナの皮
 		STATE_MAX				// この列挙型の総数
 	};
 
@@ -51,7 +52,6 @@ public:			// 誰でもアクセスできる
 	void SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type);			// 情報の設定処理
 
 	void SlideOn(D3DXVECTOR3 pos, D3DXVECTOR3 move, CPlayer *pPlayer);
-	void BlockCollision(void);	// 当たり判定処理
 	bool Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize) override;		// 当たり判定処理
 	bool Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize) override;			// ヒット処理
 	bool HitCircle(CPlayer* pPlayer, const float Radius) override;				// ヒットの円処理
@@ -60,11 +60,13 @@ public:			// 誰でもアクセスできる
 private:		// 自分だけアクセスできる
 	void Break(void);
 	void StateManager(void);
+	bool MagicWall(void);
 
 	State m_State;
 	SLIDE m_Slide;
 	D3DXVECTOR3 m_PlayerPos;
 	D3DXVECTOR3 m_SlideMove;
+	D3DXVECTOR3 m_move;
 	CPlayer *m_pPlayer;
 };
 

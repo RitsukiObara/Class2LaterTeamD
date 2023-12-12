@@ -14,6 +14,7 @@
 #include "file.h"
 #include "renderer.h"
 #include "log.h"
+#include "texture.h"
 
 #include "pause.h"
 #include "debugproc.h"
@@ -57,6 +58,11 @@ namespace
 	static const int TRANS_COUNT = 80;				// 遷移カウント
 }
 
+#define SKIP_POS	(D3DXVECTOR3(1080.0f,50.0f,0.0f))					//スキップの位置
+#define SKIP_SIZE	(D3DXVECTOR3(200.0f,50.0f,0.0f))					//スキップのサイズ
+#define GAUGE_POS	(D3DXVECTOR3(880.0f,50.0f,0.0f))					//ゲージの位置
+#define GAUGE_SIZE	(D3DXVECTOR3(0.0f,50.0f,0.0f))						//ゲージのサイズ
+
 //--------------------------------------------
 // 静的メンバ変数宣言
 //--------------------------------------------
@@ -70,6 +76,10 @@ bool CTutorial::m_bPlay = false;									// チュートリアルのプレイ中か否か
 CAnswer*  CTutorial::m_pAnswer = nullptr;							// 返答リアクション
 CExplanation*  CTutorial::m_pExplanation = nullptr;					// 説明
 bool CTutorial::m_MultiAction = false;								// 連携起動の状態
+CObject2D *CTutorial::m_apSkip[SKIP_MAX] = {};						// スキップのUI
+float CTutorial::m_fSkipAlpha = D3DX_PI;							// スキップの不透明度
+float CTutorial::m_fGauge = 0.0f;									// ゲージの数値
+float CTutorial::m_fGaugeMax = SKIP_SIZE.x;					// ゲージの最大値
 
 // デバッグ版
 #ifdef _DEBUG
@@ -97,6 +107,12 @@ CTutorial::CTutorial() : CScene(TYPE_SCENE, PRIORITY_BG)
 	{
 		m_apPlayer[nCntPlay] = nullptr;		// ネズミの情報
 	}
+	for (int nCnt = 0; nCnt < SKIP_MAX; nCnt++)
+	{
+		m_apSkip[nCnt] = NULL;
+	}
+
+	m_fSkipAlpha = D3DX_PI;
 
 	// デバッグ版
 #ifdef _DEBUG
@@ -205,22 +221,11 @@ HRESULT CTutorial::Init(void)
 		}
 	}
 
-	//// 生成処理
-	//CGameTime::Create();
-	//m_pFinish = CGameFinish::Create();
-
 	// キャラクターUIの生成処理
 	for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
 	{
 		CCharaInfoUI::Create(PLAYERUI_POS[nCnt], nCnt, m_apPlayer[nCnt]->GetType());
 	}
-
-	//// ネズミ捕りの生成
-	//CItem::Create(D3DXVECTOR3(0.0f, 0.0f, -700.0f), CItem::TYPE::TYPE_MOUSETRAP);
-	//CItem::Create(D3DXVECTOR3(400.0f, 0.0f, -700.0f), CItem::TYPE::TYPE_MOUSETRAP);
-
-	//// 武器選択UIを生成
-	//CWeaponSelectUI::Create();
 
 	// サウンドの再生
 	CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_BGM_GAME);
@@ -263,6 +268,15 @@ void CTutorial::Uninit(void)
 	{
 		m_pAnswer->Uninit();
 		m_pAnswer = NULL;
+	}
+
+	for (int nCnt = 0; nCnt < SKIP_MAX; nCnt++)
+	{
+		if (m_apSkip[nCnt] != NULL)
+		{
+			m_apSkip[nCnt]->Uninit();
+			m_apSkip[nCnt] = NULL;
+		}
 	}
 
 	// 終了処理
@@ -427,9 +441,9 @@ void CTutorial::Update(void)
 		{ // F9キーを押した場合
 
 		  // 情報をセーブする
-			//CManager::Get()->GetFile()->Save(CFile::TYPE_TUTORIAL_DEFULT);		// ブロック
+			CManager::Get()->GetFile()->Save(CFile::TYPE_TUTORIAL_DEFULT);	// ブロック
 			//CManager::Get()->GetFile()->Save(CFile::TYPE_TUTORIAL_KILL);		// ブロック
-			CManager::Get()->GetFile()->Save(CFile::TYPE_TUTORIAL_ACTION);		// ブロック
+			//CManager::Get()->GetFile()->Save(CFile::TYPE_TUTORIAL_ACTION);		// ブロック
 		}
 	}
 	else
@@ -454,6 +468,57 @@ void CTutorial::Update(void)
 
 #endif
 
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_0) == true ||
+		CManager::Get()->GetInputGamePad()->GetPress(CInputGamePad::JOYKEY::JOYKEY_START, 0) ||
+		CManager::Get()->GetInputGamePad()->GetPress(CInputGamePad::JOYKEY::JOYKEY_START, 1) ||
+		CManager::Get()->GetInputGamePad()->GetPress(CInputGamePad::JOYKEY::JOYKEY_START, 2) ||
+		CManager::Get()->GetInputGamePad()->GetPress(CInputGamePad::JOYKEY::JOYKEY_START, 3))
+	{
+		if (m_apSkip[0] != NULL)
+		{
+			m_fGauge += 1.5f;
+			if (m_fGaugeMax <= m_fGauge)
+			{
+				// ゲームモードに遷移
+				CManager::Get()->GetFade()->SetFade(CScene::MODE_GAME);
+			}
+		}
+	}
+	else
+	{
+		m_fGauge = 0.0f;
+	}
+
+	if (m_apSkip[0] != NULL)
+	{
+		m_apSkip[0]->SetPos(D3DXVECTOR3(880.0f + m_fGauge, 50.0f, 0.0f));
+		m_apSkip[0]->SetSize(D3DXVECTOR3(m_fGauge, 50.0f, 0.0f));
+		m_apSkip[0]->SetLength();					// 長さ
+		m_apSkip[0]->SetAngle();						// 方向
+		m_apSkip[0]->SetVertex();
+	}
+
+	if (m_apSkip[2] != NULL && m_bPlay == true)
+	{
+		if (sinf(m_fSkipAlpha) >= 0.5f)
+		{
+			m_fSkipAlpha += 0.02f;
+		}
+		else
+		{
+			m_fSkipAlpha += 0.4f;
+		}
+		m_apSkip[2]->SetVtxColor(D3DXCOLOR(1.0f, 1.01f, 1.0f, sinf(m_fSkipAlpha)));
+	}
+
+	for (int nCnt = 0; nCnt < SKIP_MAX; nCnt++)
+	{
+		if (m_apSkip[nCnt] != NULL)
+		{
+			m_apSkip[nCnt]->Update();
+		}
+	}
+
 	CManager::Get()->GetDebugProc()->Print("状態：%d", m_GameState);
 }
 
@@ -471,32 +536,47 @@ void CTutorial::Draw(void)
 	{
 		m_pAnswer->Draw();
 	}
+
+	for (int nCnt = 0; nCnt < SKIP_MAX; nCnt++)
+	{
+		if (m_apSkip[nCnt] != NULL)
+		{
+			m_apSkip[nCnt]->Draw();
+		}
+	}
 }
 
 //======================================
 // プレイ状態への移行
 //======================================
 void CTutorial::PlayTrue(void)
-{
-	m_bPlay = true;
-	
-	if (m_pExplanation != NULL)
-	{
-		m_pExplanation->Uninit();
-		m_pExplanation = NULL;
-	}
-	if (m_pAnswer != NULL)
-	{
-		m_pAnswer->Uninit();
-		m_pAnswer = NULL;
+{	
+	if (m_Tutorial != CTutorial::TUTORIAL_LETS_GO)
+	{// チュートリアルが最後じゃない時
+		m_bPlay = true;
+
+		if (m_pExplanation != NULL)
+		{
+			m_pExplanation->Uninit();
+			m_pExplanation = NULL;
+		}
+		if (m_pAnswer != NULL)
+		{
+			m_pAnswer->Uninit();
+			m_pAnswer = NULL;
+		}
 	}
 
+	//チュートリアルの設定処理---------------------------------------------------------------
 	for (int nCnt = 0; nCnt < 4; nCnt++)
 	{
+		//プレイ状態をtrueにする
 		m_bPlay = true;
 
 		if (m_Tutorial == CTutorial::TUTORIAL_CAT_KILL)
-		{
+		{//ネコのキル説明の時
+
+			//猫のみチュートリアル状態を解除しネズミのキル判定をfalseにしておく
 			if (CTutorial::GetPlayer(nCnt)->GetType() == CPlayer::TYPE::TYPE_CAT)
 			{
 				CTutorial::GetPlayer(nCnt)->SetTutorial(false);
@@ -504,7 +584,9 @@ void CTutorial::PlayTrue(void)
 			}
 		}
 		else if (m_Tutorial == CTutorial::TUTORIAL_RAT_RESCUE)
-		{
+		{//ネズミの蘇生説明の時
+
+			//ネズミのみチュートリアル状態を解除しネズミの蘇生判定をfalseにしておく
 			if (CTutorial::GetPlayer(nCnt)->GetType() == CPlayer::TYPE::TYPE_RAT)
 			{
 				CTutorial::GetPlayer(nCnt)->SetTutorial(false);
@@ -512,16 +594,21 @@ void CTutorial::PlayTrue(void)
 			}
 		}
 		else if (m_Tutorial == CTutorial::TUTORIAL_ACTION)
-		{
+		{//アクション起動説明の時
+
+			//アクション使用状態をfalseにしておく
 			CTutorial::GetPlayer(nCnt)->SetTutorial(false);
 			CTutorial::GetPlayer(nCnt)->SetUseAction(false);
 		}
 		else
-		{
+		{//それ以外の時
+
+			//チュートリアル状態を解除する
 			CTutorial::GetPlayer(nCnt)->SetTutorial(false);
 		}
 	}
 
+	//マップの切り替え処理--------------------------------------------------------------------
 	if (m_Tutorial == CTutorial::TUTORIAL_CAT_KILL)
 	{
 		CBlockManager::Get()->UninitAll();
@@ -572,6 +659,11 @@ void CTutorial::PlayTrue(void)
 		// マップの設定処理
 		CManager::Get()->GetFile()->SetMap();
 	}
+	else if (m_Tutorial == CTutorial::TUTORIAL_LETS_GO)
+	{
+		// ゲームモードに遷移
+		CManager::Get()->GetFade()->SetFade(CScene::MODE_GAME);
+	}
 }
 
 //======================================
@@ -583,6 +675,7 @@ void CTutorial::PlayFalse(void)
 	{
 	case CTutorial::TUTORIAL_MOVE:
 
+		// 移動したときにチュートリアル達成
 		for (int nCnt = 0; nCnt < 4; nCnt++)
 		{
 			if (m_apPlayer[nCnt]->GetBMove() == true)
@@ -597,6 +690,7 @@ void CTutorial::PlayFalse(void)
 		break;
 	case CTutorial::TUTORIAL_ATTACK_JAMP:
 
+		// ネコは攻撃、ネズミはジャンプをするとチュートリアル達成
 		for (int nCnt = 0; nCnt < 4; nCnt++)
 		{
 			if (m_apPlayer[nCnt]->GetAttack_Jump() == true)
@@ -611,6 +705,7 @@ void CTutorial::PlayFalse(void)
 		break;
 	case CTutorial::TUTORIAL_CAT_KILL:
 
+		// ネコがネズミをキルするとチュートリアル達成
 		for (int nCntPlaeyr = 0; nCntPlaeyr < 4; nCntPlaeyr++)
 		{
 			if (CTutorial::GetPlayer(nCntPlaeyr)->GetType() == CPlayer::TYPE::TYPE_CAT)
@@ -631,6 +726,7 @@ void CTutorial::PlayFalse(void)
 		break;
 	case CTutorial::TUTORIAL_RAT_RESCUE:
 
+		// ネズミをが他のネズミを蘇生するとチュートリアル達成
 		for (int nCntPlaeyr = 0; nCntPlaeyr < 4; nCntPlaeyr++)
 		{
 			if (CTutorial::GetPlayer(nCntPlaeyr)->GetType() == CPlayer::TYPE::TYPE_RAT)
@@ -651,6 +747,7 @@ void CTutorial::PlayFalse(void)
 		break;
 	case CTutorial::TUTORIAL_ACTION:
 
+		// 障害物を起動したときにそれぞれチュートリアル達成
 		for (int nCnt = 0; nCnt < 4; nCnt++)
 		{
 			if (CTutorial::GetPlayer(nCnt)->GetUseAction() == true)
@@ -658,6 +755,8 @@ void CTutorial::PlayFalse(void)
 				if (m_pAnswer != NULL)
 				{
 					m_pAnswer->SetAnswer(true, nCnt);
+
+					// チュートリアル達成時に動けないようチュートリアル状態にする
 					m_apPlayer[nCnt]->SetTutorial(true);
 				}
 			}
@@ -666,6 +765,7 @@ void CTutorial::PlayFalse(void)
 		break;
 	case CTutorial::TUTORIAL_ITEM_MULTI:
 
+		// ネコはネズミ捕りの設置、ネズミはリードの起動でチュートリアル達成
 		if (m_MultiAction == true)
 		{
 			for (int nCnt = 0; nCnt < 4; nCnt++)
@@ -693,12 +793,31 @@ void CTutorial::PlayFalse(void)
 
 		break;
 	case CTutorial::TUTORIAL_GIMMICK:
+
+		// 自動的にチュートリアル達成とする
+		for (int nCnt = 0; nCnt < 4; nCnt++)
+		{
+			if (m_pAnswer != NULL)
+			{
+				m_pAnswer->SetAnswer(true, nCnt);
+			}
+		}
 		break;
 	case CTutorial::TUTORIAL_LETS_GO:
+
+		// 自動的にチュートリアル達成とする
+		for (int nCnt = 0; nCnt < 4; nCnt++)
+		{
+			if (m_pAnswer != NULL)
+			{
+				m_pAnswer->SetAnswer(true, nCnt);
+			}
+		}
 		break;
 	case CTutorial::TUTORIAL_MAX:
 		break;
 	default:
+		assert(false);
 		break;
 	}
 
@@ -772,6 +891,46 @@ void CTutorial::SetData(const MODE mode)
 
 	// 情報の初期化
 	m_nFinishCount = 0;				// 終了カウント
+
+	for (int nCnt = 0; nCnt < SKIP_MAX; nCnt++)
+	{
+		if (m_apSkip[nCnt] == NULL)
+		{
+			m_apSkip[nCnt] = CObject2D::Create(CObject2D::TYPE::TYPE_NONE, CObject::TYPE::TYPE_2DUI, CObject::PRIORITY_UI);
+
+			if (nCnt == 0)
+			{
+				m_apSkip[nCnt]->SetPos(GAUGE_POS);			// 位置
+				m_apSkip[nCnt]->SetPosOld(GAUGE_POS);		// 前回の位置
+				m_apSkip[nCnt]->SetRot(NONE_D3DXVECTOR3);		// 向き
+				m_apSkip[nCnt]->SetSize(GAUGE_SIZE);			// サイズ
+			}
+			else
+			{
+				m_apSkip[nCnt]->SetPos(SKIP_POS);			// 位置
+				m_apSkip[nCnt]->SetPosOld(SKIP_POS);		// 前回の位置
+				m_apSkip[nCnt]->SetRot(NONE_D3DXVECTOR3);		// 向き
+				m_apSkip[nCnt]->SetSize(SKIP_SIZE);			// サイズ
+			}
+			m_apSkip[nCnt]->SetLength();					// 長さ
+			m_apSkip[nCnt]->SetAngle();						// 方向
+
+			// 頂点座標の設定処理
+			m_apSkip[nCnt]->SetVertex();
+		}
+	}
+	if (m_apSkip[0] != NULL)
+	{
+		m_apSkip[0]->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\tutorial_skip_gauge00.png"));		// テクスチャの割り当て処理
+	}
+	if (m_apSkip[1] != NULL)
+	{
+		m_apSkip[1]->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\tutorial_skip_gauge01.png"));		// テクスチャの割り当て処理
+	}
+	if (m_apSkip[2] != NULL)
+	{
+		m_apSkip[2]->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\tutorial_skip00.png"));		// テクスチャの割り当て処理
+	}
 }
 
 //======================================

@@ -13,6 +13,8 @@
 #include "main.h"
 #include "scene.h"
 
+#define SKIP_MAX (3)
+
 //--------------------------------------------
 // 前方宣言
 //--------------------------------------------
@@ -22,6 +24,7 @@ class CPlayer;			// プレイヤー
 class CGameFinish;		// フィニッシュ
 class CAnswer;			// 返答リアクション
 class CExplanation;		// 説明
+class CObject2D;		// 説明
 
 //--------------------------------------------
 // クラス(チュートリアルクラス)
@@ -78,6 +81,8 @@ public:						// 誰でもアクセスできる
 
 	static CPlayer* GetPlayer(const int nID);		// プレイヤーの取得処理
 
+	static TUTORIAL GetTutorial(void) { return m_Tutorial; }
+
 	// NULL化処理
 	static void DeletePause(void);		// ポーズのNULL化処理
 	static void DeletePlayer(int nIdx);	// プレイヤーのNULL化処理
@@ -110,6 +115,10 @@ private:					// 自分だけアクセスできる
 	static CAnswer* m_pAnswer;				// 返答リアクションの情報
 	static CExplanation* m_pExplanation;	// 説明の情報
 	static bool m_MultiAction;				// 連携起動の状態
+	static CObject2D* m_apSkip[SKIP_MAX];	// スキップ用のUI
+	static float m_fSkipAlpha;				// スキップの不透明度
+	static float m_fGauge;					// ゲージの数値
+	static float m_fGaugeMax;				// ゲージの最大値
 
 	// デバッグ版
 #ifdef _DEBUG

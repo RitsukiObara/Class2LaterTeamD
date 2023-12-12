@@ -119,7 +119,7 @@ void CAnswer::Update(void)
 		{
 			if (m_abPressAnswer[nCnt] == true)
 			{
-				m_apAnswer[nCnt]->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\use_check.png"));		// テクスチャの割り当て処理
+				m_apAnswer[nCnt]->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\tutorial_checkbox01.png"));		// テクスチャの割り当て処理
 			}
 
 			m_apAnswer[nCnt]->Update();
@@ -201,7 +201,7 @@ void CAnswer::SetData(void)
 				m_apAnswer[nCnt]->SetSize(D3DXVECTOR3(30.0f, 30.0f, 0.0f));			// サイズ
 				m_apAnswer[nCnt]->SetLength();										// 長さ
 				m_apAnswer[nCnt]->SetAngle();										// 方向
-				m_apAnswer[nCnt]->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\no_check.png"));		// テクスチャの割り当て処理
+				m_apAnswer[nCnt]->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\tutorial_checkbox00.png"));		// テクスチャの割り当て処理
 
 				// 頂点座標の設定処理
 				m_apAnswer[nCnt]->SetVertex();
@@ -221,7 +221,7 @@ void CAnswer::SetData(void)
 				m_apAnswer[nCnt]->SetSize(D3DXVECTOR3(20.0f, 20.0f, 0.0f));						// サイズ
 				m_apAnswer[nCnt]->SetLength();													// 長さ
 				m_apAnswer[nCnt]->SetAngle();													// 方向
-				m_apAnswer[nCnt]->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\no_check.png"));		// テクスチャの割り当て処理
+				m_apAnswer[nCnt]->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\tutorial_checkbox00.png"));		// テクスチャの割り当て処理
 
 																																	// 頂点座標の設定処理
 				m_apAnswer[nCnt]->SetVertex();

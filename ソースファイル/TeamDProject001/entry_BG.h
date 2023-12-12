@@ -34,9 +34,6 @@ public:
 		TYPE_FARWALL,		// 奥の壁
 		TYPE_SHOEFLOOR,		// 靴履き場の床
 		TYPE_SIDEWALL,		// 横の壁
-		TYPE_BOOTS,			//ブーツ
-		TYPE_SANDAL,		//サンダル
-		TYPE_LESTHERSHOES,	//レザーシューズ
 		TYPE_MAX			// この列挙型の総数
 	};
 

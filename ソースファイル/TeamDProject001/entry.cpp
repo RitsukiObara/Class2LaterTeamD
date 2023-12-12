@@ -271,7 +271,7 @@ void CEntry::Update(void)
 		if (m_nSceneCnt > 80)
 		{
 			// ƒQ[ƒ€ƒ‚[ƒh‚É‘JˆÚ
-			CManager::Get()->GetFade()->SetFade(CScene::MODE_GAME);
+			CManager::Get()->GetFade()->SetFade(CScene::MODE_TUTORIAL);
 		}
 
 	}

@@ -783,14 +783,6 @@ void CPlayer::GetItem(const CItem::TYPE type)
 }
 
 //=======================================
-// ƒWƒƒƒ“ƒvó‹µ‚Ìİ’èˆ—
-//=======================================
-void CPlayer::SetEnableJump(const bool bJump)
-{
-	
-}
-
-//=======================================
 // ‹Câó‘Ô‚ÌŠÇ—
 //=======================================
 void CPlayer::StunStateManager(void)

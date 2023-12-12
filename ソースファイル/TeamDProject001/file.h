@@ -31,6 +31,12 @@ public:			// 誰でもアクセスできる
 	enum TYPE
 	{
 		TYPE_OBSTACLE = 0,	// 障害物
+		TYPE_MAP_OBSTACLE1,	// マップの障害物1
+		TYPE_MAP_OBSTACLE2,	// マップの障害物2
+		TYPE_MAP_OBSTACLE3,	// マップの障害物3
+		TYPE_MAP_BLOCK1,	// マップのブロック1
+		TYPE_MAP_BLOCK2,	// マップのブロック2
+		TYPE_MAP_BLOCK3,	// マップのブロック3
 		TYPE_CARROUTE,		// 車の経路
 		TYPE_BLOCK,			// ブロック
 		TYPE_TUTORIAL_DEFULT,	// チュートリアルのデフォルトブロック
@@ -86,11 +92,11 @@ public:			// 誰でもアクセスできる
 private:		// 自分のみアクセスできる
 
 	// メンバ関数(セーブ関係)
-	HRESULT SaveObstacle(void);		// 障害物のセーブ処理
+	HRESULT SaveObstacle(const char *cFileName);		// 障害物のセーブ処理
 	HRESULT SaveBlock(const char *cFileName);		// ブロックのセーブ処理
 
 	// メンバ関数(ロード関係)
-	HRESULT LoadObstacle(void);		// 障害物のロード処理
+	HRESULT LoadObstacle(const char *cFileName);		// 障害物のロード処理
 	HRESULT LoadCarRoute(void);		// 車の経路のロード処理
 	HRESULT LoadBlock(const char *cFileName);		// ブロックのロード処理
 

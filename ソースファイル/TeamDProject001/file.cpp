@@ -21,6 +21,12 @@
 // マクロ定義
 //--------------------------------------------
 #define OBSTACLE_TXT		"data\\TXT\\Obstacle.txt"		// 障害物のテキスト
+#define MAP_OBSTACLE1_TXT	"data\\TXT\\MapObstacle1.txt"	// マップの障害物1のテキスト
+#define MAP_OBSTACLE2_TXT	"data\\TXT\\MapObstacle2.txt"	// マップの障害物2のテキスト
+#define MAP_OBSTACLE3_TXT	"data\\TXT\\MapObstacle3.txt"	// マップの障害物3のテキスト
+#define MAP_BLOCK1_TXT		"data\\TXT\\Block1.txt"			// マップのブロック1のテキスト
+#define MAP_BLOCK2_TXT		"data\\TXT\\Block2.txt"			// マップのブロック2のテキスト
+#define MAP_BLOCK3_TXT		"data\\TXT\\Block3.txt"			// マップのブロック3のテキスト
 #define CARROUTE_TXT		"data\\TXT\\CarRoute.txt"		// 車の経路のテキスト
 #define BLOCK_TXT			"data\\TXT\\Block.txt"			// ブロックのテキスト
 #define TUTORIAL_BLOCK_TXT	"data\\TXT\\Tutorial.txt"		// ブロックのテキスト
@@ -86,7 +92,7 @@ HRESULT CFile::Save(const TYPE type)
 	case TYPE_OBSTACLE:
 
 		// 障害物のセーブ処理
-		if (FAILED(SaveObstacle()))
+		if (FAILED(SaveObstacle(OBSTACLE_TXT)))
 		{ // 失敗した場合
 
 			// 失敗を返す
@@ -163,7 +169,7 @@ HRESULT CFile::Load(const TYPE type)
 	case TYPE_OBSTACLE:
 
 		// 障害物のロード処理
-		if (FAILED(LoadObstacle()))
+		if (FAILED(LoadObstacle(OBSTACLE_TXT)))
 		{ // 失敗した場合
 
 			// 失敗を返す
@@ -343,7 +349,7 @@ void CFile::Uninit(void)
 //===========================================
 // 障害物のセーブ処理
 //===========================================
-HRESULT CFile::SaveObstacle(void)
+HRESULT CFile::SaveObstacle(const char *cFileName)
 {
 	// ローカル変数宣言
 	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を代入する
@@ -352,7 +358,7 @@ HRESULT CFile::SaveObstacle(void)
 	FILE *pFile;				// ファイルポインタ
 
 	// ファイルを読み込み形式で開く
-	pFile = fopen(OBSTACLE_TXT, "w");
+	pFile = fopen(cFileName, "w");
 
 	if (pFile != nullptr)
 	{ // ファイルが開けた場合
@@ -452,7 +458,7 @@ HRESULT CFile::SaveBlock(const char *cFileName)
 //===========================================
 // 障害物のロード処理
 //===========================================
-HRESULT CFile::LoadObstacle(void)
+HRESULT CFile::LoadObstacle(const char *cFileName)
 {
 	// 変数を宣言
 	int nEnd;							// テキスト読み込み終了の確認用
@@ -464,7 +470,7 @@ HRESULT CFile::LoadObstacle(void)
 	FILE *pFile;						// ファイルポインタ
 
 	// ファイルを読み込み形式で開く
-	pFile = fopen(OBSTACLE_TXT, "r");
+	pFile = fopen(cFileName, "r");
 
 	if (pFile != nullptr)
 	{ // ファイルが開けた場合
