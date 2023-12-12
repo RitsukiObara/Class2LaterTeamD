@@ -99,7 +99,6 @@ public:			// 誰でもアクセスできる
 		TYPE_HONEYBOTTLE,			// 蜂蜜のボトル
 		TYPE_SLIME,					// スライム
 		TYPE_HAIRBALL,				// 毬
-		TYPE_FLOWERVASE,			// 花瓶
 		TYPE_PETBOTTLE,				// ペットボトル
 		TYPE_TOYCARBODY,			// おもちゃの車(本体)
 		TYPE_ROOMBA_MAIN,			// ルンバの本体
