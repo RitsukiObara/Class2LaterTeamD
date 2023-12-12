@@ -251,8 +251,55 @@ bool CCurtain::HitCircle(CPlayer* pPlayer, const float Radius)
 			) == true)
 			{ // 円の当たり判定内に入った場合
 
-				// true を返す
-				return true;
+				switch (pPlayer->GetType())
+				{
+				case CPlayer::TYPE_CAT:		// ネコ
+
+					if (m_apSwitch[nCnt]->GetBoot() == true)
+					{ // 起動状況が false の場合
+
+						// ギミックUIの設定処理
+						m_apSwitch[nCnt]->SetGimmickUI(true, pPlayer->GetPlayerIdx());
+					}
+					else
+					{ // 上記以外
+
+						// ギミックUIの設定処理
+						m_apSwitch[nCnt]->SetGimmickUI(false, pPlayer->GetPlayerIdx());
+					}
+
+					break;
+
+				case CPlayer::TYPE_RAT:		// ネズミ
+
+					if (m_apSwitch[nCnt]->GetBoot() == false)
+					{ // 起動状況が true の場合
+
+						// ギミックUIの設定処理
+						m_apSwitch[nCnt]->SetGimmickUI(true, pPlayer->GetPlayerIdx());
+					}
+					else
+					{ // 上記以外
+
+						// ギミックUIの設定処理
+						m_apSwitch[nCnt]->SetGimmickUI(false, pPlayer->GetPlayerIdx());
+					}
+
+					break;
+
+				default:
+
+					// 停止
+					assert(false);
+
+					break;
+				}
+			}
+			else
+			{ // 上記以外
+
+				// ギミックUIの設定処理
+				m_apSwitch[nCnt]->SetGimmickUI(false, pPlayer->GetPlayerIdx());
 			}
 		}
 	}

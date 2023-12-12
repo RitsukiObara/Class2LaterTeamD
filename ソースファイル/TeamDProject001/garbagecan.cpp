@@ -167,6 +167,9 @@ void CGarbage::StateManager(void)
 		if (pos.y <= 0.0f)
 		{ // ’n–ÊˆÈ‰º‚É‚È‚Á‚½ê‡
 
+			// ˆÊ’u‚ð•â³‚·‚é
+			pos.y = 0.0f;
+
 			// ˆÚ“®—Ê‚ð‰Šú‰»‚·‚é
 			m_move = NONE_D3DXVECTOR3;
 

@@ -8,9 +8,13 @@
 // インクルードファイル
 //*******************************************
 #include "main.h"
+#include "manager.h"
 #include "switch.h"
 #include "model.h"
 #include "useful.h"
+
+#include "objectbillboard.h"
+#include "texture.h"
 
 // マクロ定義
 #define LEVER_SHIFT		(5.0f)		// レバーのずらす幅
@@ -26,6 +30,11 @@ CSwitch::CSwitch() : CObject(CObject::TYPE_NONE, CObject::PRIORITY_BLOCK)
 	for (int nCnt = 0; nCnt < TYPE_MAX; nCnt++)
 	{
 		m_apModel[nCnt] = nullptr;		// モデルの情報
+	}
+	m_pGimmickUI = nullptr;				// ギミックUIの情報
+	for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
+	{
+		m_aUIFalse[nCnt] = false;		// 全部[False]の時にUIを削除する
 	}
 	m_posCopy = NONE_D3DXVECTOR3;		// 位置のコピー
 	m_fRotDest = 0.0f;					// 目的の向き
@@ -56,6 +65,11 @@ HRESULT CSwitch::Init(void)
 			m_apModel[nCnt] = CModel::Create(TYPE_NONE, PRIORITY_BLOCK);
 		}
 	}
+	m_pGimmickUI = nullptr;				// ギミックUIの情報
+	for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
+	{
+		m_aUIFalse[nCnt] = false;		// 全部[False]の時にUIを削除する
+	}
 	m_posCopy = NONE_D3DXVECTOR3;		// 位置のコピー
 	m_fRotDest = 0.0f;					// 目的の向き
 	m_fPosYDest = 0.0f;					// 目的の位置(Y軸)
@@ -81,6 +95,14 @@ void CSwitch::Uninit(void)
 		}
 	}
 
+	if (m_pGimmickUI != nullptr)
+	{ // ギミックUIが NULL じゃない場合
+
+		// ギミックUIの終了処理
+		m_pGimmickUI->Uninit();
+		m_pGimmickUI = nullptr;
+	}
+	
 	// 本体の終了処理
 	Release();
 }
@@ -92,6 +114,13 @@ void CSwitch::Update(void)
 {
 	// 状態マネージャー
 	StateManager();
+
+	if (m_pGimmickUI != nullptr)
+	{ // ギミックUIが NULL じゃない場合
+
+		// 更新処理
+		m_pGimmickUI->Update();
+	}
 }
 
 //=====================================
@@ -107,6 +136,13 @@ void CSwitch::Draw(void)
 			// モデルの描画処理
 			m_apModel[nCnt]->Draw();
 		}
+	}
+
+	if (m_pGimmickUI != nullptr)
+	{ // ギミックUIが NULL じゃない場合
+
+		// 描画処理
+		m_pGimmickUI->DrawLightOff();
 	}
 }
 
@@ -265,6 +301,62 @@ void CSwitch::StateManager(void)
 	// 位置と向きを適用する
 	m_apModel[TYPE_LEVER]->SetPos(pos);
 	m_apModel[TYPE_LEVER]->SetRot(rot);
+}
+
+//=======================================
+// ギミックUIの設定処理
+//=======================================
+void CSwitch::SetGimmickUI(bool Set, int Player_Idx)
+{
+	if (Set == true)
+	{//UI表示の範囲内にいる場合
+
+		if (m_pGimmickUI == nullptr)
+		{ // ギミックUIが NULL じゃない場合
+
+			//自分のUI表示状態をONにする
+			m_aUIFalse[Player_Idx] = true;
+
+			//UIの表示
+			m_pGimmickUI = CBillboard::Create(TYPE_NONE);
+			m_pGimmickUI->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\UI_GimmickOn.png"));
+			m_pGimmickUI->SetSize(D3DXVECTOR3(50.0f, 50.0f, 0.0f));
+
+			// 情報の設定処理
+			m_pGimmickUI->SetPos(D3DXVECTOR3(				// 位置
+				m_apModel[TYPE_BASE]->GetPos().x,
+				m_apModel[TYPE_BASE]->GetPos().y + 60.0f,
+				m_apModel[TYPE_BASE]->GetPos().z));
+			m_pGimmickUI->SetPosOld(D3DXVECTOR3(			// 前回の位置
+				m_apModel[TYPE_BASE]->GetPos().x,
+				m_apModel[TYPE_BASE]->GetPos().y + 60.0f,
+				m_apModel[TYPE_BASE]->GetPos().z));
+
+			// 頂点座標の設定処理
+			m_pGimmickUI->SetVertex();
+		}
+	}
+	else
+	{//UI表示の範囲内にいない場合
+
+		//自分のUI表示状態をOFFにする
+		m_aUIFalse[Player_Idx] = false;
+	}
+
+	//全てのプレイヤーの表示状態がOFFのとき削除する
+	if (m_aUIFalse[0] == false &&
+		m_aUIFalse[1] == false &&
+		m_aUIFalse[2] == false &&
+		m_aUIFalse[3] == false)
+	{
+		if (m_pGimmickUI != NULL)
+		{ // ギミックUIが NULL の場合
+
+			// ギミックUIの終了処理
+			m_pGimmickUI->Uninit();
+			m_pGimmickUI = NULL;
+		}
+	}
 }
 
 //=======================================
