@@ -140,6 +140,9 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 				// 移動量を設定する
 				pPlayer->SetSpeed(pPlayer->GetSpeedCopy() * 0.3f);
 
+				// ジャンプ状況を設定する
+				pPlayer->SetEnableJump(true);
+
 				// ヒットした
 				bHitMove = true;
 
