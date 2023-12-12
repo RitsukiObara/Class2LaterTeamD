@@ -307,6 +307,15 @@ void CRat::MotionManager(void)
 }
 
 //=====================================
+// ジャンプ状況の設定処理
+//=====================================
+void CRat::SetEnableJump(const bool bJump)
+{
+	// ジャンプ状況を設定する
+	m_bJump = bJump;
+}
+
+//=====================================
 // 情報の設定処理
 //=====================================
 void CRat::SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type)
