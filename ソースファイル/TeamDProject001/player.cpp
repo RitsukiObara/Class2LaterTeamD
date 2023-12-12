@@ -37,7 +37,7 @@
 //-------------------------------------------
 namespace
 {
-	static const D3DXVECTOR3 SMASH_MOVE = D3DXVECTOR3(10.0f, 11.0f, 10.0f);		// 吹き飛び状態の移動量
+	static const D3DXVECTOR3 SMASH_MOVE = D3DXVECTOR3(8.0f, 20.0f, 8.0f);		// 吹き飛び状態の移動量
 	static const D3DXCOLOR SMASH_COLOR = D3DXCOLOR(0.9f, 0.0f, 0.1f, 0.7f);		// 吹き飛び状態の時の色
 	static const float CAT_CAMERA_HEIGHT = 200.0f;		// 猫のカメラの高さ
 	static const float CAT_CAMERA_DIS = 300.0f;			// 猫のカメラの視点と注視点の高さの差分(角度)

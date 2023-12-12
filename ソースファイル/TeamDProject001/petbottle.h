@@ -40,18 +40,24 @@ public:			// 誰でもアクセスできる
 
 	bool Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize) override;	// 当たり判定処理
 	bool Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize) override;		// ヒット処理
+	bool HitCircle(CPlayer* pPlayer, const float Radius) override;			// 円のヒット処理
+	void Action(void) override;												// ギミック起動処理
 
 private:		// 自分だけアクセスできる
 
 	// メンバ関数
-	void Cycle(void);								// 回転処理
-	void Gravity(void);								// 重力処理
-	void Elevation(void);							// 起伏地面の当たり判定
-	void Collapse(const D3DXVECTOR3& posPlayer);	// 倒れる処理
-	bool MagicWall(void);							// 魔法の壁処理
+	void Block(void);				// ブロックとの当たり判定
+	void Cycle(void);				// 回転処理
+	void Gravity(void);				// 重力処理
+	void Elevation(void);			// 起伏地面の当たり判定
+	bool MagicWall(void);			// 魔法の壁処理
+	void CollsionSetting(void);		// 当たり判定の設定処理
 
 	// メンバ変数
 	D3DXVECTOR3 m_move;			// 移動量
+	D3DXVECTOR3 m_posPlayer;	// ぶつかったプレイヤーの位置
+	D3DXVECTOR3 m_vtxMax;		// 最大値
+	D3DXVECTOR3 m_vtxMin;		// 最小値
 	STATE m_state;				// 状態
 };
 #endif
