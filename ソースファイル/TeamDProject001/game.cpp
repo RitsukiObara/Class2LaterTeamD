@@ -170,6 +170,8 @@ HRESULT CGame::Init(void)
 	//pObstacle->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 1.0f, 0.0f));
 
 	//ÉSÉ~î†ÇÃê∂ê¨
+	CObstacle::Create(D3DXVECTOR3(-100.0f, 0.0f, -500.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_HONEY);
+
 	CObstacle::Create(D3DXVECTOR3(-600.0f, 0, 0.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_GARBAGECAN);
 	CObstacle::Create(D3DXVECTOR3(-100.0f, 0, 0.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_GARBAGECAN);
 	CObstacle::Create(D3DXVECTOR3(500.0f, 0, 0.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_GARBAGECAN);
