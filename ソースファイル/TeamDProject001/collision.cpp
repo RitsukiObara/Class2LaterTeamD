@@ -85,10 +85,6 @@ void collision::ObstacleCollision(CPlayer* player, const float fWidth, const flo
 
 				break;
 
-			case CObstacle::TYPE::TYPE_FLOWERVASE:
-
-				break;
-
 			case CObstacle::TYPE::TYPE_PETBOTTLE:
 
 				break;
@@ -170,12 +166,6 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 
 				// ƒqƒbƒgˆ—
 				pPlayer->Smash(fAngle);
-
-				break;
-
-			case CObstacle::TYPE_FLOWERVASE:
-
-				// “Á‚É‚È‚µ
 
 				break;
 
