@@ -9,14 +9,16 @@
 //*******************************************
 #include "main.h"
 #include "manager.h"
-#include "collision.h"
-#include "fraction.h"
-#include "renderer.h"
 #include "garbagecan.h"
+#include "renderer.h"
 #include "useful.h"
+
 #include "player.h"
 #include "block.h"
 #include "block_manager.h"
+#include "obstacle_manager.h"
+#include "collision.h"
+#include "fraction.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -24,6 +26,7 @@
 #define SPEED		(2.0f)		// 速度
 #define GRAVITY		(0.4f)		// 重力
 #define ROT_MOVE	(0.05f)		// 向きの移動量
+#define CAT_SIZE	(D3DXVECTOR3(70.0f, 280.0f, 70.0f))		// 当たり判定のサイズ
 
 //==============================
 // コンストラクタ
@@ -351,8 +354,29 @@ bool CGarbage::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 				return true;
 			}
 
-		  // 次のブロックの情報を取得する
+			// 次のブロックの情報を取得する
 			pBlock = pBlock->GetNext();
+		}
+
+		// 先頭の障害物の情報を取得する
+		CObstacle* pObstacle = CObstacleManager::Get()->GetTop();
+
+		while (pObstacle != nullptr)
+		{ // 障害物が NULL の場合
+
+			if (pObstacle != this &&
+				pObstacle->Collision(pPlayer, CAT_SIZE) == true)
+			{ // 六面体の当たり判定が true の場合
+
+				// 位置を適用する
+				pPlayer->SetPos(pos);
+
+				// true を返す
+				return true;
+			}
+
+			// 次の障害物の情報を取得する
+			pObstacle = pObstacle->GetNext();
 		}
 	}
 

@@ -12,7 +12,10 @@
 //***********************************
 #include "obstacle.h"
 
-#define MAX_TARAI (5)
+//-----------------------------------
+// マクロ定義
+//-----------------------------------
+#define MAX_TARAI (10)			// タライの最大数
 
 class CTarai;
 //-----------------------------------
@@ -37,16 +40,21 @@ public:			// 誰でもアクセスできる
 	bool HitCircle(CPlayer* pPlayer, const float Radius) override;
 	void Action(void) override;										// ギミック起動処理
 
-	static void NULLTarai(int Idx) { m_apTarai[Idx] = NULL; }
+	void NULLTarai(int Idx) { m_apTarai[Idx] = NULL; }
 
 private:		// 自分だけアクセスできる
-	void SetTarai(void);
 
-	static CTarai *m_apTarai[MAX_TARAI];
+	// メンバ関数
+	void TaraiCheck(void);		// タライの存在確認処理
+	void SetTarai(void);		// たらいの生成処理
+	void CountJudge(void);		// タライのカウント判断処理
+
+	// メンバ変数
+	CTarai *m_apTarai[MAX_TARAI];
 	int m_nTaraiCount;
-	bool m_bAction;
 	float m_fDownPosY;
 	float m_fUpPosY;
+	bool m_bFall;
 };
 
 #endif
