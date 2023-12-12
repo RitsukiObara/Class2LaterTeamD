@@ -589,7 +589,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "HoneyBottle.png";
+    "data\\TEXTURE\\HoneyBottle.png";
    }
   }
   Material {
