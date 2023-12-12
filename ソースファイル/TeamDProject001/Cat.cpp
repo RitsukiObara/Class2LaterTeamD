@@ -52,7 +52,7 @@ namespace
 	static const D3DXVECTOR3 CAT_SIZE = D3DXVECTOR3(70.0f, 280.0f, 70.0f);		// 当たり判定のサイズ
 	static const float MOVE_SPEED = 20.0f;			// 移動速度
 	static const float ATTACK_DISTANCE = 100.0f;	// 攻撃範囲までの距離
-	static const float GRAVITY = 0.55f;				// 重力
+	static const float GRAVITY = 1.0f;				// 重力
 	static const float STUN_HEIGHT = 300.0f;		// 気絶演出が出てくる高さ
 	static const float ID_HEIGHT = 350.0f;			// IDが出てくる高さ
 	static const int STANDBY_COUNT = 12;			// スタンバイ状態のカウント数
