@@ -317,6 +317,9 @@ void CPlayer::Update(void)
 		}
 	}
 
+	// 壁の当たり判定
+	collision::WallCollision(this, m_sizeColl);
+
 	// デバッグ表示
 	CManager::Get()->GetDebugProc()->Print("位置：%f %f %f\n向き：%f %f %f\n", GetPos().x, GetPos().y, GetPos().z, GetRot().x, GetRot().y, GetRot().z);
 }

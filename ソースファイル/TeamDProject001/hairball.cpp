@@ -18,6 +18,7 @@
 #include "elevation_manager.h"
 #include "block.h"
 #include "block_manager.h"
+#include "map.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -362,41 +363,41 @@ void CHairBall::MagicWall(void)
 	D3DXVECTOR3 Max = GetFileData().vtxMax;
 	D3DXVECTOR3 Min = GetFileData().vtxMin;
 
-	if (pos.x + Min.x <= -1600.0f)
+	if (pos.x + Min.x <= -MAP_SIZE.x)
 	{ // 位置が左から出そうな場合
 
 		// 位置を設定する
-		pos.x = -1600.0f - Min.x;
+		pos.x = -MAP_SIZE.x - Min.x;
 
 		// 移動量を逆にする
 		m_move.x *= -1;
 	}
 
-	if (pos.x + Max.x >= 1600.0f)
+	if (pos.x + Max.x >= MAP_SIZE.x)
 	{ // 位置が右から出そうな場合
 
 		// 位置を設定する
-		pos.x = 1600.0f - Max.x;
+		pos.x = MAP_SIZE.x - Max.x;
 
 		// 移動量を逆にする
 		m_move.x *= -1;
 	}
 
-	if (pos.z + Min.z <= -1000.0f)
+	if (pos.z + Min.z <= -MAP_SIZE.z)
 	{ // 位置が右から出そうな場合
 
 		// 位置を設定する
-		pos.z = -1000.0f - Min.z;
+		pos.z = -MAP_SIZE.z - Min.z;
 
 		// 移動量を逆にする
 		m_move.z *= -1;
 	}
 
-	if (pos.z + Max.z >= 1000.0f)
+	if (pos.z + Max.z >= MAP_SIZE.z)
 	{ // 位置が右から出そうな場合
 
 		// 位置を設定する
-		pos.z = 1000.0f - Max.z;
+		pos.z = MAP_SIZE.z - Max.z;
 
 		// 移動量を逆にする
 		m_move.z *= -1;

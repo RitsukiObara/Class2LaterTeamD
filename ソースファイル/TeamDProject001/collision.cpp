@@ -467,9 +467,6 @@ bool collision::BlockCollision(CPlayer* player, const D3DXVECTOR3& collSize)
 		pBlock = pBlock->GetNext();
 	}
 
-	// •Ç‚Ì“–‚½‚è”»’è
-	WallCollision(player, collSize);
-
 	// ƒWƒƒƒ“ƒvó‹µ‚ğ•Ô‚·
 	return bJump;
 }

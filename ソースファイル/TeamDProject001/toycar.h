@@ -29,6 +29,7 @@ public:			// 誰でもアクセスできる
 	{
 		STATE_DRIVE = 0,	// ドライブ状態
 		STATE_CURVE,		// カーブ状態
+		STATE_BRAKE,		// ブレーキ状態
 		STATE_MAX			// この列挙型の総数
 	};
 
@@ -51,16 +52,15 @@ private:		// 自分だけアクセスできる
 	// メンバ関数
 	void Drive(void);			// 走行処理
 	void Curve(void);			// カービング処理
-	void Check(void);			// 位置の確認処理
-	void RotCalc(void);			// 方向の設定処理
+	void RotCalc(void);			// 向きの計算処理
+	bool Block(void);			// ブロックの当たり判定処理
+	bool MagicWall(void);		// 魔法壁の当たり判定処理
 
 	// メンバ変数
-	D3DXVECTOR3 m_pPosInit;		// 初期位置
 	CCarGear* m_pGear;			// 歯車の情報
-	D3DXVECTOR3* m_pPosDest;	// 目的の位置
+	D3DXVECTOR3 m_move;			// 移動量
 	STATE m_state;				// 状態
-	int m_nPosDestNum;			// 目的の位置の総数
-	int m_nPosDestIdx;			// 目的の位置の番号
+	int m_nBrakeCount;			// ブレーキカウント
 	float m_fRotDest;			// 目的の向き
 	bool m_bRight;				// 右向き状況
 };

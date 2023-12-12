@@ -15,6 +15,7 @@
 
 #include "objectElevation.h"
 #include "elevation_manager.h"
+#include "map.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -374,28 +375,28 @@ bool CPetbottle::MagicWall(void)
 	// 位置を取得する
 	D3DXVECTOR3 pos = GetPos();
 
-	if (pos.x + m_vtxMin.x <= -1600.0f)
+	if (pos.x + m_vtxMin.x <= -MAP_SIZE.x)
 	{ // 位置が左から出そうな場合
 
 		// true を返す
 		return true;
 	}
 
-	if (pos.x + m_vtxMax.x >= 1600.0f)
+	if (pos.x + m_vtxMax.x >= MAP_SIZE.x)
 	{ // 位置が右から出そうな場合
 
 		// true を返す
 		return true;
 	}
 
-	if (pos.z + m_vtxMin.z <= -1000.0f)
+	if (pos.z + m_vtxMin.z <= -MAP_SIZE.z)
 	{ // 位置が右から出そうな場合
 
 		// true を返す
 		return true;
 	}
 
-	if (pos.z + m_vtxMax.z >= 1000.0f)
+	if (pos.z + m_vtxMax.z >= MAP_SIZE.z)
 	{ // 位置が右から出そうな場合
 
 		// true を返す
