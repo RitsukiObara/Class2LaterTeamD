@@ -244,6 +244,8 @@ void CTv::Action(void)
 			}
 		}
 	}
+
+
 }
 
 //=====================================
@@ -260,32 +262,6 @@ void CTv::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE typ
 //=====================================
 bool CTv::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
-	// 位置と最小値と最大値を設定する
-	D3DXVECTOR3 pos = pPlayer->GetPos();
-	D3DXVECTOR3 vtxMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);
-	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);
-
-	// 六面体の当たり判定
-	if (collision::HexahedronCollision
-	(
-		&pos,					// プレイヤーの位置
-		GetPos(),				// 位置
-		pPlayer->GetPosOld(),	// プレイヤーの前回の位置
-		GetPosOld(),			// 前回の位置
-		vtxMin,					// プレイヤーの最小値
-		GetFileData().vtxMin,	// 最小値
-		vtxMax,					// プレイヤーの最大値
-		GetFileData().vtxMax	// 最大値
-	) == true)
-	{ // 当たった場合
-
-	  // 位置を適用する
-		pPlayer->SetPos(pos);
-
-		// true を返す
-		return true;
-	}
-
 	// false を返す
 	return false;
 }

@@ -249,9 +249,9 @@ void CRat::MotionManager(void)
 		if (CResult::GetState() == CGame::STATE_RAT_WIN)
 		{ // ねずみのかち
 
-			if (nMotionType != MOTIONTYPE_WIN)
+			if (nMotionType != MOTIONTYPE_MOVE)
 			{
-				nMotionType = MOTIONTYPE_WIN;
+				nMotionType = MOTIONTYPE_MOVE;
 
 				// モーションの設定処理
 				GetMotion()->Set(nMotionType);
@@ -260,9 +260,9 @@ void CRat::MotionManager(void)
 		else if (CResult::GetState() == CGame::STATE_CAT_WIN)
 		{ // ねこのかち
 
-			if (nMotionType != MOTIONTYPE_DEATH)
+			if (nMotionType != MOTIONTYPE_NEUTRAL)
 			{
-				nMotionType = MOTIONTYPE_DEATH;
+				nMotionType = MOTIONTYPE_NEUTRAL;
 
 				// モーションの設定処理
 				GetMotion()->Set(nMotionType);
@@ -272,27 +272,7 @@ void CRat::MotionManager(void)
 	else
 	{ // リザルト以外のとき
 
-		if (GetStunState() == STUNSTATE_SMASH)
-		{
-			if (nMotionType != MOTIONTYPE_KNOCKBACK)
-			{
-				nMotionType = MOTIONTYPE_KNOCKBACK;
-
-				// モーションの設定処理
-				GetMotion()->Set(nMotionType);
-			}
-		}
-		else if (GetStunState() == STUNSTATE_STUN)
-		{
-			if (nMotionType != MOTIONTYPE_STUN)
-			{
-				nMotionType = MOTIONTYPE_STUN;
-
-				// モーションの設定処理
-				GetMotion()->Set(nMotionType);
-			}
-		}
-		else if (m_bJump == true)
+		if (m_bJump == true)
 		{
 			if (nMotionType != MOTIONTYPE_JUMP)
 			{
@@ -313,16 +293,6 @@ void CRat::MotionManager(void)
 				GetMotion()->Set(nMotionType);
 			}
 		}
-		else if (m_bResurrection == true)
-		{
-			if (nMotionType != MOTIONTYPE_RESURRECTION)
-			{
-				nMotionType = MOTIONTYPE_RESURRECTION;
-
-				// モーションの設定処理
-				GetMotion()->Set(nMotionType);
-			}
-		}
 		else
 		{
 			if (nMotionType != MOTIONTYPE_NEUTRAL)
@@ -334,6 +304,15 @@ void CRat::MotionManager(void)
 			}
 		}
 	}
+}
+
+//=====================================
+// ジャンプ状況の設定処理
+//=====================================
+void CRat::SetEnableJump(const bool bJump)
+{
+	// ジャンプ状況を設定する
+	m_bJump = bJump;
 }
 
 //=====================================

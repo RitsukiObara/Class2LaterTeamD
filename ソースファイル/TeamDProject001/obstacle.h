@@ -63,7 +63,6 @@ public:			// 誰でもアクセスできる
 	virtual void Uninit(void);		// 終了処理
 	virtual void Update(void);		// 更新処理
 	virtual void Draw(void);		// 描画処理
-	virtual void Draw(const float fAlpha);		// 描画処理
 
 	virtual void SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type);			// 情報の設定処理
 
@@ -86,8 +85,6 @@ public:			// 誰でもアクセスできる
 	bool GetRatUse(void) { return m_bRatUse; }				// 起動可能の取得処理
 	void SetAction(const bool Set) { m_bAction = Set; }		// 起動状態の設定処理
 	bool GetAction(void) { return m_bAction; }				// 起動状態の取得処理
-	void SetAlpha(float fAlpha) { m_fAlpha = fAlpha; }		// 不透明度の設定処理
-	float GetAlpha(void) { return m_fAlpha; }				// 不透明度の取得処理
 
 	virtual D3DXVECTOR3 GetPosHead(void) { return NONE_D3DXVECTOR3; }
 	virtual D3DXVECTOR3 GetPosToes(void) { return NONE_D3DXVECTOR3; }
@@ -106,7 +103,6 @@ private:		// 自分だけアクセスできる
 	bool m_bCatUse;						//猫が起動できるかどうか
 	bool m_bRatUse;						//ネズミが起動できるかどうか
 	bool m_bAction;						//起動しているかどうか
-	float m_fAlpha;						//不透明度
 
 	// リスト構造関係
 	CObstacle* m_pPrev;	// 前へのポインタ
