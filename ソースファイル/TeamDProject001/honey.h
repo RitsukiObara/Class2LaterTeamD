@@ -40,11 +40,15 @@ public:			// 誰でもアクセスできる
 
 	bool Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize) override;		// 当たり判定処理
 	bool Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize) override;			// ヒット処理
+	bool HitCircle(CPlayer* pPlayer, const float Radius) override;				// ヒット処理
+	void Action(void) override;													// ギミック起動処理
 
 private:		// 自分だけアクセスできる
-	void Break(void);
+
+	// メンバ関数
 	void StateManager(void);
 
+	// メンバ変数
 	State m_State;
 };
 

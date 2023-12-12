@@ -53,6 +53,7 @@ public:			// 誰でもアクセスできる
 	void MotionManager(void);		// モーションの管理
 
 	bool GetAttack_Jump(void) { return m_bJump; }	// アタックジャンプ状態の取得処理
+	void SetEnableJump(const bool bJump) override;	// ジャンプ状況の設定処理
 
 	void SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type);	// 情報の設定処理
 
