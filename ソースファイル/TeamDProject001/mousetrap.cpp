@@ -22,6 +22,8 @@
 //-------------------------------------------
 #define IRON_SHIFT			(10.0f)		// 鉄部分のずらす位置
 #define DANGER_SHIFT		(200.0f)	// 危険マークのずらす位置
+#define JUMP_HEIGHT			(9.0f)		// ジャンプの高さ
+#define GRAVITY				(1.0f)		// 重力
 
 //==============================
 // コンストラクタ
@@ -32,6 +34,7 @@ CMouseTrap::CMouseTrap() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_B
 	m_pIron = nullptr;			// 鉄部分
 	m_pMark = nullptr;			// 危険マークの情報
 	m_state = STATE_NONE;		// 状態
+	m_fGravity = 0.0f;			// 重力
 	SetCatUse(true);
 }
 
@@ -59,6 +62,7 @@ HRESULT CMouseTrap::Init(void)
 	m_pIron = nullptr;			// 鉄部分
 	m_pMark = nullptr;			// 危険マークの情報
 	m_state = STATE_NONE;		// 状態
+	m_fGravity = 0.0f;			// 重力
 
 	// 値を返す
 	return S_OK;
@@ -109,6 +113,9 @@ void CMouseTrap::Update(void)
 			break;
 
 		case CMouseTrap::STATE_MOVE:
+
+			// 移動処理
+			Move();
 
 			// 移動処理
 			if (m_pIron->Move() == true)
@@ -179,8 +186,11 @@ void CMouseTrap::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const T
 //=====================================
 bool CMouseTrap::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
-	if (pPlayer->GetType() == CPlayer::TYPE_RAT)
-	{ // 種類がネズミの場合
+	if (m_state == STATE_NONE &&
+		pPlayer->GetType() == CPlayer::TYPE_RAT &&
+		pPlayer->GetState() == CPlayer::STATE_NONE &&
+		pPlayer->GetStunState() == CPlayer::STUNSTATE_NONE)
+	{ // 気絶していないネズミかつ、通常状態の場合
 
 		bool bPosbool = false, bPosOldbool = false, bVecbool = false, bVecboolOld = false;
 
@@ -275,12 +285,34 @@ bool CMouseTrap::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 			// 移動状態にする
 			m_state = STATE_MOVE;
 
+			// 重力を設定する
+			m_fGravity = JUMP_HEIGHT;
+
 			// true を返す
 			return true;
 		}
 	}
+
 	// false を返す
 	return false;
+}
+
+//=====================================
+// 移動処理
+//=====================================
+void CMouseTrap::Move(void)
+{
+	// 位置を設定する
+	D3DXVECTOR3 pos = GetPos();
+
+	// 重力を加算する
+	pos.y += m_fGravity;
+
+	// 重力を減算する
+	m_fGravity -= GRAVITY;
+
+	// 位置を適用する
+	SetPos(pos);
 }
 
 //=====================================
