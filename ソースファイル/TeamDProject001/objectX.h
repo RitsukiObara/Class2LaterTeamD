@@ -152,6 +152,9 @@ public:			// 誰でもアクセスできる
 		TYPE_ENTRANCE_FRONT,		// 玄関の奥の壁
 		TYPE_ENTRANCE_SHOEFLOOR,	// 靴履き場の床
 		TYPE_ENTRANCE_SIDEWALL,		// 横の壁
+		TYPE_BOOTS,					//ブーツ
+		TYPE_SANDAL,				//サンダル
+		TYPE_LESTHERSHOES,			//レザーシューズ
 
 		// 当たり判定モデル
 		TYPE_COLLISION,				// 当たり判定のエディットモデル
