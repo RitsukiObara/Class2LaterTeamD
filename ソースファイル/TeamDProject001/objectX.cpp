@@ -46,9 +46,7 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\Book001.x",				// 本(青)
 	"data\\MODEL\\Book002.x",				// 本(緑)
 	"data\\MODEL\\Book003.x",				// 本(黄)
-	"data\\MODEL\\lever000.x",				// レバー(本体)
-	"data\\MODEL\\lever001.x",				// レバー(棒)
-	
+
 	// ブロックモデル
 	"data\\MODEL\\cardboard.x",				// 段ボール
 	"data\\MODEL\\TissueBox.x",				// ティッシュ箱
@@ -122,7 +120,6 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\cat\\07_cat_Lleg.x",		//左足
 	"data\\MODEL\\cat\\08_cat_Rfoot.x",		//右腿
 	"data\\MODEL\\cat\\09_cat_Rleg.x",		//右足
-	"data\\MODEL\\cat\\flag.x",				//白旗
 
 	// ネズミモデル
 	"data\\MODEL\\rat\\rat_Ghost.x",		// 幽霊の姿

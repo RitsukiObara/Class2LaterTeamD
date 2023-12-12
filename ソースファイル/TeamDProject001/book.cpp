@@ -382,7 +382,7 @@ bool CBook::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 //=====================================
 bool CBook::HitCircle(CPlayer* pPlayer, const float Radius)
 {
-	if (GetAction() == false &&
+	if (m_state == STATE_STOP &&
 		useful::CircleCollisionXZ(pPlayer->GetPos(), GetPos(), Radius, GetFileData().fRadius) == true)
 	{ // 停止状態かつ、円の範囲内の場合
 
@@ -427,8 +427,5 @@ void CBook::Action(void)
 
 		// 移動状況を true にする(動き始める)
 		m_aBook[2].bMove = true;
-
-		// アクション状況を true にする
-		SetAction(true);
 	}
 }

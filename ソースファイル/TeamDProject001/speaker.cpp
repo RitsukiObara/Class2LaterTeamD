@@ -270,8 +270,7 @@ bool CSpeaker::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 //=====================================
 bool CSpeaker::HitCircle(CPlayer* pPlayer, const float Radius)
 {
-	if (GetAction() == false &&
-		useful::CircleCollisionXZ(pPlayer->GetPos(), GetPos(), Radius, GetFileData().fRadius + ADD_HIT_RADIUS) == true)
+	if (useful::CircleCollisionXZ(pPlayer->GetPos(), GetPos(), Radius, GetFileData().fRadius + ADD_HIT_RADIUS) == true)
 	{ // ‰~‚Ì”ÍˆÍ“à‚É‚¢‚½ê‡
 
 		// true ‚ğ•Ô‚·

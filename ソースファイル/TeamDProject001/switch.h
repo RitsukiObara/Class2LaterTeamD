@@ -42,7 +42,6 @@ public:			// 誰でもアクセスできる
 	void Draw(void);		// 描画処理
 
 	void SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot);				// 情報の設定処理
-	void ChangeBoot(void);	// 起動状況の入れ替え処理
 
 	// セット・ゲット関数
 	CModel* GetModel(const TYPE type);		// モデルの取得処理
@@ -54,14 +53,9 @@ public:			// 誰でもアクセスできる
 
 private:		// 自分だけアクセスできる
 
-	// メンバ関数
-	void StateManager(void);			// 状態マネージャー
-
 	// メンバ変数
 	CModel* m_apModel[TYPE_MAX];		// モデルの情報
-	D3DXVECTOR3 m_posCopy;				// 位置のコピー
-	float m_fRotDest;					// 目的の向き
-	float m_fPosYDest;					// 目的の位置(Y軸)
+	bool m_bMove;						// 移動状況
 	bool m_bBoot;						// 起動状況
 };
 
