@@ -198,7 +198,6 @@
     <ClCompile Include="fan_blade.cpp" />
     <ClCompile Include="fan_wind.cpp" />
     <ClCompile Include="file.cpp" />
-    <ClCompile Include="flowervase.cpp" />
     <ClCompile Include="fraction.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="game_finish.cpp" />
@@ -344,7 +343,6 @@
     <ClInclude Include="fan_blade.h" />
     <ClInclude Include="fan_wind.h" />
     <ClInclude Include="file.h" />
-    <ClInclude Include="flowervase.h" />
     <ClInclude Include="fraction.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="game_finish.h" />

@@ -321,9 +321,6 @@
     <ClCompile Include="player_idUI.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="flowervase.cpp">
-      <Filter>Gimmick\Obstacle</Filter>
-    </ClCompile>
     <ClCompile Include="petbottle.cpp">
       <Filter>Gimmick\Obstacle</Filter>
     </ClCompile>
@@ -745,9 +742,6 @@
     </ClInclude>
     <ClInclude Include="player_idUI.h">
       <Filter>UI</Filter>
-    </ClInclude>
-    <ClInclude Include="flowervase.h">
-      <Filter>Gimmick\Obstacle</Filter>
     </ClInclude>
     <ClInclude Include="petbottle.h">
       <Filter>Gimmick\Obstacle</Filter>

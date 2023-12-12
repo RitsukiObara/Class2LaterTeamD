@@ -94,12 +94,12 @@ public:			// 誰でもアクセスできる
 		TYPE_KATEN,					// カーテン
 		TYPE_KATENRAIL,				// カーテンのレール
 		TYPE_TANSU02,				// たんす
+		TYPE_TV_STAND,				// テレビのスタンド
 
 		// 障害物モデル
 		TYPE_HONEYBOTTLE,			// 蜂蜜のボトル
 		TYPE_SLIME,					// スライム
 		TYPE_HAIRBALL,				// 毬
-		TYPE_FLOWERVASE,			// 花瓶
 		TYPE_PETBOTTLE,				// ペットボトル
 		TYPE_TOYCARBODY,			// おもちゃの車(本体)
 		TYPE_ROOMBA_MAIN,			// ルンバの本体
@@ -152,6 +152,9 @@ public:			// 誰でもアクセスできる
 		TYPE_ENTRANCE_FRONT,		// 玄関の奥の壁
 		TYPE_ENTRANCE_SHOEFLOOR,	// 靴履き場の床
 		TYPE_ENTRANCE_SIDEWALL,		// 横の壁
+		TYPE_BOOTS,					//ブーツ
+		TYPE_SANDAL,				//サンダル
+		TYPE_LESTHERSHOES,			//レザーシューズ
 
 		// 当たり判定モデル
 		TYPE_COLLISION,				// 当たり判定のエディットモデル

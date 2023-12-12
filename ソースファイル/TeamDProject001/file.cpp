@@ -49,15 +49,8 @@ CFile::CFile()
 {
 	for (int nCntInfo = 0; nCntInfo < MAX_FILE_DATA; nCntInfo++)
 	{
-		m_ObstacleInfo.pos[nCntInfo] = NONE_D3DXVECTOR3;				// 位置
-		m_ObstacleInfo.type[nCntInfo] = CObstacle::TYPE_HONEY;			// 種類
-
-		for (int nCntCar = 0; nCntCar < MAX_CAR_ROUTE; nCntCar++)
-		{
-			m_CarRouteInfo.pos[nCntInfo][nCntCar];						// 車のルートの情報
-		}
-		m_CarRouteInfo.nNumPos[nCntInfo] = 0;							// 位置の数
-
+		m_ObstacleInfo.pos[nCntInfo] = NONE_D3DXVECTOR3;		// 位置
+		m_ObstacleInfo.type[nCntInfo] = CObstacle::TYPE_HONEY;	// 種類
 		m_BlockInfo.pos[nCntInfo] = NONE_D3DXVECTOR3;			// 位置
 		m_BlockInfo.rotType[nCntInfo] = CBlock::ROTTYPE_FRONT;	// 向きの種類
 		m_BlockInfo.type[nCntInfo] = CBlock::TYPE_CARDBOARD;	// 種類
@@ -65,12 +58,10 @@ CFile::CFile()
 
 	// 総数をクリアする
 	m_ObstacleInfo.nNum = 0;			// 障害物
-	m_CarRouteInfo.nNum = 0;			// 車の経路
 	m_BlockInfo.nNum = 0;				// ブロック
 
 	// 成功状況をクリアする
 	m_ObstacleInfo.bSuccess = false;	// 障害物
-	m_CarRouteInfo.bSuccess = false;	// 車の経路
 	m_BlockInfo.bSuccess = false;		// ブロック
 }
 
@@ -96,6 +87,78 @@ HRESULT CFile::Save(const TYPE type)
 		{ // 失敗した場合
 
 			// 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
+	case TYPE_MAP_OBSTACLE1:
+
+		// 障害物のセーブ処理
+		if (FAILED(SaveObstacle(MAP_OBSTACLE1_TXT)))
+		{ // 失敗した場合
+
+		  // 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
+	case TYPE_MAP_OBSTACLE2:
+
+		// 障害物のセーブ処理
+		if (FAILED(SaveObstacle(MAP_OBSTACLE2_TXT)))
+		{ // 失敗した場合
+
+		  // 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
+	case TYPE_MAP_OBSTACLE3:
+
+		// 障害物のセーブ処理
+		if (FAILED(SaveObstacle(MAP_OBSTACLE3_TXT)))
+		{ // 失敗した場合
+
+		  // 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
+	case TYPE_MAP_BLOCK1:
+
+		// 障害物のセーブ処理
+		if (FAILED(SaveBlock(MAP_BLOCK1_TXT)))
+		{ // 失敗した場合
+
+		  // 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
+	case TYPE_MAP_BLOCK2:
+
+		// 障害物のセーブ処理
+		if (FAILED(SaveBlock(MAP_BLOCK2_TXT)))
+		{ // 失敗した場合
+
+		  // 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
+	case TYPE_MAP_BLOCK3:
+
+		// 障害物のセーブ処理
+		if (FAILED(SaveBlock(MAP_BLOCK3_TXT)))
+		{ // 失敗した場合
+
+		  // 失敗を返す
 			return E_FAIL;
 		}
 
@@ -178,13 +241,73 @@ HRESULT CFile::Load(const TYPE type)
 
 		break;
 
-	case TYPE_CARROUTE:
+	case TYPE_MAP_OBSTACLE1:
 
-		// 車のロード処理
-		if (FAILED(LoadCarRoute()))
+		// 障害物のロード処理
+		if (FAILED(LoadObstacle(MAP_OBSTACLE1_TXT)))
 		{ // 失敗した場合
 
-			// 失敗を返す
+		  // 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
+	case TYPE_MAP_OBSTACLE2:
+
+		// 障害物のロード処理
+		if (FAILED(LoadObstacle(MAP_OBSTACLE2_TXT)))
+		{ // 失敗した場合
+
+		  // 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
+	case TYPE_MAP_OBSTACLE3:
+
+		// 障害物のロード処理
+		if (FAILED(LoadObstacle(MAP_OBSTACLE3_TXT)))
+		{ // 失敗した場合
+
+		  // 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
+	case TYPE_MAP_BLOCK1:
+
+		// 障害物のロード処理
+		if (FAILED(LoadBlock(MAP_BLOCK1_TXT)))
+		{ // 失敗した場合
+
+		  // 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
+	case TYPE_MAP_BLOCK2:
+
+		// 障害物のロード処理
+		if (FAILED(LoadBlock(MAP_BLOCK2_TXT)))
+		{ // 失敗した場合
+
+		  // 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
+	case TYPE_MAP_BLOCK3:
+
+		// 障害物のロード処理
+		if (FAILED(LoadBlock(MAP_BLOCK3_TXT)))
+		{ // 失敗した場合
+
+		  // 失敗を返す
 			return E_FAIL;
 		}
 
@@ -251,33 +374,6 @@ HRESULT CFile::Load(const TYPE type)
 }
 
 //===========================================
-// 車の経路の取得処理
-//===========================================
-D3DXVECTOR3* CFile::GetCarRoute(const int nType)
-{
-	// 車の経路を返す
-	return m_CarRouteInfo.pos[nType];
-}
-
-//===========================================
-// 車の経路の総数取得処理
-//===========================================
-int CFile::GetCarRouteNum(void) const
-{
-	// 車の経路の数を返す
-	return m_CarRouteInfo.nNum;
-}
-
-//===========================================
-// 車の経路の位置の総数の取得処理
-//===========================================
-int CFile::GetCarRouteNumPos(const int nType) const
-{
-	// 車の経路の位置の総数を返す
-	return m_CarRouteInfo.nNumPos[nType];
-}
-
-//===========================================
 // マップの設定処理
 //===========================================
 void CFile::SetMap(void)
@@ -288,7 +384,7 @@ void CFile::SetMap(void)
 		for (int nCntObst = 0; nCntObst < m_ObstacleInfo.nNum; nCntObst++)
 		{
 			// 障害物の生成処理
-			CObstacle::Create(m_ObstacleInfo.pos[nCntObst], NONE_D3DXVECTOR3, m_ObstacleInfo.type[nCntObst]);
+			CObstacle::Create(m_ObstacleInfo.pos[nCntObst], m_ObstacleInfo.rot[nCntObst], m_ObstacleInfo.type[nCntObst]);
 		}
 	}
 
@@ -310,15 +406,8 @@ HRESULT CFile::Init(void)
 {
 	for (int nCntInfo = 0; nCntInfo < MAX_FILE_DATA; nCntInfo++)
 	{
-		m_ObstacleInfo.pos[nCntInfo] = NONE_D3DXVECTOR3;				// 位置
-		m_ObstacleInfo.type[nCntInfo] = CObstacle::TYPE_HONEY;			// 種類
-
-		for (int nCntCar = 0; nCntCar < MAX_CAR_ROUTE; nCntCar++)
-		{
-			m_CarRouteInfo.pos[nCntInfo][nCntCar];						// 車のルートの情報
-		}
-		m_CarRouteInfo.nNumPos[nCntInfo] = 0;							// 位置の数
-
+		m_ObstacleInfo.pos[nCntInfo] = NONE_D3DXVECTOR3;		// 位置
+		m_ObstacleInfo.type[nCntInfo] = CObstacle::TYPE_HONEY;	// 種類
 		m_BlockInfo.pos[nCntInfo] = NONE_D3DXVECTOR3;			// 位置
 		m_BlockInfo.rotType[nCntInfo] = CBlock::ROTTYPE_FRONT;	// 向きの種類
 		m_BlockInfo.type[nCntInfo] = CBlock::TYPE_CARDBOARD;	// 種類
@@ -326,12 +415,10 @@ HRESULT CFile::Init(void)
 
 	// 総数をクリアする
 	m_ObstacleInfo.nNum = 0;			// 障害物
-	m_CarRouteInfo.nNum = 0;			// 車の経路
 	m_BlockInfo.nNum = 0;				// ブロック
 
 	// 成功状況をクリアする
 	m_ObstacleInfo.bSuccess = false;	// 障害物
-	m_CarRouteInfo.bSuccess = false;	// 車の経路
 	m_BlockInfo.bSuccess = false;		// ブロック
 
 	// 成功を返す
@@ -367,10 +454,13 @@ HRESULT CFile::SaveObstacle(const char *cFileName)
 		{ // オブジェクトへのポインタが NULL じゃなかった場合
 
 			// 文字列を書き込む
-			fprintf(pFile, "SET_OBSTACLE\n");		// 障害物の設定を書き込む
+			fprintf(pFile, "SET_OBSTACLE\n");	// 障害物の設定を書き込む
 
 			fprintf(pFile, "\tPOS = ");			// 位置の設定を書き込む
 			fprintf(pFile, "%.1f %.1f %.1f\n", pObstacle->GetPos().x, pObstacle->GetPos().y, pObstacle->GetPos().z);			// 位置を書き込む
+
+			fprintf(pFile, "\tROT = ");			// 位置の設定を書き込む
+			fprintf(pFile, "%.1f %.1f %.1f\n", pObstacle->GetRot().x, pObstacle->GetRot().y, pObstacle->GetRot().z);			// 向きを書き込む
 
 			fprintf(pFile, "\tTYPE = ");		// 種類の設定を書き込む
 			fprintf(pFile, "%d\n", pObstacle->GetType());			// 種類を書き込む
@@ -499,6 +589,15 @@ HRESULT CFile::LoadObstacle(const char *cFileName)
 							&m_ObstacleInfo.pos[m_ObstacleInfo.nNum].y,
 							&m_ObstacleInfo.pos[m_ObstacleInfo.nNum].z);		// 位置を読み込む
 					}
+					else if (strcmp(&aString[0], "ROT") == 0)
+					{ // 読み込んだ文字列が POS の場合
+
+						fscanf(pFile, "%s", &aString[0]);				// = を読み込む (不要)
+						fscanf(pFile, "%f%f%f",
+							&m_ObstacleInfo.rot[m_ObstacleInfo.nNum].x,
+							&m_ObstacleInfo.rot[m_ObstacleInfo.nNum].y,
+							&m_ObstacleInfo.rot[m_ObstacleInfo.nNum].z);		// 位置を読み込む
+					}
 					else if (strcmp(&aString[0], "TYPE") == 0)
 					{ // 読み込んだ文字列が TYPE の場合
 
@@ -519,95 +618,6 @@ HRESULT CFile::LoadObstacle(const char *cFileName)
 
 		// 成功状況を true にする
 		m_ObstacleInfo.bSuccess = true;
-	}
-	else
-	{ // ファイルが開けなかった場合
-
-		// 停止
-		assert(false);
-
-		// 失敗を返す
-		return E_FAIL;
-	}
-
-	// 成功を返す
-	return S_OK;
-}
-
-//===========================================
-// 車の経路のロード処理
-//===========================================
-HRESULT CFile::LoadCarRoute(void)
-{
-	// 変数を宣言
-	int nEnd;							// テキスト読み込み終了の確認用
-	char aString[MAX_STRING];			// テキストの文字列の代入用
-	m_CarRouteInfo.nNum = 0;			// 総数
-	m_CarRouteInfo.bSuccess = false;	// 成功状況
-
-	// ポインタを宣言
-	FILE *pFile;						// ファイルポインタ
-
-	// ファイルを読み込み形式で開く
-	pFile = fopen(CARROUTE_TXT, "r");
-
-	if (pFile != nullptr)
-	{ // ファイルが開けた場合
-
-		do
-		{ // 読み込んだ文字列が EOF ではない場合ループ
-
-			// ファイルから文字列を読み込む
-			nEnd = fscanf(pFile, "%s", &aString[0]);	// テキストを読み込みきったら EOF を返す
-
-			if (strcmp(&aString[0], "SET_CARROUTE") == 0)
-			{ // 読み込んだ文字列が SET_CARROUTE の場合
-
-				do
-				{ // 読み込んだ文字列が END_SET_CARROUTE ではない場合ループ
-
-					// ファイルから文字列を読み込む
-					fscanf(pFile, "%s", &aString[0]);
-
-					if (strcmp(&aString[0], "NUMROUTE") == 0)
-					{ // 読み込んだ文字列が NUMROUTE の場合
-
-						fscanf(pFile, "%s", &aString[0]);										// = を読み込む (不要)
-						fscanf(pFile, "%d", &m_CarRouteInfo.nNumPos[m_CarRouteInfo.nNum]);		// 位置を読み込む
-
-						if (m_CarRouteInfo.nNumPos[m_CarRouteInfo.nNum] > MAX_CAR_ROUTE)
-						{ // 最大数を超えていた場合
-
-							// 停止
-							assert(false);
-						}
-					}
-					else if (strcmp(&aString[0], "POS") == 0)
-					{ // 読み込んだ文字列が POS の場合
-
-						for (int nCnt = 0; nCnt < m_CarRouteInfo.nNumPos[m_CarRouteInfo.nNum]; nCnt++)
-						{
-							fscanf(pFile, "%s", &aString[0]);					// 位置の番号 を読み込む (不要)
-							fscanf(pFile, "%s", &aString[0]);					// = を読み込む (不要)
-							fscanf(pFile, "%f%f%f", 
-								&m_CarRouteInfo.pos[m_CarRouteInfo.nNum][nCnt].x,
-								&m_CarRouteInfo.pos[m_CarRouteInfo.nNum][nCnt].y,
-								&m_CarRouteInfo.pos[m_CarRouteInfo.nNum][nCnt].z);	// 位置を読み込む
-						}
-					}
-
-				} while (strcmp(&aString[0], "END_SET_CARROUTE") != 0);		// 読み込んだ文字列が END_SET_CARROUTE ではない場合ループ
-
-				// データの総数を増やす
-				m_CarRouteInfo.nNum++;
-			}
-		} while (nEnd != EOF);				// 読み込んだ文字列が EOF ではない場合ループ
-
-		// ファイルを閉じる
-		fclose(pFile);
-
-		// 成功状況を true にする
-		m_CarRouteInfo.bSuccess = true;
 	}
 	else
 	{ // ファイルが開けなかった場合
@@ -669,10 +679,29 @@ HRESULT CFile::LoadBlock(const char *cFileName)
 					}
 					else if (strcmp(&aString[0], "ROT") == 0)
 					{ // 読み込んだ文字列が ROT の場合
+						float fRotType = 0.0f;
 
 						fscanf(pFile, "%s", &aString[0]);				// = を読み込む (不要)
-						fscanf(pFile, "%d",
-							&m_BlockInfo.rotType[m_BlockInfo.nNum]);	// 向きを読み込む
+						fscanf(pFile, "%s", &aString[0]);				// 向きを読み込む (不要)
+						fscanf(pFile, "%f", &fRotType);					// 向きを読み込む
+						fscanf(pFile, "%s", &aString[0]);				// 向きを読み込む (不要)
+
+						if (fRotType <= -1.57f)
+						{
+							m_BlockInfo.rotType[m_BlockInfo.nNum] = CBlock::ROTTYPE::ROTTYPE_RIGHT;
+						}
+						else if (fRotType <= 0.1f)
+						{
+							m_BlockInfo.rotType[m_BlockInfo.nNum] = CBlock::ROTTYPE::ROTTYPE_FRONT;
+						}
+						else if (fRotType <= 1.7f)
+						{
+							m_BlockInfo.rotType[m_BlockInfo.nNum] = CBlock::ROTTYPE::ROTTYPE_LEFT;
+						}
+						else
+						{
+							m_BlockInfo.rotType[m_BlockInfo.nNum] = CBlock::ROTTYPE::ROTTYPE_BACK;
+						}
 					}
 					else if (strcmp(&aString[0], "TYPE") == 0)
 					{ // 読み込んだ文字列が TYPE の場合
