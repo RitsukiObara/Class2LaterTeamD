@@ -78,6 +78,7 @@ public:			// 誰でもアクセスできる
 	bool Stun(int StunTime);						// 気絶状態
 	virtual void MotionManager(void) = 0;			// モーションマネージャー
 	virtual void GetItem(const CItem::TYPE type);	// アイテムの取得処理
+	virtual void SetEnableJump(const bool bJump);	// ジャンプの設定処理
 
 	virtual void SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type);		// 情報の設定処理
 	void CameraUpdate(void);			// カメラ情報の更新
