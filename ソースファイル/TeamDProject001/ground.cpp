@@ -12,7 +12,7 @@
 //=======================================
 #define MAP_INDOOR_TEXTURE		"data\\TEXTURE\\ground001.jpg"		// 屋内床テクスチャ
 //=======================================
-CGround::CGround() : CObject3D(CObject::TYPE_MAP, CObject::PRIORITY_BLOCK)
+CGround::CGround() : CObject3D(CObject::TYPE_MAP, CObject::PRIORITY_BG)
 {
 
 }

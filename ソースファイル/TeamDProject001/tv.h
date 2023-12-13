@@ -42,7 +42,7 @@ public:			// 誰でもアクセスできる
 
 	void SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type);			// 情報の設定処理
 
-	bool Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize) override;	// 当たり判定処理
+	bool Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize) override;		// 当たり判定処理
 	bool HitCircle(CPlayer* pPlayer, const float Radius) override;
 	void Action(void) override;		// アクション
 	bool HitRemocon(void);			// リモコンのヒット処理
