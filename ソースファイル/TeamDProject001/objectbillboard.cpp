@@ -544,7 +544,7 @@ int CBillboard::GetTexIdx(void) const
 //===========================================
 // 生成処理
 //===========================================
-CBillboard* CBillboard::Create(TYPE type)
+CBillboard* CBillboard::Create(const TYPE type, const PRIORITY priority)
 {
 	// ローカルオブジェクトを生成
 	CBillboard* pBillboard = nullptr;	// ビルボードのインスタンスを生成
@@ -553,7 +553,7 @@ CBillboard* CBillboard::Create(TYPE type)
 	{ // オブジェクトが NULL の場合
 
 		// オブジェクトを生成
-		pBillboard = new CBillboard(type, PRIORITY_BG);
+		pBillboard = new CBillboard(type, priority);
 	}
 	else
 	{ // オブジェクトが NULL じゃない場合

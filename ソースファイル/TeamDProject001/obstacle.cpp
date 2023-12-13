@@ -480,7 +480,7 @@ void CObstacle::GimmickUI(bool Set, int Player_Idx)
 				m_pGimmickUIFalse[Player_Idx] = true;
 
 				//UI‚Ì•\Ž¦
-				m_pGimmickUI = CBillboard::Create(TYPE_NONE);
+				m_pGimmickUI = CBillboard::Create(TYPE_NONE, PRIORITY_UI);
 				m_pGimmickUI->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\UI_GimmickOn.png"));
 				m_pGimmickUI->SetSize(D3DXVECTOR3(50.0f, 50.0f, 0.0f));
 
@@ -547,7 +547,7 @@ void CObstacle::MultiGimmickUI(bool Set, int Player_Idx)
 				m_pGimmickUIFalse[Player_Idx] = true;
 
 				//UI‚Ì•\Ž¦
-				m_pMultiGimmickUI[nCnt] = CBillboard::Create(TYPE_NONE);
+				m_pMultiGimmickUI[nCnt] = CBillboard::Create(TYPE_NONE, PRIORITY_UI);
 				m_pMultiGimmickUI[nCnt]->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\UI_GimmickOn.png"));
 				m_pMultiGimmickUI[nCnt]->SetSize(D3DXVECTOR3(50.0f, 50.0f, 0.0f));
 				if (nCnt == 0)

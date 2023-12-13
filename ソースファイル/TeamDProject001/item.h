@@ -23,6 +23,7 @@ public:			// 誰でもアクセスできる
 	enum TYPE
 	{
 		TYPE_MOUSETRAP = 0,		// ネズミ捕り
+		TYPE_DYNAMITE,			// ダイナマイト
 		TYPE_MAX				// この列挙型の総数
 	};
 

@@ -43,7 +43,6 @@ CItemUI::CItemUI() : CObject(TYPE_ITEMUI, PRIORITY_UI)
 	{
 		m_aItemUI[nCnt].pMark = nullptr;				// マークの情報
 		m_aItemUI[nCnt].pFrame = nullptr;				// 枠の情報
-		m_aItemUI[nCnt].type = CItem::TYPE_MOUSETRAP;	// 種類
 	}
 }
 
@@ -65,7 +64,6 @@ HRESULT CItemUI::Init(void)
 	{
 		m_aItemUI[nCnt].pMark = nullptr;				// マークの情報
 		m_aItemUI[nCnt].pFrame = nullptr;				// 枠の情報
-		m_aItemUI[nCnt].type = CItem::TYPE_MOUSETRAP;	// 種類
 	}
 
 	// 成功を返す

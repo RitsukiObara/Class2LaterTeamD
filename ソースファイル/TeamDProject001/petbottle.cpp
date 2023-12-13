@@ -412,8 +412,7 @@ bool CPetbottle::MagicWall(void)
 //=====================================
 void CPetbottle::CollsionSetting(void)
 {
-	// 位置と向きと最小値と最大値を取得する
-	D3DXVECTOR3 pos = GetPos();
+	// 向きと最大値と最小値を取得する
 	D3DXVECTOR3 rot = GetRot();
 	D3DXVECTOR3 vtxMin = GetFileData().vtxMin;
 	D3DXVECTOR3 vtxMax = GetFileData().vtxMax;
@@ -423,30 +422,30 @@ void CPetbottle::CollsionSetting(void)
 	{ // 方向が手前からの場合
 
 		// 最大値と最小値を設定する
-		m_vtxMax = D3DXVECTOR3(0.0f, vtxMax.y, vtxMax.z);
-		m_vtxMin = D3DXVECTOR3(0.0f, vtxMin.y, vtxMin.z);
+		m_vtxMax = vtxMax;
+		m_vtxMin = vtxMin;
 	}
 	else if (rot.y >= D3DX_PI * 0.25f &&
 		rot.y <= D3DX_PI * 0.75f)
 	{ // 方向が左からの場合
 
 		// 最大値と最小値を設定する
-		m_vtxMax = D3DXVECTOR3(vtxMax.z, vtxMax.y, 0.0f);
-		m_vtxMin = D3DXVECTOR3(vtxMin.z, vtxMin.y, 0.0f);
+		m_vtxMax = D3DXVECTOR3(vtxMax.z, vtxMax.y, -vtxMin.x);
+		m_vtxMin = D3DXVECTOR3(vtxMin.z, vtxMin.y, -vtxMax.x);
 	}
 	else if (rot.y >= D3DX_PI * -0.75f &&
 		rot.y <= D3DX_PI * -0.25f)
 	{ // 方向が右からの場合
 
 		// 最大値と最小値を設定する
-		m_vtxMax = D3DXVECTOR3(-vtxMin.z, vtxMax.y, 0.0f);
-		m_vtxMin = D3DXVECTOR3(-vtxMax.z, vtxMin.y, 0.0f);
+		m_vtxMax = D3DXVECTOR3(-vtxMin.z, vtxMax.y, vtxMax.x);
+		m_vtxMin = D3DXVECTOR3(-vtxMax.z, vtxMin.y, vtxMin.z);
 	}
 	else
 	{ // 上記以外(方向が奥からの場合)
 
 		// 最大値と最小値を設定する
-		m_vtxMax = D3DXVECTOR3(0.0f, vtxMax.y, -vtxMin.z);
-		m_vtxMin = D3DXVECTOR3(0.0f, vtxMin.y, -vtxMax.z);
+		m_vtxMax = D3DXVECTOR3(-vtxMin.x, vtxMax.y, -vtxMin.z);
+		m_vtxMin = D3DXVECTOR3(-vtxMax.x, vtxMin.y, -vtxMax.z);
 	}
 }
