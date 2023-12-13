@@ -76,6 +76,7 @@ private:		// 自分だけアクセスできる
 	void Gravity(void);				// 重力処理
 	void Attack(void);				// 攻撃処理
 	void AttackStateManager(void);	// 攻撃状態マネージャー
+	void AttackBlock(void);			// ブロックへの攻撃処理
 	void Elevation(void);			// 起伏地面の当たり判定
 	void ItemSet(void);				// ネコのアイテム設置処理
 	void DebugMessage(void);		// デバッグメッセージ処理
