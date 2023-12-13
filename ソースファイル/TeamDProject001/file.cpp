@@ -313,18 +313,6 @@ HRESULT CFile::Load(const TYPE type)
 
 		break;
 
-	case TYPE_CARROUTE:
-
-		// 車のロード処理
-		if (FAILED(LoadCarRoute()))
-		{ // 失敗した場合
-
-			// 失敗を返す
-			return E_FAIL;
-		}
-
-		break;
-
 	case TYPE_BLOCK:
 
 		// ブロックのロード処理
@@ -396,7 +384,7 @@ void CFile::SetMap(void)
 		for (int nCntObst = 0; nCntObst < m_ObstacleInfo.nNum; nCntObst++)
 		{
 			// 障害物の生成処理
-			CObstacle::Create(m_ObstacleInfo.pos[nCntObst], NONE_D3DXVECTOR3, m_ObstacleInfo.type[nCntObst]);
+			CObstacle::Create(m_ObstacleInfo.pos[nCntObst], m_ObstacleInfo.rot[nCntObst], m_ObstacleInfo.type[nCntObst]);
 		}
 	}
 
@@ -466,10 +454,13 @@ HRESULT CFile::SaveObstacle(const char *cFileName)
 		{ // オブジェクトへのポインタが NULL じゃなかった場合
 
 			// 文字列を書き込む
-			fprintf(pFile, "SET_OBSTACLE\n");		// 障害物の設定を書き込む
+			fprintf(pFile, "SET_OBSTACLE\n");	// 障害物の設定を書き込む
 
 			fprintf(pFile, "\tPOS = ");			// 位置の設定を書き込む
 			fprintf(pFile, "%.1f %.1f %.1f\n", pObstacle->GetPos().x, pObstacle->GetPos().y, pObstacle->GetPos().z);			// 位置を書き込む
+
+			fprintf(pFile, "\tROT = ");			// 位置の設定を書き込む
+			fprintf(pFile, "%.1f %.1f %.1f\n", pObstacle->GetRot().x, pObstacle->GetRot().y, pObstacle->GetRot().z);			// 向きを書き込む
 
 			fprintf(pFile, "\tTYPE = ");		// 種類の設定を書き込む
 			fprintf(pFile, "%d\n", pObstacle->GetType());			// 種類を書き込む
@@ -598,6 +589,15 @@ HRESULT CFile::LoadObstacle(const char *cFileName)
 							&m_ObstacleInfo.pos[m_ObstacleInfo.nNum].y,
 							&m_ObstacleInfo.pos[m_ObstacleInfo.nNum].z);		// 位置を読み込む
 					}
+					else if (strcmp(&aString[0], "ROT") == 0)
+					{ // 読み込んだ文字列が POS の場合
+
+						fscanf(pFile, "%s", &aString[0]);				// = を読み込む (不要)
+						fscanf(pFile, "%f%f%f",
+							&m_ObstacleInfo.rot[m_ObstacleInfo.nNum].x,
+							&m_ObstacleInfo.rot[m_ObstacleInfo.nNum].y,
+							&m_ObstacleInfo.rot[m_ObstacleInfo.nNum].z);		// 位置を読み込む
+					}
 					else if (strcmp(&aString[0], "TYPE") == 0)
 					{ // 読み込んだ文字列が TYPE の場合
 
@@ -679,10 +679,29 @@ HRESULT CFile::LoadBlock(const char *cFileName)
 					}
 					else if (strcmp(&aString[0], "ROT") == 0)
 					{ // 読み込んだ文字列が ROT の場合
+						float fRotType = 0.0f;
 
 						fscanf(pFile, "%s", &aString[0]);				// = を読み込む (不要)
-						fscanf(pFile, "%d",
-							&m_BlockInfo.rotType[m_BlockInfo.nNum]);	// 向きを読み込む
+						fscanf(pFile, "%s", &aString[0]);				// 向きを読み込む (不要)
+						fscanf(pFile, "%f", &fRotType);					// 向きを読み込む
+						fscanf(pFile, "%s", &aString[0]);				// 向きを読み込む (不要)
+
+						if (fRotType <= -1.57f)
+						{
+							m_BlockInfo.rotType[m_BlockInfo.nNum] = CBlock::ROTTYPE::ROTTYPE_RIGHT;
+						}
+						else if (fRotType <= 0.1f)
+						{
+							m_BlockInfo.rotType[m_BlockInfo.nNum] = CBlock::ROTTYPE::ROTTYPE_FRONT;
+						}
+						else if (fRotType <= 1.7f)
+						{
+							m_BlockInfo.rotType[m_BlockInfo.nNum] = CBlock::ROTTYPE::ROTTYPE_LEFT;
+						}
+						else
+						{
+							m_BlockInfo.rotType[m_BlockInfo.nNum] = CBlock::ROTTYPE::ROTTYPE_BACK;
+						}
 					}
 					else if (strcmp(&aString[0], "TYPE") == 0)
 					{ // 読み込んだ文字列が TYPE の場合
