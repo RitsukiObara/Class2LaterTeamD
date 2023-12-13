@@ -28,7 +28,6 @@ public:			// 誰でもアクセスできる
 		TYPE_HONEY = 0,		// 蜂蜜
 		TYPE_SLIME,			// スライム
 		TYPE_HAIRBALL,		// 毬
-		TYPE_FLOWERVASE,	// 花瓶
 		TYPE_PETBOTTLE,		// ペットボトル
 		TYPE_TOYCAR,		// おもちゃの車
 		TYPE_ROOMBA,		// ルンバ

@@ -10,20 +10,22 @@
 #include "main.h"
 #include "manager.h"
 #include "toycar.h"
-#include "renderer.h"
-#include "file.h"
 #include "useful.h"
 
 #include "car_gear.h"
 #include "collision.h"
+#include "map.h"
+#include "block.h"
+#include "block_manager.h"
 
 //-------------------------------------------
 // マクロ定義
 //-------------------------------------------
 #define CAR_GEAR_SHIFT		(D3DXVECTOR3(0.0f, 40.0f, 0.0f))		// 車の歯車のずらす幅
-#define CAR_SPEED			(-4.0f)									// 車の速度
-#define CAR_CURVE_SPEED		(0.03f)									// 車の曲がる速度
-#define CAR_DEST_ROT_SHIFT	(0.05f)									// 車が状態遷移する向きの差分の許容値
+#define CAR_SPEED			(-11.0f)		// 車の速度
+#define CAR_CURVE_SPEED		(0.08f)			// 車の曲がる速度
+#define CAR_DEST_ROT_SHIFT	(0.1f)			// 目的の向きの補正の許容範囲
+#define CAR_BRAKE_COUNT		(40)			// ブレーキカウント数
 
 //==============================
 // コンストラクタ
@@ -31,14 +33,12 @@
 CToyCar::CToyCar() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 {
 	// 全ての値をクリアする
-	m_pPosInit = NONE_D3DXVECTOR3;	// 初期位置
 	m_pGear = nullptr;				// 歯車の情報
-	m_pPosDest = nullptr;			// 目的の位置
+	m_move = NONE_D3DXVECTOR3;		// 移動量
 	m_state = STATE_DRIVE;			// 状態
-	m_nPosDestNum = 0;				// 目的の位置の総数
-	m_nPosDestIdx = 0;				// 目的の位置の番号
+	m_nBrakeCount = 0;				// ブレーキカウント
 	m_fRotDest = 0.0f;				// 目的の向き
-	m_bRight = false;				// 右向き状況
+	m_bRight = true;				// 右向き状況
 }
 
 //==============================
@@ -62,14 +62,12 @@ HRESULT CToyCar::Init(void)
 	}
 
 	// 全ての値を初期化する
-	m_pPosInit = NONE_D3DXVECTOR3;	// 初期位置
 	m_pGear = nullptr;				// 歯車の値
-	m_pPosDest = nullptr;			// 目的の位置
+	m_move = NONE_D3DXVECTOR3;		// 移動量
 	m_state = STATE_DRIVE;			// 状態
-	m_nPosDestNum = 0;				// 目的の位置の総数
-	m_nPosDestIdx = 0;				// 目的の位置の番号
+	m_nBrakeCount = 0;				// ブレーキカウント
 	m_fRotDest = 0.0f;				// 目的の向き
-	m_bRight = false;				// 右向き状況
+	m_bRight = true;				// 右向き状況
 
 	// 値を返す
 	return S_OK;
@@ -102,18 +100,46 @@ void CToyCar::Update(void)
 
 	switch (m_state)
 	{
-	case CToyCar::STATE_DRIVE:
+	case STATE_DRIVE:
 
 		// 走行処理
 		Drive();
 
+		if (MagicWall() == true ||
+			Block() == true)
+		{ // 魔法壁または、ブロックの当たり判定が true の場合
+
+			// カーブ状態にする
+			m_state = STATE_CURVE;
+
+			// 向きの計算処理
+			RotCalc();
+		}
+
 		break;
 
-	case CToyCar::STATE_CURVE:
+	case STATE_CURVE:
 
 		// カービング処理
 		Curve();
 		
+		break;
+
+	case STATE_BRAKE:
+
+		// ブレーキカウントを加算する
+		m_nBrakeCount++;
+
+		if (m_nBrakeCount % CAR_BRAKE_COUNT == 0)
+		{ // ブレーキカウントが一定数になった場合
+
+			// ブレーキカウントを初期化する
+			m_nBrakeCount = 0;
+
+			// ドライブ状態にする
+			m_state = STATE_DRIVE;
+		}
+
 		break;
 
 	default:
@@ -122,13 +148,6 @@ void CToyCar::Update(void)
 		assert(false);
 
 		break;
-	}
-
-	if (m_pPosDest != nullptr)
-	{ // 位置が NULL じゃない場合
-
-		// 位置の確認処理
-		Check();
 	}
 
 	if (m_pGear != nullptr)
@@ -163,9 +182,6 @@ void CToyCar::Draw(void)
 //=====================================
 void CToyCar::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type)
 {
-	// 車の経路を設定する
-	int nType = rand() % CManager::Get()->GetFile()->GetCarRouteNum();
-
 	// 情報の設定処理
 	CObstacle::SetData(pos, rot, type);
 
@@ -177,15 +193,11 @@ void CToyCar::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE
 	}
 
 	// 全ての値を設定する
-	m_pPosInit = pos;				// 初期位置
-	m_nPosDestIdx = 0;				// 目的の位置の番号
-	m_nPosDestNum = CManager::Get()->GetFile()->GetCarRouteNumPos(nType);		// 目的の位置の総数
-	m_pPosDest = CManager::Get()->GetFile()->GetCarRoute(nType);				// 目的の位置のポインタ
-	m_state = STATE_CURVE;			// 状態
-	m_bRight = false;				// 右向き状況
-
-	// 目的地への向きの計算処理
-	RotCalc();
+	m_move = D3DXVECTOR3(sinf(rot.y) * CAR_SPEED, 0.0f, cosf(rot.y) * CAR_SPEED);	// 移動量
+	m_state = STATE_DRIVE;			// 状態
+	m_nBrakeCount = 0;				// ブレーキカウント
+	m_fRotDest = 0.0f;				// 目的の向き
+	m_bRight = true;				// 右向き状況
 }
 
 //=====================================
@@ -248,9 +260,8 @@ void CToyCar::Drive(void)
 	D3DXVECTOR3 pos = GetPos();		// 位置
 	D3DXVECTOR3 rot = GetRot();		// 向き
 
-	// 移動させる
-	pos.x += sinf(rot.y) * CAR_SPEED;
-	pos.z += cosf(rot.y) * CAR_SPEED;
+	// 位置を移動する
+	pos += m_move;
 
 	// 位置を適用する
 	SetPos(pos);
@@ -286,8 +297,12 @@ void CToyCar::Curve(void)
 		// 向きを補正する
 		rot.y = m_fRotDest;
 
-		// ドライブ状態にする
-		m_state = STATE_DRIVE;
+		// ブレーキ状態にする
+		m_state = STATE_BRAKE;
+
+		// 移動量を設定する
+		m_move.x = sinf(rot.y) * CAR_SPEED;
+		m_move.z = cosf(rot.y) * CAR_SPEED;
 	}
 
 	// 向きを適用する
@@ -295,36 +310,7 @@ void CToyCar::Curve(void)
 }
 
 //=====================================
-// 位置の確認処理
-//=====================================
-void CToyCar::Check(void)
-{
-	// 情報を取得する
-	D3DXVECTOR3 pos = GetPos();			// 位置を取得する
-	D3DXVECTOR3 posOld = GetPosOld();	// 前回の位置を取得する
-
-	if (((m_pPosInit.x + m_pPosDest[m_nPosDestIdx].x >= posOld.x && m_pPosInit.x + m_pPosDest[m_nPosDestIdx].x <= pos.x) ||
-		(m_pPosInit.x + m_pPosDest[m_nPosDestIdx].x <= posOld.x && m_pPosInit.x + m_pPosDest[m_nPosDestIdx].x >= pos.x)) ||
-		((m_pPosInit.z + m_pPosDest[m_nPosDestIdx].z >= posOld.z && m_pPosInit.z + m_pPosDest[m_nPosDestIdx].z <= pos.z) ||
-		(m_pPosInit.z + m_pPosDest[m_nPosDestIdx].z <= posOld.z && m_pPosInit.z + m_pPosDest[m_nPosDestIdx].z >= pos.z)))
-	{ // 位置が目的地を超えた場合
-
-		// 位置を補正する
-		pos = m_pPosInit + m_pPosDest[m_nPosDestIdx];
-
-		// 総数を変える
-		m_nPosDestIdx = (m_nPosDestIdx + 1) % m_nPosDestNum;
-
-		// 向きの設定処理
-		RotCalc();
-
-		// カーブ状態を設定する
-		m_state = STATE_CURVE;
-	}
-}
-
-//=====================================
-// 方向の設定処理
+// 向きの計算処理
 //=====================================
 void CToyCar::RotCalc(void)
 {
@@ -332,9 +318,16 @@ void CToyCar::RotCalc(void)
 	D3DXVECTOR3 pos = GetPos();		// 位置
 	D3DXVECTOR3 rot = GetRot();		// 向き
 	float fRotDiff;					// 向きの差分
+	float fRotMagni;				// 向きの倍率
+
+	// 向きの倍率をランダムで算出
+	fRotMagni = (float)((rand() % 51 - 50) * 0.01f);
 
 	// 目的の向きを設定する
-	m_fRotDest = atan2f(pos.x - (m_pPosInit.x + m_pPosDest[m_nPosDestIdx].x), pos.z - (m_pPosInit.z + m_pPosDest[m_nPosDestIdx].z));
+	m_fRotDest = rot.y + (D3DX_PI * fRotMagni);
+
+	// 向きの正規化
+	useful::RotNormalize(&m_fRotDest);
 
 	// 向きの差分を求める
 	fRotDiff = m_fRotDest - rot.y;
@@ -354,4 +347,103 @@ void CToyCar::RotCalc(void)
 		// 左向きにする
 		m_bRight = false;
 	}
+}
+
+//=====================================
+// ブロックの当たり判定処理
+//=====================================
+bool CToyCar::Block(void)
+{
+	// ローカル変数宣言
+	CBlock* pBlock = CBlockManager::Get()->GetTop();		// ブロックの先頭を取得する
+	D3DXVECTOR3 pos = GetPos();								// 位置を取得する
+	bool bClush = false;									// 衝突判定
+
+	while (pBlock != nullptr)
+	{ // ブロックが NULL じゃない場合回す
+
+		if (collision::HexahedronCollision
+		(
+			&pos,
+			pBlock->GetPos(),
+			GetPosOld(),
+			pBlock->GetPosOld(),
+			GetFileData().vtxMin,
+			pBlock->GetVtxMin(),
+			GetFileData().vtxMax,
+			pBlock->GetFileData().vtxMax
+		) == true)
+		{ // 六面体の当たり判定に当たった場合
+
+			// 衝突判定を true にする
+			bClush = true;
+		}
+
+		// 次のブロックを取得する
+		pBlock = pBlock->GetNext();
+	}
+
+	// 位置を適用する
+	SetPos(pos);
+
+	// 衝突判定を返す
+	return bClush;
+}
+
+//=====================================
+// 魔法壁の当たり判定処理
+//=====================================
+bool CToyCar::MagicWall(void)
+{
+	// ローカル変数宣言
+	D3DXVECTOR3 pos = GetPos();					// 位置
+	D3DXVECTOR3 max = GetFileData().vtxMax;		// 最大値
+	D3DXVECTOR3 min = GetFileData().vtxMin;		// 最小値
+	bool bClush = false;						// 衝突状況
+
+	if (pos.x + min.x <= -MAP_SIZE.x)
+	{ // 位置が左から出そうな場合
+
+		// 位置を設定する
+		pos.x = -MAP_SIZE.x - min.x;
+
+		// 衝突状況を true にする
+		bClush = true;
+	}
+
+	if (pos.x + max.x >= MAP_SIZE.x)
+	{ // 位置が右から出そうな場合
+
+		// 位置を設定する
+		pos.x = MAP_SIZE.x - max.x;
+
+		// 衝突状況を true にする
+		bClush = true;
+	}
+
+	if (pos.z + min.z <= -MAP_SIZE.z)
+	{ // 位置が右から出そうな場合
+
+		// 位置を設定する
+		pos.z = -MAP_SIZE.z - min.z;
+
+		// 衝突状況を true にする
+		bClush = true;
+	}
+
+	if (pos.z + max.z >= MAP_SIZE.z)
+	{ // 位置が右から出そうな場合
+
+		// 位置を設定する
+		pos.z = MAP_SIZE.z - max.z;
+
+		// 衝突状況を true にする
+		bClush = true;
+	}
+
+	// 位置を適用する
+	SetPos(pos);
+
+	// 衝突状況を返す
+	return bClush;
 }

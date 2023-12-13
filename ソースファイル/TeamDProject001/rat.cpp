@@ -40,8 +40,8 @@
 namespace
 {
 	static const D3DXVECTOR3 COLLSIZE = D3DXVECTOR3(30.0f, 50.0f, 30.0f);		// 当たり判定でのサイズ
-	static const float GRAVITY = 0.55f;					// 重力
-	static const float ADD_MOVE_Y = 10.0f;				// ジャンプ力
+	static const float GRAVITY = 1.2f;					// 重力
+	static const float ADD_MOVE_Y = 20.0f;				// ジャンプ力
 	static const float ATTACK_DISTANCE = 80.0f;			// 攻撃範囲までの距離
 	static const float MOVE_SPEED = 15.0f;				// 速度
 	static const float ARROW_DISTANCE = 100.0f;			// このネズミの矢印の距離
@@ -337,6 +337,15 @@ void CRat::MotionManager(void)
 }
 
 //=====================================
+// ジャンプ状況の設定処理
+//=====================================
+void CRat::SetEnableJump(const bool bJump)
+{
+	// ジャンプ状況を設定する
+	m_bJump = bJump;
+}
+
+//=====================================
 // 情報の設定処理
 //=====================================
 void CRat::SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type)
@@ -431,9 +440,6 @@ void CRat::Gravity(void)
 
 	// 重力を加算する
 	move.y -= GRAVITY;
-
-	// 位置を加算する
-	pos.y += move.y;
 
 	// 移動量を適用する
 	SetPos(pos);

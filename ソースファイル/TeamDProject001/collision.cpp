@@ -85,10 +85,6 @@ void collision::ObstacleCollision(CPlayer* player, const float fWidth, const flo
 
 				break;
 
-			case CObstacle::TYPE::TYPE_FLOWERVASE:
-
-				break;
-
 			case CObstacle::TYPE::TYPE_PETBOTTLE:
 
 				break;
@@ -140,6 +136,9 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 				// 移動量を設定する
 				pPlayer->SetSpeed(pPlayer->GetSpeedCopy() * 0.3f);
 
+				// ジャンプ状況を設定する
+				pPlayer->SetEnableJump(true);
+
 				// ヒットした
 				bHitMove = true;
 
@@ -167,12 +166,6 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 
 				// ヒット処理
 				pPlayer->Smash(fAngle);
-
-				break;
-
-			case CObstacle::TYPE_FLOWERVASE:
-
-				// 特になし
 
 				break;
 
@@ -473,9 +466,6 @@ bool collision::BlockCollision(CPlayer* player, const D3DXVECTOR3& collSize)
 		// 次のブロックの情報を取得する
 		pBlock = pBlock->GetNext();
 	}
-
-	// 壁の当たり判定
-	WallCollision(player, collSize);
 
 	// ジャンプ状況を返す
 	return bJump;

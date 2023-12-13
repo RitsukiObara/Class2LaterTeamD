@@ -157,7 +157,7 @@ void CEntry::Update(void)
 
 			for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
 			{
-				m_apPlayer[m_EntryId[nCnt]]->SetMove(D3DXVECTOR3(0.0f, 20.0f, 0.0f));
+				m_apPlayer[m_EntryId[nCnt]]->SetMove(D3DXVECTOR3(0.0f, 25.0f, 0.0f));
 			}
 
 		}
