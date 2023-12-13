@@ -17,6 +17,8 @@
 #include "map.h"
 #include "block.h"
 #include "block_manager.h"
+#include "obstacle.h"
+#include "obstacle_manager.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -26,6 +28,8 @@
 #define CAR_CURVE_SPEED		(0.08f)			// 車の曲がる速度
 #define CAR_DEST_ROT_SHIFT	(0.1f)			// 目的の向きの補正の許容範囲
 #define CAR_BRAKE_COUNT		(40)			// ブレーキカウント数
+#define ROTDEST_MAGNI_MIN	(8)				// 目的の向きの倍率の最小値
+#define ROTDEST_MAGNI_RANGE	(11)			// 目的の向きの倍率の範囲
 
 //==============================
 // コンストラクタ
@@ -38,6 +42,7 @@ CToyCar::CToyCar() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 	m_state = STATE_DRIVE;			// 状態
 	m_nBrakeCount = 0;				// ブレーキカウント
 	m_fRotDest = 0.0f;				// 目的の向き
+	m_fRotMagni = 0.0f;				// 向きの倍率
 	m_bRight = true;				// 右向き状況
 }
 
@@ -67,6 +72,7 @@ HRESULT CToyCar::Init(void)
 	m_state = STATE_DRIVE;			// 状態
 	m_nBrakeCount = 0;				// ブレーキカウント
 	m_fRotDest = 0.0f;				// 目的の向き
+	m_fRotMagni = 0.0f;				// 向きの倍率
 	m_bRight = true;				// 右向き状況
 
 	// 値を返す
@@ -197,6 +203,7 @@ void CToyCar::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE
 	m_state = STATE_DRIVE;			// 状態
 	m_nBrakeCount = 0;				// ブレーキカウント
 	m_fRotDest = 0.0f;				// 目的の向き
+	m_fRotMagni = (float)((rand() % ROTDEST_MAGNI_RANGE + ROTDEST_MAGNI_MIN) * 0.1f);		// 向きの倍率
 	m_bRight = true;				// 右向き状況
 }
 
@@ -318,13 +325,9 @@ void CToyCar::RotCalc(void)
 	D3DXVECTOR3 pos = GetPos();		// 位置
 	D3DXVECTOR3 rot = GetRot();		// 向き
 	float fRotDiff;					// 向きの差分
-	float fRotMagni;				// 向きの倍率
-
-	// 向きの倍率をランダムで算出
-	fRotMagni = (float)((rand() % 51 - 50) * 0.01f);
 
 	// 目的の向きを設定する
-	m_fRotDest = rot.y + (D3DX_PI * fRotMagni);
+	m_fRotDest = rot.y + (D3DX_PI * m_fRotMagni);
 
 	// 向きの正規化
 	useful::RotNormalize(&m_fRotDest);
@@ -371,7 +374,7 @@ bool CToyCar::Block(void)
 			GetFileData().vtxMin,
 			pBlock->GetVtxMin(),
 			GetFileData().vtxMax,
-			pBlock->GetFileData().vtxMax
+			pBlock->GetVtxMax()
 		) == true)
 		{ // 六面体の当たり判定に当たった場合
 
@@ -391,51 +394,91 @@ bool CToyCar::Block(void)
 }
 
 //=====================================
+// 障害物の当たり判定処理
+//=====================================
+bool CToyCar::Obstacle(void)
+{
+	// ローカル変数宣言
+	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();	// 障害物の先頭を取得する
+	D3DXVECTOR3 pos = GetPos();									// 位置を取得する
+	bool bClush = false;										// 衝突判定
+
+	while (pObstacle != nullptr)
+	{ // 障害物が NULL じゃない場合回す
+
+		if (collision::HexahedronCollision
+		(
+			&pos,
+			pObstacle->GetPos(),
+			GetPosOld(),
+			pObstacle->GetPosOld(),
+			GetFileData().vtxMin,
+			pObstacle->GetFileData().vtxMin,
+			GetFileData().vtxMax,
+			pObstacle->GetFileData().vtxMax
+		) == true)
+		{ // 六面体の当たり判定に当たった場合
+
+			// 衝突判定を true にする
+			bClush = true;
+		}
+
+		// 次の障害物を取得する
+		pObstacle = pObstacle->GetNext();
+	}
+
+	// 位置を適用する
+	SetPos(pos);
+
+	// 衝突判定を返す
+	return bClush;
+}
+
+//=====================================
 // 魔法壁の当たり判定処理
 //=====================================
 bool CToyCar::MagicWall(void)
 {
 	// ローカル変数宣言
 	D3DXVECTOR3 pos = GetPos();					// 位置
-	D3DXVECTOR3 max = GetFileData().vtxMax;		// 最大値
-	D3DXVECTOR3 min = GetFileData().vtxMin;		// 最小値
+	float fRadius = GetFileData().fRadius;		// 半径
 	bool bClush = false;						// 衝突状況
 
-	if (pos.x + min.x <= -MAP_SIZE.x)
+	if (pos.x - fRadius <= -MAP_SIZE.x)
 	{ // 位置が左から出そうな場合
 
 		// 位置を設定する
-		pos.x = -MAP_SIZE.x - min.x;
+		pos.x = -MAP_SIZE.x + fRadius;
 
 		// 衝突状況を true にする
 		bClush = true;
 	}
 
-	if (pos.x + max.x >= MAP_SIZE.x)
+	if (pos.x + fRadius >= MAP_SIZE.x)
 	{ // 位置が右から出そうな場合
 
 		// 位置を設定する
-		pos.x = MAP_SIZE.x - max.x;
+		pos.x = MAP_SIZE.x - fRadius;
 
 		// 衝突状況を true にする
 		bClush = true;
 	}
 
-	if (pos.z + min.z <= -MAP_SIZE.z)
-	{ // 位置が右から出そうな場合
+	if (pos.z - fRadius <= -MAP_SIZE.z)
+	{ // 位置が手前から出そうな場合
 
 		// 位置を設定する
-		pos.z = -MAP_SIZE.z - min.z;
+		pos.z = -MAP_SIZE.z + fRadius;
 
 		// 衝突状況を true にする
 		bClush = true;
 	}
 
-	if (pos.z + max.z >= MAP_SIZE.z)
-	{ // 位置が右から出そうな場合
+	if (pos.z + fRadius >= MAP_SIZE.z)
+	{ // 位置が奥から出そうな場合
 
 		// 位置を設定する
-		pos.z = MAP_SIZE.z - max.z;
+		pos.z = MAP_SIZE.z - fRadius;
 
 		// 衝突状況を true にする
 		bClush = true;
