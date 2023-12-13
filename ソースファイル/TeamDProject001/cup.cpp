@@ -151,7 +151,7 @@ void CCup::StateManager(D3DXVECTOR3 *pos, D3DXVECTOR3 *rot)
 			pos->y = 15.0f;
 			m_State = STATE_TRUE;
 
-			m_pWater = CObject3D::Create(CObject3D::TYPE_NONE);
+			m_pWater = CObject3D::Create(CObject3D::TYPE_NONE, PRIORITY_BLOCK);
 			m_pWater->SetPos(GetPos());
 			m_pWater->SetRot(D3DXVECTOR3(D3DX_PI * 0.5f, rot->y, 0.0f));
 			m_pWater->SetSize(m_WaterSize);

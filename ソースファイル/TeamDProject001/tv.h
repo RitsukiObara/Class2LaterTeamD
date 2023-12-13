@@ -25,12 +25,11 @@ public:			// 誰でもアクセスできる
 	CTv();				// コンストラクタ
 	~CTv();				// デストラクタ
 
-							// 列挙型定義(状態)
+	// 列挙型定義(状態)
 	enum STATE
 	{
 		STATE_NONE = 0,	// アイテム取得可能状態
 		STATE_COOLDOWN,	// クールタイム状態
-		STATE_TRAP,		// ネズミ捕り画面だった場合
 		STATE_BOMB,		// 爆弾画面だった場合
 		STATE_MAX		// この列挙型の総数
 	};
@@ -43,22 +42,23 @@ public:			// 誰でもアクセスできる
 
 	void SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type);			// 情報の設定処理
 
-	bool Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize) override;	// 当たり判定処理
+	bool Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize) override;		// 当たり判定処理
 	bool HitCircle(CPlayer* pPlayer, const float Radius) override;
-	bool HitRemocon(void);
 	void Action(void) override;		// アクション
+	bool HitRemocon(void);			// リモコンのヒット処理
 	void PowerAction(void);			// 電源処理
 	void VisionChange(void);		// テレビ画面切り替え
 private:		// 自分だけアクセスできる
 	void StateManager(void);		// 状態管理マネージャー
 
-	bool m_bPower;
+	CObject3D *m_pVision;		// ポリゴン情報
+	CBlock* m_pRemocon;			// リモコンのモデル情報
+	D3DXVECTOR3 m_vtxMax;		// 最大値
+	D3DXVECTOR3 m_vtxMin;		// 最小値
+	STATE m_State;				// テレビの状態
 	int m_nCoolTime;			// クールタイム
 	int m_nChangeVision;		// 画面変化処理
-	STATE m_State;				// テレビの状態
-	CObject3D *m_pVision;		// ポリゴン情報
-	D3DXVECTOR3 m_VisionSize;	// ポリゴンサイズ
-	CBlock* m_pRemocn;			// リモコンのモデル情報
+	bool m_bPower;				// 電源
 };
 
 #endif

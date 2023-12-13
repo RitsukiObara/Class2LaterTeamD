@@ -178,6 +178,9 @@ void CBook::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE t
 			// 向きをランダムで算出
 			fRot = (rand() % 81 - 40) * 0.01f;
 
+			// 本(赤)の向きにプラスする
+			fRot +=GetRot().y;
+
 			// 情報を設定する
 			m_aBook[nCnt].pBook->SetPos(D3DXVECTOR3(pos.x, pos.y + ((nCnt + 1) * SHIFT_HEIGHT), pos.z));
 			m_aBook[nCnt].pBook->SetPosOld(m_aBook[nCnt].pBook->GetPos());
