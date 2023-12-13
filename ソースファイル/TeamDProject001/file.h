@@ -47,6 +47,7 @@ public:			// 誰でもアクセスできる
 	struct SObstacleInfo
 	{
 		D3DXVECTOR3 pos[MAX_FILE_DATA];			// 位置
+		D3DXVECTOR3 rot[MAX_FILE_DATA];			// 向き
 		CObstacle::TYPE type[MAX_FILE_DATA];	// 種類
 		int nNum;								// 総数
 		bool bSuccess;							// 成功状況
@@ -78,7 +79,7 @@ private:		// 自分のみアクセスできる
 
 	// メンバ関数(セーブ関係)
 	HRESULT SaveObstacle(const char *cFileName);		// 障害物のセーブ処理
-	HRESULT SaveBlock(const char *cFileName);		// ブロックのセーブ処理
+	HRESULT SaveBlock(const char *cFileName);			// ブロックのセーブ処理
 
 	// メンバ関数(ロード関係)
 	HRESULT LoadObstacle(const char *cFileName);		// 障害物のロード処理
