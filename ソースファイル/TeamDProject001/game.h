@@ -63,6 +63,9 @@ public:						// 誰でもアクセスできる
 	static void SetItemSpawn(const bool bItemSpawn) { m_bItemSpawn = bItemSpawn; }	// アイテム出現状態の設定
 	static bool GetItemSpawn(void) {return m_bItemSpawn; }					// アイテム出現状態の取得
 
+	static void SetMapNumber(const int Number) { m_nMapNumber = Number; }	// マップ番号の設定
+	static int GetMapNumber(void) { return m_nMapNumber; }					// マップ番号の取得
+
 	// NULL化処理
 	static void DeletePause(void);		// ポーズのNULL化処理
 	static void DeletePlayer(int nIdx);	// プレイヤーのNULL化処理
@@ -91,6 +94,7 @@ private:					// 自分だけアクセスできる
 	static int m_nNumItem;					// アイテムの数
 	static bool m_bCountDown;				// カウントダウンが使用されているかどうか
 	static bool m_bItemSpawn;				// アイテムが出現しているかどうか
+	static int m_nMapNumber;				// マップ番号
 
 // デバッグ版
 #ifdef _DEBUG

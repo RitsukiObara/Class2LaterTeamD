@@ -439,7 +439,7 @@ void CPetbottle::CollsionSetting(void)
 
 		// 最大値と最小値を設定する
 		m_vtxMax = D3DXVECTOR3(-vtxMin.z, vtxMax.y, vtxMax.x);
-		m_vtxMin = D3DXVECTOR3(-vtxMax.z, vtxMin.y, vtxMin.z);
+		m_vtxMin = D3DXVECTOR3(-vtxMax.z, vtxMin.y, vtxMin.x);
 	}
 	else
 	{ // 上記以外(方向が奥からの場合)

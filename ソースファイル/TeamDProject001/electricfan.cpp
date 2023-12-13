@@ -16,15 +16,16 @@
 #include "fan_blade.h"
 #include "Effect.h"
 #include "collision.h"
+#include "debugproc.h"
 
 //-------------------------------------------
 // マクロ定義
 //-------------------------------------------
 #define FAN_SHIFT		(175.0f)		// 扇風機の羽根のずらす高さ
 #define WIND_RANGE		(1600.0f)		// 扇風機の風の範囲
-#define WIND_MOVE		(11)			// 風エフェクトの移動量の幅
+#define WIND_MOVE		(15)			// 風エフェクトの移動量の幅
 #define WIND_LIFE		(50)			// 風エフェクトの寿命
-#define WIND_RADIUS		(40.0f)			// 風エフェクトの半径
+#define WIND_RADIUS		(3.0f)			// 風エフェクトの半径
 #define FAN_MOVE_OFF	(0.0f)			// スイッチOFFの羽根の移動量
 #define FAN_MOVE_ON		(0.5f)			// スイッチONの羽根の移動量
 
@@ -92,21 +93,21 @@ void CElecFan::Update(void)
 	if (m_bPower == true)
 	{ // 電源がついている場合
 
-		//D3DXVECTOR3 pos;		// 位置
-		//D3DXVECTOR3 move;		// 移動量
+		D3DXVECTOR3 pos;		// 位置
+		D3DXVECTOR3 move;		// 移動量
 
-		//// 位置を設定する
-		//pos.x = GetPos().x + sinf(GetRot().y + (D3DX_PI * 0.5f)) * (rand() % (int)(GetFileData().vtxMax.x) - (int)(GetFileData().vtxMax.x * 0.5f));
-		//pos.y = GetPos().y + rand() % (int)(GetFileData().vtxMax.y) + (int)(GetFileData().vtxMin.y);
-		//pos.z = GetPos().z + cosf(GetRot().y + (D3DX_PI * 0.5f)) * (rand() % (int)(GetFileData().vtxMax.z) - (int)(GetFileData().vtxMax.z * 0.5f));
+		// 位置を設定する
+		pos.x = GetPos().x + sinf(GetRot().y + (D3DX_PI * 0.5f)) * (rand() % (int)(GetFileData().vtxMax.x) - (int)(GetFileData().vtxMax.x * 0.5f));
+		pos.y = GetPos().y + rand() % (int)(GetFileData().vtxMax.y) + (int)(GetFileData().vtxMin.y);
+		pos.z = GetPos().z + cosf(GetRot().y + (D3DX_PI * 0.5f)) * (rand() % (int)(GetFileData().vtxMax.z) - (int)(GetFileData().vtxMax.z * 0.5f));
 
-		//// 移動量を設定する
-		//move.x = sinf(GetRot().y + D3DX_PI) * (rand() % WIND_MOVE + (WIND_MOVE * 0.5f));
-		//move.y = 0.0f;
-		//move.z = cosf(GetRot().y + D3DX_PI) * (rand() % WIND_MOVE + (WIND_MOVE * 0.5f));
+		// 移動量を設定する
+		move.x = sinf(GetRot().y + D3DX_PI) * (rand() % WIND_MOVE + (WIND_MOVE * 0.5f));
+		move.y = 0.0f;
+		move.z = cosf(GetRot().y + D3DX_PI) * (rand() % WIND_MOVE + (WIND_MOVE * 0.5f));
 
-		//// エフェクトを出す
-		//CEffect::Create(pos, move, WIND_LIFE, WIND_RADIUS, CEffect::TYPE_WIND, NONE_D3DXCOLOR, true);
+		// エフェクトを出す
+		CEffect::Create(pos, move, WIND_LIFE, WIND_RADIUS, CEffect::TYPE_WIND, NONE_D3DXCOLOR, true);
 	}
 
 	if (m_pFan != nullptr)
@@ -155,6 +156,7 @@ void CElecFan::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYP
 
 		// ファンを生成する
 		m_pFan = CFanBlade::Create(posFan);
+		m_pFan->SetRot(rot);
 	}
 }
 
@@ -193,15 +195,64 @@ bool CElecFan::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 	if (m_bPower == true)
 	{ // 電源状況が true の場合
 
-		// 各最大値・最小値を宣言
-		D3DXVECTOR3 vtxMin = D3DXVECTOR3(sinf(GetRot().y) * -WIND_RANGE, 0.0f, cosf(GetRot().y) * -WIND_RANGE);
-		D3DXVECTOR3 vtxMax = D3DXVECTOR3(0.0f, GetFileData().vtxMax.y, 0.0f);
+		// 向き・最大値・最小値を宣言
+		D3DXVECTOR3 rot = GetRot();
+		D3DXVECTOR3 IvtxMin;
+		D3DXVECTOR3 IvtxMax;
+		D3DXVECTOR3 vtxMin = D3DXVECTOR3
+		(
+			GetFileData().vtxMin.x - 30.0f,
+			0.0f,
+			-WIND_RANGE
+		);
+		D3DXVECTOR3 vtxMax = D3DXVECTOR3
+		(
+			GetFileData().vtxMax.x + 30.0f,
+			GetFileData().vtxMax.y,
+			0.0f
+		);
+
+		if (rot.y >= D3DX_PI * -0.25f &&
+			rot.y <= D3DX_PI * 0.25f)
+		{ // 方向が手前からの場合
+
+			// 最大値と最小値を設定する
+			IvtxMax = vtxMax;
+			IvtxMin = vtxMin;
+		}
+		else if (rot.y >= D3DX_PI * 0.25f &&
+			rot.y <= D3DX_PI * 0.75f)
+		{ // 方向が左からの場合
+
+			// 最大値と最小値を設定する
+			IvtxMax = D3DXVECTOR3(vtxMax.z, vtxMax.y, -vtxMin.x);
+			IvtxMin = D3DXVECTOR3(vtxMin.z, vtxMin.y, -vtxMax.x);
+		}
+		else if (rot.y >= D3DX_PI * -0.75f &&
+			rot.y <= D3DX_PI * -0.25f)
+		{ // 方向が右からの場合
+
+			// 最大値と最小値を設定する
+			IvtxMax = D3DXVECTOR3(-vtxMin.z, vtxMax.y, vtxMax.x);
+			IvtxMin = D3DXVECTOR3(-vtxMax.z, vtxMin.y, vtxMin.x);
+		}
+		else
+		{ // 上記以外(方向が奥からの場合)
+
+			// 最大値と最小値を設定する
+			IvtxMax = D3DXVECTOR3(-vtxMin.x, vtxMax.y, -vtxMin.z);
+			IvtxMin = D3DXVECTOR3(-vtxMax.x, vtxMin.y, -vtxMax.z);
+		}
+
+		CManager::Get()->GetDebugProc()->Print("\n\n[X:%f] [Z:%f]\n", IvtxMax.x, IvtxMax.z);
+		CManager::Get()->GetDebugProc()->Print("[X:%f] [Z:%f]\n\n", IvtxMin.x, IvtxMin.z);
+
 		D3DXVECTOR3 playerMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);
 		D3DXVECTOR3 playerMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);
 
-		if (useful::RectangleCollisionXY(pPlayer->GetPos(), GetPos(), playerMax, vtxMax, playerMin, vtxMin) == true &&
-			useful::RectangleCollisionXZ(pPlayer->GetPos(), GetPos(), playerMax, vtxMax, playerMin, vtxMin) == true &&
-			useful::RectangleCollisionYZ(pPlayer->GetPos(), GetPos(), playerMax, vtxMax, playerMin, vtxMin) == true)
+		if (useful::RectangleCollisionXY(pPlayer->GetPos(), GetPos(), playerMax, IvtxMax, playerMin, IvtxMin) == true &&
+			useful::RectangleCollisionXZ(pPlayer->GetPos(), GetPos(), playerMax, IvtxMax, playerMin, IvtxMin) == true &&
+			useful::RectangleCollisionYZ(pPlayer->GetPos(), GetPos(), playerMax, IvtxMax, playerMin, IvtxMin) == true)
 		{ // 当たり判定の中に入った場合
 
 			// true を返す

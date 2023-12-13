@@ -162,20 +162,24 @@ bool CPin::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 	if (m_State == STATE_TRUE)
 	{ // ギミック発動状態の場合
 
-		// 最大値と最小値を設定する
-		D3DXVECTOR3 vtxMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);
-		D3DXVECTOR3 vtxMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);
+		if (pPlayer->GetType() == CPlayer::TYPE_CAT)
+		{ // 対象プレイヤーがネコだった場合
 
-		if (useful::RectangleCollisionXY(pPlayer->GetPos(), GetPos(), vtxMax, GetFileData().vtxMax, vtxMin, GetFileData().vtxMin) == true &&
-			useful::RectangleCollisionXZ(pPlayer->GetPos(), GetPos(), vtxMax, GetFileData().vtxMax, vtxMin, GetFileData().vtxMin) == true &&
-			useful::RectangleCollisionYZ(pPlayer->GetPos(), GetPos(), vtxMax, GetFileData().vtxMax, vtxMin, GetFileData().vtxMin) == true)
-		{ // 範囲内に入った場合
+			// 最大値と最小値を設定する
+			D3DXVECTOR3 vtxMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);
+			D3DXVECTOR3 vtxMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);
 
-			// 終了処理
-			Uninit();
+			if (useful::RectangleCollisionXY(pPlayer->GetPos(), GetPos(), vtxMax, GetFileData().vtxMax, vtxMin, GetFileData().vtxMin) == true &&
+				useful::RectangleCollisionXZ(pPlayer->GetPos(), GetPos(), vtxMax, GetFileData().vtxMax, vtxMin, GetFileData().vtxMin) == true &&
+				useful::RectangleCollisionYZ(pPlayer->GetPos(), GetPos(), vtxMax, GetFileData().vtxMax, vtxMin, GetFileData().vtxMin) == true)
+			{ // 範囲内に入った場合
 
-			// true を返す
-			return true;
+				// 終了処理
+				Uninit();
+
+				// true を返す
+				return true;
+			}
 		}
 	}
 

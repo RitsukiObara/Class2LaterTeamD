@@ -9,15 +9,11 @@
 //*******************************************
 #include "main.h"
 #include "manager.h"
-#include "renderer.h"
 #include "tv.h"
 #include "useful.h"
-#include "objectX.h"
-#include "consent.h"
 #include "object3D.h"
 #include "input.h"
 #include "texture.h"
-#include "effect.h"
 #include "collision.h"
 #include "block.h"
 #include "player.h"
@@ -29,9 +25,9 @@
 #define COOL_TIME			(300)	// クールタイム
 #define CHANGE_TIME			(120)	// 画面変化速度
 #define VISION_SIZE			(D3DXVECTOR3(150.0f, 80.0f, 0.0f))		// ビジョンのサイズ
-#define NONE_TEXTURE		("data\\TEXTURE\\SkyBox.jpg")			// 何でもない画面のテクスチャ
-#define BOMB_TEXTURE		("data\\TEXTURE\\dynamite.png")			// 爆誕の画面のテクスチャ
-#define COOLTIME_TEXTURE	("data\\TEXTURE\\obanyanPhoto.jpg")		// クールタイム中のテクスチャ
+#define NONE_TEXTURE		("data\\TEXTURE\\TV000.png")			// 何でもない画面のテクスチャ
+#define BOMB_TEXTURE		("data\\TEXTURE\\TV001.png")			// 爆誕の画面のテクスチャ
+#define COOLTIME_TEXTURE	("data\\TEXTURE\\TV_sandstorm.jpg")		// クールタイム中のテクスチャ
 #define CAT_RADIUS			(70.0f)		// ネコの半径
 #define RAT_RADIUS			(30.0f)		// ネコの半径
 
@@ -142,6 +138,13 @@ void CTv::Update(void)
 				PowerAction();
 			}
 		}
+
+		if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_0) == true)
+		{	// ボタンが押されたとき
+
+			//　テレビの電源操作
+			PowerAction();
+		}
 	}
 }
 
@@ -237,7 +240,7 @@ void CTv::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE typ
 
 		// 最大値と最小値を設定する
 		m_vtxMax = D3DXVECTOR3(-vtxMin.z, vtxMax.y, vtxMax.x);
-		m_vtxMin = D3DXVECTOR3(-vtxMax.z, vtxMin.y, vtxMin.z);
+		m_vtxMin = D3DXVECTOR3(-vtxMax.z, vtxMin.y, vtxMin.x);
 	}
 	else
 	{ // 上記以外(方向が奥からの場合)
@@ -364,7 +367,7 @@ void CTv::PowerAction(void)
 		{	// ポリゴンが存在していないとき生成する
 
 			D3DXVECTOR3 pPos = GetPos();
-			m_pVision = CObject3D::Create(CObject::TYPE_NONE);
+			m_pVision = CObject3D::Create(CObject::TYPE_NONE, PRIORITY_BLOCK);
 			m_pVision->SetPos(D3DXVECTOR3(pPos.x - sinf(GetRot().y) * 18.0f, pPos.y + 160.0f, pPos.z - cosf(GetRot().y) * 18.0f));
 			m_pVision->SetRot(GetRot());
 			m_pVision->SetSize(VISION_SIZE);

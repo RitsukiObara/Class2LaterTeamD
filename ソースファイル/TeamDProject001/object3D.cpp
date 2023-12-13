@@ -555,7 +555,7 @@ float CObject3D::ElevationCollision(const D3DXVECTOR3 pos)
 //===========================================
 // 生成処理
 //===========================================
-CObject3D* CObject3D::Create(TYPE type)
+CObject3D* CObject3D::Create(const TYPE type, const PRIORITY priority)
 {
 	// ローカルオブジェクトを生成
 	CObject3D* pObject3D = nullptr;	// オブジェクト3Dのインスタンスを生成
@@ -564,7 +564,7 @@ CObject3D* CObject3D::Create(TYPE type)
 	{ // オブジェクトが NULL の場合
 
 		// オブジェクトを生成
-		pObject3D = new CObject3D(type, PRIORITY_BG);
+		pObject3D = new CObject3D(type, priority);
 	}
 	else
 	{ // オブジェクトが NULL じゃない場合

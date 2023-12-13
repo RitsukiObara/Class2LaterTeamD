@@ -14,6 +14,10 @@
 #include "renderer.h"
 #include "useful.h"
 
+// マクロ定義
+#define BLOCK_HEIGHT_MAX		(400.0f)		// ブロックの高さの最大値
+#define BLOCK_HEIGHT_CORRECT	(99999.0f)		// ブロックの補正後の高さ
+
 //==============================
 // コンストラクタ
 //==============================
@@ -27,6 +31,7 @@ CBlock::CBlock() : CModel(CObject::TYPE_BLOCK, CObject::PRIORITY_BLOCK)
 	m_vtxMin = NONE_D3DXVECTOR3;	// 最小値
 	m_pPrev = nullptr;				// 前のへのポインタ
 	m_pNext = nullptr;				// 次のへのポインタ
+	m_bOnRat = false;				// ネズミが乗っているか
 
 	if (CBlockManager::Get() != nullptr)
 	{ // マネージャーが存在していた場合
@@ -98,6 +103,7 @@ HRESULT CBlock::Init(void)
 	m_type = TYPE_CARDBOARD;		// 種類
 	m_vtxMax = NONE_D3DXVECTOR3;	// 最大値
 	m_vtxMin = NONE_D3DXVECTOR3;	// 最小値
+	m_bOnRat = false;				// ネズミが乗っているか
 
 	// 値を返す
 	return S_OK;
@@ -398,4 +404,29 @@ void CBlock::CollisionSetting(void)
 
 		break;
 	}
+
+	if (m_vtxMax.y >= BLOCK_HEIGHT_MAX)
+	{ // 一定よりも高い場合
+
+		// ネズミが乗れなくする
+		m_vtxMax.y = BLOCK_HEIGHT_CORRECT;
+	}
+}
+
+//=====================================
+// ネズミの乗っている状況設定
+//=====================================
+void CBlock::SetOnRat(const bool bOnRat)
+{
+	// ネズミの乗っている状況設定
+	m_bOnRat = bOnRat;
+}
+
+//=====================================
+// ネズミの乗っている状況取得
+//=====================================
+bool CBlock::GetOnRat(void) const
+{
+	// ネズミの乗っている状況を返す
+	return m_bOnRat;
 }

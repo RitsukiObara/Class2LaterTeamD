@@ -265,9 +265,6 @@ void CPlayer::Update(void)
 	// 障害物との当たり判定
 	collision::ObstacleHit(this, m_sizeColl.x, m_sizeColl.y, m_sizeColl.z);
 
-	// 障害物との当たり判定
-	ObstacleCollision();
-
 	// 気絶状態の管理
 	StunStateManager();
 
@@ -277,16 +274,24 @@ void CPlayer::Update(void)
 	// 起動可能障害物や警告を出す障害物のサーチ
 	collision::ObstacleSearch(this, m_sizeColl.x + ADD_ACTION_RADIUS);
 
+	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_E) ||
+		CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_B, m_nPlayerIdx) == true)
+	{ // アクションキーを押した場合
+
+		if (m_State != STATE_DEATH &&
+			m_StunState != STUNSTATE_SMASH &&
+			m_StunState != STUNSTATE_STUN)
+		{ // アクションを起こせる場合
+
+			// 障害物のアクション処理
+			collision::ObstacleAction(this, m_sizeColl.x + ADD_ACTION_RADIUS);
+		}
+	}
+
 #if CAMERA != 0
 	//カメラ情報の更新
 	CameraUpdate();
 #endif // CAMERA
-
-	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_E) ||
-		CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_B, m_nPlayerIdx) == true)
-	{
-		collision::ObstacleAction(this, m_sizeColl.x + ADD_ACTION_RADIUS);
-	}
 
 #ifdef _DEBUG
 
@@ -704,14 +709,14 @@ void CPlayer::CameraUpdate(void)
 			CManager::Get()->GetInputGamePad()->GetGameStickRXPress(m_nPlayerIdx) < 0)
 		{ // 右スティックを右に倒した場合
 
-		  // カメラの向きを減算する
+			// カメラの向きを減算する
 			m_CameraRot.y -= CAMERA_ROT_MOVE;
 		}
 		if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_RSHIFT) == true ||
 			CManager::Get()->GetInputGamePad()->GetGameStickRXPress(m_nPlayerIdx) > 0)
 		{ // 右スティックを右に倒した場合
 
-		  // カメラの向きを加算する
+			// カメラの向きを加算する
 			m_CameraRot.y += CAMERA_ROT_MOVE;
 		}
 
@@ -820,15 +825,6 @@ void CPlayer::RotNormalize(void)
 //		//m_bAttack = true;		// 攻撃した状態にする
 //	}
 //}
-
-//=======================================
-// 障害物との当たり判定
-//=======================================
-void CPlayer::ObstacleCollision(void)
-{
-	// 障害物との衝突判定
-	collision::ObstacleCollision(this, m_sizeColl.x, m_sizeColl.y, m_sizeColl.z);
-}
 
 //=======================================
 // 気絶処理
