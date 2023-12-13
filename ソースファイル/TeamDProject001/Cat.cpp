@@ -34,6 +34,7 @@
 #include "obstacle_manager.h"
 #include "rat.h"
 #include "itemUI.h"
+#include "item_mark.h"
 #include "fraction.h"
 #include "player_idUI.h"
 
@@ -447,12 +448,20 @@ void CCat::ItemSet(void)
 				CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_Y, GetPlayerIdx()) == true))
 		{ // アイテムを持っている状態でYボタンが押された場合
 
-			switch (m_pItemUI->GetItemUI(CItemUI::ORDER_FRONT).type)
+			switch (m_pItemUI->GetItemUI(CItemUI::ORDER_FRONT).pMark->GetType())
 			{
 			case CItem::TYPE_MOUSETRAP:		// ネズミ捕り
 
 				// アイテムを設置する
 				CObstacle::Create(GetPos(), GetRot(), CObstacle::TYPE::TYPE_MOUSETRAP);
+				m_bItem = true;
+
+				break;
+
+			case CItem::TYPE_DYNAMITE:		// ダイナマイト
+
+				// アイテムを設置する
+				CObstacle::Create(GetPos(), GetRot(), CObstacle::TYPE::TYPE_DYNAMITE);
 				m_bItem = true;
 
 				break;

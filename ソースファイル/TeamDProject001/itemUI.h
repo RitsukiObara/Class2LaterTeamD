@@ -39,7 +39,6 @@ public:				// 誰でもアクセスできる
 	{
 		CItemMark* pMark;		// マークの情報
 		CItemFrame* pFrame;		// 枠の情報
-		CItem::TYPE type;		// アイテムの種類
 	};
 
 	CItemUI();				// コンストラクタ

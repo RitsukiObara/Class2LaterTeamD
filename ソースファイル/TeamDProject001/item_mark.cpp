@@ -13,6 +13,7 @@
 // マクロ定義
 //=======================================
 #define MOUSETRAP_TEXTURE	"data\\TEXTURE\\Mousetrap.png"		// ネズミ捕りのテクスチャ
+#define DYNAMITE_TEXTURE	"data\\TEXTURE\\dynamite.png"		// ダイナマイトのテクスチャ
 #define SMALL_MAGNI			(D3DXVECTOR3(0.9f, 1.1f, 0.0f))		// 小さい状態の倍率
 #define BIG_MAGNI			(D3DXVECTOR3(1.1f, 0.9f, 0.0f))		// 大きい状態の倍率
 #define SIZING_CORRECT		(0.05f)								// 拡縮の補正倍率
@@ -115,6 +116,13 @@ void CItemMark::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const C
 
 		// テクスチャの割り当て処理
 		BindTexture(CManager::Get()->GetTexture()->Regist(MOUSETRAP_TEXTURE));
+
+		break;
+
+	case CItem::TYPE_DYNAMITE:
+
+		// テクスチャの割り当て処理
+		BindTexture(CManager::Get()->GetTexture()->Regist(DYNAMITE_TEXTURE));
 
 		break;
 
