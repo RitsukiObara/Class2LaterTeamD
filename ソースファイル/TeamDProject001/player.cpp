@@ -704,14 +704,14 @@ void CPlayer::CameraUpdate(void)
 			CManager::Get()->GetInputGamePad()->GetGameStickRXPress(m_nPlayerIdx) < 0)
 		{ // 右スティックを右に倒した場合
 
-		  // カメラの向きを減算する
+			// カメラの向きを減算する
 			m_CameraRot.y -= CAMERA_ROT_MOVE;
 		}
 		if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_RSHIFT) == true ||
 			CManager::Get()->GetInputGamePad()->GetGameStickRXPress(m_nPlayerIdx) > 0)
 		{ // 右スティックを右に倒した場合
 
-		  // カメラの向きを加算する
+			// カメラの向きを加算する
 			m_CameraRot.y += CAMERA_ROT_MOVE;
 		}
 

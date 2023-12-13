@@ -31,7 +31,8 @@
 //===============================
 #define COLLISION_ADD_DIFF_LENGTH		(0.01f)			// 僅かな誤差を埋めるためのマクロ定義(突っかかり防止)
 #define COLLISION_CAT_SIZE				(D3DXVECTOR3(70.0f,250.0f,70.0f))		// ネコの当たり判定のサイズ
-#define WIND_MOVE						(17.0f)			// 風で吹き飛ぶ移動量
+#define CAT_WIND_MAGNI					(0.9f)			// ネコの風の倍率
+#define RAT_WIND_MAGNI					(1.1f)			// ネズミの風の倍率
 
 //===============================
 // 丸影の当たり判定処理
@@ -249,9 +250,20 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 				// 向きを正規化する
 				useful::RotNormalize(&fAngle);
 
-				// 位置を押し出す
-				pos.x += sinf(fAngle) * WIND_MOVE;
-				pos.z += cosf(fAngle) * WIND_MOVE;
+				if (pPlayer->GetType() == CPlayer::TYPE_CAT)
+				{ // ネコの場合
+
+					// 位置を押し出す
+					pos.x += sinf(fAngle) * pPlayer->GetSpeedCopy() * CAT_WIND_MAGNI;
+					pos.z += cosf(fAngle) * pPlayer->GetSpeedCopy() * CAT_WIND_MAGNI;
+				}
+				else if(pPlayer->GetType() == CPlayer::TYPE_RAT)
+				{ // ネズミの場合
+
+					// 位置を押し出す
+					pos.x += sinf(fAngle) * pPlayer->GetSpeedCopy() * RAT_WIND_MAGNI;
+					pos.z += cosf(fAngle) * pPlayer->GetSpeedCopy() * RAT_WIND_MAGNI;
+				}
 
 				// 位置を設定する
 				pPlayer->SetPos(pos);
