@@ -502,7 +502,7 @@ void CEdit::Set(void)
 		return;
 	}
 
-	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_0) == true)
+	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_RETURN) == true)
 	{ // 0キーを押した場合
 
 		switch (m_type)
@@ -695,7 +695,7 @@ void CEdit::DeleteObstacle(void)
 		if (useful::RectangleCollisionXY(GetPos(), pObstacle->GetPos(), GetFileData().vtxMax, pObstacle->GetFileData().vtxMax, GetFileData().vtxMin, pObstacle->GetFileData().vtxMin) == true &&
 			useful::RectangleCollisionXZ(GetPos(), pObstacle->GetPos(), GetFileData().vtxMax, pObstacle->GetFileData().vtxMax, GetFileData().vtxMin, pObstacle->GetFileData().vtxMin) == true &&
 			useful::RectangleCollisionYZ(GetPos(), pObstacle->GetPos(), GetFileData().vtxMax, pObstacle->GetFileData().vtxMax, GetFileData().vtxMin, pObstacle->GetFileData().vtxMin) == true &&
-			CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_9) == true)
+			CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_BACKSPACE) == true)
 		{ // オブジェクトの中に入っている場合
 
 			// 終了処理
@@ -725,7 +725,7 @@ void CEdit::DeleteBlock(void)
 		if (useful::RectangleCollisionXY(GetPos(), pBlock->GetPos(), GetFileData().vtxMax, pBlock->GetFileData().vtxMax, GetFileData().vtxMin, pBlock->GetFileData().vtxMin) == true &&
 			useful::RectangleCollisionXZ(GetPos(), pBlock->GetPos(), GetFileData().vtxMax, pBlock->GetFileData().vtxMax, GetFileData().vtxMin, pBlock->GetFileData().vtxMin) == true &&
 			useful::RectangleCollisionYZ(GetPos(), pBlock->GetPos(), GetFileData().vtxMax, pBlock->GetFileData().vtxMax, GetFileData().vtxMin, pBlock->GetFileData().vtxMin) == true &&
-			CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_9) == true)
+			CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_BACKSPACE) == true)
 		{ // オブジェクトの中に入っている場合
 
 			// 終了処理

@@ -94,6 +94,7 @@ public:			// 誰でもアクセスできる
 		TYPE_KATEN,					// カーテン
 		TYPE_KATENRAIL,				// カーテンのレール
 		TYPE_TANSU02,				// たんす
+		TYPE_TV_STAND,				// テレビのスタンド
 
 		// 障害物モデル
 		TYPE_HONEYBOTTLE,			// 蜂蜜のボトル

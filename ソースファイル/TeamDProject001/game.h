@@ -71,6 +71,7 @@ public:						// 誰でもアクセスできる
 #ifdef _DEBUG
 	static CEdit* GetEdit(void);		// エディットの取得処理
 	static bool IsEdit(void);			// エディット状況の取得処理
+	static bool GetEditbool(void) { return m_bEdit; }			// エディット状況の取得処理
 #endif
 
 private:					// 自分だけアクセスできる
