@@ -344,6 +344,9 @@ void CCat::AttackStateManager(void)
 
 		//CEffect::Create(m_AttackPos, NONE_D3DXVECTOR3, 1, 400.0f, CEffect::TYPE::TYPE_NONE, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f), true);
 
+		// ブロックへの攻撃処理
+		AttackBlock();
+
 		if (useful::CircleCollisionXZ(m_AttackPos, m_AttackPos,10.0f,10.0f) == true)
 		{
 			for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
@@ -363,24 +366,15 @@ void CCat::AttackStateManager(void)
 					pPlayer->GetType() == CPlayer::TYPE_RAT)
 				{ // プレイヤーがネズミの場合
 
-					if (useful::RectangleCollisionXY(D3DXVECTOR3(pos.x + sinf(rot.y) * -ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * -ATTACK_DISTANCE),
+					if (useful::RectangleCollisionXZ(D3DXVECTOR3(pos.x + sinf(rot.y) * -ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * -ATTACK_DISTANCE),
 						pPlayer->GetPos(),
-						ATTACK_SIZE,
-						D3DXVECTOR3(30.0f, 50.0f, 30.0f),
-						D3DXVECTOR3(-ATTACK_SIZE.x, -ATTACK_SIZE.y, -ATTACK_SIZE.z),
-						D3DXVECTOR3(-30.0f, -50.0f, -30.0f)) == true)
-					{ // XYの矩形に当たってたら
+						ATTACK_SIZE, D3DXVECTOR3(30.0f, 50.0f, 30.0f),
+						D3DXVECTOR3(-ATTACK_SIZE.x, -ATTACK_SIZE.y, -ATTACK_SIZE.z), D3DXVECTOR3(-30.0f, -50.0f, -30.0f)) == true)
+					{ // XZの矩形に当たってたら
 
-						if (useful::RectangleCollisionXZ(D3DXVECTOR3(pos.x + sinf(rot.y) * -ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * -ATTACK_DISTANCE),
-							pPlayer->GetPos(),
-							ATTACK_SIZE, D3DXVECTOR3(30.0f, 50.0f, 30.0f),
-							D3DXVECTOR3(-ATTACK_SIZE.x, -ATTACK_SIZE.y, -ATTACK_SIZE.z), D3DXVECTOR3(-30.0f, -50.0f, -30.0f)) == true)
-						{ // XZの矩形に当たってたら
-
-						  // プレイヤーのヒット処理
-							pPlayer->Hit();
-							SetRatKill(true);
-						}
+						// プレイヤーのヒット処理
+						pPlayer->Hit();
+						SetRatKill(true);
 					}
 				}
 			}
@@ -398,6 +392,14 @@ void CCat::AttackStateManager(void)
 	{
 		m_nAtkStateCount--;
 	}
+}
+
+//=======================================
+// ブロックへの攻撃処理
+//=======================================
+void CCat::AttackBlock(void)
+{
+	
 }
 
 //=======================================
