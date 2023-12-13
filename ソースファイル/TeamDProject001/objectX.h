@@ -94,12 +94,12 @@ public:			// 誰でもアクセスできる
 		TYPE_KATEN,					// カーテン
 		TYPE_KATENRAIL,				// カーテンのレール
 		TYPE_TANSU02,				// たんす
+		TYPE_TV_STAND,				// テレビのスタンド
 
 		// 障害物モデル
 		TYPE_HONEYBOTTLE,			// 蜂蜜のボトル
 		TYPE_SLIME,					// スライム
 		TYPE_HAIRBALL,				// 毬
-		TYPE_FLOWERVASE,			// 花瓶
 		TYPE_PETBOTTLE,				// ペットボトル
 		TYPE_TOYCARBODY,			// おもちゃの車(本体)
 		TYPE_ROOMBA_MAIN,			// ルンバの本体

@@ -116,10 +116,13 @@ HRESULT CGame::Init(void)
 	// メッシュの読み込み処理
 	//CMesh::TxtSet();
 
-	// マップの情報をロードする
-	CManager::Get()->GetFile()->Load(CFile::TYPE_OBSTACLE);
-	CManager::Get()->GetFile()->Load(CFile::TYPE_CARROUTE);
-	CManager::Get()->GetFile()->Load(CFile::TYPE_BLOCK);
+	//// マップの情報をロードする
+	//CManager::Get()->GetFile()->Load(CFile::TYPE_OBSTACLE);
+	//CManager::Get()->GetFile()->Load(CFile::TYPE_CARROUTE);
+	//CManager::Get()->GetFile()->Load(CFile::TYPE_BLOCK);
+
+	CManager::Get()->GetFile()->Load(CFile::TYPE_MAP_OBSTACLE1);		// 障害物
+	CManager::Get()->GetFile()->Load(CFile::TYPE_MAP_BLOCK1);		// ブロック
 
 	// マップの設定処理
 	CManager::Get()->GetFile()->SetMap();
@@ -141,7 +144,7 @@ HRESULT CGame::Init(void)
 	//CObstacle *pObstacle = NULL;
 
 	//// ルンバの生成処理
-	//CObstacle::Create(D3DXVECTOR3(-600.0f, 0.0f, -400.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_ROOMBA);
+	//CObstacle::Create(D3DXVECTOR3(-600.0f, 0.0f, 0.0f), NONE_D3DXVECTOR3, CObstacle::TYPE::TYPE_TOYCAR);
 	//CObstacle::Create(D3DXVECTOR3(600.0f, 0.0f, 400.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_ROOMBA);
 
 	//// ひもの生成処理
@@ -383,8 +386,8 @@ void CGame::Update(void)
 		{ // F9キーを押した場合
 
 			// 情報をセーブする
-			CManager::Get()->GetFile()->Save(CFile::TYPE_OBSTACLE);		// 障害物
-			CManager::Get()->GetFile()->Save(CFile::TYPE_BLOCK);		// ブロック
+			CManager::Get()->GetFile()->Save(CFile::TYPE_MAP_OBSTACLE1);		// 障害物
+			CManager::Get()->GetFile()->Save(CFile::TYPE_MAP_BLOCK1);		// ブロック
 		}
 	}
 	else

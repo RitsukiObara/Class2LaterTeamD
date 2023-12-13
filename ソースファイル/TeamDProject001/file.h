@@ -18,7 +18,6 @@
 // マクロ定義
 //--------------------------------------------
 #define MAX_FILE_DATA		(512)		// ファイルのデータの最大数
-#define MAX_CAR_ROUTE		(10)		// 車の経路の最大数
 
 //--------------------------------------------
 // クラス(ファイル読み込みクラス)
@@ -37,7 +36,6 @@ public:			// 誰でもアクセスできる
 		TYPE_MAP_BLOCK1,	// マップのブロック1
 		TYPE_MAP_BLOCK2,	// マップのブロック2
 		TYPE_MAP_BLOCK3,	// マップのブロック3
-		TYPE_CARROUTE,		// 車の経路
 		TYPE_BLOCK,			// ブロック
 		TYPE_TUTORIAL_DEFULT,	// チュートリアルのデフォルトブロック
 		TYPE_TUTORIAL_KILL,		// チュートリアルのキル用ブロック
@@ -49,18 +47,10 @@ public:			// 誰でもアクセスできる
 	struct SObstacleInfo
 	{
 		D3DXVECTOR3 pos[MAX_FILE_DATA];			// 位置
+		D3DXVECTOR3 rot[MAX_FILE_DATA];			// 向き
 		CObstacle::TYPE type[MAX_FILE_DATA];	// 種類
 		int nNum;								// 総数
 		bool bSuccess;							// 成功状況
-	};
-
-	// 車の経路
-	struct SCarRouteInfo
-	{
-		D3DXVECTOR3 pos[MAX_FILE_DATA][MAX_CAR_ROUTE];	// 車の位置
-		int nNumPos[MAX_FILE_DATA];						// 位置の数
-		int nNum;										// 総数
-		bool bSuccess;									// 成功状況
 	};
 
 	// ブロックの情報
@@ -83,26 +73,20 @@ public:			// 誰でもアクセスできる
 	HRESULT Save(const TYPE type);	// セーブ処理
 	HRESULT Load(const TYPE type);	// ロード処理
 
-	D3DXVECTOR3* GetCarRoute(const int nType);		// 車の経路の取得処理
-	int GetCarRouteNum(void) const;					// 車の経路の総数取得処理
-	int GetCarRouteNumPos(const int nType) const;	// 車の経路の位置の総数の取得処理
-
 	void SetMap(void);				// マップの設定処理
 
 private:		// 自分のみアクセスできる
 
 	// メンバ関数(セーブ関係)
 	HRESULT SaveObstacle(const char *cFileName);		// 障害物のセーブ処理
-	HRESULT SaveBlock(const char *cFileName);		// ブロックのセーブ処理
+	HRESULT SaveBlock(const char *cFileName);			// ブロックのセーブ処理
 
 	// メンバ関数(ロード関係)
 	HRESULT LoadObstacle(const char *cFileName);		// 障害物のロード処理
-	HRESULT LoadCarRoute(void);		// 車の経路のロード処理
 	HRESULT LoadBlock(const char *cFileName);		// ブロックのロード処理
 
 	// メンバ変数
 	SObstacleInfo m_ObstacleInfo;	// 障害物の情報
-	SCarRouteInfo m_CarRouteInfo;	// 車のルートの情報
 	SBlockInfo m_BlockInfo;			// ブロックの情報
 
 	// 静的メンバ変数

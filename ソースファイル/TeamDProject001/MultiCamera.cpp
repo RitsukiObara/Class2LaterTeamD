@@ -440,97 +440,93 @@ void CMultiCamera::Rotation(void)
 //=======================
 void CMultiCamera::Move(void)
 {
-	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LCONTROL) == true)
-	{ // 左CTRLキーを押している場合
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_T) == true ||
+		CManager::Get()->GetInputGamePad()->GetGameStickRYPress(0) > 0)
+	{ // Wキーを押した場合
 
-		if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_UP) == true ||
-			CManager::Get()->GetInputGamePad()->GetGameStickRYPress(0) > 0)
-		{ // Wキーを押した場合
-
-			if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_RIGHT) == true ||
-				CManager::Get()->GetInputGamePad()->GetGameStickRXPress(0) > 0)
-			{ // Dキーを押した場合
-
-				m_posR.x += sinf(D3DX_PI * 0.25f + m_rot.y) * POS_SPEED;
-				m_posV.x += sinf(D3DX_PI * 0.25f + m_rot.y) * POS_SPEED;
-
-				m_posR.z += cosf(D3DX_PI * 0.25f + m_rot.y) * POS_SPEED;
-				m_posV.z += cosf(D3DX_PI * 0.25f + m_rot.y) * POS_SPEED;
-			}
-			else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LEFT) == true ||
-				CManager::Get()->GetInputGamePad()->GetGameStickRXPress(0) < 0)
-			{ // Aキーを押した場合
-
-				m_posR.x += sinf(-D3DX_PI * 0.25f + m_rot.y) * POS_SPEED;
-				m_posV.x += sinf(-D3DX_PI * 0.25f + m_rot.y) * POS_SPEED;
-
-				m_posR.z += cosf(-D3DX_PI * 0.25f + m_rot.y) * POS_SPEED;
-				m_posV.z += cosf(-D3DX_PI * 0.25f + m_rot.y) * POS_SPEED;
-			}
-			else
-			{ // Wキーのみを押した場合
-
-				m_posR.x += sinf(m_rot.y) * POS_SPEED;
-				m_posV.x += sinf(m_rot.y) * POS_SPEED;
-
-				m_posR.z += cosf(m_rot.y) * POS_SPEED;
-				m_posV.z += cosf(m_rot.y) * POS_SPEED;
-			}
-		}
-		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_DOWN) == true ||
-			CManager::Get()->GetInputGamePad()->GetGameStickRYPress(0) < 0)
-		{ // Sキーを押した場合
-
-			if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_RIGHT) == true ||
-				CManager::Get()->GetInputGamePad()->GetGameStickRXPress(0) > 0)
-			{ // Dキーを押した場合
-
-				m_posR.x += sinf(D3DX_PI * 0.75f + m_rot.y) * POS_SPEED;
-				m_posV.x += sinf(D3DX_PI * 0.75f + m_rot.y) * POS_SPEED;
-
-				m_posR.z += cosf(D3DX_PI * 0.75f + m_rot.y) * POS_SPEED;
-				m_posV.z += cosf(D3DX_PI * 0.75f + m_rot.y) * POS_SPEED;
-			}
-			else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LEFT) == true ||
-				CManager::Get()->GetInputGamePad()->GetGameStickRXPress(0) < 0)
-			{ // Aキーを押した場合
-
-				m_posR.x += sinf(-D3DX_PI * 0.75f + m_rot.y) * POS_SPEED;
-				m_posV.x += sinf(-D3DX_PI * 0.75f + m_rot.y) * POS_SPEED;
-
-				m_posR.z += cosf(-D3DX_PI * 0.75f + m_rot.y) * POS_SPEED;
-				m_posV.z += cosf(-D3DX_PI * 0.75f + m_rot.y) * POS_SPEED;
-			}
-			else
-			{ // Sキーのみを押した場合
-
-				m_posR.x -= sinf(m_rot.y) * POS_SPEED;
-				m_posV.x -= sinf(m_rot.y) * POS_SPEED;
-
-				m_posR.z -= cosf(m_rot.y) * POS_SPEED;
-				m_posV.z -= cosf(m_rot.y) * POS_SPEED;
-			}
-		}
-		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_RIGHT) == true ||
+		if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_H) == true ||
 			CManager::Get()->GetInputGamePad()->GetGameStickRXPress(0) > 0)
 		{ // Dキーを押した場合
 
-			m_posR.x += sinf(D3DX_PI * 0.5f + m_rot.y) * POS_SPEED;
-			m_posV.x += sinf(D3DX_PI * 0.5f + m_rot.y) * POS_SPEED;
+			m_posR.x += sinf(D3DX_PI * 0.25f + m_rot.y) * POS_SPEED;
+			m_posV.x += sinf(D3DX_PI * 0.25f + m_rot.y) * POS_SPEED;
 
-			m_posR.z += cosf(D3DX_PI * 0.5f + m_rot.y) * POS_SPEED;
-			m_posV.z += cosf(D3DX_PI * 0.5f + m_rot.y) * POS_SPEED;
+			m_posR.z += cosf(D3DX_PI * 0.25f + m_rot.y) * POS_SPEED;
+			m_posV.z += cosf(D3DX_PI * 0.25f + m_rot.y) * POS_SPEED;
 		}
-		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LEFT) == true ||
+		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_F) == true ||
 			CManager::Get()->GetInputGamePad()->GetGameStickRXPress(0) < 0)
 		{ // Aキーを押した場合
 
-			m_posR.x -= sinf(D3DX_PI * 0.5f + m_rot.y) * POS_SPEED;
-			m_posV.x -= sinf(D3DX_PI * 0.5f + m_rot.y) * POS_SPEED;
+			m_posR.x += sinf(-D3DX_PI * 0.25f + m_rot.y) * POS_SPEED;
+			m_posV.x += sinf(-D3DX_PI * 0.25f + m_rot.y) * POS_SPEED;
 
-			m_posR.z += cosf(D3DX_PI * 0.5f - m_rot.y) * POS_SPEED;
-			m_posV.z += cosf(D3DX_PI * 0.5f - m_rot.y) * POS_SPEED;
+			m_posR.z += cosf(-D3DX_PI * 0.25f + m_rot.y) * POS_SPEED;
+			m_posV.z += cosf(-D3DX_PI * 0.25f + m_rot.y) * POS_SPEED;
 		}
+		else
+		{ // Wキーのみを押した場合
+
+			m_posR.x += sinf(m_rot.y) * POS_SPEED;
+			m_posV.x += sinf(m_rot.y) * POS_SPEED;
+
+			m_posR.z += cosf(m_rot.y) * POS_SPEED;
+			m_posV.z += cosf(m_rot.y) * POS_SPEED;
+		}
+	}
+	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_G) == true ||
+		CManager::Get()->GetInputGamePad()->GetGameStickRYPress(0) < 0)
+	{ // Sキーを押した場合
+
+		if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_H) == true ||
+			CManager::Get()->GetInputGamePad()->GetGameStickRXPress(0) > 0)
+		{ // Dキーを押した場合
+
+			m_posR.x += sinf(D3DX_PI * 0.75f + m_rot.y) * POS_SPEED;
+			m_posV.x += sinf(D3DX_PI * 0.75f + m_rot.y) * POS_SPEED;
+
+			m_posR.z += cosf(D3DX_PI * 0.75f + m_rot.y) * POS_SPEED;
+			m_posV.z += cosf(D3DX_PI * 0.75f + m_rot.y) * POS_SPEED;
+		}
+		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_F) == true ||
+			CManager::Get()->GetInputGamePad()->GetGameStickRXPress(0) < 0)
+		{ // Aキーを押した場合
+
+			m_posR.x += sinf(-D3DX_PI * 0.75f + m_rot.y) * POS_SPEED;
+			m_posV.x += sinf(-D3DX_PI * 0.75f + m_rot.y) * POS_SPEED;
+
+			m_posR.z += cosf(-D3DX_PI * 0.75f + m_rot.y) * POS_SPEED;
+			m_posV.z += cosf(-D3DX_PI * 0.75f + m_rot.y) * POS_SPEED;
+		}
+		else
+		{ // Sキーのみを押した場合
+
+			m_posR.x -= sinf(m_rot.y) * POS_SPEED;
+			m_posV.x -= sinf(m_rot.y) * POS_SPEED;
+
+			m_posR.z -= cosf(m_rot.y) * POS_SPEED;
+			m_posV.z -= cosf(m_rot.y) * POS_SPEED;
+		}
+	}
+	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_H) == true ||
+		CManager::Get()->GetInputGamePad()->GetGameStickRXPress(0) > 0)
+	{ // Dキーを押した場合
+
+		m_posR.x += sinf(D3DX_PI * 0.5f + m_rot.y) * POS_SPEED;
+		m_posV.x += sinf(D3DX_PI * 0.5f + m_rot.y) * POS_SPEED;
+
+		m_posR.z += cosf(D3DX_PI * 0.5f + m_rot.y) * POS_SPEED;
+		m_posV.z += cosf(D3DX_PI * 0.5f + m_rot.y) * POS_SPEED;
+	}
+	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_F) == true ||
+		CManager::Get()->GetInputGamePad()->GetGameStickRXPress(0) < 0)
+	{ // Aキーを押した場合
+
+		m_posR.x -= sinf(D3DX_PI * 0.5f + m_rot.y) * POS_SPEED;
+		m_posV.x -= sinf(D3DX_PI * 0.5f + m_rot.y) * POS_SPEED;
+
+		m_posR.z += cosf(D3DX_PI * 0.5f - m_rot.y) * POS_SPEED;
+		m_posV.z += cosf(D3DX_PI * 0.5f - m_rot.y) * POS_SPEED;
 	}
 }
 
@@ -582,41 +578,52 @@ void CMultiCamera::MovePosV(void)
 //=======================
 void CMultiCamera::MovePosR(void)
 {
-	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LCONTROL) == true)
-	{ // 左CTRLキーを押している場合
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_I) == true)
+	{ // Tキーを押した場合
 
-		if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_T) == true)
-		{ // Tキーを押した場合
+	  // 注視点を上に動かす
+		m_posR.y += POS_SPEED;
+	}
+	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_K) == true)
+	{ // Bキーを押した場合
 
-		  // 注視点を上に動かす
-			m_posR.y += POS_SPEED;
-		}
-		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_B) == true)
-		{ // Bキーを押した場合
+	  // 注視点を下に動かす
+		m_posR.y -= POS_SPEED;
+	}
+	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_J) == true)
+	{ // Qキーを押した場合
 
-		  // 注視点を下に動かす
-			m_posR.y -= POS_SPEED;
-		}
-		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_Q) == true)
-		{ // Qキーを押した場合
+	  // 注視点を右に回す
+		m_rot.y -= ROT_Y_SPEED;
 
-		  // 注視点を右に回す
-			m_rot.y -= ROT_Y_SPEED;
+		// 注視点を更新する
+		m_posR.x = m_posV.x + sinf(m_rot.y) * m_Dis;
+		m_posR.z = m_posV.z + cosf(m_rot.y) * m_Dis;
+	}
+	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_L) == true)
+	{ // Eキーを押した場合
 
-			// 注視点を更新する
-			m_posR.x = m_posV.x + sinf(m_rot.y) * m_Dis;
-			m_posR.z = m_posV.z + cosf(m_rot.y) * m_Dis;
-		}
-		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_E) == true)
-		{ // Eキーを押した場合
+	  // 注視点を左に回す
+		m_rot.y += ROT_Y_SPEED;
 
-		  // 注視点を左に回す
-			m_rot.y += ROT_Y_SPEED;
+		// 注視点を更新する
+		m_posR.x = m_posV.x + sinf(m_rot.y) * m_Dis;
+		m_posR.z = m_posV.z + cosf(m_rot.y) * m_Dis;
+	}
 
-			// 注視点を更新する
-			m_posR.x = m_posV.x + sinf(m_rot.y) * m_Dis;
-			m_posR.z = m_posV.z + cosf(m_rot.y) * m_Dis;
-		}
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_RSHIFT) == true)
+	{ // Eキーを押した場合
+
+	  // 注視点を左に回す
+		m_posR.y += POS_SPEED;
+		m_posV.y += POS_SPEED;
+	}
+	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_RCONTROL) == true)
+	{ // Eキーを押した場合
+
+	  // 注視点を左に回す
+		m_posR.y -= POS_SPEED;
+		m_posV.y -= POS_SPEED;
 	}
 }
 

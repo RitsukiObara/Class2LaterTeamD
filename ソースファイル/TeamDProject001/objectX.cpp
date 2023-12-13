@@ -81,12 +81,12 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\Katen.x",					// カーテン
 	"data\\MODEL\\KatenRail.x",				// カーテンのレール
 	"data\\MODEL\\Tansu002.x",				// たんす
+	"data\\MODEL\\TV_stand.x",				// テレビのスタンド
 
 	// 障害物モデル
 	"data\\MODEL\\HoneyBottle.x",			// 蜂蜜のボトル
 	"data\\MODEL\\Slime.x",					// スライム
 	"data\\MODEL\\HairBall.x",				// 毬
-	"data\\MODEL\\flowervase.x",			// 花瓶
 	"data\\MODEL\\Pettobotoru.x",			// ペットボトル
 	"data\\MODEL\\ToyCarBody.x",			// おもちゃの車(本体)
 	"data\\MODEL\\Roomba_Main.x",			// ルンバの本体

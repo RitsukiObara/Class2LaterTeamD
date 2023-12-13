@@ -19,7 +19,6 @@
 #include "honey.h"
 #include "slime.h"
 #include "hairball.h"
-#include "flowervase.h"
 #include "petbottle.h"
 #include "toycar.h"
 #include "roomba.h"
@@ -291,13 +290,6 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, con
 
 			// ü{Çê∂ê¨Ç∑ÇÈ
 			pObstacle = new CHairBall;
-
-			break;
-
-		case CObstacle::TYPE_FLOWERVASE:
-
-			// â‘ïrÇê∂ê¨Ç∑ÇÈ
-			pObstacle = new CFlowerVase;
 
 			break;
 

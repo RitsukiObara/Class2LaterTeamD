@@ -71,6 +71,7 @@ public:			// 誰でもアクセスできる
 		TYPE_KATEN,				// カーテン
 		TYPE_KATENRAIL,			// カーテンのレール
 		TYPE_TANSU02,			// たんす
+		TYPE_TV_STAND,			// テレビ台
 		TYPE_MAX				// この列挙型の総数
 	};
 
