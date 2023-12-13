@@ -14,6 +14,10 @@
 #include "renderer.h"
 #include "useful.h"
 
+// マクロ定義
+#define BLOCK_HEIGHT_MAX		(400.0f)		// ブロックの高さの最大値
+#define BLOCK_HEIGHT_CORRECT	(99999.0f)		// ブロックの補正後の高さ
+
 //==============================
 // コンストラクタ
 //==============================
@@ -399,6 +403,13 @@ void CBlock::CollisionSetting(void)
 		assert(false);
 
 		break;
+	}
+
+	if (m_vtxMax.y >= BLOCK_HEIGHT_MAX)
+	{ // 一定よりも高い場合
+
+		// ネズミが乗れなくする
+		m_vtxMax.y = BLOCK_HEIGHT_CORRECT;
 	}
 }
 
