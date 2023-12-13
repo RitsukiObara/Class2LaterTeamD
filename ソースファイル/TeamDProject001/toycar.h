@@ -54,6 +54,7 @@ private:		// 自分だけアクセスできる
 	void Curve(void);			// カービング処理
 	void RotCalc(void);			// 向きの計算処理
 	bool Block(void);			// ブロックの当たり判定処理
+	bool Obstacle(void);		// 障害物の当たり判定処理
 	bool MagicWall(void);		// 魔法壁の当たり判定処理
 
 	// メンバ変数
@@ -62,6 +63,7 @@ private:		// 自分だけアクセスできる
 	STATE m_state;				// 状態
 	int m_nBrakeCount;			// ブレーキカウント
 	float m_fRotDest;			// 目的の向き
+	float m_fRotMagni;			// 向きの倍率
 	bool m_bRight;				// 右向き状況
 };
 
