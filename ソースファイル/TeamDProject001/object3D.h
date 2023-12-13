@@ -57,7 +57,7 @@ public:			// 誰でもアクセスできる
 	int GetTexIdx(void) const;				// テクスチャのインデックスの取得処理
 
 	// 静的メンバ関数
-	static CObject3D* Create(TYPE type);		// 生成処理
+	static CObject3D* Create(const TYPE type, const PRIORITY priority);		// 生成処理
 
 	float ElevationCollision(const D3DXVECTOR3 pos);	// 起伏のあるポリゴンの当たり判定
 

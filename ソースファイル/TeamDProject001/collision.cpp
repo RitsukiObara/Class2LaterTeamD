@@ -272,6 +272,16 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 				pObstacle->SlideOn(pPlayer->GetPos(), pPlayer->GetMove(), pPlayer);
 				break;
 
+			case CObstacle::TYPE_DYNAMITE:
+
+				// Œü‚«‚ğZo‚·‚é
+				fAngle = atan2f(pos.x - pObstacle->GetPos().x, pos.z - pObstacle->GetPos().z);
+
+				// ‚«”ò‚Ñˆ—
+				pPlayer->Smash(fAngle);
+
+				break;
+
 			case CObstacle::TYPE_BOOK:
 
 				// ‹Câó‘Ô

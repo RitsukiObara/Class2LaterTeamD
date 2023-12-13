@@ -8,13 +8,12 @@
 // インクルードファイル
 //*******************************************
 #include "main.h"
+#include "manager.h"
 #include "dynamite.h"
 #include "obstacle.h"
 #include "useful.h"
 #include "Effect.h"
-#include "game.h"
-#include "manager.h"
-#include "input.h"
+#include "collision.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -31,9 +30,6 @@ CDynamite::CDynamite() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLO
 {
 	// 全ての値をクリアする
 	m_state =STATE_NONE;							// 状態
-	m_Scale =D3DXVECTOR3(1.0f,1.0f,1.0f);			// 拡大率
-	m_pos = D3DXVECTOR3(0.0f,0.0f,0.0f);			// 位置
-	m_bCatch = true;								// 持っているかどうか
 	m_nExplosion = 0;								// 爆発タイミング
 
 	// 使用条件
@@ -62,9 +58,6 @@ HRESULT CDynamite::Init(void)
 
 	// 全ての値をクリアする
 	m_state = STATE_NONE;							// 状態
-	m_Scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);		// 拡大率
-	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// 位置
-	m_bCatch = true;								// 持っているかどうか
 	m_nExplosion = 0;								// 爆発タイミング
 
 	// 値を返す
@@ -86,44 +79,6 @@ void CDynamite::Uninit(void)
 //=====================================
 void CDynamite::Update(void)
 {
-	
-	// 猫の手から手放す処理
-	for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
-	{
-		CPlayer* pPlayer;
-		pPlayer = CGame::GetPlayer(nCnt);
-		if (pPlayer->GetType() == CPlayer::TYPE_CAT)
-		{
-			if (CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_B, nCnt) == true)
-			{ // アイテムを持っている状態でYボタンが押された場合
-				m_bCatch = false;
-			}
-		}
-	}
-
-	if (m_bCatch == true)
-	{ // ネコが持っている場合
-
-		for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
-		{
-			// ネコの位置に設定する
-			CPlayer* pPlayer;
-			pPlayer = CGame::GetPlayer(nCnt);
-			if (pPlayer->GetType() == CPlayer::TYPE_CAT)
-			{
-				m_pos = pPlayer->GetPos();
-				m_pos.y = 120.0f;
-			}
-
-		}
-	}
-	else
-	{ // 地面に置かれている場合
-		m_pos.y = 0.0f;
-
-	}
-
-	
 	if (m_nExplosion > EXPLOSION_COUNT-120 && m_state != STATE_EXPLOSION)
 	{ // 残り2秒になった場合
 
@@ -137,19 +92,20 @@ void CDynamite::Update(void)
 
 	if (m_state == STATE_EXPLOSION)
 	{// 爆発後
+
+		// 爆発の判定時間を加算する
 		m_nDelTyming++;
+
 		if (m_nDelTyming > DELEAT_COUNT)
-		{
+		{ // 一定カウントになった場合
+
 			// 爆弾の削除
 			Uninit();
 		}
 	}
 
-	Explosion();	// 爆発処理
-
-	// 位置を設定する
-	SetPos(m_pos);
-
+	// 爆発処理
+	Explosion();
 }
 
 //=====================================
@@ -159,6 +115,7 @@ void CDynamite::Draw(void)
 {
 	if (m_state != STATE_EXPLOSION)
 	{// 爆発のタイミングで描画を消す
+
 		// 描画処理
 		CObstacle::Draw();
 	}
@@ -171,7 +128,41 @@ void CDynamite::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TY
 {
 	// 情報の設定処理
 	CObstacle::SetData(pos, rot, type);
+}
 
+//=====================================
+// 当たり判定処理
+//=====================================
+bool CDynamite::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
+{
+	// 位置と最小値と最大値を設定する
+	D3DXVECTOR3 pos = pPlayer->GetPos();
+	D3DXVECTOR3 vtxMax = collSize;
+	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);
+
+	// 六面体の当たり判定
+	if (collision::HexahedronCollision
+	(
+		&pos,					// プレイヤーの位置
+		GetPos(),				// 位置
+		pPlayer->GetPosOld(),	// プレイヤーの前回の位置
+		GetPosOld(),			// 前回の位置
+		vtxMin,					// プレイヤーの最小値
+		GetFileData().vtxMin,	// 最小値
+		vtxMax,					// プレイヤーの最大値
+		GetFileData().vtxMax	// 最大値
+	) == true)
+	{ // 当たった場合
+
+		// 位置を適用する
+		pPlayer->SetPos(pos);
+
+		// true を返す
+		return true;
+	}
+
+	// false を返す
+	return false;
 }
 
 //=====================================
@@ -180,16 +171,16 @@ void CDynamite::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TY
 bool CDynamite::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
 	if (m_state == STATE_EXPLOSION)
-	{
-		D3DXVECTOR3 objPos = GetPos();
-		if (useful::CylinderInner(pPlayer->GetPos(), objPos, collSize.x + EXPLOSION_RADIUS))
+	{ // 爆発状態の場合
+
+		if (useful::CylinderInner(pPlayer->GetPos(), GetPos(), collSize.x + EXPLOSION_RADIUS))
 		{ // 円の中に入った場合
 
-		  // true を返す
+			// true を返す
 			return true;
 		}
-
 	}
+
 	// false を返す
 	return false;
 }
@@ -200,7 +191,7 @@ bool CDynamite::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 void CDynamite::ChageScale(void)
 {
 	// 拡大サイズを取得
-	m_Scale = CObstacle::GetScale();
+	D3DXVECTOR3 scale = CObstacle::GetScale();
 
 	switch (m_state)
 	{
@@ -208,18 +199,20 @@ void CDynamite::ChageScale(void)
 		break;
 	
 	case CDynamite::STATE_MINI:	// 縮小状態
-		m_Scale += SCALE_SPEED;
 
-		if (m_Scale.x > 1.8f)
+		scale += SCALE_SPEED;
+
+		if (scale.x > 1.8f)
 		{
 			m_state = STATE_BIG;
 		}
 		break;
 
 	case CDynamite::STATE_BIG:	// 拡大状態
-		m_Scale -= SCALE_SPEED;	
 
-		if (m_Scale.x <= 1.0f)
+		scale -= SCALE_SPEED;
+
+		if (scale.x <= 1.0f)
 		{
 			m_state = STATE_MINI;
 		}
@@ -237,7 +230,7 @@ void CDynamite::ChageScale(void)
 	}
 
 	// 拡大サイズを設定
-	CObstacle::SetScale(m_Scale);
+	SetScale(scale);
 }
 
 //=====================================
@@ -245,16 +238,20 @@ void CDynamite::ChageScale(void)
 //=====================================
 void CDynamite::Explosion(void)
 {
+	// 爆発までのカウントを加算する
 	m_nExplosion++;
+
 	if (m_nExplosion >= EXPLOSION_COUNT)
 	{// 爆発の時が来た時
 
 		if (m_state != STATE_EXPLOSION)
-		{
+		{ // 爆発状態以外の場合
+
 			//爆発状態にする
 			m_state = STATE_EXPLOSION;
+
 			// 爆発エフェクトを出す
-			CEffect::Create(m_pos, D3DXVECTOR3(5.0f, 5.0f, 5.0f), 10, 550.0f, CEffect::TYPE_RUPTURE, D3DXCOLOR(0.2f, 0.2f, 0.2f, 1.0f), false);
+			CEffect::Create(GetPos(), D3DXVECTOR3(5.0f, 5.0f, 5.0f), 10, 550.0f, CEffect::TYPE_RUPTURE, D3DXCOLOR(0.2f, 0.2f, 0.2f, 1.0f), false);
 		}
 	}
 }
