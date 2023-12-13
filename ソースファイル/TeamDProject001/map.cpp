@@ -27,10 +27,10 @@ HRESULT CMap::Init(void)
 	//================================
 	//地面の初期化
 	//================================
-	m_Ground = CGround::Create();
+	/*m_Ground = CGround::Create();*/
 
-	// 頂点座標の設定処理
-	m_Ground->SetVertex();
+	//// 頂点座標の設定処理
+	//m_Ground->SetVertex();
 
 	//================================
 	//壁の初期化
