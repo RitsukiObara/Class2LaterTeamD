@@ -101,6 +101,78 @@ HRESULT CFile::Save(const TYPE type)
 
 		break;
 
+	case TYPE_MAP_OBSTACLE1:
+
+		// 障害物のセーブ処理
+		if (FAILED(SaveObstacle(MAP_OBSTACLE1_TXT)))
+		{ // 失敗した場合
+
+		  // 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
+	case TYPE_MAP_OBSTACLE2:
+
+		// 障害物のセーブ処理
+		if (FAILED(SaveObstacle(MAP_OBSTACLE2_TXT)))
+		{ // 失敗した場合
+
+		  // 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
+	case TYPE_MAP_OBSTACLE3:
+
+		// 障害物のセーブ処理
+		if (FAILED(SaveObstacle(MAP_OBSTACLE3_TXT)))
+		{ // 失敗した場合
+
+		  // 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
+	case TYPE_MAP_BLOCK1:
+
+		// 障害物のセーブ処理
+		if (FAILED(SaveBlock(MAP_BLOCK1_TXT)))
+		{ // 失敗した場合
+
+		  // 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
+	case TYPE_MAP_BLOCK2:
+
+		// 障害物のセーブ処理
+		if (FAILED(SaveBlock(MAP_BLOCK2_TXT)))
+		{ // 失敗した場合
+
+		  // 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
+	case TYPE_MAP_BLOCK3:
+
+		// 障害物のセーブ処理
+		if (FAILED(SaveBlock(MAP_BLOCK3_TXT)))
+		{ // 失敗した場合
+
+		  // 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
 	case TYPE_BLOCK:
 
 		// ブロックのセーブ処理
@@ -173,6 +245,78 @@ HRESULT CFile::Load(const TYPE type)
 		{ // 失敗した場合
 
 			// 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
+	case TYPE_MAP_OBSTACLE1:
+
+		// 障害物のロード処理
+		if (FAILED(LoadObstacle(MAP_OBSTACLE1_TXT)))
+		{ // 失敗した場合
+
+		  // 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
+	case TYPE_MAP_OBSTACLE2:
+
+		// 障害物のロード処理
+		if (FAILED(LoadObstacle(MAP_OBSTACLE2_TXT)))
+		{ // 失敗した場合
+
+		  // 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
+	case TYPE_MAP_OBSTACLE3:
+
+		// 障害物のロード処理
+		if (FAILED(LoadObstacle(MAP_OBSTACLE3_TXT)))
+		{ // 失敗した場合
+
+		  // 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
+	case TYPE_MAP_BLOCK1:
+
+		// 障害物のロード処理
+		if (FAILED(LoadBlock(MAP_BLOCK1_TXT)))
+		{ // 失敗した場合
+
+		  // 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
+	case TYPE_MAP_BLOCK2:
+
+		// 障害物のロード処理
+		if (FAILED(LoadBlock(MAP_BLOCK2_TXT)))
+		{ // 失敗した場合
+
+		  // 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
+	case TYPE_MAP_BLOCK3:
+
+		// 障害物のロード処理
+		if (FAILED(LoadBlock(MAP_BLOCK3_TXT)))
+		{ // 失敗した場合
+
+		  // 失敗を返す
 			return E_FAIL;
 		}
 

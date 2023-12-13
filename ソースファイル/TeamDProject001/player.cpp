@@ -40,7 +40,8 @@ namespace
 	static const D3DXVECTOR3 SMASH_MOVE = D3DXVECTOR3(10.0f, 11.0f, 10.0f);		// 吹き飛び状態の移動量
 	static const D3DXCOLOR SMASH_COLOR = D3DXCOLOR(0.9f, 0.0f, 0.1f, 0.7f);		// 吹き飛び状態の時の色
 	static const float CAT_CAMERA_HEIGHT = 200.0f;		// 猫のカメラの高さ
-	static const float CAT_CAMERA_DIS = 300.0f;			// 猫のカメラの視点と注視点の高さの差分(角度)
+	//static const float CAT_CAMERA_DIS = 300.0f;			// 猫のカメラの視点と注視点の高さの差分(角度)
+	static const float CAT_CAMERA_DIS = 900.0f;			// 猫のカメラの視点と注視点の高さの差分(角度)
 	static const float RAT_CAMERA_HEIGHT = 100.0f;		// 猫のカメラの高さ
 	static const float RAT_CAMERA_DIS = 60.0f;			// ネズミのカメラの視点と注視点の高さの差分(角度)
 	static const float DIFF_ROT = 0.2f;					// 角度に足す差分の割合
@@ -614,51 +615,56 @@ void CPlayer::Move(void)
 //=======================================
 void CPlayer::CameraUpdate(void)
 {
-	CMultiCamera *pCamera = CManager::Get()->GetMlutiCamera(m_nPlayerIdx);
-	D3DXVECTOR3 Pos = GetPos();
+	if (CGame::GetEditbool() == false)
+	{
 
-	if (m_type == TYPE::TYPE_CAT)
-	{ //猫のカメラの位置
-		pCamera->SetPosR(D3DXVECTOR3(
-			Pos.x,
-			Pos.y + CAT_CAMERA_HEIGHT,
-			Pos.z
-		));
-		pCamera->SetPosV(D3DXVECTOR3(
-			Pos.x + sinf(m_CameraRot.y + (D3DX_PI * 1.0f)) * 200.0f,
-			Pos.y + CAT_CAMERA_HEIGHT + CAT_CAMERA_DIS,
-			Pos.z + cosf(m_CameraRot.y + (D3DX_PI * 1.0f)) * 200.0f));
+		CMultiCamera *pCamera = CManager::Get()->GetMlutiCamera(m_nPlayerIdx);
+		D3DXVECTOR3 Pos = GetPos();
+
+		if (m_type == TYPE::TYPE_CAT)
+		{ //猫のカメラの位置
+			pCamera->SetPosR(D3DXVECTOR3(
+				Pos.x,
+				Pos.y + CAT_CAMERA_HEIGHT,
+				Pos.z
+			));
+			pCamera->SetPosV(D3DXVECTOR3(
+				Pos.x + sinf(m_CameraRot.y + (D3DX_PI * 1.0f)) * 200.0f,
+				Pos.y + CAT_CAMERA_HEIGHT + CAT_CAMERA_DIS,
+				Pos.z + cosf(m_CameraRot.y + (D3DX_PI * 1.0f)) * 200.0f));
+		}
+		else
+		{ //ネズミのカメラの位置
+			pCamera->SetPosR(D3DXVECTOR3(
+				Pos.x,
+				Pos.y + RAT_CAMERA_HEIGHT,
+				Pos.z
+			));
+			pCamera->SetPosV(D3DXVECTOR3(
+				Pos.x + sinf(m_CameraRot.y + (D3DX_PI * 1.0f)) * 200.0f,
+				Pos.y + RAT_CAMERA_HEIGHT + RAT_CAMERA_DIS,
+				Pos.z + cosf(m_CameraRot.y + (D3DX_PI * 1.0f)) * 200.0f));
+		}
+
+		if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LSHIFT) == true ||
+			CManager::Get()->GetInputGamePad()->GetGameStickRXPress(m_nPlayerIdx) < 0)
+		{ // 右スティックを右に倒した場合
+
+			// カメラの向きを減算する
+			m_CameraRot.y -= CAMERA_ROT_MOVE;
+		}
+		if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_RSHIFT) == true ||
+			CManager::Get()->GetInputGamePad()->GetGameStickRXPress(m_nPlayerIdx) > 0)
+		{ // 右スティックを右に倒した場合
+
+			// カメラの向きを加算する
+			m_CameraRot.y += CAMERA_ROT_MOVE;
+		}
+
+		// 向きの正規化
+		useful::RotNormalize(&m_CameraRot.y);
+
 	}
-	else
-	{ //ネズミのカメラの位置
-		pCamera->SetPosR(D3DXVECTOR3(
-			Pos.x,
-			Pos.y + RAT_CAMERA_HEIGHT,
-			Pos.z
-		));
-		pCamera->SetPosV(D3DXVECTOR3(
-			Pos.x + sinf(m_CameraRot.y + (D3DX_PI * 1.0f)) * 200.0f,
-			Pos.y + RAT_CAMERA_HEIGHT + RAT_CAMERA_DIS,
-			Pos.z + cosf(m_CameraRot.y + (D3DX_PI * 1.0f)) * 200.0f));
-	}
-
-	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_LSHIFT) == true ||
-		CManager::Get()->GetInputGamePad()->GetGameStickRXPress(m_nPlayerIdx) < 0)
-	{ // 右スティックを右に倒した場合
-
-		// カメラの向きを減算する
-		m_CameraRot.y -= CAMERA_ROT_MOVE;
-	}
-	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_RSHIFT) == true ||
-		CManager::Get()->GetInputGamePad()->GetGameStickRXPress(m_nPlayerIdx) > 0)
-	{ // 右スティックを右に倒した場合
-
-		// カメラの向きを加算する
-		m_CameraRot.y += CAMERA_ROT_MOVE;
-	}
-
-	// 向きの正規化
-	useful::RotNormalize(&m_CameraRot.y);
 }
 
 //=======================================
