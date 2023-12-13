@@ -60,6 +60,9 @@ public:						// 誰でもアクセスできる
 	static void SetCountDown(const bool Set) { m_bCountDown = Set; }		// ゲームの進行状態の設定処理
 	static bool GetCountDown(void) { return m_bCountDown; }					// ゲームの進行状態の取得処理
 
+	static void SetItemSpawn(const bool bItemSpawn) { m_bItemSpawn = bItemSpawn; }	// アイテム出現状態の設定
+	static bool GetItemSpawn(void) {return m_bItemSpawn; }					// アイテム出現状態の取得
+
 	// NULL化処理
 	static void DeletePause(void);		// ポーズのNULL化処理
 	static void DeletePlayer(int nIdx);	// プレイヤーのNULL化処理
@@ -76,6 +79,7 @@ private:					// 自分だけアクセスできる
 	// メンバ関数
 	void Pause(void);			// ポーズ処理
 	void Transition(void);		// 遷移処理
+	void ItemSpawn(void);		// アイテム出現処理
 
 	// 静的メンバ変数(最初から必要な物を配置しておく)
 	static CPause* m_pPause;				// ポーズの情報
@@ -83,7 +87,10 @@ private:					// 自分だけアクセスできる
 	static CGameFinish* m_pFinish;			// フィニッシュの情報
 	static STATE m_GameState;				// ゲームの進行状態
 	static int m_nFinishCount;				// 終了カウント
-	static bool m_bCountDown;			// カウントダウンが使用されているかどうか
+	static int m_nItemSpawnCount;			// アイテム出現カウンター
+	static int m_nNumItem;					// アイテムの数
+	static bool m_bCountDown;				// カウントダウンが使用されているかどうか
+	static bool m_bItemSpawn;				// アイテムが出現しているかどうか
 
 // デバッグ版
 #ifdef _DEBUG

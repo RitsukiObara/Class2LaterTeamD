@@ -692,6 +692,9 @@ void collision::ItemCollision(CPlayer& pPlayer, const int nHave)
 
 			// 終了処理
 			pItem->Uninit();
+
+			// アイテム出現してない状態にする
+			CGame::SetItemSpawn(false);
 		}
 
 		// 次のアイテムを設定する

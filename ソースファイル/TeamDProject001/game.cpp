@@ -43,6 +43,8 @@
 //--------------------------------------------
 namespace
 {
+	static const int MAX_ITEM_POS = 3;					// アイテム出現位置の最大数
+
 	static const D3DXVECTOR3 PLAYERUI_POS[MAX_PLAY] =								// プレイヤーUIの位置
 	{
 		D3DXVECTOR3(90.0f, SCREEN_HEIGHT * 0.5f - 80.0f, 0.0f),
@@ -50,8 +52,19 @@ namespace
 		D3DXVECTOR3(90.0f, SCREEN_HEIGHT - 80.0f, 0.0f),
 		D3DXVECTOR3(SCREEN_WIDTH - 90.0f, SCREEN_HEIGHT - 80.0f, 0.0f),
 	};
+
+	// アイテムの出現位置
+	static const D3DXVECTOR3 ITEM_SPAWN_POS[MAX_ITEM_POS] =
+	{
+		D3DXVECTOR3(-1100.0f, 0.0f, 100.0f),
+		D3DXVECTOR3(1000.0f, 0.0f, 450.0f),
+		D3DXVECTOR3(1200.0f, 0.0f, -800.0f),
+	};
+
 	static const int TRANS_COUNT = 80;				// 遷移カウント
 	static const int START_COUNT = 5;				// 開始のカウント
+	static const int MAX_ITEM = 3;					// アイテムの最大数
+	static const int ATEMSPAWN_CONT = (60 - 25) / MAX_ITEM * 60;	// アイテム出現カウント
 }
 
 //--------------------------------------------
@@ -61,8 +74,11 @@ CPause* CGame::m_pPause = nullptr;							// ポーズの情報
 CPlayer* CGame::m_apPlayer[MAX_PLAY] = {};					// プレイヤーの情報
 CGame::STATE CGame::m_GameState = CGame::STATE_START;		// ゲームの進行状態
 int CGame::m_nFinishCount = 0;								// 終了カウント
+int CGame::m_nItemSpawnCount = 0;							// アイテム出現カウンター
+int CGame::m_nNumItem = 0;									// アイテムの数
 CGameFinish* CGame::m_pFinish = nullptr;					// フィニッシュの情報
 bool CGame::m_bCountDown = false;							// カウントダウンが使用されているか
+bool CGame::m_bItemSpawn = false;							// アイテムが出現しているかどうか
 
 // デバッグ版
 #ifdef _DEBUG
@@ -79,8 +95,11 @@ CGame::CGame() : CScene(TYPE_SCENE, PRIORITY_BG)
 	m_pPause = nullptr;			// ポーズ
 	m_pFinish = nullptr;		// フィニッシュ
 	m_nFinishCount = 0;			// 終了カウント
+	m_nItemSpawnCount = 0;		// アイテム出現カウント
+	m_nNumItem = 0;				// アイテムの数
 	m_GameState = STATE_START;	// 状態
 	m_pFinish = false;
+	m_bItemSpawn = false;		// アイテムが出現しているかどうか
 
 	for (int nCntPlay = 0; nCntPlay < MAX_PLAY; nCntPlay++)
 	{
@@ -116,13 +135,9 @@ HRESULT CGame::Init(void)
 	// メッシュの読み込み処理
 	//CMesh::TxtSet();
 
-	//// マップの情報をロードする
-	//CManager::Get()->GetFile()->Load(CFile::TYPE_OBSTACLE);
-	//CManager::Get()->GetFile()->Load(CFile::TYPE_CARROUTE);
-	//CManager::Get()->GetFile()->Load(CFile::TYPE_BLOCK);
-
-	CManager::Get()->GetFile()->Load(CFile::TYPE_MAP_OBSTACLE1);		// 障害物
-	CManager::Get()->GetFile()->Load(CFile::TYPE_MAP_BLOCK1);		// ブロック
+	// マップの情報をロードする
+	CManager::Get()->GetFile()->Load(CFile::TYPE_MAP_OBSTACLE1);
+	CManager::Get()->GetFile()->Load(CFile::TYPE_MAP_BLOCK1);
 
 	// マップの設定処理
 	CManager::Get()->GetFile()->SetMap();
@@ -218,10 +233,6 @@ HRESULT CGame::Init(void)
 		CCharaInfoUI::Create(PLAYERUI_POS[nCnt], nCnt, m_apPlayer[nCnt]->GetType());
 	}
 
-	// ネズミ捕りの生成
-	CItem::Create(D3DXVECTOR3(0.0f, 0.0f, -700.0f), CItem::TYPE::TYPE_MOUSETRAP);
-	CItem::Create(D3DXVECTOR3(400.0f, 0.0f, -700.0f), CItem::TYPE::TYPE_MOUSETRAP);
-
 	//// 武器選択UIを生成
 	//CWeaponSelectUI::Create();
 
@@ -313,6 +324,17 @@ void CGame::Update(void)
 
 	case CGame::STATE_PLAY:
 
+		if (m_pPause != nullptr)
+		{ // ポーズが NULL じゃないとき
+
+			if (m_pPause->GetPause() == false)
+			{ // ポーズ状態じゃないとき
+
+				// アイテム出現
+				ItemSpawn();
+			}
+		}
+
 		// ポーズ処理
 		Pause();
 
@@ -386,8 +408,8 @@ void CGame::Update(void)
 		{ // F9キーを押した場合
 
 			// 情報をセーブする
-			CManager::Get()->GetFile()->Save(CFile::TYPE_MAP_OBSTACLE1);		// 障害物
-			CManager::Get()->GetFile()->Save(CFile::TYPE_MAP_BLOCK1);		// ブロック
+			CManager::Get()->GetFile()->Save(CFile::TYPE_OBSTACLE);		// 障害物
+			CManager::Get()->GetFile()->Save(CFile::TYPE_BLOCK);		// ブロック
 		}
 	}
 	else
@@ -491,6 +513,42 @@ void CGame::Transition(void)
 		CManager::Get()->GetFade()->SetFade(CScene::MODE_RESULT);
 	}
 }
+
+//======================================
+// アイテム出現処理
+//======================================
+void CGame::ItemSpawn(void)
+{
+	if (m_bItemSpawn == false)
+	{ // アイテムが出現されてなかったら
+
+		m_nItemSpawnCount++;		// アイテム出現カウント加算
+	}
+	else if (m_bItemSpawn == true)
+	{ // アイテムが出現してたら
+
+		m_nItemSpawnCount = 1;		// カウンター初期化
+
+		CManager::Get()->GetDebugProc()->Print("\n-----------------------------------------------アイテム出現中-----------------------------------------------\n", m_GameState);
+	}
+
+	if ((m_nItemSpawnCount % ATEMSPAWN_CONT) == 0 && m_nNumItem < MAX_ITEM)
+	{ // 一定時間経った
+
+		int nItemPos;			// アイテムの出現位置選択
+
+		nItemPos = rand() % MAX_ITEM_POS;		// アイテムの出現位置の設定
+
+		// ネズミ捕りの生成
+		CItem::Create(ITEM_SPAWN_POS[nItemPos], CItem::TYPE::TYPE_MOUSETRAP);
+
+		m_nNumItem++;				// アイテムの数加算
+
+		m_nItemSpawnCount = 0;		// カウンター初期化
+		m_bItemSpawn = true;		// アイテムが出現している状態にする
+	}
+}
+
 
 //======================================
 // ポーズの取得処理

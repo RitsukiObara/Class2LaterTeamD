@@ -26,6 +26,7 @@ CItem::CItem() : CModel(CObject::TYPE_ITEM, CObject::PRIORITY_ENTITY)
 {
 	// 全ての値をクリアする
 	m_type = TYPE_MOUSETRAP;		// 種類
+	m_state = STATE_NONE;			// 状態
 	m_fScaleDest = 0.0f;			// 目的の拡大率
 	m_pPrev = nullptr;				// 前のへのポインタ
 	m_pNext = nullptr;				// 次のへのポインタ
@@ -96,6 +97,7 @@ HRESULT CItem::Init(void)
 
 	// 全ての値を初期化する
 	m_type = TYPE_MOUSETRAP;	// 種類
+	m_state = STATE_STANDBY;	// 状態
 	m_fScaleDest = 0.0f;		// 目的の拡大率
 
 	// 値を返す
@@ -152,7 +154,7 @@ void CItem::SetData(const D3DXVECTOR3& pos, const TYPE type)
 	SetPos(pos);							// 位置
 	SetPosOld(pos);							// 前回の位置
 	SetRot(NONE_D3DXVECTOR3);				// 向き
-	SetScale(NONE_SCALE);					// 拡大率
+	SetScale(D3DXVECTOR3(0.0f,0.0f,0.0f));	// 拡大率
 	SetFileData(CXFile::TYPE_TRAPITEM);		// モデルの情報
 
 	// 全ての値を設定する
@@ -225,12 +227,30 @@ void CItem::SetType(const TYPE type)
 }
 
 //=====================================
+// 状態の設定処理
+//=====================================
+void CItem::SetState(const STATE state)
+{
+	// 状態を設定する
+	m_state = state;
+}
+
+//=====================================
 // 種類の取得処理
 //=====================================
 CItem::TYPE CItem::GetType(void) const
 {
 	// 種類を返す
 	return m_type;
+}
+
+//=====================================
+// 種類の取得処理
+//=====================================
+CItem::STATE CItem::GetState(void) const
+{
+	// 状態を返す
+	return m_state;
 }
 
 //=====================================
@@ -256,14 +276,41 @@ void CItem::Scaling(void)
 	// 拡大率を取得する
 	D3DXVECTOR3 scale = GetScale();
 
-	// 拡大率の補正処理
-	if (useful::FrameCorrect(m_fScaleDest, &scale.x, 0.002f) == true ||
-		useful::FrameCorrect(m_fScaleDest, &scale.y, 0.002f) == true ||
-		useful::FrameCorrect(m_fScaleDest, &scale.z, 0.002f) == true)
-	{ // 目的の値になった場合
+	switch (m_state)
+	{
+	case CItem::STATE_NONE:		// 何もしない
 
-		// 目的の拡大率を設定する
-		m_fScaleDest = (m_fScaleDest >= EXTEND_SCALE) ? SHRINK_SCALE : EXTEND_SCALE;
+		// 拡大率の補正処理
+		if (useful::FrameCorrect(m_fScaleDest, &scale.x, 0.002f) == true ||
+			useful::FrameCorrect(m_fScaleDest, &scale.y, 0.002f) == true ||
+			useful::FrameCorrect(m_fScaleDest, &scale.z, 0.002f) == true)
+		{ // 目的の値になった場合
+
+			// 目的の拡大率を設定する
+			m_fScaleDest = (m_fScaleDest >= EXTEND_SCALE) ? SHRINK_SCALE : EXTEND_SCALE;
+		}
+
+		break;
+
+	case CItem::STATE_STANDBY:	// 待機
+
+		// 拡大率の補正処理
+		if (useful::FrameCorrect(m_fScaleDest, &scale.x, 0.05f) == true ||
+			useful::FrameCorrect(m_fScaleDest, &scale.y, 0.05f) == true ||
+			useful::FrameCorrect(m_fScaleDest, &scale.z, 0.05f) == true)
+		{ // 目的の値になった場合
+
+			m_state = STATE_NONE;		// 何もしない状態にする
+		}
+
+		break;
+
+	default:
+
+		// 停止する
+		assert(false);
+
+		break;
 	}
 
 	// 拡大率を適用する
