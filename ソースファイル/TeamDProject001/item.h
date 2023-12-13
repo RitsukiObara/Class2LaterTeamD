@@ -23,7 +23,16 @@ public:			// 誰でもアクセスできる
 	enum TYPE
 	{
 		TYPE_MOUSETRAP = 0,		// ネズミ捕り
+		TYPE_DYNAMITE,			// ダイナマイト
 		TYPE_MAX				// この列挙型の総数
+	};
+
+	// 列挙型定義(状態)
+	enum STATE
+	{
+		STATE_NONE = 0,		// 何もしない
+		STATE_STANDBY,		// 待機
+		STATE_MAX			// この列挙型の総数
 	};
 
 	CItem();			// コンストラクタ
@@ -45,7 +54,10 @@ public:			// 誰でもアクセスできる
 
 	// セット・ゲット関係
 	void SetType(const TYPE type);		// 種類の設定処理
+	void SetState(const STATE state);	// 状態の設定処理
+
 	TYPE GetType(void) const;			// 種類の取得処理
+	STATE GetState(void) const;			// 種類の取得処理
 
 	// 静的メンバ関数
 	static CItem* Create(const D3DXVECTOR3& pos, const TYPE type);	// 生成処理
@@ -58,6 +70,7 @@ private:		// 自分だけアクセスできる
 
 	// メンバ変数
 	TYPE m_type;			// 種類
+	STATE m_state;			// 状態
 	float m_fScaleDest;		// 目的の拡大率
 
 	// リスト構造関係

@@ -3,8 +3,8 @@
 //========================
 //マクロ定義
 //========================
-#define WALLSIZE_LONG D3DXVECTOR3(1600,0,600)
-#define WALLSIZE_SHORT D3DXVECTOR3(1000,0,600)
+#define WALLSIZE_LONG D3DXVECTOR3(1600,0,1000)
+#define WALLSIZE_SHORT D3DXVECTOR3(1000,0,1000)
 
 //========================
 //静的メンバ変数
