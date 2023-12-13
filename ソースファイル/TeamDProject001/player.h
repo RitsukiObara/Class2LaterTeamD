@@ -188,7 +188,6 @@ protected:		// 自分と派生クラスだけがアクセスできる
 private:		// 自分だけアクセスできる
 
 	// メンバ関数
-	void ObstacleCollision(void);		// 障害物との当たり判定
 	void StunStateManager(void);		// 気絶状態の管理
 	void StateManager(void);			// 状態の管理
 

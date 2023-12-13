@@ -241,11 +241,14 @@ void CCat::Update(void)
 	// 角度の正規化
 	RotNormalize();
 
-	// ブロックとの当たり判定
-	collision::BlockCollision(this, GetSizeColl());
-
 	// 更新処理
 	CPlayer::Update();
+
+	// 障害物との衝突判定
+	collision::ObstacleCollision(this, GetSizeColl().x, GetSizeColl().y, GetSizeColl().z);
+
+	// ブロックとの当たり判定
+	collision::BlockCollision(this, GetSizeColl());
 
 	if (GetPlayerID() != nullptr)
 	{ // プレイヤーのID表示が NULL じゃない場合
