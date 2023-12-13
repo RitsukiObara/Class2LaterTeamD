@@ -56,9 +56,9 @@ namespace
 	// アイテムの出現位置
 	static const D3DXVECTOR3 ITEM_SPAWN_POS[MAX_ITEM_POS] =
 	{
-		D3DXVECTOR3(-1440.0f, 0.0f, 400.0f),
-		D3DXVECTOR3(1230.0f, 0.0f, -160.0f),
-		D3DXVECTOR3(-200.0f, 0.0f, -900.0f),
+		D3DXVECTOR3(-1100.0f, 0.0f, 100.0f),
+		D3DXVECTOR3(1000.0f, 0.0f, 450.0f),
+		D3DXVECTOR3(1200.0f, 0.0f, -800.0f),
 	};
 
 	static const int TRANS_COUNT = 80;				// 遷移カウント
@@ -135,13 +135,9 @@ HRESULT CGame::Init(void)
 	// メッシュの読み込み処理
 	//CMesh::TxtSet();
 
-	//// マップの情報をロードする
-	//CManager::Get()->GetFile()->Load(CFile::TYPE_OBSTACLE);
-	//CManager::Get()->GetFile()->Load(CFile::TYPE_CARROUTE);
-	//CManager::Get()->GetFile()->Load(CFile::TYPE_BLOCK);
-
-	CManager::Get()->GetFile()->Load(CFile::TYPE_MAP_OBSTACLE1);		// 障害物
-	CManager::Get()->GetFile()->Load(CFile::TYPE_MAP_BLOCK1);		// ブロック
+	// マップの情報をロードする
+	CManager::Get()->GetFile()->Load(CFile::TYPE_MAP_OBSTACLE1);
+	CManager::Get()->GetFile()->Load(CFile::TYPE_MAP_BLOCK1);
 
 	// マップの設定処理
 	CManager::Get()->GetFile()->SetMap();
@@ -412,8 +408,8 @@ void CGame::Update(void)
 		{ // F9キーを押した場合
 
 			// 情報をセーブする
-			CManager::Get()->GetFile()->Save(CFile::TYPE_MAP_OBSTACLE1);		// 障害物
-			CManager::Get()->GetFile()->Save(CFile::TYPE_MAP_BLOCK1);		// ブロック
+			CManager::Get()->GetFile()->Save(CFile::TYPE_OBSTACLE);		// 障害物
+			CManager::Get()->GetFile()->Save(CFile::TYPE_BLOCK);		// ブロック
 		}
 	}
 	else
