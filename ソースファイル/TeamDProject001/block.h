@@ -98,11 +98,14 @@ public:			// 誰でもアクセスできる
 
 	// セット・ゲット関係
 	void SetCollision(const COLLISION collsion);	// 当たり判定の種類の設定処理
+	void SetOnRat(const bool bOnRat);				// ネズミの乗っている状況設定
+
 	COLLISION GetCollision(void) const;				// 当たり判定の種類の取得処理
 	ROTTYPE GetRotType(void) const;					// 向きの種類の取得処理
 	TYPE GetType(void) const;						// 種類の取得処理
 	D3DXVECTOR3 GetVtxMax(void) const;				// 最大値の取得処理
 	D3DXVECTOR3 GetVtxMin(void) const;				// 最小値の取得処理
+	bool GetOnRat(void) const;						// ネズミの乗っている状況取得
 
 	// 静的メンバ関数
 	static CBlock* Create(const D3DXVECTOR3& pos, const ROTTYPE rotType, const TYPE type);	// 生成処理
@@ -118,6 +121,7 @@ private:		// 自分だけアクセスできる
 	TYPE m_type;			// 種類
 	D3DXVECTOR3 m_vtxMax;	// 最大値
 	D3DXVECTOR3 m_vtxMin;	// 最小値
+	bool m_bOnRat;			// ネズミが乗っているか
 
 	// リスト構造関係
 	CBlock* m_pPrev;	// 前へのポインタ
