@@ -52,7 +52,7 @@ public:			// 誰でもアクセスできる
 	int GetTexIdx(void) const;				// テクスチャのインデックスの取得処理
 
 	// 静的メンバ関数
-	static CBillboard* Create(TYPE type);	// 生成処理
+	static CBillboard* Create(const TYPE type, const PRIORITY priority);	// 生成処理
 
 private:
 
