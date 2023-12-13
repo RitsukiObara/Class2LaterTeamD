@@ -318,7 +318,7 @@ void CSwitch::SetGimmickUI(bool Set, int Player_Idx)
 			m_aUIFalse[Player_Idx] = true;
 
 			//UI‚Ì•\Ž¦
-			m_pGimmickUI = CBillboard::Create(TYPE_NONE);
+			m_pGimmickUI = CBillboard::Create(TYPE_NONE, PRIORITY_UI);
 			m_pGimmickUI->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\UI_GimmickOn.png"));
 			m_pGimmickUI->SetSize(D3DXVECTOR3(50.0f, 50.0f, 0.0f));
 

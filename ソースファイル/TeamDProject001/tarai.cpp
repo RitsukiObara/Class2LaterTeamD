@@ -156,7 +156,7 @@ void CTarai::SetData(const D3DXVECTOR3& pos, CHimo* pHimo)
 
 	if (m_pShadow == NULL)
 	{
-		m_pShadow = CObject3D::Create(CObject::TYPE::TYPE_NONE);
+		m_pShadow = CObject3D::Create(CObject::TYPE_NONE, PRIORITY_BG);
 		m_pShadow->SetPos(D3DXVECTOR3(pos.x, 0.0f, pos.z));			// ˆÊ’u
 		m_pShadow->SetPosOld(D3DXVECTOR3(pos.x, 0.0f, pos.z));		// ‘O‰ñ‚ÌˆÊ’u
 		m_pShadow->SetRot(D3DXVECTOR3(D3DX_PI * 0.0f, 0.0f, 0.0f));	// Œü‚«
