@@ -84,6 +84,7 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\TV_stand.x",				// テレビのスタンド
 	"data\\MODEL\\WallPlus50.x",			// 50*100の壁
 	"data\\MODEL\\WallPlus100.x",			// 100*100の壁
+	"data\\MODEL\\door001.x",				// ドア
 
 	// 障害物モデル
 	"data\\MODEL\\HoneyBottle.x",			// 蜂蜜のボトル
