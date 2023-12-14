@@ -106,7 +106,7 @@ public:			// 誰でもアクセスできる
 
 	// セット・ゲット関係
 	void SetCollision(const COLLISION collsion);	// 当たり判定の種類の設定処理
-	void SetOnRat(const bool bOnRat);				// ネズミの乗っている状況設定
+	//void SetOnRat(const bool bOnRat, const int nPlayerIdx);		// ネズミの乗っている状況設定
 	void SetState(STATE state);						// 状態設定
 
 	COLLISION GetCollision(void) const;				// 当たり判定の種類の取得処理
@@ -115,7 +115,7 @@ public:			// 誰でもアクセスできる
 	STATE GetState(void) const;						// 状態の取得処理
 	D3DXVECTOR3 GetVtxMax(void) const;				// 最大値の取得処理
 	D3DXVECTOR3 GetVtxMin(void) const;				// 最小値の取得処理
-	bool GetOnRat(void) const;						// ネズミの乗っている状況取得
+	//bool GetOnRat(void) const;						// ネズミの乗っている状況取得
 
 	// 静的メンバ関数
 	static CBlock* Create(const D3DXVECTOR3& pos, const ROTTYPE rotType, const TYPE type);	// 生成処理
@@ -134,7 +134,8 @@ private:		// 自分だけアクセスできる
 	STATE m_state;			// 状態
 	D3DXVECTOR3 m_vtxMax;	// 最大値
 	D3DXVECTOR3 m_vtxMin;	// 最小値
-	bool m_bOnRat;			// ネズミが乗っているか
+	//bool m_bOnRat;			// ネズミが乗っているか
+	//int m_nPlayerIdx;		// プレイヤー番号
 	int m_nAngleSwitch;		// 角度の+-切り替え
 	int m_nSwayCount;		// 揺らす秒数
 
