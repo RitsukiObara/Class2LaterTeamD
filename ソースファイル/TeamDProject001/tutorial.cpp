@@ -79,12 +79,12 @@ bool CTutorial::m_MultiAction = false;								// 連携起動の状態
 CObject2D *CTutorial::m_apSkip[SKIP_MAX] = {};						// スキップのUI
 float CTutorial::m_fSkipAlpha = D3DX_PI;							// スキップの不透明度
 float CTutorial::m_fGauge = 0.0f;									// ゲージの数値
-float CTutorial::m_fGaugeMax = SKIP_SIZE.x;					// ゲージの最大値
+float CTutorial::m_fGaugeMax = SKIP_SIZE.x;							// ゲージの最大値
 
 // デバッグ版
 #ifdef _DEBUG
-CEdit* CTutorial::m_pEdit = nullptr;							// エディットの情報
-bool CTutorial::m_bEdit = false;								// エディット状況
+CEdit* CTutorial::m_pEdit = nullptr;								// エディットの情報
+bool CTutorial::m_bEdit = false;									// エディット状況
 #endif
 
 //=========================================
@@ -147,6 +147,8 @@ HRESULT CTutorial::Init(void)
 	CManager::Get()->GetFile()->FalseSuccess();
 	CManager::Get()->GetFile()->Load(CFile::TYPE_TUTORIAL_DEFULT);
 	//CManager::Get()->GetFile()->Load(CFile::TYPE_TUTORIAL_KILL);
+	//CManager::Get()->GetFile()->Load(CFile::TYPE_TUTORIAL_ACTION);
+
 
 	// マップの設定処理
 	CManager::Get()->GetFile()->SetMap();
@@ -442,7 +444,7 @@ void CTutorial::Update(void)
 		{ // F9キーを押した場合
 
 		  // 情報をセーブする
-			CManager::Get()->GetFile()->Save(CFile::TYPE_TUTORIAL_DEFULT);	// ブロック
+			//CManager::Get()->GetFile()->Save(CFile::TYPE_TUTORIAL_DEFULT);	// ブロック
 			//CManager::Get()->GetFile()->Save(CFile::TYPE_TUTORIAL_KILL);		// ブロック
 			//CManager::Get()->GetFile()->Save(CFile::TYPE_TUTORIAL_ACTION);		// ブロック
 		}
