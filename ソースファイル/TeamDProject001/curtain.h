@@ -55,12 +55,16 @@ public:			// 誰でもアクセスできる
 private:		// 自分だけアクセスできる
 
 	// メンバ関数
+	void VtxSetting(void);		// 頂点の設定処理
+	void ScaleVtxSet(void);		// 拡大率による頂点の設定処理
 	void StateManager(void);	// 状態マネージャー
 
 	// メンバ変数
 	CSwitch* m_apSwitch[MAX_SWITCH];	// スイッチの情報
 	STATE m_state;						// 状態
-	float m_fVtxMinZ;					// Z軸の最小値
+	D3DXVECTOR3 m_vtxMax;				// 最大値
+	D3DXVECTOR3 m_vtxMin;				// 最小値
+	float m_fEdge;						// カーテンの端の座標
 };
 
 #endif
