@@ -68,9 +68,9 @@ public:			// 誰でもアクセスできる
 		TYPE_PICTUREFRAME,		// 写真立て
 		TYPE_SHELF,				// 戸棚
 		TYPE_PULLSHELF,			// 引き出し棚
-		TYPE_KITCHEN,			//キッチン
-		TYPE_REIZOUKO,			//冷蔵庫
-		TYPE_TABLE,				//テーブル
+		TYPE_KITCHEN,			// キッチン
+		TYPE_REIZOUKO,			// 冷蔵庫
+		TYPE_TABLE,				// テーブル
 		TYPE_CHAIR,				// 机の椅子
 		TYPE_CORKBOARD,			// コルクボード
 		TYPE_DESK,				// デスク
@@ -83,6 +83,13 @@ public:			// 誰でもアクセスできる
 		TYPE_WALL_PLUS50,		// 50*100の壁
 		TYPE_WALL_PLUS100,		// 100*100の壁
 		TYPE_DOOR001,			// ドア
+		TYPE_SMALL_SHELF,		// 小さな棚
+		TYPE_BOOKSHELF,			// 横長の本棚
+		TYPE_TALBESHELF,		// テーブルの高さの棚
+		TYPE_SOFA_SHEET,		// ソファー（座面）
+		TYPE_SOFA_BACKTEST,		// ソファー（背もたれ）
+		TYPE_CHAIR_SHEET,		// 机の椅子(座面)
+		TYPE_CHAIR_BACKREST,	// 机の椅子(背もたれ)
 		TYPE_MAX				// この列挙型の総数
 	};
 

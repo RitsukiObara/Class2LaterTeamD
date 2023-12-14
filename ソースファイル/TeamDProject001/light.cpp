@@ -16,9 +16,9 @@
 #include "debugproc.h"
 
 // マクロ定義
-#define ONE_LIGHT_VEC		(D3DXVECTOR3(0.22f, -0.87f, 0.22f))		// 一つ目のライトの方向
-#define TWO_LIGHT_VEC		(D3DXVECTOR3(-0.9f, -0.2f, 0.2f))		// 二つ目のライトの方向
-#define THREE_LIGHT_VEC		(D3DXVECTOR3(0.55f, 0.3f, 0.88f))		// 三つ目のライトの方向
+#define ONE_LIGHT_VEC		(D3DXVECTOR3(0.22f, -0.87f, 0.44f))		// 一つ目のライトの方向
+#define TWO_LIGHT_VEC		(D3DXVECTOR3(-0.48f, 0.88f, -0.44f))		// 二つ目のライトの方向
+#define THREE_LIGHT_VEC		(D3DXVECTOR3(0.89f, -0.11f, 0.44f))		// 三つ目のライトの方向
 
 //=========================
 // コンストラクタ

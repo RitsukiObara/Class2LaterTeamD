@@ -695,6 +695,7 @@ void CCharacter::Box(void)
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// 位置
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// 前回の位置
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// 向き
+	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// 移動量
 	m_scale = NONE_SCALE;								// 拡大率
 	ZeroMemory(&m_mtxWorld, sizeof(D3DXMATRIX));		// ワールドマトリックス
 	
@@ -715,6 +716,7 @@ HRESULT CCharacter::Init(void)
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// 位置
 	m_posOld = m_pos;									// 前回の位置
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// 向き
+	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// 移動量
 	m_scale = NONE_SCALE;								// 拡大率
 
 	for (int nCnt = 0; nCnt < MAX_PARTS; nCnt++)
@@ -996,6 +998,24 @@ D3DXVECTOR3 CCharacter::GetRot(void) const
 {
 	// 向きを設定する
 	return m_rot;
+}
+
+//========================
+// 移動量設定処理
+//========================
+void CCharacter::SetMove(const D3DXVECTOR3& move)
+{
+	// 移動量を設定する
+	m_move = move;
+}
+
+//========================
+// 移動量取得処理
+//========================
+D3DXVECTOR3 CCharacter::GetMove(void) const
+{
+	// 移動量を設定する
+	return m_move;
 }
 
 //========================

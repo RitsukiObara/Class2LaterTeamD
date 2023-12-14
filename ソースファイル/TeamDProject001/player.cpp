@@ -44,7 +44,7 @@ namespace
 	static const float RAT_CAMERA_HEIGHT = 100.0f;		// 猫のカメラの高さ
 	static const float RAT_CAMERA_DIS = 60.0f;			// ネズミのカメラの視点と注視点の高さの差分(角度)
 	static const float DIFF_ROT = 0.2f;					// 角度に足す差分の割合
-	static const float CAMERA_ROT_MOVE = 0.03f;			// カメラの向きの移動量
+	static const float CAMERA_ROT_MOVE = 0.025f;			// カメラの向きの移動量
 	static const float ADD_ACTION_RADIUS = 40.0f;		// サーチ時の半径の追加数
 	static const int NONE_PLAYERIDX = -1;				// プレイヤーの番号の初期値
 	static const int STUN_WAIT = 120;					// オブジェクト無効の待機時間
@@ -94,7 +94,7 @@ void CPlayer::Box(void)
 	m_pRecoveringUI = nullptr;			// 回復中のUIの情報
 	m_pSpeechMessage = nullptr;			// 伝達メッセージの情報
 	m_pDeathArrow[MAX_PLAY] = {};		// 死亡矢印の情報
-	m_move = NONE_D3DXVECTOR3;			// 移動量
+	//m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_sizeColl = NONE_D3DXVECTOR3;		// 当たり判定のサイズ
 	m_col = D3DXCOLOR(1.0f,1.0f,1.0f,1.0f);				// 色
 	m_type = TYPE_CAT;					// 種類
@@ -143,7 +143,7 @@ HRESULT CPlayer::Init(void)
 	m_pRecoveringUI = nullptr;			// 回復中のUIの情報
 	m_pSpeechMessage = nullptr;			// 伝達メッセージの情報
 	m_pDeathArrow[MAX_PLAY] = {};		// 死亡矢印の情報
-	m_move = NONE_D3DXVECTOR3;			// 移動量
+	//m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_sizeColl = NONE_D3DXVECTOR3;		// 当たり判定のサイズ
 	m_col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);				// 色
 	m_type = TYPE_CAT;					// 種類
@@ -387,15 +387,23 @@ void CPlayer::Smash(const float fAngle)
 		move.y = SMASH_MOVE.y;
 		move.z = cosf(fAngle) * SMASH_MOVE.z;
 
+		m_fRotDest = fAngle;
+
+		// 位置加算
+		pos += move;
+
+		// 移動量設定
+		SetMove(move);
+
+		// 位置設定
+		SetPos(pos);
+
 		// 吹き飛び状態にする
 		m_StunState = STUNSTATE_SMASH;
 
 		// 気絶状態カウントを設定する
 		m_StunStateCount = SMASH_WAIT;
 	}
-
-	// 移動量を適用する
-	SetMove(move);
 }
 
 //=====================================
@@ -411,7 +419,7 @@ void CPlayer::SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 
 	// 全ての値をクリアする
 	m_pStun = nullptr;					// 気絶の情報
-	m_move = NONE_D3DXVECTOR3;			// 移動量
+	//m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_sizeColl = NONE_D3DXVECTOR3;		// 当たり判定のサイズ
 	m_type = type;						// 種類
 	m_nPlayerIdx = nID;					// プレイヤーのインデックス
@@ -510,7 +518,7 @@ CPlayer* CPlayer::Create(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 void CPlayer::MoveControl(void)
 {
 	// ローカル変数宣言
-	D3DXVECTOR3 rot = GetRot();
+	//D3DXVECTOR3 rot = GetRot();
 
 	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_D) == true ||
 		CManager::Get()->GetInputGamePad()->GetGameStickLXPress(m_nPlayerIdx) > 0)
@@ -521,7 +529,7 @@ void CPlayer::MoveControl(void)
 		{ // 上を押した場合
 
 			// 向きを設定する
-			rot.y = m_CameraRot.y + D3DX_PI * -0.75f;
+			//rot.y = m_CameraRot.y + D3DX_PI * -0.75f;
 			m_fRotDest = m_CameraRot.y + D3DX_PI * -0.75f;
 		}
 		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true ||
@@ -529,14 +537,14 @@ void CPlayer::MoveControl(void)
 		{ // 下を押した場合
 
 			// 向きを設定する
-			rot.y = m_CameraRot.y + D3DX_PI * -0.25f;
+			//rot.y = m_CameraRot.y + D3DX_PI * -0.25f;
 			m_fRotDest = m_CameraRot.y + D3DX_PI * -0.25f;
 		}
 		else
 		{ // 上記以外
 
 			// 向きを設定する
-			rot.y = m_CameraRot.y + D3DX_PI * -0.5f;
+			//rot.y = m_CameraRot.y + D3DX_PI * -0.5f;
 			m_fRotDest = m_CameraRot.y + D3DX_PI * -0.5f;
 
 		}
@@ -551,7 +559,7 @@ void CPlayer::MoveControl(void)
 		{ // 上を押した場合
 
 			// 向きを設定する
-			rot.y = m_CameraRot.y + D3DX_PI * 0.75f;
+			//rot.y = m_CameraRot.y + D3DX_PI * 0.75f;
 			m_fRotDest = m_CameraRot.y + D3DX_PI * 0.75f;
 
 		}
@@ -560,14 +568,14 @@ void CPlayer::MoveControl(void)
 		{ // 下を押した場合
 
 			// 向きを設定する
-			rot.y = m_CameraRot.y + D3DX_PI * 0.25f;
+			//rot.y = m_CameraRot.y + D3DX_PI * 0.25f;
 			m_fRotDest = m_CameraRot.y + D3DX_PI * 0.25f;
 		}
 		else
 		{ // 上記以外
 
 			// 向きを設定する
-			rot.y = m_CameraRot.y + D3DX_PI * 0.5f;
+			//rot.y = m_CameraRot.y + D3DX_PI * 0.5f;
 			m_fRotDest = m_CameraRot.y + D3DX_PI * 0.5f;
 		}
 		m_bMove = true;
@@ -577,7 +585,7 @@ void CPlayer::MoveControl(void)
 	{ // 上を押した場合
 
 		// 向きを設定する
-		rot.y = m_CameraRot.y + D3DX_PI * 1.0f;
+		//rot.y = m_CameraRot.y + D3DX_PI * 1.0f;
 		m_fRotDest = m_CameraRot.y + D3DX_PI * 1.0f;
 		m_bMove = true;
 	}
@@ -586,7 +594,7 @@ void CPlayer::MoveControl(void)
 	{ // 下を押した場合
 
 		// 向きを設定する
-		rot.y = m_CameraRot.y + D3DX_PI * 0.0f;
+		//rot.y = m_CameraRot.y + D3DX_PI * 0.0f;
 		m_fRotDest = m_CameraRot.y + D3DX_PI * 0.0f;
 		m_bMove = true;
 	}
@@ -605,13 +613,17 @@ void CPlayer::Move(void)
 {
 	// 位置を取得する
 	D3DXVECTOR3 pos = GetPos();
+	D3DXVECTOR3 move = GetMove();
 
 	// 移動量を設定する
-	m_move.x = -sinf(m_fRotDest) * m_fSpeed;
-	m_move.z = -cosf(m_fRotDest) * m_fSpeed;
+	move.x = -sinf(m_fRotDest) * m_fSpeed;
+	move.z = -cosf(m_fRotDest) * m_fSpeed;
 
 	// 移動量を加算する
-	pos += m_move;
+	pos += move;
+
+	// 移動量を適用する
+	SetMove(move);
 
 	// 位置を適用する
 	SetPos(pos);
@@ -1417,20 +1429,20 @@ void CPlayer::DeleteDeathArrow(const int nIdx)
 //=======================================
 // 移動量の設定処理
 //=======================================
-void CPlayer::SetMove(const D3DXVECTOR3& move)
-{
-	// 移動量を設定する
-	m_move = move;
-}
+//void CPlayer::SetMove(const D3DXVECTOR3& move)
+//{
+//	// 移動量を設定する
+//	m_move = move;
+//}
 
 //=======================================
 // 移動量の取得処理
 //=======================================
-D3DXVECTOR3 CPlayer::GetMove(void) const
-{
-	// 移動量を返す
-	return m_move;
-}
+//D3DXVECTOR3 CPlayer::GetMove(void) const
+//{
+//	// 移動量を返す
+//	return m_move;
+//}
 
 //=======================================
 // 当たり判定サイズの設定処理

@@ -12,7 +12,7 @@
 CWall* CMap::m_Wall[WALL_NUM] = {};
 
 //コンストラクタ
-CMap::CMap() : CObject(CObject::TYPE_MAP, CObject::PRIORITY_BG)
+CMap::CMap() : CObject(CObject::TYPE_MAP, CObject::PRIORITY_UI)
 {
 
 }
@@ -39,6 +39,21 @@ HRESULT CMap::Init(void)
 	m_Wall[1] = CWall::Create(D3DXVECTOR3(0.0f, 300.0f, -1000.0f), D3DXVECTOR3(1.57f, 0.0f, 0.0f), WALLSIZE_LONG);
 	m_Wall[2] = CWall::Create(D3DXVECTOR3(1600.0f, 300.0f, 0.0f), D3DXVECTOR3(1.57f, 0.0f, 1.57f), WALLSIZE_SHORT);
 	m_Wall[3] = CWall::Create(D3DXVECTOR3(-1600.0f, 300.0f, 0.0f), D3DXVECTOR3(1.57f, 0.0f, -1.57f), WALLSIZE_SHORT);
+
+	m_Wall[4] = CWall::Create(D3DXVECTOR3(0.0f, 300.0f, 1000.0f), D3DXVECTOR3(1.57f, 0.0f, 0.0f), WALLSIZE_LONG);
+	m_Wall[5] = CWall::Create(D3DXVECTOR3(0.0f, 300.0f, -1000.0f), D3DXVECTOR3(-1.57f, 0.0f, 0.0f), WALLSIZE_LONG);
+	m_Wall[6] = CWall::Create(D3DXVECTOR3(1600.0f, 300.0f, 0.0f), D3DXVECTOR3(1.57f, 0.0f, -1.57f), WALLSIZE_SHORT);
+	m_Wall[7] = CWall::Create(D3DXVECTOR3(-1600.0f, 300.0f, 0.0f), D3DXVECTOR3(1.57f, 0.0f, 1.57f), WALLSIZE_SHORT);
+
+	m_Wall[8] = CWall::Create(D3DXVECTOR3(0.0f, 300.0f, 1500.0f), D3DXVECTOR3(-1.57f, 0.0f, 0.0f), D3DXVECTOR3(2100, 0, 1100));
+	m_Wall[9] = CWall::Create(D3DXVECTOR3(0.0f, 300.0f, -1500.0f), D3DXVECTOR3(1.57f, 0.0f, 0.0f), D3DXVECTOR3(2100, 0, 1100));
+	m_Wall[10] = CWall::Create(D3DXVECTOR3(2100.0f, 300.0f, 0.0f), D3DXVECTOR3(1.57f, 0.0f, 1.57f), D3DXVECTOR3(1500, 0, 1100));
+	m_Wall[11] = CWall::Create(D3DXVECTOR3(-2100.0f, 300.0f, 0.0f), D3DXVECTOR3(1.57f, 0.0f, -1.57f), D3DXVECTOR3(1500,0,1100));
+
+	m_Wall[4]->SetVtxColor(D3DXCOLOR(255, 255, 255, 0.2f));
+	m_Wall[5]->SetVtxColor(D3DXCOLOR(255, 255, 255, 0.2f));
+	m_Wall[6]->SetVtxColor(D3DXCOLOR(255, 255, 255, 0.2f));
+	m_Wall[7]->SetVtxColor(D3DXCOLOR(255, 255, 255, 0.2f));
 
 	for (int nCnt = 0; nCnt < WALL_NUM; nCnt++)
 	{

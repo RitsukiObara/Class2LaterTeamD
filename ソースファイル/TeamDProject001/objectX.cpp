@@ -85,6 +85,13 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\WallPlus50.x",			// 50*100の壁
 	"data\\MODEL\\WallPlus100.x",			// 100*100の壁
 	"data\\MODEL\\door001.x",				// ドア
+	"data\\MODEL\\Small_shelf.x",			// 小さな棚
+	"data\\MODEL\\bookshelf.x",				// 横長の本棚
+	"data\\MODEL\\tableshelf.x",			// テーブルの高さの棚
+	"data\\MODEL\\sofa_sheet.x",			// ソファー（座面）
+	"data\\MODEL\\sofa_backrest.x",			// ソファー（背もたれ）
+	"data\\MODEL\\Chair_seat.x",			// 机の椅子(座面)
+	"data\\MODEL\\Chair_backrest.x",		// 机の椅子(背もたれ)
 
 	// 障害物モデル
 	"data\\MODEL\\HoneyBottle.x",			// 蜂蜜のボトル
