@@ -19,6 +19,14 @@ class CBlock : public CModel
 {
 public:			// 誰でもアクセスできる
 
+	// 状態
+	enum STATE
+	{
+		STATE_NONE = 0,		// 何もしない
+		STATE_SWAY,			// 揺れる
+		STATE_MAX			// この列挙型の総数
+	};
+
 	// 向きの種類
 	enum ROTTYPE
 	{
@@ -99,10 +107,12 @@ public:			// 誰でもアクセスできる
 	// セット・ゲット関係
 	void SetCollision(const COLLISION collsion);	// 当たり判定の種類の設定処理
 	void SetOnRat(const bool bOnRat);				// ネズミの乗っている状況設定
+	void SetState(STATE state);						// 状態設定
 
 	COLLISION GetCollision(void) const;				// 当たり判定の種類の取得処理
 	ROTTYPE GetRotType(void) const;					// 向きの種類の取得処理
 	TYPE GetType(void) const;						// 種類の取得処理
+	STATE GetState(void) const;						// 状態の取得処理
 	D3DXVECTOR3 GetVtxMax(void) const;				// 最大値の取得処理
 	D3DXVECTOR3 GetVtxMin(void) const;				// 最小値の取得処理
 	bool GetOnRat(void) const;						// ネズミの乗っている状況取得
@@ -114,14 +124,19 @@ private:		// 自分だけアクセスできる
 
 	// メンバ関数
 	void CollisionSetting(void);		// 向きによる最大値・最小値の設定処理
+	void UpdateState(void);				// 状態更新処理
+	void Sway(void);					// 揺らす処理
 
 	// メンバ変数
 	COLLISION m_collision;	// 当たり判定の種類
 	ROTTYPE m_rotType;		// 向きの種類
 	TYPE m_type;			// 種類
+	STATE m_state;			// 状態
 	D3DXVECTOR3 m_vtxMax;	// 最大値
 	D3DXVECTOR3 m_vtxMin;	// 最小値
 	bool m_bOnRat;			// ネズミが乗っているか
+	int m_nAngleSwitch;		// 角度の+-切り替え
+	int m_nSwayCount;		// 揺らす秒数
 
 	// リスト構造関係
 	CBlock* m_pPrev;	// 前へのポインタ

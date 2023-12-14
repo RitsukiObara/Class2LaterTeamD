@@ -22,8 +22,8 @@
 #define CAT_SIDE2		(300.0f)										//画面外に置いておくテクスチャの初期横位置
 #define RAT_SIDE		(350.0f)										//画面外に置いておくテクスチャの初期横位置
 #define RAT_SIDE2		(145.0f)										//画面外に置いておくテクスチャの初期横位置
-#define CAT_KING_POS	(D3DXVECTOR3(-SET_SIDE,360.0f,0.0f))			//ネコ代表の位置
-#define CAT_KING_SIZE	(D3DXVECTOR3(100.0f,600.0f,0.0f))				//ネコ代表のサイズ
+#define CAT_KING_POS	(D3DXVECTOR3(-SET_SIDE,330.0f,0.0f))			//ネコ代表の位置
+#define CAT_KING_SIZE	(D3DXVECTOR3(200.0f,400.0f,0.0f))				//ネコ代表のサイズ
 #define CAT_BG_POS		(D3DXVECTOR3(-SET_SIDE + CAT_SIDE,170.0f,0.0f)) //猫背景の位置
 #define CAT_BG_POS2		(D3DXVECTOR3(-SET_SIDE + CAT_SIDE2,170.0f,0.0f)) //猫背景の位置
 #define CAT_BG_SIZE		(D3DXVECTOR3(80.0f,80.0f,0.0f))					//猫背景のサイズ
@@ -31,8 +31,8 @@
 #define CAT_TEXT_POS	(D3DXVECTOR3(-SET_SIDE,200.0f,0.0f))			//猫テキストの位置
 #define CAT_TEXT_SIZE	(D3DXVECTOR3(400.0f,200.0f,0.0f))				//猫テキストのサイズ
 																		
-#define RAT_KING_POS	(D3DXVECTOR3(1280.0f + SET_SIDE,400,0.0f))		//ネズミ代表の位置
-#define RAT_KING_SIZE	(D3DXVECTOR3(100.0f,400.0f,0.0f))				//ネズミ代表のサイズ
+#define RAT_KING_POS	(D3DXVECTOR3(1280.0f + SET_SIDE,520,0.0f))		//ネズミ代表の位置
+#define RAT_KING_SIZE	(D3DXVECTOR3(125.0f,200.0f,0.0f))				//ネズミ代表のサイズ
 #define RAT_BG_POS		(D3DXVECTOR3(1280.0f + SET_SIDE - RAT_SIDE,550.0f,0.0f))	//ネズミ背景の位置
 #define RAT_BG_POS2		(D3DXVECTOR3(1280.0f + SET_SIDE - RAT_SIDE2,680.0f,0.0f))	//ネズミ背景の位置
 #define RAT_BG_SIZE		(D3DXVECTOR3(50.0f,60.0f,0.0f))					//ネズミ背景のサイズ
@@ -74,7 +74,7 @@ CExplanation::CExplanation() : CObject/*親クラス*/(/*ここにタイプを入れる*/CObje
 	m_pRatBG = NULL;
 	m_pRatText = NULL;
 	m_ColorKing = D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f);
-	m_ColorText = D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f);;
+	m_ColorText = D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f);
 	for (int nCnt = 0; nCnt < IMAGE_MAX; nCnt++)
 	{
 		m_apImage[nCnt] = NULL;
@@ -461,7 +461,7 @@ void CExplanation::SetData(CTutorial::TUTORIAL Tutorial)
 			m_pCatKing->SetLength();					// 長さ
 			m_pCatKing->SetAngle();						// 方向
 			m_pCatKing->SetVtxColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));	// 色
-			m_pCatKing->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\image.png"));		// テクスチャの割り当て処理
+			m_pCatKing->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\tutorial_icon_Obanyan.png"));		// テクスチャの割り当て処理
 
 			// 頂点座標の設定処理
 			m_pCatKing->SetVertex();
@@ -520,7 +520,7 @@ void CExplanation::SetData(CTutorial::TUTORIAL Tutorial)
 			m_pRatKing->SetLength();					// 長さ
 			m_pRatKing->SetAngle();						// 方向
 			m_pRatKing->SetVtxColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));	// 色
-			m_pRatKing->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\image.png"));		// テクスチャの割り当て処理
+			m_pRatKing->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\tutorial_icon_ChuChuGG.png"));		// テクスチャの割り当て処理
 
 			// 頂点座標の設定処理
 			m_pRatKing->SetVertex();
