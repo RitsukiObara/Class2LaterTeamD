@@ -585,7 +585,7 @@ void collision::BlockCircleCollision(CBlock& block, CPlayer* player, const float
 }
 
 //===============================
-// ブロックの当たり判定
+// ブロックの攻撃判定
 //===============================
 bool collision::BlockHit(CPlayer* player, const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize)
 {
@@ -600,26 +600,26 @@ bool collision::BlockHit(CPlayer* player, const D3DXVECTOR3& pos, const D3DXVECT
 		{
 		case CBlock::COLLISION_SQUARE:
 
-			// 矩形の当たり判定
+			// 矩形の攻撃判定
 			BlockRectangleHit(*pBlock, player, pos, collSize, &bHit);
-
-			if (bHit == true)
-			{ // 攻撃が当たったら
-
-				// 揺れる状態にする
-				pBlock->SetState(pBlock->STATE_SWAY);
-
-				bHit = false;
-			}
 
 			break;
 
 		case CBlock::COLLISION_CIRCLE:
 
-			// 円の当たり判定
-			//BlockCircleCollision(*pBlock, player, collSize.x, collSize.y, &bJump);
+			// 円の攻撃判定
+			BlockCircleHit(*pBlock, player, pos, collSize.x, collSize.y, &bHit);
 
 			break;
+		}
+
+		if (bHit == true)
+		{ // 攻撃が当たったら
+
+			// 揺れる状態にする
+			pBlock->SetState(pBlock->STATE_SWAY);
+
+			bHit = false;
 		}
 
 		// 次のブロックの情報を取得する
@@ -631,7 +631,7 @@ bool collision::BlockHit(CPlayer* player, const D3DXVECTOR3& pos, const D3DXVECT
 }
 
 //===============================
-// ブロックの矩形の当たり判定
+// ブロックの矩形の攻撃判定
 //===============================
 void collision::BlockRectangleHit(const CBlock& block, CPlayer* player, const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, bool* pHit)
 {
@@ -659,6 +659,33 @@ void collision::BlockRectangleHit(const CBlock& block, CPlayer* player, const D3
 
 		// trueにする
 		*pHit = true;
+	}
+}
+
+//===============================
+// ブロックの円形の攻撃判定
+//===============================
+void collision::BlockCircleHit(CBlock& block, CPlayer* player, const D3DXVECTOR3& pos, const float fRadius, const float fHeight, bool* pHit)
+{
+	// 位置と前回の位置と移動量を取得する
+	D3DXVECTOR3 posOld = player->GetPosOld();
+	D3DXVECTOR3 move = player->GetMove();
+
+	if (pos.y <= block.GetPos().y + block.GetFileData().vtxMax.y &&
+		pos.y + fHeight >= block.GetPos().y + block.GetFileData().vtxMin.y)
+	{ // ブロックと衝突した場合
+
+		if (useful::CylinderInner(pos, block.GetPos(), block.GetFileData().fRadius + fRadius) == true)
+		{ // 円柱の内側にいた場合
+
+			if (posOld.y >= block.GetPos().y + block.GetFileData().vtxMax.y &&
+				pos.y <= block.GetPos().y + block.GetFileData().vtxMax.y)
+			{ // 上からの当たり判定
+
+				// trueにする
+				*pHit = true;
+			}
+		}
 	}
 }
 

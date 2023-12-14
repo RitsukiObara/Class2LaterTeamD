@@ -58,7 +58,7 @@ namespace
 	{
 		D3DXVECTOR3(-1100.0f, 0.0f, 100.0f),
 		D3DXVECTOR3(1000.0f, 0.0f, 450.0f),
-		D3DXVECTOR3(1200.0f, 0.0f, -800.0f),
+		D3DXVECTOR3(1250.0f, 0.0f, -800.0f),
 	};
 
 	static const int TRANS_COUNT = 80;				// ‘JˆÚƒJƒEƒ“ƒg

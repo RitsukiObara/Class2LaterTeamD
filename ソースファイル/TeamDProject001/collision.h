@@ -49,9 +49,9 @@ namespace collision
 	void BlockRectangleCollision(const CBlock& block, CPlayer* player, const D3DXVECTOR3& collSize, bool* pJump);			// ブロックの矩形の当たり判定
 	void BlockCircleCollision(CBlock& block, CPlayer* player, const float fRadius, const float fHeight, bool* pJump);		// ブロックの円形の当たり判定
 
-	bool BlockHit(CPlayer* player, const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize);							// ブロックの当たり判定
-	void BlockRectangleHit(const CBlock& block, CPlayer* player, const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, bool* pHit);			// ブロックの矩形の当たり判定
-	//void BlockCircleHit(CBlock& block, CPlayer* player, const D3DXVECTOR3& pos, const float fRadius, const float fHeight, bool* pJump);		// ブロックの円形の当たり判定
+	bool BlockHit(CPlayer* player, const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize);							// ブロックの攻撃判定
+	void BlockRectangleHit(const CBlock& block, CPlayer* player, const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, bool* pHit);			// ブロックの矩形の攻撃判定
+	void BlockCircleHit(CBlock& block, CPlayer* player, const D3DXVECTOR3& pos, const float fRadius, const float fHeight, bool* pHit);		// ブロックの円形の攻撃判定
 
 	// 起伏地面の当たり判定
 	bool ElevOutRangeCollision(D3DXVECTOR3* pPos, const D3DXVECTOR3& posOld, const float fWidth);			// 起伏地面の範囲外の当たり判定

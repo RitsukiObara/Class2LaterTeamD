@@ -476,8 +476,6 @@ void CBlock::UpdateState(void)
 		// 揺らす処理
 		Sway();
 
-		CManager::Get()->GetDebugProc()->Print("揺れた！！！！！！！！！！！！！！！！！！！\n");
-
 		break;
 
 	default:
