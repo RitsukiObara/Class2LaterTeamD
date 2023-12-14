@@ -23,6 +23,7 @@
 #include "file.h"
 #include "pause.h"
 #include "rat.h"
+#include "map.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -181,7 +182,7 @@ void CMultiCamera::Update(void)
 
 	default:					// 上記以外
 
-								// 情報のリセット処理
+		// 情報のリセット処理
 		Reset();
 
 		break;
@@ -1020,4 +1021,27 @@ void CMultiCamera::Vibrate(void)
 
 	//// 揺れカウントを加算する
 	//m_nSwingCount++;
+}
+
+//========================================
+// 視点がマップ外に出たときに戻す処理
+//========================================
+void CMultiCamera::MagicWall(void)
+{
+	if (m_posV.x > MAP_SIZE.x)
+	{
+		m_posV.x = MAP_SIZE.x;
+	}
+	if (m_posV.x < -MAP_SIZE.x)
+	{
+		m_posV.x = -MAP_SIZE.x;
+	}
+	if (m_posV.z > MAP_SIZE.z)
+	{
+		m_posV.z = MAP_SIZE.z;
+	}
+	if (m_posV.z < -MAP_SIZE.z)
+	{
+		m_posV.z = MAP_SIZE.z;
+	}
 }

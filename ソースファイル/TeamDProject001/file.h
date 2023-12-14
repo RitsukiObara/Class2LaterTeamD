@@ -73,6 +73,7 @@ public:			// 誰でもアクセスできる
 	HRESULT Save(const TYPE type);	// セーブ処理
 	HRESULT Load(const TYPE type);	// ロード処理
 
+	void FalseSuccess(void);		// 成功状況のリセット
 	void SetMap(void);				// マップの設定処理
 
 private:		// 自分のみアクセスできる

@@ -376,6 +376,16 @@ HRESULT CFile::Load(const TYPE type)
 //===========================================
 // マップの設定処理
 //===========================================
+void CFile::FalseSuccess(void)
+{
+	// 成功状況をクリアする
+	m_ObstacleInfo.bSuccess = false;	// 障害物
+	m_BlockInfo.bSuccess = false;		// ブロック
+}
+
+//===========================================
+// マップの設定処理
+//===========================================
 void CFile::SetMap(void)
 {
 	if (m_ObstacleInfo.bSuccess == true)

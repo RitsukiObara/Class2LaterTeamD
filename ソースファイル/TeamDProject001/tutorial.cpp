@@ -144,6 +144,7 @@ HRESULT CTutorial::Init(void)
 	//CMesh::TxtSet();
 
 	// マップの情報をロードする
+	CManager::Get()->GetFile()->FalseSuccess();
 	CManager::Get()->GetFile()->Load(CFile::TYPE_TUTORIAL_DEFULT);
 	//CManager::Get()->GetFile()->Load(CFile::TYPE_TUTORIAL_KILL);
 
