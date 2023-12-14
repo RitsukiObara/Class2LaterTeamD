@@ -13,7 +13,7 @@
 //=======================================
 #define MAP_INDOOR0_WALL_TEXTURE		"data\\TEXTURE\\wall001.png"		// 屋内床テクスチャ
 //=======================================
-CWall::CWall() : CObject3D(CObject::TYPE_MAP, CObject::PRIORITY_BLOCK)
+CWall::CWall() : CObject3D(CObject::TYPE_MAP, CObject::PRIORITY_UI)
 {
 
 }

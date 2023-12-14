@@ -5,7 +5,7 @@
 #include "ground.h"
 #include "wall.h"
 
-#define WALL_NUM (4)
+#define WALL_NUM (12)
 
 class CMap :public CObject
 {

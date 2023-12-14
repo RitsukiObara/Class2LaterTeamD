@@ -44,7 +44,7 @@ namespace
 	static const float RAT_CAMERA_HEIGHT = 100.0f;		// 猫のカメラの高さ
 	static const float RAT_CAMERA_DIS = 60.0f;			// ネズミのカメラの視点と注視点の高さの差分(角度)
 	static const float DIFF_ROT = 0.2f;					// 角度に足す差分の割合
-	static const float CAMERA_ROT_MOVE = 0.05f;			// カメラの向きの移動量
+	static const float CAMERA_ROT_MOVE = 0.03f;			// カメラの向きの移動量
 	static const float ADD_ACTION_RADIUS = 40.0f;		// サーチ時の半径の追加数
 	static const int NONE_PLAYERIDX = -1;				// プレイヤーの番号の初期値
 	static const int STUN_WAIT = 120;					// オブジェクト無効の待機時間
