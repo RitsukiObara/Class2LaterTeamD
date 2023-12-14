@@ -31,7 +31,7 @@
 //===============================
 #define COLLISION_ADD_DIFF_LENGTH		(0.01f)			// 僅かな誤差を埋めるためのマクロ定義(突っかかり防止)
 #define COLLISION_CAT_SIZE				(D3DXVECTOR3(70.0f,250.0f,70.0f))		// ネコの当たり判定のサイズ
-#define CAT_WIND_MAGNI					(0.9f)			// ネコの風の倍率
+#define CAT_WIND_MAGNI					(0.3f)			// ネコの風の倍率
 #define RAT_WIND_MAGNI					(1.1f)			// ネズミの風の倍率
 
 //===============================

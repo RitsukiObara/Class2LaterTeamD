@@ -177,7 +177,7 @@ HRESULT CGame::Init(void)
 	//CObstacle *pObstacle = NULL;
 
 	//// ÉãÉìÉoÇÃê∂ê¨èàóù
-	CObstacle::Create(D3DXVECTOR3(-280.0f, 200.0f, -200.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CObstacle::TYPE::TYPE_GARBAGECAN);
+	//CObstacle::Create(D3DXVECTOR3(-280.0f, 200.0f, -200.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CObstacle::TYPE::TYPE_GARBAGECAN);
 	//CObstacle::Create(D3DXVECTOR3(600.0f, 0.0f, 400.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_ROOMBA);
 
 	//// Ç–Ç‡ÇÃê∂ê¨èàóù
