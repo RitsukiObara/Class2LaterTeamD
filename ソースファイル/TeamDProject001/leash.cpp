@@ -182,9 +182,6 @@ void CLeash::SetActionPos(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 		pos.x + sinf(rot.y + (D3DX_PI * 0.0f)) * 350.0f,
 		pos.y,
 		pos.z + cosf(rot.y + (D3DX_PI * 0.0f)) * 350.0f);
-
-	CEffect::Create(ActionPosHead, NONE_D3DXVECTOR3, 20, 30.0f, CEffect::TYPE::TYPE_NONE, NONE_D3DXCOLOR, true);
-	CEffect::Create(ActionPosToes, NONE_D3DXVECTOR3, 20, 30.0f, CEffect::TYPE::TYPE_NONE, NONE_D3DXCOLOR, true);
 }
 
 //=====================================

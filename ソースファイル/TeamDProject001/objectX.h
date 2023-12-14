@@ -98,6 +98,13 @@ public:			// 誰でもアクセスできる
 		TYPE_WALL_PLUS50,			// 50*100の壁
 		TYPE_WALL_PLUS100,			// 100*100の壁
 		TYPE_DOOR001,				// ドア
+		TYPE_SMALL_SHELF,			// 小さな棚
+		TYPE_BOOKSHELF,				// 横長の本棚
+		TYPE_TALBESHELF,			// テーブルの高さの棚
+		TYPE_SOFA_SHEET,			// ソファー（座面）
+		TYPE_SOFA_BACKTEST,			// ソファー（背もたれ）
+		TYPE_CHAIR_SHEET,			// 机の椅子(座面)
+		TYPE_CHAIR_BACKREST,		// 机の椅子(背もたれ)
 
 		// 障害物モデル
 		TYPE_HONEYBOTTLE,			// 蜂蜜のボトル
