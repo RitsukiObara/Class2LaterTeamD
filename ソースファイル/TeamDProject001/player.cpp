@@ -94,7 +94,7 @@ void CPlayer::Box(void)
 	m_pRecoveringUI = nullptr;			// 回復中のUIの情報
 	m_pSpeechMessage = nullptr;			// 伝達メッセージの情報
 	m_pDeathArrow[MAX_PLAY] = {};		// 死亡矢印の情報
-	m_move = NONE_D3DXVECTOR3;			// 移動量
+	//m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_sizeColl = NONE_D3DXVECTOR3;		// 当たり判定のサイズ
 	m_col = D3DXCOLOR(1.0f,1.0f,1.0f,1.0f);				// 色
 	m_type = TYPE_CAT;					// 種類
@@ -143,7 +143,7 @@ HRESULT CPlayer::Init(void)
 	m_pRecoveringUI = nullptr;			// 回復中のUIの情報
 	m_pSpeechMessage = nullptr;			// 伝達メッセージの情報
 	m_pDeathArrow[MAX_PLAY] = {};		// 死亡矢印の情報
-	m_move = NONE_D3DXVECTOR3;			// 移動量
+	//m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_sizeColl = NONE_D3DXVECTOR3;		// 当たり判定のサイズ
 	m_col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);				// 色
 	m_type = TYPE_CAT;					// 種類
@@ -382,10 +382,19 @@ void CPlayer::Smash(const float fAngle)
 		m_StunState == STUNSTATE_NONE)
 	{ // ダメージ受ける状態だった場合
 
-		// 移動量を算出する
-		move.x = sinf(fAngle) * SMASH_MOVE.x;
-		move.y = SMASH_MOVE.y;
-		move.z = cosf(fAngle) * SMASH_MOVE.z;
+		//// 移動量を算出する
+		//move.x = sinf(fAngle) * SMASH_MOVE.x;
+		//move.y = SMASH_MOVE.y;
+		//move.z = cosf(fAngle) * SMASH_MOVE.z;
+
+		//// 位置加算
+		//pos += move;
+
+		//// 移動量設定
+		//SetMove(move);
+
+		//// 位置設定
+		//SetPos(pos);
 
 		// 吹き飛び状態にする
 		m_StunState = STUNSTATE_SMASH;
@@ -393,9 +402,6 @@ void CPlayer::Smash(const float fAngle)
 		// 気絶状態カウントを設定する
 		m_StunStateCount = SMASH_WAIT;
 	}
-
-	// 移動量を適用する
-	SetMove(move);
 }
 
 //=====================================
@@ -411,7 +417,7 @@ void CPlayer::SetData(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 
 	// 全ての値をクリアする
 	m_pStun = nullptr;					// 気絶の情報
-	m_move = NONE_D3DXVECTOR3;			// 移動量
+	//m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_sizeColl = NONE_D3DXVECTOR3;		// 当たり判定のサイズ
 	m_type = type;						// 種類
 	m_nPlayerIdx = nID;					// プレイヤーのインデックス
@@ -605,13 +611,17 @@ void CPlayer::Move(void)
 {
 	// 位置を取得する
 	D3DXVECTOR3 pos = GetPos();
+	D3DXVECTOR3 move = GetMove();
 
 	// 移動量を設定する
-	m_move.x = -sinf(m_fRotDest) * m_fSpeed;
-	m_move.z = -cosf(m_fRotDest) * m_fSpeed;
+	move.x = -sinf(m_fRotDest) * m_fSpeed;
+	move.z = -cosf(m_fRotDest) * m_fSpeed;
 
 	// 移動量を加算する
-	pos += m_move;
+	pos += move;
+
+	// 移動量を適用する
+	SetMove(move);
 
 	// 位置を適用する
 	SetPos(pos);
@@ -1417,20 +1427,20 @@ void CPlayer::DeleteDeathArrow(const int nIdx)
 //=======================================
 // 移動量の設定処理
 //=======================================
-void CPlayer::SetMove(const D3DXVECTOR3& move)
-{
-	// 移動量を設定する
-	m_move = move;
-}
+//void CPlayer::SetMove(const D3DXVECTOR3& move)
+//{
+//	// 移動量を設定する
+//	m_move = move;
+//}
 
 //=======================================
 // 移動量の取得処理
 //=======================================
-D3DXVECTOR3 CPlayer::GetMove(void) const
-{
-	// 移動量を返す
-	return m_move;
-}
+//D3DXVECTOR3 CPlayer::GetMove(void) const
+//{
+//	// 移動量を返す
+//	return m_move;
+//}
 
 //=======================================
 // 当たり判定サイズの設定処理
