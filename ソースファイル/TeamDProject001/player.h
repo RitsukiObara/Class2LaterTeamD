@@ -113,8 +113,8 @@ public:			// 誰でもアクセスできる
 	CDeathArrow* GetDeathArrow(const int nIdx);			// 死亡矢印の取得処理
 	void DeleteDeathArrow(const int nIdx);				// 死亡矢印の消去処理
 
-	void SetMove(const D3DXVECTOR3& move);		// 移動量の設定処理
-	D3DXVECTOR3 GetMove(void) const;			// 移動量の取得処理
+	//void SetMove(const D3DXVECTOR3& move);		// 移動量の設定処理
+	//D3DXVECTOR3 GetMove(void) const;			// 移動量の取得処理
 
 	void SetSizeColl(const D3DXVECTOR3& size);	// 当たり判定サイズの設定処理
 	D3DXVECTOR3 GetSizeColl(void) const;		// 当たり判定サイズの取得処理
@@ -200,7 +200,7 @@ private:		// 自分だけアクセスできる
 	CRecoveringUI* m_pRecoveringUI;			// 回復中のUIの情報
 	CSpeechMessage* m_pSpeechMessage;		// 伝達メッセージの情報
 	CDeathArrow* m_pDeathArrow[MAX_PLAY];	// 死亡矢印の情報
-	D3DXVECTOR3 m_move;			// 移動量
+	//D3DXVECTOR3 m_move;			// 移動量
 	D3DXVECTOR3 m_sizeColl;		// 当たり判定のサイズ
 	D3DXCOLOR m_col;			// 色
 	TYPE m_type;				// 種類

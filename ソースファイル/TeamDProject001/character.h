@@ -105,6 +105,9 @@ public:			// 誰でもアクセスできる
 	void SetRot(const D3DXVECTOR3& rot);	// 向き設定処理
 	D3DXVECTOR3 GetRot(void) const;			// 向き取得処理
 
+	void SetMove(const D3DXVECTOR3& move);		// 移動量設定処理
+	D3DXVECTOR3 GetMove(void) const;			// 移動量取得処理
+
 	void SetScale(const D3DXVECTOR3& scale);	// 拡大率設定処理
 	D3DXVECTOR3 GetScale(void) const;			// 拡大率取得処理
 
@@ -128,6 +131,7 @@ private:		// 自分だけアクセスできる
 	D3DXVECTOR3		m_pos;				// 位置
 	D3DXVECTOR3		m_posOld;			// 前回の位置
 	D3DXVECTOR3		m_rot;				// 向き
+	D3DXVECTOR3		m_move;				// 移動量
 	D3DXVECTOR3		m_scale;			// 拡大率
 	D3DXMATRIX		m_mtxWorld;			// ワールドマトリックス
 	CHierarchy* m_apModel[MAX_PARTS];	// モデルの情報
