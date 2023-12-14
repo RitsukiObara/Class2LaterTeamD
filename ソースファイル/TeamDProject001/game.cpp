@@ -153,6 +153,7 @@ HRESULT CGame::Init(void)
 	}
 
 	// マップの情報をロードする
+	CManager::Get()->GetFile()->FalseSuccess();
 	CManager::Get()->GetFile()->Load(CFile::TYPE_MAP_OBSTACLE1);
 	CManager::Get()->GetFile()->Load(CFile::TYPE_MAP_BLOCK1);
 
@@ -176,7 +177,7 @@ HRESULT CGame::Init(void)
 	//CObstacle *pObstacle = NULL;
 
 	//// ルンバの生成処理
-	//CObstacle::Create(D3DXVECTOR3(-600.0f, 0.0f, -500.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CObstacle::TYPE::TYPE_TV);
+	//CObstacle::Create(D3DXVECTOR3(-600.0f, 0.0f, -500.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CObstacle::TYPE::TYPE_SPEAKER);
 	//CObstacle::Create(D3DXVECTOR3(600.0f, 0.0f, 400.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_ROOMBA);
 
 	//// ひもの生成処理
