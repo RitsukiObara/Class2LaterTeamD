@@ -403,32 +403,13 @@ void CCat::AttackStateManager(void)
 void CCat::AttackBlock(void)
 {
 	// ローカル変数宣言
-	CPlayer* pPlayer = nullptr;
 	D3DXVECTOR3 pos = GetPos();
 	D3DXVECTOR3 rot = GetRot();
 
-	for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
-	{
-		if (CManager::Get()->GetMode() == CScene::MODE_GAME)
-		{
-			// プレイヤーの情報を取得する
-			pPlayer = CGame::GetPlayer(nCnt);
-		}
-		if (CManager::Get()->GetMode() == CScene::MODE_TUTORIAL)
-		{
-			// プレイヤーの情報を取得する
-			pPlayer = CTutorial::GetPlayer(nCnt);
-		}
-
-		if (pPlayer != nullptr &&
-			pPlayer->GetType() == CPlayer::TYPE_CAT)
-		{
-
-			collision::BlockHit(pPlayer,
-				D3DXVECTOR3(pos.x + sinf(rot.y) * -ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * -ATTACK_DISTANCE),
-				ATTACK_SIZE);
-		}
-	}
+	// ブロックの攻撃判定
+	collision::BlockHit(this,
+		D3DXVECTOR3(pos.x + sinf(rot.y) * -ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * -ATTACK_DISTANCE),
+		ATTACK_SIZE);
 }
 
 //=======================================

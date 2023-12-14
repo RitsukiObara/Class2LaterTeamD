@@ -58,7 +58,7 @@ namespace
 	{
 		D3DXVECTOR3(-1100.0f, 0.0f, 100.0f),
 		D3DXVECTOR3(1000.0f, 0.0f, 450.0f),
-		D3DXVECTOR3(1200.0f, 0.0f, -800.0f),
+		D3DXVECTOR3(1250.0f, 0.0f, -800.0f),
 	};
 
 	static const int TRANS_COUNT = 80;				// 遷移カウント
@@ -177,7 +177,7 @@ HRESULT CGame::Init(void)
 	//CObstacle *pObstacle = NULL;
 
 	//// ルンバの生成処理
-	//CObstacle::Create(D3DXVECTOR3(-600.0f, 0.0f, -500.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CObstacle::TYPE::TYPE_SPEAKER);
+	CObstacle::Create(D3DXVECTOR3(-280.0f, 200.0f, -200.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CObstacle::TYPE::TYPE_GARBAGECAN);
 	//CObstacle::Create(D3DXVECTOR3(600.0f, 0.0f, 400.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_ROOMBA);
 
 	//// ひもの生成処理
