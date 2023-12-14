@@ -585,6 +585,84 @@ void collision::BlockCircleCollision(CBlock& block, CPlayer* player, const float
 }
 
 //===============================
+// ブロックの当たり判定
+//===============================
+bool collision::BlockHit(CPlayer* player, const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize)
+{
+	// 先頭のブロックの情報を取得する
+	CBlock* pBlock = CBlockManager::Get()->GetTop();
+	bool bHit = false;			// ジャンプ状況
+
+	while (pBlock != nullptr)
+	{ // ブロックが NULL の場合
+
+		switch (pBlock->GetCollision())
+		{
+		case CBlock::COLLISION_SQUARE:
+
+			// 矩形の当たり判定
+			BlockRectangleHit(*pBlock, player, pos, collSize, &bHit);
+
+			if (bHit == true)
+			{ // 攻撃が当たったら
+
+				// 揺れる状態にする
+				pBlock->SetState(pBlock->STATE_SWAY);
+
+				bHit = false;
+			}
+
+			break;
+
+		case CBlock::COLLISION_CIRCLE:
+
+			// 円の当たり判定
+			//BlockCircleCollision(*pBlock, player, collSize.x, collSize.y, &bJump);
+
+			break;
+		}
+
+		// 次のブロックの情報を取得する
+		pBlock = pBlock->GetNext();
+	}
+
+	// ジャンプ状況を返す
+	return bHit;
+}
+
+//===============================
+// ブロックの矩形の当たり判定
+//===============================
+void collision::BlockRectangleHit(const CBlock& block, CPlayer* player, const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize, bool* pHit)
+{
+	// 当たり判定の変数を宣言
+	SCollision collision = {};
+
+	// ブロックの当たり判定に必要な変数を宣言
+	D3DXVECTOR3 move = player->GetMove();									// 移動量
+	D3DXVECTOR3 vtxMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);	// 最大値
+	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-collSize.x, -collSize.y, -collSize.z);		// 最小値
+
+	// 六面体の当たり判定
+	collision = HexahedronClushNotMove
+	(
+		pos,
+		block.GetPos(),
+		vtxMin,
+		block.GetVtxMin(),
+		vtxMax,
+		block.GetVtxMax()
+	);
+
+	if (collision.bTop == true)
+	{ // 上に乗った場合
+
+		// trueにする
+		*pHit = true;
+	}
+}
+
+//===============================
 // 起伏地面の範囲外の当たり判定
 //===============================
 bool collision::ElevOutRangeCollision(D3DXVECTOR3* pPos, const D3DXVECTOR3& posOld, const float fWidth)
@@ -903,6 +981,78 @@ collision::SCollision collision::HexahedronClush(D3DXVECTOR3* pos, const D3DXVEC
 
 			// 位置を設定する
 			pos->y = posBlock.y + minBlock.y - (max.y + COLLISION_ADD_DIFF_LENGTH);
+
+			// 下の当たり判定を true にする
+			collision.bBottom = true;
+		}
+	}
+
+	// 当たり判定の変数を返す
+	return collision;
+}
+
+//======================
+// 六面体の当たり判定(どの面に乗ったかの判定付き && 移動させない)
+//======================
+collision::SCollision collision::HexahedronClushNotMove(const D3DXVECTOR3& pos, const D3DXVECTOR3& posBlock, const D3DXVECTOR3& min, const D3DXVECTOR3& minBlock, const D3DXVECTOR3& max, const D3DXVECTOR3& maxBlock)
+{
+	// 当たり判定の変数を宣言
+	SCollision collision = { false,false,false,false,false,false };
+
+	if (posBlock.y + maxBlock.y >= pos.y + min.y &&
+		posBlock.y + minBlock.y <= pos.y + max.y &&
+		posBlock.z + maxBlock.z >= pos.z + min.z &&
+		posBlock.z + minBlock.z <= pos.z + max.z)
+	{ // X軸の判定に入れる場合
+
+		if (posBlock.x + maxBlock.x >= pos.x + min.x)
+		{ // 右にぶつかった場合
+
+			// 右の当たり判定を true にする
+			collision.bRight = true;
+		}
+		else if (posBlock.x + minBlock.x <= pos.x + max.x)
+		{ // 左にぶつかった場合
+
+			// 左の当たり判定を true にする
+			collision.bLeft = true;
+		}
+	}
+
+	if (posBlock.x + maxBlock.x >= pos.x + min.x &&
+		posBlock.x + minBlock.x <= pos.x + max.x &&
+		posBlock.y + maxBlock.y >= pos.y + min.y &&
+		posBlock.y + minBlock.y <= pos.y + max.y)
+	{ // Z軸の判定に入れる場合
+
+		if (posBlock.z + maxBlock.z >= pos.z + min.z)
+		{ // 奥にぶつかった場合
+
+			// 奥の当たり判定を true にする
+			collision.bFar = true;
+		}
+		else if (posBlock.z + minBlock.z <= pos.z + max.z)
+		{ // 手前にぶつかった場合
+
+			// 手前の当たり判定を true にする
+			collision.bNear = true;
+		}
+	}
+
+	if (posBlock.x + maxBlock.x >= pos.x + min.x &&
+		posBlock.x + minBlock.x <= pos.x + max.x &&
+		posBlock.z + maxBlock.z >= pos.z + min.z &&
+		posBlock.z + minBlock.z <= pos.z + max.z)
+	{ // Y軸の判定に入れる場合
+
+		if (posBlock.y + maxBlock.y >= pos.y + min.y)
+		{ // 上にぶつかった場合
+
+			// 上の当たり判定を true にする
+			collision.bTop = true;
+		}
+		else if (posBlock.y + minBlock.y <= pos.y + max.y)
+		{ // 下にぶつかった場合
 
 			// 下の当たり判定を true にする
 			collision.bBottom = true;
