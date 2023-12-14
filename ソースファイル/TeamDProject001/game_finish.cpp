@@ -66,7 +66,7 @@ HRESULT CGameFinish::Init(void)
 	{ // フィニッシュの情報が NULL の場合
 
 		// フィニッシュを生成する
-		m_pFinish = CObject2D::Create(CObject2D::TYPE_NONE, CObject::TYPE_NONE, PRIORITY_UI);
+		m_pFinish = CObject2D::Create(CObject2D::TYPE_NONE, CObject::TYPE_NONE, PRIORITY_PAUSE);
 
 		if (m_pFinish != nullptr)
 		{ // 情報が入っている場合
@@ -127,14 +127,17 @@ void CGameFinish::Update(void)
 		m_pGameTime = CGameTime::Get();
 		if (m_pGameTime != nullptr)
 		{
-			if (m_pCountdown == nullptr && m_pGameTime->GetSeconds() == 5)	
+			if (m_pCountdown == nullptr && m_pGameTime->GetSeconds() == 5)
 			{// 残り５秒＆カウントダウンポインターがnullの時
 				m_pCountdown = CCountdown::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f), D3DXVECTOR3(50.0f, 80.0f, 0.0f), FINISH_COUNT);
 				CGame::SetCountDown(true);
 			}
 			if (m_pGameTime->GetSeconds() == 0)
 			{// カウントダウンが0になった時
-				m_bFinish = true;
+				if (CGame::GetState() != CGame::STATE_CAT_WIN)
+				{// 猫が勝っている状態じゃない時
+					m_bFinish = true;
+				}
 			}
 			if (m_bFinish == true)
 			{// 終了状態になった時

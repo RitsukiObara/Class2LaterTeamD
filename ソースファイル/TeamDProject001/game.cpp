@@ -99,7 +99,7 @@ CGame::CGame() : CScene(TYPE_SCENE, PRIORITY_BG)
 	m_nItemSpawnCount = 0;		// アイテム出現カウント
 	m_nNumItem = 0;				// アイテムの数
 	m_GameState = STATE_START;	// 状態
-	m_pFinish = false;
+	m_bCountDown = false;
 	m_bItemSpawn = false;		// アイテムが出現しているかどうか
 	m_nMapNumber = 0;
 
@@ -426,8 +426,8 @@ void CGame::Update(void)
 		{ // F9キーを押した場合
 
 			// 情報をセーブする
-			CManager::Get()->GetFile()->Save(CFile::TYPE_OBSTACLE);		// 障害物
-			CManager::Get()->GetFile()->Save(CFile::TYPE_BLOCK);		// ブロック
+			CManager::Get()->GetFile()->Save(CFile::TYPE_MAP_OBSTACLE1);
+			CManager::Get()->GetFile()->Save(CFile::TYPE_MAP_BLOCK1);
 		}
 	}
 	else
