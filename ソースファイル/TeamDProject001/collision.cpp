@@ -626,7 +626,7 @@ bool collision::BlockHit(CPlayer* player, const D3DXVECTOR3& pos, const D3DXVECT
 		pBlock = pBlock->GetNext();
 	}
 
-	// ジャンプ状況を返す
+	// ヒット状況を返す
 	return bHit;
 }
 
@@ -643,16 +643,20 @@ void collision::BlockRectangleHit(const CBlock& block, CPlayer* player, const D3
 	D3DXVECTOR3 vtxMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);	// 最大値
 	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-collSize.x, -collSize.y, -collSize.z);		// 最小値
 
-	// 六面体の当たり判定
-	collision = HexahedronClushNotMove
-	(
-		pos,
-		block.GetPos(),
-		vtxMin,
-		block.GetVtxMin(),
-		vtxMax,
-		block.GetVtxMax()
-	);
+	if (block.GetVtxMax().y < 500.0f)
+	{ // ブロックがネズミが乗れる高さじゃないとき
+
+		// 六面体の当たり判定
+		collision = HexahedronClushNotMove
+		(
+			pos,
+			block.GetPos(),
+			vtxMin,
+			block.GetVtxMin(),
+			vtxMax,
+			block.GetVtxMax()
+		);
+	}
 
 	if (collision.bTop == true)
 	{ // 上に乗った場合
