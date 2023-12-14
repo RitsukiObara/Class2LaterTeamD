@@ -125,14 +125,13 @@ void CAnswer::Update(void)
 				m_apPlayerID[nCnt]->SetVtxColor(m_Color);
 			}
 
-
 			//入力でチェックを入れる
 			if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_RETURN) == true)
 			{
 				m_abPressAnswer[nCnt] = true;
 			}
 
-			if (CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_A, nCnt))
+			if (CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_START, nCnt))
 			{
 				m_abPressAnswer[nCnt] = true;
 			}
@@ -176,6 +175,17 @@ void CAnswer::Draw(void)
 {
 	for (int nCnt = 0; nCnt < 4; nCnt++)
 	{
+		if (m_apPlayerID[nCnt] != NULL)
+		{
+			if (m_abPressAnswer[nCnt] == true)
+			{
+				m_apPlayerID[nCnt]->Draw();
+			}
+		}
+	}
+
+	for (int nCnt = 0; nCnt < 4; nCnt++)
+	{
 		if (m_apAnswer[nCnt] != NULL)
 		{
 			m_apAnswer[nCnt]->Draw();
@@ -186,7 +196,10 @@ void CAnswer::Draw(void)
 	{
 		if (m_apPlayerID[nCnt] != NULL)
 		{
-			m_apPlayerID[nCnt]->Draw();
+			if (m_abPressAnswer[nCnt] == false)
+			{
+				m_apPlayerID[nCnt]->Draw();
+			}
 		}
 	}
 }
@@ -286,10 +299,10 @@ void CAnswer::SetData(void)
 			if (m_apPlayerID[nCnt] == NULL)
 			{
 				m_apPlayerID[nCnt] = CObject2D::Create(CObject2D::TYPE::TYPE_NONE, CObject::TYPE::TYPE_NONE, CObject::PRIORITY_UI);
-				m_apPlayerID[nCnt]->SetPos(D3DXVECTOR3(m_apAnswer[nCnt]->GetPos().x, m_apAnswer[nCnt]->GetPos().y - 25.0f, 0.0f));		// 位置
-				m_apPlayerID[nCnt]->SetPosOld(D3DXVECTOR3(m_apAnswer[nCnt]->GetPos().x, m_apAnswer[nCnt]->GetPos().y - 25.0f, 0.0f));	// 前回の位置
+				m_apPlayerID[nCnt]->SetPos(D3DXVECTOR3(m_apAnswer[nCnt]->GetPos().x, m_apAnswer[nCnt]->GetPos().y, 0.0f));		// 位置
+				m_apPlayerID[nCnt]->SetPosOld(D3DXVECTOR3(m_apAnswer[nCnt]->GetPos().x, m_apAnswer[nCnt]->GetPos().y, 0.0f));	// 前回の位置
 				m_apPlayerID[nCnt]->SetRot(NONE_D3DXVECTOR3);						// 向き
-				m_apPlayerID[nCnt]->SetSize(D3DXVECTOR3(ANSWER_SIZE, ANSWER_SIZE, 0.0f));		// サイズ
+				m_apPlayerID[nCnt]->SetSize(D3DXVECTOR3(ANSWER_SIZE * 1.1f, ANSWER_SIZE * 1.1f, 0.0f));		// サイズ
 				m_apPlayerID[nCnt]->SetLength();									// 長さ
 				m_apPlayerID[nCnt]->SetAngle();										// 方向
 				m_apPlayerID[nCnt]->SetVtxColor(m_Color);							// 色
