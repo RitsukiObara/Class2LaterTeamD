@@ -24,7 +24,7 @@
 //-------------------------------------------
 // マクロ定義
 //-------------------------------------------
-#define SPEED		(2.0f)		// 速度
+#define SPEED		(4.0f)		// 速度
 #define GRAVITY		(0.4f)		// 重力
 #define ROT_MOVE	(0.05f)		// 向きの移動量
 #define CAT_SIZE	(D3DXVECTOR3(70.0f, 280.0f, 70.0f))		// 当たり判定のサイズ
@@ -290,9 +290,9 @@ void CGarbage::Break(void)
 		m_State = STATE_FALL;
 
 		// 移動量を設定する
-		m_move.x = sinf(GetRot().x + (D3DX_PI * -0.5f)) * SPEED;
+		m_move.x = sinf(GetRot().y + (D3DX_PI * -0.5f)) * SPEED;
 		m_move.y = 0.0f;
-		m_move.z = cosf(GetRot().x + (D3DX_PI * -0.5f)) * SPEED;
+		m_move.z = cosf(GetRot().y + (D3DX_PI * -0.5f)) * SPEED;
 	}
 
 	// アクション状況を true にする

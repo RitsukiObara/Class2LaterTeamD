@@ -102,8 +102,6 @@ void CSpeaker::Uninit(void)
 //=====================================
 void CSpeaker::Update(void)
 {
-	D3DXVECTOR3 pos = GetPos();
-
 	if (m_bAction == true)
 	{
 		SetNote();
@@ -125,8 +123,6 @@ void CSpeaker::Update(void)
 			}
 		}
 	}
-
-	SetPos(pos);
 
 	// èÛë‘Ç…ÇÊÇÈèàóù
 	State();
@@ -190,7 +186,6 @@ void CSpeaker::Action(void)
 
 	// èkÇ›èÛë‘Ç…Ç∑ÇÈ
 	m_state = STATE_SHRINK;
-	SetAction(true);
 }
 
 //=====================================

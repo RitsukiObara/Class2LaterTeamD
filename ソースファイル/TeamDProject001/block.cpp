@@ -13,10 +13,14 @@
 #include "manager.h"
 #include "renderer.h"
 #include "useful.h"
+#include "debugproc.h"
 
 // マクロ定義
 #define BLOCK_HEIGHT_MAX		(400.0f)		// ブロックの高さの最大値
 #define BLOCK_HEIGHT_CORRECT	(99999.0f)		// ブロックの補正後の高さ
+#define SWAY_ANGLE				(0.020f * D3DX_PI)			// 揺れる角度
+#define SWAY_ADD				(0.2f)			// 揺れる早さ
+#define SWAY_TIME				(30)			// 揺らす時間
 
 //==============================
 // コンストラクタ
@@ -27,11 +31,15 @@ CBlock::CBlock() : CModel(CObject::TYPE_BLOCK, CObject::PRIORITY_BLOCK)
 	m_collision = COLLISION_SQUARE;	// 当たり判定の種類
 	m_rotType = ROTTYPE_FRONT;		// 向きの種類
 	m_type = TYPE_CARDBOARD;		// 種類
+	m_state = STATE_NONE;			// 状態
 	m_vtxMax = NONE_D3DXVECTOR3;	// 最大値
 	m_vtxMin = NONE_D3DXVECTOR3;	// 最小値
 	m_pPrev = nullptr;				// 前のへのポインタ
 	m_pNext = nullptr;				// 次のへのポインタ
-	m_bOnRat = false;				// ネズミが乗っているか
+	//m_bOnRat = false;				// ネズミが乗っているか
+	//m_nPlayerIdx = -1;				// プレイヤー番号
+	m_nAngleSwitch = 0;				// 角度の+-切り替え
+	m_nSwayCount = 0;				// 揺らす秒数
 
 	if (CBlockManager::Get() != nullptr)
 	{ // マネージャーが存在していた場合
@@ -101,9 +109,13 @@ HRESULT CBlock::Init(void)
 	m_collision = COLLISION_SQUARE;	// 当たり判定の種類
 	m_rotType = ROTTYPE_FRONT;		// 向きの種類
 	m_type = TYPE_CARDBOARD;		// 種類
+	m_state = STATE_NONE;			// 状態
 	m_vtxMax = NONE_D3DXVECTOR3;	// 最大値
 	m_vtxMin = NONE_D3DXVECTOR3;	// 最小値
-	m_bOnRat = false;				// ネズミが乗っているか
+	//m_bOnRat = false;				// ネズミが乗っているか
+	//m_nPlayerIdx = -1;				// プレイヤー番号
+	m_nAngleSwitch = 1;				// 角度の+-切り替え
+	m_nSwayCount = 0;				// 揺らす秒数
 
 	// 値を返す
 	return S_OK;
@@ -149,7 +161,8 @@ void CBlock::UninitAll(void)
 //=====================================
 void CBlock::Update(void)
 {
-
+	// 状態更新処理
+	UpdateState();
 }
 
 //=====================================
@@ -355,6 +368,43 @@ D3DXVECTOR3 CBlock::GetVtxMin(void) const
 }
 
 //=====================================
+// ネズミの乗っている状況設定
+//=====================================
+//void CBlock::SetOnRat(const bool bOnRat, const int nPlayerIdx)
+//{
+//	// ネズミの乗っている状況設定
+//	m_bOnRat = bOnRat;
+//	m_nPlayerIdx = nPlayerIdx;
+//}
+
+//=====================================
+// ネズミの乗っている状況取得
+//=====================================
+//bool CBlock::GetOnRat(void) const
+//{
+//	// ネズミの乗っている状況を返す
+//	return m_bOnRat;
+//}
+
+//=====================================
+// 状態設定
+//=====================================
+void CBlock::SetState(STATE state)
+{
+	// 状態設定
+	m_state = state;
+}
+
+//=====================================
+// 状態の取得処理
+//=====================================
+CBlock::STATE CBlock::GetState(void) const
+{
+	// 状態を返す
+	return m_state;
+}
+
+//=====================================
 // 向きによる最大値・最小値の設定処理
 //=====================================
 void CBlock::CollisionSetting(void)
@@ -414,19 +464,69 @@ void CBlock::CollisionSetting(void)
 }
 
 //=====================================
-// ネズミの乗っている状況設定
+// 状態更新処理
 //=====================================
-void CBlock::SetOnRat(const bool bOnRat)
+void CBlock::UpdateState(void)
 {
-	// ネズミの乗っている状況設定
-	m_bOnRat = bOnRat;
+	switch (m_state)
+	{
+	case CBlock::STATE_NONE:		// 何もしない
+
+		break;
+
+	case CBlock::STATE_SWAY:		// 揺れる
+
+		// 揺らす処理
+		Sway();
+
+		break;
+
+	default:
+
+		// 停止する
+		assert(false);
+
+		break;
+	}
 }
 
 //=====================================
-// ネズミの乗っている状況取得
+// 揺らす処理
 //=====================================
-bool CBlock::GetOnRat(void) const
+void CBlock::Sway(void)
 {
-	// ネズミの乗っている状況を返す
-	return m_bOnRat;
+	// ローカル変数宣言
+	D3DXVECTOR3 rot = GetRot();		// 向き取得
+	float fAngle = 0.0f;	// 加算する角度
+
+	if (rot.z > SWAY_ANGLE || rot.z < -SWAY_ANGLE)
+	{ // 角度が目標の範囲外だったら
+
+		m_nAngleSwitch *= -1;		// 角度に加算する+-変更
+	}
+
+	// 加算する角度
+	fAngle += (SWAY_ANGLE * SWAY_ADD) * m_nAngleSwitch;
+
+	// 角度加算
+	rot.z += fAngle;
+
+	if (m_nSwayCount >= SWAY_TIME)
+	{ // 一定時間経ったら
+
+		if (rot.z <= 0.01 && rot.z >= -0.01f)
+		{ // まっすぐまでの誤差の範囲になったら
+
+			m_state = STATE_NONE;		// 何もしない状態にする
+			m_nSwayCount = 0;			// カウンター初期化
+			rot.z = 0.0f;				// まっすぐにする
+		}
+	}
+	else
+	{
+		m_nSwayCount++;					// カウンター加算
+	}
+
+	// 向きの設定
+	SetRot(rot);
 }

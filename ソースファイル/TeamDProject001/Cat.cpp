@@ -402,7 +402,14 @@ void CCat::AttackStateManager(void)
 //=======================================
 void CCat::AttackBlock(void)
 {
-	
+	// ローカル変数宣言
+	D3DXVECTOR3 pos = GetPos();
+	D3DXVECTOR3 rot = GetRot();
+
+	// ブロックの攻撃判定
+	collision::BlockHit(this,
+		D3DXVECTOR3(pos.x + sinf(rot.y) * -ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * -ATTACK_DISTANCE),
+		ATTACK_SIZE);
 }
 
 //=======================================

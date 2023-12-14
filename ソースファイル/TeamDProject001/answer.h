@@ -44,6 +44,7 @@ private:		// 自分だけアクセスできる
 	bool m_abPressAnswer[4];
 	CObject2D *m_apPlayerID[4];
 
+	D3DXCOLOR m_Color;
 };
 
 #endif

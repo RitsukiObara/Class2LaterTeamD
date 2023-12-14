@@ -22,7 +22,7 @@
 //=========================
 // コンストラクタ
 //=========================
-CCountdown::CCountdown() : CNumber(CObject::TYPE_COUNTDOWN, CObject::PRIORITY_UI)
+CCountdown::CCountdown() : CNumber(CObject::TYPE_COUNTDOWN, CObject::PRIORITY_PLAYER)
 {
 	// 全ての値をクリアする
 	m_sizeDest = NONE_D3DXVECTOR3;		// 目的のサイズ
@@ -77,36 +77,39 @@ void CCountdown::Uninit(void)
 //=========================
 void CCountdown::Update(void)
 {
+	if (CGame::GetState() != CGame::STATE_CAT_WIN)
+	{// 猫が勝っている状態じゃない時
 	// 計算処理
-	Calculate();
+		Calculate();
 
-	if (m_nSecond <= 0)
-	{ // 時間が0を超えた場合
+		if (m_nSecond <= 0)
+		{ // 時間が0を超えた場合
 
-		// 時間を補正する
-		m_nSecond = 0;
+			// 時間を補正する
+			m_nSecond = 0;
 
-		// プレイ状態にする
-		CGame::SetState(CGame::STATE_PLAY);
+			// プレイ状態にする
+			CGame::SetState(CGame::STATE_PLAY);
 
-		// 終了処理
-		Uninit();
+			// 終了処理
+			Uninit();
 
-		// この先の処理を行わない
-		return;
+			// この先の処理を行わない
+			return;
+		}
+
+		// 回転処理
+		Cycle();
+
+		// 拡大処理
+		Scaling();
+
+		// 頂点座標の設定処理
+		SetVertexRot();
+
+		// テクスチャの設定処理(アニメーションバージョン)
+		SetVtxTextureAnim(NUMBER_TEXTURE_PATTERN, m_nSecond);
 	}
-	
-	// 回転処理
-	Cycle();
-
-	// 拡大処理
-	Scaling();
-
-	// 頂点座標の設定処理
-	SetVertexRot();
-
-	// テクスチャの設定処理(アニメーションバージョン)
-	SetVtxTextureAnim(NUMBER_TEXTURE_PATTERN, m_nSecond);
 }
 
 //=========================

@@ -58,7 +58,7 @@ namespace
 	{
 		D3DXVECTOR3(-1100.0f, 0.0f, 100.0f),
 		D3DXVECTOR3(1000.0f, 0.0f, 450.0f),
-		D3DXVECTOR3(1200.0f, 0.0f, -800.0f),
+		D3DXVECTOR3(1250.0f, 0.0f, -800.0f),
 	};
 
 	static const int TRANS_COUNT = 80;				// 遷移カウント
@@ -99,7 +99,7 @@ CGame::CGame() : CScene(TYPE_SCENE, PRIORITY_BG)
 	m_nItemSpawnCount = 0;		// アイテム出現カウント
 	m_nNumItem = 0;				// アイテムの数
 	m_GameState = STATE_START;	// 状態
-	m_pFinish = false;
+	m_bCountDown = false;
 	m_bItemSpawn = false;		// アイテムが出現しているかどうか
 	m_nMapNumber = 0;
 
@@ -153,6 +153,7 @@ HRESULT CGame::Init(void)
 	}
 
 	// マップの情報をロードする
+	CManager::Get()->GetFile()->FalseSuccess();
 	CManager::Get()->GetFile()->Load(CFile::TYPE_MAP_OBSTACLE1);
 	CManager::Get()->GetFile()->Load(CFile::TYPE_MAP_BLOCK1);
 
@@ -176,7 +177,7 @@ HRESULT CGame::Init(void)
 	//CObstacle *pObstacle = NULL;
 
 	//// ルンバの生成処理
-	//CObstacle::Create(D3DXVECTOR3(-600.0f, 0.0f, -500.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CObstacle::TYPE::TYPE_TV);
+	CObstacle::Create(D3DXVECTOR3(-280.0f, 200.0f, -200.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CObstacle::TYPE::TYPE_GARBAGECAN);
 	//CObstacle::Create(D3DXVECTOR3(600.0f, 0.0f, 400.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_ROOMBA);
 
 	//// ひもの生成処理
@@ -425,8 +426,8 @@ void CGame::Update(void)
 		{ // F9キーを押した場合
 
 			// 情報をセーブする
-			CManager::Get()->GetFile()->Save(CFile::TYPE_OBSTACLE);		// 障害物
-			CManager::Get()->GetFile()->Save(CFile::TYPE_BLOCK);		// ブロック
+			CManager::Get()->GetFile()->Save(CFile::TYPE_MAP_OBSTACLE1);
+			CManager::Get()->GetFile()->Save(CFile::TYPE_MAP_BLOCK1);
 		}
 	}
 	else

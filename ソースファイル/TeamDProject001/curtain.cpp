@@ -49,7 +49,9 @@ CCurtain::CCurtain() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK
 		m_apSwitch[nCnt] = nullptr;		// スイッチの情報
 	}
 	m_state = STATE_CLOSE;				// 状態
-	m_fVtxMinZ = 0.0f;					// Z軸の最小値
+	m_vtxMax = NONE_D3DXVECTOR3;		// 最大値
+	m_vtxMin = NONE_D3DXVECTOR3;		// 最小値
+	m_fEdge = 0.0f;						// カーテンの端の座標
 	SetCatUse(true);					// ネコの使用条件
 	SetRatUse(true);					// ネズミの使用条件
 }
@@ -80,7 +82,9 @@ HRESULT CCurtain::Init(void)
 		m_apSwitch[nCnt] = nullptr;		// モデルの情報
 	}
 	m_state = STATE_CLOSE;				// 状態
-	m_fVtxMinZ = 0.0f;					// Z軸の最小値
+	m_vtxMax = NONE_D3DXVECTOR3;		// 最大値
+	m_vtxMin = NONE_D3DXVECTOR3;		// 最小値
+	m_fEdge = 0.0f;						// カーテンの端の座標
 
 	// 値を返す
 	return S_OK;
@@ -142,12 +146,8 @@ void CCurtain::Update(void)
 		m_state = STATE_CLOSE;
 	}
 
-	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_0) == true)
-	{ // 0キーを押した場合
-
-		// 状態を設定する
-		m_state = (STATE)((m_state + 1) % STATE_MAX);
-	}
+	// 拡大率の設定処理
+	ScaleVtxSet();
 }
 
 //=====================================
@@ -191,7 +191,12 @@ void CCurtain::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYP
 		}
 	}
 	m_state = STATE_CLOSE;			// 状態
-	m_fVtxMinZ = GetFileData().vtxMin.z * GetScale().z;		// Z軸の最小値
+
+	// 頂点の設定処理
+	VtxSetting();
+
+	// 拡大率による頂点の設定処理
+	ScaleVtxSet();
 }
 
 //=====================================
@@ -200,12 +205,8 @@ void CCurtain::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYP
 bool CCurtain::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
 	D3DXVECTOR3 pos = pPlayer->GetPos();
-	D3DXVECTOR3 objMin = GetFileData().vtxMin;							// カーテンの最小値
 	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);	// 最小値
 	D3DXVECTOR3 vtxMax = collSize;										// 最大値
-
-	// カーテンの最小値(Z軸)を設定する
-	objMin.z = GetFileData().vtxMin.z * GetScale().z;
 
 	// 六面体の当たり判定
 	if (collision::HexahedronCollision
@@ -215,9 +216,9 @@ bool CCurtain::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 		pPlayer->GetPosOld(),
 		GetPosOld(),
 		vtxMin,
-		objMin,
+		m_vtxMin,
 		vtxMax,
-		GetFileData().vtxMax
+		m_vtxMax
 		) == true)
 	{ // 当たった場合
 
@@ -364,6 +365,89 @@ void CCurtain::HitMultiCircle(CPlayer* pPlayer, const float Radius, bool bInput)
 				}
 			}
 		}
+	}
+}
+
+//=====================================
+// 頂点の設定処理
+//=====================================
+void CCurtain::VtxSetting(void)
+{
+	// 向きと最大値・最小値を設定する
+	D3DXVECTOR3 rot = GetRot();
+	D3DXVECTOR3 vtxMax = GetFileData().vtxMax;
+	D3DXVECTOR3 vtxMin = GetFileData().vtxMin;
+
+	if (rot.y >= D3DX_PI * -0.25f &&
+		rot.y <= D3DX_PI * 0.25f)
+	{ // 方向が手前からの場合
+
+		// 最大値と最小値を設定する
+		m_vtxMax = vtxMax;
+		m_vtxMin = vtxMin;
+	}
+	else if (rot.y >= D3DX_PI * 0.25f &&
+		rot.y <= D3DX_PI * 0.75f)
+	{ // 方向が左からの場合
+
+		// 最大値と最小値を設定する
+		m_vtxMax = D3DXVECTOR3(vtxMax.z, vtxMax.y, -vtxMin.x);
+		m_vtxMin = D3DXVECTOR3(vtxMin.z, vtxMin.y, -vtxMax.x);
+	}
+	else if (rot.y >= D3DX_PI * -0.75f &&
+		rot.y <= D3DX_PI * -0.25f)
+	{ // 方向が右からの場合
+
+		// 最大値と最小値を設定する
+		m_vtxMax = D3DXVECTOR3(-vtxMin.z, vtxMax.y, vtxMax.x);
+		m_vtxMin = D3DXVECTOR3(-vtxMax.z, vtxMin.y, vtxMin.x);
+	}
+	else
+	{ // 上記以外(方向が奥からの場合)
+
+		// 最大値と最小値を設定する
+		m_vtxMax = D3DXVECTOR3(-vtxMin.x, vtxMax.y, -vtxMin.z);
+		m_vtxMin = D3DXVECTOR3(-vtxMax.x, vtxMin.y, -vtxMax.z);
+	}
+}
+
+//=====================================
+// 拡大率による頂点の設定処理
+//=====================================
+void CCurtain::ScaleVtxSet(void)
+{
+	// 向きを取得する
+	D3DXVECTOR3 rot = GetRot();
+
+	// カーテンの端の座標を設定する
+	m_fEdge = GetFileData().vtxMin.z * GetScale().z;
+
+	if (rot.y >= D3DX_PI * -0.25f &&
+		rot.y <= D3DX_PI * 0.25f)
+	{ // 方向が手前からの場合
+
+		// 頂点を設定する
+		m_vtxMin.z = m_fEdge;
+	}
+	else if (rot.y >= D3DX_PI * 0.25f &&
+		rot.y <= D3DX_PI * 0.75f)
+	{ // 方向が左からの場合
+
+		// 頂点を設定する
+		m_vtxMin.x = m_fEdge;
+	}
+	else if (rot.y >= D3DX_PI * -0.75f &&
+		rot.y <= D3DX_PI * -0.25f)
+	{ // 方向が右からの場合
+
+		// 頂点を設定する
+		m_vtxMax.x = -m_fEdge;
+	}
+	else
+	{ // 上記以外(方向が奥からの場合)
+
+		// 頂点を設定する
+		m_vtxMax.z = -m_fEdge;
 	}
 }
 

@@ -20,10 +20,11 @@
 #define SET_SIDE		(100.0f)										//画面外に置いておくテクスチャの初期横位置
 #define CAT_SIDE		(280.0f)										//画面外に置いておくテクスチャの初期横位置
 #define CAT_SIDE2		(300.0f)										//画面外に置いておくテクスチャの初期横位置
+#define RAT_SIDE0		(120.0f)										//画面外に置いておくテクスチャの初期横位置
 #define RAT_SIDE		(350.0f)										//画面外に置いておくテクスチャの初期横位置
 #define RAT_SIDE2		(145.0f)										//画面外に置いておくテクスチャの初期横位置
-#define CAT_KING_POS	(D3DXVECTOR3(-SET_SIDE,360.0f,0.0f))			//ネコ代表の位置
-#define CAT_KING_SIZE	(D3DXVECTOR3(100.0f,600.0f,0.0f))				//ネコ代表のサイズ
+#define CAT_KING_POS	(D3DXVECTOR3(-SET_SIDE,330.0f,0.0f))			//ネコ代表の位置
+#define CAT_KING_SIZE	(D3DXVECTOR3(200.0f,400.0f,0.0f))				//ネコ代表のサイズ
 #define CAT_BG_POS		(D3DXVECTOR3(-SET_SIDE + CAT_SIDE,170.0f,0.0f)) //猫背景の位置
 #define CAT_BG_POS2		(D3DXVECTOR3(-SET_SIDE + CAT_SIDE2,170.0f,0.0f)) //猫背景の位置
 #define CAT_BG_SIZE		(D3DXVECTOR3(80.0f,80.0f,0.0f))					//猫背景のサイズ
@@ -31,10 +32,12 @@
 #define CAT_TEXT_POS	(D3DXVECTOR3(-SET_SIDE,200.0f,0.0f))			//猫テキストの位置
 #define CAT_TEXT_SIZE	(D3DXVECTOR3(400.0f,200.0f,0.0f))				//猫テキストのサイズ
 																		
-#define RAT_KING_POS	(D3DXVECTOR3(1280.0f + SET_SIDE,400,0.0f))		//ネズミ代表の位置
-#define RAT_KING_SIZE	(D3DXVECTOR3(100.0f,400.0f,0.0f))				//ネズミ代表のサイズ
+#define RAT_KING_POS	(D3DXVECTOR3(1280.0f + SET_SIDE,520,0.0f))		//ネズミ代表の位置
+#define RAT_KING_SIZE	(D3DXVECTOR3(125.0f,200.0f,0.0f))				//ネズミ代表のサイズ
+#define RAT_BG_POS0		(D3DXVECTOR3(1280.0f + SET_SIDE - RAT_SIDE,50.0f,0.0f))	//ネズミ背景の位置
 #define RAT_BG_POS		(D3DXVECTOR3(1280.0f + SET_SIDE - RAT_SIDE,550.0f,0.0f))	//ネズミ背景の位置
 #define RAT_BG_POS2		(D3DXVECTOR3(1280.0f + SET_SIDE - RAT_SIDE2,680.0f,0.0f))	//ネズミ背景の位置
+#define RAT_BG_SIZE0	(D3DXVECTOR3(120.0f,50.0f,0.0f))					//ネズミ背景のサイズ
 #define RAT_BG_SIZE		(D3DXVECTOR3(50.0f,60.0f,0.0f))					//ネズミ背景のサイズ
 #define RAT_BG_SIZE2	(D3DXVECTOR3(160.0f,50.0f,0.0f))					//ネズミ背景のサイズ
 #define RAT_TEXT_POS	(D3DXVECTOR3(1280.0f + SET_SIDE,500.0f,0.0f))	//ネズミテキストの位置
@@ -50,6 +53,7 @@
 #define CAT_BG_STOP2	(630.0f + CAT_SIDE2)							// 猫背景の停止位置
 #define CAT_TEXT_STOP	(630.0f)										// 猫テキストの停止位置
 #define RAT_KING_STOP	(1280.0f - 150.0f)								// ネズミ代表の停止位置
+#define RAT_BG_STOP0	(1280.0f - RAT_SIDE0)							// ネズミ背景の停止位置
 #define RAT_BG_STOP		(1280.0f - 630.0f - RAT_SIDE)					// ネズミ背景の停止位置
 #define RAT_BG_STOP2	(1280.0f - 630.0f - RAT_SIDE2)					// ネズミ背景の停止位置
 #define RAT_TEXT_STOP	(1280.0f - 630.0f)								// ネズミテキストの停止位置
@@ -63,7 +67,7 @@
 //==============================
 // コンストラクタ
 //==============================
-CExplanation::CExplanation() : CObject/*親クラス*/(/*ここにタイプを入れる*/CObject::TYPE_2DUI, /*ここに優先順位を入れる*/CObject::PRIORITY_UI)
+CExplanation::CExplanation() : CObject(CObject::TYPE_2DUI, CObject::PRIORITY_UI)
 {
 	// 全ての値をクリアする
 	m_pBG = NULL;
@@ -74,7 +78,7 @@ CExplanation::CExplanation() : CObject/*親クラス*/(/*ここにタイプを入れる*/CObje
 	m_pRatBG = NULL;
 	m_pRatText = NULL;
 	m_ColorKing = D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f);
-	m_ColorText = D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f);;
+	m_ColorText = D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f);
 	for (int nCnt = 0; nCnt < IMAGE_MAX; nCnt++)
 	{
 		m_apImage[nCnt] = NULL;
@@ -95,13 +99,6 @@ CExplanation::~CExplanation()
 //==============================
 HRESULT CExplanation::Init(void)
 {
-	//if (FAILED(親クラス::Init()))
-	//{ // 初期化処理に失敗した場合
-
-	//	// 失敗を返す
-	//	return E_FAIL;
-	//}
-
 	// 全ての値を初期化する
 
 	// 値を返す
@@ -255,6 +252,13 @@ void CExplanation::Update(void)
 		D3DXVECTOR3 pos = m_pRatBG->GetPos();
 		pos.x -= SIDE_MOVESPEED;
 
+		if (CTutorial::GetTutorial() == CTutorial::TUTORIAL::TUTORIAL_MOVE)
+		{
+			if (pos.x < RAT_BG_STOP0)
+			{
+				pos.x = RAT_BG_STOP0;
+			}
+		}
 		if (CTutorial::GetTutorial() == CTutorial::TUTORIAL::TUTORIAL_ACTION)
 		{
 			if (pos.x < RAT_BG_STOP)
@@ -461,7 +465,7 @@ void CExplanation::SetData(CTutorial::TUTORIAL Tutorial)
 			m_pCatKing->SetLength();					// 長さ
 			m_pCatKing->SetAngle();						// 方向
 			m_pCatKing->SetVtxColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));	// 色
-			m_pCatKing->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\image.png"));		// テクスチャの割り当て処理
+			m_pCatKing->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\tutorial_icon_Obanyan.png"));		// テクスチャの割り当て処理
 
 			// 頂点座標の設定処理
 			m_pCatKing->SetVertex();
@@ -520,12 +524,27 @@ void CExplanation::SetData(CTutorial::TUTORIAL Tutorial)
 			m_pRatKing->SetLength();					// 長さ
 			m_pRatKing->SetAngle();						// 方向
 			m_pRatKing->SetVtxColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));	// 色
-			m_pRatKing->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\image.png"));		// テクスチャの割り当て処理
+			m_pRatKing->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\tutorial_icon_ChuChuGG.png"));		// テクスチャの割り当て処理
 
 			// 頂点座標の設定処理
 			m_pRatKing->SetVertex();
 		}
-		if (m_pRatBG == NULL && Tutorial == CTutorial::TUTORIAL_ACTION)
+
+		if (m_pRatBG == NULL && Tutorial == CTutorial::TUTORIAL_MOVE)
+		{
+			m_pRatBG = CObject2D::Create(CObject2D::TYPE::TYPE_NONE, CObject::TYPE::TYPE_NONE, CObject::PRIORITY_UI);
+			m_pRatBG->SetPos(RAT_BG_POS0);				// 位置
+			m_pRatBG->SetPosOld(RAT_BG_POS0);			// 前回の位置
+			m_pRatBG->SetRot(NONE_D3DXVECTOR3);			// 向き
+			m_pRatBG->SetSize(RAT_BG_SIZE0);				// サイズ
+			m_pRatBG->SetLength();						// 長さ
+			m_pRatBG->SetAngle();						// 方向
+			m_pRatBG->SetVtxColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));	// 色
+
+																		// 頂点座標の設定処理
+			m_pRatBG->SetVertex();
+		}
+		else if (m_pRatBG == NULL && Tutorial == CTutorial::TUTORIAL_ACTION)
 		{
 			m_pRatBG = CObject2D::Create(CObject2D::TYPE::TYPE_NONE, CObject::TYPE::TYPE_NONE, CObject::PRIORITY_UI);
 			m_pRatBG->SetPos(RAT_BG_POS);				// 位置
@@ -572,6 +591,10 @@ void CExplanation::SetData(CTutorial::TUTORIAL Tutorial)
 	switch (Tutorial)
 	{
 	case CTutorial::TUTORIAL_MOVE:
+		if (m_pRatBG != NULL)
+		{
+			m_pRatBG->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\tutorial_ok.png"));		// テクスチャの割り当て処理
+		}
 		if (m_pCatText != NULL)
 		{
 			m_pCatText->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\tutorial_textcat00.png"));		// テクスチャの割り当て処理
