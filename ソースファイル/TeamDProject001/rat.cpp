@@ -203,6 +203,12 @@ void CRat::Update(void)
 	// 角度の正規化
 	RotNormalize();
 
+	// プレイヤーの更新処理
+	CPlayer::Update();
+
+	// 障害物との衝突判定
+	collision::ObstacleCollision(this, GetSizeColl().x, GetSizeColl().y, GetSizeColl().z);
+
 	// ブロックとの当たり判定
 	if (collision::BlockCollision(this, GetSizeColl()) == true)
 	{ // 上に乗った場合
@@ -210,9 +216,6 @@ void CRat::Update(void)
 		// ジャンプ状況を false にする
 		m_bJump = false;
 	}
-
-	// プレイヤーの更新処理
-	CPlayer::Update();
 
 	if (GetPlayerID() != nullptr)
 	{ // プレイヤーのID表示が NULL じゃない場合

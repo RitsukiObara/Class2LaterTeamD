@@ -79,6 +79,7 @@ int CGame::m_nNumItem = 0;									// アイテムの数
 CGameFinish* CGame::m_pFinish = nullptr;					// フィニッシュの情報
 bool CGame::m_bCountDown = false;							// カウントダウンが使用されているか
 bool CGame::m_bItemSpawn = false;							// アイテムが出現しているかどうか
+int CGame::m_nMapNumber = 0;								// アイテムが出現しているかどうか
 
 // デバッグ版
 #ifdef _DEBUG
@@ -100,6 +101,7 @@ CGame::CGame() : CScene(TYPE_SCENE, PRIORITY_BG)
 	m_GameState = STATE_START;	// 状態
 	m_pFinish = false;
 	m_bItemSpawn = false;		// アイテムが出現しているかどうか
+	m_nMapNumber = 0;
 
 	for (int nCntPlay = 0; nCntPlay < MAX_PLAY; nCntPlay++)
 	{
@@ -134,6 +136,21 @@ HRESULT CGame::Init(void)
 
 	// メッシュの読み込み処理
 	//CMesh::TxtSet();
+
+	m_nMapNumber = rand() % 3;
+
+	if (m_nMapNumber == 0)
+	{
+
+	}
+	else if (m_nMapNumber == 1)
+	{
+
+	}
+	else if (m_nMapNumber == 2)
+	{
+
+	}
 
 	// マップの情報をロードする
 	CManager::Get()->GetFile()->Load(CFile::TYPE_MAP_OBSTACLE1);

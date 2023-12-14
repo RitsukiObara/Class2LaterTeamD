@@ -195,47 +195,64 @@ bool CElecFan::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 	if (m_bPower == true)
 	{ // 電源状況が true の場合
 
-		// 各最大値・最小値を宣言
-		D3DXVECTOR3 vtxMin = D3DXVECTOR3(
-			sinf(GetRot().y + D3DX_PI * 1.0f) * WIND_RANGE,
+		// 向き・最大値・最小値を宣言
+		D3DXVECTOR3 rot = GetRot();
+		D3DXVECTOR3 IvtxMin;
+		D3DXVECTOR3 IvtxMax;
+		D3DXVECTOR3 vtxMin = D3DXVECTOR3
+		(
+			GetFileData().vtxMin.x - 30.0f,
 			0.0f,
-			cosf(GetRot().y + D3DX_PI * 1.0f) * WIND_RANGE);
-		D3DXVECTOR3 vtxMax = D3DXVECTOR3(
-			sinf(GetRot().y + D3DX_PI * 0.5f) * 10.0f,
+			-WIND_RANGE
+		);
+		D3DXVECTOR3 vtxMax = D3DXVECTOR3
+		(
+			GetFileData().vtxMax.x + 30.0f,
 			GetFileData().vtxMax.y,
-			cosf(GetRot().y + D3DX_PI * 0.5f) * 10.0f);
+			0.0f
+		);
 
-		D3DXVECTOR3 IvtxMin = vtxMin;
-		D3DXVECTOR3 IvtxMax = vtxMax;
+		if (rot.y >= D3DX_PI * -0.25f &&
+			rot.y <= D3DX_PI * 0.25f)
+		{ // 方向が手前からの場合
 
-		if (GetRot().y <= -1.57f)
-		{// 右
-			vtxMax = D3DXVECTOR3(IvtxMin.x, IvtxMax.y,IvtxMin.z);
-			vtxMin = D3DXVECTOR3(IvtxMax.x, IvtxMin.y, IvtxMax.z);
+			// 最大値と最小値を設定する
+			IvtxMax = vtxMax;
+			IvtxMin = vtxMin;
 		}
-		else if (GetRot().y <= 0.1f)
-		{// 正面
+		else if (rot.y >= D3DX_PI * 0.25f &&
+			rot.y <= D3DX_PI * 0.75f)
+		{ // 方向が左からの場合
 
+			// 最大値と最小値を設定する
+			IvtxMax = D3DXVECTOR3(vtxMax.z, vtxMax.y, -vtxMin.x);
+			IvtxMin = D3DXVECTOR3(vtxMin.z, vtxMin.y, -vtxMax.x);
 		}
-		else if (GetRot().y <= 1.7f)
-		{// 左
+		else if (rot.y >= D3DX_PI * -0.75f &&
+			rot.y <= D3DX_PI * -0.25f)
+		{ // 方向が右からの場合
 
+			// 最大値と最小値を設定する
+			IvtxMax = D3DXVECTOR3(-vtxMin.z, vtxMax.y, vtxMax.x);
+			IvtxMin = D3DXVECTOR3(-vtxMax.z, vtxMin.y, vtxMin.x);
 		}
 		else
-		{// 後ろ
-			vtxMax = D3DXVECTOR3(IvtxMin.x, IvtxMax.y, IvtxMin.z);
-			vtxMin = D3DXVECTOR3(IvtxMax.x, IvtxMin.y, IvtxMax.z);
+		{ // 上記以外(方向が奥からの場合)
+
+			// 最大値と最小値を設定する
+			IvtxMax = D3DXVECTOR3(-vtxMin.x, vtxMax.y, -vtxMin.z);
+			IvtxMin = D3DXVECTOR3(-vtxMax.x, vtxMin.y, -vtxMax.z);
 		}
 
-		CManager::Get()->GetDebugProc()->Print("\n\n[X:%f] [Z:%f]\n", vtxMax.x, vtxMax.z);
-		CManager::Get()->GetDebugProc()->Print("[X:%f] [Z:%f]\n\n", vtxMin.x, vtxMin.z);
+		CManager::Get()->GetDebugProc()->Print("\n\n[X:%f] [Z:%f]\n", IvtxMax.x, IvtxMax.z);
+		CManager::Get()->GetDebugProc()->Print("[X:%f] [Z:%f]\n\n", IvtxMin.x, IvtxMin.z);
 
 		D3DXVECTOR3 playerMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);
 		D3DXVECTOR3 playerMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);
 
-		if (useful::RectangleCollisionXY(pPlayer->GetPos(), GetPos(), playerMax, vtxMax, playerMin, vtxMin) == true &&
-			useful::RectangleCollisionXZ(pPlayer->GetPos(), GetPos(), playerMax, vtxMax, playerMin, vtxMin) == true &&
-			useful::RectangleCollisionYZ(pPlayer->GetPos(), GetPos(), playerMax, vtxMax, playerMin, vtxMin) == true)
+		if (useful::RectangleCollisionXY(pPlayer->GetPos(), GetPos(), playerMax, IvtxMax, playerMin, IvtxMin) == true &&
+			useful::RectangleCollisionXZ(pPlayer->GetPos(), GetPos(), playerMax, IvtxMax, playerMin, IvtxMin) == true &&
+			useful::RectangleCollisionYZ(pPlayer->GetPos(), GetPos(), playerMax, IvtxMax, playerMin, IvtxMin) == true)
 		{ // 当たり判定の中に入った場合
 
 			// true を返す
