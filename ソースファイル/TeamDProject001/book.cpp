@@ -320,30 +320,43 @@ bool CBook::KillZ(void)
 bool CBook::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
 	D3DXVECTOR3 pos = pPlayer->GetPos();
+	D3DXVECTOR3 move = pPlayer->GetMove();
 	D3DXVECTOR3 vtxMax = collSize;
 	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);
 	D3DXVECTOR3 objMax = D3DXVECTOR3(GetFileData().vtxMax.x, GetFileData().vtxMax.y + (GetFileData().collsize.y * MAX_BOOK), GetFileData().vtxMax.z);
+	collision::SCollision coll = { false,false,false,false,false,false };
 
-	// 六面体の当たり判定
-	if (m_state == STATE_STOP &&
-		collision::HexahedronCollision
-	(
-		&pos,					// 位置
-		GetPos(),				// 本の位置
-		pPlayer->GetPosOld(),	// 前回の位置
-		GetPosOld(),			// 本の前回の位置
-		vtxMin,					// 最小値
-		GetFileData().vtxMin,	// 本の最小値
-		vtxMax,					// 最大値
-		objMax					// 本の最小値
-	) == true)
-	{ // 当たり判定に当たった場合
+	if (m_state == STATE_STOP)
+	{ // 停止状態の場合
+
+		// 六面体の当たり判定
+		coll = collision::HexahedronClush
+		(
+			&pos,					// 位置
+			GetPos(),				// 本の位置
+			pPlayer->GetPosOld(),	// 前回の位置
+			GetPosOld(),			// 本の前回の位置
+			vtxMin,					// 最小値
+			GetFileData().vtxMin,	// 本の最小値
+			vtxMax,					// 最大値
+			objMax					// 本の最小値
+		);
 
 		// 位置を適用する
 		pPlayer->SetPos(pos);
 
-		// true を返す
-		return true;
+		if (coll.bTop == true)
+		{ // 上に乗った場合
+
+			// 移動量を初期化する
+			move.y = 0.0f;
+
+			// 移動量を適用する
+			pPlayer->SetMove(move);
+
+			// true を返す
+			return true;
+		}
 	}
 
 	// false を返す

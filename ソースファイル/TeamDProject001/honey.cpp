@@ -127,36 +127,37 @@ void CHoney::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE 
 bool CHoney::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
 	// 座標関係の変数を設定する
-	D3DXVECTOR3 pos = pPlayer->GetPos();			// 位置
-	D3DXVECTOR3 posOld = pPlayer->GetPosOld();		// 前回の位置
+	D3DXVECTOR3 pos = pPlayer->GetPos();		// 位置
+	D3DXVECTOR3 move = pPlayer->GetMove();		// 移動量
 	D3DXVECTOR3 vtxMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);	// 最大値
 	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);		// 最小値
+	collision::SCollision coll = { false,false,false,false,false,false };
 
 	if (m_State == STATE_HONEYBOTTLE)
 	{ // 蜂蜜ボトル状態の場合
 
-		if (collision::HexahedronCollision(&pos, GetPos(), posOld, GetPosOld(), vtxMin, GetFileData().vtxMin, vtxMax, GetFileData().vtxMax) == true)
-		{ // 六面体の当たり判定が true の場合
+		// 六面体の当たり判定
+		coll = collision::HexahedronClush(&pos, GetPos(), pPlayer->GetPosOld(), GetPosOld(), vtxMin, GetFileData().vtxMin, vtxMax, GetFileData().vtxMax);
 
-			// 位置を適用する
-			pPlayer->SetPos(pos);
+		// 位置を適用する
+		pPlayer->SetPos(pos);
+
+		if (coll.bTop == true)
+		{ // 上に乗った場合
+
+			// 移動量を初期化する
+			move.y = 0.0f;
+
+			// 移動量を適用する
+			pPlayer->SetMove(move);
 
 			// true を返す
 			return true;
 		}
-		else
-		{ // 上記以外
-
-			// false を返す
-			return false;
-		}
 	}
-	else
-	{ // 上記以外
 
-		// false を返す
-		return false;
-	}
+	// false を返す
+	return false;
 }
 
 //=====================================

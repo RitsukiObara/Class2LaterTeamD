@@ -207,7 +207,12 @@ void CRat::Update(void)
 	CPlayer::Update();
 
 	// 障害物との衝突判定
-	collision::ObstacleCollision(this, GetSizeColl().x, GetSizeColl().y, GetSizeColl().z);
+	if (collision::ObstacleCollision(this, GetSizeColl().x, GetSizeColl().y, GetSizeColl().z) == true)
+	{ // 上に乗った場合
+
+		// ジャンプ状況を false にする
+		m_bJump = false;
+	}
 
 	// ブロックとの当たり判定
 	if (collision::BlockCollision(this, GetSizeColl()) == true)

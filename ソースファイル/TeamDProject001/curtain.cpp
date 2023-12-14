@@ -209,7 +209,7 @@ bool CCurtain::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 	D3DXVECTOR3 vtxMax = collSize;										// 最大値
 
 	// 六面体の当たり判定
-	if (collision::HexahedronCollision
+	collision::HexahedronCollision
 	(
 		&pos,
 		GetPos(),
@@ -219,15 +219,10 @@ bool CCurtain::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 		m_vtxMin,
 		vtxMax,
 		m_vtxMax
-		) == true)
-	{ // 当たった場合
+	);
 
-		// 位置を適用する
-		pPlayer->SetPos(pos);
-
-		// true を返す
-		return true;
-	}
+	// 位置を適用する
+	pPlayer->SetPos(pos);
 
 	// false を返す
 	return false;

@@ -151,24 +151,7 @@ bool CHairBall::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 	{ // 毬と衝突した場合
 
 		// 円柱の当たり判定処理
-		if (useful::CylinderCollision(&pos, GetPos(), GetFileData().fRadius + collSize.x) == true)
-		{ // 当たり判定が false の場合
-
-			if (pPlayer->GetPosOld().y >= GetPos().y + GetFileData().vtxMax.y &&
-				pos.y <= GetPos().y + GetFileData().vtxMax.y)
-			{ // 上からの当たり判定
-
-				// 縦の位置を設定する
-				pos.y = GetPos().y + GetFileData().vtxMax.y + 0.01f;
-			}
-			else if (pPlayer->GetPosOld().y + collSize.y <= GetPos().y + GetFileData().vtxMin.y &&
-				pos.y + collSize.y >= GetPos().y + GetFileData().vtxMin.y)
-			{ // 下からの当たり判定
-
-				// 縦の位置を設定する
-				pos.y = GetPos().y + GetFileData().vtxMin.y - collSize.y - 0.01f;
-			}
-		}
+		useful::CylinderCollision(&pos, GetPos(), GetFileData().fRadius + collSize.x);
 	}
 
 	// 位置を適用する

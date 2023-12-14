@@ -315,26 +315,31 @@ bool CGarbage::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
 	// 位置と最大値と最小値を設定する
 	D3DXVECTOR3 pos = pPlayer->GetPos();
+	D3DXVECTOR3 move = pPlayer->GetMove();
 	D3DXVECTOR3 vtxMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);
 	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);
+	collision::SCollision coll = { false,false,false,false,false,false };
 
 	if (m_State == STATE_GARBAGECAN)
 	{ //ゴミ箱状態の場合
 
-		if (collision::HexahedronCollision(&pos, GetPos(), pPlayer->GetPosOld(), GetPosOld(), vtxMin, GetFileData().vtxMin, vtxMax, GetFileData().vtxMax) == true)
-		{ // 六面体の当たり判定が true の場合
+		// 六面体の当たり判定
+		coll = collision::HexahedronClush(&pos, GetPos(), pPlayer->GetPosOld(), GetPosOld(), vtxMin, GetFileData().vtxMin, vtxMax, GetFileData().vtxMax);
 
-			// 位置を適用する
-			pPlayer->SetPos(pos);
+		// 位置を適用する
+		pPlayer->SetPos(pos);
+
+		if(coll.bTop == true)
+		{ // 上に乗った場合
+
+			// 移動量を初期化する
+			move.y = 0.0f;
+
+			// 移動量を設定する
+			pPlayer->SetMove(move);
 
 			// true を返す
 			return true;
-		}
-		else
-		{ // 上記以外
-
-			// false を返す
-			return false;
 		}
 	}
 	else if(m_Slide == SLIDE_ON)
@@ -350,9 +355,6 @@ bool CGarbage::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 
 				// 位置を適用する
 				pPlayer->SetPos(pos);
-
-				// true を返す
-				return true;
 			}
 
 			// 次のブロックの情報を取得する
@@ -371,9 +373,6 @@ bool CGarbage::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 
 				// 位置を適用する
 				pPlayer->SetPos(pos);
-
-				// true を返す
-				return true;
 			}
 
 			// 次の障害物の情報を取得する

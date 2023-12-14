@@ -167,17 +167,27 @@ bool CElecFan::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
 	// 位置と最大値と最小値を設定する
 	D3DXVECTOR3 playPos = pPlayer->GetPos();
+	D3DXVECTOR3 move = pPlayer->GetMove();
 	D3DXVECTOR3 vtxMax = D3DXVECTOR3(GetFileData().fRadius, GetFileData().vtxMax.y, GetFileData().fRadius);
 	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-GetFileData().fRadius, GetFileData().vtxMin.y, -GetFileData().fRadius);
 	D3DXVECTOR3 playMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);
 	D3DXVECTOR3 playMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);
+	collision::SCollision coll = { false,false,false,false,false,false };
 
 	// 六面体の当たり判定
-	if (collision::HexahedronCollision(&playPos, GetPos(), pPlayer->GetPosOld(), GetPosOld(), playMin, vtxMin, playMax, vtxMax) == true)
-	{ // 当たり判定が true の場合
+	coll = collision::HexahedronClush(&playPos, GetPos(), pPlayer->GetPosOld(), GetPosOld(), playMin, vtxMin, playMax, vtxMax);
 
-		// 位置を適用する
-		pPlayer->SetPos(playPos);
+	// 位置を適用する
+	pPlayer->SetPos(playPos);
+
+	if (coll.bTop == true)
+	{ // 上に乗った場合
+
+		// 移動量を初期化する
+		move.y = 0.0f;
+
+		// 移動量を適用する
+		pPlayer->SetMove(move);
 
 		// true を返す
 		return true;

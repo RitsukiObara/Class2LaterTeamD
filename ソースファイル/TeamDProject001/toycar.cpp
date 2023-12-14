@@ -214,14 +214,25 @@ bool CToyCar::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
 	// 位置と最小値と最大値を宣言
 	D3DXVECTOR3 pos = pPlayer->GetPos();
+	D3DXVECTOR3 move = pPlayer->GetMove();
 	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);;
 	D3DXVECTOR3 vtxMax = collSize;
+	collision::SCollision coll = { false,false,false,false,false,false };
 
 	// 六面体の当たり判定
-	if (collision::HexahedronCollision(&pos, GetPos(), pPlayer->GetPosOld(), GetPosOld(), vtxMin, GetFileData().vtxMin, vtxMax, GetFileData().vtxMax) == true)
-	{
-		// 位置を適用する
-		pPlayer->SetPos(pos);
+	coll = collision::HexahedronClush(&pos, GetPos(), pPlayer->GetPosOld(), GetPosOld(), vtxMin, GetFileData().vtxMin, vtxMax, GetFileData().vtxMax);
+
+	// 位置を適用する
+	pPlayer->SetPos(pos);
+
+	if (coll.bTop == true)
+	{ // 上に乗った場合
+
+		// 移動量を初期化する
+		move.y = 0.0f;
+
+		// 移動量を適用する
+		pPlayer->SetMove(move);
 
 		// true を返す
 		return true;
@@ -237,6 +248,7 @@ bool CToyCar::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 bool CToyCar::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
 	// 最小値と最大値を宣言
+	D3DXVECTOR3 pos = pPlayer->GetPos();
 	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);
 	D3DXVECTOR3	vtxMax = collSize;
 
@@ -244,10 +256,18 @@ bool CToyCar::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 		m_state == STATE_DRIVE)
 	{ // ネズミかつ、ドライブ状態の場合
 
-		if (useful::RectangleCollisionXY(GetPos(), pPlayer->GetPos(), GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true &&
-			useful::RectangleCollisionXZ(GetPos(), pPlayer->GetPos(), GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true &&
-			useful::RectangleCollisionYZ(GetPos(), pPlayer->GetPos(), GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true)
-		{ // 中にいる場合
+		if (collision::HexahedronCollision
+		(
+			&pos,
+			GetPos(),
+			pPlayer->GetPosOld(),
+			GetPosOld(),
+			vtxMin,
+			GetFileData().vtxMin,
+			vtxMax,
+			GetFileData().vtxMax
+		) == true)
+		{ // 車に当たった場合
 
 			// true を返す
 			return true;

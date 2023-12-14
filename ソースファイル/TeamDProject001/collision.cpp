@@ -58,11 +58,12 @@ void collision::ShadowCollision(const D3DXVECTOR3& pos, int nIdx)
 //===============================
 // 障害物の当たり判定
 //===============================
-void collision::ObstacleCollision(CPlayer* player, const float fWidth, const float fHeight, const float fDepth)
+bool collision::ObstacleCollision(CPlayer* player, const float fWidth, const float fHeight, const float fDepth)
 {
 	// ローカル変数宣言
 	D3DXVECTOR3 collSize = D3DXVECTOR3(fWidth, fHeight, fDepth);	// 当たり判定のサイズ
 	CObstacle* pObstacle = CObstacleManager::Get()->GetTop();		// 先頭の障害物を取得する
+	bool bLand = false;				// 着地判定
 
 	while (pObstacle != nullptr)
 	{ // ブロックの情報が NULL じゃない場合
@@ -70,42 +71,16 @@ void collision::ObstacleCollision(CPlayer* player, const float fWidth, const flo
 		// 当たり判定処理
 		if (pObstacle->Collision(player, collSize) == true)
 		{
-			switch (pObstacle->GetType())
-			{
-			case CObstacle::TYPE::TYPE_HONEY:		// 蜂蜜
-
-				// 特に無し
-
-				break;
-
-			case CObstacle::TYPE::TYPE_SLIME:
-
-				break;
-
-			case CObstacle::TYPE::TYPE_HAIRBALL:
-
-				break;
-
-			case CObstacle::TYPE::TYPE_PETBOTTLE:
-
-				break;
-
-			case CObstacle::TYPE::TYPE_TOYCAR:
-
-				break;
-
-			default:			// 上記以外
-
-				// 停止
-				//assert(false);
-
-				break;
-			}
+			// 着地判定を出す
+			bLand = true;
 		}
 
 		// 次のオブジェクトを代入する
 		pObstacle = pObstacle->GetNext();
 	}
+
+	// 着地判定を返す
+	return bLand;
 }
 
 //===============================
