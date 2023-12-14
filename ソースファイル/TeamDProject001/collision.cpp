@@ -589,9 +589,16 @@ void collision::BlockCircleCollision(CBlock& block, CPlayer* player, const float
 //===============================
 bool collision::BlockHit(CPlayer* player, const D3DXVECTOR3& pos, const D3DXVECTOR3& collSize)
 {
+	// 当たり判定の変数を宣言
+	SCollision collision = {};
+
 	// 先頭のブロックの情報を取得する
 	CBlock* pBlock = CBlockManager::Get()->GetTop();
+	CPlayer *pPlayer = nullptr;		// プレイヤーの情報
+	D3DXVECTOR3 vtxMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);	// 最大値
+	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-collSize.x, -collSize.y, -collSize.z);		// 最小値
 	bool bHit = false;			// ジャンプ状況
+	float fAngle = 0.0f;		// 吹き飛ぶ向き
 
 	while (pBlock != nullptr)
 	{ // ブロックが NULL の場合
@@ -615,6 +622,40 @@ bool collision::BlockHit(CPlayer* player, const D3DXVECTOR3& pos, const D3DXVECT
 
 		if (bHit == true)
 		{ // 攻撃が当たったら
+
+			for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
+			{
+				// プレイヤーの情報を取得する
+				pPlayer = CGame::GetPlayer(nCnt);
+
+				if (pPlayer != nullptr &&
+					pPlayer->GetType() == CPlayer::TYPE_RAT)
+				{ // ネズミの時
+
+					// 六面体の当たり判定
+					collision = HexahedronClushNotMove
+					(
+						pPlayer->GetPos(),
+						pBlock->GetPos(),
+						vtxMin,
+						pBlock->GetVtxMin(),
+						vtxMax,
+						pBlock->GetVtxMax()
+					);
+
+					if (collision.bTop == true)
+					{ // 上に当たってるとき
+
+						D3DXVECTOR3 DestPos = pos - pPlayer->GetPos();		// 目的の位置
+
+						// 目的の向きを求める
+						fAngle = atan2f(DestPos.x, DestPos.z);
+
+						// 吹き飛び処理
+						pPlayer->Smash(fAngle);
+					}
+				}
+			}
 
 			// 揺れる状態にする
 			pBlock->SetState(pBlock->STATE_SWAY);

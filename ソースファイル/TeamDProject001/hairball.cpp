@@ -336,13 +336,35 @@ void CHairBall::Block(void)
 	// ローカル変数宣言
 	CBlock* pBlock = CBlockManager::Get()->GetTop();		// ブロックの先頭のオブジェクトを取得する
 	D3DXVECTOR3 pos = GetPos();				// 位置を取得する
+	collision::SCollision coll = { false,false, false, false, false, false };		// 当たり判定の変数
 
 	while (pBlock != nullptr)
 	{ // 地面の情報がある限り回す
 
-		if (collision::HexahedronCollision(&pos, pBlock->GetPos(), GetPosOld(), pBlock->GetPosOld(), GetFileData().vtxMin, pBlock->GetFileData().vtxMin, GetFileData().vtxMax, pBlock->GetFileData().vtxMax) == true)
-		{ // 当たり判定が true の場合
+		// 当たり判定の変数を加える
+		coll = collision::HexahedronClush(&pos, pBlock->GetPos(), GetPosOld(), pBlock->GetPosOld(), GetFileData().vtxMin, pBlock->GetFileData().vtxMin, GetFileData().vtxMax, pBlock->GetFileData().vtxMax);
 
+		if (coll.bFar == true ||
+			coll.bNear == true)
+		{ // 奥手前に当たった場合
+
+			// 移動量を逆にする
+			m_move.z *= -1.0f;
+		}
+
+		if(coll.bLeft == true ||
+			coll.bRight == true)
+		{ // 左右に当たった場合
+
+			// 移動量を逆にする
+			m_move.x *= -1.0f;
+		}
+
+		if (coll.bTop == true)
+		{ // 上に当たった場合
+
+			// 移動量を逆にする
+			m_move.y *= -1.0f;
 		}
 
 		// 次のポインタを取得する
@@ -384,7 +406,7 @@ void CHairBall::MagicWall(void)
 	}
 
 	if (pos.z + Min.z <= -MAP_SIZE.z)
-	{ // 位置が右から出そうな場合
+	{ // 位置が手前から出そうな場合
 
 		// 位置を設定する
 		pos.z = -MAP_SIZE.z - Min.z;
@@ -394,7 +416,7 @@ void CHairBall::MagicWall(void)
 	}
 
 	if (pos.z + Max.z >= MAP_SIZE.z)
-	{ // 位置が右から出そうな場合
+	{ // 位置が奥から出そうな場合
 
 		// 位置を設定する
 		pos.z = MAP_SIZE.z - Max.z;
