@@ -36,7 +36,8 @@ CBlock::CBlock() : CModel(CObject::TYPE_BLOCK, CObject::PRIORITY_BLOCK)
 	m_vtxMin = NONE_D3DXVECTOR3;	// 最小値
 	m_pPrev = nullptr;				// 前のへのポインタ
 	m_pNext = nullptr;				// 次のへのポインタ
-	m_bOnRat = false;				// ネズミが乗っているか
+	//m_bOnRat = false;				// ネズミが乗っているか
+	//m_nPlayerIdx = -1;				// プレイヤー番号
 	m_nAngleSwitch = 0;				// 角度の+-切り替え
 	m_nSwayCount = 0;				// 揺らす秒数
 
@@ -111,7 +112,8 @@ HRESULT CBlock::Init(void)
 	m_state = STATE_NONE;			// 状態
 	m_vtxMax = NONE_D3DXVECTOR3;	// 最大値
 	m_vtxMin = NONE_D3DXVECTOR3;	// 最小値
-	m_bOnRat = false;				// ネズミが乗っているか
+	//m_bOnRat = false;				// ネズミが乗っているか
+	//m_nPlayerIdx = -1;				// プレイヤー番号
 	m_nAngleSwitch = 1;				// 角度の+-切り替え
 	m_nSwayCount = 0;				// 揺らす秒数
 
@@ -368,20 +370,21 @@ D3DXVECTOR3 CBlock::GetVtxMin(void) const
 //=====================================
 // ネズミの乗っている状況設定
 //=====================================
-void CBlock::SetOnRat(const bool bOnRat)
-{
-	// ネズミの乗っている状況設定
-	m_bOnRat = bOnRat;
-}
+//void CBlock::SetOnRat(const bool bOnRat, const int nPlayerIdx)
+//{
+//	// ネズミの乗っている状況設定
+//	m_bOnRat = bOnRat;
+//	m_nPlayerIdx = nPlayerIdx;
+//}
 
 //=====================================
 // ネズミの乗っている状況取得
 //=====================================
-bool CBlock::GetOnRat(void) const
-{
-	// ネズミの乗っている状況を返す
-	return m_bOnRat;
-}
+//bool CBlock::GetOnRat(void) const
+//{
+//	// ネズミの乗っている状況を返す
+//	return m_bOnRat;
+//}
 
 //=====================================
 // 状態設定
