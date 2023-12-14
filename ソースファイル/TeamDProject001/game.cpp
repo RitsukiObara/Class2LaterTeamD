@@ -153,6 +153,7 @@ HRESULT CGame::Init(void)
 	}
 
 	// マップの情報をロードする
+	CManager::Get()->GetFile()->FalseSuccess();
 	CManager::Get()->GetFile()->Load(CFile::TYPE_MAP_OBSTACLE1);
 	CManager::Get()->GetFile()->Load(CFile::TYPE_MAP_BLOCK1);
 
