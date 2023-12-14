@@ -366,7 +366,7 @@ void CCat::AttackStateManager(void)
 				}
 
 				if (pPlayer != nullptr &&
-					pPlayer->GetType() == CPlayer::TYPE_RAT)
+					pPlayer->GetType() == CPlayer::TYPE_RAT && pPlayer->GetState() == CPlayer::STUNSTATE_SMASH)
 				{ // プレイヤーがネズミの場合
 
 					if (useful::RectangleCollisionXZ(D3DXVECTOR3(pos.x + sinf(rot.y) * -ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * -ATTACK_DISTANCE),
