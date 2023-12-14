@@ -758,7 +758,6 @@ void CCharacter::Uninit(void)
 //========================
 void CCharacter::Update(void)
 {
-	m_posOld = m_pos;									// ‘O‰ñ‚ÌˆÊ’u
 
 }
 

@@ -646,7 +646,7 @@ bool collision::BlockHit(CPlayer* player, const D3DXVECTOR3& pos, const D3DXVECT
 					if (collision.bTop == true)
 					{ // 上に当たってるとき
 
-						D3DXVECTOR3 DestPos = pos - pPlayer->GetPos();		// 目的の位置
+						D3DXVECTOR3 DestPos = pPlayer->GetPos() - pos;		// 目的の位置
 
 						// 目的の向きを求める
 						fAngle = atan2f(DestPos.x, DestPos.z);

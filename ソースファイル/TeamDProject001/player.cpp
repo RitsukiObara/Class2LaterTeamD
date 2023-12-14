@@ -382,19 +382,21 @@ void CPlayer::Smash(const float fAngle)
 		m_StunState == STUNSTATE_NONE)
 	{ // ダメージ受ける状態だった場合
 
-		//// 移動量を算出する
-		//move.x = sinf(fAngle) * SMASH_MOVE.x;
-		//move.y = SMASH_MOVE.y;
-		//move.z = cosf(fAngle) * SMASH_MOVE.z;
+		// 移動量を算出する
+		move.x = sinf(fAngle) * SMASH_MOVE.x;
+		move.y = SMASH_MOVE.y;
+		move.z = cosf(fAngle) * SMASH_MOVE.z;
 
-		//// 位置加算
-		//pos += move;
+		m_fRotDest = fAngle;
 
-		//// 移動量設定
-		//SetMove(move);
+		// 位置加算
+		pos += move;
 
-		//// 位置設定
-		//SetPos(pos);
+		// 移動量設定
+		SetMove(move);
+
+		// 位置設定
+		SetPos(pos);
 
 		// 吹き飛び状態にする
 		m_StunState = STUNSTATE_SMASH;
@@ -516,7 +518,7 @@ CPlayer* CPlayer::Create(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 void CPlayer::MoveControl(void)
 {
 	// ローカル変数宣言
-	D3DXVECTOR3 rot = GetRot();
+	//D3DXVECTOR3 rot = GetRot();
 
 	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_D) == true ||
 		CManager::Get()->GetInputGamePad()->GetGameStickLXPress(m_nPlayerIdx) > 0)
@@ -527,7 +529,7 @@ void CPlayer::MoveControl(void)
 		{ // 上を押した場合
 
 			// 向きを設定する
-			rot.y = m_CameraRot.y + D3DX_PI * -0.75f;
+			//rot.y = m_CameraRot.y + D3DX_PI * -0.75f;
 			m_fRotDest = m_CameraRot.y + D3DX_PI * -0.75f;
 		}
 		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true ||
@@ -535,14 +537,14 @@ void CPlayer::MoveControl(void)
 		{ // 下を押した場合
 
 			// 向きを設定する
-			rot.y = m_CameraRot.y + D3DX_PI * -0.25f;
+			//rot.y = m_CameraRot.y + D3DX_PI * -0.25f;
 			m_fRotDest = m_CameraRot.y + D3DX_PI * -0.25f;
 		}
 		else
 		{ // 上記以外
 
 			// 向きを設定する
-			rot.y = m_CameraRot.y + D3DX_PI * -0.5f;
+			//rot.y = m_CameraRot.y + D3DX_PI * -0.5f;
 			m_fRotDest = m_CameraRot.y + D3DX_PI * -0.5f;
 
 		}
@@ -557,7 +559,7 @@ void CPlayer::MoveControl(void)
 		{ // 上を押した場合
 
 			// 向きを設定する
-			rot.y = m_CameraRot.y + D3DX_PI * 0.75f;
+			//rot.y = m_CameraRot.y + D3DX_PI * 0.75f;
 			m_fRotDest = m_CameraRot.y + D3DX_PI * 0.75f;
 
 		}
@@ -566,14 +568,14 @@ void CPlayer::MoveControl(void)
 		{ // 下を押した場合
 
 			// 向きを設定する
-			rot.y = m_CameraRot.y + D3DX_PI * 0.25f;
+			//rot.y = m_CameraRot.y + D3DX_PI * 0.25f;
 			m_fRotDest = m_CameraRot.y + D3DX_PI * 0.25f;
 		}
 		else
 		{ // 上記以外
 
 			// 向きを設定する
-			rot.y = m_CameraRot.y + D3DX_PI * 0.5f;
+			//rot.y = m_CameraRot.y + D3DX_PI * 0.5f;
 			m_fRotDest = m_CameraRot.y + D3DX_PI * 0.5f;
 		}
 		m_bMove = true;
@@ -583,7 +585,7 @@ void CPlayer::MoveControl(void)
 	{ // 上を押した場合
 
 		// 向きを設定する
-		rot.y = m_CameraRot.y + D3DX_PI * 1.0f;
+		//rot.y = m_CameraRot.y + D3DX_PI * 1.0f;
 		m_fRotDest = m_CameraRot.y + D3DX_PI * 1.0f;
 		m_bMove = true;
 	}
@@ -592,7 +594,7 @@ void CPlayer::MoveControl(void)
 	{ // 下を押した場合
 
 		// 向きを設定する
-		rot.y = m_CameraRot.y + D3DX_PI * 0.0f;
+		//rot.y = m_CameraRot.y + D3DX_PI * 0.0f;
 		m_fRotDest = m_CameraRot.y + D3DX_PI * 0.0f;
 		m_bMove = true;
 	}
