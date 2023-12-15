@@ -44,11 +44,11 @@ namespace
 	static const float RAT_CAMERA_HEIGHT = 100.0f;		// 猫のカメラの高さ
 	static const float RAT_CAMERA_DIS = 60.0f;			// ネズミのカメラの視点と注視点の高さの差分(角度)
 	static const float DIFF_ROT = 0.2f;					// 角度に足す差分の割合
-	static const float CAMERA_ROT_MOVE = 0.025f;		// カメラの向きの移動量
+	static const float CAMERA_ROT_MOVE = 0.032f;		// カメラの向きの移動量
 	static const float ADD_ACTION_RADIUS = 40.0f;		// サーチ時の半径の追加数
 	static const int NONE_PLAYERIDX = -1;				// プレイヤーの番号の初期値
 	static const int CAT_SMASH_STUN = 120;				// ネコのスタン時間
-	static const int RAT_SMASH_STUN = 30;				// ネズミのスタン時間
+	static const int RAT_SMASH_STUN = 90;				// ネズミのスタン時間
 	static const int STUN_WAIT = 120;					// オブジェクト無効の待機時間
 	static const int DEATH_WAIT = 120;					// 死亡時の待機時間
 	static const int SMASH_WAIT = 40;					// 吹き飛び状態のカウント数
@@ -299,7 +299,7 @@ void CPlayer::Update(void)
 
 	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_1))
 	{
-		SetLog(m_nPlayerIdx ,CLog::TYPE::TYPE_DEATH);
+		SetLog(m_nPlayerIdx, CLog::TYPE::TYPE_DEATH);
 	}
 
 	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_2))
@@ -519,92 +519,95 @@ CPlayer* CPlayer::Create(const D3DXVECTOR3& pos, const int nID, const TYPE type)
 //=======================================
 void CPlayer::MoveControl(void)
 {
-	// ローカル変数宣言
-	//D3DXVECTOR3 rot = GetRot();
+	if (CManager::Get()->GetMode() == CScene::MODE_GAME || CManager::Get()->GetMode() == CScene::MODE_TUTORIAL)
+	{
+		// ローカル変数宣言
+		//D3DXVECTOR3 rot = GetRot();
 
-	if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_D) == true ||
-		CManager::Get()->GetInputGamePad()->GetGameStickLXPress(m_nPlayerIdx) > 0)
-	{ // 右を押した場合
+		if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_D) == true ||
+			CManager::Get()->GetInputGamePad()->GetGameStickLXPress(m_nPlayerIdx) > 0)
+		{ // 右を押した場合
 
-		if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_W) == true ||
+			if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_W) == true ||
+				CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nPlayerIdx) > 0)
+			{ // 上を押した場合
+
+				// 向きを設定する
+				//rot.y = m_CameraRot.y + D3DX_PI * -0.75f;
+				m_fRotDest = m_CameraRot.y + D3DX_PI * -0.75f;
+			}
+			else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true ||
+				CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nPlayerIdx) < 0)
+			{ // 下を押した場合
+
+				// 向きを設定する
+				//rot.y = m_CameraRot.y + D3DX_PI * -0.25f;
+				m_fRotDest = m_CameraRot.y + D3DX_PI * -0.25f;
+			}
+			else
+			{ // 上記以外
+
+				// 向きを設定する
+				//rot.y = m_CameraRot.y + D3DX_PI * -0.5f;
+				m_fRotDest = m_CameraRot.y + D3DX_PI * -0.5f;
+
+			}
+			m_bMove = true;
+		}
+		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_A) == true ||
+			CManager::Get()->GetInputGamePad()->GetGameStickLXPress(m_nPlayerIdx) < 0)
+		{ // 左を押した場合
+
+			if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_W) == true ||
+				CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nPlayerIdx) > 0)
+			{ // 上を押した場合
+
+				// 向きを設定する
+				//rot.y = m_CameraRot.y + D3DX_PI * 0.75f;
+				m_fRotDest = m_CameraRot.y + D3DX_PI * 0.75f;
+
+			}
+			else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true ||
+				CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nPlayerIdx) < 0)
+			{ // 下を押した場合
+
+				// 向きを設定する
+				//rot.y = m_CameraRot.y + D3DX_PI * 0.25f;
+				m_fRotDest = m_CameraRot.y + D3DX_PI * 0.25f;
+			}
+			else
+			{ // 上記以外
+
+				// 向きを設定する
+				//rot.y = m_CameraRot.y + D3DX_PI * 0.5f;
+				m_fRotDest = m_CameraRot.y + D3DX_PI * 0.5f;
+			}
+			m_bMove = true;
+		}
+		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_W) == true ||
 			CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nPlayerIdx) > 0)
 		{ // 上を押した場合
 
 			// 向きを設定する
-			//rot.y = m_CameraRot.y + D3DX_PI * -0.75f;
-			m_fRotDest = m_CameraRot.y + D3DX_PI * -0.75f;
+			//rot.y = m_CameraRot.y + D3DX_PI * 1.0f;
+			m_fRotDest = m_CameraRot.y + D3DX_PI * 1.0f;
+			m_bMove = true;
 		}
 		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true ||
 			CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nPlayerIdx) < 0)
 		{ // 下を押した場合
 
 			// 向きを設定する
-			//rot.y = m_CameraRot.y + D3DX_PI * -0.25f;
-			m_fRotDest = m_CameraRot.y + D3DX_PI * -0.25f;
+			//rot.y = m_CameraRot.y + D3DX_PI * 0.0f;
+			m_fRotDest = m_CameraRot.y + D3DX_PI * 0.0f;
+			m_bMove = true;
 		}
 		else
 		{ // 上記以外
-
-			// 向きを設定する
-			//rot.y = m_CameraRot.y + D3DX_PI * -0.5f;
-			m_fRotDest = m_CameraRot.y + D3DX_PI * -0.5f;
-
+			m_bMove = false;
+			// 速度を設定する
+			m_fSpeed = 0.0f;
 		}
-		m_bMove = true;
-	}
-	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_A) == true ||
-		CManager::Get()->GetInputGamePad()->GetGameStickLXPress(m_nPlayerIdx) < 0)
-	{ // 左を押した場合
-
-		if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_W) == true ||
-			CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nPlayerIdx) > 0)
-		{ // 上を押した場合
-
-			// 向きを設定する
-			//rot.y = m_CameraRot.y + D3DX_PI * 0.75f;
-			m_fRotDest = m_CameraRot.y + D3DX_PI * 0.75f;
-
-		}
-		else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true ||
-			CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nPlayerIdx) < 0)
-		{ // 下を押した場合
-
-			// 向きを設定する
-			//rot.y = m_CameraRot.y + D3DX_PI * 0.25f;
-			m_fRotDest = m_CameraRot.y + D3DX_PI * 0.25f;
-		}
-		else
-		{ // 上記以外
-
-			// 向きを設定する
-			//rot.y = m_CameraRot.y + D3DX_PI * 0.5f;
-			m_fRotDest = m_CameraRot.y + D3DX_PI * 0.5f;
-		}
-		m_bMove = true;
-	}
-	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_W) == true ||
-		CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nPlayerIdx) > 0)
-	{ // 上を押した場合
-
-		// 向きを設定する
-		//rot.y = m_CameraRot.y + D3DX_PI * 1.0f;
-		m_fRotDest = m_CameraRot.y + D3DX_PI * 1.0f;
-		m_bMove = true;
-	}
-	else if (CManager::Get()->GetInputKeyboard()->GetPress(DIK_S) == true ||
-		CManager::Get()->GetInputGamePad()->GetGameStickLYPress(m_nPlayerIdx) < 0)
-	{ // 下を押した場合
-
-		// 向きを設定する
-		//rot.y = m_CameraRot.y + D3DX_PI * 0.0f;
-		m_fRotDest = m_CameraRot.y + D3DX_PI * 0.0f;
-		m_bMove = true;
-	}
-	else
-	{ // 上記以外
-		m_bMove = false;
-		// 速度を設定する
-		m_fSpeed = 0.0f;
 	}
 }
 
@@ -613,22 +616,25 @@ void CPlayer::MoveControl(void)
 //=======================================
 void CPlayer::Move(void)
 {
-	// 位置を取得する
-	D3DXVECTOR3 pos = GetPos();
-	D3DXVECTOR3 move = GetMove();
+	if (CManager::Get()->GetMode() == CScene::MODE_GAME || CManager::Get()->GetMode() == CScene::MODE_TUTORIAL)
+	{
+		// 位置を取得する
+		D3DXVECTOR3 pos = GetPos();
+		D3DXVECTOR3 move = GetMove();
 
-	// 移動量を設定する
-	move.x = -sinf(m_fRotDest) * m_fSpeed;
-	move.z = -cosf(m_fRotDest) * m_fSpeed;
+		// 移動量を設定する
+		move.x = -sinf(m_fRotDest) * m_fSpeed;
+		move.z = -cosf(m_fRotDest) * m_fSpeed;
 
-	// 移動量を加算する
-	pos += move;
+		// 移動量を加算する
+		pos += move;
 
-	// 移動量を適用する
-	SetMove(move);
+		// 移動量を適用する
+		SetMove(move);
 
-	// 位置を適用する
-	SetPos(pos);
+		// 位置を適用する
+		SetPos(pos);
+	}
 }
 
 //=======================================
