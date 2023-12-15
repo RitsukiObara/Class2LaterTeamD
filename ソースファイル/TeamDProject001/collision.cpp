@@ -483,18 +483,141 @@ void collision::BlockRectangleCollision(const CBlock& block, CPlayer* player, co
 	D3DXVECTOR3 vtxMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);	// 最大値
 	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);		// 最小値
 
-	// 六面体の当たり判定
-	collision = HexahedronClush
-	(
-		&pos,
-		block.GetPos(),
-		posOld,
-		block.GetPosOld(),
-		vtxMin,
-		block.GetVtxMin(),
-		vtxMax,
-		block.GetVtxMax()
-	);
+	if (block.GetPos().y + block.GetVtxMax().y >= pos.y + vtxMin.y &&
+		block.GetPos().y + block.GetVtxMin().y <= pos.y + vtxMax.y &&
+		block.GetPos().z + block.GetVtxMax().z >= pos.z + vtxMin.z &&
+		block.GetPos().z + block.GetVtxMin().z <= pos.z + vtxMax.z)
+	{ // X軸の判定に入れる場合
+
+		if (block.GetPosOld().x + block.GetVtxMax().x <= posOld.x + vtxMin.x &&
+			block.GetPos().x + block.GetVtxMax().x >= pos.x + vtxMin.x)
+		{ // 右にぶつかった場合
+
+			if (block.GetPos().y + block.GetVtxMax().y - 5.0f <= pos.y + vtxMin.y)
+			{ // 少しの段差の場合
+
+				// 位置を設定する
+				pos.y = block.GetPos().y + block.GetVtxMax().y - (vtxMin.y - COLLISION_ADD_DIFF_LENGTH);
+
+				// 上の当たり判定を true にする
+				collision.bTop = true;
+			}
+			else
+			{ // 上記以外
+
+				// 位置を設定する
+				pos.x = block.GetPos().x + block.GetVtxMax().x - (vtxMin.x - COLLISION_ADD_DIFF_LENGTH);
+
+				// 右の当たり判定を true にする
+				collision.bRight = true;
+			}
+		}
+		else if (block.GetPosOld().x + block.GetVtxMin().x >= posOld.x + vtxMax.x &&
+			block.GetPos().x + block.GetVtxMin().x <= pos.x + vtxMax.x)
+		{ // 左にぶつかった場合
+
+			if (block.GetPos().y + block.GetVtxMax().y - 5.0f <= pos.y + vtxMin.y)
+			{ // 少しの段差の場合
+
+				// 位置を設定する
+				pos.y = block.GetPos().y + block.GetVtxMax().y - (vtxMin.y - COLLISION_ADD_DIFF_LENGTH);
+
+				// 上の当たり判定を true にする
+				collision.bTop = true;
+			}
+			else
+			{ // 上記以外
+
+				// 位置を設定する
+				pos.x = block.GetPos().x + block.GetVtxMin().x - (vtxMax.x + COLLISION_ADD_DIFF_LENGTH);
+
+				// 左の当たり判定を true にする
+				collision.bLeft = true;
+			}
+		}
+	}
+
+	if (block.GetPos().x + block.GetVtxMax().x >= pos.x + vtxMin.x &&
+		block.GetPos().x + block.GetVtxMin().x <= pos.x + vtxMax.x &&
+		block.GetPos().y + block.GetVtxMax().y >= pos.y + vtxMin.y &&
+		block.GetPos().y + block.GetVtxMin().y <= pos.y + vtxMax.y)
+	{ // Z軸の判定に入れる場合
+
+		if (block.GetPosOld().z + block.GetVtxMax().z <= posOld.z + vtxMin.z &&
+			block.GetPos().z + block.GetVtxMax().z >= pos.z + vtxMin.z)
+		{ // 奥にぶつかった場合
+
+			if (block.GetPos().y + block.GetVtxMax().y - 5.0f <= pos.y + vtxMin.y)
+			{ // 少しの段差の場合
+
+				// 位置を設定する
+				pos.y = block.GetPos().y + block.GetVtxMax().y - (vtxMin.y - COLLISION_ADD_DIFF_LENGTH);
+
+				// 上の当たり判定を true にする
+				collision.bTop = true;
+			}
+			else
+			{ // 上記以外
+
+				// 位置を設定する
+				pos.z = block.GetPos().z + block.GetVtxMax().z - (vtxMin.z - COLLISION_ADD_DIFF_LENGTH);
+
+				// 奥の当たり判定を true にする
+				collision.bFar = true;
+			}
+		}
+		else if (block.GetPosOld().z + block.GetVtxMin().z >= posOld.z + vtxMax.z &&
+			block.GetPos().z + block.GetVtxMin().z <= pos.z + vtxMax.z)
+		{ // 手前にぶつかった場合
+
+			if (block.GetPos().y + block.GetVtxMax().y - 5.0f <= pos.y + vtxMin.y)
+			{ // 少しの段差の場合
+
+				// 位置を設定する
+				pos.y = block.GetPos().y + block.GetVtxMax().y - (vtxMin.y - COLLISION_ADD_DIFF_LENGTH);
+
+				// 上の当たり判定を true にする
+				collision.bTop = true;
+			}
+			else
+			{ // 上記以外
+
+				// 位置を設定する
+				pos.z = block.GetPos().z + block.GetVtxMin().z - (vtxMax.z + COLLISION_ADD_DIFF_LENGTH);
+
+				// 手前の当たり判定を true にする
+				collision.bNear = true;
+			}
+		}
+	}
+
+	if (block.GetPos().x + block.GetVtxMax().x >= pos.x + vtxMin.x &&
+		block.GetPos().x + block.GetVtxMin().x <= pos.x + vtxMax.x &&
+		block.GetPos().z + block.GetVtxMax().z >= pos.z + vtxMin.z &&
+		block.GetPos().z + block.GetVtxMin().z <= pos.z + vtxMax.z)
+	{ // Y軸の判定に入れる場合
+
+		if (block.GetPosOld().y + block.GetVtxMax().y <= posOld.y + vtxMin.y &&
+			block.GetPos().y + block.GetVtxMax().y >= pos.y + vtxMin.y)
+		{ // 上にぶつかった場合
+
+			// 位置を設定する
+			pos.y = block.GetPos().y + block.GetVtxMax().y - (vtxMin.y - COLLISION_ADD_DIFF_LENGTH);
+
+			// 上の当たり判定を true にする
+			collision.bTop = true;
+		}
+		else if (block.GetPosOld().y + block.GetVtxMin().y >= posOld.y + vtxMax.y &&
+			block.GetPos().y + block.GetVtxMin().y <= pos.y + vtxMax.y)
+		{ // 下にぶつかった場合
+
+			// 位置を設定する
+			pos.y = block.GetPos().y + block.GetVtxMin().y - (vtxMax.y + COLLISION_ADD_DIFF_LENGTH);
+
+			// 下の当たり判定を true にする
+			collision.bBottom = true;
+		}
+	}
 
 	if (collision.bTop == true)
 	{ // 上に乗った場合
