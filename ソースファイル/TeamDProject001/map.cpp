@@ -13,7 +13,11 @@ CWall* CMap::m_Wall[WALL_NUM] = {};
 CModel* CMap::m_Model[2] = {};
 
 //コンストラクタ
+<<<<<<< HEAD
 CMap::CMap() : CObject(CObject::TYPE_MAP, CObject::PRIORITY_PAUSE)
+=======
+CMap::CMap() : CObject(CObject::TYPE_MAP, CObject::PRIORITY_BG)
+>>>>>>> a6d35c5daae5407901398af745c3cdbb2ce6ef47
 {
 
 }
