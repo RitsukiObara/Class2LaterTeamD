@@ -25,6 +25,7 @@ public:			// 誰でもアクセス出来る
 		TYPE_ENEMYDEATH,	// 敵の死亡
 		TYPE_SLIME,			// スライム床
 		TYPE_RESURRECTION,	// 復活
+		TYPE_HONEY,			// ハチミツ床
 		TYPE_MAX
 	};
 
@@ -49,6 +50,7 @@ private:		// 自分だけアクセスできる
 	void InitEnemyDeath(const D3DXVECTOR3& pos);	// 敵の死亡の生成
 	void InitSlime(const D3DXVECTOR3& pos);			// スライム床のパーティクル生成
 	void InitResurrection(const D3DXVECTOR3& pos);	// 復活のパーティクル生成
+	void InitHoney(const D3DXVECTOR3& pos);			// ハチミツ床のパーティクル生成
 
 };
 

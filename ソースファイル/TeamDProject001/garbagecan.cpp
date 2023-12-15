@@ -367,7 +367,7 @@ bool CGarbage::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 		while (pObstacle != nullptr)
 		{ // áŠQ•¨‚ª NULL ‚Ìê‡
 
-			if (pObstacle != this &&
+			if (pObstacle->GetType() != CObstacle::TYPE::TYPE_GARBAGECAN &&
 				pObstacle->Collision(pPlayer, CAT_SIZE) == true)
 			{ // ˜Z–Ê‘Ì‚Ì“–‚½‚è”»’è‚ª true ‚Ìê‡
 

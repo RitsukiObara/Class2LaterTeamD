@@ -24,8 +24,8 @@
 #define FAN_SHIFT		(175.0f)		// 扇風機の羽根のずらす高さ
 #define WIND_RANGE		(1600.0f)		// 扇風機の風の範囲
 #define WIND_MOVE		(15)			// 風エフェクトの移動量の幅
-#define WIND_LIFE		(50)			// 風エフェクトの寿命
-#define WIND_RADIUS		(3.0f)			// 風エフェクトの半径
+#define WIND_LIFE		(44)			// 風エフェクトの寿命
+#define WIND_RADIUS		(7.0f)			// 風エフェクトの半径
 #define FAN_MOVE_OFF	(0.0f)			// スイッチOFFの羽根の移動量
 #define FAN_MOVE_ON		(0.5f)			// スイッチONの羽根の移動量
 

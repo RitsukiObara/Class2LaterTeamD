@@ -34,7 +34,7 @@
 #define CAT_WIND_MAGNI					(0.3f)			// ネコの風の倍率
 #define RAT_WIND_MAGNI					(1.1f)			// ネズミの風の倍率
 #define CAT_STUN_TIME					(90)			// ネコのスタン時間
-#define RAT_STUN_TIME					(30)			// ネズミのスタン時間
+#define RAT_STUN_TIME					(60)			// ネズミのスタン時間
 
 //===============================
 // 丸影の当たり判定処理
