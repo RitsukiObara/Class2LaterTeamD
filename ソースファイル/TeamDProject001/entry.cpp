@@ -107,8 +107,6 @@ HRESULT CEntry::Init(void)
 	// ƒGƒ“ƒgƒŠ[‰æ–Ê‚Ì‘€ìà–¾UI‚Ì¶¬
 	CEntryMessage::Create(POS_MESSAGEUI, POS_MESSAGEUI, SIZE_MESSAGEUI);
 
-	CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_BGM_ENTRY);
-
 	// ¬Œ÷‚ğ•Ô‚·
 	return S_OK;
 }
