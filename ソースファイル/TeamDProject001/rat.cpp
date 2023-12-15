@@ -600,7 +600,7 @@ void CRat::DeathArrow(void)
 				SetDeathArrow(D3DXVECTOR3(pos.x + sinf(DestRot.y + -D3DX_PI * 0.5f) * ARROW_DISTANCE,
 					pos.y - 1.0f,
 					pos.z + cosf(DestRot.y + -D3DX_PI * 0.5f) * ARROW_DISTANCE),
-					posOld, DestRot, nCnt);
+					posOld, DestRot, nCnt, GetPlayerIdx());
 
 				// âÒïúÇ≥ÇπÇƒÇÈèÛë‘Ç…Ç∑ÇÈ
 				abRez[nCnt] = true;

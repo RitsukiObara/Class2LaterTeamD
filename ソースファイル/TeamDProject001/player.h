@@ -109,7 +109,7 @@ public:			// 誰でもアクセスできる
 	CSpeechMessage* GetSpeechMessage(void);		// 伝達メッセージの取得処理
 	void DeleteSpeechMessage(void);				// 伝達メッセージの消去処理
 
-	void SetDeathArrow(const D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& rot, const int nIdx);		// 死亡矢印の設定処理
+	void SetDeathArrow(const D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& rot, const int nIdx, const int PlayerIdx);		// 死亡矢印の設定処理
 	CDeathArrow* GetDeathArrow(const int nIdx);			// 死亡矢印の取得処理
 	void DeleteDeathArrow(const int nIdx);				// 死亡矢印の消去処理
 

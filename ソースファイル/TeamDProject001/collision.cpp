@@ -33,6 +33,8 @@
 #define COLLISION_CAT_SIZE				(D3DXVECTOR3(70.0f,250.0f,70.0f))		// ネコの当たり判定のサイズ
 #define CAT_WIND_MAGNI					(0.3f)			// ネコの風の倍率
 #define RAT_WIND_MAGNI					(1.1f)			// ネズミの風の倍率
+#define CAT_STUN_TIME					(90)			// ネコのスタン時間
+#define RAT_STUN_TIME					(30)			// ネズミのスタン時間
 
 //===============================
 // 丸影の当たり判定処理
@@ -181,7 +183,14 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 			case CObstacle::TYPE_HIMO:
 
 				// ヒット処理
-				pPlayer->Stun(60);
+				if (pPlayer->GetType() == CPlayer::TYPE::TYPE_CAT)
+				{
+					pPlayer->Stun(CAT_STUN_TIME);
+				}
+				else if (pPlayer->GetType() == CPlayer::TYPE::TYPE_RAT)
+				{
+					pPlayer->Stun(RAT_STUN_TIME);
+				}
 
 				break;
 
@@ -198,22 +207,43 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 
 			case CObstacle::TYPE_MOUSETRAP:
 
-				// 気絶状態
-				pPlayer->Stun(60);
+				// ヒット処理
+				if (pPlayer->GetType() == CPlayer::TYPE::TYPE_CAT)
+				{
+					pPlayer->Stun(CAT_STUN_TIME);
+				}
+				else if (pPlayer->GetType() == CPlayer::TYPE::TYPE_RAT)
+				{
+					pPlayer->Stun(RAT_STUN_TIME);
+				}
 
 				break;
 
 			case CObstacle::TYPE_LEASH:
 
-				// 気絶処理
-				pPlayer->Stun(60);
+				// ヒット処理
+				if (pPlayer->GetType() == CPlayer::TYPE::TYPE_CAT)
+				{
+					pPlayer->Stun(CAT_STUN_TIME);
+				}
+				else if (pPlayer->GetType() == CPlayer::TYPE::TYPE_RAT)
+				{
+					pPlayer->Stun(RAT_STUN_TIME);
+				}
 
 				break;
 
 			case CObstacle::TYPE_PIN:
 
-				// 気絶処理
-				pPlayer->Stun(60);
+				// ヒット処理
+				if (pPlayer->GetType() == CPlayer::TYPE::TYPE_CAT)
+				{
+					pPlayer->Stun(CAT_STUN_TIME);
+				}
+				else if (pPlayer->GetType() == CPlayer::TYPE::TYPE_RAT)
+				{
+					pPlayer->Stun(RAT_STUN_TIME);
+				}
 
 				break;
 
@@ -247,15 +277,22 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 
 			case CObstacle::TYPE_CUP:
 
-				// 気絶状態
-				pPlayer->Stun(60);
+				// ヒット処理
+				if (pPlayer->GetType() == CPlayer::TYPE::TYPE_CAT)
+				{
+					pPlayer->Stun(CAT_STUN_TIME);
+				}
+				else if (pPlayer->GetType() == CPlayer::TYPE::TYPE_RAT)
+				{
+					pPlayer->Stun(RAT_STUN_TIME);
+				}
 
 				break;
 
 			case CObstacle::TYPE_GARBAGECAN:
 
 				// 気絶状態
-				pPlayer->Stun(90);
+				pPlayer->Stun(120);
 				pObstacle->SlideOn(pPlayer->GetPos(), pPlayer->GetMove(), pPlayer);
 				break;
 
@@ -271,8 +308,15 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 
 			case CObstacle::TYPE_BOOK:
 
-				// 気絶状態
-				pPlayer->Stun(60);
+				// ヒット処理
+				if (pPlayer->GetType() == CPlayer::TYPE::TYPE_CAT)
+				{
+					pPlayer->Stun(CAT_STUN_TIME);
+				}
+				else if (pPlayer->GetType() == CPlayer::TYPE::TYPE_RAT)
+				{
+					pPlayer->Stun(RAT_STUN_TIME);
+				}
 
 				break;
 
