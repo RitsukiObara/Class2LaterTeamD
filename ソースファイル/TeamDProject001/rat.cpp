@@ -553,6 +553,9 @@ void CRat::Hit(void)
 			// ネコが勝利した状態にする
 			CGame::SetState(CGame::STATE_CAT_WIN);
 		}
+
+		// 攻撃のヒット音を鳴らす
+		CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_CATATTACK_HIT);
 	}
 }
 
@@ -705,6 +708,9 @@ void CRat::ResurrectionCollision(void)
 
 						// 復活させてる状態にする
 						m_bResurrection = true;
+
+						// 復活パーティクル生成
+						CParticle::Create(pPlayer->GetPos(), CParticle::TYPE_RESURRECTION);
 					}
 
 					// 回復させてる状態にする
