@@ -57,7 +57,7 @@ namespace
 	static const float STUN_HEIGHT = 300.0f;		// 気絶演出が出てくる高さ
 	static const float ID_HEIGHT = 350.0f;			// IDが出てくる高さ
 	static const int STANDBY_COUNT = 12;			// スタンバイ状態のカウント数
-	static const int ATTACK_COUNT = 20;				// 攻撃状態のカウント数
+	static const int ATTACK_COUNT = 30;				// 攻撃状態のカウント数
 }
 
 //--------------------------------------------
@@ -77,6 +77,7 @@ CCat::CCat() : CPlayer(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 	m_rotDest = NONE_D3DXVECTOR3;	// 目的の向き
 	m_nShadowIdx = INIT_SHADOW;		// 影のインデックス
 	m_nItemCount = 0;				// アイテムの所持数
+	m_nAtkTime = 0;
 }
 
 //=========================================
@@ -334,6 +335,7 @@ void CCat::AttackStateManager(void)
 			m_bAttack = true;		// 攻撃した状態にする
 			m_AttackState = ATTACKSTATE_ATTACK;
 			m_nAtkStateCount = ATTACK_COUNT;
+			m_nAtkTime = 5;
 
 			for (int nCnt = 0; nCnt < 10; nCnt++)
 			{
@@ -350,7 +352,7 @@ void CCat::AttackStateManager(void)
 		// ブロックへの攻撃処理
 		AttackBlock();
 
-		if (useful::CircleCollisionXZ(m_AttackPos, m_AttackPos,10.0f,10.0f) == true)
+		if (useful::CircleCollisionXZ(m_AttackPos, m_AttackPos,10.0f,10.0f) == true && m_nAtkTime > 0)
 		{
 			for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
 			{
@@ -386,7 +388,6 @@ void CCat::AttackStateManager(void)
 		if (m_nAtkStateCount <= 0)
 		{//状態カウントが0になった時
 			m_AttackState = ATTACKSTATE_MOVE;
-			m_bAttack = false;		// 攻撃してない状態にする
 		}
 		break;
 	}
@@ -394,6 +395,10 @@ void CCat::AttackStateManager(void)
 	if (m_nAtkStateCount > 0)
 	{
 		m_nAtkStateCount--;
+	}
+	if (m_nAtkTime > 0)
+	{
+		m_nAtkTime--;
 	}
 }
 
