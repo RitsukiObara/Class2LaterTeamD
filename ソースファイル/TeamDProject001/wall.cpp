@@ -17,6 +17,12 @@ CWall::CWall() : CObject3D(CObject::TYPE_MAP, CObject::PRIORITY_BG)
 {
 
 }
+
+CWall::CWall(PRIORITY priority) : CObject3D(CObject::TYPE_MAP, priority)
+{
+
+}
+
 CWall::~CWall()
 {
 
@@ -45,11 +51,11 @@ void CWall::Draw(void)
 {
 	CObject3D::Draw();
 }
-CWall* CWall::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size)
+CWall* CWall::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, CObject::PRIORITY pritype)
 {
 	CWall *pWall;
 
-	pWall = new CWall;
+	pWall = new CWall(pritype);
 
 	pWall->SetType(TYPE_MAP);
 
