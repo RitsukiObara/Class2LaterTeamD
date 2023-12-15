@@ -129,8 +129,26 @@ void CCamera::Update(void)
 
 		break;
 
+	case CScene::MODE_ENTRY:	// エントリーモード
+
+	// 全ての値をリセットする
+		m_Dis = CAMERA_DISTANCE;					// 視点と注視点の距離
+		m_posV = D3DXVECTOR3(0.0f, 100.0f, -m_Dis);	// 視点の位置
+		m_posVDest = m_posV;						// 目的の視点
+		m_posR = D3DXVECTOR3(0.0f, 100.0f, 0.0f);	// 注視点の位置
+		m_posRDest = m_posR;						// 目的の注視点
+		m_VecU = D3DXVECTOR3(0.0f, 1.0f, 0.0f);		// 上方向ベクトル
+		m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 向き
+		m_type = TYPE_NONE;							// 種類
+		m_rotDest = m_rot.y;						// 目的の向き
+		m_DisDest = CAMERA_DISTANCE;				// 目的の距離
+		m_nSwingCount = 0;							// 揺れカメラのカウント
+		m_bControl = false;							// 操作状況
+
+		break;
+
 	case CScene::MODE_GAME:		// ゲームモード
-	case CScene::MODE_TUTORIAL:		// ゲームモード
+	case CScene::MODE_TUTORIAL:	// チュートリアルモード
 
 		if (CGame::GetPause() != nullptr &&
 			CGame::GetPause()->GetPause() == false)
@@ -138,7 +156,7 @@ void CCamera::Update(void)
 
 			// ゲーム画面のカメラ処理
 			GameCamera();
-		}
+	}
 		else
 		{ // 上記以外
 
@@ -160,13 +178,31 @@ void CCamera::Update(void)
 
 		break;
 
+	case CScene::MODE_RESULT:	// リザルトモード
+
+		// 全ての値をリセットする
+		m_Dis = CAMERA_DISTANCE;					// 視点と注視点の距離
+		m_posV = D3DXVECTOR3(0.0f, 100.0f, -m_Dis);	// 視点の位置
+		m_posVDest = m_posV;						// 目的の視点
+		m_posR = D3DXVECTOR3(0.0f, 100.0f, 0.0f);	// 注視点の位置
+		m_posRDest = m_posR;						// 目的の注視点
+		m_VecU = D3DXVECTOR3(0.0f, 1.0f, 0.0f);		// 上方向ベクトル
+		m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 向き
+		m_type = TYPE_NONE;							// 種類
+		m_rotDest = m_rot.y;						// 目的の向き
+		m_DisDest = CAMERA_DISTANCE;				// 目的の距離
+		m_nSwingCount = 0;							// 揺れカメラのカウント
+		m_bControl = false;							// 操作状況
+
+		break;
+
 	default:					// 上記以外
 
 		// 情報のリセット処理
 		Reset();
 
 		break;
-	}
+		}
 
 	// 向きの正規化処理
 	useful::RotNormalize(&m_rot.y);
