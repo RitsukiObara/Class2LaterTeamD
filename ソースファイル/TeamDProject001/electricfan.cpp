@@ -17,6 +17,7 @@
 #include "Effect.h"
 #include "collision.h"
 #include "debugproc.h"
+#include "sound.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -312,4 +313,7 @@ void CElecFan::Action(void)
 		SetCatUse(true);
 		SetRatUse(false);
 	}
+
+	// スイッチオンを鳴らす
+	CManager::Get()->GetSound()->Play(CSound::SOUND_LEBEL_SE_PUSH_SWITCH);
 }

@@ -553,6 +553,9 @@ void CRat::Hit(void)
 			// ƒlƒR‚ªŸ—˜‚µ‚½ó‘Ô‚É‚·‚é
 			CGame::SetState(CGame::STATE_CAT_WIN);
 		}
+
+		// UŒ‚‚Ìƒqƒbƒg‰¹‚ð–Â‚ç‚·
+		CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_CATATTACK_HIT);
 	}
 }
 

@@ -175,6 +175,8 @@ bool CHoney::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 		useful::RectangleCollisionYZ(GetPos(), pPlayer->GetPos(), GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true)
 	{ // ŽlŠp‚Ì“–‚½‚è”»’è‚Ì’†‚É“ü‚Á‚Ä‚¢‚½ê‡
 
+		CParticle::Create(pPlayer->GetPos(), CParticle::TYPE_HONEY);
+
 		// true ‚ð•Ô‚·
 		return true;
 	}
@@ -195,8 +197,6 @@ bool CHoney::HitCircle(CPlayer* pPlayer, const float Radius)
 		GetAction() == false &&
 		useful::CircleCollisionXZ(pPlayer->GetPos(), GetPos(), Radius, GetFileData().fRadius) == true)
 	{ // ‰~‚Ì”ÍˆÍ“à‚É‚¢‚éê‡
-
-		CParticle::Create(pPlayer->GetPos(), CParticle::TYPE_HONEY);
 
 		// true ‚ð•Ô‚·
 		return true;
