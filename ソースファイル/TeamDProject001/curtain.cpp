@@ -13,6 +13,7 @@
 #include "useful.h"
 #include "input.h"
 #include "collision.h"
+#include "game.h"
 
 #include "switch.h"
 
@@ -21,17 +22,21 @@
 //-------------------------------------------
 namespace
 {
-	static const D3DXVECTOR3 SWITCH_POS[MAX_SWITCH] =		// スイッチの位置
+	static const D3DXVECTOR3 SWITCH_POS[MAP_TYPE][MAX_SWITCH] =		// スイッチの位置
 	{
-		D3DXVECTOR3(-500.0f,100.0f,0.0f),
-		D3DXVECTOR3(0.0f,100.0f,0.0f),
-		D3DXVECTOR3(500.0f,100.0f,0.0f),
+		{ // 1マップ目
+			NONE_D3DXVECTOR3,
+			NONE_D3DXVECTOR3,
+			NONE_D3DXVECTOR3
+		},
 	};
-	static const D3DXVECTOR3 SWITCH_ROT[MAX_SWITCH] =		// スイッチの向き
+	static const D3DXVECTOR3 SWITCH_ROT[MAP_TYPE][MAX_SWITCH] =		// スイッチの向き
 	{
-		NONE_D3DXVECTOR3,
-		NONE_D3DXVECTOR3,
-		NONE_D3DXVECTOR3,
+		{ // 1マップ目
+			NONE_D3DXVECTOR3,
+			NONE_D3DXVECTOR3,
+			NONE_D3DXVECTOR3
+		},
 	};
 	static const float CLOSE_SCALE = 0.03f;					// 閉じた状態の拡大率
 	static const float SCALE_CORRECT = 0.01f;				// 拡大率の補正率
@@ -180,14 +185,21 @@ void CCurtain::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYP
 	// 拡大率を初期化する
 	SetScale(D3DXVECTOR3(1.0f, 1.0f, CLOSE_SCALE));
 
-	// 全ての値を設定する
-	for (int nCnt = 0; nCnt < MAX_SWITCH; nCnt++)
-	{
-		if (m_apSwitch[nCnt] == nullptr)
-		{ // モデルが NULL じゃない場合
+	if (CManager::Get()->GetMode() == CScene::MODE_GAME)
+	{ // ゲームモードの場合
 
-			// スイッチの生成処理
-			m_apSwitch[nCnt] = CSwitch::Create(SWITCH_POS[nCnt], SWITCH_ROT[nCnt]);
+		// マップの番号を取得する
+		int nMapNum = CGame::GetMapNumber();
+
+		// 全ての値を設定する
+		for (int nCnt = 0; nCnt < MAX_SWITCH; nCnt++)
+		{
+			if (m_apSwitch[nCnt] == nullptr)
+			{ // モデルが NULL じゃない場合
+
+				// スイッチの生成処理
+				m_apSwitch[nCnt] = CSwitch::Create(SWITCH_POS[nMapNum][nCnt], SWITCH_ROT[nMapNum][nCnt]);
+			}
 		}
 	}
 	m_state = STATE_CLOSE;			// 状態
