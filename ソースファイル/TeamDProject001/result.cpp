@@ -24,6 +24,7 @@
 #include "player.h"
 #include "confetti.h"
 #include "sound.h"
+#include "entry_BG.h"
 
 //--------------------------------------------
 // マクロ定義
@@ -67,8 +68,8 @@ HRESULT CResult::Init(void)
 	// スカイボックスの生成処理
 	CSkyBox::Create();
 
-	// テキスト読み込み処理
-	CMesh::TxtSet();
+	// 背景の生成処理
+	CEntryBG::Create();
 
 	// テキスト読み込み処理
 	CElevation::TxtSet();
