@@ -15,7 +15,7 @@
 #include "renderer.h"
 #include "honey.h"
 #include "useful.h"
-
+#include "Particle.h"
 //-------------------------------------------
 // ƒ}ƒNƒ’è‹`
 //-------------------------------------------
@@ -195,6 +195,8 @@ bool CHoney::HitCircle(CPlayer* pPlayer, const float Radius)
 		GetAction() == false &&
 		useful::CircleCollisionXZ(pPlayer->GetPos(), GetPos(), Radius, GetFileData().fRadius) == true)
 	{ // ‰~‚Ì”ÍˆÍ“à‚É‚¢‚éê‡
+
+		CParticle::Create(pPlayer->GetPos(), CParticle::TYPE_HONEY);
 
 		// true ‚ð•Ô‚·
 		return true;
