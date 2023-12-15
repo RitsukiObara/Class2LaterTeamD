@@ -705,6 +705,9 @@ void CRat::ResurrectionCollision(void)
 
 						// 復活させてる状態にする
 						m_bResurrection = true;
+
+						// 復活パーティクル生成
+						CParticle::Create(pPlayer->GetPos(), CParticle::TYPE_RESURRECTION);
 					}
 
 					// 回復させてる状態にする
