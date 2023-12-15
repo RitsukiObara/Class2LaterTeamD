@@ -24,6 +24,7 @@ public:			// 誰でもアクセスできる
 	{
 		STATE_STAND = 0,	// 通常状態
 		STATE_COLLAPSE,		// 倒れ状態
+		STATE_LEAVE,		// 退場状態
 		STATE_MAX			// この列挙型の総数
 	};
 
@@ -46,7 +47,7 @@ public:			// 誰でもアクセスできる
 private:		// 自分だけアクセスできる
 
 	// メンバ関数
-	void Block(void);				// ブロックとの当たり判定
+	bool Block(void);				// ブロックとの当たり判定
 	void Cycle(void);				// 回転処理
 	void Gravity(void);				// 重力処理
 	void Elevation(void);			// 起伏地面の当たり判定

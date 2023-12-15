@@ -15,7 +15,10 @@
 
 #include "objectElevation.h"
 #include "elevation_manager.h"
+#include "block.h"
+#include "block_manager.h"
 #include "map.h"
+#include "collision.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -87,14 +90,14 @@ void CPetbottle::Update(void)
 {
 	switch (m_state)
 	{
-	case CPetbottle::STATE_STAND:
+	case CPetbottle::STATE_STAND:		// 直立状態
 
 		// 向きを設定する
 		SetRot(STAND_ROT);
 
 		break;
 
-	case CPetbottle::STATE_COLLAPSE:
+	case CPetbottle::STATE_COLLAPSE:	// 倒れ状態
 
 		// 回転処理
 		Cycle();
@@ -102,15 +105,22 @@ void CPetbottle::Update(void)
 		// 重力処理
 		Gravity();
 
-		if (MagicWall() == true)
-		{ // 部屋の端に当たった場合
+		if (Block() == true ||
+			MagicWall() == true)
+		{ // ブロックか部屋の端に当たった場合
 
-			// 終了処理
-			Uninit();
+			// 退場状態にする
+			m_state = STATE_LEAVE;
 
 			// この先の処理を行わない
 			return;
 		}
+
+		break;
+
+	case STATE_LEAVE:					// 退場状態
+
+
 
 		break;
 
@@ -288,9 +298,38 @@ void CPetbottle::Action(void)
 //=====================================
 // ブロックとの当たり判定
 //=====================================
-void CPetbottle::Block(void)
+bool CPetbottle::Block(void)
 {
+	D3DXVECTOR3 pos = GetPos();			// 位置を取得する
+	CBlock* pBlock = CBlockManager::Get()->GetTop();	// ブロックの先頭を取得する
 
+	while (pBlock != nullptr)
+	{ // ブロックが NULL じゃない限り回る
+
+		// 六面体の当たり判定
+		if (collision::HexahedronCollision
+		(
+			&pos,
+			pBlock->GetPos(),
+			GetPosOld(),
+			pBlock->GetPosOld(),
+			m_vtxMin,
+			pBlock->GetVtxMin(),
+			m_vtxMax,
+			pBlock->GetVtxMax()
+		) == true)
+		{ // 当たった場合
+
+			// true を返す
+			return true;
+		}
+
+		// 次のブロックを取得する
+		pBlock = pBlock->GetNext();
+	}
+
+	// false を返す
+	return false;
 }
 
 //=====================================
