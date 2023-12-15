@@ -60,6 +60,5 @@ private:		// 自分だけアクセスできる
 	D3DXVECTOR3 m_vtxMax;		// 最大値
 	D3DXVECTOR3 m_vtxMin;		// 最小値
 	STATE m_state;				// 状態
-	float m_fAlpha;				// 透明度
 };
 #endif

@@ -15,7 +15,7 @@
 #include "renderer.h"
 #include "honey.h"
 #include "useful.h"
-#include "Particle.h"
+
 //-------------------------------------------
 // マクロ定義
 //-------------------------------------------
@@ -174,8 +174,6 @@ bool CHoney::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 		useful::RectangleCollisionXZ(GetPos(), pPlayer->GetPos(), GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true &&
 		useful::RectangleCollisionYZ(GetPos(), pPlayer->GetPos(), GetFileData().vtxMax, vtxMax, GetFileData().vtxMin, vtxMin) == true)
 	{ // 四角の当たり判定の中に入っていた場合
-
-		CParticle::Create(pPlayer->GetPos(), CParticle::TYPE_HONEY);
 
 		// true を返す
 		return true;

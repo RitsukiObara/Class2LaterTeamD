@@ -78,6 +78,9 @@ HRESULT CTitle::Init(void)
 	m_pUIEdit = C2DUIEdit::Create();
 	m_pUIEdit->LoadData(LOADUI_NAME,NONE_D3DXVECTOR3);
 
+	// サウンドの再生
+	CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_BGM_TITLE);
+
 	// 全ての値を初期化する
 	m_state = STATE_TITLE_APPEAR;	// 状態
 	m_nTransCount = 0;				// 遷移カウント

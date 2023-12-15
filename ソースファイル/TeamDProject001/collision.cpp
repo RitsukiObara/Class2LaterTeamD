@@ -33,8 +33,6 @@
 #define COLLISION_CAT_SIZE				(D3DXVECTOR3(70.0f,250.0f,70.0f))		// ネコの当たり判定のサイズ
 #define CAT_WIND_MAGNI					(0.3f)			// ネコの風の倍率
 #define RAT_WIND_MAGNI					(1.1f)			// ネズミの風の倍率
-#define CAT_STUN_TIME					(90)			// ネコのスタン時間
-#define RAT_STUN_TIME					(60)			// ネズミのスタン時間
 
 //===============================
 // 丸影の当たり判定処理
@@ -183,14 +181,7 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 			case CObstacle::TYPE_HIMO:
 
 				// ヒット処理
-				if (pPlayer->GetType() == CPlayer::TYPE::TYPE_CAT)
-				{
-					pPlayer->Stun(CAT_STUN_TIME);
-				}
-				else if (pPlayer->GetType() == CPlayer::TYPE::TYPE_RAT)
-				{
-					pPlayer->Stun(RAT_STUN_TIME);
-				}
+				pPlayer->Stun(60);
 
 				break;
 
@@ -207,43 +198,22 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 
 			case CObstacle::TYPE_MOUSETRAP:
 
-				// ヒット処理
-				if (pPlayer->GetType() == CPlayer::TYPE::TYPE_CAT)
-				{
-					pPlayer->Stun(CAT_STUN_TIME);
-				}
-				else if (pPlayer->GetType() == CPlayer::TYPE::TYPE_RAT)
-				{
-					pPlayer->Stun(RAT_STUN_TIME);
-				}
+				// 気絶状態
+				pPlayer->Stun(60);
 
 				break;
 
 			case CObstacle::TYPE_LEASH:
 
-				// ヒット処理
-				if (pPlayer->GetType() == CPlayer::TYPE::TYPE_CAT)
-				{
-					pPlayer->Stun(CAT_STUN_TIME);
-				}
-				else if (pPlayer->GetType() == CPlayer::TYPE::TYPE_RAT)
-				{
-					pPlayer->Stun(RAT_STUN_TIME);
-				}
+				// 気絶処理
+				pPlayer->Stun(60);
 
 				break;
 
 			case CObstacle::TYPE_PIN:
 
-				// ヒット処理
-				if (pPlayer->GetType() == CPlayer::TYPE::TYPE_CAT)
-				{
-					pPlayer->Stun(CAT_STUN_TIME);
-				}
-				else if (pPlayer->GetType() == CPlayer::TYPE::TYPE_RAT)
-				{
-					pPlayer->Stun(RAT_STUN_TIME);
-				}
+				// 気絶処理
+				pPlayer->Stun(60);
 
 				break;
 
@@ -277,22 +247,15 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 
 			case CObstacle::TYPE_CUP:
 
-				// ヒット処理
-				if (pPlayer->GetType() == CPlayer::TYPE::TYPE_CAT)
-				{
-					pPlayer->Stun(CAT_STUN_TIME);
-				}
-				else if (pPlayer->GetType() == CPlayer::TYPE::TYPE_RAT)
-				{
-					pPlayer->Stun(RAT_STUN_TIME);
-				}
+				// 気絶状態
+				pPlayer->Stun(60);
 
 				break;
 
 			case CObstacle::TYPE_GARBAGECAN:
 
 				// 気絶状態
-				pPlayer->Stun(120);
+				pPlayer->Stun(90);
 				pObstacle->SlideOn(pPlayer->GetPos(), pPlayer->GetMove(), pPlayer);
 				break;
 
@@ -308,15 +271,8 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 
 			case CObstacle::TYPE_BOOK:
 
-				// ヒット処理
-				if (pPlayer->GetType() == CPlayer::TYPE::TYPE_CAT)
-				{
-					pPlayer->Stun(CAT_STUN_TIME);
-				}
-				else if (pPlayer->GetType() == CPlayer::TYPE::TYPE_RAT)
-				{
-					pPlayer->Stun(RAT_STUN_TIME);
-				}
+				// 気絶状態
+				pPlayer->Stun(60);
 
 				break;
 
@@ -527,141 +483,18 @@ void collision::BlockRectangleCollision(const CBlock& block, CPlayer* player, co
 	D3DXVECTOR3 vtxMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);	// 最大値
 	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);		// 最小値
 
-	if (block.GetPos().y + block.GetVtxMax().y >= pos.y + vtxMin.y &&
-		block.GetPos().y + block.GetVtxMin().y <= pos.y + vtxMax.y &&
-		block.GetPos().z + block.GetVtxMax().z >= pos.z + vtxMin.z &&
-		block.GetPos().z + block.GetVtxMin().z <= pos.z + vtxMax.z)
-	{ // X軸の判定に入れる場合
-
-		if (block.GetPosOld().x + block.GetVtxMax().x <= posOld.x + vtxMin.x &&
-			block.GetPos().x + block.GetVtxMax().x >= pos.x + vtxMin.x)
-		{ // 右にぶつかった場合
-
-			if (block.GetPos().y + block.GetVtxMax().y - 5.0f <= pos.y + vtxMin.y)
-			{ // 少しの段差の場合
-
-				// 位置を設定する
-				pos.y = block.GetPos().y + block.GetVtxMax().y - (vtxMin.y - COLLISION_ADD_DIFF_LENGTH);
-
-				// 上の当たり判定を true にする
-				collision.bTop = true;
-			}
-			else
-			{ // 上記以外
-
-				// 位置を設定する
-				pos.x = block.GetPos().x + block.GetVtxMax().x - (vtxMin.x - COLLISION_ADD_DIFF_LENGTH);
-
-				// 右の当たり判定を true にする
-				collision.bRight = true;
-			}
-		}
-		else if (block.GetPosOld().x + block.GetVtxMin().x >= posOld.x + vtxMax.x &&
-			block.GetPos().x + block.GetVtxMin().x <= pos.x + vtxMax.x)
-		{ // 左にぶつかった場合
-
-			if (block.GetPos().y + block.GetVtxMax().y - 5.0f <= pos.y + vtxMin.y)
-			{ // 少しの段差の場合
-
-				// 位置を設定する
-				pos.y = block.GetPos().y + block.GetVtxMax().y - (vtxMin.y - COLLISION_ADD_DIFF_LENGTH);
-
-				// 上の当たり判定を true にする
-				collision.bTop = true;
-			}
-			else
-			{ // 上記以外
-
-				// 位置を設定する
-				pos.x = block.GetPos().x + block.GetVtxMin().x - (vtxMax.x + COLLISION_ADD_DIFF_LENGTH);
-
-				// 左の当たり判定を true にする
-				collision.bLeft = true;
-			}
-		}
-	}
-
-	if (block.GetPos().x + block.GetVtxMax().x >= pos.x + vtxMin.x &&
-		block.GetPos().x + block.GetVtxMin().x <= pos.x + vtxMax.x &&
-		block.GetPos().y + block.GetVtxMax().y >= pos.y + vtxMin.y &&
-		block.GetPos().y + block.GetVtxMin().y <= pos.y + vtxMax.y)
-	{ // Z軸の判定に入れる場合
-
-		if (block.GetPosOld().z + block.GetVtxMax().z <= posOld.z + vtxMin.z &&
-			block.GetPos().z + block.GetVtxMax().z >= pos.z + vtxMin.z)
-		{ // 奥にぶつかった場合
-
-			if (block.GetPos().y + block.GetVtxMax().y - 5.0f <= pos.y + vtxMin.y)
-			{ // 少しの段差の場合
-
-				// 位置を設定する
-				pos.y = block.GetPos().y + block.GetVtxMax().y - (vtxMin.y - COLLISION_ADD_DIFF_LENGTH);
-
-				// 上の当たり判定を true にする
-				collision.bTop = true;
-			}
-			else
-			{ // 上記以外
-
-				// 位置を設定する
-				pos.z = block.GetPos().z + block.GetVtxMax().z - (vtxMin.z - COLLISION_ADD_DIFF_LENGTH);
-
-				// 奥の当たり判定を true にする
-				collision.bFar = true;
-			}
-		}
-		else if (block.GetPosOld().z + block.GetVtxMin().z >= posOld.z + vtxMax.z &&
-			block.GetPos().z + block.GetVtxMin().z <= pos.z + vtxMax.z)
-		{ // 手前にぶつかった場合
-
-			if (block.GetPos().y + block.GetVtxMax().y - 5.0f <= pos.y + vtxMin.y)
-			{ // 少しの段差の場合
-
-				// 位置を設定する
-				pos.y = block.GetPos().y + block.GetVtxMax().y - (vtxMin.y - COLLISION_ADD_DIFF_LENGTH);
-
-				// 上の当たり判定を true にする
-				collision.bTop = true;
-			}
-			else
-			{ // 上記以外
-
-				// 位置を設定する
-				pos.z = block.GetPos().z + block.GetVtxMin().z - (vtxMax.z + COLLISION_ADD_DIFF_LENGTH);
-
-				// 手前の当たり判定を true にする
-				collision.bNear = true;
-			}
-		}
-	}
-
-	if (block.GetPos().x + block.GetVtxMax().x >= pos.x + vtxMin.x &&
-		block.GetPos().x + block.GetVtxMin().x <= pos.x + vtxMax.x &&
-		block.GetPos().z + block.GetVtxMax().z >= pos.z + vtxMin.z &&
-		block.GetPos().z + block.GetVtxMin().z <= pos.z + vtxMax.z)
-	{ // Y軸の判定に入れる場合
-
-		if (block.GetPosOld().y + block.GetVtxMax().y <= posOld.y + vtxMin.y &&
-			block.GetPos().y + block.GetVtxMax().y >= pos.y + vtxMin.y)
-		{ // 上にぶつかった場合
-
-			// 位置を設定する
-			pos.y = block.GetPos().y + block.GetVtxMax().y - (vtxMin.y - COLLISION_ADD_DIFF_LENGTH);
-
-			// 上の当たり判定を true にする
-			collision.bTop = true;
-		}
-		else if (block.GetPosOld().y + block.GetVtxMin().y >= posOld.y + vtxMax.y &&
-			block.GetPos().y + block.GetVtxMin().y <= pos.y + vtxMax.y)
-		{ // 下にぶつかった場合
-
-			// 位置を設定する
-			pos.y = block.GetPos().y + block.GetVtxMin().y - (vtxMax.y + COLLISION_ADD_DIFF_LENGTH);
-
-			// 下の当たり判定を true にする
-			collision.bBottom = true;
-		}
-	}
+	// 六面体の当たり判定
+	collision = HexahedronClush
+	(
+		&pos,
+		block.GetPos(),
+		posOld,
+		block.GetPosOld(),
+		vtxMin,
+		block.GetVtxMin(),
+		vtxMax,
+		block.GetVtxMax()
+	);
 
 	if (collision.bTop == true)
 	{ // 上に乗った場合

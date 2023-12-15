@@ -12,7 +12,6 @@
 #include "renderer.h"
 #include "slime.h"
 #include "useful.h"
-#include "Particle.h"
 
 //==============================
 // コンストラクタ
@@ -94,7 +93,7 @@ bool CSlime::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 		useful::RectangleCollisionXZ(GetPos(), pPlayer->GetPos(), GetFileData().vtxMax, max, GetFileData().vtxMin, min) == true &&
 		useful::RectangleCollisionYZ(GetPos(), pPlayer->GetPos(), GetFileData().vtxMax, max, GetFileData().vtxMin, min) == true)
 	{ // 四角の当たり判定の中に入っていた場合
-		CParticle::Create(pPlayer->GetPos(), CParticle::TYPE_SLIME);
+
 		// true を返す
 		return true;
 	}

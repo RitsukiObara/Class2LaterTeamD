@@ -117,13 +117,6 @@ void CParticle::Create(const D3DXVECTOR3& pos, const CParticle::TYPE type)
 
 			break;
 
-		case TYPE_HONEY: // ハチミツ
-
-			// ハチミツの初期化処理
-			pParticle->InitHoney(pos);
-
-			break;
-
 		default:			// 上記以外
 
 			// 停止
@@ -371,7 +364,6 @@ void CParticle::InitSlime(const D3DXVECTOR3& pos)
 		false
 	);
 }
-
 //===============================
 // 復活のエフェクト生成
 //===============================
@@ -415,45 +407,4 @@ void CParticle::InitResurrection(const D3DXVECTOR3& pos)
 			);
 		}
 
-}
-
-//===============================
-// ハチミツ床のエフェクト生成
-//===============================
-void CParticle::InitHoney(const D3DXVECTOR3& pos)
-{
-	// ローカル変数宣言
-	D3DXVECTOR3 EffectPos;		// エフェクトの位置
-	D3DXVECTOR3 EffectMove;		// エフェクトの移動量
-	int nLife;					// 寿命
-	D3DXVECTOR3 randRot;		// ランダムの向き
-
-								// 向きを設定する
-	randRot.x = (float)((rand() % 629 - 314) * 0.01f);
-	EffectPos.x = pos.x + sinf(randRot.x) * 20.0f;
-
-	EffectPos.y = pos.y;
-
-	// 向きを設定する
-	randRot.z = (float)((rand() % 629 - 314) * 0.01f);
-	EffectPos.z = pos.z + cosf(randRot.z) * 20.0f;
-
-	EffectMove.x = sinf(randRot.x) * (rand() % 3 + 7);
-	EffectMove.y = (float)(rand() % 3 + 1);
-	EffectMove.z = cosf(randRot.z) * (rand() % 3 + 7);
-
-	// 寿命を設定する
-	nLife = rand() % 10 + 8;
-
-	// エフェクトの生成処理
-	CEffect::Create
-	(
-		EffectPos,
-		EffectMove,
-		nLife,
-		50.0f,
-		CEffect::TYPE_DUST,
-		D3DXCOLOR(1.0f, 0.8f, 0.1f, 1.0f),
-		false
-	);
 }

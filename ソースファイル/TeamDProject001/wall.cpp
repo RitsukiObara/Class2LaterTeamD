@@ -13,7 +13,11 @@
 //=======================================
 #define MAP_INDOOR0_WALL_TEXTURE		"data\\TEXTURE\\wall001.png"		// 屋内床テクスチャ
 //=======================================
-CWall::CWall() : CObject3D(CObject::TYPE_MAP, CObject::PRIORITY_BG)
+CWall::CWall() : CObject3D(CObject::TYPE_MAP, CObject::PRIORITY_UI)
+{
+
+}
+CWall::CWall( PRIORITY priority) : CObject3D(CObject::TYPE_MAP,priority)
 {
 
 }
@@ -45,14 +49,13 @@ void CWall::Draw(void)
 {
 	CObject3D::Draw();
 }
-CWall* CWall::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size)
+CWall* CWall::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, CObject::PRIORITY pritype)
 {
 	CWall *pWall;
 
-	pWall = new CWall;
+	pWall = new CWall(pritype);
 
 	pWall->SetType(TYPE_MAP);
-
 	pWall->m_pos = pos;
 	pWall->m_rot = rot;
 	pWall->m_size = size;

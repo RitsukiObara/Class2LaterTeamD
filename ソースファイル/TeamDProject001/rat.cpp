@@ -33,7 +33,6 @@
 #include "object3Dfan.h"
 #include "recoveringUI.h"
 #include "speech_message.h"
-#include "sound.h"
 
 //-------------------------------------------
 // 無名名前空間
@@ -157,6 +156,9 @@ void CRat::Update(void)
 	// 前回の位置を設定する
 	SetPosOld(GetPos());
 
+	// 重力処理
+	Gravity();
+
 	if (CPlayer::GetStunState() != CPlayer::STUNSTATE_STUN &&
 		CPlayer::GetState() != CPlayer::STATE_DEATH)
 	{ // 気絶状態or死亡状態じゃない場合
@@ -191,9 +193,6 @@ void CRat::Update(void)
 		// 移動量を初期化する
 		SetMove(NONE_D3DXVECTOR3);
 	}
-
-	// 重力処理
-	Gravity();
 
 	// 死亡矢印の処理
 	DeathArrow();
@@ -450,9 +449,6 @@ void CRat::Gravity(void)
 	// 重力を加算する
 	move.y -= GRAVITY;
 
-	// 位置を移動する
-	pos.y += move.y;
-
 	// 移動量を適用する
 	SetPos(pos);
 	SetMove(move);
@@ -553,9 +549,6 @@ void CRat::Hit(void)
 			// ネコが勝利した状態にする
 			CGame::SetState(CGame::STATE_CAT_WIN);
 		}
-
-		// 攻撃のヒット音を鳴らす
-		CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_CATATTACK_HIT);
 	}
 }
 
@@ -603,7 +596,7 @@ void CRat::DeathArrow(void)
 				SetDeathArrow(D3DXVECTOR3(pos.x + sinf(DestRot.y + -D3DX_PI * 0.5f) * ARROW_DISTANCE,
 					pos.y - 1.0f,
 					pos.z + cosf(DestRot.y + -D3DX_PI * 0.5f) * ARROW_DISTANCE),
-					posOld, DestRot, nCnt, GetPlayerIdx());
+					posOld, DestRot, nCnt);
 
 				// 回復させてる状態にする
 				abRez[nCnt] = true;
@@ -708,9 +701,6 @@ void CRat::ResurrectionCollision(void)
 
 						// 復活させてる状態にする
 						m_bResurrection = true;
-
-						// 復活パーティクル生成
-						CParticle::Create(pPlayer->GetPos(), CParticle::TYPE_RESURRECTION);
 					}
 
 					// 回復させてる状態にする

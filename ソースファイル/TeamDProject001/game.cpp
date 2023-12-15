@@ -137,8 +137,20 @@ HRESULT CGame::Init(void)
 	// メッシュの読み込み処理
 	//CMesh::TxtSet();
 
-	// マップの番号をランダムで設定
-	m_nMapNumber = rand() % MAP_TYPE;
+	m_nMapNumber = rand() % 3;
+
+	if (m_nMapNumber == 0)
+	{
+
+	}
+	else if (m_nMapNumber == 1)
+	{
+
+	}
+	else if (m_nMapNumber == 2)
+	{
+
+	}
 
 	// マップの情報をロードする
 	CManager::Get()->GetFile()->FalseSuccess();
@@ -241,6 +253,9 @@ HRESULT CGame::Init(void)
 
 	//// 武器選択UIを生成
 	//CWeaponSelectUI::Create();
+
+	// サウンドの再生
+	CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_BGM_GAME);
 
 	// 情報の初期化
 	m_nFinishCount = 0;				// 終了カウント

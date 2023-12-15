@@ -100,55 +100,48 @@ void CScene::SetData(const MODE mode)
 	if (CManager::Get()->GetSound() != nullptr)
 	{ // サウンドが NULL じゃない場合
 
-		// BGMを流す
-		switch (m_mode)
-		{
-		case MODE_LOGO:
+		//// BGMを流す
+		//switch (m_mode)
+		//{
+		//case MODE_LOGO:
 
-			break;
+		//	break;
 
-		case MODE_TITLE:
+		//case MODE_TITLE:
 
-			// タイトルBGMを流す
-			CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_BGM_TITLE);
+		//	// タイトルBGMを流す
+		//	CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_BGM_TITLE);
 
-			break;
+		//	break;
 
-		case MODE_ENTRY:
+		//case MODE_ENTRY:
 
-			// エントリーBGMを流す
-			CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_BGM_ENTRY);
+		//	// ランキングBGMを流す
+		//	CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_BGM_RANKING);
 
-			break;
+		//	break;
 
-		case MODE_TUTORIAL:
+		//case MODE_GAME:
 
-			// ゲームBGMを流す
-			CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_BGM_GAME);
+		//	// ゲームBGMを流す
+		//	CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_BGM_GAME);
 
-			break;
+		//	break;
 
-		case MODE_GAME:
+		//case MODE_RESULT:
 
-			// ゲームBGMを流す
-			CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_BGM_GAME);
+		//	// リザルトBGMを流す
+		//	CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_BGM_RESULT);
 
-			break;
+		//	break;
 
-		case MODE_RESULT:
+		//default:
 
-			// リザルトBGMを流す
-			CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_BGM_RESULT);
+		//	// 停止
+		//	assert(false);
 
-			break;
-
-		default:
-
-			// 停止
-			assert(false);
-
-			break;
-		}
+		//	break;
+		//}
 	}
 }
 

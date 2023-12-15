@@ -12,12 +12,9 @@
 //***********************************
 #include "obstacle.h"
 
-//-----------------------------------
-// 前方宣言
-//-----------------------------------
+class CConsent;
 class CObject3D;
-class CModel;
-
+class CBlock;
 //-----------------------------------
 // クラス定義(コップ)
 //-----------------------------------
@@ -55,7 +52,7 @@ private:		// 自分だけアクセスできる
 	void StateManager(void);		// 状態管理マネージャー
 
 	CObject3D *m_pVision;		// ポリゴン情報
-	CModel* m_pRemocon;			// リモコンのモデル情報
+	CBlock* m_pRemocon;			// リモコンのモデル情報
 	D3DXVECTOR3 m_vtxMax;		// 最大値
 	D3DXVECTOR3 m_vtxMin;		// 最小値
 	STATE m_State;				// テレビの状態

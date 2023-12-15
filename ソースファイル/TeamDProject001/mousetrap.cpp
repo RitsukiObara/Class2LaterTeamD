@@ -16,7 +16,6 @@
 
 #include "manager.h"
 #include "input.h"
-#include "sound.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -121,9 +120,6 @@ void CMouseTrap::Update(void)
 			// 移動処理
 			if (m_pIron->Move() == true)
 			{ // ネズミ捕りの状態遷移が終了した場合
-
-				// ネズミ捕りに掛かる音を鳴らす
-				CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_MOUSETRAP_ADDICTED);
 
 				// 終了処理
 				Uninit();

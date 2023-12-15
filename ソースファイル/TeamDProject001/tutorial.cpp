@@ -230,6 +230,9 @@ HRESULT CTutorial::Init(void)
 		CCharaInfoUI::Create(PLAYERUI_POS[nCnt], nCnt, m_apPlayer[nCnt]->GetType());
 	}
 
+	// サウンドの再生
+	CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_BGM_GAME);
+
 	// 情報の初期化
 	m_nFinishCount = 0;				// 終了カウント
 	m_GameState = STATE_START;		// 状態

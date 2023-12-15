@@ -87,7 +87,7 @@ HRESULT CEntry::Init(void)
 			m_apUI[nCnt] = CEntryUI::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f + (300.0f * nCnt) - 450.0f, SCREEN_HEIGHT * 0.45f, 0.0f), nCnt, CPlayer::TYPE_CAT);
 
 			// ネコの生成処理
-			m_apPlayer[nCnt] = CPlayer::Create(D3DXVECTOR3(-500.0f + (350.0f*nCnt), 0.0f, -150.0f), nCnt, CPlayer::TYPE_CAT);
+			m_apPlayer[nCnt] = CPlayer::Create(D3DXVECTOR3(-500.0f + (350.0f*nCnt), -100.0f, -150.0f), nCnt, CPlayer::TYPE_CAT);
 
 		}
 		else
@@ -97,7 +97,7 @@ HRESULT CEntry::Init(void)
 			m_apUI[nCnt] = CEntryUI::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f + (300.0f * nCnt) - 450.0f, SCREEN_HEIGHT * 0.45f, 0.0f), nCnt, CPlayer::TYPE_RAT);
 
 			// ラットの生成処理
-			m_apPlayer[nCnt] = CPlayer::Create(D3DXVECTOR3(-500.0f + (350.0f*nCnt), 0.0f, -150.0f), nCnt, CPlayer::TYPE_RAT);
+			m_apPlayer[nCnt] = CPlayer::Create(D3DXVECTOR3(-500.0f + (350.0f*nCnt), -100.0f, -150.0f), nCnt, CPlayer::TYPE_RAT);
 
 		}
 		// ID代入
@@ -106,6 +106,8 @@ HRESULT CEntry::Init(void)
 
 	// エントリー画面の操作説明UIの生成
 	CEntryMessage::Create(POS_MESSAGEUI, POS_MESSAGEUI, SIZE_MESSAGEUI);
+
+	CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_BGM_ENTRY);
 
 	// 成功を返す
 	return S_OK;
@@ -234,7 +236,7 @@ void CEntry::Update(void)
 			for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
 			{ // 位置設定&移動量リセット
 
-				m_apPlayer[m_EntryId[nCnt]]->SetPos(D3DXVECTOR3(-500.0f + (350.0f * nCnt), 0.0f, -150.0f));		// 位置
+				m_apPlayer[m_EntryId[nCnt]]->SetPos(D3DXVECTOR3(-500.0f + (350.0f * nCnt), -100.0f, -150.0f));	// 位置
 				m_apPlayer[m_EntryId[nCnt]]->SetMove(D3DXVECTOR3(0.0f, 0.0f, 0.0f));							// 移動量
 				m_apPlayer[m_EntryId[nCnt]]->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));								// 向き
 			}
@@ -245,10 +247,10 @@ void CEntry::Update(void)
 
 		for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
 		{
-			if (m_apPlayer[m_EntryId[nCnt]]->GetPos().y < -2.0f)
+			if (m_apPlayer[m_EntryId[nCnt]]->GetPos().y < -102.0f)
 			{	// 一定の高さより低くなった場合
 
-				m_apPlayer[m_EntryId[nCnt]]->SetPos(D3DXVECTOR3(-500.0f + (350.0f * nCnt), -2.0f, -150.0f));
+				m_apPlayer[m_EntryId[nCnt]]->SetPos(D3DXVECTOR3(-500.0f + (350.0f * nCnt), -102.0f, -150.0f));
 				m_apPlayer[m_EntryId[nCnt]]->SetMove(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 			}
