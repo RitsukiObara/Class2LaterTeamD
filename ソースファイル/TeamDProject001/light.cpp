@@ -15,10 +15,25 @@
 #include "input.h"
 #include "debugproc.h"
 
-// マクロ定義
-#define ONE_LIGHT_VEC		(D3DXVECTOR3(0.22f, -0.87f, 0.44f))		// 一つ目のライトの方向
-#define TWO_LIGHT_VEC		(D3DXVECTOR3(-0.48f, 0.88f, -0.44f))		// 二つ目のライトの方向
-#define THREE_LIGHT_VEC		(D3DXVECTOR3(0.89f, -0.11f, 0.44f))		// 三つ目のライトの方向
+//-------------------------------------------
+// 無名名前空間
+//-------------------------------------------
+namespace
+{
+	static const float LIGHT_PAWOR = 0.5f;
+	static const D3DXCOLOR LIGHT_DIFFUSE[NUM_LIGHT] =			// ライトの色
+	{
+		D3DXCOLOR(LIGHT_PAWOR, LIGHT_PAWOR, LIGHT_PAWOR, 1.0f),
+		D3DXCOLOR(LIGHT_PAWOR, LIGHT_PAWOR, LIGHT_PAWOR, 1.0f),
+		D3DXCOLOR(LIGHT_PAWOR, LIGHT_PAWOR, LIGHT_PAWOR, 1.0f),
+	};
+	static const D3DXVECTOR3 LIGHT_VECTOR[NUM_LIGHT] =			// ライトの方向
+	{
+		D3DXVECTOR3(0.2f, -0.6f, -0.5f),
+		D3DXVECTOR3(-0.5f, -0.6f, -0.5f),
+		D3DXVECTOR3(0.8f, -0.6f, 0.5f),
+	};
+}
 
 //=========================
 // コンストラクタ
@@ -58,47 +73,14 @@ HRESULT CLight::Init(void)
 		// ライトの種類を設定
 		m_light[nCntSet].Type = D3DLIGHT_DIRECTIONAL;
 
-		switch (nCntSet)
-		{
-		case 0:
+		// ライトの拡散光を設定
+		m_light[nCntSet].Diffuse = LIGHT_DIFFUSE[nCntSet];
 
-			// ライトの拡散光を設定
-			m_light[nCntSet].Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+		// ライトの方向を設定
+		vecDir = LIGHT_VECTOR[nCntSet];
 
-			// ライトの方向を設定
-			vecDir = ONE_LIGHT_VEC;
-
-			break;				// 抜け出す
-
-		case 1:
-
-			// ライトの拡散光を設定
-			m_light[nCntSet].Diffuse = D3DXCOLOR(0.65f, 0.65f, 0.65f, 1.0f);
-
-			// ライトの方向を設定
-			vecDir = TWO_LIGHT_VEC;
-
-			break;				// 抜け出す
-
-		case 2:
-
-			// ライトの拡散光を設定
-			m_light[nCntSet].Diffuse = D3DXCOLOR(0.65f, 0.65f, 0.65f, 1.0f);
-
-			// ライトの方向を設定
-			vecDir = THREE_LIGHT_VEC;
-
-			break;				// 抜け出す
-
-		default:
-
-			// 停止
-			assert(false);
-
-			break;
-		}
-
-		D3DXVec3Normalize(&vecDir, &vecDir);				// ベクトルを正規化する
+		// ベクトルを正規化する
+		D3DXVec3Normalize(&vecDir, &vecDir);
 
 		m_light[nCntSet].Direction = vecDir;
 

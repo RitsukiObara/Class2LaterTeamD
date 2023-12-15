@@ -57,7 +57,7 @@ namespace
 	static const float STUN_HEIGHT = 300.0f;		// 気絶演出が出てくる高さ
 	static const float ID_HEIGHT = 350.0f;			// IDが出てくる高さ
 	static const int STANDBY_COUNT = 12;			// スタンバイ状態のカウント数
-	static const int ATTACK_COUNT = 20;				// 攻撃状態のカウント数
+	static const int ATTACK_COUNT = 30;				// 攻撃状態のカウント数
 }
 
 //--------------------------------------------
@@ -77,6 +77,7 @@ CCat::CCat() : CPlayer(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 	m_rotDest = NONE_D3DXVECTOR3;	// 目的の向き
 	m_nShadowIdx = INIT_SHADOW;		// 影のインデックス
 	m_nItemCount = 0;				// アイテムの所持数
+	m_nAtkTime = 0;
 }
 
 //=========================================
@@ -191,9 +192,6 @@ void CCat::Update(void)
 	// 前回の位置の設定処理
 	SetPosOld(GetPos());
 
-	// 重力処理
-	Gravity();
-
 	if (CPlayer::GetStunState() != CPlayer::STUNSTATE_STUN &&
 		CPlayer::GetState() != CPlayer::STATE_DEATH &&
 		m_AttackState == ATTACKSTATE_MOVE)
@@ -225,6 +223,9 @@ void CCat::Update(void)
 		// 移動量を初期化する
 		SetMove(NONE_D3DXVECTOR3);
 	}
+
+	// 重力処理
+	Gravity();
 
 	// 攻撃状態の管理
 	AttackStateManager();
@@ -276,14 +277,19 @@ void CCat::Draw(void)
 //===========================================
 void CCat::Gravity(void)
 {
-	// 移動量を取得する
+	// 位置と移動量を取得する
+	D3DXVECTOR3 pos = GetPos();
 	D3DXVECTOR3 move = GetMove();
 
 	// 重力加算
 	move.y -= GRAVITY;
 
+	// 位置を移動する
+	pos.y += move.y;
+
 	// 情報を適用する
-	SetMove(move);
+	SetPos(pos);		// 位置
+	SetMove(move);		// 移動量
 }
 
 //===========================================
@@ -302,6 +308,8 @@ void CCat::Attack(void)
 			m_AttackState = ATTACKSTATE_STANDBY;
 			m_nAtkStateCount = STANDBY_COUNT;
 		
+			// ネコの攻撃音を流す
+			CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_CATATTACK);
 		}
 	}
 }
@@ -334,6 +342,7 @@ void CCat::AttackStateManager(void)
 			m_bAttack = true;		// 攻撃した状態にする
 			m_AttackState = ATTACKSTATE_ATTACK;
 			m_nAtkStateCount = ATTACK_COUNT;
+			m_nAtkTime = 5;
 
 			for (int nCnt = 0; nCnt < 10; nCnt++)
 			{
@@ -350,7 +359,7 @@ void CCat::AttackStateManager(void)
 		// ブロックへの攻撃処理
 		AttackBlock();
 
-		if (useful::CircleCollisionXZ(m_AttackPos, m_AttackPos,10.0f,10.0f) == true)
+		if (useful::CircleCollisionXZ(m_AttackPos, m_AttackPos,10.0f,10.0f) == true && m_nAtkTime > 0)
 		{
 			for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
 			{
@@ -386,7 +395,6 @@ void CCat::AttackStateManager(void)
 		if (m_nAtkStateCount <= 0)
 		{//状態カウントが0になった時
 			m_AttackState = ATTACKSTATE_MOVE;
-			m_bAttack = false;		// 攻撃してない状態にする
 		}
 		break;
 	}
@@ -394,6 +402,10 @@ void CCat::AttackStateManager(void)
 	if (m_nAtkStateCount > 0)
 	{
 		m_nAtkStateCount--;
+	}
+	if (m_nAtkTime > 0)
+	{
+		m_nAtkTime--;
 	}
 }
 

@@ -18,6 +18,7 @@
 #include "input.h"
 #include "texture.h"
 #include "effect.h"
+#include "sound.h"
 
 //==============================
 // コンストラクタ
@@ -150,6 +151,9 @@ void CCup::StateManager(D3DXVECTOR3 *pos, D3DXVECTOR3 *rot)
 		{
 			pos->y = 15.0f;
 			m_State = STATE_TRUE;
+
+			// コップが落ちた音を流す
+			CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_THE_CUP_FALLS);
 
 			m_pWater = CObject3D::Create(CObject3D::TYPE_NONE, PRIORITY_BLOCK);
 			m_pWater->SetPos(GetPos());

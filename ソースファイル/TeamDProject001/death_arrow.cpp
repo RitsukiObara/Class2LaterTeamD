@@ -28,6 +28,7 @@ CDeathArrow::CDeathArrow() : CModel(CObject::TYPE_DEATHARROW, CObject::PRIORITY_
 	// 全ての値をクリアする
 	m_pos = NONE_D3DXVECTOR3;		// 位置
 	m_rot = NONE_D3DXVECTOR3;		// 向き
+	m_nPlayerIdx = -1;
 }
 
 //==============================
@@ -80,14 +81,17 @@ void CDeathArrow::Update(void)
 //=====================================
 void CDeathArrow::Draw(void)
 {
-	// 描画処理
-	CModel::Draw();
+	if (m_nPlayerIdx == CObject::GetDrawIdx())
+	{
+		// 描画処理
+		CModel::Draw();
+	}
 }
 
 //=====================================
 // 情報の設定処理
 //=====================================
-void CDeathArrow::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& rot)
+void CDeathArrow::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& rot, const int nIdx)
 {
 	// 設定処理に便利なマクロ定義
 	//NONE_D3DXVECTOR3					// 向きを傾けない時とかに使用する
@@ -99,12 +103,13 @@ void CDeathArrow::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, con
 	SetRot(rot);					// 向き
 	SetScale(NONE_SCALE);			// 拡大率
 	SetFileData(CXFile::TYPE_DEATHARROW);	// モデルの情報
+	m_nPlayerIdx = nIdx;
 }
 
 //=======================================
 // 生成処理
 //=======================================
-CDeathArrow* CDeathArrow::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& rot)
+CDeathArrow* CDeathArrow::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& rot, const int nIdx)
 {
 	// ローカルオブジェクトを生成
 	CDeathArrow* pDeathArrow = nullptr;	// 死亡矢印のインスタンスを生成
@@ -140,7 +145,7 @@ CDeathArrow* CDeathArrow::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& posO
 		}
 
 		// 情報の設定処理
-		pDeathArrow->SetData(pos, posOld, rot);
+		pDeathArrow->SetData(pos, posOld, rot, nIdx);
 	}
 	else
 	{ // オブジェクトが NULL の場合

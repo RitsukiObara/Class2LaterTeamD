@@ -27,6 +27,5 @@ private:
 
 	CGround* m_Ground;
 	static CWall* m_Wall[WALL_NUM];
-	static CModel* m_Model[2];
 };
 #endif // !_MAP_H_
