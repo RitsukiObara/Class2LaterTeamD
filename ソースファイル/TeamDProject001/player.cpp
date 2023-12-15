@@ -44,9 +44,11 @@ namespace
 	static const float RAT_CAMERA_HEIGHT = 100.0f;		// 猫のカメラの高さ
 	static const float RAT_CAMERA_DIS = 60.0f;			// ネズミのカメラの視点と注視点の高さの差分(角度)
 	static const float DIFF_ROT = 0.2f;					// 角度に足す差分の割合
-	static const float CAMERA_ROT_MOVE = 0.025f;			// カメラの向きの移動量
+	static const float CAMERA_ROT_MOVE = 0.025f;		// カメラの向きの移動量
 	static const float ADD_ACTION_RADIUS = 40.0f;		// サーチ時の半径の追加数
 	static const int NONE_PLAYERIDX = -1;				// プレイヤーの番号の初期値
+	static const int CAT_SMASH_STUN = 120;				// ネコのスタン時間
+	static const int RAT_SMASH_STUN = 30;				// ネズミのスタン時間
 	static const int STUN_WAIT = 120;					// オブジェクト無効の待機時間
 	static const int DEATH_WAIT = 120;					// 死亡時の待機時間
 	static const int SMASH_WAIT = 40;					// 吹き飛び状態のカウント数
@@ -94,7 +96,6 @@ void CPlayer::Box(void)
 	m_pRecoveringUI = nullptr;			// 回復中のUIの情報
 	m_pSpeechMessage = nullptr;			// 伝達メッセージの情報
 	m_pDeathArrow[MAX_PLAY] = {};		// 死亡矢印の情報
-	//m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_sizeColl = NONE_D3DXVECTOR3;		// 当たり判定のサイズ
 	m_col = D3DXCOLOR(1.0f,1.0f,1.0f,1.0f);				// 色
 	m_type = TYPE_CAT;					// 種類
@@ -600,7 +601,10 @@ void CPlayer::MoveControl(void)
 	}
 	else
 	{ // 上記以外
+
+		// 移動状況を false にする
 		m_bMove = false;
+
 		// 速度を設定する
 		m_fSpeed = 0.0f;
 	}
@@ -620,7 +624,8 @@ void CPlayer::Move(void)
 	move.z = -cosf(m_fRotDest) * m_fSpeed;
 
 	// 移動量を加算する
-	pos += move;
+	pos.x += move.x;
+	pos.z += move.z;
 
 	// 移動量を適用する
 	SetMove(move);
@@ -940,7 +945,16 @@ void CPlayer::StunStateManager(void)
 
 			// 気絶状態にする
 			m_StunState = STUNSTATE_STUN;
-			m_StunStateCount = STUN_WAIT;
+
+			// スタン時間の設定
+			if (m_type == TYPE::TYPE_CAT)
+			{// ネコの場合
+				m_StunStateCount = CAT_SMASH_STUN;
+			}
+			else if (m_type == TYPE::TYPE_RAT)
+			{// ネズミの場合
+				m_StunStateCount = RAT_SMASH_STUN;
+			}
 
 			if (CManager::Get()->GetMode() == CScene::MODE_TUTORIAL)
 			{
@@ -960,6 +974,9 @@ void CPlayer::StunStateManager(void)
 			// 気絶演出の設定処理
 			SetStun(GetPos());
 		}
+
+		// 移動状況を false にする
+		m_bMove = false;
 
 		break;
 
@@ -988,6 +1005,10 @@ void CPlayer::StunStateManager(void)
 				m_pStun = nullptr;
 			}
 		}
+
+		// 移動状況を false にする
+		m_bMove = false;
+
 		break;
 
 	case STUNSTATE_WAIT:	//障害物のみ無敵状態
@@ -1386,13 +1407,13 @@ void CPlayer::DeleteSpeechMessage(void)
 //=======================================
 // 死亡矢印の設定処理
 //=======================================
-void CPlayer::SetDeathArrow(const D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& rot, const int nIdx)
+void CPlayer::SetDeathArrow(const D3DXVECTOR3& pos, const D3DXVECTOR3& posOld, const D3DXVECTOR3& rot, const int nIdx, const int PlayerIdx)
 {
 	if (m_pDeathArrow[nIdx] == nullptr)
 	{ // 死亡矢印が NULL の時
 
 	  // 死亡矢印の生成
-		m_pDeathArrow[nIdx] = CDeathArrow::Create(pos, posOld, rot);
+		m_pDeathArrow[nIdx] = CDeathArrow::Create(pos, posOld, rot, PlayerIdx);
 	}
 	else if (m_pDeathArrow[nIdx] != nullptr)
 	{ // 死亡矢印が NULL じゃないとき

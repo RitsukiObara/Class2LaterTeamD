@@ -254,9 +254,6 @@ HRESULT CGame::Init(void)
 	//// 武器選択UIを生成
 	//CWeaponSelectUI::Create();
 
-	// サウンドの再生
-	CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_BGM_GAME);
-
 	// 情報の初期化
 	m_nFinishCount = 0;				// 終了カウント
 	m_GameState = STATE_START;		// 状態
