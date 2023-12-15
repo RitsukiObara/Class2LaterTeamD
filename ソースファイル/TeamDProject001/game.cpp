@@ -137,20 +137,8 @@ HRESULT CGame::Init(void)
 	// メッシュの読み込み処理
 	//CMesh::TxtSet();
 
-	m_nMapNumber = rand() % 3;
-
-	if (m_nMapNumber == 0)
-	{
-
-	}
-	else if (m_nMapNumber == 1)
-	{
-
-	}
-	else if (m_nMapNumber == 2)
-	{
-
-	}
+	// マップの番号をランダムで設定
+	m_nMapNumber = rand() % MAP_TYPE;
 
 	// マップの情報をロードする
 	CManager::Get()->GetFile()->FalseSuccess();
