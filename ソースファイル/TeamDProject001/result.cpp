@@ -23,6 +23,8 @@
 #include "objectElevation.h"
 #include "player.h"
 #include "confetti.h"
+#include "sound.h"
+#include "entry_BG.h"
 
 //--------------------------------------------
 // マクロ定義
@@ -66,8 +68,8 @@ HRESULT CResult::Init(void)
 	// スカイボックスの生成処理
 	CSkyBox::Create();
 
-	// テキスト読み込み処理
-	CMesh::TxtSet();
+	// 背景の生成処理
+	CEntryBG::Create();
 
 	// テキスト読み込み処理
 	CElevation::TxtSet();
@@ -89,6 +91,8 @@ HRESULT CResult::Init(void)
 
 	}
 
+	// 勝利音を流す
+	CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_VICTORY);
 	
 	int nCatIdx = CEntry::GetCatIdx();// ネコのインデックスを取得する
 	int nRatCount = 0;		// ネズミのカウント

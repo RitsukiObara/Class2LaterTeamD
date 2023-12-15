@@ -19,7 +19,6 @@ CSound::SOUNDINFO CSound::m_aSoundInfo[CSound::SOUND_LABEL_MAX] =
 	{ "data\\SE\\Select.wav",0 },			// 選択音
 	{ "data\\SE\\Decide.wav",0 },			// 決定音
 	{ "data\\SE\\victory.wav",0 },			// 勝利音
-	{ "data\\SE\\NewRecord.wav",0 },		// 新記録の音
 	{ "data\\SE\\CAT_Attack.wav",0},		// ネコの攻撃
 	{ "data\\SE\\Cat_Attack_Hit.wav",0},	// ネコの攻撃がネズミにヒットしたときの音
 	{ "data\\SE\\walk_cat.wav",0},			// ネコの歩行音

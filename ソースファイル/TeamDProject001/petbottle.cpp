@@ -39,6 +39,7 @@ CPetbottle::CPetbottle() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_B
 	m_vtxMax = NONE_D3DXVECTOR3;		// 最大値
 	m_vtxMin = NONE_D3DXVECTOR3;		// 最小値
 	m_state = STATE_STAND;				// 状態
+	m_fAlpha = 1.0f;					// 透明度
 	SetRatUse(false);
 	SetCatUse(true);
 }
@@ -69,6 +70,7 @@ HRESULT CPetbottle::Init(void)
 	m_vtxMax = NONE_D3DXVECTOR3;		// 最大値
 	m_vtxMin = NONE_D3DXVECTOR3;		// 最小値
 	m_state = STATE_STAND;				// 状態
+	m_fAlpha = 1.0f;					// 透明度
 
 	// 値を返す
 	return S_OK;
@@ -120,7 +122,18 @@ void CPetbottle::Update(void)
 
 	case STATE_LEAVE:					// 退場状態
 
+		// 透明度を減算する
+		m_fAlpha -= 0.01f;
 
+		if (m_fAlpha <= 0.0f)
+		{ // 透明度が 0.0f 以下の場合
+
+			// 終了処理
+			Uninit();
+
+			// この先の処理を行わない
+			return;
+		}
 
 		break;
 
@@ -141,8 +154,22 @@ void CPetbottle::Update(void)
 //=====================================
 void CPetbottle::Draw(void)
 {
-	// 描画処理
-	CObstacle::Draw();
+	switch (m_state)
+	{
+	case CPetbottle::STATE_LEAVE:
+
+		// 描画処理
+		CObstacle::Draw(m_fAlpha);
+
+		break;
+
+	default:
+
+		// 描画処理
+		CObstacle::Draw();
+
+		break;
+	}
 }
 
 //=====================================
@@ -162,6 +189,7 @@ void CPetbottle::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const T
 	m_vtxMax = NONE_D3DXVECTOR3;		// 最大値
 	m_vtxMin = NONE_D3DXVECTOR3;		// 最小値
 	m_state = STATE_STAND;				// 状態
+	m_fAlpha = 1.0f;					// 透明度
 }
 
 //=====================================

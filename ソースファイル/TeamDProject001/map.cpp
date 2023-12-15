@@ -12,7 +12,7 @@
 CWall* CMap::m_Wall[WALL_NUM] = {};
 
 //コンストラクタ
-CMap::CMap() : CObject(CObject::TYPE_MAP, CObject::PRIORITY_UI)
+CMap::CMap() : CObject(CObject::TYPE_MAP, CObject::PRIORITY_BG)
 {
 
 }
