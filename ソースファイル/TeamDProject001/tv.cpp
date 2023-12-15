@@ -18,6 +18,7 @@
 #include "block.h"
 #include "player.h"
 #include "game.h"
+#include"sound.h"
 
 //------------------------------
 // マクロ定義
@@ -402,7 +403,15 @@ void CTv::PowerAction(void)
 
 				// 砂嵐テクスチャの割り当て処理
 				m_pVision->BindTexture(CManager::Get()->GetTexture()->Regist(COOLTIME_TEXTURE));
+
+				//	サウンドの再生
+				CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_TV_SANDSTORM);
+	
 			}
+			
+			//再生中のサウンドを停止
+			CManager::Get()->GetSound()->Stop(CSound::SOUND_LABEL_SE_TV_SANDSTORM);
+
 		}
 
 		// 電源ONにする

@@ -26,7 +26,7 @@ CSound::SOUNDINFO CSound::m_aSoundInfo[CSound::SOUND_LABEL_MAX] =
 	{ "data\\SE\\walk_rat.wav",0},			// ネズミの歩行音
 	{ "data\\SE\\mousetrap_HIT.wav",0},		// ネズミ取りにハマる音
 	{ "data\\SE\\Cup_Falls.wav",0 },		// コップが落ちる音
-	{ "data\\SE\\TV_sandstorm.wav",0 },		// テレビの砂嵐
+	{ "data\\SE\\TV_sandstorm.wav",-1 },		// テレビの砂嵐
 	{ "data\\SE\\press_the_switch.wav",0 },	// スイッチを押した時の音
 	{ "data\\SE\\Set_Item.wav",0},			// 設置音
 	{ "data\\SE\\cleaning.wav",0 },			// 掃除機(ルンバ)
