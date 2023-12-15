@@ -652,9 +652,9 @@ void CPlayer::Move(void)
 		move.x = -sinf(m_fRotDest) * m_fSpeed;
 		move.z = -cosf(m_fRotDest) * m_fSpeed;
 
-	// ˆÚ“®—Ê‚ð‰ÁŽZ‚·‚é
-	pos.x += move.x;
-	pos.z += move.z;
+		// ˆÚ“®—Ê‚ð‰ÁŽZ‚·‚é
+		pos.x += move.x;
+		pos.z += move.z;
 
 		// ˆÚ“®—Ê‚ð“K—p‚·‚é
 		SetMove(move);

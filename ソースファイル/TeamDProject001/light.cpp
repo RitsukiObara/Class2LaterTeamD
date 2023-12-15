@@ -20,17 +20,18 @@
 //-------------------------------------------
 namespace
 {
+	static const float LIGHT_PAWOR = 0.5f;
 	static const D3DXCOLOR LIGHT_DIFFUSE[NUM_LIGHT] =			// ライトの色
 	{
-		D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
-		D3DXCOLOR(0.65f, 0.65f, 0.65f, 1.0f),
-		D3DXCOLOR(0.65f, 0.65f, 0.65f, 1.0f),
+		D3DXCOLOR(LIGHT_PAWOR, LIGHT_PAWOR, LIGHT_PAWOR, 1.0f),
+		D3DXCOLOR(LIGHT_PAWOR, LIGHT_PAWOR, LIGHT_PAWOR, 1.0f),
+		D3DXCOLOR(LIGHT_PAWOR, LIGHT_PAWOR, LIGHT_PAWOR, 1.0f),
 	};
 	static const D3DXVECTOR3 LIGHT_VECTOR[NUM_LIGHT] =			// ライトの方向
 	{
-		D3DXVECTOR3(0.22f, -0.87f, 0.44f),
-		D3DXVECTOR3(-0.48f, 0.88f, -0.44f),
-		D3DXVECTOR3(0.89f, -0.11f, 0.44f),
+		D3DXVECTOR3(0.2f, -0.6f, -0.5f),
+		D3DXVECTOR3(-0.5f, -0.6f, -0.5f),
+		D3DXVECTOR3(0.8f, -0.6f, 0.5f),
 	};
 }
 
