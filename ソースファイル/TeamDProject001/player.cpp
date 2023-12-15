@@ -94,7 +94,6 @@ void CPlayer::Box(void)
 	m_pRecoveringUI = nullptr;			// 回復中のUIの情報
 	m_pSpeechMessage = nullptr;			// 伝達メッセージの情報
 	m_pDeathArrow[MAX_PLAY] = {};		// 死亡矢印の情報
-	//m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_sizeColl = NONE_D3DXVECTOR3;		// 当たり判定のサイズ
 	m_col = D3DXCOLOR(1.0f,1.0f,1.0f,1.0f);				// 色
 	m_type = TYPE_CAT;					// 種類
@@ -600,7 +599,10 @@ void CPlayer::MoveControl(void)
 	}
 	else
 	{ // 上記以外
+
+		// 移動状況を false にする
 		m_bMove = false;
+
 		// 速度を設定する
 		m_fSpeed = 0.0f;
 	}
@@ -620,7 +622,8 @@ void CPlayer::Move(void)
 	move.z = -cosf(m_fRotDest) * m_fSpeed;
 
 	// 移動量を加算する
-	pos += move;
+	pos.x += move.x;
+	pos.z += move.z;
 
 	// 移動量を適用する
 	SetMove(move);
@@ -961,6 +964,9 @@ void CPlayer::StunStateManager(void)
 			SetStun(GetPos());
 		}
 
+		// 移動状況を false にする
+		m_bMove = false;
+
 		break;
 
 	case STUNSTATE_STUN:	//気絶状態
@@ -988,6 +994,10 @@ void CPlayer::StunStateManager(void)
 				m_pStun = nullptr;
 			}
 		}
+
+		// 移動状況を false にする
+		m_bMove = false;
+
 		break;
 
 	case STUNSTATE_WAIT:	//障害物のみ無敵状態

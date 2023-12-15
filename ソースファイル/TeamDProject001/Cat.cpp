@@ -191,9 +191,6 @@ void CCat::Update(void)
 	// 前回の位置の設定処理
 	SetPosOld(GetPos());
 
-	// 重力処理
-	Gravity();
-
 	if (CPlayer::GetStunState() != CPlayer::STUNSTATE_STUN &&
 		CPlayer::GetState() != CPlayer::STATE_DEATH &&
 		m_AttackState == ATTACKSTATE_MOVE)
@@ -225,6 +222,9 @@ void CCat::Update(void)
 		// 移動量を初期化する
 		SetMove(NONE_D3DXVECTOR3);
 	}
+
+	// 重力処理
+	Gravity();
 
 	// 攻撃状態の管理
 	AttackStateManager();
@@ -276,14 +276,19 @@ void CCat::Draw(void)
 //===========================================
 void CCat::Gravity(void)
 {
-	// 移動量を取得する
+	// 位置と移動量を取得する
+	D3DXVECTOR3 pos = GetPos();
 	D3DXVECTOR3 move = GetMove();
 
 	// 重力加算
 	move.y -= GRAVITY;
 
+	// 位置を移動する
+	pos.y += move.y;
+
 	// 情報を適用する
-	SetMove(move);
+	SetPos(pos);		// 位置
+	SetMove(move);		// 移動量
 }
 
 //===========================================
@@ -302,6 +307,8 @@ void CCat::Attack(void)
 			m_AttackState = ATTACKSTATE_STANDBY;
 			m_nAtkStateCount = STANDBY_COUNT;
 		
+			// ネコの攻撃音を流す
+			CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_CATATTACK);
 		}
 	}
 }

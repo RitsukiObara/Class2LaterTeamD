@@ -33,6 +33,7 @@
 #include "object3Dfan.h"
 #include "recoveringUI.h"
 #include "speech_message.h"
+#include "sound.h"
 
 //-------------------------------------------
 // 無名名前空間
@@ -156,9 +157,6 @@ void CRat::Update(void)
 	// 前回の位置を設定する
 	SetPosOld(GetPos());
 
-	// 重力処理
-	Gravity();
-
 	if (CPlayer::GetStunState() != CPlayer::STUNSTATE_STUN &&
 		CPlayer::GetState() != CPlayer::STATE_DEATH)
 	{ // 気絶状態or死亡状態じゃない場合
@@ -193,6 +191,9 @@ void CRat::Update(void)
 		// 移動量を初期化する
 		SetMove(NONE_D3DXVECTOR3);
 	}
+
+	// 重力処理
+	Gravity();
 
 	// 死亡矢印の処理
 	DeathArrow();
@@ -448,6 +449,9 @@ void CRat::Gravity(void)
 
 	// 重力を加算する
 	move.y -= GRAVITY;
+
+	// 位置を移動する
+	pos.y += move.y;
 
 	// 移動量を適用する
 	SetPos(pos);
