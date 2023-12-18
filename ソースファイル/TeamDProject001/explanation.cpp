@@ -605,11 +605,7 @@ void CExplanation::SetData(CTutorial::TUTORIAL Tutorial)
 	case CTutorial::TUTORIAL_TABLESWING:
 		if (m_pCatText != NULL)
 		{
-			m_pCatText->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\tutorial_textcat01.png"));		// テクスチャの割り当て処理
-		}
-		if (m_pRatText != NULL)
-		{
-			m_pRatText->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\tutorial_textrat01.png"));		// テクスチャの割り当て処理
+			m_pCatText->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\tutorial_textcat05.png"));		// テクスチャの割り当て処理
 		}
 		break;
 
