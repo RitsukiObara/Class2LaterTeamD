@@ -27,6 +27,7 @@ CNote::CNote() : CModel(CObject::TYPE_NONE, CObject::PRIORITY_BLOCK)
 {
 	m_move = NONE_D3DXVECTOR3;
 	m_nLife = 10;
+	m_nRandHeight = 0;
 }
 
 //==============================
@@ -114,8 +115,8 @@ void CNote::SetData(const D3DXVECTOR3& pos)
 	SetRot(NONE_D3DXVECTOR3);					// å¸Ç´
 	SetScale(NONE_SCALE);						// ägëÂó¶
 
-	int nRandNote = rand() % 3;
-	switch (nRandNote)
+	m_nRandHeight = rand() % 3;
+	switch (m_nRandHeight)
 	{
 	case 0:
 		SetFileData(CXFile::TYPE_NOTE4);			// ÉÇÉfÉãèÓïÒ
