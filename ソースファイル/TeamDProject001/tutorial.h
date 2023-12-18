@@ -48,6 +48,7 @@ public:						// 誰でもアクセスできる
 	{
 		TUTORIAL_MOVE = 0,		// 移動
 		TUTORIAL_ATTACK_JAMP,	// アタック＆ジャンプ
+		TUTORIAL_TABLESWING,	// 机を揺らす
 		TUTORIAL_CAT_KILL,		// ネコのキル
 		TUTORIAL_RAT_RESCUE,	// ネズミの救助
 		TUTORIAL_ACTION,		// アクション
@@ -101,6 +102,7 @@ private:					// 自分だけアクセスできる
 	// メンバ関数
 	static void CatPosReset(void);			// ネコの位置をリセットする
 	static void RatPosReset(void);			// ネズミの位置をリセットする
+	static void RatPosTable(void);			// ネズミをテーブルの上に配置する
 	void Pause(void);			// ポーズ処理
 	void Transition(void);		// 遷移処理
 

@@ -9,6 +9,7 @@
 //********************************************
 #include "manager.h"
 #include "screen_frame.h"
+#include "texture.h"
 
 //--------------------------------------------
 // 無名名前空間
@@ -17,12 +18,13 @@ namespace
 {
 	static const D3DXVECTOR3 FRAME_POS = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f);		// 位置
 	static const D3DXVECTOR3 FRAME_SIZE = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f);		// サイズ
+	static const char* FRAME_TEXTURE = "data\\TEXTURE\\UI_FRAME.png";										// テクスチャ
 }
 
 //============================
 // コンストラクタ
 //============================
-CScreenFrame::CScreenFrame() : CObject2D(CObject::TYPE_SCREENFRAME, CObject::PRIORITY_BG)
+CScreenFrame::CScreenFrame() : CObject2D(CObject::TYPE_SCREENFRAME, CObject::PRIORITY_UI)
 {
 
 }
@@ -92,6 +94,9 @@ void CScreenFrame::SetData(void)
 
 	// 頂点情報の初期化
 	SetVertex();
+
+	// テクスチャの割り当て処理
+	BindTexture(CManager::Get()->GetTexture()->Regist(FRAME_TEXTURE));
 }
 
 //============================
@@ -131,6 +136,9 @@ CScreenFrame* CScreenFrame::Create(void)
 			// NULL を返す
 			return nullptr;
 		}
+
+		// 情報の設定処理
+		pScreen->SetData();
 	}
 	else
 	{ // オブジェクトが NULL の場合
