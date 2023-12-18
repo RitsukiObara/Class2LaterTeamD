@@ -800,20 +800,8 @@ bool collision::BlockHit(CPlayer* player, const D3DXVECTOR3& pos, const D3DXVECT
 
 						D3DXVECTOR3 DestPos = pPlayer->GetPos() - pos;		// –Ú“I‚ÌˆÊ’u
 
-						int nAngle = rand() % 1;
-						float fAngleRand = 0.0f;
-
-						if (nAngle == 0)
-						{
-							fAngleRand = 0.25f;
-						}
-						else if (nAngle == 1)
-						{
-							fAngleRand = -0.25f;
-						}
-
 						// –Ú“I‚ÌŒü‚«‚ð‹‚ß‚é
-						fAngle = atan2f(DestPos.x, DestPos.z) + D3DX_PI * fAngleRand;
+						fAngle = atan2f(DestPos.x, DestPos.z) + 50.0f;
 
 						// ‚«”ò‚Ñˆ—
 						pPlayer->Smash(fAngle);

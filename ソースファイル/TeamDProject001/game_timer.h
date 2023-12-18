@@ -54,6 +54,7 @@ private:			// 自分だけアクセスできる
 	// メンバ変数
 	CNumber* m_apNumber[GAME_TIME_DIGIT];	// 番号の情報
 	CObject2D* m_pColon;					// コロン
+	CObject2D* m_pBG;						// 背景
 	int m_nSeconds;							// 秒数
 	int m_nFrame;							// フレーム数
 
