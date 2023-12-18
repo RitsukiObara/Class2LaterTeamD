@@ -510,6 +510,9 @@
     <ClCompile Include="switch.cpp">
       <Filter>Gimmick\Obstacle</Filter>
     </ClCompile>
+    <ClCompile Include="screen_frame.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -931,6 +934,9 @@
     </ClInclude>
     <ClInclude Include="switch.h">
       <Filter>Gimmick\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="screen_frame.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
