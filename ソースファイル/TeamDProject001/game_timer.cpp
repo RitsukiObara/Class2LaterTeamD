@@ -26,12 +26,14 @@ CGameTime* CGameTime::m_pGameTimer = nullptr;		// ゲームタイマーの情報
 //--------------------------------------------------
 #define TIME_COUNTDOWN		(60)	// 秒数
 #define ONE_SECOND			(60)	// 1秒のフレーム数
-#define TIME_POS			(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f))		// ゲームタイマーの位置
+#define TIME_POS			(D3DXVECTOR3(618.0f, SCREEN_HEIGHT * 0.5f, 0.0f))		// ゲームタイマーの位置
 #define TIME_SIZE			(D3DXVECTOR3(25.0f, 40.0f, 0.0f))		// ゲームタイマーのサイズ
-#define TIME_CORON_POS		(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f))		// ゲームタイマーのコロンの位置
+#define TIME_CORON_POS		(D3DXVECTOR3(618.0f, SCREEN_HEIGHT * 0.5f, 0.0f))		// ゲームタイマーのコロンの位置
 #define TIME_CORON_SIZE		(D3DXVECTOR3(15.0f, 30.0f, 0.0f))		// ゲームタイマーのコロンのサイズ
-#define TIME_SHIFT			(23.0f)									// ゲームタイマーのコロンのサイズ
-#define TIME_CORON_SHIFT	(15.0f)									// ゲームタイマーのコロンのサイズ
+#define TIME_BG_POS			(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f))		// ゲームタイマーの背景の位置
+#define TIME_BG_SIZE		(D3DXVECTOR3(90.0f, 40.0f, 0.0f))		// ゲームタイマーの背景のサイズ
+#define TIME_SHIFT			(23.0f)									// ゲームタイマーのずらす幅
+#define TIME_CORON_SHIFT	(15.0f)									// ゲームタイマーのコロンのずらす幅
 #define NUMBER_TEXTURE		"data\\TEXTURE\\Number.png"				// 数字のテクスチャ
 #define CORON_TEXTURE		"data\\TEXTURE\\time_koron.png"			// コロンのテクスチャ
 
@@ -46,6 +48,7 @@ CGameTime::CGameTime() : CObject(CObject::TYPE_TIME, CObject::PRIORITY_UI)
 		m_apNumber[nCnt] = nullptr;		// 数字の情報
 	}
 	m_pColon = nullptr;					// コロン
+	m_pBG = nullptr;					// 背景
 	m_nSeconds = TIME_COUNTDOWN;		// 秒数
 	m_nFrame = 0;						// フレーム数
 }
@@ -107,6 +110,14 @@ HRESULT CGameTime::Init(void)
 		m_pColon = CObject2D::Create(CObject2D::TYPE_NONE, TYPE_NONE, PRIORITY_UI);
 	}
 
+	if (m_pBG == nullptr)
+	{ // 背景が NULL の場合
+
+		// 背景を生成する
+		m_pBG = CObject2D::Create(CObject2D::TYPE_NONE, TYPE_NONE, PRIORITY_UI);
+	}
+
+
 	// 成功を返す
 	return S_OK;
 }
@@ -133,6 +144,14 @@ void CGameTime::Uninit(void)
 		// コロンの終了処理
 		m_pColon->Uninit();
 		m_pColon = nullptr;
+	}
+
+	if (m_pBG != nullptr)
+	{ // 背景の情報が NULL じゃない場合
+
+		// 背景の終了処理
+		m_pBG->Uninit();
+		m_pBG = nullptr;
 	}
 
 	// 本体の終了処理
@@ -164,6 +183,14 @@ void CGameTime::Draw(void)
 {
 	if (CGame::GetState() != CGame::STATE_START && CGame::GetCountDown() == false)
 	{ // 一定の状態以外の場合
+
+		if (m_pBG != nullptr)
+		{ // 背景の情報が NULL じゃない場合
+
+			// 描画処理
+			m_pBG->Draw();
+		}
+
 		for (int nCnt = 0; nCnt < GAME_TIME_DIGIT; nCnt++)
 		{
 			if (m_apNumber[nCnt] != nullptr)
@@ -259,6 +286,24 @@ void CGameTime::SetData(void)
 
 		// 頂点座標の設定処理
 		m_pColon->SetVertex();
+	}
+
+	if (m_pBG != nullptr)
+	{ // 背景が NULL じゃない場合
+
+		// 情報の設定処理
+		m_pBG->SetPos(TIME_BG_POS);				// 位置
+		m_pBG->SetPosOld(TIME_BG_POS);			// 前回の位置
+		m_pBG->SetRot(NONE_D3DXVECTOR3);		// 向き
+		m_pBG->SetSize(TIME_BG_SIZE);			// サイズ
+		m_pBG->SetAngle();						// 方向
+		m_pBG->SetLength();						// 長さ
+
+		// 頂点座標の設定処理
+		m_pBG->SetVertex();
+
+		// 頂点カラーの設定処理
+		m_pBG->SetVtxColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
 	}
 }
 
