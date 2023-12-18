@@ -15,6 +15,7 @@
 #include "objectX.h"
 #include "tarai.h"
 #include "input.h"
+#include "sound.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -252,6 +253,9 @@ void CHimo::Action(void)
 {
 	// アクション状況を true にする
 	SetAction(true);
+
+	// ひものSE鳴らす
+	CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_HIMO);
 }
 
 //=====================================

@@ -90,10 +90,6 @@ private:		// 自分だけアクセスできる
 	float m_fPauseAlpha;					// 透明度を変化させる変数
 	bool m_bPause;							// ポーズ状況
 	bool m_bDisp;							// 描画状況
-
-	// 静的メンバ変数
-	static const char *c_apFilename[POLYGON_MAX];		// テクスチャファイル名
-	static const Info c_aPauseInfo[POLYGON_MAX];		// ポーズの情報
 };
 
 #endif

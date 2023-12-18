@@ -22,7 +22,7 @@
 //-------------------------------------------
 namespace
 {
-	static const D3DXVECTOR3 SWITCH_POS[MAP_TYPE][MAX_SWITCH] =		// スイッチの位置
+	const D3DXVECTOR3 SWITCH_POS[MAP_TYPE][MAX_SWITCH] =		// スイッチの位置
 	{
 		{ // 1マップ目
 			NONE_D3DXVECTOR3,
@@ -30,7 +30,7 @@ namespace
 			NONE_D3DXVECTOR3
 		},
 	};
-	static const D3DXVECTOR3 SWITCH_ROT[MAP_TYPE][MAX_SWITCH] =		// スイッチの向き
+	const D3DXVECTOR3 SWITCH_ROT[MAP_TYPE][MAX_SWITCH] =		// スイッチの向き
 	{
 		{ // 1マップ目
 			NONE_D3DXVECTOR3,
@@ -38,9 +38,9 @@ namespace
 			NONE_D3DXVECTOR3
 		},
 	};
-	static const float CLOSE_SCALE = 0.03f;					// 閉じた状態の拡大率
-	static const float SCALE_CORRECT = 0.01f;				// 拡大率の補正率
-	static const float OPEN_SCALE = 1.0f;					// 開いた状態の拡大率
+	const float CLOSE_SCALE = 0.03f;					// 閉じた状態の拡大率
+	const float SCALE_CORRECT = 0.01f;				// 拡大率の補正率
+	const float OPEN_SCALE = 1.0f;					// 開いた状態の拡大率
 }
 
 //==============================

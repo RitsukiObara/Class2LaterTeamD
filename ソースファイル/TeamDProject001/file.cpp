@@ -18,21 +18,26 @@
 #include "edit.h"
 
 //--------------------------------------------
-// マクロ定義
+// 無名名前空間
 //--------------------------------------------
-#define OBSTACLE_TXT		"data\\TXT\\Obstacle.txt"		// 障害物のテキスト
-#define MAP_OBSTACLE1_TXT	"data\\TXT\\MapObstacle1.txt"	// マップの障害物1のテキスト
-#define MAP_OBSTACLE2_TXT	"data\\TXT\\MapObstacle2.txt"	// マップの障害物2のテキスト
-#define MAP_OBSTACLE3_TXT	"data\\TXT\\MapObstacle3.txt"	// マップの障害物3のテキスト
-#define MAP_BLOCK1_TXT		"data\\TXT\\Block1.txt"			// マップのブロック1のテキスト
-#define MAP_BLOCK2_TXT		"data\\TXT\\Block2.txt"			// マップのブロック2のテキスト
-#define MAP_BLOCK3_TXT		"data\\TXT\\Block3.txt"			// マップのブロック3のテキスト
-#define CARROUTE_TXT		"data\\TXT\\CarRoute.txt"		// 車の経路のテキスト
-#define BLOCK_TXT			"data\\TXT\\Block.txt"			// ブロックのテキスト
-#define TUTORIAL_BLOCK_TXT	"data\\TXT\\Tutorial.txt"		// ブロックのテキスト
-#define TUTORIAL_TABLE_TXT	"data\\TXT\\TutorialTable.txt"	// ブロックのテキスト
-#define TUTORIAL_KILL_TXT	"data\\TXT\\TutorialKill.txt"	// ブロックのテキスト
-#define TUTORIAL_ACTION_TXT	"data\\TXT\\TutorialAction.txt"	// ブロックのテキスト
+namespace
+{
+	const char* TXT[CFile::TYPE_MAX] =
+	{
+		"data\\TXT\\Obstacle.txt",			// 障害物のテキスト
+		"data\\TXT\\MapObstacle1.txt",		// マップの障害物1のテキスト
+		"data\\TXT\\MapObstacle2.txt",		// マップの障害物2のテキスト
+		"data\\TXT\\MapObstacle3.txt",		// マップの障害物3のテキスト
+		"data\\TXT\\Block1.txt",			// マップのブロック1のテキスト
+		"data\\TXT\\Block2.txt",			// マップのブロック2のテキスト
+		"data\\TXT\\Block3.txt",			// マップのブロック3のテキスト
+		"data\\TXT\\Block.txt",				// ブロックのテキスト
+		"data\\TXT\\Tutorial.txt",			// チュートリアルのデフォルトブロック
+		"data\\TXT\\TutorialTable.txt",		//チュートリアルのテーブル用ブロック
+		"data\\TXT\\TutorialKill.txt",		// チュートリアルのキル用ブロック
+		"data\\TXT\\TutorialAction.txt",	// チュートリアルのアクション用ブロック
+	};
+}
 
 //--------------------------------------------
 // 静的メンバ変数宣言
@@ -84,7 +89,7 @@ HRESULT CFile::Save(const TYPE type)
 	case TYPE_OBSTACLE:
 
 		// 障害物のセーブ処理
-		if (FAILED(SaveObstacle(OBSTACLE_TXT)))
+		if (FAILED(SaveObstacle(TXT[TYPE_OBSTACLE])))
 		{ // 失敗した場合
 
 			// 失敗を返す
@@ -96,7 +101,7 @@ HRESULT CFile::Save(const TYPE type)
 	case TYPE_MAP_OBSTACLE1:
 
 		// 障害物のセーブ処理
-		if (FAILED(SaveObstacle(MAP_OBSTACLE1_TXT)))
+		if (FAILED(SaveObstacle(TXT[TYPE_MAP_OBSTACLE1])))
 		{ // 失敗した場合
 
 		  // 失敗を返す
@@ -108,7 +113,7 @@ HRESULT CFile::Save(const TYPE type)
 	case TYPE_MAP_OBSTACLE2:
 
 		// 障害物のセーブ処理
-		if (FAILED(SaveObstacle(MAP_OBSTACLE2_TXT)))
+		if (FAILED(SaveObstacle(TXT[TYPE_MAP_OBSTACLE2])))
 		{ // 失敗した場合
 
 		  // 失敗を返す
@@ -120,7 +125,7 @@ HRESULT CFile::Save(const TYPE type)
 	case TYPE_MAP_OBSTACLE3:
 
 		// 障害物のセーブ処理
-		if (FAILED(SaveObstacle(MAP_OBSTACLE3_TXT)))
+		if (FAILED(SaveObstacle(TXT[TYPE_MAP_OBSTACLE3])))
 		{ // 失敗した場合
 
 		  // 失敗を返す
@@ -132,7 +137,7 @@ HRESULT CFile::Save(const TYPE type)
 	case TYPE_MAP_BLOCK1:
 
 		// 障害物のセーブ処理
-		if (FAILED(SaveBlock(MAP_BLOCK1_TXT)))
+		if (FAILED(SaveBlock(TXT[TYPE_MAP_BLOCK1])))
 		{ // 失敗した場合
 
 		  // 失敗を返す
@@ -144,7 +149,7 @@ HRESULT CFile::Save(const TYPE type)
 	case TYPE_MAP_BLOCK2:
 
 		// 障害物のセーブ処理
-		if (FAILED(SaveBlock(MAP_BLOCK2_TXT)))
+		if (FAILED(SaveBlock(TXT[TYPE_MAP_BLOCK2])))
 		{ // 失敗した場合
 
 		  // 失敗を返す
@@ -156,7 +161,7 @@ HRESULT CFile::Save(const TYPE type)
 	case TYPE_MAP_BLOCK3:
 
 		// 障害物のセーブ処理
-		if (FAILED(SaveBlock(MAP_BLOCK3_TXT)))
+		if (FAILED(SaveBlock(TXT[TYPE_MAP_BLOCK3])))
 		{ // 失敗した場合
 
 		  // 失敗を返す
@@ -168,7 +173,7 @@ HRESULT CFile::Save(const TYPE type)
 	case TYPE_BLOCK:
 
 		// ブロックのセーブ処理
-		if (FAILED(SaveBlock(BLOCK_TXT)))
+		if (FAILED(SaveBlock(TXT[TYPE_BLOCK])))
 		{ // 失敗した場合
 
 			// 失敗を返す
@@ -178,7 +183,7 @@ HRESULT CFile::Save(const TYPE type)
 	case TYPE_TUTORIAL_DEFULT:
 
 		// ブロックのセーブ処理
-		if (FAILED(SaveBlock(TUTORIAL_BLOCK_TXT)))
+		if (FAILED(SaveBlock(TXT[TYPE_TUTORIAL_DEFULT])))
 		{ // 失敗した場合
 
 		  // 失敗を返す
@@ -190,7 +195,7 @@ HRESULT CFile::Save(const TYPE type)
 	case TYPE_TUTORIAL_TABLE:
 
 		// ブロックのセーブ処理
-		if (FAILED(SaveBlock(TUTORIAL_TABLE_TXT)))
+		if (FAILED(SaveBlock(TXT[TYPE_TUTORIAL_TABLE])))
 		{ // 失敗した場合
 
 		  // 失敗を返す
@@ -202,7 +207,7 @@ HRESULT CFile::Save(const TYPE type)
 	case TYPE_TUTORIAL_KILL:
 
 		// ブロックのセーブ処理
-		if (FAILED(SaveBlock(TUTORIAL_KILL_TXT)))
+		if (FAILED(SaveBlock(TXT[TYPE_TUTORIAL_KILL])))
 		{ // 失敗した場合
 
 		  // 失敗を返す
@@ -214,7 +219,7 @@ HRESULT CFile::Save(const TYPE type)
 	case TYPE_TUTORIAL_ACTION:
 
 		// ブロックのセーブ処理
-		if (FAILED(SaveBlock(TUTORIAL_ACTION_TXT)))
+		if (FAILED(SaveBlock(TXT[TYPE_TUTORIAL_ACTION])))
 		{ // 失敗した場合
 
 		  // 失敗を返す
@@ -245,7 +250,7 @@ HRESULT CFile::Load(const TYPE type)
 	case TYPE_OBSTACLE:
 
 		// 障害物のロード処理
-		if (FAILED(LoadObstacle(OBSTACLE_TXT)))
+		if (FAILED(LoadObstacle(TXT[TYPE_OBSTACLE])))
 		{ // 失敗した場合
 
 			// 失敗を返す
@@ -257,7 +262,7 @@ HRESULT CFile::Load(const TYPE type)
 	case TYPE_MAP_OBSTACLE1:
 
 		// 障害物のロード処理
-		if (FAILED(LoadObstacle(MAP_OBSTACLE1_TXT)))
+		if (FAILED(LoadObstacle(TXT[TYPE_MAP_OBSTACLE1])))
 		{ // 失敗した場合
 
 		  // 失敗を返す
@@ -269,7 +274,7 @@ HRESULT CFile::Load(const TYPE type)
 	case TYPE_MAP_OBSTACLE2:
 
 		// 障害物のロード処理
-		if (FAILED(LoadObstacle(MAP_OBSTACLE2_TXT)))
+		if (FAILED(LoadObstacle(TXT[TYPE_MAP_OBSTACLE2])))
 		{ // 失敗した場合
 
 		  // 失敗を返す
@@ -281,7 +286,7 @@ HRESULT CFile::Load(const TYPE type)
 	case TYPE_MAP_OBSTACLE3:
 
 		// 障害物のロード処理
-		if (FAILED(LoadObstacle(MAP_OBSTACLE3_TXT)))
+		if (FAILED(LoadObstacle(TXT[TYPE_MAP_OBSTACLE3])))
 		{ // 失敗した場合
 
 		  // 失敗を返す
@@ -293,7 +298,7 @@ HRESULT CFile::Load(const TYPE type)
 	case TYPE_MAP_BLOCK1:
 
 		// 障害物のロード処理
-		if (FAILED(LoadBlock(MAP_BLOCK1_TXT)))
+		if (FAILED(LoadBlock(TXT[TYPE_MAP_BLOCK1])))
 		{ // 失敗した場合
 
 		  // 失敗を返す
@@ -305,7 +310,7 @@ HRESULT CFile::Load(const TYPE type)
 	case TYPE_MAP_BLOCK2:
 
 		// 障害物のロード処理
-		if (FAILED(LoadBlock(MAP_BLOCK2_TXT)))
+		if (FAILED(LoadBlock(TXT[TYPE_MAP_BLOCK2])))
 		{ // 失敗した場合
 
 		  // 失敗を返す
@@ -317,7 +322,7 @@ HRESULT CFile::Load(const TYPE type)
 	case TYPE_MAP_BLOCK3:
 
 		// 障害物のロード処理
-		if (FAILED(LoadBlock(MAP_BLOCK3_TXT)))
+		if (FAILED(LoadBlock(TXT[TYPE_MAP_BLOCK3])))
 		{ // 失敗した場合
 
 		  // 失敗を返す
@@ -329,7 +334,7 @@ HRESULT CFile::Load(const TYPE type)
 	case TYPE_BLOCK:
 
 		// ブロックのロード処理
-		if (FAILED(LoadBlock(BLOCK_TXT)))
+		if (FAILED(LoadBlock(TXT[TYPE_BLOCK])))
 		{ // 失敗した場合
 
 			// 失敗を返す
@@ -341,7 +346,7 @@ HRESULT CFile::Load(const TYPE type)
 	case TYPE_TUTORIAL_DEFULT:
 
 		// ブロックのロード処理
-		if (FAILED(LoadBlock(TUTORIAL_BLOCK_TXT)))
+		if (FAILED(LoadBlock(TXT[TYPE_TUTORIAL_DEFULT])))
 		{ // 失敗した場合
 
 		  // 失敗を返す
@@ -353,7 +358,7 @@ HRESULT CFile::Load(const TYPE type)
 	case TYPE_TUTORIAL_TABLE:
 
 		// ブロックのロード処理
-		if (FAILED(LoadBlock(TUTORIAL_TABLE_TXT)))
+		if (FAILED(LoadBlock(TXT[TYPE_TUTORIAL_TABLE])))
 		{ // 失敗した場合
 
 		  // 失敗を返す
@@ -364,7 +369,7 @@ HRESULT CFile::Load(const TYPE type)
 	case TYPE_TUTORIAL_KILL:
 
 		// ブロックのロード処理
-		if (FAILED(LoadBlock(TUTORIAL_KILL_TXT)))
+		if (FAILED(LoadBlock(TXT[TYPE_TUTORIAL_KILL])))
 		{ // 失敗した場合
 
 		  // 失敗を返す
@@ -376,10 +381,10 @@ HRESULT CFile::Load(const TYPE type)
 	case TYPE_TUTORIAL_ACTION:
 
 		// ブロックのロード処理
-		if (FAILED(LoadBlock(TUTORIAL_ACTION_TXT)))
+		if (FAILED(LoadBlock(TXT[TYPE_TUTORIAL_ACTION])))
 		{ // 失敗した場合
 
-		  // 失敗を返す
+			// 失敗を返す
 			return E_FAIL;
 		}
 

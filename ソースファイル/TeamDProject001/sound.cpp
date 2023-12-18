@@ -35,6 +35,10 @@ CSound::SOUNDINFO CSound::m_aSoundInfo[CSound::SOUND_LABEL_MAX] =
 	{ "data\\SE\\bottle_roll.wav",-1 },		// ペットボトルが転がる音
 	{ "data\\SE\\bottle_over.wav",0 },		// ペットボトルが倒れる音
 	{ "data\\SE\\Pick_up.wav",0 },			// 拾った音
+	{ "data\\SE\\tutorial_check.wav",0 },	// チュートリアルのチェック音
+	{ "data\\SE\\himo.wav",0 },				// ひも引っ張る音
+	{ "data\\SE\\mari.wav",0 },				// まりの音
+
 };
 
 //=============================================================================

@@ -43,21 +43,21 @@
 //--------------------------------------------
 namespace
 {
-	static const D3DXVECTOR3 ITEMUI_POS[MAX_PLAY] =			// アイテムUIの位置
+	const D3DXVECTOR3 ITEMUI_POS[MAX_PLAY] =			// アイテムUIの位置
 	{
 		D3DXVECTOR3(70.0f,50.0f,0.0f),
 		D3DXVECTOR3(SCREEN_WIDTH - 70.0f,50.0f,0.0f),
 		D3DXVECTOR3(70.0f,SCREEN_HEIGHT * 0.5f + 50.0f,0.0f),
 		D3DXVECTOR3(SCREEN_WIDTH - 70.0f,SCREEN_HEIGHT * 0.5f + 50.0f,0.0f)
 	};
-	static const D3DXVECTOR3 CAT_SIZE = D3DXVECTOR3(70.0f, 280.0f, 70.0f);		// 当たり判定のサイズ
-	static const float MOVE_SPEED = 20.0f;			// 移動速度
-	static const float ATTACK_DISTANCE = 100.0f;	// 攻撃範囲までの距離
-	static const float GRAVITY = 1.2f;				// 重力
-	static const float STUN_HEIGHT = 300.0f;		// 気絶演出が出てくる高さ
-	static const float ID_HEIGHT = 350.0f;			// IDが出てくる高さ
-	static const int STANDBY_COUNT = 12;			// スタンバイ状態のカウント数
-	static const int ATTACK_COUNT = 30;				// 攻撃状態のカウント数
+	const D3DXVECTOR3 CAT_SIZE = D3DXVECTOR3(70.0f, 280.0f, 70.0f);		// 当たり判定のサイズ
+	const float MOVE_SPEED = 20.0f;			// 移動速度
+	const float ATTACK_DISTANCE = 100.0f;	// 攻撃範囲までの距離
+	const float GRAVITY = 1.2f;				// 重力
+	const float STUN_HEIGHT = 300.0f;		// 気絶演出が出てくる高さ
+	const float ID_HEIGHT = 350.0f;			// IDが出てくる高さ
+	const int STANDBY_COUNT = 12;			// スタンバイ状態のカウント数
+	const int ATTACK_COUNT = 30;				// 攻撃状態のカウント数
 }
 
 //--------------------------------------------

@@ -40,17 +40,17 @@
 //-------------------------------------------
 namespace
 {
-	static const D3DXVECTOR3 COLLSIZE = D3DXVECTOR3(30.0f, 50.0f, 30.0f);		// 当たり判定でのサイズ
-	static const float GRAVITY = 1.2f;					// 重力
-	static const float ADD_MOVE_Y = 25.0f;				// ジャンプ力
-	static const float ATTACK_DISTANCE = 80.0f;			// 攻撃範囲までの距離
-	static const float MOVE_SPEED = 15.0f;				// 速度
-	static const float ARROW_DISTANCE = 100.0f;			// このネズミの矢印の距離
-	static const float STUN_HEIGHT = 80.0f;				// 気絶演出が出てくる高さ
-	static const float ID_HEIGHT = 110.0f;				// IDが出てくる高さ
-	static const int INVINCIBLE_COUNT = 60;				// 無敵カウント
-	static const WORD DEATH_VIBRATE = 50000;			// 死んだときのバイブレーションの強度
-	static const int DEATH_VIBRATE_COUNT = 20;			// 死んだときのバイブレーションのカウント数
+	const D3DXVECTOR3 COLLSIZE = D3DXVECTOR3(30.0f, 50.0f, 30.0f);		// 当たり判定でのサイズ
+	const float GRAVITY = 1.2f;					// 重力
+	const float ADD_MOVE_Y = 25.0f;				// ジャンプ力
+	const float ATTACK_DISTANCE = 80.0f;			// 攻撃範囲までの距離
+	const float MOVE_SPEED = 15.0f;				// 速度
+	const float ARROW_DISTANCE = 100.0f;			// このネズミの矢印の距離
+	const float STUN_HEIGHT = 80.0f;				// 気絶演出が出てくる高さ
+	const float ID_HEIGHT = 110.0f;				// IDが出てくる高さ
+	const int INVINCIBLE_COUNT = 60;				// 無敵カウント
+	const WORD DEATH_VIBRATE = 50000;			// 死んだときのバイブレーションの強度
+	const int DEATH_VIBRATE_COUNT = 20;			// 死んだときのバイブレーションのカウント数
 }
 
 //--------------------------------------------
