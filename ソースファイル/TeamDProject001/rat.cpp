@@ -225,6 +225,13 @@ void CRat::Update(void)
 		m_bJump = false;
 	}
 
+	if (GetMove().y <= -GRAVITY)
+	{ // 重力が一定以上あった場合(あとで修繕予定)
+
+		// ジャンプしている
+		m_bJump = true;
+	}
+
 	if (GetPlayerID() != nullptr)
 	{ // プレイヤーのID表示が NULL じゃない場合
 
