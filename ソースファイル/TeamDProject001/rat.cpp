@@ -42,7 +42,7 @@ namespace
 {
 	static const D3DXVECTOR3 COLLSIZE = D3DXVECTOR3(30.0f, 50.0f, 30.0f);		// 当たり判定でのサイズ
 	static const float GRAVITY = 1.2f;					// 重力
-	static const float ADD_MOVE_Y = 24.0f;				// ジャンプ力
+	static const float ADD_MOVE_Y = 25.0f;				// ジャンプ力
 	static const float ATTACK_DISTANCE = 80.0f;			// 攻撃範囲までの距離
 	static const float MOVE_SPEED = 15.0f;				// 速度
 	static const float ARROW_DISTANCE = 100.0f;			// このネズミの矢印の距離

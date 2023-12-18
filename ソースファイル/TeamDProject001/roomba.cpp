@@ -11,10 +11,11 @@
 #include "manager.h"
 #include "renderer.h"
 #include "roomba.h"
+#include "model.h"
 #include "useful.h"
-#include "objectX.h"
 
 #include "player.h"
+#include "sound.h"
 
 //==============================
 // コンストラクタ
@@ -55,6 +56,9 @@ HRESULT CRoomba::Init(void)
 	{
 		m_apSub[nCnt] = NULL;
 	}
+
+	// 掃除音を鳴らす
+	CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_CLEANING);
 	
 	// 値を返す
 	return S_OK;

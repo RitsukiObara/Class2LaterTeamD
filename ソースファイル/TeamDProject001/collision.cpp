@@ -358,7 +358,7 @@ void collision::ObstacleAction(CPlayer* pPlayer, const float Radius)
 			{
 				if (pObstacle->GetType() == CObstacle::TYPE::TYPE_LEASH ||
 					pObstacle->GetType() == CObstacle::TYPE::TYPE_REDKATEN)
-				{//リードのとき
+				{//多人数アクションのとき
 					pObstacle->HitMultiCircle(pPlayer, Radius, true);
 				}
 				else
@@ -366,10 +366,20 @@ void collision::ObstacleAction(CPlayer* pPlayer, const float Radius)
 					if (pObstacle->HitCircle(pPlayer, Radius) == true)
 					{ // 障害物の当たり判定が通った場合
 
-						//起動状態にする
-						pObstacle->Action();
+						if (pObstacle->GetType() == CObstacle::TYPE::TYPE_BOOK)
+						{ // 起動にプレイヤーの情報が必要な場合
 
-						//ネズミがアクションを行った判定(チュートリアル用)
+							// アクション処理
+							pObstacle->Action(pPlayer);
+						}
+						else
+						{ // 上記以外
+
+							// アクション処理
+							pObstacle->Action();
+						}
+
+						// ネズミがアクションを行った判定(チュートリアル用)
 						pPlayer->SetUseAction(true);
 					}
 				}
@@ -386,11 +396,22 @@ void collision::ObstacleAction(CPlayer* pPlayer, const float Radius)
 				}
 				else
 				{//リード以外のとき
+
 					if (pObstacle->HitCircle(pPlayer, Radius) == true)
 					{ // 障害物の当たり判定が通った場合
 
-					  //起動状態にする
-						pObstacle->Action();
+						if (pObstacle->GetType() == CObstacle::TYPE::TYPE_BOOK)
+						{ // 起動にプレイヤーの情報が必要な場合
+
+							// アクション処理
+							pObstacle->Action(pPlayer);
+						}
+						else
+						{ // 上記以外
+
+							// アクション処理
+							pObstacle->Action();
+						}
 
 						//ネズミがアクションを行った判定(チュートリアル用)
 						pPlayer->SetUseAction(true);
@@ -663,7 +684,8 @@ void collision::BlockRectangleCollision(const CBlock& block, CPlayer* player, co
 		}
 	}
 
-	if (collision.bTop == true)
+	if (collision.bTop == true ||
+		collision.bBottom == true)
 	{ // 上に乗った場合
 
 		// 重力を0.0fにする
@@ -714,6 +736,9 @@ void collision::BlockCircleCollision(CBlock& block, CPlayer* player, const float
 
 				// 位置を設定する
 				pos.y = block.GetPos().y + block.GetFileData().vtxMin.y - fHeight;
+
+				// 移動量を0にする
+				move.y = 0.0f;
 			}
 		}
 

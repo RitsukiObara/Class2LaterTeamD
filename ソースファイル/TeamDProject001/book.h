@@ -60,8 +60,8 @@ public:			// 誰でもアクセスできる
 
 	bool Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize) override;	// 当たり判定処理
 	bool Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize) override;		// ヒット処理
-	bool HitCircle(CPlayer* pPlayer, const float Radius) override;
-	void Action(void) override;
+	bool HitCircle(CPlayer* pPlayer, const float Radius) override;			// 円のヒット処理
+	void Action(CPlayer* pPlayer) override;			// アクション処理
 
 private:		// 自分だけアクセスできる
 
@@ -73,6 +73,7 @@ private:		// 自分だけアクセスできる
 	SBook m_aBook[MAX_BOOK];	// 本の構造体
 	D3DXVECTOR3 m_move;			// 移動量
 	STATE m_state;				// 状態
+	int m_nActionID;			// アクションID
 	float m_fGravity;			// 重力
 	bool m_bDisp;				// 描画状況
 	bool m_bMove;				// 移動状況
