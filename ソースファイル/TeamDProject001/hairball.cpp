@@ -13,6 +13,7 @@
 #include "hairball.h"
 #include "collision.h"
 #include "useful.h"
+#include "sound.h"
 
 #include "objectElevation.h"
 #include "elevation_manager.h"
@@ -177,6 +178,9 @@ bool CHairBall::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 			Targetpos.y + collSize.y >= GetPos().y + GetFileData().vtxMin.y &&
 			useful::CylinderInner(Targetpos, GetPos(), GetFileData().fRadius + collSize.x) == true)
 		{ // Ÿ{‚ÆÕ“Ë‚µ‚½ê‡
+
+			// ‚Ü‚è‚ÌSE–Â‚ç‚·
+			CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_HAIRBALL);
 
 			// ‚«”ò‚Î‚µó‘Ô‚É‚·‚é
 			m_state = STATE_SMASH;

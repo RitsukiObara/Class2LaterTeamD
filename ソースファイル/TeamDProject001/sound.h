@@ -43,6 +43,10 @@ public:			// 誰でもアクセス出来る
 		SOUND_LABEL_SE_PETBOTTLES_ROLL,	//ペットボトルが転がる音
 		SOUND_LABEL_SE_PETBOTTLES_FALL_DOWN, //ペットボトルが倒れる音
 		SOUND_LABEL_SE_PICKED_UP,		//拾った音
+		SOUND_LABEL_SE_CHECK,			//チュートリアルのチェック音
+		SOUND_LABEL_SE_HIMO,			//ひもの音
+		SOUND_LABEL_SE_HAIRBALL,		//まりの音
+
 		SOUND_LABEL_MAX					// この列挙型の総数
 	};
 
