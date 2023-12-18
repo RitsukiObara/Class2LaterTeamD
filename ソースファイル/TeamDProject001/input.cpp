@@ -274,7 +274,7 @@ CInputGamePad::CInputGamePad()
 	ZeroMemory(&m_aPadState[0], sizeof(m_aPadState));					// プレス情報
 	ZeroMemory(&m_aPadStateTrigger[0], sizeof(m_aPadStateTrigger));		// トリガー情報
 	ZeroMemory(&m_aPadStateRelease[0], sizeof(m_aPadStateRelease));		// リリース情報
-	ZeroMemory(&m_aPadVibration[0], sizeof(m_aPadVibration));			// バイブレーション情報
+	ZeroMemory(&m_aVibration[0], sizeof(m_aVibration));					// バイブレーション情報
 	m_bConnect = false;													// 接続判定
 }
 
@@ -307,7 +307,7 @@ HRESULT CInputGamePad::Init(HINSTANCE hInstance, HWND hWnd)
 	memset(&m_aPadStateRelease[0], 0, sizeof(m_aPadStateRelease));
 
 	// バイブレーション情報を用意する
-	memset(&m_aPadVibration[0], 0, sizeof(m_aPadVibration));
+	memset(&m_aVibration[0], 0, sizeof(m_aVibration));
 
 	// 接続判定を初期化する
 	m_bConnect = false;
@@ -356,6 +356,41 @@ void CInputGamePad::Update(void)
 
 			// 接続されている
 			bConnect = true;
+
+			if (m_aVibration[nCntGP].nCountRight > 0)
+			{ // 右のカウントが0超過の場合
+
+				// カウントを減算する
+				m_aVibration[nCntGP].nCountRight--;
+			}
+			else
+			{ // 上記以外
+				
+				// カウントを0にする
+				m_aVibration[nCntGP].nCountRight = 0;
+
+				// 右のバイブレーションの強さを0にする
+				m_aVibration[nCntGP].vibration.wRightMotorSpeed = 0;
+			}
+
+			if (m_aVibration[nCntGP].nCountLeft > 0)
+			{ // 左のカウントが0超過の場合
+
+				// カウントを減算する
+				m_aVibration[nCntGP].nCountLeft--;
+			}
+			else
+			{ // 上記以外
+				
+				// カウントを0にする
+				m_aVibration[nCntGP].nCountLeft = 0;
+
+				// 左のバイブレーションの強さを0にする
+				m_aVibration[nCntGP].vibration.wLeftMotorSpeed = 0;
+			}
+
+			// バイブレーションの情報を渡す
+			XInputSetState(nCntGP, &m_aVibration[nCntGP].vibration);
 		}
 	}
 
@@ -390,45 +425,31 @@ bool CInputGamePad::GetRelease(JOYKEY nKey, int nPlayer)
 //======================================
 // 右のバイブレーション処理
 //======================================
-void CInputGamePad::GetRightVibration(int nPlayer, const bool bSwitch)
+void CInputGamePad::GetRightVibration(int nPlayer, const WORD strength, const int nCount)
 {
-	if (bSwitch == true)
-	{ // Switchが ON の場合
+	// 右のバイブレーションを ON にする
+	m_aVibration[nPlayer].vibration.wRightMotorSpeed = strength;
 
-		// 右のバイブレーションを ON にする
-		m_aPadVibration[nPlayer].wRightMotorSpeed = 65535;
-	}
-	else
-	{ // Switchが OFF の場合
-
-		// 右のバイブレーションを OFF にする
-		m_aPadVibration[nPlayer].wRightMotorSpeed = 0;
-	}
+	// カウントを設定する
+	m_aVibration[nPlayer].nCountRight = nCount;
 
 	// バイブレーションの情報を渡す
-	XInputSetState(nPlayer, &m_aPadVibration[nPlayer]);
+	XInputSetState(nPlayer, &m_aVibration[nPlayer].vibration);
 }
 
 //======================================
 // 左のバイブレーション処理
 //======================================
-void CInputGamePad::GetLeftVibration(int nPlayer, const bool bSwitch)
+void CInputGamePad::GetLeftVibration(int nPlayer, const WORD strength, const int nCount)
 {
-	if (bSwitch == true)
-	{ // Switchが ON の場合
+	// 右のバイブレーションを ON にする
+	m_aVibration[nPlayer].vibration.wLeftMotorSpeed = strength;
 
-		// 左のバイブレーションを ON にする
-		m_aPadVibration[nPlayer].wLeftMotorSpeed = 65535;
-	}
-	else
-	{ // Switchが OFF の場合
-
-		// 左のバイブレーションを OFF にする
-		m_aPadVibration[nPlayer].wLeftMotorSpeed = 0;
-	}
+	// カウントを設定する
+	m_aVibration[nPlayer].nCountLeft = nCount;
 
 	// バイブレーションの情報を渡す
-	XInputSetState(nPlayer, &m_aPadVibration[nPlayer]);
+	XInputSetState(nPlayer, &m_aVibration[nPlayer].vibration);
 }
 
 //======================================

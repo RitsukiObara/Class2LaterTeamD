@@ -49,6 +49,8 @@ namespace
 	static const float STUN_HEIGHT = 80.0f;				// 気絶演出が出てくる高さ
 	static const float ID_HEIGHT = 110.0f;				// IDが出てくる高さ
 	static const int INVINCIBLE_COUNT = 60;				// 無敵カウント
+	static const WORD DEATH_VIBRATE = 50000;			// 死んだときのバイブレーションの強度
+	static const int DEATH_VIBRATE_COUNT = 20;			// 死んだときのバイブレーションのカウント数
 }
 
 //--------------------------------------------
@@ -508,6 +510,10 @@ void CRat::Hit(void)
 
 	if (state == STATE_NONE)
 	{ // ダメージ受ける状態だった場合
+
+		// バイブレーションを設定する
+		CManager::Get()->GetInputGamePad()->GetRightVibration(GetPlayerIdx(), DEATH_VIBRATE, DEATH_VIBRATE_COUNT);
+		CManager::Get()->GetInputGamePad()->GetLeftVibration(GetPlayerIdx(), DEATH_VIBRATE, DEATH_VIBRATE_COUNT);
 
 		CParticle::Create(pos, CParticle::TYPE_ENEMYDEATH); //パーティクル
 
