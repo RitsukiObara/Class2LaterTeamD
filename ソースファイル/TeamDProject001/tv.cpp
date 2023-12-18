@@ -10,27 +10,38 @@
 #include "main.h"
 #include "manager.h"
 #include "tv.h"
+#include "model.h"
 #include "useful.h"
-#include "object3D.h"
 #include "input.h"
 #include "texture.h"
 #include "collision.h"
-#include "block.h"
+#include "object3D.h"
 #include "player.h"
 #include "game.h"
 #include"sound.h"
 
 //------------------------------
-// マクロ定義
+// 無名名前関数
 //------------------------------
-#define COOL_TIME			(300)	// クールタイム
-#define CHANGE_TIME			(120)	// 画面変化速度
-#define VISION_SIZE			(D3DXVECTOR3(150.0f, 80.0f, 0.0f))		// ビジョンのサイズ
-#define NONE_TEXTURE		("data\\TEXTURE\\TV000.png")			// 何でもない画面のテクスチャ
-#define BOMB_TEXTURE		("data\\TEXTURE\\TV001.png")			// 爆誕の画面のテクスチャ
-#define COOLTIME_TEXTURE	("data\\TEXTURE\\TV_sandstorm.jpg")		// クールタイム中のテクスチャ
-#define CAT_RADIUS			(70.0f)		// ネコの半径
-#define RAT_RADIUS			(30.0f)		// ネコの半径
+namespace
+{
+	static const D3DXVECTOR3 REMOCON_POS[MAP_TYPE] =		// リモコンの位置
+	{
+		D3DXVECTOR3(-340.0f, 200.0f, -50.0f),
+	};
+	static const D3DXVECTOR3 REMOCON_ROT[MAP_TYPE] =		// リモコンの向き
+	{
+		D3DXVECTOR3(0.0f, -D3DX_PI * 0.5f, 0.0f),
+	};
+	static const int COOL_TIME = 300;			// クールタイム
+	static const int CHANGE_TIME = 120;			// 画面変化速度
+	static const D3DXVECTOR3 VISION_SIZE = D3DXVECTOR3(150.0f, 80.0f, 0.0f);	// ビジョンのサイズ
+	static const char* NONE_TEXTURE = "data\\TEXTURE\\TV000.png";				// 何でもない画面のテクスチャ
+	static const char* BOMB_TEXTURE = "data\\TEXTURE\\TV001.png";				// 爆弾の画面のテクスチャ
+	static const char* COOLTIME_TEXTURE = "data\\TEXTURE\\TV_sandstorm.jpg";	// クールタイム中のテクスチャ
+	static const float CAT_RADIUS = 70.0f;		// ネコの半径
+	static const float RAT_RADIUS = 30.0f;		// ネズミの半径
+}
 
 //==============================
 // コンストラクタ
@@ -61,7 +72,6 @@ CTv::~CTv()
 //==============================
 HRESULT CTv::Init(void)
 {
-
 	// 全ての値をクリアする
 	m_State = STATE_NONE;				// アイテムが取れる状態に
 	m_pVision = nullptr;				// ポリゴン情報をnullptr
@@ -73,11 +83,30 @@ HRESULT CTv::Init(void)
 	if (FAILED(CObstacle::Init()))
 	{ // 初期化処理に失敗した場合
 
-	  // 失敗を返す
+		// 失敗を返す
 		return E_FAIL;
 	}
 
-	m_pRemocon = CBlock::Create(D3DXVECTOR3(100.0f, 0.0f, 200.0f), CBlock::ROTTYPE_FRONT, CBlock::TYPE_REMOCON);
+	if (CManager::Get()->GetMode() == CScene::MODE_GAME)
+	{ //ゲームモードの場合
+
+		// マップの番号を取得する
+		int nMapNum = CGame::GetMapNumber();
+
+		// リモコンを生成
+		m_pRemocon = CModel::Create(TYPE_NONE, PRIORITY_BLOCK);
+
+		if (m_pRemocon != nullptr)
+		{ // リモコンが NULL じゃない場合
+
+			// 情報の設定処理
+			m_pRemocon->SetPos(REMOCON_POS[nMapNum]);		// 位置
+			m_pRemocon->SetPosOld(REMOCON_POS[nMapNum]);	// 前回の位置
+			m_pRemocon->SetRot(REMOCON_ROT[nMapNum]);		// 向き
+			m_pRemocon->SetScale(NONE_SCALE);				// 拡大率
+			m_pRemocon->SetFileData(CXFile::TYPE_REMOCON);	// モデルの情報
+		}
+	}
 
 	// 使用条件
 	SetRatUse(false);								// ネズミが使用できるか
@@ -98,6 +127,14 @@ void CTv::Uninit(void)
 		// テレビ画面の終了処理
 		m_pVision->Uninit();
 		m_pVision = nullptr;
+	}
+
+	if (m_pRemocon != nullptr)
+	{ // リモコンが NULL の場合
+
+		// リモコンの終了処理
+		m_pRemocon->Uninit();
+		m_pRemocon = nullptr;
 	}
 
 	// 終了処理
@@ -156,6 +193,13 @@ void CTv::Draw(void)
 {
 	// 描画処理
 	CObstacle::Draw();
+
+	if (m_pRemocon != nullptr)
+	{ // リモコンが NULL じゃない場合
+
+		// 描画処理
+		m_pRemocon->Draw();
+	}
 
 	if (m_pVision != nullptr)
 	{ // ビジョンが NULL じゃない場合
