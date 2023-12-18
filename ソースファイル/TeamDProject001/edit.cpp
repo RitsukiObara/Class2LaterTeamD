@@ -27,7 +27,7 @@
 //==============================
 // コンストラクタ
 //==============================
-CEdit::CEdit() : CModel(CObject::TYPE_EDIT, CObject::PRIORITY_UI)
+CEdit::CEdit() : CModel(CObject::TYPE_EDIT, CObject::PRIORITY_BG)
 {
 	// 全ての値をクリアする
 	m_type = TYPE::TYPE_OBSTACLE;				// 種類
