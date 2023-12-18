@@ -111,8 +111,18 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 			{
 			case CObstacle::TYPE_HONEY:
 
-				// 移動量を設定する
-				pPlayer->SetSpeed(pPlayer->GetSpeedCopy() * 0.3f);
+				if (pPlayer->GetType() == CPlayer::TYPE_CAT)
+				{ // ネコの場合
+
+					// 移動量を設定する
+					pPlayer->SetSpeed(pPlayer->GetSpeedCopy() * 0.6f);
+				}
+				else
+				{ // ネズミの場合
+
+					// 移動量を設定する
+					pPlayer->SetSpeed(pPlayer->GetSpeedCopy() * 0.3f);
+				}
 
 				// ジャンプ状況を設定する
 				pPlayer->SetEnableJump(true);

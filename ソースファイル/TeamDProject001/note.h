@@ -44,6 +44,7 @@ private:		// 自分だけアクセスできる
 	D3DXVECTOR3 m_move;		// 移動量
 	int m_nLife;			// 寿命
 	int m_nIndex;			// 使用番号
+	int m_nRandHeight;		// 高さのランダム処理
 	CSpeaker *m_Main;		// 自分の事を使用しているオブジェクト
 };
 
