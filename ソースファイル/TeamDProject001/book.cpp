@@ -377,15 +377,29 @@ bool CBook::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-collSize.x, 0.0f, -collSize.z);
 	CModel* pBook = nullptr;
 
-	for (int nCnt = 0; nCnt < MAX_BOOK; nCnt++)
-	{
-		// 本の情報を設定する
-		pBook = m_aBook[nCnt].pBook;
+	if (pPlayer->GetPlayerIdx() != m_nActionID)
+	{ // 発動した本人じゃなかった場合
+
+		for (int nCnt = 0; nCnt < MAX_BOOK; nCnt++)
+		{
+			// 本の情報を設定する
+			pBook = m_aBook[nCnt].pBook;
+
+			if (m_state == STATE_COLLAPSE &&
+				useful::RectangleCollisionXY(pPlayer->GetPos(), pBook->GetPos(), vtxMax, pBook->GetFileData().vtxMax, vtxMin, pBook->GetFileData().vtxMin) == true &&
+				useful::RectangleCollisionXZ(pPlayer->GetPos(), pBook->GetPos(), vtxMax, pBook->GetFileData().vtxMax, vtxMin, pBook->GetFileData().vtxMin) == true &&
+				useful::RectangleCollisionYZ(pPlayer->GetPos(), pBook->GetPos(), vtxMax, pBook->GetFileData().vtxMax, vtxMin, pBook->GetFileData().vtxMin) == true)
+			{ // 倒れ状態で本に当たった場合
+
+				// true を返す
+				return true;
+			}
+		}
 
 		if (m_state == STATE_COLLAPSE &&
-			useful::RectangleCollisionXY(pPlayer->GetPos(), pBook->GetPos(), vtxMax, pBook->GetFileData().vtxMax, vtxMin, pBook->GetFileData().vtxMin) == true && 
-			useful::RectangleCollisionXZ(pPlayer->GetPos(), pBook->GetPos(), vtxMax, pBook->GetFileData().vtxMax, vtxMin, pBook->GetFileData().vtxMin) == true && 
-			useful::RectangleCollisionYZ(pPlayer->GetPos(), pBook->GetPos(), vtxMax, pBook->GetFileData().vtxMax, vtxMin, pBook->GetFileData().vtxMin) == true)
+			useful::RectangleCollisionXY(pPlayer->GetPos(), GetPos(), vtxMax, GetFileData().vtxMax, vtxMin, GetFileData().vtxMin) == true &&
+			useful::RectangleCollisionXZ(pPlayer->GetPos(), GetPos(), vtxMax, GetFileData().vtxMax, vtxMin, GetFileData().vtxMin) == true &&
+			useful::RectangleCollisionYZ(pPlayer->GetPos(), GetPos(), vtxMax, GetFileData().vtxMax, vtxMin, GetFileData().vtxMin) == true)
 		{ // 倒れ状態で本に当たった場合
 
 			// true を返す
@@ -417,7 +431,7 @@ bool CBook::HitCircle(CPlayer* pPlayer, const float Radius)
 //=====================================
 // 起動時の処理
 //=====================================
-void CBook::Action(void)
+void CBook::Action(CPlayer* pPlayer)
 {
 	if (m_state == STATE_STOP)
 	{ // 停止状態の場合
@@ -450,5 +464,8 @@ void CBook::Action(void)
 
 		// アクション状況を true にする
 		SetAction(true);
+
+		// プレイヤーIdxを代入する
+		m_nActionID = pPlayer->GetPlayerIdx();
 	}
 }

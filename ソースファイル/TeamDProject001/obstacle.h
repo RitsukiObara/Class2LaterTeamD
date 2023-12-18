@@ -70,6 +70,7 @@ public:			// 誰でもアクセスできる
 	virtual bool Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize);		// ヒット処理
 	virtual bool HitCircle(CPlayer* pPlayer, const float Radius) { return false; }							// ヒット処理
 	virtual void Action(void) {}											// ギミック起動処理
+	virtual void Action(CPlayer* pPlayer) {}								// ギミック起動処理(プレイヤー情報が必要な場合)
 	virtual void HitMultiCircle(CPlayer* pPlayer, const float Radius, bool bInput) {}				// ヒット処理
 	virtual void MultiAction(void) {}										// ギミック同時起動処理
 	void GimmickUI(bool Set, int Player_Idx);								// ギミック起動UIの表示

@@ -60,8 +60,8 @@ public:			// 誰でもアクセスできる
 
 	bool Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize) override;	// 当たり判定処理
 	bool Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize) override;		// ヒット処理
-	bool HitCircle(CPlayer* pPlayer, const float Radius) override;
-	void Action(void) override;
+	bool HitCircle(CPlayer* pPlayer, const float Radius) override;			// 円のヒット処理
+	void Action(CPlayer* pPlayer) override;			// アクション処理
 
 private:		// 自分だけアクセスできる
 
