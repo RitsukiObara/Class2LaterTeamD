@@ -75,6 +75,7 @@ public:			// 誰でもアクセスできる
 		TYPE_DEATHARROW,		// 死亡矢印
 		TYPE_ENTRYMESSAGEUI,	// エントリーの説明UI
 		TYPE_ENTRYBG,			// エントリー画面の背景
+		TYPE_SCREENFRAME,		// 画面の枠
 		TYPE_MAX				// この列挙型の総数
 	};
 
