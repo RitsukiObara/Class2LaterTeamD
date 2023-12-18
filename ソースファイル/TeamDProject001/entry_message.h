@@ -4,8 +4,8 @@
 // Author 佐藤根詩音
 //
 //===================================
-#ifndef _ENTRY_MASSAGE_H_
-#define _ENTRY_MASSAGE_H_
+#ifndef _ENTRY_MESSAGE_H_
+#define _ENTRY_MESSAGE_H_
 
 //***********************************
 // インクルードファイル
