@@ -8,6 +8,7 @@
 // インクルードファイル
 //*******************************************
 #include "game.h"
+#include "tutorial.h"
 #include "collision.h"
 #include "shadowCircle.h"
 #include "objectElevation.h"
@@ -25,6 +26,7 @@
 #include "item.h"
 #include "item_manager.h"
 #include "player.h"
+#include "manager.h"
 
 //===============================
 // マクロ定義
@@ -767,8 +769,16 @@ bool collision::BlockHit(CPlayer* player, const D3DXVECTOR3& pos, const D3DXVECT
 
 			for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
 			{
-				// プレイヤーの情報を取得する
-				pPlayer = CGame::GetPlayer(nCnt);
+				if (CManager::Get()->GetMode() == CScene::MODE_TUTORIAL)
+				{
+					// プレイヤーの情報を取得する
+					pPlayer = CTutorial::GetPlayer(nCnt);
+				}
+				else if(CManager::Get()->GetMode() == CScene::MODE_GAME)
+				{
+					// プレイヤーの情報を取得する
+					pPlayer = CGame::GetPlayer(nCnt);
+				}
 
 				if (pPlayer != nullptr &&
 					pPlayer->GetType() == CPlayer::TYPE_RAT)

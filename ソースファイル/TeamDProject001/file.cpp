@@ -30,6 +30,7 @@
 #define CARROUTE_TXT		"data\\TXT\\CarRoute.txt"		// 車の経路のテキスト
 #define BLOCK_TXT			"data\\TXT\\Block.txt"			// ブロックのテキスト
 #define TUTORIAL_BLOCK_TXT	"data\\TXT\\Tutorial.txt"		// ブロックのテキスト
+#define TUTORIAL_TABLE_TXT	"data\\TXT\\TutorialTable.txt"	// ブロックのテキスト
 #define TUTORIAL_KILL_TXT	"data\\TXT\\TutorialKill.txt"	// ブロックのテキスト
 #define TUTORIAL_ACTION_TXT	"data\\TXT\\TutorialAction.txt"	// ブロックのテキスト
 
@@ -178,6 +179,18 @@ HRESULT CFile::Save(const TYPE type)
 
 		// ブロックのセーブ処理
 		if (FAILED(SaveBlock(TUTORIAL_BLOCK_TXT)))
+		{ // 失敗した場合
+
+		  // 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
+	case TYPE_TUTORIAL_TABLE:
+
+		// ブロックのセーブ処理
+		if (FAILED(SaveBlock(TUTORIAL_TABLE_TXT)))
 		{ // 失敗した場合
 
 		  // 失敗を返す
@@ -335,6 +348,17 @@ HRESULT CFile::Load(const TYPE type)
 			return E_FAIL;
 		}
 
+		break;
+
+	case TYPE_TUTORIAL_TABLE:
+
+		// ブロックのロード処理
+		if (FAILED(LoadBlock(TUTORIAL_TABLE_TXT)))
+		{ // 失敗した場合
+
+		  // 失敗を返す
+			return E_FAIL;
+		}
 		break;
 
 	case TYPE_TUTORIAL_KILL:

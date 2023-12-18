@@ -146,9 +146,9 @@ HRESULT CTutorial::Init(void)
 	// マップの情報をロードする
 	CManager::Get()->GetFile()->FalseSuccess();
 	CManager::Get()->GetFile()->Load(CFile::TYPE_TUTORIAL_DEFULT);
+	//CManager::Get()->GetFile()->Load(CFile::TYPE_TUTORIAL_TABLE);
 	//CManager::Get()->GetFile()->Load(CFile::TYPE_TUTORIAL_KILL);
 	//CManager::Get()->GetFile()->Load(CFile::TYPE_TUTORIAL_ACTION);
-
 
 	// マップの設定処理
 	CManager::Get()->GetFile()->SetMap();
@@ -442,6 +442,7 @@ void CTutorial::Update(void)
 
 		  // 情報をセーブする
 			//CManager::Get()->GetFile()->Save(CFile::TYPE_TUTORIAL_DEFULT);	// ブロック
+			//CManager::Get()->GetFile()->Save(CFile::TYPE_TUTORIAL_TABLE);		// ブロック
 			//CManager::Get()->GetFile()->Save(CFile::TYPE_TUTORIAL_KILL);		// ブロック
 			//CManager::Get()->GetFile()->Save(CFile::TYPE_TUTORIAL_ACTION);		// ブロック
 		}
@@ -573,7 +574,7 @@ void CTutorial::PlayTrue(void)
 		//プレイ状態をtrueにする
 		m_bPlay = true;
 
-		if (m_Tutorial == CTutorial::TUTORIAL_CAT_KILL)
+		if (m_Tutorial == CTutorial::TUTORIAL_TABLESWING || m_Tutorial == CTutorial::TUTORIAL_CAT_KILL)
 		{//ネコのキル説明の時
 
 			//猫のみチュートリアル状態を解除しネズミのキル判定をfalseにしておく
@@ -581,6 +582,7 @@ void CTutorial::PlayTrue(void)
 			{
 				CTutorial::GetPlayer(nCnt)->SetTutorial(false);
 				CTutorial::GetPlayer(nCnt)->SetRatKill(false);
+				CTutorial::GetPlayer(nCnt)->SetRatStun(false);
 			}
 		}
 		else if (m_Tutorial == CTutorial::TUTORIAL_RAT_RESCUE)
@@ -609,7 +611,17 @@ void CTutorial::PlayTrue(void)
 	}
 
 	//マップの切り替え処理--------------------------------------------------------------------
-	if (m_Tutorial == CTutorial::TUTORIAL_CAT_KILL)
+	if (m_Tutorial == CTutorial::TUTORIAL_TABLESWING)
+	{
+		CBlockManager::Get()->UninitAll();
+		CManager::Get()->GetFile()->Load(CFile::TYPE_TUTORIAL_TABLE);
+
+		// マップの設定処理
+		CManager::Get()->GetFile()->SetMap();
+
+		RatPosTable();
+	}
+	else if (m_Tutorial == CTutorial::TUTORIAL_CAT_KILL)
 	{
 		CBlockManager::Get()->UninitAll();
 		CManager::Get()->GetFile()->Load(CFile::TYPE_TUTORIAL_KILL);
@@ -703,6 +715,29 @@ void CTutorial::PlayFalse(void)
 		}
 
 		break;
+
+	case CTutorial::TUTORIAL_TABLESWING:
+
+		// ネコがネズミをキルするとチュートリアル達成
+		for (int nCntPlaeyr = 0; nCntPlaeyr < 4; nCntPlaeyr++)
+		{
+			if (CTutorial::GetPlayer(nCntPlaeyr)->GetType() == CPlayer::TYPE::TYPE_RAT)
+			{
+				if (CTutorial::GetPlayer(nCntPlaeyr)->GetRatStun() == true)
+				{
+					for (int nCnt = 0; nCnt < 4; nCnt++)
+					{
+						if (m_pAnswer != NULL)
+						{
+							m_pAnswer->SetAnswer(true, nCnt);
+						}
+					}
+				}
+			}
+		}
+
+		break;
+
 	case CTutorial::TUTORIAL_CAT_KILL:
 
 		// ネコがネズミをキルするとチュートリアル達成
@@ -724,6 +759,7 @@ void CTutorial::PlayFalse(void)
 		}
 
 		break;
+
 	case CTutorial::TUTORIAL_RAT_RESCUE:
 
 		// ネズミをが他のネズミを蘇生するとチュートリアル達成
@@ -867,6 +903,20 @@ void CTutorial::RatPosReset(void)
 		if (m_apPlayer[nCnt]->GetType() == CPlayer::TYPE_RAT)
 		{
 			m_apPlayer[nCnt]->SetPos(D3DXVECTOR3(250.0f * nCnt + 500.0f, 0.0f, 0.0f));
+		}
+	}
+}
+
+//======================================
+// ネズミの位置をリセットする
+//======================================
+void CTutorial::RatPosTable(void)
+{
+	for (int nCnt = 0; nCnt < 4; nCnt++)
+	{
+		if (m_apPlayer[nCnt]->GetType() == CPlayer::TYPE_RAT)
+		{
+			m_apPlayer[nCnt]->SetPos(D3DXVECTOR3(800.0f, 200.0f, -800.0f + nCnt * 500.0f));
 		}
 	}
 }
