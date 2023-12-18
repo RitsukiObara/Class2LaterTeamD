@@ -538,9 +538,6 @@ bool collision::BlockCollision(CPlayer* player, const D3DXVECTOR3& collSize)
 //===============================
 void collision::BlockRectangleCollision(const CBlock& block, CPlayer* player, const D3DXVECTOR3& collSize, bool* pJump)
 {
-	// 当たり判定の変数を宣言
-	SCollision collision = {};
-
 	// ブロックの当たり判定に必要な変数を宣言
 	D3DXVECTOR3 pos = player->GetPos();										// 位置
 	D3DXVECTOR3 posOld = player->GetPosOld();								// 前回の位置
@@ -563,18 +560,12 @@ void collision::BlockRectangleCollision(const CBlock& block, CPlayer* player, co
 
 				// 位置を設定する
 				pos.y = block.GetPos().y + block.GetVtxMax().y - (vtxMin.y - COLLISION_ADD_DIFF_LENGTH);
-
-				// 上の当たり判定を true にする
-				collision.bTop = true;
 			}
 			else
 			{ // 上記以外
 
 				// 位置を設定する
 				pos.x = block.GetPos().x + block.GetVtxMax().x - (vtxMin.x - COLLISION_ADD_DIFF_LENGTH);
-
-				// 右の当たり判定を true にする
-				collision.bRight = true;
 			}
 		}
 		else if (block.GetPosOld().x + block.GetVtxMin().x >= posOld.x + vtxMax.x &&
@@ -586,18 +577,12 @@ void collision::BlockRectangleCollision(const CBlock& block, CPlayer* player, co
 
 				// 位置を設定する
 				pos.y = block.GetPos().y + block.GetVtxMax().y - (vtxMin.y - COLLISION_ADD_DIFF_LENGTH);
-
-				// 上の当たり判定を true にする
-				collision.bTop = true;
 			}
 			else
 			{ // 上記以外
 
 				// 位置を設定する
 				pos.x = block.GetPos().x + block.GetVtxMin().x - (vtxMax.x + COLLISION_ADD_DIFF_LENGTH);
-
-				// 左の当たり判定を true にする
-				collision.bLeft = true;
 			}
 		}
 	}
@@ -617,18 +602,12 @@ void collision::BlockRectangleCollision(const CBlock& block, CPlayer* player, co
 
 				// 位置を設定する
 				pos.y = block.GetPos().y + block.GetVtxMax().y - (vtxMin.y - COLLISION_ADD_DIFF_LENGTH);
-
-				// 上の当たり判定を true にする
-				collision.bTop = true;
 			}
 			else
 			{ // 上記以外
 
 				// 位置を設定する
 				pos.z = block.GetPos().z + block.GetVtxMax().z - (vtxMin.z - COLLISION_ADD_DIFF_LENGTH);
-
-				// 奥の当たり判定を true にする
-				collision.bFar = true;
 			}
 		}
 		else if (block.GetPosOld().z + block.GetVtxMin().z >= posOld.z + vtxMax.z &&
@@ -640,18 +619,12 @@ void collision::BlockRectangleCollision(const CBlock& block, CPlayer* player, co
 
 				// 位置を設定する
 				pos.y = block.GetPos().y + block.GetVtxMax().y - (vtxMin.y - COLLISION_ADD_DIFF_LENGTH);
-
-				// 上の当たり判定を true にする
-				collision.bTop = true;
 			}
 			else
 			{ // 上記以外
 
 				// 位置を設定する
 				pos.z = block.GetPos().z + block.GetVtxMin().z - (vtxMax.z + COLLISION_ADD_DIFF_LENGTH);
-
-				// 手前の当たり判定を true にする
-				collision.bNear = true;
 			}
 		}
 	}
@@ -669,8 +642,11 @@ void collision::BlockRectangleCollision(const CBlock& block, CPlayer* player, co
 			// 位置を設定する
 			pos.y = block.GetPos().y + block.GetVtxMax().y - (vtxMin.y - COLLISION_ADD_DIFF_LENGTH);
 
-			// 上の当たり判定を true にする
-			collision.bTop = true;
+			// 重力を0.0fにする
+			move.y = 0.0f;
+
+			// trueにする
+			*pJump = true;
 		}
 		else if (block.GetPosOld().y + block.GetVtxMin().y >= posOld.y + vtxMax.y &&
 			block.GetPos().y + block.GetVtxMin().y <= pos.y + vtxMax.y)
@@ -679,20 +655,9 @@ void collision::BlockRectangleCollision(const CBlock& block, CPlayer* player, co
 			// 位置を設定する
 			pos.y = block.GetPos().y + block.GetVtxMin().y - (vtxMax.y + COLLISION_ADD_DIFF_LENGTH);
 
-			// 下の当たり判定を true にする
-			collision.bBottom = true;
+			// 重力を0.0fにする
+			move.y = 0.0f;
 		}
-	}
-
-	if (collision.bTop == true ||
-		collision.bBottom == true)
-	{ // 上に乗った場合
-
-		// 重力を0.0fにする
-		move.y = 0.0f;
-
-		// trueにする
-		*pJump = true;
 	}
 
 	// 位置と移動量を適用する

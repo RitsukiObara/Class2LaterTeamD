@@ -97,6 +97,14 @@ public:			// 誰でもアクセスできる
 		JOYKEY_MAX
 	};
 
+	// 構造体定義(バイブレーション関係)
+	struct SVibrate
+	{
+		XINPUT_VIBRATION vibration;		// バイブレーションの情報
+		int nCountRight;				// 右の震えるカウント
+		int nCountLeft;					// 左の震えるカウント
+	};
+
 	CInputGamePad();		// コンストラクタ
 	~CInputGamePad();		// デストラクタ
 
@@ -107,8 +115,8 @@ public:			// 誰でもアクセスできる
 	bool GetPress(JOYKEY nKey, int nPlayer);		// プレス処理
 	bool GetTrigger(JOYKEY nKey, int nPlayer);		// トリガー情報処理
 	bool GetRelease(JOYKEY nKey, int nPlayer);		// リリース情報処理
-	void GetRightVibration(int nPlayer, const bool bSwitch);		// 右のバイブレーション処理
-	void GetLeftVibration(int nPlayer, const bool bSwitch);			// 左のバイブレーション処理
+	void GetRightVibration(int nPlayer, const WORD strength, const int nCount);		// 右のバイブレーション処理
+	void GetLeftVibration(int nPlayer, const WORD strength, const int nCount);		// 左のバイブレーション処理
 	bool GetConnect(void);							// 接続判定の取得処理
 
 	// 左スティック関係
@@ -125,7 +133,7 @@ private:		// 誰でもアクセスできる
 	XINPUT_STATE m_aPadState[MAX_PLAYER];			// プレス情報
 	XINPUT_STATE m_aPadStateTrigger[MAX_PLAYER];	// トリガー情報
 	XINPUT_STATE m_aPadStateRelease[MAX_PLAYER];	// リリース情報
-	XINPUT_VIBRATION m_aPadVibration[MAX_PLAYER];	// バイブレーションの情報
+	SVibrate m_aVibration[MAX_PLAYER];				// バイブレーションの情報
 	bool m_bConnect;								// 接続判定
 };
 
