@@ -154,8 +154,8 @@ HRESULT CGame::Init(void)
 
 	// マップの情報をロードする
 	CManager::Get()->GetFile()->FalseSuccess();
-	CManager::Get()->GetFile()->Load(CFile::TYPE_MAP_OBSTACLE1);
-	CManager::Get()->GetFile()->Load(CFile::TYPE_MAP_BLOCK1);
+	CManager::Get()->GetFile()->Load(CFile::TYPE_MAP_OBSTACLE2);
+	CManager::Get()->GetFile()->Load(CFile::TYPE_MAP_BLOCK2);
 
 	// マップの設定処理
 	CManager::Get()->GetFile()->SetMap();
@@ -423,8 +423,8 @@ void CGame::Update(void)
 		{ // F9キーを押した場合
 
 			// 情報をセーブする
-			CManager::Get()->GetFile()->Save(CFile::TYPE_MAP_OBSTACLE1);
-			CManager::Get()->GetFile()->Save(CFile::TYPE_MAP_BLOCK1);
+			CManager::Get()->GetFile()->Save(CFile::TYPE_MAP_OBSTACLE2);
+			CManager::Get()->GetFile()->Save(CFile::TYPE_MAP_BLOCK2);
 		}
 	}
 	else

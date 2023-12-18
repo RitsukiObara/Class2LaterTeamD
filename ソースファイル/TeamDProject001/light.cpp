@@ -20,7 +20,7 @@
 //-------------------------------------------
 namespace
 {
-	static const float LIGHT_PAWOR = 0.5f;
+	static const float LIGHT_PAWOR = 0.8f;
 	static const D3DXCOLOR LIGHT_DIFFUSE[NUM_LIGHT] =			// ライトの色
 	{
 		D3DXCOLOR(LIGHT_PAWOR, LIGHT_PAWOR, LIGHT_PAWOR, 1.0f),
@@ -29,8 +29,8 @@ namespace
 	};
 	static const D3DXVECTOR3 LIGHT_VECTOR[NUM_LIGHT] =			// ライトの方向
 	{
-		D3DXVECTOR3(0.2f, -0.6f, -0.5f),
 		D3DXVECTOR3(-0.5f, -0.6f, -0.5f),
+		D3DXVECTOR3(0.0f, 0.1f, 0.9f),
 		D3DXVECTOR3(0.8f, -0.6f, 0.5f),
 	};
 }
