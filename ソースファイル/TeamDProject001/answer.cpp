@@ -13,6 +13,7 @@
 #include "object2D.h"
 #include "texture.h"
 #include "input.h"
+#include "sound.h"
 
 //-------------------------------------------
 // ƒ}ƒNƒ’è‹`
@@ -134,6 +135,9 @@ void CAnswer::Update(void)
 			if (CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_START, nCnt))
 			{
 				m_abPressAnswer[nCnt] = true;
+
+				// OK‰¹Ä¶
+				CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_CHECK);
 			}
 		}
 	}
