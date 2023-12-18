@@ -663,7 +663,8 @@ void collision::BlockRectangleCollision(const CBlock& block, CPlayer* player, co
 		}
 	}
 
-	if (collision.bTop == true)
+	if (collision.bTop == true ||
+		collision.bBottom == true)
 	{ // ã‚Éæ‚Á‚½ê‡
 
 		// d—Í‚ğ0.0f‚É‚·‚é
@@ -714,6 +715,9 @@ void collision::BlockCircleCollision(CBlock& block, CPlayer* player, const float
 
 				// ˆÊ’u‚ğİ’è‚·‚é
 				pos.y = block.GetPos().y + block.GetFileData().vtxMin.y - fHeight;
+
+				// ˆÚ“®—Ê‚ğ0‚É‚·‚é
+				move.y = 0.0f;
 			}
 		}
 

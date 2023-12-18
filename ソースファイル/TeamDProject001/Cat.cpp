@@ -466,6 +466,7 @@ void CCat::ItemSet(void)
 {
 	if (m_pItemUI != nullptr)
 	{ // アイテムUIの情報が NULL じゃない場合
+
 		if (m_nItemCount > 0 &&
 			m_pItemUI->GetItemUI(CItemUI::ORDER_FRONT).pMark != nullptr &&
 			(CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_TAB) == true ||
@@ -503,6 +504,9 @@ void CCat::ItemSet(void)
 
 			// アイテムのカウント数を減算する
 			m_nItemCount--;
+
+			// アイテム設置音を鳴らす
+			CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_SETITEM);
 		}
 	}
 }

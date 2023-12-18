@@ -35,7 +35,7 @@ public:			// 誰でもアクセス出来る
 		SOUND_LABEL_SE_THE_CUP_FALLS,	//コップが落ちた音
 		SOUND_LABEL_SE_TV_SANDSTORM,	//テレビの砂嵐
 		SOUND_LEBEL_SE_PUSH_SWITCH,		//スイッチを押した時の音
-		SOUND_LABEL_SE_LNSTALLATION,	//設置音
+		SOUND_LABEL_SE_SETITEM,			//設置音
 		SOUND_LABEL_SE_CLEANING,		//掃除機(ルンバ)
 		SOUND_LABEL_SE_FAN,				//扇風機
 		SOUND_LABEL_SE_THUMBTACK,		//画鋲

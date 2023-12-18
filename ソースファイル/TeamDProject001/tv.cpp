@@ -402,11 +402,7 @@ void CTv::PowerAction(void)
 			{ // クールタイム中
 
 				// 砂嵐テクスチャの割り当て処理
-				m_pVision->BindTexture(CManager::Get()->GetTexture()->Regist(COOLTIME_TEXTURE));
-
-				//	サウンドの再生
-				//CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_TV_SANDSTORM);
-	
+				m_pVision->BindTexture(CManager::Get()->GetTexture()->Regist(COOLTIME_TEXTURE));	
 			}
 		}
 

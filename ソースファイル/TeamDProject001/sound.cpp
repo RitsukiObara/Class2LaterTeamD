@@ -27,12 +27,12 @@ CSound::SOUNDINFO CSound::m_aSoundInfo[CSound::SOUND_LABEL_MAX] =
 	{ "data\\SE\\Cup_Falls.wav",0 },		// コップが落ちる音
 	{ "data\\SE\\TV_sandstorm.wav",-1 },		// テレビの砂嵐
 	{ "data\\SE\\press_the_switch.wav",0 },	// スイッチを押した時の音
-	{ "data\\SE\\Set_Item.wav",0},			// 設置音
-	{ "data\\SE\\cleaning.wav",0 },			// 掃除機(ルンバ)
-	{ "data\\SE\\Fan.wav",0 },				// 扇風機
+	{ "data\\SE\\SetItem.wav",0},			// アイテム設置音
+	{ "data\\SE\\cleaning.wav",-1 },		// 掃除機(ルンバ)
+	{ "data\\SE\\Fan.wav",-1 },				// 扇風機
 	{ "data\\SE\\med_bottle04.wav",0 },		// 画鋲
 	{ "data\\SE\\Terai_Hit.wav",0,},		// タライが頭に当たる
-	{ "data\\SE\\bottle_roll.wav",0 },		// ペットボトルが転がる音
+	{ "data\\SE\\bottle_roll.wav",-1 },		// ペットボトルが転がる音
 	{ "data\\SE\\bottle_over.wav",0 },		// ペットボトルが倒れる音
 	{ "data\\SE\\Pick_up.wav",0 },			// 拾った音
 };
