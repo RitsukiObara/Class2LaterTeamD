@@ -16,6 +16,7 @@
 #include "input.h"
 #include "effect.h"
 #include "fraction.h"
+#include "sound.h"
 
 #define ACTION_TIME (120)
 #define WAIT_TIME (20)
@@ -123,6 +124,9 @@ void CPin::StateManager(D3DXVECTOR3 *pos, D3DXVECTOR3 *rot)
 			{
 				CFraction::Create(GetPos(), CFraction::TYPE_PIN);
 			}
+
+			// ‰æ•e‚ªŽU‚é‰¹‚ð–Â‚ç‚·
+			CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_THUMBTACK);
 		}
 		break;
 

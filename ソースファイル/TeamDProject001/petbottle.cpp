@@ -19,6 +19,7 @@
 #include "block_manager.h"
 #include "map.h"
 #include "collision.h"
+#include "sound.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -127,6 +128,9 @@ void CPetbottle::Update(void)
 
 		if (m_fAlpha <= 0.0f)
 		{ // 透明度が 0.0f 以下の場合
+
+			// ペットボトルが転がる音を止める
+			CManager::Get()->GetSound()->Stop(CSound::SOUND_LABEL_SE_PETBOTTLES_ROLL);
 
 			// 終了処理
 			Uninit();
@@ -281,6 +285,9 @@ void CPetbottle::Action(void)
 	// アクション状況を true にする
 	SetAction(true);
 
+	// ペットボトルが倒れる音を鳴らす
+	CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_PETBOTTLES_FALL_DOWN);
+
 	// 方向を設定する
 	fAngle = atan2f((pos.x - m_posPlayer.x), (pos.z - m_posPlayer.z));
 
@@ -321,6 +328,9 @@ void CPetbottle::Action(void)
 
 	// 当たり判定の設定処理
 	CollsionSetting();
+
+	// ペットボトルが転がる音を鳴らす
+	CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_PETBOTTLES_ROLL);
 }
 
 //=====================================

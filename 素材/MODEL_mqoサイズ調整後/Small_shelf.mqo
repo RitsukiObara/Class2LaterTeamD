@@ -2,13 +2,13 @@ Metasequoia Document
 Format Text Ver 1.0
 
 Scene {
-	pos -44.1436 -132.8049 1458.9825
+	pos -44.1436 -132.8049 2334.3723
 	lookat 0.0000 0.0000 0.0000
-	head -6.7234
-	pich 0.3192
+	head -6.5734
+	pich 0.2792
 	bank 0.0000
 	ortho 0
-	zoom2 5.1406
+	zoom2 3.2129
 	amb 0.250 0.250 0.250
 	dirlights 1 {
 		light {
@@ -352,7 +352,7 @@ Object "obj6" {
 }
 Object "obj7" {
 	visible 15
-	locking 1
+	locking 0
 	shading 1
 	facet 59.5
 	color 0.898 0.498 0.698

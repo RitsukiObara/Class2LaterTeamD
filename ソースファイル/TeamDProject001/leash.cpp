@@ -39,7 +39,6 @@ CLeash::CLeash() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 		m_bSetHead[nCnt] = false;
 		m_bSetToes[nCnt] = false;
 	}
-	m_bAction = false;
 	m_StateCount = 0;
 	SetRatUse(true);
 }
@@ -91,7 +90,10 @@ void CLeash::Update(void)
 		m_State == STATE_FALSE)
 	{//起動していない時にネズミが両端を持ったら
 		Action();
-		m_bAction = true;
+
+		// アクション状況を true にする
+		SetAction(true);
+
 		if (CManager::Get()->GetMode() == CScene::MODE_TUTORIAL)
 		{
 			CTutorial::SetMultiAction(true);
@@ -166,6 +168,7 @@ void CLeash::Action(void)
 	m_State = STATE_JUMPWAIT;
 	m_StateCount = WAIT_TIME;
 	m_move.y = 30.0f;
+	SetAction(true);
 }
 
 //=====================================
@@ -222,7 +225,10 @@ void CLeash::StateManager(D3DXVECTOR3 *pos)
 				m_bSetHead[nCnt] = false;
 				m_bSetToes[nCnt] = false;
 			}
-			m_bAction = false;
+
+			// アクション状況を false にする
+			SetAction(false);
+
 			SetFileData(CXFile::TYPE_LEASH);
 		}
 		break;
@@ -317,14 +323,18 @@ bool CLeash::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 //=====================================
 bool CLeash::HitCircle(CPlayer* pPlayer, const float Radius)
 {
-	if (useful::CircleCollisionXZ(pPlayer->GetPos(), ActionPosHead, Radius, GetFileData().fRadius) == true)
-	{//円の範囲内の場合tureを返す
-		return true;
-	}
+	if (GetAction() == false)
+	{ // アクション状況が false の場合
 
-	if (useful::CircleCollisionXZ(pPlayer->GetPos(), ActionPosToes, Radius, GetFileData().fRadius) == true)
-	{//円の範囲内の場合tureを返す
-		return true;
+		if (useful::CircleCollisionXZ(pPlayer->GetPos(), ActionPosHead, Radius, GetFileData().fRadius) == true)
+		{//円の範囲内の場合tureを返す
+			return true;
+		}
+
+		if (useful::CircleCollisionXZ(pPlayer->GetPos(), ActionPosToes, Radius, GetFileData().fRadius) == true)
+		{//円の範囲内の場合tureを返す
+			return true;
+		}
 	}
 
 	return false;
@@ -335,29 +345,33 @@ bool CLeash::HitCircle(CPlayer* pPlayer, const float Radius)
 //=====================================
 void CLeash::HitMultiCircle(CPlayer* pPlayer, const float Radius, bool bInput)
 {
-	if (useful::CircleCollisionXZ(pPlayer->GetPos(), ActionPosHead, Radius, GetFileData().fRadius) == true)
-	{//円の範囲内の場合tureを返す
+	if (GetAction() == false)
+	{ // アクション状況が false の場合
 
-		if (bInput == true)
-		{//起動入力がある時
-			m_bSetHead[pPlayer->GetPlayerIdx()] = true;
+		if (useful::CircleCollisionXZ(pPlayer->GetPos(), ActionPosHead, Radius, GetFileData().fRadius) == true)
+		{//円の範囲内の場合tureを返す
+
+			if (bInput == true)
+			{//起動入力がある時
+				m_bSetHead[pPlayer->GetPlayerIdx()] = true;
+			}
 		}
-	}
-	else
-	{
-		m_bSetHead[pPlayer->GetPlayerIdx()] = false;
-	}
-
-	if (useful::CircleCollisionXZ(pPlayer->GetPos(), ActionPosToes, Radius, GetFileData().fRadius) == true)
-	{//円の範囲内の場合tureを返す
-
-		if (bInput == true)
-		{//起動入力がある時
-			m_bSetToes[pPlayer->GetPlayerIdx()] = true;
+		else
+		{
+			m_bSetHead[pPlayer->GetPlayerIdx()] = false;
 		}
-	}
-	else
-	{
-		m_bSetToes[pPlayer->GetPlayerIdx()] = false;
+
+		if (useful::CircleCollisionXZ(pPlayer->GetPos(), ActionPosToes, Radius, GetFileData().fRadius) == true)
+		{//円の範囲内の場合tureを返す
+
+			if (bInput == true)
+			{//起動入力がある時
+				m_bSetToes[pPlayer->GetPlayerIdx()] = true;
+			}
+		}
+		else
+		{
+			m_bSetToes[pPlayer->GetPlayerIdx()] = false;
+		}
 	}
 }
