@@ -373,7 +373,7 @@ void CExplanation::SetData(CTutorial::TUTORIAL Tutorial)
 		m_pBG->SetSize(D3DXVECTOR3(640.0f, 360.0f, 0.0f));	// サイズ
 		m_pBG->SetLength();									// 長さ
 		m_pBG->SetAngle();									// 方向
-		m_pBG->SetVtxColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.5f));	// 色
+		m_pBG->SetVtxColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.8f));	// 色
 
 		// 頂点座標の設定処理
 		m_pBG->SetVertex();
@@ -421,7 +421,7 @@ void CExplanation::SetData(CTutorial::TUTORIAL Tutorial)
 			m_apImage[1]->SetLength();					// 長さ
 			m_apImage[1]->SetAngle();					// 方向
 
-														// 頂点座標の設定処理
+			// 頂点座標の設定処理
 			m_apImage[1]->SetVertex();
 		}
 		if (m_apImage[2] == NULL)
@@ -440,21 +440,6 @@ void CExplanation::SetData(CTutorial::TUTORIAL Tutorial)
 	}
 	else
 	{
-		if (m_pBG == NULL)
-		{
-			m_pBG = CObject2D::Create(CObject2D::TYPE::TYPE_NONE, CObject::TYPE::TYPE_NONE, CObject::PRIORITY_UI);
-			m_pBG->SetPos(D3DXVECTOR3(640.0f, 360.0f, 0.0f));	// 位置
-			m_pBG->SetPosOld(D3DXVECTOR3(640.0f, 360.0f, 0.0f));// 前回の位置
-			m_pBG->SetRot(NONE_D3DXVECTOR3);					// 向き
-			m_pBG->SetSize(D3DXVECTOR3(640.0f, 360.0f, 0.0f));	// サイズ
-			m_pBG->SetLength();									// 長さ
-			m_pBG->SetAngle();									// 方向
-			m_pBG->SetVtxColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.5f));	// 色
-
-			// 頂点座標の設定処理
-			m_pBG->SetVertex();
-
-		}
 		if (m_pCatKing == NULL && Tutorial != CTutorial::TUTORIAL_RAT_RESCUE)
 		{
 			m_pCatKing = CObject2D::Create(CObject2D::TYPE::TYPE_NONE, CObject::TYPE::TYPE_NONE, CObject::PRIORITY_UI);
@@ -514,7 +499,7 @@ void CExplanation::SetData(CTutorial::TUTORIAL Tutorial)
 			// 頂点座標の設定処理
 			m_pCatText->SetVertex();
 		}
-		if (m_pRatKing == NULL && Tutorial != CTutorial::TUTORIAL_CAT_KILL)
+		if (m_pRatKing == NULL && Tutorial != CTutorial::TUTORIAL_TABLESWING && Tutorial != CTutorial::TUTORIAL_CAT_KILL)
 		{
 			m_pRatKing = CObject2D::Create(CObject2D::TYPE::TYPE_NONE, CObject::TYPE::TYPE_NONE, CObject::PRIORITY_UI);
 			m_pRatKing->SetPos(RAT_KING_POS);			// 位置
@@ -572,7 +557,7 @@ void CExplanation::SetData(CTutorial::TUTORIAL Tutorial)
 																		// 頂点座標の設定処理
 			m_pRatBG->SetVertex();
 		}
-		if (m_pRatText == NULL && Tutorial != CTutorial::TUTORIAL_CAT_KILL)
+		if (m_pRatText == NULL && Tutorial != CTutorial::TUTORIAL_TABLESWING && Tutorial != CTutorial::TUTORIAL_CAT_KILL)
 		{
 			m_pRatText = CObject2D::Create(CObject2D::TYPE::TYPE_NONE, CObject::TYPE::TYPE_NONE, CObject::PRIORITY_UI);
 			m_pRatText->SetPos(RAT_TEXT_POS);			// 位置
@@ -607,6 +592,17 @@ void CExplanation::SetData(CTutorial::TUTORIAL Tutorial)
 		break;
 
 	case CTutorial::TUTORIAL_ATTACK_JAMP:
+		if (m_pCatText != NULL)
+		{
+			m_pCatText->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\tutorial_textcat01.png"));		// テクスチャの割り当て処理
+		}
+		if (m_pRatText != NULL)
+		{
+			m_pRatText->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\tutorial_textrat01.png"));		// テクスチャの割り当て処理
+		}
+		break;
+
+	case CTutorial::TUTORIAL_TABLESWING:
 		if (m_pCatText != NULL)
 		{
 			m_pCatText->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\TUTORIAL\\tutorial_textcat01.png"));		// テクスチャの割り当て処理
