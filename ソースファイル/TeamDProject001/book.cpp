@@ -24,6 +24,7 @@
 #define COLLAPSE_ROT_CORRECT	(0.05f)			// 倒れ状態の向きの補正値
 #define NEXT_MOVE_POS_Y			(20.0f)			// 次のオブジェクトが動き出す座標(Y軸)
 #define DEATH_POS_Y				(0.0f)			// 見えなくなる座標(Y軸)
+#define NONE_ACTIONID			(-1)			// アクションIDの初期値
 
 //==============================
 // コンストラクタ
@@ -41,6 +42,7 @@ CBook::CBook() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 	}
 	m_move = NONE_D3DXVECTOR3;		// 移動量
 	m_state = STATE_STOP;			// 状態
+	m_nActionID = NONE_ACTIONID;	// アクションID
 	m_fGravity = 0.0f;				// 重力
 	m_bDisp = true;					// 描画状況
 	m_bMove = false;				// 移動状況
@@ -85,6 +87,7 @@ HRESULT CBook::Init(void)
 
 	m_move = NONE_D3DXVECTOR3;		// 移動量
 	m_state = STATE_STOP;			// 状態
+	m_nActionID = NONE_ACTIONID;	// アクションID
 	m_fGravity = 0.0f;				// 重力
 	m_bDisp = true;					// 描画状況
 	m_bMove = false;				// 移動状況
@@ -192,6 +195,7 @@ void CBook::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE t
 	m_move = NONE_D3DXVECTOR3;		// 移動量
 	m_state = STATE_STOP;			// 状態
 	m_fGravity = 0.0f;				// 重力
+	m_nActionID = NONE_ACTIONID;	// アクションID
 	m_bDisp = true;					// 描画状況
 }
 

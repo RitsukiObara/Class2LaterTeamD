@@ -73,6 +73,7 @@ private:		// 自分だけアクセスできる
 	SBook m_aBook[MAX_BOOK];	// 本の構造体
 	D3DXVECTOR3 m_move;			// 移動量
 	STATE m_state;				// 状態
+	int m_nActionID;			// アクションID
 	float m_fGravity;			// 重力
 	bool m_bDisp;				// 描画状況
 	bool m_bMove;				// 移動状況
