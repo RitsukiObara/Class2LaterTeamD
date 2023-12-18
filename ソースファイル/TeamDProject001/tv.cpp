@@ -339,6 +339,13 @@ void CTv::Action(void)
 			// アイテムの取得処理
 			pPlayer->GetItem(CItem::TYPE_DYNAMITE);
 
+			if (m_State != STATE_COOLDOWN)
+			{ // クールタイム以外の場合
+
+				//	サウンドの再生
+				CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_TV_SANDSTORM);
+			}
+
 			// アイテム取った後の状態にする
 			m_State = STATE_COOLDOWN;
 			m_nCoolTime = COOL_TIME;
@@ -365,6 +372,8 @@ void CTv::PowerAction(void)
 			m_pVision = nullptr;
 
 		}
+		//	サウンドの再生
+		CManager::Get()->GetSound()->Stop(CSound::SOUND_LABEL_SE_TV_SANDSTORM);
 
 		// 電源OFFにする
 		m_bPower = false;
@@ -405,8 +414,7 @@ void CTv::PowerAction(void)
 				m_pVision->BindTexture(CManager::Get()->GetTexture()->Regist(COOLTIME_TEXTURE));
 
 				//	サウンドの再生
-				//CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_TV_SANDSTORM);
-	
+				CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_TV_SANDSTORM);
 			}
 		}
 
@@ -492,17 +500,22 @@ void CTv::VisionChange(void)
 			{
 				switch (m_State)
 				{
-				case STATE_NONE:
+				case STATE_NONE: // 何でもない状態の場合
 					m_pVision->BindTexture(CManager::Get()->GetTexture()->Regist(BOMB_TEXTURE));
 					m_State = STATE_BOMB;
+					//	サウンドの再生
+					CManager::Get()->GetSound()->Stop(CSound::SOUND_LABEL_SE_TV_SANDSTORM);
 					break;
 
-				case STATE_BOMB:
+				case STATE_BOMB: // 爆弾の画面の場合
 					m_pVision->BindTexture(CManager::Get()->GetTexture()->Regist(NONE_TEXTURE));
 					m_State = STATE_NONE;
+					//	サウンドの再生
+					CManager::Get()->GetSound()->Stop(CSound::SOUND_LABEL_SE_TV_SANDSTORM);
+					break;
+				case STATE_COOLDOWN: // クールタイム中の場合
 
 					break;
-
 				default:
 
 					// 停止
