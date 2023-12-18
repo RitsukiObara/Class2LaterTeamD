@@ -38,6 +38,7 @@ public:			// 誰でもアクセスできる
 		TYPE_MAP_BLOCK3,	// マップのブロック3
 		TYPE_BLOCK,			// ブロック
 		TYPE_TUTORIAL_DEFULT,	// チュートリアルのデフォルトブロック
+		TYPE_TUTORIAL_TABLE,	//チュートリアルのテーブル用ブロック
 		TYPE_TUTORIAL_KILL,		// チュートリアルのキル用ブロック
 		TYPE_TUTORIAL_ACTION,	// チュートリアルのアクション用ブロック
 		TYPE_MAX			// この列挙型の総数

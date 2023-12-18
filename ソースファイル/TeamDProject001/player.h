@@ -163,6 +163,8 @@ public:			// 誰でもアクセスできる
 	virtual bool GetAttack_Jump(void) { return false; }	// アタックジャンプ状態の取得処理
 	void SetRatKill(bool Set) { m_bKill = Set; }		// キルの設定処理
 	bool GetRatKill(void) { return m_bKill; }			// キルの取得処理
+	void SetRatStun(bool Set) { m_bStun = Set; }		// スタンの設定処理
+	bool GetRatStun(void) { return m_bStun; }			// スタンの取得処理
 	void SetRatRescue(bool Set) { m_bRescue = Set; }	// 救助の設定処理
 	bool GetRatRescue(void) { return m_bRescue; }		// 救助の取得処理
 	void SetUseAction(bool Set) { m_bAction = Set; }	// 起動の設定処理
@@ -223,6 +225,7 @@ private:		// 自分だけアクセスできる
 	int m_nLogPlayer;			// ログに表示するプレイヤーの番号
 	int m_nLogNumber;			// ログの生成番号
 	bool m_bTutorial;			// チュートリアル状態かどうか
+	bool m_bStun;				// スタンを行ったかどうか
 	bool m_bKill;				// キルを行ったかどうか
 	bool m_bRescue;				// 救助を行ったかどうか
 	bool m_bAction;				// 起動を行ったかどうか

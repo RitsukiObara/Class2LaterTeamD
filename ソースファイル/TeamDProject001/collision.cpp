@@ -8,6 +8,7 @@
 // インクルードファイル
 //*******************************************
 #include "game.h"
+#include "tutorial.h"
 #include "collision.h"
 #include "shadowCircle.h"
 #include "objectElevation.h"
@@ -25,6 +26,7 @@
 #include "item.h"
 #include "item_manager.h"
 #include "player.h"
+#include "manager.h"
 
 //===============================
 // マクロ定義
@@ -767,8 +769,16 @@ bool collision::BlockHit(CPlayer* player, const D3DXVECTOR3& pos, const D3DXVECT
 
 			for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
 			{
-				// プレイヤーの情報を取得する
-				pPlayer = CGame::GetPlayer(nCnt);
+				if (CManager::Get()->GetMode() == CScene::MODE_TUTORIAL)
+				{
+					// プレイヤーの情報を取得する
+					pPlayer = CTutorial::GetPlayer(nCnt);
+				}
+				else if(CManager::Get()->GetMode() == CScene::MODE_GAME)
+				{
+					// プレイヤーの情報を取得する
+					pPlayer = CGame::GetPlayer(nCnt);
+				}
 
 				if (pPlayer != nullptr &&
 					pPlayer->GetType() == CPlayer::TYPE_RAT)
@@ -790,20 +800,8 @@ bool collision::BlockHit(CPlayer* player, const D3DXVECTOR3& pos, const D3DXVECT
 
 						D3DXVECTOR3 DestPos = pPlayer->GetPos() - pos;		// 目的の位置
 
-						int nAngle = rand() % 1;
-						float fAngleRand = 0.0f;
-
-						if (nAngle == 0)
-						{
-							fAngleRand = 0.25f;
-						}
-						else if (nAngle == 1)
-						{
-							fAngleRand = -0.25f;
-						}
-
 						// 目的の向きを求める
-						fAngle = atan2f(DestPos.x, DestPos.z) + D3DX_PI * fAngleRand;
+						fAngle = atan2f(DestPos.x, DestPos.z) + 50.0f;
 
 						// 吹き飛び処理
 						pPlayer->Smash(fAngle);
