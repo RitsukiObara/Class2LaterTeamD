@@ -230,13 +230,13 @@ HRESULT CGame::Init(void)
 			{ // ネコ担当のプレイヤーの場合
 
 				// プレイヤーの生成
-				m_apPlayer[nCntPlay] = CPlayer::Create(D3DXVECTOR3(500.0f * nCntPlay - 500.0f, 0.0f, 0.0f), nCntPlay, CPlayer::TYPE_CAT);
+				m_apPlayer[nCntPlay] = CPlayer::Create(D3DXVECTOR3(1200.0f, 0.0f, 700.0f), nCntPlay, CPlayer::TYPE_CAT);
 			}
 			else
 			{ // 上記以外
 
 				// プレイヤーの生成
-				m_apPlayer[nCntPlay] = CPlayer::Create(D3DXVECTOR3(500.0f * nCntPlay - 500.0f, 0.0f, 0.0f), nCntPlay, CPlayer::TYPE_RAT);
+				m_apPlayer[nCntPlay] = CPlayer::Create(D3DXVECTOR3(-500.0f, 0.0f, 300.0f*nCntPlay-300.0f), nCntPlay, CPlayer::TYPE_RAT);
 			}
 		}
 	}

@@ -54,6 +54,8 @@ namespace
 	static const int SMASH_WAIT = 40;					// 吹き飛び状態のカウント数
 	static const int STUN_FLASH_INTERVAL = 12;			// プレイヤーの点滅間隔
 	static const int DEATH_FLASH_INTERVAL = 4;			// プレイヤーの点滅間隔
+	static const WORD SMASH_VIBRATE = 30000;			// 吹き飛んだ時のバイブレーション
+	static const WORD STUN_VIBRATE = 20000;				// 気絶したときのバイブレーション
 }
 
 //==============================
@@ -382,6 +384,10 @@ void CPlayer::Smash(const float fAngle)
 	if (m_State == STATE_NONE &&
 		m_StunState == STUNSTATE_NONE)
 	{ // ダメージ受ける状態だった場合
+
+		// バイブレーションを設定する
+		CManager::Get()->GetInputGamePad()->GetRightVibration(GetPlayerIdx(), SMASH_VIBRATE, SMASH_WAIT);
+		CManager::Get()->GetInputGamePad()->GetLeftVibration(GetPlayerIdx(), SMASH_VIBRATE, SMASH_WAIT);
 
 		// 移動量を算出する
 		move.x = sinf(fAngle) * SMASH_MOVE.x;
@@ -882,6 +888,10 @@ bool CPlayer::Stun(int StunTime)
 		m_State == STATE_NONE)
 	{ // 通常状態だった場合
 
+		// バイブレーションを設定する
+		CManager::Get()->GetInputGamePad()->GetRightVibration(GetPlayerIdx(), STUN_VIBRATE, StunTime);
+		CManager::Get()->GetInputGamePad()->GetLeftVibration(GetPlayerIdx(), STUN_VIBRATE, StunTime);
+
 		// 気絶状態にする
 		m_StunState = STUNSTATE_STUN;
 		m_StunStateCount = StunTime;
@@ -980,10 +990,18 @@ void CPlayer::StunStateManager(void)
 			if (m_type == TYPE::TYPE_CAT)
 			{// ネコの場合
 				m_StunStateCount = CAT_SMASH_STUN;
+
+				// バイブレーションを設定する
+				CManager::Get()->GetInputGamePad()->GetRightVibration(GetPlayerIdx(), STUN_VIBRATE, CAT_SMASH_STUN);
+				CManager::Get()->GetInputGamePad()->GetLeftVibration(GetPlayerIdx(), STUN_VIBRATE, CAT_SMASH_STUN);
 			}
 			else if (m_type == TYPE::TYPE_RAT)
 			{// ネズミの場合
 				m_StunStateCount = RAT_SMASH_STUN;
+
+				// バイブレーションを設定する
+				CManager::Get()->GetInputGamePad()->GetRightVibration(GetPlayerIdx(), STUN_VIBRATE, RAT_SMASH_STUN);
+				CManager::Get()->GetInputGamePad()->GetLeftVibration(GetPlayerIdx(), STUN_VIBRATE, RAT_SMASH_STUN);
 			}
 
 			if (CManager::Get()->GetMode() == CScene::MODE_TUTORIAL)

@@ -273,6 +273,7 @@
     <ClCompile Include="sample_manager.cpp" />
     <ClCompile Include="scene.cpp" />
     <ClCompile Include="score.cpp" />
+    <ClCompile Include="screen_frame.cpp" />
     <ClCompile Include="shadowCircle.cpp" />
     <ClCompile Include="shadowModel.cpp" />
     <ClCompile Include="skybox.cpp" />
@@ -415,6 +416,7 @@
     <ClInclude Include="sample_manager.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="score.h" />
+    <ClInclude Include="screen_frame.h" />
     <ClInclude Include="shadowCircle.h" />
     <ClInclude Include="shadowModel.h" />
     <ClInclude Include="skybox.h" />
