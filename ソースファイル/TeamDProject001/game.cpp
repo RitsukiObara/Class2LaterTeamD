@@ -37,6 +37,7 @@
 
 #include "obstacle_manager.h"
 #include "chara_infoUI.h"
+#include "screen_frame.h"
 
 //--------------------------------------------
 // 無名名前空間
@@ -133,6 +134,9 @@ HRESULT CGame::Init(void)
 
 	// テキスト読み込み処理
 	CElevation::TxtSet();
+
+	// 画面の枠の生成
+	CScreenFrame::Create();
 
 	// メッシュの読み込み処理
 	//CMesh::TxtSet();
