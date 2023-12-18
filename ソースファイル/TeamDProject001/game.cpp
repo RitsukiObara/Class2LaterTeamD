@@ -137,7 +137,7 @@ HRESULT CGame::Init(void)
 	// ƒƒbƒVƒ…‚Ì“Ç‚İ‚İˆ—
 	//CMesh::TxtSet();
 
-	m_nMapNumber = rand() % 3;
+	m_nMapNumber = 0;
 
 	if (m_nMapNumber == 0)
 	{
