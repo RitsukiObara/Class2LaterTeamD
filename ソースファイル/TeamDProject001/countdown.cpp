@@ -22,7 +22,7 @@
 //=========================
 // コンストラクタ
 //=========================
-CCountdown::CCountdown() : CNumber(CObject::TYPE_COUNTDOWN, CObject::PRIORITY_PLAYER)
+CCountdown::CCountdown() : CNumber(CObject::TYPE_COUNTDOWN, CObject::PRIORITY_UI)
 {
 	// 全ての値をクリアする
 	m_sizeDest = NONE_D3DXVECTOR3;		// 目的のサイズ

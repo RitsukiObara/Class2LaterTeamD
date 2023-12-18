@@ -44,9 +44,9 @@
 //--------------------------------------------
 namespace
 {
-	static const int MAX_ITEM_POS = 3;					// アイテム出現位置の最大数
+	const int MAX_ITEM_POS = 3;					// アイテム出現位置の最大数
 
-	static const D3DXVECTOR3 PLAYERUI_POS[MAX_PLAY] =								// プレイヤーUIの位置
+	const D3DXVECTOR3 PLAYERUI_POS[MAX_PLAY] =								// プレイヤーUIの位置
 	{
 		D3DXVECTOR3(90.0f, SCREEN_HEIGHT * 0.5f - 80.0f, 0.0f),
 		D3DXVECTOR3(SCREEN_WIDTH - 90.0f, SCREEN_HEIGHT * 0.5f - 80.0f, 0.0f),
@@ -55,17 +55,17 @@ namespace
 	};
 
 	// アイテムの出現位置
-	static const D3DXVECTOR3 ITEM_SPAWN_POS[MAX_ITEM_POS] =
+	const D3DXVECTOR3 ITEM_SPAWN_POS[MAX_ITEM_POS] =
 	{
 		D3DXVECTOR3(-1100.0f, 0.0f, 100.0f),
 		D3DXVECTOR3(1000.0f, 0.0f, 450.0f),
 		D3DXVECTOR3(1250.0f, 0.0f, -800.0f),
 	};
 
-	static const int TRANS_COUNT = 80;				// 遷移カウント
-	static const int START_COUNT = 5;				// 開始のカウント
-	static const int MAX_ITEM = 3;					// アイテムの最大数
-	static const int ATEMSPAWN_CONT = (60 - 25) / MAX_ITEM * 60;	// アイテム出現カウント
+	const int TRANS_COUNT = 80;				// 遷移カウント
+	const int START_COUNT = 60;				// 開始のカウント
+	const int MAX_ITEM = 3;					// アイテムの最大数
+	const int ATEMSPAWN_CONT = (60 - 25) / MAX_ITEM * 60;	// アイテム出現カウント
 }
 
 //--------------------------------------------
@@ -132,11 +132,11 @@ HRESULT CGame::Init(void)
 	// シーンの初期化
 	CScene::Init();
 
-	// テキスト読み込み処理
-	CElevation::TxtSet();
-
 	// 画面の枠の生成
 	CScreenFrame::Create();
+
+	// テキスト読み込み処理
+	CElevation::TxtSet();
 
 	// メッシュの読み込み処理
 	//CMesh::TxtSet();

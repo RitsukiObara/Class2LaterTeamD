@@ -355,6 +355,9 @@ bool CGarbage::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 
 				// 位置を適用する
 				pPlayer->SetPos(pos);
+
+				// true を返す
+				return true;
 			}
 
 			// 次のブロックの情報を取得する
@@ -373,6 +376,9 @@ bool CGarbage::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 
 				// 位置を適用する
 				pPlayer->SetPos(pos);
+
+				// true を返す
+				return true;
 			}
 
 			// 次の障害物の情報を取得する

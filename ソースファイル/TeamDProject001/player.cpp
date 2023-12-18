@@ -37,25 +37,25 @@
 //-------------------------------------------
 namespace
 {
-	static const D3DXVECTOR3 SMASH_MOVE = D3DXVECTOR3(8.0f, 20.0f, 8.0f);		// 吹き飛び状態の移動量
-	static const D3DXCOLOR SMASH_COLOR = D3DXCOLOR(0.9f, 0.0f, 0.1f, 0.7f);		// 吹き飛び状態の時の色
-	static const float CAT_CAMERA_HEIGHT = 250.0f;		// 猫のカメラの高さ
-	static const float CAT_CAMERA_DIS = 50.0f;			// 猫のカメラの視点と注視点の高さの差分(角度)
-	static const float RAT_CAMERA_HEIGHT = 100.0f;		// 猫のカメラの高さ
-	static const float RAT_CAMERA_DIS = 60.0f;			// ネズミのカメラの視点と注視点の高さの差分(角度)
-	static const float DIFF_ROT = 0.2f;					// 角度に足す差分の割合
-	static const float CAMERA_ROT_MOVE = 0.032f;		// カメラの向きの移動量
-	static const float ADD_ACTION_RADIUS = 40.0f;		// サーチ時の半径の追加数
-	static const int NONE_PLAYERIDX = -1;				// プレイヤーの番号の初期値
-	static const int CAT_SMASH_STUN = 120;				// ネコのスタン時間
-	static const int RAT_SMASH_STUN = 90;				// ネズミのスタン時間
-	static const int STUN_WAIT = 120;					// オブジェクト無効の待機時間
-	static const int DEATH_WAIT = 120;					// 死亡時の待機時間
-	static const int SMASH_WAIT = 40;					// 吹き飛び状態のカウント数
-	static const int STUN_FLASH_INTERVAL = 12;			// プレイヤーの点滅間隔
-	static const int DEATH_FLASH_INTERVAL = 4;			// プレイヤーの点滅間隔
-	static const WORD SMASH_VIBRATE = 30000;			// 吹き飛んだ時のバイブレーション
-	static const WORD STUN_VIBRATE = 20000;				// 気絶したときのバイブレーション
+	const D3DXVECTOR3 SMASH_MOVE = D3DXVECTOR3(8.0f, 20.0f, 8.0f);		// 吹き飛び状態の移動量
+	const D3DXCOLOR SMASH_COLOR = D3DXCOLOR(0.9f, 0.0f, 0.1f, 0.7f);		// 吹き飛び状態の時の色
+	const float CAT_CAMERA_HEIGHT = 250.0f;		// 猫のカメラの高さ
+	const float CAT_CAMERA_DIS = 50.0f;			// 猫のカメラの視点と注視点の高さの差分(角度)
+	const float RAT_CAMERA_HEIGHT = 100.0f;		// 猫のカメラの高さ
+	const float RAT_CAMERA_DIS = 60.0f;			// ネズミのカメラの視点と注視点の高さの差分(角度)
+	const float DIFF_ROT = 0.2f;					// 角度に足す差分の割合
+	const float CAMERA_ROT_MOVE = 0.032f;		// カメラの向きの移動量
+	const float ADD_ACTION_RADIUS = 40.0f;		// サーチ時の半径の追加数
+	const int NONE_PLAYERIDX = -1;				// プレイヤーの番号の初期値
+	const int CAT_SMASH_STUN = 120;				// ネコのスタン時間
+	const int RAT_SMASH_STUN = 90;				// ネズミのスタン時間
+	const int STUN_WAIT = 120;					// オブジェクト無効の待機時間
+	const int DEATH_WAIT = 120;					// 死亡時の待機時間
+	const int SMASH_WAIT = 40;					// 吹き飛び状態のカウント数
+	const int STUN_FLASH_INTERVAL = 12;			// プレイヤーの点滅間隔
+	const int DEATH_FLASH_INTERVAL = 4;			// プレイヤーの点滅間隔
+	const WORD SMASH_VIBRATE = 30000;			// 吹き飛んだ時のバイブレーション
+	const WORD STUN_VIBRATE = 20000;				// 気絶したときのバイブレーション
 }
 
 //==============================

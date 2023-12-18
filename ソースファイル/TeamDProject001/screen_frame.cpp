@@ -16,9 +16,9 @@
 //--------------------------------------------
 namespace
 {
-	static const D3DXVECTOR3 FRAME_POS = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f);		// 位置
-	static const D3DXVECTOR3 FRAME_SIZE = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f);		// サイズ
-	static const char* FRAME_TEXTURE = "data\\TEXTURE\\UI_FRAME.png";										// テクスチャ
+	const D3DXVECTOR3 FRAME_POS = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f);		// 位置
+	const D3DXVECTOR3 FRAME_SIZE = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f);	// サイズ
+	const char* FRAME_TEXTURE = "data\\TEXTURE\\UI_FRAME.png";										// テクスチャ
 }
 
 //============================

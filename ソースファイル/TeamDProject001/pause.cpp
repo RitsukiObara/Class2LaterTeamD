@@ -16,55 +16,41 @@
 #include "useful.h"
 
 //---------------------------------------
-// マクロ定義
+// 無名名前空間
 //---------------------------------------
-// 位置関係
-#define BACK_POS				(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f))		// 背景の位置
-#define PAUSEMENU_POS			(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f))		// メニューの位置
-#define CONTINUE_POS			(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 260.0f, 0.0f))					// コンティニューの位置
-#define RESET_POS				(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 410.0f, 0.0f))					// リセットの位置
-#define TITLE_POS				(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 560.0f, 0.0f))					// タイトルの位置
-
-// サイズ関係
-#define BACK_SIZE				(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f))		// 背景のサイズ
-#define MENU_SIZE				(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f))		// メニューのサイズ
-#define CONTINUE_SIZE			(D3DXVECTOR3(360.0f, 64.0f, 0.0f))			// コンティニューのサイズ
-#define RESET_SIZE				(D3DXVECTOR3(220.0f, 64.0f, 0.0f))			// リセットのサイズ
-#define TITLE_SIZE				(D3DXVECTOR3(200.0f, 64.0f, 0.0f))			// タイトルのサイズ
-#define CURSOR_SIZE				(D3DXVECTOR3(50.0f, 50.0f, 0.0f))			// カーソルのサイズ
-
-// その他
-#define PAUSE_BACK_COL			(D3DXCOLOR(0.2f, 0.2f, 0.2f, 0.4f))			// 背景の色
-#define PAUSE_ALPHA				(0.02f)					// 透明度の変化の数値
-#define DECIDE_ALPHA			(0.7f)					// 決定した後の透明度の変化
-#define NOCHOICE_ALPHA			(0.5f)					// 選んでいない選択肢の透明度
-#define SIZEDEST_MAGNI			(1.2f)					// 目標のサイズの倍率
-#define SIZEDEST_CORRECT_VALUE	(0.7f)					// 目標のサイズの補正の倍率
-#define CHOICE_ALPHA_MIN		(0.4f)					// 選択肢の透明度の最小値
-#define SELECT_REPEAT_COUNT		(15)					// 選択の時のリピートのカウント数
-
-// 静的メンバ変数宣言
-const char*CPause::c_apFilename[CPause::POLYGON_MAX] =	// テクスチャファイル名
+namespace
 {
-	nullptr,								// 背景ポリゴン
-	"data\\TEXTURE\\PAUSE_menu.png",		// ポーズメニューのテクスチャ
-	"data\\TEXTURE\\PAUSE_return.png",		// コンティニューのテクスチャ
-	"data\\TEXTURE\\PAUSE_Reset.png",		// リセットのテクスチャ
-	"data\\TEXTURE\\PAUSE_title.png",		// タイトルのテクスチャ
-	"data\\TEXTURE\\PAUSE_Choicebar.png",	// 右カーソルのテクスチャ
-	"data\\TEXTURE\\PAUSE_Choicebar.png",	// 左カーソルのテクスチャ
-};
+	const D3DXCOLOR PAUSE_BACK_COL = D3DXCOLOR(0.2f, 0.2f, 0.2f, 0.4f);			// 背景の色
+	const float PAUSE_ALPHA = 0.02f;				// 透明度の変化の数値
+	const float  DECIDE_ALPHA = 0.7f;				// 決定した後の透明度の変化
+	const float  NOCHOICE_ALPHA = 0.5f;				// 選んでいない選択肢の透明度
+	const float  SIZEDEST_MAGNI = 1.2f;				// 目標のサイズの倍率
+	const float  SIZEDEST_CORRECT_VALUE = 0.7f;		// 目標のサイズの補正の倍率
+	const float  CHOICE_ALPHA_MIN = 0.4f;			// 選択肢の透明度の最小値
+	const int SELECT_REPEAT_COUNT = 15;				// 選択の時のリピートのカウント数
 
-const CPause::Info CPause::c_aPauseInfo[POLYGON_MAX] = 	// ポーズの情報
-{
-	{ BACK_POS ,BACK_SIZE },			// 背景ポリゴン
-	{ PAUSEMENU_POS ,MENU_SIZE },		// ポーズメニュー
-	{ CONTINUE_POS ,CONTINUE_SIZE },	// コンティニュー
-	{ RESET_POS ,RESET_SIZE },			// リトライ
-	{ TITLE_POS ,TITLE_SIZE },			// タイトル
-	{ NONE_D3DXVECTOR3,CURSOR_SIZE },	// 右カーソル
-	{ NONE_D3DXVECTOR3,CURSOR_SIZE },	// 左カーソル
-};
+	const char* PAUSE_TEXTURE[CPause::POLYGON_MAX] =	// テクスチャファイル名
+	{
+		nullptr,									// 背景ポリゴン
+		"data\\TEXTURE\\PAUSE_menu.png",			// ポーズメニューのテクスチャ
+		"data\\TEXTURE\\PAUSE_return.png",			// コンティニューのテクスチャ
+		"data\\TEXTURE\\PAUSE_Reset.png",			// リセットのテクスチャ
+		"data\\TEXTURE\\PAUSE_title.png",			// タイトルのテクスチャ
+		"data\\TEXTURE\\PAUSE_Choicebar.png",		// 右カーソルのテクスチャ
+		"data\\TEXTURE\\PAUSE_Choicebar.png",		// 左カーソルのテクスチャ
+	};
+
+	const CPause::Info PAUSE_INFO[CPause::POLYGON_MAX] = 	// ポーズの情報
+	{
+		{ D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f) ,D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f) },			// 背景ポリゴン
+		{ D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f) ,D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f) },		// ポーズメニュー
+		{ D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 260.0f, 0.0f) ,D3DXVECTOR3(360.0f, 64.0f, 0.0f) },	// コンティニュー
+		{ D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 410.0f, 0.0f) ,D3DXVECTOR3(220.0f, 64.0f, 0.0f) },			// リトライ
+		{ D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 560.0f, 0.0f) ,D3DXVECTOR3(200.0f, 64.0f, 0.0f) },			// タイトル
+		{ NONE_D3DXVECTOR3,D3DXVECTOR3(50.0f, 50.0f, 0.0f) },	// 右カーソル
+		{ NONE_D3DXVECTOR3,D3DXVECTOR3(50.0f, 50.0f, 0.0f) },	// 左カーソル
+	};
+}
 
 //==========================================
 // コンストラクタ
@@ -108,9 +94,9 @@ HRESULT CPause::Init(void)
 			m_apObject[nCnt] = m_apObject[nCnt]->Create(CObject2D::TYPE_NONE, CObject::TYPE_NONE, PRIORITY_PAUSE);
 
 			// 情報を設定する
-			m_apObject[nCnt]->SetPos(c_aPauseInfo[nCnt].pos);			// 位置
+			m_apObject[nCnt]->SetPos(PAUSE_INFO[nCnt].pos);			// 位置
 			m_apObject[nCnt]->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));	// 向き
-			m_apObject[nCnt]->SetSize(c_aPauseInfo[nCnt].size);			// サイズ
+			m_apObject[nCnt]->SetSize(PAUSE_INFO[nCnt].size);			// サイズ
 			m_apObject[nCnt]->SetLength();								// 長さ
 			m_apObject[nCnt]->SetAngle();								// 方向
 
@@ -125,14 +111,14 @@ HRESULT CPause::Init(void)
 			}
 
 			// テクスチャの割り当て処理
-			m_apObject[nCnt]->BindTexture(CManager::Get()->GetTexture()->Regist(c_apFilename[nCnt]));
+			m_apObject[nCnt]->BindTexture(CManager::Get()->GetTexture()->Regist(PAUSE_TEXTURE[nCnt]));
 		}
 	}
 
 	// 全ての値を初期化する
 	m_PauseMenu = MENU_CONTINUE;		// メニュー
 	m_PauseColor = NONE_D3DXCOLOR;		// 選択肢の色
-	m_sizeDest = D3DXVECTOR3(c_aPauseInfo[m_PauseMenu + POLYGON_CONTINUE].size.x * SIZEDEST_MAGNI, c_aPauseInfo[m_PauseMenu + POLYGON_CONTINUE].size.y * SIZEDEST_MAGNI, 0.0f);			// 目標のサイズ
+	m_sizeDest = D3DXVECTOR3(PAUSE_INFO[m_PauseMenu + POLYGON_CONTINUE].size.x * SIZEDEST_MAGNI, PAUSE_INFO[m_PauseMenu + POLYGON_CONTINUE].size.y * SIZEDEST_MAGNI, 0.0f);			// 目標のサイズ
 	m_nPauseCounter = 0;				// カウンター
 	m_fPauseAlpha = PAUSE_ALPHA;		// 透明度の変化量
 	m_bPause = false;					// ポーズ状況
@@ -318,7 +304,7 @@ void CPause::PauseSelect(void)
 	}
 
 	// 目標のサイズの設定処理
-	m_sizeDest = D3DXVECTOR3(c_aPauseInfo[m_PauseMenu + POLYGON_CONTINUE].size.x * SIZEDEST_MAGNI, c_aPauseInfo[m_PauseMenu + POLYGON_CONTINUE].size.y * SIZEDEST_MAGNI, 0.0f);
+	m_sizeDest = D3DXVECTOR3(PAUSE_INFO[m_PauseMenu + POLYGON_CONTINUE].size.x * SIZEDEST_MAGNI, PAUSE_INFO[m_PauseMenu + POLYGON_CONTINUE].size.y * SIZEDEST_MAGNI, 0.0f);
 }
 
 //=====================================
@@ -431,7 +417,7 @@ void CPause::PauseVertex(void)
 			m_apObject[nPauseCnt + POLYGON_CONTINUE]->SetVtxColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, NOCHOICE_ALPHA));
 
 			// サイズの設定処理
-			m_apObject[nPauseCnt + POLYGON_CONTINUE]->SetSize(c_aPauseInfo[nPauseCnt + POLYGON_CONTINUE].size);
+			m_apObject[nPauseCnt + POLYGON_CONTINUE]->SetSize(PAUSE_INFO[nPauseCnt + POLYGON_CONTINUE].size);
 		}
 
 		// 頂点座標の設定処理
@@ -448,8 +434,8 @@ void CPause::CursorMove(void)
 	D3DXVECTOR3 pos = m_apObject[m_PauseMenu + POLYGON_CONTINUE]->GetPos();
 
 	// カーソルの設定処理
-	m_apObject[POLYGON_RCURSOR]->SetPos(D3DXVECTOR3(pos.x + m_sizeDest.x + CURSOR_SIZE.x, pos.y, 0.0f));
-	m_apObject[POLYGON_LCURSOR]->SetPos(D3DXVECTOR3(pos.x - m_sizeDest.x - CURSOR_SIZE.x, pos.y, 0.0f));
+	m_apObject[POLYGON_RCURSOR]->SetPos(D3DXVECTOR3(pos.x + m_sizeDest.x + PAUSE_INFO[POLYGON_RCURSOR].pos.x, pos.y, 0.0f));
+	m_apObject[POLYGON_LCURSOR]->SetPos(D3DXVECTOR3(pos.x - m_sizeDest.x - PAUSE_INFO[POLYGON_LCURSOR].pos.x, pos.y, 0.0f));
 
 	// 頂点座標の設定処理
 	m_apObject[POLYGON_RCURSOR]->SetVertex();

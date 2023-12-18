@@ -15,7 +15,7 @@
 //---------------------------------------
 namespace
 {
-	static const D3DXVECTOR3 BG_POS[CEntryBG::TYPE_MAX] =		// ”wŒi‚ÌˆÊ’u
+	const D3DXVECTOR3 BG_POS[CEntryBG::TYPE_MAX] =		// ”wŒi‚ÌˆÊ’u
 	{
 		D3DXVECTOR3(0.0f, 0.0f, 2650.0f),
 		D3DXVECTOR3(900.0f, -200.0f, 200.0f),
@@ -29,7 +29,7 @@ namespace
 		D3DXVECTOR3(700.0f, 140.0f,0.0f),
 	};
 
-	static const D3DXVECTOR3 BG_ROT[CEntryBG::TYPE_MAX] =		// ”wŒi‚ÌˆÊ’u
+	const D3DXVECTOR3 BG_ROT[CEntryBG::TYPE_MAX] =		// ”wŒi‚ÌˆÊ’u
 	{
 		NONE_D3DXVECTOR3,
 		NONE_D3DXVECTOR3,

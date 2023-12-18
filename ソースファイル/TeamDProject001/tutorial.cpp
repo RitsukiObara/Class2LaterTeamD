@@ -48,14 +48,14 @@
 //--------------------------------------------
 namespace
 {
-	static const D3DXVECTOR3 PLAYERUI_POS[MAX_PLAY] =								// プレイヤーUIの位置
+	const D3DXVECTOR3 PLAYERUI_POS[MAX_PLAY] =								// プレイヤーUIの位置
 	{
 		D3DXVECTOR3(90.0f, SCREEN_HEIGHT * 0.5f - 80.0f, 0.0f),
 		D3DXVECTOR3(SCREEN_WIDTH - 90.0f, SCREEN_HEIGHT * 0.5f - 80.0f, 0.0f),
 		D3DXVECTOR3(90.0f, SCREEN_HEIGHT - 80.0f, 0.0f),
 		D3DXVECTOR3(SCREEN_WIDTH - 90.0f, SCREEN_HEIGHT - 80.0f, 0.0f),
 	};
-	static const int TRANS_COUNT = 80;				// 遷移カウント
+	const int TRANS_COUNT = 80;				// 遷移カウント
 }
 
 #define SKIP_POS	(D3DXVECTOR3(1080.0f,50.0f,0.0f))					//スキップの位置

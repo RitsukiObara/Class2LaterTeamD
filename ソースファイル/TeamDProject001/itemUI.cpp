@@ -20,13 +20,13 @@
 //--------------------------------------------
 namespace
 {
-	static const D3DXVECTOR3 FRAME_POS_SHIFT_BACK = D3DXVECTOR3(-40.0f, 20.0f, 0.0f);		// 後ろの枠の位置のずらす幅
-	static const D3DXVECTOR3 FRAME_SIZE[CItemUI::ORDER_MAX] =								// 枠のサイズ
+	const D3DXVECTOR3 FRAME_POS_SHIFT_BACK = D3DXVECTOR3(-40.0f, 20.0f, 0.0f);		// 後ろの枠の位置のずらす幅
+	const D3DXVECTOR3 FRAME_SIZE[CItemUI::ORDER_MAX] =								// 枠のサイズ
 	{
 		D3DXVECTOR3(30.0f, 30.0f, 0.0f),			// 後ろ
 		D3DXVECTOR3(50.0f, 50.0f, 0.0f),			// 前
 	};
-	static const D3DXVECTOR3 MARK_SIZE[CItemUI::ORDER_MAX] =								// 枠のサイズ
+	const D3DXVECTOR3 MARK_SIZE[CItemUI::ORDER_MAX] =								// 枠のサイズ
 	{
 		D3DXVECTOR3(15.0f, 15.0f, 0.0f),			// 後ろ
 		D3DXVECTOR3(30.0f, 30.0f, 0.0f),			// 前
