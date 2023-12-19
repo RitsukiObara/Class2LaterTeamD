@@ -45,6 +45,7 @@ public:			// 誰でもアクセスできる
 		float fGravity;		// 重力
 		bool bDisp;			// 描画状況
 		bool bMove;			// 移動状況
+		bool bSe;			// SE再生状況
 	};
 
 	CBook();				// コンストラクタ
@@ -77,6 +78,7 @@ private:		// 自分だけアクセスできる
 	float m_fGravity;			// 重力
 	bool m_bDisp;				// 描画状況
 	bool m_bMove;				// 移動状況
+	bool m_bSe;					// SE再生状況
 };
 
 #endif

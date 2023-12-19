@@ -12,6 +12,7 @@
 #include "book.h"
 #include "useful.h"
 #include "collision.h"
+#include "sound.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -39,6 +40,7 @@ CBook::CBook() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 		m_aBook[nCnt].fGravity = 0.0f;			// 重力
 		m_aBook[nCnt].bDisp = true;				// 描画状況
 		m_aBook[nCnt].bMove = false;			// 移動状況
+		m_aBook[nCnt].bSe = false;				// SE再生状況
 	}
 	m_move = NONE_D3DXVECTOR3;		// 移動量
 	m_state = STATE_STOP;			// 状態
@@ -46,6 +48,7 @@ CBook::CBook() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 	m_fGravity = 0.0f;				// 重力
 	m_bDisp = true;					// 描画状況
 	m_bMove = false;				// 移動状況
+	m_bSe = false;					// SE再生状況
 	SetCatUse(true);				// ネコの使用条件
 	SetRatUse(true);				// ネズミの使用条件
 }
@@ -83,6 +86,7 @@ HRESULT CBook::Init(void)
 		m_aBook[nCnt].fGravity = 0.0f;				// 重力
 		m_aBook[nCnt].bDisp = true;					// 描画状況
 		m_aBook[nCnt].bMove = false;			// 移動状況
+		m_aBook[nCnt].bSe = false;				// SE再生状況
 	}
 
 	m_move = NONE_D3DXVECTOR3;		// 移動量
@@ -91,6 +95,7 @@ HRESULT CBook::Init(void)
 	m_fGravity = 0.0f;				// 重力
 	m_bDisp = true;					// 描画状況
 	m_bMove = false;				// 移動状況
+	m_bSe = false;					// SE再生状況
 
 	// 値を返す
 	return S_OK;
@@ -223,6 +228,14 @@ void CBook::StateManager(void)
 		if (m_bMove == true)
 		{ // 移動状況が true の場合
 
+			if(m_bSe == false)
+			{ // SE再生してないとき
+
+				// 歩くSE再生
+				CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_BOOLDOWN);
+				m_bSe = true;		//SE再生した状態にする
+			}
+
 			// 向きの補正処理
 			useful::RotCorrect(D3DX_PI, &rot.z, COLLAPSE_ROT_CORRECT);
 
@@ -237,6 +250,14 @@ void CBook::StateManager(void)
 		{
 			if (m_aBook[nCnt].bMove == true)
 			{ // 移動状況が true の場合
+
+				if (m_aBook[nCnt].bSe == false)
+				{ // SE再生してないとき
+
+					// 歩くSE再生
+					CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_BOOLDOWN);
+					m_aBook[nCnt].bSe = true;		//SE再生した状態にする
+				}
 
 				// 位置と向きを取得する
 				objpos = m_aBook[nCnt].pBook->GetPos();

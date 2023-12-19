@@ -57,8 +57,8 @@ HRESULT CRoomba::Init(void)
 		m_apSub[nCnt] = NULL;
 	}
 
-	// ‘|œ‰¹‚ð–Â‚ç‚·
-	CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_CLEANING);
+	//// ‘|œ‰¹‚ð–Â‚ç‚·
+	//CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_CLEANING);
 	
 	// ’l‚ð•Ô‚·
 	return S_OK;

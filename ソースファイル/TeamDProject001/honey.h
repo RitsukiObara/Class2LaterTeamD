@@ -50,6 +50,8 @@ private:		// 自分だけアクセスできる
 
 	// メンバ変数
 	State m_State;
+	int m_nWalkSeCount;	// 歩く音のカウンター
+	bool m_bLeakSe;		// 蜂蜜広がるSE
 };
 
 #endif
