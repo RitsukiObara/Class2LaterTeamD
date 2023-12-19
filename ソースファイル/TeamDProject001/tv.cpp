@@ -14,11 +14,13 @@
 #include "useful.h"
 #include "input.h"
 #include "texture.h"
-#include "collision.h"
+#include "sound.h"
 #include "object3D.h"
+#include "objectbillboard.h"
+
 #include "player.h"
+#include "collision.h"
 #include "game.h"
-#include"sound.h"
 
 //------------------------------
 // 無名名前関数
@@ -51,7 +53,8 @@ CTv::CTv() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 	// 全ての値をクリアする
 	m_State = STATE_NONE;				// アイテムが取れる状態に
 	m_pVision = nullptr;				// ポリゴン情報をnullptr
-	m_pRemocon = nullptr;				// リモコン情報をnullptr
+	m_remocon.pRemocon = nullptr;		// リモコン情報をnullptr
+	m_remocon.pGimmickUI = nullptr;		// ギミックUIをnullptr
 	m_vtxMax = NONE_D3DXVECTOR3;		// 最大値
 	m_vtxMin = NONE_D3DXVECTOR3;		// 最小値
 	m_nCoolTime = 0;					// クールタイム
@@ -75,7 +78,8 @@ HRESULT CTv::Init(void)
 	// 全ての値をクリアする
 	m_State = STATE_NONE;				// アイテムが取れる状態に
 	m_pVision = nullptr;				// ポリゴン情報をnullptr
-	m_pRemocon = nullptr;				// リモコン情報をnullptr
+	m_remocon.pRemocon = nullptr;		// リモコン情報をnullptr
+	m_remocon.pGimmickUI = nullptr;		// ギミックUIをnullptr
 	m_vtxMax = NONE_D3DXVECTOR3;		// 最大値
 	m_vtxMin = NONE_D3DXVECTOR3;		// 最小値
 	m_nCoolTime = 0;					// クールタイム
@@ -94,17 +98,17 @@ HRESULT CTv::Init(void)
 		int nMapNum = CGame::GetMapNumber();
 
 		// リモコンを生成
-		m_pRemocon = CModel::Create(TYPE_NONE, PRIORITY_BLOCK);
+		m_remocon.pRemocon = CModel::Create(TYPE_NONE, PRIORITY_BLOCK);
 
-		if (m_pRemocon != nullptr)
+		if (m_remocon.pRemocon != nullptr)
 		{ // リモコンが NULL じゃない場合
 
 			// 情報の設定処理
-			m_pRemocon->SetPos(REMOCON_POS[nMapNum]);		// 位置
-			m_pRemocon->SetPosOld(REMOCON_POS[nMapNum]);	// 前回の位置
-			m_pRemocon->SetRot(REMOCON_ROT[nMapNum]);		// 向き
-			m_pRemocon->SetScale(NONE_SCALE);				// 拡大率
-			m_pRemocon->SetFileData(CXFile::TYPE_REMOCON);	// モデルの情報
+			m_remocon.pRemocon->SetPos(REMOCON_POS[nMapNum]);		// 位置
+			m_remocon.pRemocon->SetPosOld(REMOCON_POS[nMapNum]);	// 前回の位置
+			m_remocon.pRemocon->SetRot(REMOCON_ROT[nMapNum]);		// 向き
+			m_remocon.pRemocon->SetScale(NONE_SCALE);				// 拡大率
+			m_remocon.pRemocon->SetFileData(CXFile::TYPE_REMOCON);	// モデルの情報
 		}
 	}
 
@@ -129,12 +133,20 @@ void CTv::Uninit(void)
 		m_pVision = nullptr;
 	}
 
-	if (m_pRemocon != nullptr)
+	if (m_remocon.pRemocon != nullptr)
 	{ // リモコンが NULL の場合
 
 		// リモコンの終了処理
-		m_pRemocon->Uninit();
-		m_pRemocon = nullptr;
+		m_remocon.pRemocon->Uninit();
+		m_remocon.pRemocon = nullptr;
+	}
+
+	if (m_remocon.pGimmickUI != nullptr)
+	{ // ギミックUIが NULL の場合
+
+		// ギミックUIの終了処理
+		m_remocon.pGimmickUI->Uninit();
+		m_remocon.pGimmickUI = nullptr;
 	}
 
 	// 終了処理
@@ -159,11 +171,31 @@ void CTv::Update(void)
 		m_pVision->Update();
 	}
 
-	if (m_pRemocon != nullptr)
+	if (m_remocon.pRemocon != nullptr)
 	{	// リモコンのモデルがnullではないとき
 
 		if (HitRemocon() == true)
 		{	// 周りにプレイヤーがいたら
+
+			if (m_remocon.pGimmickUI == nullptr)
+			{ // ギミックUIが NULL の場合
+
+				//UIの表示
+				m_remocon.pGimmickUI = CBillboard::Create(TYPE_NONE, PRIORITY_UI);
+				m_remocon.pGimmickUI->BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\UI_GimmickOn.png"));
+				m_remocon.pGimmickUI->SetSize(D3DXVECTOR3(50.0f, 50.0f, 0.0f));
+
+				m_remocon.pGimmickUI->SetPos(D3DXVECTOR3(
+					m_remocon.pRemocon->GetPos().x,
+					m_remocon.pRemocon->GetPos().y + 50.0f,
+					m_remocon.pRemocon->GetPos().z));
+				m_remocon.pGimmickUI->SetPosOld(D3DXVECTOR3(
+					m_remocon.pRemocon->GetPos().x,
+					m_remocon.pRemocon->GetPos().y + 50.0f,
+					m_remocon.pRemocon->GetPos().z));
+
+				m_remocon.pGimmickUI->SetVertex();
+			}
 
 			if (CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_B, 0) == true ||
 				CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_B, 1) == true ||
@@ -174,6 +206,17 @@ void CTv::Update(void)
 
 				//　テレビの電源操作
 				PowerAction();
+			}
+		}
+		else
+		{ // 上記以外
+
+			if (m_remocon.pGimmickUI != nullptr)
+			{ // ギミックUIが NULL じゃない場合
+
+				// ギミックUIの終了処理
+				m_remocon.pGimmickUI->Uninit();
+				m_remocon.pGimmickUI = nullptr;
 			}
 		}
 
@@ -194,11 +237,11 @@ void CTv::Draw(void)
 	// 描画処理
 	CObstacle::Draw();
 
-	if (m_pRemocon != nullptr)
+	if (m_remocon.pRemocon != nullptr)
 	{ // リモコンが NULL じゃない場合
 
 		// 描画処理
-		m_pRemocon->Draw();
+		m_remocon.pRemocon->Draw();
 	}
 
 	if (m_pVision != nullptr)
@@ -206,6 +249,13 @@ void CTv::Draw(void)
 
 		// 描画処理
 		m_pVision->DrawLightOff();
+	}
+
+	if (m_remocon.pGimmickUI != nullptr)
+	{ // ギミックUIが NULL じゃない場合
+
+		// 描画処理
+		m_remocon.pGimmickUI->Draw();
 	}
 }
 
@@ -377,25 +427,29 @@ void CTv::Action(void)
 		// プレイヤーを取得する
 		pPlayer = CGame::GetPlayer(nCnt);
 
-		if (pPlayer->GetType() == CPlayer::TYPE_CAT)
-		{ // ネコの場合
+		if (pPlayer != nullptr)
+		{ // プレイヤーが NULL じゃない場合
 
-			// アイテムの取得処理
-			pPlayer->GetItem(CItem::TYPE_DYNAMITE);
+			if (pPlayer->GetType() == CPlayer::TYPE_CAT)
+			{ // ネコの場合
 
-			if (m_State != STATE_COOLDOWN)
-			{ // クールタイム以外の場合
+				// アイテムの取得処理
+				pPlayer->GetItem(CItem::TYPE_DYNAMITE);
 
-				//	サウンドの再生
-				CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_TV_SANDSTORM);
+				if (m_State != STATE_COOLDOWN)
+				{ // クールタイム以外の場合
+
+					// サウンドの再生
+					CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_TV_SANDSTORM);
+				}
+
+				// アイテム取った後の状態にする
+				m_State = STATE_COOLDOWN;
+				m_nCoolTime = COOL_TIME;
+
+				// テクスチャの割り当て処理
+				m_pVision->BindTexture(CManager::Get()->GetTexture()->Regist(COOLTIME_TEXTURE));
 			}
-
-			// アイテム取った後の状態にする
-			m_State = STATE_COOLDOWN;
-			m_nCoolTime = COOL_TIME;
-
-			// テクスチャの割り当て処理
-			m_pVision->BindTexture(CManager::Get()->GetTexture()->Regist(COOLTIME_TEXTURE));
 		}
 	}
 }
@@ -493,7 +547,7 @@ bool CTv::HitRemocon(void)
 			case CPlayer::TYPE_CAT:
 
 				if (m_bPower == false &&
-					useful::CircleCollisionXZ(pPlayer->GetPos(), m_pRemocon->GetPos(), CAT_RADIUS, m_pRemocon->GetFileData().fRadius) == true)
+					useful::CircleCollisionXZ(pPlayer->GetPos(), m_remocon.pRemocon->GetPos(), CAT_RADIUS, m_remocon.pRemocon->GetFileData().fRadius) == true)
 				{ // 電源OFFかつ、円の範囲内の場合
 
 					// true を返す
@@ -505,7 +559,7 @@ bool CTv::HitRemocon(void)
 			case CPlayer::TYPE_RAT:
 
 				if (m_bPower == true &&
-					useful::CircleCollisionXZ(pPlayer->GetPos(), m_pRemocon->GetPos(), RAT_RADIUS, m_pRemocon->GetFileData().fRadius) == true)
+					useful::CircleCollisionXZ(pPlayer->GetPos(), m_remocon.pRemocon->GetPos(), RAT_RADIUS, m_remocon.pRemocon->GetFileData().fRadius) == true)
 				{ // 電源ONかつ、円の範囲内の場合
 
 					// true を返す

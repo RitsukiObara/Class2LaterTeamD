@@ -340,12 +340,13 @@ bool CPetbottle::Block(void)
 {
 	D3DXVECTOR3 pos = GetPos();			// 位置を取得する
 	CBlock* pBlock = CBlockManager::Get()->GetTop();	// ブロックの先頭を取得する
+	collision::SCollision collision = { false,false,false,false,false,false };		// 当たり判定
 
 	while (pBlock != nullptr)
 	{ // ブロックが NULL じゃない限り回る
 
 		// 六面体の当たり判定
-		if (collision::HexahedronCollision
+		collision = collision::HexahedronClush
 		(
 			&pos,
 			pBlock->GetPos(),
@@ -355,8 +356,16 @@ bool CPetbottle::Block(void)
 			pBlock->GetVtxMin(),
 			m_vtxMax,
 			pBlock->GetVtxMax()
-		) == true)
+		);
+
+		if (collision.bTop == true)
 		{ // 当たった場合
+
+			// 重力を0にする
+			m_move.y = 0.0f;
+		}
+		else
+		{ // 上記以外
 
 			// true を返す
 			return true;

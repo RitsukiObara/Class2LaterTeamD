@@ -16,12 +16,15 @@
 #include "honey.h"
 #include "useful.h"
 #include "Particle.h"
+#include "sound.h"
+
 //-------------------------------------------
 // マクロ定義
 //-------------------------------------------
 #define HONEY_SCALE			(D3DXVECTOR3(0.5f, 1.0f, 0.5f))		// 蜂蜜状態の拡大率
 #define HONEY_FRAC_COUNT	(15)								// 蜂蜜の破片の数
 #define HONEY_ADD_SCALE		(0.005f)							// 蜂蜜の拡大率の加算数
+#define WALK_SE				(30)								// 歩くSEのカウント数
 
 //==============================
 // コンストラクタ
@@ -30,6 +33,8 @@ CHoney::CHoney() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 {
 	// 全ての値をクリアする
 	m_State = STATE_HONEYBOTTLE;
+	m_bLeakSe = false;		// 蜂蜜広がるSE
+	m_nWalkSeCount = 0;	// 歩く音のカウンター
 	SetCatUse(true);
 	SetRatUse(false);
 }
@@ -53,6 +58,10 @@ HRESULT CHoney::Init(void)
 		// 失敗を返す
 		return E_FAIL;
 	}
+
+	// 全ての値をクリアする
+	m_bLeakSe = false;		// 蜂蜜広がるSE
+	m_nWalkSeCount = WALK_SE;		// 歩く音のカウンター
 
 	// 値を返す
 	return S_OK;
@@ -102,6 +111,15 @@ void CHoney::StateManager(void)
 
 		if (Scale.x <= 1.0f)
 		{
+			if (m_bLeakSe == false)
+			{ // SE鳴らしてなかったら
+
+				// 広がるSE再生
+				CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_HONEYLEAK);
+
+				m_bLeakSe = true;		// SE鳴らした状態にする
+			}
+
 			Scale.x += HONEY_ADD_SCALE;
 			Scale.z += HONEY_ADD_SCALE;
 
@@ -193,14 +211,28 @@ bool CHoney::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 //=====================================
 bool CHoney::HitCircle(CPlayer* pPlayer, const float Radius)
 {
+	m_nWalkSeCount++;		// 歩く音カウンター加算
+
 	if (pPlayer->GetType() == CPlayer::TYPE_CAT &&
 		GetAction() == false &&
 		useful::CircleCollisionXZ(pPlayer->GetPos(), GetPos(), Radius, GetFileData().fRadius) == true)
 	{ // 円の範囲内にいる場合
 
+		if ((m_nWalkSeCount % WALK_SE) == 0 && m_State == STATE_HONEY)
+		{ // 一定時間経ったら
+
+			// 歩くSE再生
+			CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_HONEYWALK);
+
+			m_nWalkSeCount = 0;		// カウンター初期化
+		}
+
 		// true を返す
 		return true;
 	}
+
+	// カウンター初期化
+	m_nWalkSeCount = WALK_SE - 1;
 
 	// false を返す
 	return false;
@@ -219,6 +251,9 @@ void CHoney::Action(void)
 
 		// モデルの情報を設定する
 		SetFileData(CXFile::TYPE_HONEY);
+
+		// 割れるSE再生
+		CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_HONEYBREAK);
 
 		for (int nCnt = 0; nCnt < HONEY_FRAC_COUNT; nCnt++)
 		{
