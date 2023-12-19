@@ -63,7 +63,7 @@ namespace
 	};
 
 	const int TRANS_COUNT = 80;				// 遷移カウント
-	const int START_COUNT = 60;				// 開始のカウント
+	const int START_COUNT = 30;				// 開始のカウント
 	const int MAX_ITEM = 3;					// アイテムの最大数
 	const int ATEMSPAWN_CONT = (60 - 25) / MAX_ITEM * 60;	// アイテム出現カウント
 }
