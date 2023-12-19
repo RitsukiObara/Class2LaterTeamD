@@ -264,7 +264,7 @@ void CHoney::Action(void)
 		// 拡大率を設定する
 		SetScale(HONEY_SCALE);
 
-		// アクション状況を false にする
-		SetAction(false);
+		// アクション状況を true にする
+		SetAction(true);
 	}
 }

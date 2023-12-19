@@ -94,6 +94,7 @@ private:		// 自分だけアクセスできる
 	int m_nAtkTime;					// 攻撃が出ている時間
 	bool m_bAttack;					// 攻撃をしているかどうか
 	bool m_bItem;					// アイテムを使用しているか
+	bool m_bSE;						// SE再生してるか
 };
 
 #endif

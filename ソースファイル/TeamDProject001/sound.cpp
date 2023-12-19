@@ -44,6 +44,7 @@ CSound::SOUNDINFO CSound::m_aSoundInfo[CSound::SOUND_LABEL_MAX] =
 	{ "data\\SE\\honey_leak.wav",0 },		// –I–¨‚ªL‚ª‚é‰¹
 	{ "data\\SE\\honey_walk.wav",0 },		// –I–¨‚Ìã•à‚­‰¹
 	{ "data\\SE\\book_down.wav",0 },		// –{‚ª—‚¿‚é‰¹
+	{ "data\\SE\\block_attack.wav",0 },		// ƒuƒƒbƒN’@‚­‰¹
 
 };
 
