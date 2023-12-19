@@ -1073,7 +1073,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Desktop\\Git\\Class2LaterTeamD\\ソ\ースファイル\\TeamDProject001\\data\\TEXTURE\\senpuki.png";
+    "data\\TEXTURE\\senpuki.png";
    }
   }
   Material {
