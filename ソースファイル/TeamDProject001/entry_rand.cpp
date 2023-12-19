@@ -17,8 +17,8 @@
 //-------------------------------------------
 namespace
 {
-	const D3DXVECTOR3 RAND_POS = D3DXVECTOR3(1000.0f, 50.0f, 0.0f);		// 位置
-	const D3DXVECTOR3 RAND_SIZE = D3DXVECTOR3(200.0f, 50.0f, 0.0f);		// サイズ
+	const D3DXVECTOR3 RAND_POS = D3DXVECTOR3(1170.0f, 690.0f, 0.0f);	// 位置
+	const D3DXVECTOR3 RAND_SIZE = D3DXVECTOR3(100.0f, 50.0f, 0.0f);		// サイズ
 	const char* RAND_TEXTURE = "data\\TEXTURE\\Randam.png";				// テクスチャの名前
 }
 

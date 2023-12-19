@@ -417,16 +417,6 @@ void CFile::FalseSuccess(void)
 //===========================================
 void CFile::SetMap(void)
 {
-	if (m_ObstacleInfo.bSuccess == true)
-	{ // ¬Œ÷ó‹µ‚ª true ‚Ìê‡
-
-		for (int nCntObst = 0; nCntObst < m_ObstacleInfo.nNum; nCntObst++)
-		{
-			// áŠQ•¨‚Ì¶¬ˆ—
-			CObstacle::Create(m_ObstacleInfo.pos[nCntObst], m_ObstacleInfo.rot[nCntObst], m_ObstacleInfo.type[nCntObst]);
-		}
-	}
-
 	if (m_BlockInfo.bSuccess == true)
 	{ // ¬Œ÷ó‹µ‚ª true ‚Ìê‡
 
@@ -434,6 +424,16 @@ void CFile::SetMap(void)
 		{
 			// ƒuƒƒbƒN‚Ì¶¬ˆ—
 			CBlock::Create(m_BlockInfo.pos[nCntBlock], m_BlockInfo.rotType[nCntBlock], m_BlockInfo.type[nCntBlock]);
+		}
+	}
+
+	if (m_ObstacleInfo.bSuccess == true)
+	{ // ¬Œ÷ó‹µ‚ª true ‚Ìê‡
+
+		for (int nCntObst = 0; nCntObst < m_ObstacleInfo.nNum; nCntObst++)
+		{
+			// áŠQ•¨‚Ì¶¬ˆ—
+			CObstacle::Create(m_ObstacleInfo.pos[nCntObst], m_ObstacleInfo.rot[nCntObst], m_ObstacleInfo.type[nCntObst]);
 		}
 	}
 }
