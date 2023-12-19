@@ -56,6 +56,10 @@ public:			// 誰でもアクセスできる
 	void MySetIdx(int Idx){ m_bmySet[Idx] = false; }
 	static void NULLNote(int Idx) { m_apNote[Idx] = NULL; }
 
+	// セット・ゲット関数
+	//void SetBgm(bool bBgm);		// BGM状況設定
+	//bool GetBgm(void);			// BGM状況取得
+
 private:		// 自分だけアクセスできる
 
 	// メンバ関数
@@ -70,6 +74,7 @@ private:		// 自分だけアクセスできる
 
 	// 静的メンバ変数
 	static CNote *m_apNote[MAX_NOTE];
+	static int m_nNumBgmAll;		// BGM鳴らした総数
 };
 
 #endif

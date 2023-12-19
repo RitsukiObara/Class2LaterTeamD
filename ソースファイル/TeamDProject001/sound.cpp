@@ -16,6 +16,8 @@ CSound::SOUNDINFO CSound::m_aSoundInfo[CSound::SOUND_LABEL_MAX] =
 	{ "data\\BGM\\GameBGM.wav",-1 },		// ゲームBGM
 	{ "data\\BGM\\ResultBGM.wav",-1 },		// リザルトBGM
 	{ "data\\BGM\\RankingBGM.wav",-1 },		// ランキングBGM
+	{ "data\\BGM\\destiny_of_victory.wav",-1 },		// スピーカーBGM
+
 	{ "data\\SE\\Select.wav",0 },			// 選択音
 	{ "data\\SE\\Decide.wav",0 },			// 決定音
 	{ "data\\SE\\victory.wav",0 },			// 勝利音
@@ -42,6 +44,7 @@ CSound::SOUNDINFO CSound::m_aSoundInfo[CSound::SOUND_LABEL_MAX] =
 	{ "data\\SE\\honey_leak.wav",0 },		// 蜂蜜が広がる音
 	{ "data\\SE\\honey_walk.wav",0 },		// 蜂蜜の上歩く音
 	{ "data\\SE\\book_down.wav",0 },		// 本が落ちる音
+	{ "data\\SE\\block_attack.wav",0 },		// ブロック叩く音
 
 };
 

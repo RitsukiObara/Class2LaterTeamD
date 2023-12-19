@@ -113,6 +113,7 @@ void CPlayer::Box(void)
 	m_nResurrectionTime = 0;			// •œŠˆ‚·‚é‚Ü‚Å‚ÌŠÔ
 	m_bTutorial = false;
 	m_bKill = false;
+	m_bSe = false;						// SEÄ¶‚µ‚½‚©‚Ç‚¤‚©
 
 	for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
 	{

@@ -27,6 +27,7 @@
 #include "item_manager.h"
 #include "player.h"
 #include "manager.h"
+#include "sound.h"
 
 //===============================
 // マクロ定義
@@ -742,6 +743,7 @@ bool collision::BlockHit(CPlayer* player, const D3DXVECTOR3& pos, const D3DXVECT
 	D3DXVECTOR3 vtxMax = D3DXVECTOR3(collSize.x, collSize.y, collSize.z);	// 最大値
 	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-collSize.x, -collSize.y, -collSize.z);		// 最小値
 	bool bHit = false;			// ジャンプ状況
+	bool bSe = false;			// SE鳴らした状況
 	float fAngle = 0.0f;		// 吹き飛ぶ向き
 
 	while (pBlock != nullptr)
@@ -809,6 +811,15 @@ bool collision::BlockHit(CPlayer* player, const D3DXVECTOR3& pos, const D3DXVECT
 				}
 			}
 
+			if (bSe == false && player->GetSE() == false)
+			{ // SEが鳴らされてなかったら
+
+				// SE再生する
+				player->SetSE(true);
+
+				bSe = true;		// 鳴らした状態にする
+			}
+
 			// 揺れる状態にする
 			pBlock->SetState(pBlock->STATE_SWAY);
 
@@ -818,7 +829,7 @@ bool collision::BlockHit(CPlayer* player, const D3DXVECTOR3& pos, const D3DXVECT
 		// 次のブロックの情報を取得する
 		pBlock = pBlock->GetNext();
 	}
-
+	
 	// ヒット状況を返す
 	return bHit;
 }

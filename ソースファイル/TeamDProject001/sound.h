@@ -24,6 +24,8 @@ public:			// 誰でもアクセス出来る
 		SOUND_LABEL_BGM_GAME,			// ゲームBGM
 		SOUND_LABEL_BGM_RESULT,			// リザルトBGM
 		SOUND_LABEL_BGM_RANKING,		// ランキングBGM
+		SOUND_LABEL_BGM_SPEAKER,		// スピーカーBGM
+
 		SOUND_LABEL_SE_SELECT,			// 選択音
 		SOUND_LABEL_SE_DECIDE,			// 決定音
 		SOUND_LABEL_SE_VICTORY,			//勝利音
@@ -50,6 +52,7 @@ public:			// 誰でもアクセス出来る
 		SOUND_LABEL_SE_HONEYLEAK,		// 蜂蜜が広がる音
 		SOUND_LABEL_SE_HONEYWALK,		// 蜂蜜の上歩く音
 		SOUND_LABEL_SE_BOOLDOWN,		// 本が落ちる音
+		SOUND_LABEL_SE_BLOCKATTACK,		// ブロック叩く音
 
 		SOUND_LABEL_MAX					// この列挙型の総数
 	};

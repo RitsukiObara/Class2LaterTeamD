@@ -179,6 +179,7 @@ HRESULT CGame::Init(void)
 
 	// マップの情報をロードする
 	CManager::Get()->GetFile()->FalseSuccess();
+
 	CManager::Get()->GetFile()->Load(FILETYPE_OBSTACLE[m_nMapNumber]);
 	CManager::Get()->GetFile()->Load(FILETYPE_BLOCK[m_nMapNumber]);
 
