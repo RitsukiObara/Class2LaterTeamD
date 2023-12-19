@@ -25,7 +25,7 @@
 //--------------------------------------------
 // マクロ定義
 //--------------------------------------------
-#define POS_MESSAGEUI			(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 100.0f, 675.0f, 0.0f))		// 操作説明UIの位置
+#define POS_MESSAGEUI			(D3DXVECTOR3(SCREEN_WIDTH * 0.5f - 130.0f, 675.0f, 0.0f))		// 操作説明UIの位置
 #define SIZE_MESSAGEUI			(D3DXVECTOR3(500.0f, 50.0f, 0.0f))						// 操作説明UIのサイズ
 
 //--------------------------------------------
