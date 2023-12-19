@@ -157,6 +157,9 @@ public:			// 誰でもアクセスできる
 	void SetLogPlayer(int LogPlayer) { m_nLogPlayer = LogPlayer; }		// 状態の設定処理
 	int GetLogPlayer(void) { return m_nLogPlayer; }						// 状態の取得処理
 
+	void SetSE(bool bSe) { m_bSe = bSe; };			// SEの再生設定
+	bool GetSE(void) {return m_bSe; };				// SEの再生取得
+
 	//チュートリアル用ゲット関数-----------------------------------------
 	void SetBMove(bool Set) { m_bMove = Set; }			// 移動状態の設定処理
 	bool GetBMove(void) { return m_bMove; }				// 移動状態の取得処理
@@ -229,6 +232,7 @@ private:		// 自分だけアクセスできる
 	bool m_bKill;				// キルを行ったかどうか
 	bool m_bRescue;				// 救助を行ったかどうか
 	bool m_bAction;				// 起動を行ったかどうか
+	bool m_bSe;					// SE再生したかどうか
 };
 
 #endif

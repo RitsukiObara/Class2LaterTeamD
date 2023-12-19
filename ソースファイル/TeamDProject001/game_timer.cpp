@@ -36,6 +36,7 @@ CGameTime* CGameTime::m_pGameTimer = nullptr;		// ゲームタイマーの情報
 #define TIME_CORON_SHIFT	(15.0f)									// ゲームタイマーのコロンのずらす幅
 #define NUMBER_TEXTURE		"data\\TEXTURE\\Number.png"				// 数字のテクスチャ
 #define CORON_TEXTURE		"data\\TEXTURE\\time_koron.png"			// コロンのテクスチャ
+#define BG_TEXTURE		"data\\TEXTURE\\timebg.jpg"					// ゲームタイマーの背景のテクスチャ
 
 //========================
 // コンストラクタ
@@ -301,9 +302,9 @@ void CGameTime::SetData(void)
 
 		// 頂点座標の設定処理
 		m_pBG->SetVertex();
-
+		m_pBG->BindTexture(CManager::Get()->GetTexture()->Regist(BG_TEXTURE));
 		// 頂点カラーの設定処理
-		m_pBG->SetVtxColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+		m_pBG->SetVtxColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 	}
 }
 

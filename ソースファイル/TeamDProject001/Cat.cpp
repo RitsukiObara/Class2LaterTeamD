@@ -78,6 +78,7 @@ CCat::CCat() : CPlayer(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 	m_nShadowIdx = INIT_SHADOW;		// 影のインデックス
 	m_nItemCount = 0;				// アイテムの所持数
 	m_nAtkTime = 0;
+	m_bSE = false;					// SE再生してるか
 }
 
 //=========================================
@@ -162,6 +163,7 @@ HRESULT CCat::Init(void)
 	m_rotDest = NONE_D3DXVECTOR3;	// 目的の向き
 	m_nShadowIdx = INIT_SHADOW;		// 影のインデックス
 	m_nItemCount = 0;				// アイテムの所持数
+	m_bSE = false;					// SE再生してるか
 
 	// 値を返す
 	return S_OK;
@@ -330,6 +332,10 @@ void CCat::AttackStateManager(void)
 
 		//CEffect::Create(m_AttackPos, NONE_D3DXVECTOR3, 1, 400.0f, CEffect::TYPE::TYPE_NONE, D3DXCOLOR(0.0f, 0.0f, 1.0f, 0.8f), true);
 
+		// SE再生しない状態にする
+		SetSE(false);
+		m_bSE = false;
+
 		break;
 
 	case ATTACKSTATE_STANDBY:
@@ -422,6 +428,15 @@ void CCat::AttackBlock(void)
 	collision::BlockHit(this,
 		D3DXVECTOR3(pos.x + sinf(rot.y) * -ATTACK_DISTANCE, pos.y, pos.z + cosf(rot.y) * -ATTACK_DISTANCE),
 		ATTACK_SIZE);
+
+	if (GetSE() == true && m_bSE == false)
+	{ // SE再生するとき
+
+		// ブロックSE再生
+		CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_BLOCKATTACK);
+
+		m_bSE = true;
+	}
 }
 
 //=======================================
