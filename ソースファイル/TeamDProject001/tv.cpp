@@ -29,7 +29,7 @@ namespace
 {
 	const D3DXVECTOR3 REMOCON_POS[MAP_TYPE] =		// リモコンの位置
 	{
-		D3DXVECTOR3(-340.0f, 200.0f, -50.0f),
+		D3DXVECTOR3(-280.0f, 200.0f, -50.0f),
 		D3DXVECTOR3(-1490.0f, 196.0f, 404.0f),
 		D3DXVECTOR3(1020.0f, 212.0f, -350.0f),
 	};
@@ -40,13 +40,13 @@ namespace
 		D3DXVECTOR3(0.0f, D3DX_PI * 0.0f, 0.0f),
 	};
 	const int COOL_TIME = 300;			// クールタイム
-	const int CHANGE_TIME = 120;			// 画面変化速度
+	const int CHANGE_TIME = 120;		// 画面変化速度
 	const D3DXVECTOR3 VISION_SIZE = D3DXVECTOR3(150.0f, 80.0f, 0.0f);	// ビジョンのサイズ
 	const char* NONE_TEXTURE = "data\\TEXTURE\\TV000.png";				// 何でもない画面のテクスチャ
 	const char* BOMB_TEXTURE = "data\\TEXTURE\\TV001.png";				// 爆弾の画面のテクスチャ
 	const char* COOLTIME_TEXTURE = "data\\TEXTURE\\TV_sandstorm.jpg";	// クールタイム中のテクスチャ
-	const float CAT_RADIUS = 70.0f;		// ネコの半径
-	const float RAT_RADIUS = 30.0f;		// ネズミの半径
+	const float CAT_RADIUS = 140.0f;	// ネコの半径
+	const float RAT_RADIUS = 80.0f;		// ネズミの半径
 }
 
 //==============================

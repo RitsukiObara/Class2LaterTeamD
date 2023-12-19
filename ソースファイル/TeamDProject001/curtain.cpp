@@ -62,9 +62,10 @@ namespace
 			D3DXVECTOR3(0.0f, -D3DX_PI * 0.5f, 0.0f),
 		},
 	};
-	const float CLOSE_SCALE = 0.03f;					// 閉じた状態の拡大率
+	const float CLOSE_SCALE = 0.03f;				// 閉じた状態の拡大率
 	const float SCALE_CORRECT = 0.01f;				// 拡大率の補正率
 	const float OPEN_SCALE = 1.0f;					// 開いた状態の拡大率
+	const float ADD_SWITCH_RADIUS = 50.0f;			// 追加分のスイッチの半径
 }
 
 //==============================
@@ -279,7 +280,7 @@ bool CCurtain::HitCircle(CPlayer* pPlayer, const float Radius)
 				pPlayer->GetPos(),
 				m_apSwitch[nCnt]->GetModel(CSwitch::TYPE_BASE)->GetPos(),
 				Radius,
-				m_apSwitch[nCnt]->GetModel(CSwitch::TYPE_BASE)->GetFileData().fRadius
+				m_apSwitch[nCnt]->GetModel(CSwitch::TYPE_BASE)->GetFileData().fRadius + ADD_SWITCH_RADIUS
 			) == true)
 			{ // 円の当たり判定内に入った場合
 
@@ -355,7 +356,7 @@ void CCurtain::HitMultiCircle(CPlayer* pPlayer, const float Radius, bool bInput)
 				pPlayer->GetPos(),
 				m_apSwitch[nCnt]->GetModel(CSwitch::TYPE_BASE)->GetPos(),
 				Radius,
-				m_apSwitch[nCnt]->GetModel(CSwitch::TYPE_BASE)->GetFileData().fRadius
+				m_apSwitch[nCnt]->GetModel(CSwitch::TYPE_BASE)->GetFileData().fRadius + ADD_SWITCH_RADIUS
 			) == true)
 			{ // 円の当たり判定内に入った場合
 
