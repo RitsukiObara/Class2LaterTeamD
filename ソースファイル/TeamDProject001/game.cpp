@@ -79,6 +79,22 @@ namespace
 		CFile::TYPE_MAP_OBSTACLE3,
 	};
 
+	// ネコの初期位置
+	const D3DXVECTOR3 FILETYPE_CATPOS[MAP_TYPE] =
+	{
+		D3DXVECTOR3(1200.0f, 0.0f, 700.0f),
+		D3DXVECTOR3(-1200.0f,0.0f,850.0f),
+		D3DXVECTOR3(-200.0f,0.0f,-600.0f),
+	};
+
+	// ネズミの初期位置
+	const D3DXVECTOR3 FILETYPE_RATPOS[MAP_TYPE] =
+	{
+		D3DXVECTOR3(-500.0f, 0.0f, -300.0f),
+		D3DXVECTOR3(1000.0f,0.0f,-650.0f),
+		D3DXVECTOR3(1450.0f,0.0f,200.0f),
+	};
+
 	const int TRANS_COUNT = 80;				// 遷移カウント
 	const int START_COUNT = 30;				// 開始のカウント
 	const int MAX_ITEM = 3;					// アイテムの最大数
@@ -239,13 +255,13 @@ HRESULT CGame::Init(void)
 			{ // ネコ担当のプレイヤーの場合
 
 				// プレイヤーの生成
-				m_apPlayer[nCntPlay] = CPlayer::Create(D3DXVECTOR3(1200.0f, 0.0f, 700.0f), nCntPlay, CPlayer::TYPE_CAT);
+				m_apPlayer[nCntPlay] = CPlayer::Create(FILETYPE_CATPOS[m_nMapNumber], nCntPlay, CPlayer::TYPE_CAT);
 			}
 			else
 			{ // 上記以外
 
 				// プレイヤーの生成
-				m_apPlayer[nCntPlay] = CPlayer::Create(D3DXVECTOR3(-500.0f, 0.0f, 300.0f*nCntPlay-300.0f), nCntPlay, CPlayer::TYPE_RAT);
+				m_apPlayer[nCntPlay] = CPlayer::Create(D3DXVECTOR3(FILETYPE_RATPOS[m_nMapNumber].x, FILETYPE_RATPOS[m_nMapNumber].y, 100.0f * nCntPlay + FILETYPE_RATPOS[m_nMapNumber].z), nCntPlay, CPlayer::TYPE_RAT);
 			}
 		}
 	}
