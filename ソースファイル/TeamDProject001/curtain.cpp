@@ -29,6 +29,18 @@ namespace
 			NONE_D3DXVECTOR3,
 			NONE_D3DXVECTOR3
 		},
+
+		{ // 2マップ目
+			D3DXVECTOR3(-1390.0f, 290.0f, -640.0f),
+			D3DXVECTOR3(714.0f, 290.0f, -274.0f),
+			D3DXVECTOR3(300.0f, 290.0f, 980.0f),
+		},
+
+		{ // 3マップ目
+			D3DXVECTOR3(750.0f, 256.0f, 980.0f),
+			D3DXVECTOR3(-1336.0f, 256.0f, 40.0f),
+			D3DXVECTOR3(-1582.0f, 256.0f, -650.0f),
+		},
 	};
 	const D3DXVECTOR3 SWITCH_ROT[MAP_TYPE][MAX_SWITCH] =		// スイッチの向き
 	{
@@ -37,10 +49,23 @@ namespace
 			NONE_D3DXVECTOR3,
 			NONE_D3DXVECTOR3
 		},
+
+		{ // 2マップ目
+			D3DXVECTOR3(0.0f, -D3DX_PI * 0.5f, 0.0f),
+			D3DXVECTOR3(0.0f, -D3DX_PI * 0.5f, 0.0f),
+			D3DXVECTOR3(0.0f, D3DX_PI * 0.0f, 0.0f),
+		},
+
+		{ // 3マップ目
+			D3DXVECTOR3(0.0f, D3DX_PI * 0.0f, 0.0f),
+			D3DXVECTOR3(0.0f, D3DX_PI * 1.0f, 0.0f),
+			D3DXVECTOR3(0.0f, -D3DX_PI * 0.5f, 0.0f),
+		},
 	};
-	const float CLOSE_SCALE = 0.03f;					// 閉じた状態の拡大率
+	const float CLOSE_SCALE = 0.03f;				// 閉じた状態の拡大率
 	const float SCALE_CORRECT = 0.01f;				// 拡大率の補正率
 	const float OPEN_SCALE = 1.0f;					// 開いた状態の拡大率
+	const float ADD_SWITCH_RADIUS = 50.0f;			// 追加分のスイッチの半径
 }
 
 //==============================
@@ -255,7 +280,7 @@ bool CCurtain::HitCircle(CPlayer* pPlayer, const float Radius)
 				pPlayer->GetPos(),
 				m_apSwitch[nCnt]->GetModel(CSwitch::TYPE_BASE)->GetPos(),
 				Radius,
-				m_apSwitch[nCnt]->GetModel(CSwitch::TYPE_BASE)->GetFileData().fRadius
+				m_apSwitch[nCnt]->GetModel(CSwitch::TYPE_BASE)->GetFileData().fRadius + ADD_SWITCH_RADIUS
 			) == true)
 			{ // 円の当たり判定内に入った場合
 
@@ -331,7 +356,7 @@ void CCurtain::HitMultiCircle(CPlayer* pPlayer, const float Radius, bool bInput)
 				pPlayer->GetPos(),
 				m_apSwitch[nCnt]->GetModel(CSwitch::TYPE_BASE)->GetPos(),
 				Radius,
-				m_apSwitch[nCnt]->GetModel(CSwitch::TYPE_BASE)->GetFileData().fRadius
+				m_apSwitch[nCnt]->GetModel(CSwitch::TYPE_BASE)->GetFileData().fRadius + ADD_SWITCH_RADIUS
 			) == true)
 			{ // 円の当たり判定内に入った場合
 

@@ -9,6 +9,7 @@
 //********************************************
 #include "manager.h"
 #include "screen_frame.h"
+#include "object2D.h"
 #include "texture.h"
 
 //--------------------------------------------
@@ -17,16 +18,23 @@
 namespace
 {
 	const D3DXVECTOR3 FRAME_POS = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f);		// 位置
-	const D3DXVECTOR3 FRAME_SIZE = D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f);	// サイズ
-	const char* FRAME_TEXTURE = "data\\TEXTURE\\UI_FRAME.png";										// テクスチャ
+	const D3DXVECTOR3 FRAME_SIZE[CScreenFrame::TYPE_MAX] =			// サイズ
+	{
+		D3DXVECTOR3(5.0f, SCREEN_HEIGHT * 0.5f, 0.0f),
+		D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 5.0f, 0.0f),
+	};
 }
 
 //============================
 // コンストラクタ
 //============================
-CScreenFrame::CScreenFrame() : CObject2D(CObject::TYPE_SCREENFRAME, CObject::PRIORITY_UI)
+CScreenFrame::CScreenFrame() : CObject(TYPE_SCREENFRAME, PRIORITY_UI)
 {
-
+	// 全ての値をクリアする
+	for (int nCnt = 0; nCnt < TYPE_MAX; nCnt++)
+	{
+		m_apFrame[nCnt] = nullptr;		// 枠
+	}
 }
 
 //============================
@@ -42,11 +50,9 @@ CScreenFrame::~CScreenFrame()
 //============================
 HRESULT CScreenFrame::Init(void)
 {
-	if (FAILED(CObject2D::Init()))
-	{ // 初期化に失敗した場合
-
-	  // 失敗を返す
-		return E_FAIL;
+	for (int nCnt = 0; nCnt < TYPE_MAX; nCnt++)
+	{
+		m_apFrame[nCnt] = nullptr;		// 枠
 	}
 
 	// 成功を返す
@@ -58,8 +64,19 @@ HRESULT CScreenFrame::Init(void)
 //============================
 void CScreenFrame::Uninit(void)
 {
-	// 終了
-	CObject2D::Uninit();
+	for (int nCnt = 0; nCnt < TYPE_MAX; nCnt++)
+	{
+		if(m_apFrame[nCnt] != nullptr)
+		{ // 枠が NULL じゃない場合
+
+			// 枠の終了処理
+			m_apFrame[nCnt]->Uninit();
+			m_apFrame[nCnt] = nullptr;
+		}
+	}
+
+	// 本体の終了処理
+	Release();
 }
 
 //============================
@@ -67,8 +84,7 @@ void CScreenFrame::Uninit(void)
 //============================
 void CScreenFrame::Update(void)
 {
-	// 頂点情報の設定処理
-	SetVertex();
+
 }
 
 //============================
@@ -76,8 +92,15 @@ void CScreenFrame::Update(void)
 //============================
 void CScreenFrame::Draw(void)
 {
-	// 描画処理
-	CObject2D::Draw();
+	for (int nCnt = 0; nCnt < TYPE_MAX; nCnt++)
+	{
+		if (m_apFrame[nCnt] != nullptr)
+		{ // 枠が NULL じゃない場合
+
+			// 枠の描画処理
+			m_apFrame[nCnt]->Draw();
+		}
+	}
 }
 
 //============================
@@ -85,18 +108,28 @@ void CScreenFrame::Draw(void)
 //============================
 void CScreenFrame::SetData(void)
 {
-	// スクロールの設定処理
-	SetPos(FRAME_POS);				// 位置設定
-	SetRot(NONE_D3DXVECTOR3);		// 向き設定
-	SetSize(FRAME_SIZE);			// サイズ設定
-	SetLength();					// 長さ設定
-	SetAngle();						// 方向設定
+	for (int nCnt = 0; nCnt < TYPE_MAX; nCnt++)
+	{
+		if (m_apFrame[nCnt] == nullptr)
+		{ // 枠が NULL の場合
 
-	// 頂点情報の初期化
-	SetVertex();
+			// 枠を生成する
+			m_apFrame[nCnt] = CObject2D::Create(CObject2D::TYPE_NONE, TYPE_NONE, PRIORITY_UI);
 
-	// テクスチャの割り当て処理
-	BindTexture(CManager::Get()->GetTexture()->Regist(FRAME_TEXTURE));
+			// スクロールの設定処理
+			m_apFrame[nCnt]->SetPos(FRAME_POS);				// 位置設定
+			m_apFrame[nCnt]->SetRot(NONE_D3DXVECTOR3);		// 向き設定
+			m_apFrame[nCnt]->SetSize(FRAME_SIZE[nCnt]);		// サイズ設定
+			m_apFrame[nCnt]->SetLength();					// 長さ設定
+			m_apFrame[nCnt]->SetAngle();					// 方向設定
+
+			// 頂点情報の初期化
+			m_apFrame[nCnt]->SetVertex();
+
+			// 頂点カラーの設定処理
+			m_apFrame[nCnt]->SetVtxColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+		}
+	}
 }
 
 //============================
