@@ -66,11 +66,9 @@ namespace
 //--------------------------------------------
 // 静的メンバ変数宣言
 //--------------------------------------------
-CPause* CTutorial::m_pPause = nullptr;								// ポーズの情報
 CPlayer* CTutorial::m_apPlayer[MAX_PLAY] = {};						// プレイヤーの情報
 CTutorial::STATE CTutorial::m_GameState = CTutorial::STATE_START;	// チュートリアルの進行状態
 int CTutorial::m_nFinishCount = 0;									// 終了カウント
-CGameFinish* CTutorial::m_pFinish = nullptr;						// フィニッシュの情報
 CTutorial::TUTORIAL CTutorial::m_Tutorial = TUTORIAL_MOVE;			// チュートリアルの項目
 bool CTutorial::m_bPlay = false;									// チュートリアルのプレイ中か否か
 CAnswer*  CTutorial::m_pAnswer = nullptr;							// 返答リアクション
@@ -93,8 +91,6 @@ bool CTutorial::m_bEdit = false;									// エディット状況
 CTutorial::CTutorial() : CScene(TYPE_SCENE, PRIORITY_BG)
 {
 	// 全ての値をクリアする
-	m_pPause = nullptr;			// ポーズ
-	m_pFinish = nullptr;		// フィニッシュ
 	m_nFinishCount = 0;			// 終了カウント
 	m_GameState = STATE_START;	// 状態
 	m_Tutorial = TUTORIAL_MOVE;
@@ -243,10 +239,6 @@ HRESULT CTutorial::Init(void)
 //=============================================
 void CTutorial::Uninit(void)
 {
-	// ポインタを NULL にする
-	m_pPause = nullptr;			// ポーズ
-	m_pFinish = nullptr;		// フィニッシュ
-
 	for (int nCntPlay = 0; nCntPlay < MAX_PLAY; nCntPlay++)
 	{
 		m_apPlayer[nCntPlay] = nullptr;		// ネズミの情報
@@ -381,36 +373,11 @@ void CTutorial::Update(void)
 	{
 	case CTutorial::STATE_START:
 
-		// ポーズ処理
-		Pause();
-
 		break;
 
 	case CTutorial::STATE_PLAY:
 
-		// ポーズ処理
-		Pause();
-
 		break;
-
-	case CTutorial::STATE_RAT_WIN:
-
-		// 遷移処理
-		Transition();
-
-		break;
-
-	case CTutorial::STATE_CAT_WIN:
-
-		// 遷移処理
-		if (m_pFinish != nullptr)
-		{
-			m_pFinish->SetFinish(true);
-		}
-		Transition();
-
-		break;
-
 	default:
 
 		// 停止
@@ -929,13 +896,6 @@ void CTutorial::SetData(const MODE mode)
 	// 情報の設定処理
 	CScene::SetData(mode);
 
-	if (m_pPause == nullptr)
-	{ // ポーズへのポインタが NULL の場合
-
-	  // ポーズの生成処理
-		m_pPause = CPause::Create();
-	}
-
 	// スタート状態にする
 	m_GameState = STATE_START;
 
@@ -984,37 +944,6 @@ void CTutorial::SetData(const MODE mode)
 }
 
 //======================================
-// ポーズ処理
-//======================================
-void CTutorial::Pause(void)
-{
-	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_P) == true ||
-		CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_BACK, 0) == true)
-	{ // Pキーを押した場合
-
-		if (CManager::Get()->GetFade()->GetFade() == CFade::FADE_NONE)
-		{ // フェード無し状態かつ、終了以外の場合
-
-			if (m_pPause->GetPause() == false)
-			{ // ポーズが false だった場合
-
-			  // ポーズ状況を true にする
-				m_pPause->SetPause(true);
-			}
-			else
-			{ // ポーズが true だった場合
-
-			  // ポーズ状況を false にする
-				m_pPause->SetPause(false);
-			}
-
-			// 決定音を鳴らす
-			CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_DECIDE);
-		}
-	}
-}
-
-//======================================
 // 遷移処理
 //======================================
 void CTutorial::Transition(void)
@@ -1028,15 +957,6 @@ void CTutorial::Transition(void)
 	  // リザルトに遷移する
 		CManager::Get()->GetFade()->SetFade(CScene::MODE_RESULT);
 	}
-}
-
-//======================================
-// ポーズの取得処理
-//======================================
-CPause* CTutorial::GetPause(void)
-{
-	// ポーズの情報を返す
-	return m_pPause;
 }
 
 //======================================
@@ -1077,15 +997,6 @@ CPlayer* CTutorial::GetPlayer(const int nID)
 		// NULL を返す
 		return nullptr;
 	}
-}
-
-//======================================
-// ポーズのNULL化処理
-//======================================
-void CTutorial::DeletePause(void)
-{
-	// ポーズのポインタを NULL にする
-	m_pPause = nullptr;
 }
 
 //======================================
