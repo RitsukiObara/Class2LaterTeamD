@@ -28,9 +28,11 @@ namespace
 		"data\\TXT\\MapObstacle1.txt",		// マップの障害物1のテキスト
 		"data\\TXT\\MapObstacle2.txt",		// マップの障害物2のテキスト
 		"data\\TXT\\MapObstacle3.txt",		// マップの障害物3のテキスト
+		"data\\TXT\\MapObstacleSample.txt",	// マップの障害物サンプルのテキスト
 		"data\\TXT\\Block1.txt",			// マップのブロック1のテキスト
 		"data\\TXT\\Block2.txt",			// マップのブロック2のテキスト
 		"data\\TXT\\Block3.txt",			// マップのブロック3のテキスト
+		"data\\TXT\\BlockSample.txt",		// マップのブロックサンプルのテキスト
 		"data\\TXT\\Block.txt",				// ブロックのテキスト
 		"data\\TXT\\Tutorial.txt",			// チュートリアルのデフォルトブロック
 		"data\\TXT\\TutorialTable.txt",		//チュートリアルのテーブル用ブロック
@@ -134,6 +136,18 @@ HRESULT CFile::Save(const TYPE type)
 
 		break;
 
+	case TYPE_MAP_OBSTACLESAMPLE:
+
+		// 障害物のセーブ処理
+		if (FAILED(SaveObstacle(TXT[TYPE_MAP_OBSTACLESAMPLE])))
+		{ // 失敗した場合
+
+		  // 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
 	case TYPE_MAP_BLOCK1:
 
 		// 障害物のセーブ処理
@@ -162,6 +176,18 @@ HRESULT CFile::Save(const TYPE type)
 
 		// 障害物のセーブ処理
 		if (FAILED(SaveBlock(TXT[TYPE_MAP_BLOCK3])))
+		{ // 失敗した場合
+
+		  // 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
+	case TYPE_MAP_BLOCKSAMPLE:
+
+		// 障害物のセーブ処理
+		if (FAILED(SaveBlock(TXT[TYPE_MAP_BLOCKSAMPLE])))
 		{ // 失敗した場合
 
 		  // 失敗を返す
@@ -295,6 +321,18 @@ HRESULT CFile::Load(const TYPE type)
 
 		break;
 
+	case TYPE_MAP_OBSTACLESAMPLE:
+
+		// 障害物のロード処理
+		if (FAILED(LoadObstacle(TXT[TYPE_MAP_OBSTACLESAMPLE])))
+		{ // 失敗した場合
+
+		  // 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
 	case TYPE_MAP_BLOCK1:
 
 		// 障害物のロード処理
@@ -323,6 +361,18 @@ HRESULT CFile::Load(const TYPE type)
 
 		// 障害物のロード処理
 		if (FAILED(LoadBlock(TXT[TYPE_MAP_BLOCK3])))
+		{ // 失敗した場合
+
+		  // 失敗を返す
+			return E_FAIL;
+		}
+
+		break;
+
+	case TYPE_MAP_BLOCKSAMPLE:
+
+		// 障害物のロード処理
+		if (FAILED(LoadBlock(TXT[TYPE_MAP_BLOCKSAMPLE])))
 		{ // 失敗した場合
 
 		  // 失敗を返す
@@ -417,16 +467,6 @@ void CFile::FalseSuccess(void)
 //===========================================
 void CFile::SetMap(void)
 {
-	if (m_ObstacleInfo.bSuccess == true)
-	{ // 成功状況が true の場合
-
-		for (int nCntObst = 0; nCntObst < m_ObstacleInfo.nNum; nCntObst++)
-		{
-			// 障害物の生成処理
-			CObstacle::Create(m_ObstacleInfo.pos[nCntObst], m_ObstacleInfo.rot[nCntObst], m_ObstacleInfo.type[nCntObst]);
-		}
-	}
-
 	if (m_BlockInfo.bSuccess == true)
 	{ // 成功状況が true の場合
 
@@ -434,6 +474,16 @@ void CFile::SetMap(void)
 		{
 			// ブロックの生成処理
 			CBlock::Create(m_BlockInfo.pos[nCntBlock], m_BlockInfo.rotType[nCntBlock], m_BlockInfo.type[nCntBlock]);
+		}
+	}
+
+	if (m_ObstacleInfo.bSuccess == true)
+	{ // 成功状況が true の場合
+
+		for (int nCntObst = 0; nCntObst < m_ObstacleInfo.nNum; nCntObst++)
+		{
+			// 障害物の生成処理
+			CObstacle::Create(m_ObstacleInfo.pos[nCntObst], m_ObstacleInfo.rot[nCntObst], m_ObstacleInfo.type[nCntObst]);
 		}
 	}
 }

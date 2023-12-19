@@ -46,7 +46,8 @@ namespace
 {
 	const int MAX_ITEM_POS = 3;					// アイテム出現位置の最大数
 
-	const D3DXVECTOR3 PLAYERUI_POS[MAX_PLAY] =								// プレイヤーUIの位置
+	// プレイヤーUIの位置
+	const D3DXVECTOR3 PLAYERUI_POS[MAX_PLAY] =
 	{
 		D3DXVECTOR3(90.0f, SCREEN_HEIGHT * 0.5f - 80.0f, 0.0f),
 		D3DXVECTOR3(SCREEN_WIDTH - 90.0f, SCREEN_HEIGHT * 0.5f - 80.0f, 0.0f),
@@ -62,8 +63,24 @@ namespace
 		D3DXVECTOR3(1250.0f, 0.0f, -800.0f),
 	};
 
+	// 読み込むファイルの番号(ブロック)
+	const CFile::TYPE FILETYPE_BLOCK[MAP_TYPE] =
+	{
+		CFile::TYPE_MAP_BLOCK1,
+		CFile::TYPE_MAP_BLOCK2,
+		CFile::TYPE_MAP_BLOCK3,
+	};
+
+	// 読み込むファイルの番号(障害物)
+	const CFile::TYPE FILETYPE_OBSTACLE[MAP_TYPE] =
+	{
+		CFile::TYPE_MAP_OBSTACLE1,
+		CFile::TYPE_MAP_OBSTACLE2,
+		CFile::TYPE_MAP_OBSTACLE3,
+	};
+
 	const int TRANS_COUNT = 80;				// 遷移カウント
-	const int START_COUNT = 60;				// 開始のカウント
+	const int START_COUNT = 30;				// 開始のカウント
 	const int MAX_ITEM = 3;					// アイテムの最大数
 	const int ATEMSPAWN_CONT = (60 - 25) / MAX_ITEM * 60;	// アイテム出現カウント
 }
@@ -141,12 +158,13 @@ HRESULT CGame::Init(void)
 	// メッシュの読み込み処理
 	//CMesh::TxtSet();
 
+	// マップの番号をランダムで算出
 	m_nMapNumber = rand() % MAP_TYPE;
 
 	// マップの情報をロードする
 	CManager::Get()->GetFile()->FalseSuccess();
-	CManager::Get()->GetFile()->Load(CFile::TYPE_MAP_OBSTACLE1);
-	CManager::Get()->GetFile()->Load(CFile::TYPE_MAP_BLOCK1);
+	CManager::Get()->GetFile()->Load(FILETYPE_OBSTACLE[m_nMapNumber]);
+	CManager::Get()->GetFile()->Load(FILETYPE_BLOCK[m_nMapNumber]);
 
 	// マップの設定処理
 	CManager::Get()->GetFile()->SetMap();
@@ -414,8 +432,8 @@ void CGame::Update(void)
 		{ // F9キーを押した場合
 
 			// 情報をセーブする
-			CManager::Get()->GetFile()->Save(CFile::TYPE_MAP_OBSTACLE1);
-			CManager::Get()->GetFile()->Save(CFile::TYPE_MAP_BLOCK1);
+			CManager::Get()->GetFile()->Save(FILETYPE_OBSTACLE[m_nMapNumber]);
+			CManager::Get()->GetFile()->Save(FILETYPE_BLOCK[m_nMapNumber]);
 		}
 	}
 	else

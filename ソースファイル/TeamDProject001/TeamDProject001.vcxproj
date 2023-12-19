@@ -262,6 +262,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="ratmecha.cpp" />
     <ClCompile Include="rat_ghost.cpp" />
     <ClCompile Include="recoveringUI.cpp" />
     <ClCompile Include="renderer.cpp" />
@@ -406,6 +407,7 @@
     <ClInclude Include="player_idUI.h" />
     <ClInclude Include="rat.h" />
     <ClInclude Include="precompile.h" />
+    <ClInclude Include="ratmecha.h" />
     <ClInclude Include="rat_ghost.h" />
     <ClInclude Include="recoveringUI.h" />
     <ClInclude Include="renderer.h" />

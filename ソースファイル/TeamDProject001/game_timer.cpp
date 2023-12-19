@@ -24,7 +24,7 @@ CGameTime* CGameTime::m_pGameTimer = nullptr;		// ゲームタイマーの情報
 //--------------------------------------------------
 // マクロ定義
 //--------------------------------------------------
-#define TIME_COUNTDOWN		(60)	// 秒数
+#define TIME_COUNTDOWN		(120)	// 秒数
 #define ONE_SECOND			(60)	// 1秒のフレーム数
 #define TIME_POS			(D3DXVECTOR3(618.0f, SCREEN_HEIGHT * 0.5f, 0.0f))		// ゲームタイマーの位置
 #define TIME_SIZE			(D3DXVECTOR3(25.0f, 40.0f, 0.0f))		// ゲームタイマーのサイズ

@@ -38,6 +38,10 @@ CSound::SOUNDINFO CSound::m_aSoundInfo[CSound::SOUND_LABEL_MAX] =
 	{ "data\\SE\\tutorial_check.wav",0 },	// チュートリアルのチェック音
 	{ "data\\SE\\himo.wav",0 },				// ひも引っ張る音
 	{ "data\\SE\\mari.wav",0 },				// まりの音
+	{ "data\\SE\\honey_break.wav",0 },		// 蜂蜜の瓶が割れる音
+	{ "data\\SE\\honey_leak.wav",0 },		// 蜂蜜が広がる音
+	{ "data\\SE\\honey_walk.wav",0 },		// 蜂蜜の上歩く音
+	{ "data\\SE\\book_down.wav",0 },		// 本が落ちる音
 
 };
 

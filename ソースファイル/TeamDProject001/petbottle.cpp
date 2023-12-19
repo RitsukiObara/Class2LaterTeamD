@@ -356,8 +356,7 @@ bool CPetbottle::Block(void)
 			m_vtxMax,
 			pBlock->GetVtxMax()
 		) == true)
-		{ // “–‚½‚Á‚½ê‡
-
+		{
 			// true ‚ğ•Ô‚·
 			return true;
 		}

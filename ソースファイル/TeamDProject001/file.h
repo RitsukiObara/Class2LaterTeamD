@@ -33,9 +33,11 @@ public:			// 誰でもアクセスできる
 		TYPE_MAP_OBSTACLE1,	// マップの障害物1
 		TYPE_MAP_OBSTACLE2,	// マップの障害物2
 		TYPE_MAP_OBSTACLE3,	// マップの障害物3
+		TYPE_MAP_OBSTACLESAMPLE,	// マップの障害物サンプル
 		TYPE_MAP_BLOCK1,	// マップのブロック1
 		TYPE_MAP_BLOCK2,	// マップのブロック2
 		TYPE_MAP_BLOCK3,	// マップのブロック3
+		TYPE_MAP_BLOCKSAMPLE,	// マップのブロックサンプル
 		TYPE_BLOCK,			// ブロック
 		TYPE_TUTORIAL_DEFULT,	// チュートリアルのデフォルトブロック
 		TYPE_TUTORIAL_TABLE,	//チュートリアルのテーブル用ブロック

@@ -81,14 +81,12 @@ HRESULT CResult::Init(void)
 	if (m_nGameState == CGame::STATE_CAT_WIN)
 	{ // ネコが勝ったら
 
-		CResultLetter::Create(D3DXVECTOR3(0.0f, 300.0f, 0.0f), CXFile::TYPE_WINCAT_TEXT);		// ねこのかち
-
+		CResultLetter::Create(D3DXVECTOR3(0.0f, 370.0f, 0.0f), CXFile::TYPE_WINCAT_TEXT);		// ねこのかち
 	}
 	else if (m_nGameState == CGame::STATE_RAT_WIN)
 	{ // ネズミが勝ったら
 
-		CResultLetter::Create(D3DXVECTOR3(0.0f, 300.0f, 0.0f), CXFile::TYPE_WINRAT_TEXT);		// ねずみのかち
-
+		CResultLetter::Create(D3DXVECTOR3(0.0f, 370.0f, 0.0f), CXFile::TYPE_WINRAT_TEXT);		// ねずみのかち
 	}
 
 	// 勝利音を流す
@@ -103,14 +101,34 @@ HRESULT CResult::Init(void)
 		if (nCntRat == nCatIdx)
 		{ // ネコのインデックスの場合
 
-			// ネコの生成
-			m_apPlayer[nCntRat] = CPlayer::Create(D3DXVECTOR3(-500.0f, 0.0f, 0.0f), nCntRat, CPlayer::TYPE_CAT);
+			if (m_nGameState == CGame::STATE_CAT_WIN)
+			{ // ネコが勝った場合
+
+				// ネコの生成
+				m_apPlayer[nCntRat] = CPlayer::Create(D3DXVECTOR3(-300.0f, 0.0f, -200.0f), nCntRat, CPlayer::TYPE_CAT);
+			}
+			else
+			{ // 上記以外
+
+				// ネコの生成
+				m_apPlayer[nCntRat] = CPlayer::Create(D3DXVECTOR3(-300.0f, 0.0f, -100.0f), nCntRat, CPlayer::TYPE_CAT);
+			}
 		}
 		else
 		{ // 上記以外
 
-			// ネズミの生成
-			m_apPlayer[nCntRat] = CPlayer::Create(D3DXVECTOR3(300.0f * nRatCount, 0.0f, 0.0f), nCntRat, CPlayer::TYPE_RAT);
+			if (m_nGameState == CGame::STATE_RAT_WIN)
+			{ // ネズミが勝った場合
+
+				// ネズミの生成
+				m_apPlayer[nCntRat] = CPlayer::Create(D3DXVECTOR3(150.0f * nRatCount + 100.0f, 0.0f, -280.0f), nCntRat, CPlayer::TYPE_RAT);
+			}
+			else
+			{ // 上記以外
+
+				// ネズミの生成
+				m_apPlayer[nCntRat] = CPlayer::Create(D3DXVECTOR3(150.0f * nRatCount + 100.0f, 0.0f, -100.0f), nCntRat, CPlayer::TYPE_RAT);
+			}
 
 			// ネズミのカウントを加算する
 			nRatCount++;
@@ -246,7 +264,7 @@ void CResult::CreateConfetti(void)
 			// 紙吹雪生成
 			CConfetti::Create(D3DXVECTOR3(fPosX + (nCntConfettiX * -INTERVAL_CONFETTI),
 				300.0f + (nCntConfettiY * INTERVAL_CONFETTI),
-				0.0f),
+				-230.0f),
 				D3DXVECTOR3(size.x, size.y, size.z),		// サイズ
 				D3DXVECTOR3(rotMove.x, rotMove.y, rotMove.z),	// 向き
 				fGravity,							// 重力

@@ -97,7 +97,6 @@ void CPlayer::Box(void)
 	m_pRessrectionFan = nullptr;		// 円の範囲の情報
 	m_pRecoveringUI = nullptr;			// 回復中のUIの情報
 	m_pSpeechMessage = nullptr;			// 伝達メッセージの情報
-	m_pDeathArrow[MAX_PLAY] = {};		// 死亡矢印の情報
 	m_sizeColl = NONE_D3DXVECTOR3;		// 当たり判定のサイズ
 	m_col = D3DXCOLOR(1.0f,1.0f,1.0f,1.0f);				// 色
 	m_type = TYPE_CAT;					// 種類
@@ -115,9 +114,14 @@ void CPlayer::Box(void)
 	m_bTutorial = false;
 	m_bKill = false;
 
+	for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
+	{
+		m_pDeathArrow[nCnt] = nullptr;
+	}
+
 	for (int nCnt = 0; nCnt < LOG_MAX; nCnt++)
 	{
-		m_apLog[nCnt] = NULL;
+		m_apLog[nCnt] = nullptr;
 	}
 	m_nLogNumber = 0;
 }
@@ -145,7 +149,6 @@ HRESULT CPlayer::Init(void)
 	m_pRessrectionFan = nullptr;		// 円の範囲の情報
 	m_pRecoveringUI = nullptr;			// 回復中のUIの情報
 	m_pSpeechMessage = nullptr;			// 伝達メッセージの情報
-	m_pDeathArrow[MAX_PLAY] = {};		// 死亡矢印の情報
 	//m_move = NONE_D3DXVECTOR3;			// 移動量
 	m_sizeColl = NONE_D3DXVECTOR3;		// 当たり判定のサイズ
 	m_col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);				// 色
@@ -161,6 +164,11 @@ HRESULT CPlayer::Init(void)
 	m_bDispSmash = false;				// 吹き飛び用の表示するか
 	m_nResurrectionTime = 0;			// 復活するまでの時間
 	m_nLogPlayer = 0;
+
+	for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
+	{// 死亡矢印の情報
+		m_pDeathArrow[nCnt] = nullptr;
+	}
 
 	// 値を返す
 	return S_OK;
