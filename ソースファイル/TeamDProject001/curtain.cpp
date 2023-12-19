@@ -31,15 +31,15 @@ namespace
 		},
 
 		{ // 2マップ目
-			NONE_D3DXVECTOR3,
-			NONE_D3DXVECTOR3,
-			NONE_D3DXVECTOR3
+			D3DXVECTOR3(-1390.0f, 290.0f, -640.0f),
+			D3DXVECTOR3(714.0f, 290.0f, -274.0f),
+			D3DXVECTOR3(300.0f, 290.0f, 980.0f),
 		},
 
 		{ // 3マップ目
-			NONE_D3DXVECTOR3,
-			NONE_D3DXVECTOR3,
-			NONE_D3DXVECTOR3
+			D3DXVECTOR3(750.0f, 256.0f, 980.0f),
+			D3DXVECTOR3(-1336.0f, 256.0f, 40.0f),
+			D3DXVECTOR3(-1582.0f, 256.0f, -650.0f),
 		},
 	};
 	const D3DXVECTOR3 SWITCH_ROT[MAP_TYPE][MAX_SWITCH] =		// スイッチの向き
@@ -51,15 +51,15 @@ namespace
 		},
 
 		{ // 2マップ目
-			NONE_D3DXVECTOR3,
-			NONE_D3DXVECTOR3,
-			NONE_D3DXVECTOR3
+			D3DXVECTOR3(0.0f, -D3DX_PI * 0.5f, 0.0f),
+			D3DXVECTOR3(0.0f, -D3DX_PI * 0.5f, 0.0f),
+			D3DXVECTOR3(0.0f, D3DX_PI * 0.0f, 0.0f),
 		},
 
 		{ // 3マップ目
-			NONE_D3DXVECTOR3,
-			NONE_D3DXVECTOR3,
-			NONE_D3DXVECTOR3
+			D3DXVECTOR3(0.0f, D3DX_PI * 0.0f, 0.0f),
+			D3DXVECTOR3(0.0f, D3DX_PI * 1.0f, 0.0f),
+			D3DXVECTOR3(0.0f, -D3DX_PI * 0.5f, 0.0f),
 		},
 	};
 	const float CLOSE_SCALE = 0.03f;					// 閉じた状態の拡大率

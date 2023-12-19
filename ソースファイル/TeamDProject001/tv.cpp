@@ -30,14 +30,14 @@ namespace
 	const D3DXVECTOR3 REMOCON_POS[MAP_TYPE] =		// リモコンの位置
 	{
 		D3DXVECTOR3(-340.0f, 200.0f, -50.0f),
-		NONE_D3DXVECTOR3,
-		NONE_D3DXVECTOR3
+		D3DXVECTOR3(-1490.0f, 196.0f, 404.0f),
+		D3DXVECTOR3(1020.0f, 212.0f, -350.0f),
 	};
 	const D3DXVECTOR3 REMOCON_ROT[MAP_TYPE] =		// リモコンの向き
 	{
 		D3DXVECTOR3(0.0f, -D3DX_PI * 0.5f, 0.0f),
-		NONE_D3DXVECTOR3,
-		NONE_D3DXVECTOR3
+		D3DXVECTOR3(0.0f, D3DX_PI * 1.0f, 0.0f),
+		D3DXVECTOR3(0.0f, D3DX_PI * 0.0f, 0.0f),
 	};
 	const int COOL_TIME = 300;			// クールタイム
 	const int CHANGE_TIME = 120;			// 画面変化速度

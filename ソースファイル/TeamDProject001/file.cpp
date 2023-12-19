@@ -32,7 +32,7 @@ namespace
 		"data\\TXT\\Block1.txt",			// マップのブロック1のテキスト
 		"data\\TXT\\Block2.txt",			// マップのブロック2のテキスト
 		"data\\TXT\\Block3.txt",			// マップのブロック3のテキスト
-		"data\\TXT\\BlockSample.txt",			// マップのブロックサンプルのテキスト
+		"data\\TXT\\BlockSample.txt",		// マップのブロックサンプルのテキスト
 		"data\\TXT\\Block.txt",				// ブロックのテキスト
 		"data\\TXT\\Tutorial.txt",			// チュートリアルのデフォルトブロック
 		"data\\TXT\\TutorialTable.txt",		//チュートリアルのテーブル用ブロック

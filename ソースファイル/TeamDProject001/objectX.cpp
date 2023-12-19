@@ -92,6 +92,7 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\sofa_backrest.x",			// ソファー（背もたれ）
 	"data\\MODEL\\Chair_seat.x",			// 机の椅子(座面)
 	"data\\MODEL\\Chair_backrest.x",		// 机の椅子(背もたれ)
+	"data\\MODEL\\lever000.x",				// レバー(本体)
 
 	// 障害物モデル
 	"data\\MODEL\\HoneyBottle.x",			// 蜂蜜のボトル
