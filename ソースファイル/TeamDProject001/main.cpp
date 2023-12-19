@@ -25,12 +25,8 @@ int g_nCountFPS = 0;
 //=========================================
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE /*hInstancePrev*/, LPSTR /*lpCmdLine*/, int nCmdShow)
 {
-#ifdef _DEBUG
-
 	// 終了時にメモリリークを検出
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-
-#endif 
 
 	WNDCLASSEX wcex =
 	{
