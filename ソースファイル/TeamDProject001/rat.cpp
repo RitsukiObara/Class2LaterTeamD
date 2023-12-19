@@ -419,21 +419,8 @@ void CRat::Jump(void)
 	// ローカル変数宣言
 	D3DXVECTOR3 move = GetMove();
 
-#ifdef _DEBUG
-
-	if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_SPACE) == true &&
-		GetStunState() != STUNSTATE_SMASH &&
-		m_bJump == false)
-	{ // Aボタンを押した場合
-
-		move.y = ADD_MOVE_Y;	// 浮力代入
-
-		m_bJump = true;		// ジャンプしてる状態にする
-	}
-
-#endif // _DEBUG
-
-	if (CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_A, GetPlayerIdx()) == true &&
+	if ((CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_SPACE) == true ||
+		CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_A, GetPlayerIdx()) == true) &&
 		GetStunState() != STUNSTATE_SMASH &&
 		m_bJump == false)
 	{ // Aボタンを押した場合
