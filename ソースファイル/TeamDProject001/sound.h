@@ -24,6 +24,8 @@ public:			// 誰でもアクセス出来る
 		SOUND_LABEL_BGM_GAME,			// ゲームBGM
 		SOUND_LABEL_BGM_RESULT,			// リザルトBGM
 		SOUND_LABEL_BGM_RANKING,		// ランキングBGM
+		SOUND_LABEL_BGM_SPEAKER,		// スピーカーBGM
+
 		SOUND_LABEL_SE_SELECT,			// 選択音
 		SOUND_LABEL_SE_DECIDE,			// 決定音
 		SOUND_LABEL_SE_VICTORY,			//勝利音
