@@ -70,7 +70,6 @@ public:						// 誰でもアクセスできる
 	void SetData(const MODE mode);		// 情報の設定処理
 
 										// 静的メンバ関数(セット・ゲット)
-	static CPause* GetPause(void);					// ポーズの取得処理
 
 	static void SetState(const STATE state);		// チュートリアルの進行状態の設定処理
 	static STATE GetState(void);					// チュートリアルの進行状態の取得処理
@@ -85,7 +84,6 @@ public:						// 誰でもアクセスできる
 	static TUTORIAL GetTutorial(void) { return m_Tutorial; }
 
 	// NULL化処理
-	static void DeletePause(void);		// ポーズのNULL化処理
 	static void DeletePlayer(int nIdx);	// プレイヤーのNULL化処理
 
 	static void PlayTrue(void);
@@ -103,13 +101,10 @@ private:					// 自分だけアクセスできる
 	static void CatPosReset(void);			// ネコの位置をリセットする
 	static void RatPosReset(void);			// ネズミの位置をリセットする
 	static void RatPosTable(void);			// ネズミをテーブルの上に配置する
-	void Pause(void);			// ポーズ処理
 	void Transition(void);		// 遷移処理
 
 	// 静的メンバ変数(最初から必要な物を配置しておく)
-	static CPause* m_pPause;				// ポーズの情報
 	static CPlayer* m_apPlayer[MAX_PLAY];	// プレイヤーの情報
-	static CGameFinish* m_pFinish;			// フィニッシュの情報
 	static STATE m_GameState;				// チュートリアルの進行状態
 	static int m_nFinishCount;				// 終了カウント
 	static TUTORIAL m_Tutorial;				// チュートリアルの項目
