@@ -431,9 +431,9 @@ void CGame::Update(void)
 		if (CManager::Get()->GetInputKeyboard()->GetTrigger(DIK_F9) == true)
 		{ // F9キーを押した場合
 
-			//// 情報をセーブする
-			//CManager::Get()->GetFile()->Save(CFile::TYPE_MAP_OBSTACLE2);
-			//CManager::Get()->GetFile()->Save(CFile::TYPE_MAP_BLOCK2);
+			// 情報をセーブする
+			CManager::Get()->GetFile()->Save(FILETYPE_OBSTACLE[m_nMapNumber]);
+			CManager::Get()->GetFile()->Save(FILETYPE_BLOCK[m_nMapNumber]);
 		}
 	}
 	else

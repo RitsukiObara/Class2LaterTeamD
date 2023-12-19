@@ -90,6 +90,7 @@ public:			// 誰でもアクセスできる
 		TYPE_SOFA_BACKTEST,		// ソファー（背もたれ）
 		TYPE_CHAIR_SHEET,		// 机の椅子(座面)
 		TYPE_CHAIR_BACKREST,	// 机の椅子(背もたれ)
+		TYPE_LEVERBODYBLOCK,	// レバー(本体)
 		TYPE_MAX				// この列挙型の総数
 	};
 
