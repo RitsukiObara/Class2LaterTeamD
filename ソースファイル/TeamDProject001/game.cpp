@@ -132,8 +132,8 @@ HRESULT CGame::Init(void)
 	// シーンの初期化
 	CScene::Init();
 
-	// 画面の枠の生成
-	CScreenFrame::Create();
+	//// 画面の枠の生成
+	//CScreenFrame::Create();
 
 	// テキスト読み込み処理
 	CElevation::TxtSet();
