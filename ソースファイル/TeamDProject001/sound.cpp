@@ -16,6 +16,8 @@ CSound::SOUNDINFO CSound::m_aSoundInfo[CSound::SOUND_LABEL_MAX] =
 	{ "data\\BGM\\GameBGM.wav",-1 },		// ゲームBGM
 	{ "data\\BGM\\ResultBGM.wav",-1 },		// リザルトBGM
 	{ "data\\BGM\\RankingBGM.wav",-1 },		// ランキングBGM
+	{ "data\\BGM\\destiny_of_victory.wav",-1 },		// スピーカーBGM
+
 	{ "data\\SE\\Select.wav",0 },			// 選択音
 	{ "data\\SE\\Decide.wav",0 },			// 決定音
 	{ "data\\SE\\victory.wav",0 },			// 勝利音

@@ -11,6 +11,7 @@
 #include "speaker.h"
 #include "manager.h"
 #include "useful.h"
+#include "sound.h"
 
 #include "note.h"
 #include "collision.h"
@@ -34,6 +35,7 @@
 // 静的メンバ変数宣言
 //-------------------------------------------
 CNote* CSpeaker::m_apNote[MAX_NOTE] = {};		// 音符の情報
+int CSpeaker::m_nNumBgmAll = 0;					// BGM鳴らした総数
 
 //==============================
 // コンストラクタ
@@ -72,6 +74,17 @@ HRESULT CSpeaker::Init(void)
 	  // 失敗を返す
 		return E_FAIL;
 	}
+
+	// 全ての値をクリアする
+	for (int nCnt = 0; nCnt < MAX_NOTE; nCnt++)
+	{
+		m_apNote[nCnt] = NULL;
+		m_bmySet[nCnt] = false;
+	}
+
+	m_state = STATE_STOP;		// 状態
+	m_bAction = false;
+	m_nNoteCount = 0;
 
 	// 値を返す
 	return S_OK;
@@ -183,6 +196,36 @@ void CSpeaker::Action(void)
 {
 	// アクション状況を入れ替える
 	m_bAction = !m_bAction;
+
+	if (m_bAction == true)
+	{ // BGM再生してなかったら
+
+		m_nNumBgmAll++;					// BGM鳴らした総数
+	}
+	else if (m_bAction == false)
+	{ // アクションしないとき
+
+		m_nNumBgmAll--;
+	}
+
+	if (m_nNumBgmAll <= 0)
+	{ // 一つも再生してなかったら
+
+		// 運命止める
+		CManager::Get()->GetSound()->Stop(CSound::SOUND_LABEL_BGM_SPEAKER);
+
+		// ゲームBGM流す
+		CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_BGM_GAME);
+	}
+	else if (m_bAction == true && m_nNumBgmAll == 1)
+	{ // 一つ再生してたら
+
+		// ゲームBGM止める
+		CManager::Get()->GetSound()->Stop(CSound::SOUND_LABEL_BGM_GAME);
+
+		// 運命流す
+		CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_BGM_SPEAKER);
+	}
 
 	// 縮み状態にする
 	m_state = STATE_SHRINK;
