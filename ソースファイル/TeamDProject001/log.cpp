@@ -17,7 +17,7 @@
 //-------------------------------------------
 // マクロ定義
 //-------------------------------------------
-#define LOGSIZE_BG				(D3DXVECTOR3(65.0f,10.0f, 300.0f))		// ログの背景の大きさ
+#define LOGSIZE_BG				(D3DXVECTOR3(100.0f,15.0f, 10.0f))		// ログの背景の大きさ
 #define LOGSIZE_PLAYERID		(D3DXVECTOR3(25.0f, 20.0f, 10.0f))		// ログのプレイヤーIDの大きさ
 #define LOGSIZE_MESSAGE			(D3DXVECTOR3(100.0f, 15.0f, 100.0f))	// ログのメッセージの大きさ
 #define LOGDISTANCE_PLAYERID	(-50.0f)								// ログのプレイヤーIDのX位置
