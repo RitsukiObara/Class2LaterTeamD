@@ -11,6 +11,30 @@
 // インクルードファイル
 //***********************************
 #include "obstacle.h"
+#include "object3Dfan.h"
+
+
+class CExplosionFan : public CObject3DFan
+{
+public:
+	CExplosionFan();			// コンストラクタ
+	~CExplosionFan();			// デストラクタ
+
+								// メンバ関数
+	HRESULT Init(void);		// 初期化処理
+	void Uninit(void);		// 終了処理
+	void Update(void);		// 更新処理
+	void Draw(void);		// 描画処理
+
+	void SetData(const D3DXVECTOR3& pos, const D3DXCOLOR& col);		// 情報の設定処理
+
+
+	// 静的メンバ関数
+	static CExplosionFan* Create(const D3DXVECTOR3& pos, const D3DXCOLOR& col);		// 生成処理
+
+private:		// 自分だけアクセスできる
+
+};
 
 //-----------------------------------
 // クラス定義(爆弾)
@@ -49,9 +73,16 @@ private:		// 自分だけアクセスできる
 	void Explosion(void);	// 爆発処理
 
 	// メンバ変数
+	CExplosionFan* m_pFan;
 	STATE m_state;				// 状態
 	int m_nExplosion;			// 爆発タイミング
 	int m_nDelTyming;			// 爆発の判定時間
+	D3DXCOLOR m_col;
+	float m_fRadius;
+	D3DXVECTOR3 m_SizeChangeSpeed;
+	D3DXCOLOR m_ColChangeSpeed;
 };
+
+
 
 #endif

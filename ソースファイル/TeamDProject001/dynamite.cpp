@@ -14,14 +14,19 @@
 #include "useful.h"
 #include "Effect.h"
 #include "collision.h"
+#include "object3Dfan.h"
+
 
 //-------------------------------------------
 // マクロ定義
 //-------------------------------------------
 #define SCALE_SPEED	(D3DXVECTOR3(0.1f,0.1f,0.1f))	// サイズの変更速度
+#define COLOR_SPEED	(D3DXCOLOR(0.0f,0.1f,0.1f,0.0f))	// サイズの変更速度
 #define EXPLOSION_COUNT		(300)		// 爆発までのカウント
 #define DELEAT_COUNT		(10)		// 爆発の判定時間
-#define EXPLOSION_RADIUS	(200.0f)	// 爆発の範囲
+#define EXPLOSION_RADIUS	(1000.0f)	// 爆発の範囲
+#define EXPLOSION_TIME		(300)		// 爆発までのカウント
+#define START_RADIUS		(15.0f)		// 初期の爆風円の範囲
 
 //==============================
 // コンストラクタ
@@ -31,7 +36,9 @@ CDynamite::CDynamite() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLO
 	// 全ての値をクリアする
 	m_state =STATE_NONE;							// 状態
 	m_nExplosion = 0;								// 爆発タイミング
-
+	m_pFan = nullptr;
+	m_SizeChangeSpeed = SCALE_SPEED;
+	m_ColChangeSpeed = COLOR_SPEED;
 	// 使用条件
 	SetCatUse(true);
 }
@@ -59,7 +66,9 @@ HRESULT CDynamite::Init(void)
 	// 全ての値をクリアする
 	m_state = STATE_NONE;							// 状態
 	m_nExplosion = 0;								// 爆発タイミング
-
+	m_pFan = nullptr;
+	m_col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	m_fRadius = START_RADIUS;
 	// 値を返す
 	return S_OK;
 }
@@ -69,7 +78,11 @@ HRESULT CDynamite::Init(void)
 //========================================
 void CDynamite::Uninit(void)
 {
-
+	if (m_pFan != nullptr)
+	{
+		m_pFan->Uninit();
+		m_pFan = nullptr;
+	}
 	// 終了処理
 	CObstacle::Uninit();
 }
@@ -79,20 +92,26 @@ void CDynamite::Uninit(void)
 //=====================================
 void CDynamite::Update(void)
 {
-	if (m_nExplosion > EXPLOSION_COUNT-120 && m_state != STATE_EXPLOSION)
+	if (m_nExplosion > EXPLOSION_COUNT- EXPLOSION_TIME && m_state != STATE_EXPLOSION)
 	{ // 残り2秒になった場合
-
+		if (m_pFan == nullptr)
+		{// 爆風円の生成
+			m_pFan = CExplosionFan::Create(GetPos(), m_col);
+		}
 		if (m_state == STATE_NONE)
 		{
 			m_state = STATE_MINI;
 		}
-		ChageScale();	// モデルサイズ変更処理
+
+		// モデルサイズ変更処理
+		ChageScale();	
+
 
 	}
 
 	if (m_state == STATE_EXPLOSION)
 	{// 爆発後
-
+		
 		// 爆発の判定時間を加算する
 		m_nDelTyming++;
 
@@ -103,6 +122,7 @@ void CDynamite::Update(void)
 			Uninit();
 		}
 	}
+
 
 	// 爆発処理
 	Explosion();
@@ -200,21 +220,54 @@ void CDynamite::ChageScale(void)
 	
 	case CDynamite::STATE_MINI:	// 縮小状態
 
-		scale += SCALE_SPEED;
+		scale += m_SizeChangeSpeed;
 
-		if (scale.x > 1.8f)
+
+
+		if (m_pFan != nullptr)
+		{
+			// 赤色に変えていく
+			m_col -= m_ColChangeSpeed;
+
+			m_fRadius += (EXPLOSION_RADIUS - START_RADIUS) / EXPLOSION_TIME;
+			m_pFan->SetColor(m_col);
+			m_pFan->SetRadius(m_fRadius);
+		}
+
+		if (scale.x > 2.5f)
 		{
 			m_state = STATE_BIG;
+			m_SizeChangeSpeed += D3DXVECTOR3(0.01f,0.01f,0.01f);
+			m_ColChangeSpeed += COLOR_SPEED / 0.1f;
 		}
+
+
+
+
 		break;
 
 	case CDynamite::STATE_BIG:	// 拡大状態
 
-		scale -= SCALE_SPEED;
+		scale -= m_SizeChangeSpeed;
+
+		if (m_pFan != nullptr)
+		{
+			// 白色に変えていく
+			m_col += m_ColChangeSpeed;
+
+			m_fRadius += (EXPLOSION_RADIUS - START_RADIUS) / EXPLOSION_TIME;
+			m_pFan->SetColor(m_col);
+			m_pFan->SetRadius(m_fRadius);
+		}
+
 
 		if (scale.x <= 1.0f)
 		{
 			m_state = STATE_MINI;
+			m_SizeChangeSpeed += D3DXVECTOR3(0.01f, 0.01f, 0.01f);
+			m_ColChangeSpeed += COLOR_SPEED / 0.1f;
+
+
 		}
 		break;
 	case CDynamite::STATE_EXPLOSION:	// 爆発状態
@@ -251,7 +304,149 @@ void CDynamite::Explosion(void)
 			m_state = STATE_EXPLOSION;
 
 			// 爆発エフェクトを出す
-			CEffect::Create(GetPos(), D3DXVECTOR3(5.0f, 5.0f, 5.0f), 10, 550.0f, CEffect::TYPE_RUPTURE, D3DXCOLOR(0.2f, 0.2f, 0.2f, 1.0f), false);
+			CEffect::Create(GetPos(), D3DXVECTOR3(5.0f, 5.0f, 5.0f), 10, 1000.0f, CEffect::TYPE_RUPTURE, D3DXCOLOR(0.2f, 0.2f, 0.2f, 1.0f), false);
 		}
 	}
+}
+
+
+//======================================================爆風円のクラス========================================================================
+
+//==============================
+// コンストラクタ
+//==============================
+CExplosionFan::CExplosionFan() : CObject3DFan(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
+{
+
+}
+
+//==============================
+// デストラクタ
+//==============================
+CExplosionFan::~CExplosionFan()
+{
+
+}
+
+//==============================
+// 爆風の円の初期化処理
+//==============================
+HRESULT CExplosionFan::Init(void)
+{
+	if (FAILED(CObject3DFan::Init()))
+	{ // 初期化処理に失敗した場合
+
+	  // 失敗を返す
+		return E_FAIL;
+	}
+							// 値を返す
+	return S_OK;
+}
+
+//========================================
+// 爆風の円の終了処理
+//========================================
+void CExplosionFan::Uninit(void)
+{
+	// 終了処理
+	CObject3DFan::Uninit();
+}
+
+//=====================================
+// 爆風の円の更新処理
+//=====================================
+void CExplosionFan::Update(void)
+{
+	// 頂点座標の設定処理
+	SetVertex();
+
+	// 頂点カラーの設定処理
+	SetVtxColor(GetColor());		
+
+}
+
+//=====================================
+// 爆風の円の描画処理
+//=====================================
+void CExplosionFan::Draw(void)
+{
+	// 描画処理
+	CObject3DFan::Draw();
+}
+
+//=====================================
+// 情報の設定処理
+//=====================================
+void CExplosionFan::SetData(const D3DXVECTOR3& pos, const D3DXCOLOR& col)
+{
+	// 設定処理に便利なマクロ定義
+	//NONE_D3DXVECTOR3					// 向きを傾けない時とかに使用する
+	//NONE_SCALE						// 拡大率を変更しないときとかに使う
+	// 情報の設定処理
+
+	//==========================================================================
+	// 3Dポリゴン
+	//==========================================================================
+	SetPos(pos);					// 位置
+	SetPosOld(GetPos());			// 前回の位置
+	SetRot(NONE_D3DXVECTOR3);		// 向き
+	SetSize(NONE_SCALE);			// サイズ
+	SetNumAngle(120);				// 角度の総数
+	SetRadius(START_RADIUS);		// 半径
+	SetColor(col);					// 色
+}
+
+//=======================================
+// 生成処理
+//=======================================
+CExplosionFan* CExplosionFan::Create(const D3DXVECTOR3& pos, const D3DXCOLOR& col)
+{
+	// ローカルオブジェクトを生成
+	CExplosionFan* pExplosionFan = nullptr;	// サンプルのインスタンスを生成
+
+	if (pExplosionFan == nullptr)
+	{ // オブジェクトが NULL の場合
+
+	  // インスタンスを生成
+		pExplosionFan = new CExplosionFan;
+	}
+	else
+	{ // オブジェクトが NULL じゃない場合
+
+	  // 停止
+		assert(false);
+
+		// NULL を返す
+		return nullptr;
+	}
+
+	if (pExplosionFan != nullptr)
+	{ // オブジェクトが NULL じゃない場合
+
+	  // 情報の設定処理
+		pExplosionFan->SetData(pos, col);
+
+		// 初期化処理
+		if (FAILED(pExplosionFan->Init()))
+		{ // 初期化に失敗した場合
+
+		  // 停止
+			assert(false);
+
+			// NULL を返す
+			return nullptr;
+		}
+	}
+	else
+	{ // オブジェクトが NULL の場合
+
+	  // 停止
+		assert(false);
+
+		// NULL を返す
+		return nullptr;
+	}
+
+	// サンプルのポインタを返す
+	return pExplosionFan;
 }
