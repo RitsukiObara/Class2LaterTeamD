@@ -1,1 +1,40 @@
-#pragma once
+//===================================
+//
+// 天井ヘッダー[ceil.h]
+// Author 小原立暉
+//
+//===================================
+#ifndef _CEIL_H_
+#define _CEIL_H_
+
+//***********************************
+// インクルードファイル
+//***********************************
+#include "object3D.h"
+
+//-----------------------------------
+// クラス定義(CCeil)
+//-----------------------------------
+class CCeil : public CObject3D
+{
+public:
+
+	CCeil();				// コンストラクタ
+	~CCeil();				// デストラクタ
+
+	// メンバ関数
+	HRESULT Init(void);		// 初期化処理
+	void Uninit(void);		// 終了処理
+	void Update(void);		// 更新処理
+	void Draw(void);		// 描画処理
+
+	void SetData(const D3DXVECTOR3& pos);				// 情報の設定処理
+
+	// 静的メンバ関数
+	static CCeil* Create(const D3DXVECTOR3& pos);		// 生成処理
+
+private:
+
+};
+
+#endif
