@@ -32,6 +32,7 @@ CCup::CCup() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 	m_pConsent = NULL;
 	m_WaterSize = NONE_D3DXVECTOR3;
 	m_ThunderCounter = 0;
+	m_bSe = false;				// SE再生状況
 	SetRatUse(true);
 }
 
@@ -54,6 +55,8 @@ HRESULT CCup::Init(void)
 	  // 失敗を返す
 		return E_FAIL;
 	}
+
+	m_bSe = false;				// SE再生状況
 
 	// 値を返す
 	return S_OK;
@@ -154,6 +157,9 @@ void CCup::StateManager(D3DXVECTOR3 *pos, D3DXVECTOR3 *rot)
 
 			// コップが落ちた音を流す
 			CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_THE_CUP_FALLS);
+
+			// ビリビリ音を流す
+			CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_WATERBIRIBIRI);
 
 			m_pWater = CObject3D::Create(CObject3D::TYPE_NONE, PRIORITY_BLOCK);
 			m_pWater->SetPos(GetPos());
