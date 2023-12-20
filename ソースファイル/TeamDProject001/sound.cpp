@@ -45,6 +45,11 @@ CSound::SOUNDINFO CSound::m_aSoundInfo[CSound::SOUND_LABEL_MAX] =
 	{ "data\\SE\\honey_walk.wav",0 },		// 蜂蜜の上歩く音
 	{ "data\\SE\\book_down.wav",0 },		// 本が落ちる音
 	{ "data\\SE\\block_attack.wav",0 },		// ブロック叩く音
+	{ "data\\SE\\electricity_Biting.wav",-1 },	// 水のビリビリ音
+	{ "data\\SE\\banana_down.wav",0 },		// バナナ落ちる音
+	{ "data\\SE\\banana_turuturu.wav",0 },	// バナナ落ちる音
+	{ "data\\SE\\leash.wav",0 },			// リード音
+
 
 };
 

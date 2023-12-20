@@ -56,6 +56,7 @@ private:		// 自分だけアクセスできる
 	CObject3D *m_pWater;
 	D3DXVECTOR3 m_WaterSize;
 	CConsent *m_pConsent;
+	bool m_bSe;				// SE再生状況
 };
 
 #endif
