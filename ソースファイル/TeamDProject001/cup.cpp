@@ -117,11 +117,18 @@ void CCup::Update(void)
 void CCup::Draw(void)
 {
 	// •`‰æˆ—
-	CObstacle::Draw();
+	CObstacle::Draw(1.0f);
 
 	if (m_pConsent != NULL)
 	{
-		m_pConsent->Draw();
+		if (m_State == STATE_TRUE)
+		{
+			m_pConsent->Draw(1.0f);
+		}
+		else
+		{
+			m_pConsent->Draw(0.3f);
+		}
 	}
 
 	if (m_pWater != NULL)

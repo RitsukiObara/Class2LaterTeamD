@@ -80,6 +80,8 @@ public:			// 誰でもアクセスできる
 	void SetType(const TYPE type);		// 種類の設定処理
 	TYPE GetType(void);					// 種類の取得処理
 
+	void SetCatDisp(const bool Set) { m_bCatDisp = Set; }	// ネコの表示設定処理
+	void SetRatDisp(const bool Set) { m_bRatDisp = Set; }	// ネズミの表示設定処理
 	void SetCatUse(const bool Set) { m_bCatUse = Set; }		// 起動可能の設定処理
 	bool GetCatUse(void) { return m_bCatUse; }				// 起動可能の取得処理
 	void SetRatUse(const bool Set) { m_bRatUse = Set; }		// 起動可能の設定処理
@@ -104,7 +106,9 @@ private:		// 自分だけアクセスできる
 	CBillboard *m_pMultiGimmickUI[2];
 	bool m_pGimmickUIFalse[MAX_PLAY];	//全部[False]の時にUIを削除する
 	bool m_bCatUse;						//猫が起動できるかどうか
+	bool m_bCatDisp;					//猫が見えやすい描画にする
 	bool m_bRatUse;						//ネズミが起動できるかどうか
+	bool m_bRatDisp;					//ネズミが見えやすい描画にする
 	bool m_bAction;						//起動しているかどうか
 	float m_fAlpha;						//不透明度
 

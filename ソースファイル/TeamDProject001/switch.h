@@ -41,6 +41,7 @@ public:			// 誰でもアクセスできる
 	void Uninit(void);		// 終了処理
 	void Update(void);		// 更新処理
 	void Draw(void);		// 描画処理
+	virtual void Draw(const float fAlpha);		// 描画処理
 
 	void SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot);				// 情報の設定処理
 	void ChangeBoot(void);	// 起動状況の入れ替え処理

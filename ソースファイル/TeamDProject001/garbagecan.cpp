@@ -136,7 +136,7 @@ void CGarbage::Update(void)
 void CGarbage::Draw(void)
 {
 	// •`‰æˆ—
-	CObstacle::Draw();
+	CObstacle::Draw(1.0f);
 }
 
 //=====================================
