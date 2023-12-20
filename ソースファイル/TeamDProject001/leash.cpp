@@ -18,6 +18,7 @@
 #include "collision.h"
 #include "debugproc.h"
 #include "tutorial.h"
+#include "sound.h"
 
 #define ACTION_TIME (240)
 #define WAIT_TIME (20)

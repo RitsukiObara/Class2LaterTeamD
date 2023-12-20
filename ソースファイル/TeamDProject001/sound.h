@@ -54,6 +54,9 @@ public:			// 誰でもアクセス出来る
 		SOUND_LABEL_SE_BOOLDOWN,		// 本が落ちる音
 		SOUND_LABEL_SE_BLOCKATTACK,		// ブロック叩く音
 		SOUND_LABEL_SE_WATERBIRIBIRI,	// 水のビリビリ音
+		SOUND_LABEL_SE_BANANADOWN,		// バナナ落ちる音
+		SOUND_LABEL_SE_BANANATURUTURU,	// バナナ滑る音
+		SOUND_LABEL_SE_LEASH,			// リード音
 
 		SOUND_LABEL_MAX					// この列挙型の総数
 	};
