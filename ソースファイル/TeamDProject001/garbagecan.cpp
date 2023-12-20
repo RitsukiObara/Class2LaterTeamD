@@ -12,6 +12,7 @@
 #include "garbagecan.h"
 #include "renderer.h"
 #include "useful.h"
+#include "sound.h"
 
 #include "player.h"
 #include "block.h"
@@ -136,7 +137,7 @@ void CGarbage::Update(void)
 void CGarbage::Draw(void)
 {
 	// 描画処理
-	CObstacle::Draw();
+	CObstacle::Draw(1.0f);
 }
 
 //=====================================
@@ -185,6 +186,9 @@ void CGarbage::StateManager(void)
 
 			// モデルの情報を設定する
 			SetFileData(CXFile::TYPE_GARBAGE);
+
+			// バナナ落ちる音再生
+			CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_BANANADOWN);
 		}
 
 		break;
@@ -277,6 +281,9 @@ void CGarbage::SlideOn(D3DXVECTOR3 pos, D3DXVECTOR3 move, CPlayer *pPlayer)
 	m_PlayerPos = pos - GetPos();
 	m_SlideMove = move;
 	m_pPlayer = pPlayer;
+
+	// バナナ滑る音再生
+	CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_BANANATURUTURU);
 }
 
 //=====================================

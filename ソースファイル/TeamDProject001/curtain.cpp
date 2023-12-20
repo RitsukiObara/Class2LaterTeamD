@@ -188,13 +188,55 @@ void CCurtain::Draw(void)
 	// 描画処理
 	CObstacle::Draw();
 
-	for (int nCnt = 0; nCnt < MAX_SWITCH; nCnt++)
+	for (int nCntSwith = 0; nCntSwith < MAX_SWITCH; nCntSwith++)
 	{
-		if (m_apSwitch[nCnt] != nullptr)
+		if (m_apSwitch[nCntSwith] != nullptr)
 		{ // スイッチの情報が NULL じゃない場合
 
-			// スイッチの描画処理
-			m_apSwitch[nCnt]->Draw();
+			for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
+			{// どのプレイヤーのカメラ番号か回して確かめる
+				if (CManager::Get()->GetMode() == CScene::MODE_GAME)
+				{// ゲームモードの時
+					CPlayer* pPlayer = CGame::GetPlayer(nCnt);
+					if (pPlayer->GetType() == CPlayer::TYPE::TYPE_CAT)
+					{// ネコプレイヤーを取得
+						if (pPlayer->GetPlayerIdx() == GetDrawIdx())
+						{// カメラ番号とプレイヤー番号が一致する時
+							if (m_apSwitch[nCntSwith]->GetBoot() == true)
+							{// テレビの電源がONの時リモコンの表示を薄くする
+
+								// スイッチの描画処理
+								m_apSwitch[nCntSwith]->Draw(1.0f);
+							}
+							else
+							{
+								// スイッチの描画処理
+								m_apSwitch[nCntSwith]->Draw(0.3f);
+							}
+						}
+					}
+					else if (pPlayer->GetType() == CPlayer::TYPE::TYPE_RAT)
+					{// ネズミプレイヤーを取得
+						if (pPlayer->GetPlayerIdx() == GetDrawIdx())
+						{// カメラ番号とプレイヤー番号が一致する時
+							if (m_apSwitch[nCntSwith]->GetBoot() == false)
+							{// テレビの電源がOFFの時リモコンの表示を薄くする
+
+								// スイッチの描画処理
+								m_apSwitch[nCntSwith]->Draw(1.0f);
+							}
+							else
+							{
+								// スイッチの描画処理
+								m_apSwitch[nCntSwith]->Draw(0.3f);
+							}
+						}
+					}
+				}
+			}
+
+			//// スイッチの描画処理
+			//m_apSwitch[nCnt]->Draw();
 		}
 	}
 }

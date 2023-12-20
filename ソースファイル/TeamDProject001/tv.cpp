@@ -239,13 +239,59 @@ void CTv::Update(void)
 void CTv::Draw(void)
 {
 	// 描画処理
-	CObstacle::Draw();
+	if (m_bPower == true)
+	{// テレビの電源がOFFの時薄くする
+		CObstacle::Draw(1.0f);
+	}
+	else
+	{
+		CObstacle::Draw(0.3f);
+	}
 
 	if (m_remocon.pRemocon != nullptr)
 	{ // リモコンが NULL じゃない場合
 
-		// 描画処理
-		m_remocon.pRemocon->Draw();
+		for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
+		{// どのプレイヤーのカメラ番号か回して確かめる
+			if (CManager::Get()->GetMode() == CScene::MODE_GAME)
+			{// ゲームモードの時
+				CPlayer* pPlayer = CGame::GetPlayer(nCnt);
+				if (pPlayer->GetType() == CPlayer::TYPE::TYPE_CAT)
+				{// ネコプレイヤーを取得
+					if (pPlayer->GetPlayerIdx() == GetDrawIdx())
+					{// カメラ番号とプレイヤー番号が一致する時
+						if (m_bPower == true)
+						{// テレビの電源がONの時リモコンの表示を薄くする
+
+							// 描画処理
+							m_remocon.pRemocon->Draw(0.3f);
+						}
+						else
+						{
+							// 描画処理
+							m_remocon.pRemocon->Draw(1.0f);
+						}
+					}
+				}
+				else if (pPlayer->GetType() == CPlayer::TYPE::TYPE_RAT)
+				{// ネズミプレイヤーを取得
+					if (pPlayer->GetPlayerIdx() == GetDrawIdx())
+					{// カメラ番号とプレイヤー番号が一致する時
+						if (m_bPower == false)
+						{// テレビの電源がOFFの時リモコンの表示を薄くする
+
+							// 描画処理
+							m_remocon.pRemocon->Draw(0.3f);
+						}
+						else
+						{
+							// 描画処理
+							m_remocon.pRemocon->Draw(1.0f);
+						}
+					}
+				}
+			}
+		}
 	}
 
 	if (m_pVision != nullptr)
@@ -479,6 +525,7 @@ void CTv::PowerAction(void)
 
 		// 電源OFFにする
 		m_bPower = false;
+		SetAction(false);
 
 		break;
 
@@ -522,6 +569,7 @@ void CTv::PowerAction(void)
 
 		// 電源ONにする
 		m_bPower = true;
+		SetAction(true);
 
 		break;
 	}

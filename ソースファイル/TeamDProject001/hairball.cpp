@@ -34,6 +34,7 @@ CHairBall::CHairBall() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLO
 	// 全ての値をクリアする
 	m_move = NONE_D3DXVECTOR3;		// 移動量
 	m_state = STATE_STOP;			// 状態
+	SetCatDisp(true);				// 猫側の画面の不透明度を強制的に1.0fにする
 }
 
 //==============================
@@ -123,7 +124,7 @@ void CHairBall::Update(void)
 void CHairBall::Draw(void)
 {
 	// 描画処理
-	CObstacle::Draw();
+	CObstacle::Draw(1.0f);
 }
 
 //=====================================
@@ -184,6 +185,7 @@ bool CHairBall::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 
 			// 吹き飛ばし状態にする
 			m_state = STATE_SMASH;
+			SetAction(true);
 
 			// 方向を設定する
 			fAngle = atan2f((GetPos().x - Targetpos.x), (GetPos().z - Targetpos.z));
@@ -303,6 +305,7 @@ void CHairBall::Elevation(void)
 
 		// 停止状態にする
 		m_state = STATE_STOP;
+		SetAction(false);
 	}
 	else
 	{ // 上記以外
