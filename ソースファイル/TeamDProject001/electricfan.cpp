@@ -125,13 +125,21 @@ void CElecFan::Update(void)
 void CElecFan::Draw(void)
 {	
 	// •`‰æˆ—
-	CObstacle::Draw();
+	CObstacle::Draw(1.0f);
 
 	if (m_pFan != nullptr)
 	{ // ƒtƒ@ƒ“‚ª NULL ‚¶‚á‚È‚¢ê‡
 
-		// ƒtƒ@ƒ“‚Ì•`‰æˆ—
-		m_pFan->Draw();
+		if (m_bPower == true)
+		{
+			// ƒtƒ@ƒ“‚Ì•`‰æˆ—
+			m_pFan->Draw(1.0f);
+		}
+		else
+		{
+			// ƒtƒ@ƒ“‚Ì•`‰æˆ—
+			m_pFan->Draw(0.3f);
+		}
 	}
 }
 

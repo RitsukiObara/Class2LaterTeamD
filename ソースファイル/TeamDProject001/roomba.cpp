@@ -256,17 +256,22 @@ bool CRoomba::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 	float objRadius = GetFileData().fRadius;
 	float objHeight = GetFileData().vtxMax.y;
 
-	if (objPos.y <= pos.y + collSize.y &&
-		objPos.y + objHeight >= pos.y)
-	{
-		if (useful::CylinderCollision(&pos, objPos, collSize.x + objRadius))
-		{ // 円の中に入る場合
+	if (pPlayer->GetType() == CPlayer::TYPE_RAT)
+	{ // ネズミの場合
 
-			// 位置を適用する
-			pPlayer->SetPos(pos);
+		if (objPos.y <= pos.y + collSize.y &&
+			objPos.y + objHeight >= pos.y)
+		{ // 高さの判定
 
-			// true を返す
-			return true;
+			if (useful::CylinderCollision(&pos, objPos, collSize.x + objRadius))
+			{ // 円の中に入る場合
+
+				// 位置を適用する
+				pPlayer->SetPos(pos);
+
+				// true を返す
+				return true;
+			}
 		}
 	}
 

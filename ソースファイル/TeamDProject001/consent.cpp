@@ -93,6 +93,15 @@ void CConsent::Draw(void)
 }
 
 //=====================================
+// ƒRƒ“ƒZƒ“ƒg‚Ì•`‰æˆ—
+//=====================================
+void CConsent::Draw(const float fAlpha)
+{
+	// •`‰æˆ—
+	CModel::Draw(fAlpha);
+}
+
+//=====================================
 // î•ñ‚Ìİ’èˆ—
 //=====================================
 void CConsent::SetData(const D3DXVECTOR3& pos)

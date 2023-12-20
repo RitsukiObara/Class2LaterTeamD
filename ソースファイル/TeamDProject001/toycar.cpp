@@ -219,23 +219,27 @@ bool CToyCar::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 	D3DXVECTOR3 vtxMax = collSize;
 	collision::SCollision coll = { false,false,false,false,false,false };
 
-	// 六面体の当たり判定
-	coll = collision::HexahedronClush(&pos, GetPos(), pPlayer->GetPosOld(), GetPosOld(), vtxMin, GetFileData().vtxMin, vtxMax, GetFileData().vtxMax);
+	if (pPlayer->GetType() == CPlayer::TYPE_RAT)
+	{ // ネズミの場合
 
-	// 位置を適用する
-	pPlayer->SetPos(pos);
+		// 六面体の当たり判定
+		coll = collision::HexahedronClush(&pos, GetPos(), pPlayer->GetPosOld(), GetPosOld(), vtxMin, GetFileData().vtxMin, vtxMax, GetFileData().vtxMax);
 
-	if (coll.bTop == true)
-	{ // 上に乗った場合
+		// 位置を適用する
+		pPlayer->SetPos(pos);
 
-		// 移動量を初期化する
-		move.y = 0.0f;
+		if (coll.bTop == true)
+		{ // 上に乗った場合
 
-		// 移動量を適用する
-		pPlayer->SetMove(move);
+			// 移動量を初期化する
+			move.y = 0.0f;
 
-		// true を返す
-		return true;
+			// 移動量を適用する
+			pPlayer->SetMove(move);
+
+			// true を返す
+			return true;
+		}
 	}
 
 	// false を返す
