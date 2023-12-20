@@ -21,23 +21,28 @@ namespace
 {
 	const D3DXVECTOR3 LOGSIZE_BG[CLog::TYPE_MAX] =			// ログの背景の大きさ
 	{
-		D3DXVECTOR3(71.0f, 13.0f, 0.0f),
-		D3DXVECTOR3(80.0f, 13.0f, 0.0f),
-		D3DXVECTOR3(70.0f, 13.0f, 0.0f)
+		D3DXVECTOR3(85.0f, 13.0f, 0.0f),
+		D3DXVECTOR3(90.0f, 13.0f, 0.0f),
+		D3DXVECTOR3(85.0f, 13.0f, 0.0f)
 	};
-	const D3DXVECTOR3 LOGSIZE_PLAYERID = D3DXVECTOR3(25.0f, 15.0f, 0.0f);		// ログのプレイヤーIDの大きさ
-	const D3DXVECTOR3 LOGSIZE_MESSAGE = D3DXVECTOR3(100.0f, 15.0f, 0.0f);		// ログのメッセージの大きさ
+	const D3DXVECTOR3 LOGSIZE_PLAYERID = D3DXVECTOR3(20.0f, 13.0f, 0.0f);		// ログのプレイヤーIDの大きさ
+	const D3DXVECTOR3 LOGSIZE_MESSAGE[CLog::TYPE_MAX] =			// ログのメッセージの大きさ
+	{
+		D3DXVECTOR3(65.0f, 13.0f, 0.0f),
+		D3DXVECTOR3(70.0f, 13.0f, 0.0f),
+		D3DXVECTOR3(65.0f, 13.0f, 0.0f)
+	};
 	const float LOGDISTANCE_PLAYERID[CLog::TYPE_MAX] =		// ログのプレイヤーIDのX位置
 	{
-		-50.0f,
-		-55.0f,
-		-55.0f
+		-58.0f,
+		-66.0f,
+		-58.0f
 	};
 	const float LOGDISTANCE_MESSAGE[CLog::TYPE_MAX] =		// ログのメッセージのX位置
 	{
-		-30.0f,
-		-25.0f,
-		-25.0f
+		20.0f,
+		18.0f,
+		20.0f
 	};
 	const int LOGTIME = 500;				// ログの表示時間
 	const float LOGSPEED_IN = 5.0f;			// ログの登場速度
@@ -338,7 +343,7 @@ void CLog::SetData(int DrawIdx, int LogIdx, int nCreateNumber, CLog::TYPE Type)
 		m_pLogMessage->SetPos(D3DXVECTOR3(LogPos.x + LOGDISTANCE_MESSAGE[m_Type], LogPos.y, 0.0f));
 		m_pLogMessage->SetPosOld(LogPos);
 		m_pLogMessage->SetRot(NONE_D3DXVECTOR3);
-		m_pLogMessage->SetSize(LOGSIZE_MESSAGE);
+		m_pLogMessage->SetSize(LOGSIZE_MESSAGE[m_Type]);
 		m_pLogMessage->SetLength();
 		m_pLogMessage->SetAngle();
 		m_pLogMessage->SetVertex();
