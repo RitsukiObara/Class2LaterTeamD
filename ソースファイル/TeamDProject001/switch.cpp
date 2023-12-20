@@ -147,6 +147,29 @@ void CSwitch::Draw(void)
 }
 
 //=====================================
+// 破片の描画処理
+//=====================================
+void CSwitch::Draw(const float fAlpha)
+{
+	for (int nCnt = 0; nCnt < TYPE_MAX; nCnt++)
+	{
+		if (m_apModel[nCnt] != nullptr)
+		{ // モデルが NULL じゃない場合
+
+			// モデルの描画処理
+			m_apModel[nCnt]->Draw(fAlpha);
+		}
+	}
+
+	if (m_pGimmickUI != nullptr)
+	{ // ギミックUIが NULL じゃない場合
+
+		// 描画処理
+		m_pGimmickUI->DrawLightOff();
+	}
+}
+
+//=====================================
 // 起動状況の入れ替え処理
 //=====================================
 void CSwitch::ChangeBoot(void)

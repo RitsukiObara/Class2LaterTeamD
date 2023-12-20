@@ -17,20 +17,40 @@
 //-------------------------------------------
 // マクロ定義
 //-------------------------------------------
-#define LOGSIZE_BG				(D3DXVECTOR3(100.0f,15.0f, 10.0f))		// ログの背景の大きさ
-#define LOGSIZE_PLAYERID		(D3DXVECTOR3(25.0f, 20.0f, 10.0f))		// ログのプレイヤーIDの大きさ
-#define LOGSIZE_MESSAGE			(D3DXVECTOR3(100.0f, 15.0f, 100.0f))	// ログのメッセージの大きさ
-#define LOGDISTANCE_PLAYERID	(-50.0f)								// ログのプレイヤーIDのX位置
-#define LOGDISTANCE_MESSAGE		(-25.0f)								// ログのメッセージのX位置
-#define LOGTIME					(500)									// ログの表示時間
-#define LOGSPEED_IN				(5.0f)									// ログの登場速度
-#define LOGSPEED_DOWN			(1.0f)									// ログの落下速度
-#define LOGSPEED_OUT			(5.0f)									// ログの退場速度
-#define LOGPOS_IN				(100.0f)								// ログの登場位置
-#define LOGPOS_DOWN				(200.0f)								// ログの停止位置
-//-------------------------------------------
-// 静的メンバ変数宣言
-//-------------------------------------------
+namespace
+{
+	const D3DXVECTOR3 LOGSIZE_BG[CLog::TYPE_MAX] =			// ログの背景の大きさ
+	{
+		D3DXVECTOR3(85.0f, 13.0f, 0.0f),
+		D3DXVECTOR3(90.0f, 13.0f, 0.0f),
+		D3DXVECTOR3(85.0f, 13.0f, 0.0f)
+	};
+	const D3DXVECTOR3 LOGSIZE_PLAYERID = D3DXVECTOR3(20.0f, 13.0f, 0.0f);		// ログのプレイヤーIDの大きさ
+	const D3DXVECTOR3 LOGSIZE_MESSAGE[CLog::TYPE_MAX] =			// ログのメッセージの大きさ
+	{
+		D3DXVECTOR3(65.0f, 13.0f, 0.0f),
+		D3DXVECTOR3(70.0f, 13.0f, 0.0f),
+		D3DXVECTOR3(65.0f, 13.0f, 0.0f)
+	};
+	const float LOGDISTANCE_PLAYERID[CLog::TYPE_MAX] =		// ログのプレイヤーIDのX位置
+	{
+		-58.0f,
+		-66.0f,
+		-58.0f
+	};
+	const float LOGDISTANCE_MESSAGE[CLog::TYPE_MAX] =		// ログのメッセージのX位置
+	{
+		20.0f,
+		18.0f,
+		20.0f
+	};
+	const int LOGTIME = 500;				// ログの表示時間
+	const float LOGSPEED_IN = 5.0f;			// ログの登場速度
+	const float LOGSPEED_DOWN = 1.0f;		// ログの落下速度
+	const float LOGSPEED_OUT = 5.0f;		// ログの退場速度
+	const float LOGPOS_IN = 100.0f;			// ログの登場位置
+	const float LOGPOS_DOWN = 200.0f;		// ログの停止位置
+}
 
 //==============================
 // コンストラクタ
@@ -124,11 +144,11 @@ void CLog::Update(void)
 	}
 	if (m_pLogPlayerID != NULL)
 	{
-		m_pLogPlayerID->SetPos(D3DXVECTOR3(LogPos.x + LOGDISTANCE_PLAYERID, LogPos.y, 0.0f));
+		m_pLogPlayerID->SetPos(D3DXVECTOR3(LogPos.x + LOGDISTANCE_PLAYERID[m_Type], LogPos.y, 0.0f));
 	}
 	if (m_pLogMessage != NULL)
 	{
-		m_pLogMessage->SetPos(D3DXVECTOR3(LogPos.x + LOGDISTANCE_MESSAGE, LogPos.y, 0.0f));
+		m_pLogMessage->SetPos(D3DXVECTOR3(LogPos.x + LOGDISTANCE_MESSAGE[m_Type], LogPos.y, 0.0f));
 	}
 }
 
@@ -170,25 +190,25 @@ void CLog::StateManager(void)
 		switch (m_State)
 		{
 		case CLog::STATE_IN:
-			if (LogPos.x < LOGSIZE_BG.x)
+			if (LogPos.x < LOGSIZE_BG[m_Type].x)
 			{
 				LogPos.x += LOGSPEED_IN;
 			}
 			else
 			{
-				LogPos.x = LOGSIZE_BG.x;
+				LogPos.x = LOGSIZE_BG[m_Type].x;
 				m_State = STATE_DOWN;
 			}
 			break;
 		case CLog::STATE_DOWN:
 
-			if (LogPos.y < m_fLogStopPosY - (m_CreateNumber * LOGSIZE_BG.y * 2.0f))
+			if (LogPos.y < m_fLogStopPosY - (m_CreateNumber * LOGSIZE_BG[m_Type].y * 2.0f))
 			{
 				LogPos.y += LOGSPEED_DOWN;
 			}
 			else
 			{
-				LogPos.y = m_fLogStopPosY - (m_CreateNumber * LOGSIZE_BG.y * 2.0f);
+				LogPos.y = m_fLogStopPosY - (m_CreateNumber * LOGSIZE_BG[m_Type].y * 2.0f);
 			}
 
 			if (m_nLife <= 0)
@@ -198,7 +218,7 @@ void CLog::StateManager(void)
 
 			break;
 		case CLog::STATE_OUT:
-			if (LogPos.x > -LOGSIZE_BG.x)
+			if (LogPos.x > -LOGSIZE_BG[m_Type].x)
 			{
 				LogPos.x -= LOGSPEED_OUT;
 			}
@@ -219,25 +239,25 @@ void CLog::StateManager(void)
 		switch (m_State)
 		{
 		case CLog::STATE_IN:
-			if (LogPos.x > -LOGSIZE_BG.x + SCREEN_WIDTH)
+			if (LogPos.x > -LOGSIZE_BG[m_Type].x + SCREEN_WIDTH)
 			{
 				LogPos.x -= LOGSPEED_IN;
 			}
 			else
 			{
-				LogPos.x = -LOGSIZE_BG.x + SCREEN_WIDTH;
+				LogPos.x = -LOGSIZE_BG[m_Type].x + SCREEN_WIDTH;
 				m_State = STATE_DOWN;
 			}
 			break;
 		case CLog::STATE_DOWN:
 
-			if (LogPos.y < m_fLogStopPosY - (m_CreateNumber * LOGSIZE_BG.y * 2.0f))
+			if (LogPos.y < m_fLogStopPosY - (m_CreateNumber * LOGSIZE_BG[m_Type].y * 2.0f))
 			{
 				LogPos.y += LOGSPEED_DOWN;
 			}
 			else
 			{
-				LogPos.y = m_fLogStopPosY - (m_CreateNumber * LOGSIZE_BG.y * 2.0f);
+				LogPos.y = m_fLogStopPosY - (m_CreateNumber * LOGSIZE_BG[m_Type].y * 2.0f);
 			}
 
 			if (m_nLife <= 0)
@@ -247,7 +267,7 @@ void CLog::StateManager(void)
 
 			break;
 		case CLog::STATE_OUT:
-			if (LogPos.x < LOGSIZE_BG.x + SCREEN_WIDTH)
+			if (LogPos.x < LOGSIZE_BG[m_Type].x + SCREEN_WIDTH)
 			{
 				LogPos.x += LOGSPEED_OUT;
 			}
@@ -280,7 +300,7 @@ void CLog::SetData(int DrawIdx, int LogIdx, int nCreateNumber, CLog::TYPE Type)
 		m_pLogBG->SetPos(D3DXVECTOR3(LogPos.x, LogPos.y, 0.0f));
 		m_pLogBG->SetPosOld(LogPos);
 		m_pLogBG->SetRot(NONE_D3DXVECTOR3);
-		m_pLogBG->SetSize(LOGSIZE_BG);
+		m_pLogBG->SetSize(LOGSIZE_BG[m_Type]);
 		m_pLogBG->SetLength();
 		m_pLogBG->SetAngle();
 		m_pLogBG->SetVertex();
@@ -289,7 +309,7 @@ void CLog::SetData(int DrawIdx, int LogIdx, int nCreateNumber, CLog::TYPE Type)
 	if (m_pLogPlayerID == NULL)
 	{
 		m_pLogPlayerID = CObject2D::Create(CObject2D::TYPE::TYPE_NONE, CObject::TYPE::TYPE_NONE, CObject::PRIORITY::PRIORITY_UI);
-		m_pLogPlayerID->SetPos(D3DXVECTOR3(LogPos.x + LOGDISTANCE_PLAYERID, LogPos.y, 0.0f));
+		m_pLogPlayerID->SetPos(D3DXVECTOR3(LogPos.x + LOGDISTANCE_PLAYERID[m_Type], LogPos.y, 0.0f));
 		m_pLogPlayerID->SetPosOld(LogPos);
 		m_pLogPlayerID->SetRot(NONE_D3DXVECTOR3);
 		m_pLogPlayerID->SetSize(LOGSIZE_PLAYERID);
@@ -320,10 +340,10 @@ void CLog::SetData(int DrawIdx, int LogIdx, int nCreateNumber, CLog::TYPE Type)
 	if (m_pLogMessage == NULL)
 	{
 		m_pLogMessage = CObject2D::Create(CObject2D::TYPE::TYPE_NONE, CObject::TYPE::TYPE_NONE, CObject::PRIORITY::PRIORITY_UI);
-		m_pLogMessage->SetPos(D3DXVECTOR3(LogPos.x + LOGDISTANCE_MESSAGE, LogPos.y, 0.0f));
+		m_pLogMessage->SetPos(D3DXVECTOR3(LogPos.x + LOGDISTANCE_MESSAGE[m_Type], LogPos.y, 0.0f));
 		m_pLogMessage->SetPosOld(LogPos);
 		m_pLogMessage->SetRot(NONE_D3DXVECTOR3);
-		m_pLogMessage->SetSize(LOGSIZE_MESSAGE);
+		m_pLogMessage->SetSize(LOGSIZE_MESSAGE[m_Type]);
 		m_pLogMessage->SetLength();
 		m_pLogMessage->SetAngle();
 		m_pLogMessage->SetVertex();

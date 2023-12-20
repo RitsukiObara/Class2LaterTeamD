@@ -29,6 +29,7 @@ public:			// 誰でもアクセスできる
 	void Uninit(void);		// 終了処理
 	void Update(void);		// 更新処理
 	void Draw(void);		// 描画処理
+	void Draw(const float fAlpha);		// 描画処理
 
 	void SetData(const D3DXVECTOR3& pos);					// 情報の設定処理
 	void SetLife(int Life) { m_nLife = Life; }				// 寿命の設定処理

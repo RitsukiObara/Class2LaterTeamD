@@ -93,7 +93,7 @@ void CPin::Update(void)
 void CPin::Draw(void)
 {
 	// •`‰æˆ—
-	CObstacle::Draw();
+	CObstacle::Draw(1.0f);
 }
 
 //=====================================

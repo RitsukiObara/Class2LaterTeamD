@@ -92,6 +92,15 @@ void CFanBlade::Draw(void)
 }
 
 //=====================================
+// ”j•Ğ‚Ì•`‰æˆ—
+//=====================================
+void CFanBlade::Draw(const float fAlpha)
+{
+	// •`‰æˆ—
+	CModel::Draw(fAlpha);
+}
+
+//=====================================
 // î•ñ‚Ìİ’èˆ—
 //=====================================
 void CFanBlade::SetData(const D3DXVECTOR3& pos)

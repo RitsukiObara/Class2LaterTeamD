@@ -68,10 +68,10 @@ public:			// 誰でもアクセスできる
 
 	virtual bool Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize);				// 当たり判定処理
 	virtual bool Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize);		// ヒット処理
-	virtual bool HitCircle(CPlayer* pPlayer, const float Radius) { return false; }							// ヒット処理
+	virtual bool HitCircle(CPlayer* /*pPlayer*/, const float /*Radius*/) { return false; }			// ヒット処理
 	virtual void Action(void) {}											// ギミック起動処理
-	virtual void Action(CPlayer* pPlayer) {}								// ギミック起動処理(プレイヤー情報が必要な場合)
-	virtual void HitMultiCircle(CPlayer* pPlayer, const float Radius, bool bInput) {}				// ヒット処理
+	virtual void Action(CPlayer* /*pPlayer*/) {}							// ギミック起動処理(プレイヤー情報が必要な場合)
+	virtual void HitMultiCircle(CPlayer* /*pPlayer*/, const float /*Radius*/, bool /*bInput*/) {}	// ヒット処理
 	virtual void MultiAction(void) {}										// ギミック同時起動処理
 	void GimmickUI(bool Set, int Player_Idx);								// ギミック起動UIの表示
 	void MultiGimmickUI(bool Set, int Player_Idx);							// ギミック起動UIの表示
@@ -80,6 +80,8 @@ public:			// 誰でもアクセスできる
 	void SetType(const TYPE type);		// 種類の設定処理
 	TYPE GetType(void);					// 種類の取得処理
 
+	void SetCatDisp(const bool Set) { m_bCatDisp = Set; }	// ネコの表示設定処理
+	void SetRatDisp(const bool Set) { m_bRatDisp = Set; }	// ネズミの表示設定処理
 	void SetCatUse(const bool Set) { m_bCatUse = Set; }		// 起動可能の設定処理
 	bool GetCatUse(void) { return m_bCatUse; }				// 起動可能の取得処理
 	void SetRatUse(const bool Set) { m_bRatUse = Set; }		// 起動可能の設定処理
@@ -91,7 +93,7 @@ public:			// 誰でもアクセスできる
 
 	virtual D3DXVECTOR3 GetPosHead(void) { return NONE_D3DXVECTOR3; }
 	virtual D3DXVECTOR3 GetPosToes(void) { return NONE_D3DXVECTOR3; }
-	virtual void SlideOn(D3DXVECTOR3 pos, D3DXVECTOR3 move, CPlayer *pPlayer) {}
+	virtual void SlideOn(D3DXVECTOR3 /*pos*/, D3DXVECTOR3 /*move*/, CPlayer* /*pPlayer*/) {}
 
 	// 静的メンバ関数
 	static CObstacle* Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE type);		// 生成処理
@@ -104,7 +106,9 @@ private:		// 自分だけアクセスできる
 	CBillboard *m_pMultiGimmickUI[2];
 	bool m_pGimmickUIFalse[MAX_PLAY];	//全部[False]の時にUIを削除する
 	bool m_bCatUse;						//猫が起動できるかどうか
+	bool m_bCatDisp;					//猫が見えやすい描画にする
 	bool m_bRatUse;						//ネズミが起動できるかどうか
+	bool m_bRatDisp;					//ネズミが見えやすい描画にする
 	bool m_bAction;						//起動しているかどうか
 	float m_fAlpha;						//不透明度
 

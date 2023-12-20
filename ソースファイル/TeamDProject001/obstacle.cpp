@@ -34,6 +34,8 @@
 #include "dynamite.h"
 #include "book.h"
 #include "curtain.h"
+#include "game.h"
+#include "tutorial.h"
 
 //==============================
 // コンストラクタ
@@ -81,6 +83,8 @@ void CObstacle::Box(void)
 	m_bRatUse = false;
 	m_bAction = false;
 	m_fAlpha = 1.0f;
+	m_bCatDisp = false;
+	m_bRatDisp = false;
 
 	if (CObstacleManager::Get() != nullptr)
 	{ // マネージャーが存在していた場合
@@ -226,8 +230,86 @@ void CObstacle::Draw(void)
 //=====================================
 void CObstacle::Draw(const float fAlpha)
 {
-	// 描画処理
-	CModel::Draw(fAlpha);
+	for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
+	{// どのプレイヤーのカメラ番号か回して確かめる
+		if (CManager::Get()->GetMode() == CScene::MODE_GAME)
+		{// ゲームモードの時
+			CPlayer* pPlayer = CGame::GetPlayer(nCnt);
+			if (pPlayer->GetType() == CPlayer::TYPE::TYPE_CAT)
+			{// ネコプレイヤーを取得
+				if (pPlayer->GetPlayerIdx() == GetDrawIdx())
+				{// カメラ番号とプレイヤー番号が一致する時
+
+					if (m_bCatDisp == true)
+					{// 変数がtrueの時強制的に表示する
+
+						// 描画処理
+						CModel::Draw(1.0f);
+					}
+					else
+					{// 変数がfalseの時
+						if (m_bCatUse == false && m_bAction == false)
+						{// ネコが使用可能な障害物の場合普通に描画
+							// 描画処理
+							CModel::Draw(0.3f);
+						}
+						else
+						{// ネコが使用できない障害物の場合薄く表示
+							// 描画処理
+							CModel::Draw(fAlpha);
+						}
+					}
+				}
+			}
+			else if (pPlayer->GetType() == CPlayer::TYPE::TYPE_RAT)
+			{// ネズミプレイヤーを取得
+				if (pPlayer->GetPlayerIdx() == GetDrawIdx())
+				{// カメラ番号とプレイヤー番号が一致する時
+					if (m_bRatDisp == true)
+					{// 変数がtrueの時強制的に表示する
+
+						// 描画処理
+						CModel::Draw(1.0f);
+					}
+					else
+					{// 変数がfalseの時
+						if (m_bRatUse == false && m_bAction == false)
+						{// ネコが使用可能な障害物の場合普通に描画
+							// 描画処理
+							CModel::Draw(0.3f);
+						}
+						else
+						{// ネコが使用できない障害物の場合薄く表示
+							// 描画処理
+							CModel::Draw(fAlpha);
+						}
+					}
+				}
+			}
+		}
+		else if (CManager::Get()->GetMode() == CScene::MODE_TUTORIAL)
+		{
+			CPlayer* pPlayer = CTutorial::GetPlayer(nCnt);
+			if (pPlayer->GetType() == CPlayer::TYPE::TYPE_CAT)
+			{
+				if (pPlayer->GetPlayerIdx() == GetDrawIdx())
+				{
+					// 描画処理
+					CModel::Draw(fAlpha);
+				}
+			}
+			else if (pPlayer->GetType() == CPlayer::TYPE::TYPE_RAT)
+			{
+				if (pPlayer->GetPlayerIdx() == GetDrawIdx())
+				{
+					// 描画処理
+					CModel::Draw(fAlpha);
+				}
+			}
+		}
+	}
+	//// 描画処理
+	//CModel::Draw(fAlpha);
 
 	if (m_pGimmickUI != NULL)
 	{
@@ -450,7 +532,7 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, con
 //=====================================
 // 当たり判定処理
 //=====================================
-bool CObstacle::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
+bool CObstacle::Collision(CPlayer* /*pPlayer*/, const D3DXVECTOR3& /*collSize*/)
 {
 	// false を返す
 	return false;
@@ -459,7 +541,7 @@ bool CObstacle::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 //=====================================
 // ヒット処理
 //=====================================
-bool CObstacle::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
+bool CObstacle::Hit(CPlayer* /*pPlayer*/, const D3DXVECTOR3& /*collSize*/)
 {
 	// false を返す
 	return false;

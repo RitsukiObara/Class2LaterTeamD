@@ -149,7 +149,7 @@ void CHimo::Update(void)
 void CHimo::Draw(void)
 {
 	// •`‰æˆ—
-	CObstacle::Draw();
+	CObstacle::Draw(1.0f);
 
 	for (int nCnt = 0; nCnt < MAX_TARAI; nCnt++)
 	{

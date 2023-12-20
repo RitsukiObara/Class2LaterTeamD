@@ -170,7 +170,7 @@ void CPetbottle::Draw(void)
 	default:
 
 		// •`‰æˆ—
-		CObstacle::Draw();
+		CObstacle::Draw(1.0f);
 
 		break;
 	}
