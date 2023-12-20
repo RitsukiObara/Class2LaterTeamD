@@ -519,6 +519,9 @@
     <ClCompile Include="ratmecha.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="ceil.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fade.h">
@@ -949,6 +952,9 @@
     </ClInclude>
     <ClInclude Include="ratmecha.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="ceil.h">
+      <Filter>Map</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
