@@ -61,7 +61,8 @@ private:		// 自分だけアクセスできる
 
 	// メンバ変数
 	CSwitch* m_apSwitch[MAX_SWITCH];	// スイッチの情報
-	STATE m_state;						// 状態
+	STATE m_state;						// 現在の状態
+	STATE m_stateOld;					// 前回の状態
 	D3DXVECTOR3 m_vtxMax;				// 最大値
 	D3DXVECTOR3 m_vtxMin;				// 最小値
 	float m_fEdge;						// カーテンの端の座標
