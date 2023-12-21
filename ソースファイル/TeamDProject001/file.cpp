@@ -58,6 +58,7 @@ CFile::CFile()
 	for (int nCntInfo = 0; nCntInfo < MAX_FILE_DATA; nCntInfo++)
 	{
 		m_ObstacleInfo.pos[nCntInfo] = NONE_D3DXVECTOR3;		// 位置
+		m_ObstacleInfo.rot[nCntInfo] = NONE_D3DXVECTOR3;		// 位置
 		m_ObstacleInfo.type[nCntInfo] = CObstacle::TYPE_HONEY;	// 種類
 		m_BlockInfo.pos[nCntInfo] = NONE_D3DXVECTOR3;			// 位置
 		m_BlockInfo.rotType[nCntInfo] = CBlock::ROTTYPE_FRONT;	// 向きの種類
@@ -496,6 +497,7 @@ HRESULT CFile::Init(void)
 	for (int nCntInfo = 0; nCntInfo < MAX_FILE_DATA; nCntInfo++)
 	{
 		m_ObstacleInfo.pos[nCntInfo] = NONE_D3DXVECTOR3;		// 位置
+		m_ObstacleInfo.rot[nCntInfo] = NONE_D3DXVECTOR3;		// 位置
 		m_ObstacleInfo.type[nCntInfo] = CObstacle::TYPE_HONEY;	// 種類
 		m_BlockInfo.pos[nCntInfo] = NONE_D3DXVECTOR3;			// 位置
 		m_BlockInfo.rotType[nCntInfo] = CBlock::ROTTYPE_FRONT;	// 向きの種類

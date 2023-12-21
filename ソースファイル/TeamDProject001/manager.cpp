@@ -36,7 +36,25 @@ CManager* CManager::m_pManager = nullptr;			// マネージャーの情報
 //=========================================
 CManager::CManager()
 {
+	m_pRenderer = nullptr;					// レンダラーの情報
+	m_pInputKeyboard = nullptr;				// キーボードの情報
+	m_pInputGamePad = nullptr;				// ゲームパッドの情報
+	m_pSound = nullptr;						// サウンドの情報
+	m_pFile = nullptr;						// ファイルの情報
+	m_pDebugProc = nullptr;					// デバッグ表示の情報
+	m_pCamera = nullptr;					// カメラの情報
 
+	for (int nCnt = 0; nCnt < 4; nCnt++)
+	{
+		m_pMultiCamera[nCnt] = nullptr;		// カメラの情報
+
+	}
+
+	m_pLight = nullptr;						// ライトの情報
+	m_pTexture = nullptr;					// テクスチャの情報
+	m_pScene = nullptr;						// シーンの情報
+	m_pFade = nullptr;						// フェードの情報
+	m_ModeNow = CScene::MODE_LOGO;			// 現在のモード情報
 }
 
 //=========================================
@@ -397,7 +415,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 #ifdef _DEBUG
 
 		// フェードのメモリを確保する
-		m_pFade = m_pFade->Create(CScene::MODE_GAME);
+		m_pFade = m_pFade->Create(CScene::MODE_LOGO);
 #else
 
 		// シーンのメモリを確保する

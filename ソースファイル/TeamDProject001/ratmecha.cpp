@@ -53,6 +53,7 @@ CRatMecha::CRatMecha() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLO
 	m_bRight = true;				// 右向き状況
 	m_bMove = false;				// 動いているか
 	m_pPlayerID = nullptr;			// IDのポインタ
+	m_nIdnumber = -1;				// プレイヤーID番号
 
 	// 使用条件
 	SetRatUse(true);

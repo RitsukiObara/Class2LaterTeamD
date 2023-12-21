@@ -181,7 +181,22 @@ CXFile::SXFile CXFile::m_apModel[CXFile::TYPE_MAX] = {};
 //============================================================
 CXFile::CXFile()
 {
+	for (int nCnt = 0; nCnt < CXFile::TYPE_MAX; nCnt++)
+	{
+		// モデルの情報を初期化する
+		m_apModel[nCnt].pMesh = nullptr;			// メッシュ (頂点情報) へのポインタ
+		m_apModel[nCnt].pBuffMat = nullptr;			// マテリアルへのポインタ
+		m_apModel[nCnt].dwNumMat = 0;				// マテリアルの数
+		m_apModel[nCnt].vtxMin = INIT_VTX_MIN;		// 最小の頂点座標
+		m_apModel[nCnt].vtxMax = INIT_VTX_MAX;		// 最大の頂点座標
+		m_apModel[nCnt].collsize = INIT_SIZE;		// 当たり判定のサイズ
+		m_apModel[nCnt].fRadius = 0.0f;				// 半径
 
+		for (int nCntMat = 0; nCntMat < MAX_MATERIAL; nCntMat++)
+		{
+			m_apModel[nCnt].m_nTexIdx[nCntMat] = NONE_TEXIDX;		// テクスチャのインデックス
+		}
+	}
 }
 
 //============================================================
