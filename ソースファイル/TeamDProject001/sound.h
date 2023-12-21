@@ -59,6 +59,9 @@ public:			// 誰でもアクセス出来る
 		SOUND_LABEL_SE_LEASH,			// リード音
 		SOUND_LABEL_SE_CHU,				// ネズミの鳴き声の音
 		SOUND_LABEL_SE_FINISH,			// 終了の音
+		SOUND_LABEL_SE_TITLEHOLE,		// 文字が穴に入る音(タイトル)
+		SOUND_LABEL_SE_TITLEBLOW,		// 文字が吹き飛ばされる音(タイトル)
+		SOUND_LABEL_SE_TITLECOLLIDE,	// 文字がぶつかる音(タイトル)
 
 		SOUND_LABEL_MAX					// この列挙型の総数
 	};
