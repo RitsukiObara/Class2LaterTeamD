@@ -55,6 +55,8 @@ CSound::SOUNDINFO CSound::m_aSoundInfo[CSound::SOUND_LABEL_MAX] =
 	{ "data\\SE\\title_blown_away.wav",0 },	// 文字が吹き飛ばされる音(タイトル)
 	{ "data\\SE\\START_collide.wav",0 },	// 文字がぶつかる音(タイトル)
 	{ "data\\SE\\confusion.wav",0 },		// 気絶音
+	{ "data\\SE\\screw_winding.wav",-1 },	// 車のねじ巻き音
+	{ "data\\SE\\jump.wav",0 },				// ネズミのジャンプ音
 
 };
 

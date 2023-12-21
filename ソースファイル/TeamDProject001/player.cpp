@@ -1071,7 +1071,7 @@ void CPlayer::StunStateManager(void)
 		else
 		{
 			if (m_bSe == false)
-			{
+			{ // SEÄ¶‚µ‚Ä‚È‚¢
 				// ƒsƒˆƒsƒˆÄ¶
 				CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_PIYOPIYO);
 				m_bSe = true;
