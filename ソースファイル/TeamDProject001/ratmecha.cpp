@@ -49,7 +49,6 @@ CRatMecha::CRatMecha() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLO
 
 	// 使用条件
 	SetRatUse(true);
-	SetCatUse(false);
 }
 
 //==============================
@@ -180,7 +179,7 @@ void CRatMecha::Update(void)
 void CRatMecha::Draw(void)
 {
 	// 描画処理
-	CObstacle::Draw();
+	CObstacle::Draw(1.0f);
 
 	if (m_bMove == true)
 	{
@@ -521,7 +520,7 @@ void CRatMecha::Action(void)
 	if (m_bMove == false)
 	{ // ネズミメカを動かし、止められないようにする
 		m_bMove = !m_bMove;
-		SetRatUse(false);
+		SetAction(true);
 	}
 }
 
