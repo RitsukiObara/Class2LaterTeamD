@@ -16,7 +16,7 @@
 #include "collision.h"
 #include "object3Dfan.h"
 #include "texture.h"
-
+#include "sound.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -345,6 +345,8 @@ void CDynamite::Explosion(void)
 			//爆発状態にする
 			m_state = STATE_EXPLOSION;
 
+			// ダイナマイトの爆発音を鳴らす
+			CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_DYNAMITE);
 
 			//	爆風用の3Dポリゴンの生成
 			for (int nCnt = 0; nCnt < MAX_BURNWIND; nCnt++)

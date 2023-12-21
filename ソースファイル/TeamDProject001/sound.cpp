@@ -61,7 +61,7 @@ CSound::SOUNDINFO CSound::m_aSoundInfo[CSound::SOUND_LABEL_MAX] =
 	{ "data\\SE\\confusion.wav",0 },		// 気絶音
 	{ "data\\SE\\screw_winding.wav",-1 },	// 車のねじ巻き音
 	{ "data\\SE\\jump.wav",0 },				// ネズミのジャンプ音
-	{ "data\\SE\\Ratmecha_Run.wav",0 },		// ネズミメカの走行音
+	{ "data\\SE\\Ratmecha_Run.wav",-1 },	// ネズミメカの走行音
 	{ "data\\SE\\Tutorial_OK.wav",0 },		// チュートリアルの実行完了音
 	{ "data\\SE\\dynamite_explosion.wav",0 },	// ダイナマイトの爆発音
 	{ "data\\SE\\CurtainOpen.wav",0 },		// カーテンの開く音
