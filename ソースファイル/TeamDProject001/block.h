@@ -91,6 +91,10 @@ public:			// 誰でもアクセスできる
 		TYPE_CHAIR_SHEET,		// 机の椅子(座面)
 		TYPE_CHAIR_BACKREST,	// 机の椅子(背もたれ)
 		TYPE_LEVERBODYBLOCK,	// レバー(本体)
+		TYPE_WINDOW,			// 窓
+		TYPE_WALLCLOCK,			// 壁掛け時計
+		TYPE_INTERIOR000,		// 壁のインテリア(棚)
+		TYPE_WALLCROSS,			// 横柱
 		TYPE_MAX				// この列挙型の総数
 	};
 
