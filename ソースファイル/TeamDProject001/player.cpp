@@ -1058,6 +1058,7 @@ void CPlayer::StunStateManager(void)
 			// 無敵状態にする
 			m_StunState = STUNSTATE_WAIT;
 			m_StunStateCount = STUN_WAIT;
+			m_bSe = false;
 
 			if (m_pStun != nullptr)
 			{ // 気絶演出が NULL の場合
@@ -1065,6 +1066,15 @@ void CPlayer::StunStateManager(void)
 				// 気絶演出を削除する
 				m_pStun->Uninit();
 				m_pStun = nullptr;
+			}
+		}
+		else
+		{
+			if (m_bSe == false)
+			{
+				// ピヨピヨ再生
+				CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_PIYOPIYO);
+				m_bSe = true;
 			}
 		}
 
@@ -1700,4 +1710,24 @@ bool CPlayer::IsDispRecoveringUI(void)
 {
 	// 回復状態を返す
 	return m_pRecoveringUI->GetDisplayUI();
+}
+
+//=======================================
+// SEの再生設定
+//=======================================
+void CPlayer::SetSE(bool bSe)
+{
+	if (m_StunState != STUNSTATE_STUN)
+	{
+		m_bSe = bSe;
+
+	}
+}
+
+//=======================================
+// SEの再生取得
+//=======================================
+bool CPlayer::GetSE(void)
+{ 
+	return m_bSe; 
 }
