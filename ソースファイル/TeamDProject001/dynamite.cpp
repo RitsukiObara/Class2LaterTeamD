@@ -15,6 +15,7 @@
 #include "Effect.h"
 #include "collision.h"
 #include "object3Dfan.h"
+#include "texture.h"
 
 
 //-------------------------------------------
@@ -27,6 +28,8 @@
 #define EXPLOSION_RADIUS	(1000.0f)	// 爆発の範囲
 #define EXPLOSION_TIME		(300)		// 爆発までのカウント
 #define START_RADIUS		(15.0f)		// 初期の爆風円の範囲
+#define MAX_BURNWIND		(4)
+#define BRUN_TEXTURE  "data\\TEXTURE\\Rupture.tga"				// 何でもない画面のテクスチャ
 
 //==============================
 // コンストラクタ
@@ -39,6 +42,11 @@ CDynamite::CDynamite() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLO
 	m_pFan = nullptr;
 	m_SizeChangeSpeed = SCALE_SPEED;
 	m_ColChangeSpeed = COLOR_SPEED;
+	m_WindSize = D3DXVECTOR3(100.0f, 100.0f, 0.0f);;
+	m_pExWind[0] = nullptr;
+	m_pExWind[1] = nullptr;
+	m_pExWind[2] = nullptr;
+	m_pExWind[3] = nullptr;
 	// 使用条件
 	SetCatUse(true);
 }
@@ -68,7 +76,14 @@ HRESULT CDynamite::Init(void)
 	m_nExplosion = 0;								// 爆発タイミング
 	m_pFan = nullptr;
 	m_col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	m_WindSize = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_fRadius = START_RADIUS;
+	m_pExWind[0] = nullptr;
+	m_pExWind[1] = nullptr;
+	m_pExWind[2] = nullptr;
+	m_pExWind[3] = nullptr;
+
+
 	// 値を返す
 	return S_OK;
 }
@@ -83,6 +98,16 @@ void CDynamite::Uninit(void)
 		m_pFan->Uninit();
 		m_pFan = nullptr;
 	}
+
+	for (int nCnt = 0; nCnt < MAX_BURNWIND; nCnt++)
+	{
+		if (m_pExWind[nCnt] != nullptr)
+		{
+			m_pExWind[nCnt]->Uninit();
+			m_pExWind[nCnt] = nullptr;
+		}
+	}
+
 	// 終了処理
 	CObstacle::Uninit();
 }
@@ -92,7 +117,7 @@ void CDynamite::Uninit(void)
 //=====================================
 void CDynamite::Update(void)
 {
-	if (m_nExplosion > EXPLOSION_COUNT- EXPLOSION_TIME && m_state != STATE_EXPLOSION)
+	if (m_nExplosion > EXPLOSION_COUNT - EXPLOSION_TIME && m_state != STATE_EXPLOSION)
 	{ // 残り2秒になった場合
 		if (m_pFan == nullptr)
 		{// 爆風円の生成
@@ -104,17 +129,26 @@ void CDynamite::Update(void)
 		}
 
 		// モデルサイズ変更処理
-		ChageScale();	
-
-
+		ChageScale();
 	}
 
 	if (m_state == STATE_EXPLOSION)
 	{// 爆発後
-		
+
 		// 爆発の判定時間を加算する
 		m_nDelTyming++;
 
+		m_WindSize += D3DXVECTOR3(EXPLOSION_RADIUS / DELEAT_COUNT, EXPLOSION_RADIUS / DELEAT_COUNT, 0.0f);
+
+		for (int nCnt = 0; nCnt < MAX_BURNWIND; nCnt++)
+		{
+			if (m_pExWind[nCnt] != nullptr)
+			{
+				m_pExWind[nCnt]->SetSize(m_WindSize);
+				m_pExWind[nCnt]->Update();
+			}
+		}
+		
 		if (m_nDelTyming > DELEAT_COUNT)
 		{ // 一定カウントになった場合
 
@@ -122,7 +156,6 @@ void CDynamite::Update(void)
 			Uninit();
 		}
 	}
-
 
 	// 爆発処理
 	Explosion();
@@ -138,6 +171,16 @@ void CDynamite::Draw(void)
 
 		// 描画処理
 		CObstacle::Draw();
+
+	}
+
+	// 爆風用の3Dポリゴンの描画
+	for (int nCnt = 0; nCnt < MAX_BURNWIND; nCnt++)
+	{
+		if (m_pExWind[nCnt] != nullptr)
+		{
+			m_pExWind[nCnt]->DrawLightOff();
+		}
 	}
 }
 
@@ -222,8 +265,6 @@ void CDynamite::ChageScale(void)
 
 		scale += m_SizeChangeSpeed;
 
-
-
 		if (m_pFan != nullptr)
 		{
 			// 赤色に変えていく
@@ -240,9 +281,6 @@ void CDynamite::ChageScale(void)
 			m_SizeChangeSpeed += D3DXVECTOR3(0.01f,0.01f,0.01f);
 			m_ColChangeSpeed += COLOR_SPEED / 0.1f;
 		}
-
-
-
 
 		break;
 
@@ -299,12 +337,31 @@ void CDynamite::Explosion(void)
 
 		if (m_state != STATE_EXPLOSION)
 		{ // 爆発状態以外の場合
-
+			if (m_pFan != nullptr)
+			{
+				m_pFan->Uninit();
+				m_pFan = nullptr;
+			}
 			//爆発状態にする
 			m_state = STATE_EXPLOSION;
 
-			// 爆発エフェクトを出す
-			CEffect::Create(GetPos(), D3DXVECTOR3(5.0f, 5.0f, 5.0f), 10, 1000.0f, CEffect::TYPE_RUPTURE, D3DXCOLOR(0.2f, 0.2f, 0.2f, 1.0f), false);
+
+			//	爆風用の3Dポリゴンの生成
+			for (int nCnt = 0; nCnt < MAX_BURNWIND; nCnt++)
+			{
+				if (m_pExWind[nCnt] == nullptr)
+				{
+					m_pExWind[nCnt] = CObject3D::Create(CObject::TYPE_NONE, CObject::PRIORITY_SHADOW);
+					m_pExWind[nCnt]->SetPos(GetPos() + D3DXVECTOR3(0.0f, 280.0f, 0.0f));
+					m_pExWind[nCnt]->BindTexture(CManager::Get()->GetTexture()->Regist(BRUN_TEXTURE));
+					m_pExWind[nCnt]->SetVtxColor(D3DXCOLOR(1.0f, 0.2f, 0.2f, 1.0f));
+				}
+			}
+			m_pExWind[0]->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.0f, 0.0f));
+			m_pExWind[1]->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 1.0f, 0.0f));
+			m_pExWind[2]->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f));
+			m_pExWind[3]->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
+
 		}
 	}
 }
