@@ -57,6 +57,8 @@ public:			// 誰でもアクセス出来る
 		SOUND_LABEL_SE_BANANADOWN,		// バナナ落ちる音
 		SOUND_LABEL_SE_BANANATURUTURU,	// バナナ滑る音
 		SOUND_LABEL_SE_LEASH,			// リード音
+		SOUND_LABEL_SE_CHU,				// ネズミの鳴き声の音
+		SOUND_LABEL_SE_FINISH,			// 終了の音
 
 		SOUND_LABEL_MAX					// この列挙型の総数
 	};

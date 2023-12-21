@@ -15,6 +15,7 @@
 #include "useful.h"
 #include "game_timer.h"
 #include "countdown.h"
+#include "sound.h"
 
 //--------------------------------------------
 // マクロ定義
@@ -43,6 +44,7 @@ CGameFinish::CGameFinish() : CObject(CObject::TYPE_FINISHUI, PRIORITY_UI)
 	m_pCountdown = nullptr;		// カウントダウンの情報
 	m_fSize = NORMAL_SIZE;		// サイズ
 	m_bFinish = false;			// 終了したか
+	m_bSe = false;				// SE再生状況
 }
 
 //============================
@@ -62,6 +64,8 @@ HRESULT CGameFinish::Init(void)
 	m_fSize = NORMAL_SIZE * 4.0f;
 	m_pFinish = nullptr;
 	m_bFinish = false;
+	m_bSe = false;				// SE再生状況
+
 	if (m_pFinish == nullptr)
 	{ // フィニッシュの情報が NULL の場合
 
@@ -141,6 +145,16 @@ void CGameFinish::Update(void)
 			}
 			if (m_bFinish == true)
 			{// 終了状態になった時
+
+				if (m_bSe == false)
+				{ // SEが再生されてないとき
+
+					// ピッピー！再生
+					CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_FINISH);
+
+					m_bSe = true;
+				}
+
 				m_fSize -= 0.2f;
 				if (m_fSize < 1.0f)
 				{

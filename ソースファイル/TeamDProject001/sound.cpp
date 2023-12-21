@@ -49,7 +49,8 @@ CSound::SOUNDINFO CSound::m_aSoundInfo[CSound::SOUND_LABEL_MAX] =
 	{ "data\\SE\\banana_down.wav",0 },		// バナナ落ちる音
 	{ "data\\SE\\banana_turuturu.wav",0 },	// バナナ落ちる音
 	{ "data\\SE\\leash.wav",0 },			// リード音
-
+	{ "data\\SE\\Chu.wav",0 },				// ネズミの鳴き声の音
+	{ "data\\SE\\finish.wav",0 },			// 終了の音
 
 };
 
