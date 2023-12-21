@@ -711,6 +711,9 @@ void CRat::ResurrectionCollision(void)
 
 						// 復活させてる状態にする
 						m_bResurrection = true;
+
+						// 回復中の音再生
+						CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_WATERBIRIBIRI);
 					}
 
 					// 復活パーティクル生成
@@ -756,6 +759,9 @@ void CRat::ResurrectionCollision(void)
 
 						// 復活させてない状態にする
 						m_bResurrection = false;
+
+						// 回復中の音再生
+						CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_HONEYBREAK);
 					}
 				}
 				else if (m_bResurrection == false && (bCollXY == false || bCollXZ == false))
@@ -795,5 +801,8 @@ void CRat::ResurrectionCollision(void)
 
 		// 復活させてない状態にする
 		m_bResurrection = false;
+
+		// 回復中の音停止
+		CManager::Get()->GetSound()->Stop(CSound::SOUND_LABEL_SE_WATERBIRIBIRI);
 	}
 }

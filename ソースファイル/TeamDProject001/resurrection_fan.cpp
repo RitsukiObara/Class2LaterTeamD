@@ -113,26 +113,6 @@ void CRessrectionFan::SetData(const D3DXVECTOR3& pos, const D3DXCOLOR& col)
 	SetRadius(RADIUS);				// 半径
 	SetColor(col);					// 色
 	BindTexture(CManager::Get()->GetTexture()->Regist("data\\TEXTURE\\cheese.jpg"));		// テクスチャの割り当て処理
-
-	//==========================================================================
-	// アニメーション系
-	//==========================================================================
-	//SetPos(位置を入れる);			// 位置
-	//SetPosOld(位置を入れる);		// 前回の位置
-	//SetRot(向きを入れる);			// 向き
-	//SetSize(サイズを入れる);		// サイズ
-	//SetLength(引数無し);			// 長さ
-	//SetAngle(引数無し);			// 方向
-	//BindTexture(CManager::Get()->GetTexture()->Regist(テクスチャの名前));		// テクスチャの割り当て処理
-
-	// アニメーションの設定処理
-	//SetAnim(カウントを入れる, パターン数を入れる);
-
-	//// 頂点座標の設定処理
-	//SetVertex();
-
-	// テクスチャの設定(アニメーションバージョン)
-	//SetVtxTextureAnim(アニメーションの総パターン数を入れる, 0);
 }
 
 //=======================================
