@@ -18,6 +18,7 @@
 #include "debugproc.h"
 #include "useful.h"
 #include "MultiCamera.h"
+#include "sound.h"
 
 #include "motion.h"
 #include "player_idUI.h"
@@ -413,6 +414,9 @@ void CPlayer::Smash(const float fAngle)
 
 		// ˆÊ’uÝ’è
 		SetPos(pos);
+
+		// ƒ`ƒ…ƒbÄ¶
+		CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_CHU);
 
 		// ‚«”ò‚Ñó‘Ô‚É‚·‚é
 		m_StunState = STUNSTATE_SMASH;
