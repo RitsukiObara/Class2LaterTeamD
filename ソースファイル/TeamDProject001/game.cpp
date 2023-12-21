@@ -180,6 +180,15 @@ HRESULT CGame::Init(void)
 	// マップの情報をロードする
 	CManager::Get()->GetFile()->FalseSuccess();
 
+	//CObstacle::Create(D3DXVECTOR3(300.0f, 0.0f, -300.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_TV);
+	//CObstacle::Create(D3DXVECTOR3(-800.0f, 0.0f, 200.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_CUP);
+	//CObstacle::Create(D3DXVECTOR3(-800.0f, 0.0f, 400.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_CUP);
+	//CObstacle::Create(D3DXVECTOR3(-800.0f, 0.0f, 600.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_CUP);
+	//CObstacle::Create(D3DXVECTOR3(200.0f, 0.0f, 200.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_PIN);
+	//CObstacle::Create(D3DXVECTOR3(200.0f, 0.0f, 300.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_PIN);
+	//CObstacle::Create(D3DXVECTOR3(200.0f, 0.0f, 400.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_PIN);
+	//CObstacle::Create(D3DXVECTOR3(200.0f, 0.0f, 500.0f), NONE_D3DXVECTOR3, CObstacle::TYPE_PIN);
+
 	CManager::Get()->GetFile()->Load(FILETYPE_OBSTACLE[m_nMapNumber]);
 	CManager::Get()->GetFile()->Load(FILETYPE_BLOCK[m_nMapNumber]);
 	//CManager::Get()->GetFile()->Load(CFile::TYPE_MAP_BLOCKSAMPLE);

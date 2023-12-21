@@ -69,6 +69,8 @@ CLog::CLog() : CObject(CObject::TYPE_2DUI, CObject::PRIORITY_UI)
 	m_pLogBG = NULL;
 	m_pLogPlayerID = NULL;
 	m_pLogMessage = NULL;
+	m_pMain = NULL;			// 自分の事を使用しているオブジェクトのポインタ
+
 }
 
 //==============================
@@ -85,6 +87,18 @@ CLog::~CLog()
 HRESULT CLog::Init(void)
 {
 	// 全ての値を初期化する
+	LogPos = NONE_D3DXVECTOR3;
+	m_nPlayerNumber = -1;
+	m_CreateNumber = -1;
+	m_State = STATE_IN;
+	m_nLife = 0;
+	m_Type = TYPE_DEATH;
+	m_nLogIdx = -1;
+	m_fLogStopPosY = 0.0f;
+	m_pLogBG = NULL;
+	m_pLogPlayerID = NULL;
+	m_pLogMessage = NULL;
+	m_pMain = NULL;			// 自分の事を使用しているオブジェクトのポインタ
 
 	// 値を返す
 	return S_OK;

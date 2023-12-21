@@ -62,6 +62,8 @@ CTv::CTv() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 	m_vtxMax = NONE_D3DXVECTOR3;		// 最大値
 	m_vtxMin = NONE_D3DXVECTOR3;		// 最小値
 	m_nCoolTime = 0;					// クールタイム
+	m_nChangeVision = 0;		// 画面変化処理
+	m_bPower = false;				// 電源
 	SetRatUse(false);					// ネズミが使用できるか
 	SetCatUse(true);					// ネコが使用できるか
 }
@@ -87,6 +89,8 @@ HRESULT CTv::Init(void)
 	m_vtxMax = NONE_D3DXVECTOR3;		// 最大値
 	m_vtxMin = NONE_D3DXVECTOR3;		// 最小値
 	m_nCoolTime = 0;					// クールタイム
+	m_nChangeVision = 0;		// 画面変化処理
+	m_bPower = false;				// 電源
 
 	if (FAILED(CObstacle::Init()))
 	{ // 初期化処理に失敗した場合

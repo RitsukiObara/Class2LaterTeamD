@@ -33,6 +33,8 @@ CRessrectionFan::CRessrectionFan() : CObject3DFan(CObject::TYPE_PLAYER, CObject:
 {
 	// 全ての値をクリアする
 	m_nRezTime = 0;			// 回復時間
+	m_bRez = false;			// 回復してるか
+
 }
 
 //==============================
@@ -57,6 +59,7 @@ HRESULT CRessrectionFan::Init(void)
 
 	// 全ての値を初期化する
 	m_nRezTime = 0;			// 回復時間
+	m_bRez = false;			// 回復してるか
 
 	// 値を返す
 	return S_OK;

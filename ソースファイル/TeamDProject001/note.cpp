@@ -28,6 +28,9 @@ CNote::CNote() : CModel(CObject::TYPE_NONE, CObject::PRIORITY_BLOCK)
 	m_move = NONE_D3DXVECTOR3;
 	m_nLife = 10;
 	m_nRandHeight = 0;
+	m_StartPosY = 0.0f;		// 初期位置の高さ
+	m_nIndex = -1;			// 使用番号
+	m_Main = nullptr;		// 自分の事を使用しているオブジェクト
 }
 
 //==============================
@@ -49,6 +52,13 @@ HRESULT CNote::Init(void)
 	  // 失敗を返す
 		return E_FAIL;
 	}
+
+	m_move = NONE_D3DXVECTOR3;
+	m_nLife = 10;
+	m_nRandHeight = 0;
+	m_StartPosY = 0.0f;		// 初期位置の高さ
+	m_nIndex = -1;			// 使用番号
+	m_Main = nullptr;		// 自分の事を使用しているオブジェクト
 
 	// 値を返す
 	return S_OK;

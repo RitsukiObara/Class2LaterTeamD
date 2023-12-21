@@ -32,6 +32,7 @@ CSpeechMessage::CSpeechMessage() : CBillboard(CObject::TYPE_EFFECT, CObject::PRI
 	m_type = TYPE_HELP;				// 種類
 	m_nLife = 0;					// 寿命
 	m_nStateCount = 0;				// 状態のカウント
+	m_nPlayerIdx = -1;		//プレイヤー番号
 }
 
 //=========================
@@ -61,6 +62,7 @@ HRESULT CSpeechMessage::Init(void)
 	m_type = TYPE_HELP;				// 種類
 	m_nLife = 0;					// 寿命
 	m_nStateCount = 0;				// 状態のカウント
+	m_nPlayerIdx = -1;		//プレイヤー番号
 
 	// 成功を返す
 	return S_OK;
