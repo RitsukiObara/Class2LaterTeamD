@@ -66,6 +66,7 @@ private:		// 自分だけアクセスできる
 	int m_StateCount;			// 状態管理用のカウント
 	bool m_bSetHead[4];			// 先端の準備完了
 	bool m_bSetToes[4];			// 末端の準備完了
+	bool m_bSe;					// SEの再生状況
 };
 
 #endif

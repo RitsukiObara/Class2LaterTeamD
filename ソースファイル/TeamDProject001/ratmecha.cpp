@@ -25,10 +25,10 @@
 //-------------------------------------------
 // マクロ定義
 //-------------------------------------------
-#define CAR_SPEED			(-15.0f)		// 車の速度
+#define CAR_SPEED			(-7.5f)			// 車の速度
 #define CAR_CURVE_SPEED		(0.08f)			// 車の曲がる速度
 #define CAR_DEST_ROT_SHIFT	(0.1f)			// 目的の向きの補正の許容範囲
-#define CAR_BRAKE_COUNT		(6)			// ブレーキカウント数
+#define CAR_BRAKE_COUNT		(6)				// ブレーキカウント数
 #define ROTDEST_MAGNI_MIN	(8)				// 目的の向きの倍率の最小値
 #define ROTDEST_MAGNI_RANGE	(11)			// 目的の向きの倍率の範囲
 #define ATTACK_SIZE		(D3DXVECTOR3(95.0f, 150.0f, 95.0f))		// 攻撃の判定の大きさ
@@ -49,7 +49,6 @@ CRatMecha::CRatMecha() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLO
 
 	// 使用条件
 	SetRatUse(true);
-	SetCatUse(false);
 }
 
 //==============================
@@ -180,7 +179,7 @@ void CRatMecha::Update(void)
 void CRatMecha::Draw(void)
 {
 	// 描画処理
-	CObstacle::Draw();
+	CObstacle::Draw(1.0f);
 
 	if (m_bMove == true)
 	{
@@ -226,8 +225,7 @@ bool CRatMecha::Collision(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 //=====================================
 bool CRatMecha::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 {
-
-	if (m_bMove == true)
+ 	if (m_bMove == true)
 	{ // ネズミメカが動いていたら
 
 		if (pPlayer->GetType() == CPlayer::TYPE_CAT)
@@ -522,7 +520,7 @@ void CRatMecha::Action(void)
 	if (m_bMove == false)
 	{ // ネズミメカを動かし、止められないようにする
 		m_bMove = !m_bMove;
-		SetRatUse(false);
+		SetAction(true);
 	}
 }
 

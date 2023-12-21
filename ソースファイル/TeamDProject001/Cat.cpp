@@ -401,6 +401,7 @@ void CCat::AttackStateManager(void)
 		if (m_nAtkStateCount <= 0)
 		{//ó‘ÔƒJƒEƒ“ƒg‚ª0‚É‚È‚Á‚½Žž
 			m_AttackState = ATTACKSTATE_MOVE;
+			m_bAttack = false;		// UŒ‚‚µ‚Ä‚È‚¢ó‘Ô‚É‚·‚é
 		}
 		break;
 	}

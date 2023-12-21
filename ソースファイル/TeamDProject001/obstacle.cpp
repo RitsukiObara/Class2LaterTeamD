@@ -34,6 +34,7 @@
 #include "dynamite.h"
 #include "book.h"
 #include "curtain.h"
+#include "ratmecha.h"
 #include "game.h"
 #include "tutorial.h"
 
@@ -477,6 +478,13 @@ CObstacle* CObstacle::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, con
 
 			// カーテンを生成する
 			pObstacle = new CCurtain;
+
+			break;
+
+		case CObstacle::TYPE_RATMECHA:
+
+			// カーテンを生成する
+			pObstacle = new CRatMecha;
 
 			break;
 
