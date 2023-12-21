@@ -4,6 +4,7 @@
 #include "main.h"
 #include "ground.h"
 #include "wall.h"
+#include "ceil.h"
 
 #define WALL_NUM (12)
 
@@ -26,6 +27,7 @@ private:
 	int m_partsNum;
 
 	CGround* m_Ground;
+	CCeil* m_pCeil;
 	static CWall* m_Wall[WALL_NUM];
 };
 #endif // !_MAP_H_
