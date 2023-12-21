@@ -8,6 +8,7 @@
 #include "countdown.h"
 #include "renderer.h"
 #include "texture.h"
+#include "sound.h"
 #include "useful.h"
 
 #include "game.h"
@@ -30,6 +31,7 @@ CCountdown::CCountdown() : CNumber(CObject::TYPE_COUNTDOWN, CObject::PRIORITY_UI
 	m_nFrame = 0;						// 経過フレーム数
 	m_nSecond = 0;						// 秒数
 	m_nProgressCount = 0;				// 経過させるカウント
+	m_bEnd = false;						// 終了状況
 }
 
 //=========================
@@ -58,6 +60,7 @@ HRESULT CCountdown::Init(void)
 	m_nFrame = 0;						// 経過フレーム数
 	m_nSecond = 0;						// 秒数
 	m_nProgressCount = 0;				// 経過させるカウント
+	m_bEnd = false;						// 終了状況
 
 	// 成功を返す
 	return S_OK;
@@ -79,7 +82,8 @@ void CCountdown::Update(void)
 {
 	if (CGame::GetState() != CGame::STATE_CAT_WIN)
 	{// 猫が勝っている状態じゃない時
-	// 計算処理
+
+		// 計算処理
 		Calculate();
 
 		if (m_nSecond <= 0)
@@ -124,7 +128,7 @@ void CCountdown::Draw(void)
 //=========================
 // 情報の設定処理
 //=========================
-void CCountdown::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const int nCount)
+void CCountdown::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const int nCount, bool bEnd)
 {
 	// 数字の設定処理
 	SetPos(pos);				// 位置
@@ -142,6 +146,7 @@ void CCountdown::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const 
 	m_nFrame = 0;				// 経過フレーム数
 	m_nSecond = COUNTDOWN_TIME;	// 秒数
 	m_nProgressCount = nCount;	// 経過させるカウント
+	m_bEnd = bEnd;				// 終了状況
 
 	if (m_nProgressCount < 0)
 	{ // 経過させるカウントが0未満の場合
@@ -163,7 +168,7 @@ void CCountdown::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const 
 //=========================
 // 生成処理
 //=========================
-CCountdown* CCountdown::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const int nCount)
+CCountdown* CCountdown::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const int nCount, bool bEnd)
 {
 	// ローカルオブジェクトを生成
 	CCountdown* pCountdown = nullptr;	// プレイヤーのインスタンスを生成
@@ -199,7 +204,7 @@ CCountdown* CCountdown::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, 
 		}
 
 		// 情報の設定処理
-		pCountdown->SetData(pos, size, nCount);
+		pCountdown->SetData(pos, size, nCount, bEnd);
 	}
 	else
 	{ // オブジェクトが NULL の場合
@@ -237,6 +242,19 @@ void CCountdown::Calculate(void)
 
 		// 数字の設定処理
 		SetNumber(m_nSecond);
+
+		if (m_bEnd == true)
+		{ // 終了の場合
+
+			// 終了のカウントダウンを鳴らす
+			CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_COUNT_END);
+		}
+		else
+		{ // 上記以外
+
+			// 始まりのカウントダウンを鳴らす
+			CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_COUNT_START);
+		}
 	}
 }
 

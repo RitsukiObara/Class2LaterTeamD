@@ -28,10 +28,10 @@ public:			// 誰でもアクセスできる
 	void Update(void);		// 更新処理
 	void Draw(void);		// 描画処理
 
-	void SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const int nCount);					// 情報の設定処理
+	void SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const int nCount, bool bEnd);					// 情報の設定処理
 
 	// 静的メンバ関数
-	static CCountdown* Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const int nCount);		// 生成処理
+	static CCountdown* Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& size, const int nCount, bool bEnd);		// 生成処理
 
 private:		// 自分だけアクセスできる
 
@@ -46,6 +46,7 @@ private:		// 自分だけアクセスできる
 	int m_nFrame;				// 経過フレーム数
 	int m_nSecond;				// 秒数
 	int m_nProgressCount;		// 経過させるカウント
+	bool m_bEnd;				// 終了状況
 };
 
 #endif
