@@ -478,7 +478,10 @@ void CBook::Action(CPlayer* pPlayer)
 
 			// d—Í‚ğİ’è‚·‚é
 			m_aBook[nCnt].fGravity = (float)((rand() % COLLAPSE_GRAVITY + COLLAPSE_MIN_GRAVITY) * 0.01f);
+
+			m_aBook[nCnt].pBook->SetFileData((CXFile::TYPE)(CXFile::TYPE_RED_BOOKBLUE + nCnt));
 		}
+		SetFileData((CXFile::TYPE)(CXFile::TYPE_RED_BOOKRED));
 
 		// ˆÚ“®ó‹µ‚ğ true ‚É‚·‚é(“®‚«n‚ß‚é)
 		m_aBook[2].bMove = true;

@@ -29,26 +29,34 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\Honey.x",					// 蜂蜜
 	"data\\MODEL\\ToyCarScrew.x",			// おもちゃの車(ネジ)
 	"data\\MODEL\\TitleWall.x",				// タイトルの壁
-	"data\\MODEL\\Roomba_Sub.x",			// ルンバのプロペラ
+	"data\\MODEL\\Red_Roomba_Sub.x",		// ルンバのプロペラ{赤のアウトライン}
 	"data\\MODEL\\Tarai.x",					// たらい
-	"data\\MODEL\\note4.x",					// 4分音符
-	"data\\MODEL\\note8.x",					// 8分音符
-	"data\\MODEL\\note16.x",				// 16分音符
+	"data\\MODEL\\Red_note4.x",				// 4分音符{赤のアウトライン}
+	"data\\MODEL\\Red_note8.x",				// 8分音符{赤のアウトライン}
+	"data\\MODEL\\Red_note16.x",			// 16分音符{赤のアウトライン}
 	"data\\MODEL\\mousetrap_iron.x",		// ネズミ捕りの鉄部分
 	"data\\MODEL\\TrapItem.x",				// ネズミ捕り(アイテム)
-	"data\\MODEL\\leashSet.x",				// 設置状態のリード
-	"data\\MODEL\\pin_floor.x",				// 設置状態の画鋲
+	"data\\MODEL\\Red_leashSet.x",			// 設置状態のリード{赤のアウトライン}
+	"data\\MODEL\\Red_pin_floor.x",			// 設置状態の画鋲{赤のアウトライン}
 	"data\\MODEL\\pin_one.x",				// 破片用の画鋲
 	"data\\MODEL\\Senpuki_Fan.x",			// 扇風機(羽根)
 	"data\\MODEL\\consent.x",				// コンセント
 	"data\\MODEL\\arrow.x",					// 死亡矢印
-	"data\\MODEL\\banana_peel.x",			// バナナの皮
+	"data\\MODEL\\Red_banana_peel.x",		// バナナの皮{赤のアウトライン}
 	"data\\MODEL\\Book001.x",				// 本(青)
 	"data\\MODEL\\Book002.x",				// 本(緑)
 	"data\\MODEL\\Book003.x",				// 本(黄)
 	"data\\MODEL\\lever000.x",				// レバー(本体)
 	"data\\MODEL\\lever001.x",				// レバー(棒)
-	
+	"data\\MODEL\\Red_Book000.x",			// 本(赤){赤のアウトライン}
+	"data\\MODEL\\Red_Book001.x",			// 本(青){赤のアウトライン}
+	"data\\MODEL\\Red_Book002.x",			// 本(緑){赤のアウトライン}
+	"data\\MODEL\\Red_Book003.x",			// 本(黄){赤のアウトライン}
+	"data\\MODEL\\Red_ToyCarBody.x",		// おもちゃの車(本体){赤のアウトライン}
+	"data\\MODEL\\Red_ToyCarScrew.x",		// おもちゃの車(ネジ){赤のアウトライン}
+	"data\\MODEL\\Red_HairBall.x",			// 毬{赤のアウトライン}
+	"data\\MODEL\\Red_Pettobotoru.x",		// ペットボトル{赤のアウトライン}
+
 	// ブロックモデル
 	"data\\MODEL\\cardboard.x",				// 段ボール
 	"data\\MODEL\\TissueBox.x",				// ティッシュ箱
@@ -100,7 +108,7 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\HairBall.x",				// 毬
 	"data\\MODEL\\Pettobotoru.x",			// ペットボトル
 	"data\\MODEL\\ToyCarBody.x",			// おもちゃの車(本体)
-	"data\\MODEL\\Roomba_Main.x",			// ルンバの本体
+	"data\\MODEL\\Red_Roomba_Main.x",		// ルンバの本体{赤のアウトライン}
 	"data\\MODEL\\Himo.x",					// ひも
 	"data\\MODEL\\speaker.x",				// スピーカー
 	"data\\MODEL\\mousetrap.x",				// ネズミ捕り

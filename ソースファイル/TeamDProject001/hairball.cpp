@@ -185,6 +185,7 @@ bool CHairBall::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 
 			// ‚«”ò‚Î‚µó‘Ô‚É‚·‚é
 			m_state = STATE_SMASH;
+			SetFileData((CXFile::TYPE)(CXFile::TYPE_RED_HAIRBALL));
 			SetAction(true);
 
 			// •ûŒü‚ğİ’è‚·‚é
@@ -305,6 +306,7 @@ void CHairBall::Elevation(void)
 
 		// ’â~ó‘Ô‚É‚·‚é
 		m_state = STATE_STOP;
+		SetFileData((CXFile::TYPE)(CXFile::TYPE_HAIRBALL));
 		SetAction(false);
 	}
 	else

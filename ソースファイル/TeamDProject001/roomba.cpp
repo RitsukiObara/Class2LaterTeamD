@@ -227,7 +227,7 @@ void CRoomba::SetData(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const TYPE
 					break;
 				}
 
-				m_apSub[nCnt]->SetFileData((CXFile::TYPE::TYPE_ROOMBA_SUB));	// モデル情報
+				m_apSub[nCnt]->SetFileData((CXFile::TYPE::TYPE_RED_ROOMBA_SUB));	// モデル情報
 			}
 			else
 			{ // 上記以外

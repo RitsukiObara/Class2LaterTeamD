@@ -205,7 +205,7 @@ void CLeash::StateManager(D3DXVECTOR3 *pos)
 		{
 			m_State = STATE_TRUE;
 			m_StateCount = ACTION_TIME;
-			SetFileData(CXFile::TYPE_LEASHSET);
+			SetFileData(CXFile::TYPE_RED_LEASHSET);
 		}
 		break;
 
