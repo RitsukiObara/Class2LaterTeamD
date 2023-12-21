@@ -318,6 +318,9 @@ void CRat::MotionManager(void)
 
 				// モーションの設定処理
 				GetMotion()->Set(nMotionType);
+
+				// ジャンプ再生
+				CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_JUMP);
 			}
 		}
 		else if (GetMove().x > 0.05f || GetMove().x < -0.05f ||

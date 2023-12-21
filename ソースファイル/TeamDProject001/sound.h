@@ -63,6 +63,8 @@ public:			// 誰でもアクセス出来る
 		SOUND_LABEL_SE_TITLEBLOW,		// 文字が吹き飛ばされる音(タイトル)
 		SOUND_LABEL_SE_TITLECOLLIDE,	// 文字がぶつかる音(タイトル)
 		SOUND_LABEL_SE_PIYOPIYO,		// 気絶音
+		SOUND_LABEL_SE_NEZI,			// 車のねじ巻き音
+		SOUND_LABEL_SE_JUMP,			// ネズミのジャンプ音
 
 		SOUND_LABEL_MAX					// この列挙型の総数
 	};
