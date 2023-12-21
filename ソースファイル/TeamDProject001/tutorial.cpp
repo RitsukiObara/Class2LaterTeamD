@@ -331,6 +331,9 @@ void CTutorial::Update(void)
 		{
 			m_pExplanation = CExplanation::Create(m_Tutorial);
 
+			// ‚«o‚µ‚ÌoŒ»‰¹‚ð–Â‚ç‚·
+			CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_TUTORIAL_BUBBLE);
+
 			for (int nCnt = 0; nCnt < 4; nCnt++)
 			{
 				CTutorial::GetPlayer(nCnt)->SetTutorial(true);

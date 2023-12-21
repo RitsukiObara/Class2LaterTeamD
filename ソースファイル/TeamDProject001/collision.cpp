@@ -1032,6 +1032,9 @@ void collision::ItemCollision(CPlayer& pPlayer, const int nHave)
 			// アイテムの取得処理
 			pPlayer.GetItem(pItem->GetType());
 
+			// 取得音鳴らす
+			CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_THUMBTACK);
+
 			// 終了処理
 			pItem->Uninit();
 

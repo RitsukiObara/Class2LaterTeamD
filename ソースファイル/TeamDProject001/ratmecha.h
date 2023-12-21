@@ -24,7 +24,15 @@ class CRatMecha : public CObstacle
 {
 public:			// 誰でもアクセスできる
 
-				// 列挙型定義(状態)
+	// 列挙型定義(サウンドの種類)
+	enum SOUNDTYPE
+	{
+		SOUNDTYPE_RUN = 0,	// 走る音
+		SOUNDTYPE_BREAK,	// 破壊される音
+		SOUNDTYPE_MAX		// この列挙型の総数
+	};
+
+	// 列挙型定義(状態)
 	enum STATE
 	{
 		STATE_DRIVE = 0,	// ドライブ状態
@@ -69,6 +77,9 @@ private:		// 自分だけアクセスできる
 	bool m_bRight;				// 右向き状況
 	bool m_bMove;				// 動いているか
 	int m_nIdnumber;			// プレイヤーID番号
+
+	// 静的メンバ変数
+	static int m_nBgmAll[SOUNDTYPE_MAX];		// BGMを鳴らした音の総数
 };
 
 #endif

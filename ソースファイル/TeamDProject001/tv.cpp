@@ -480,7 +480,8 @@ void CTv::Action(void)
 		if (pPlayer != nullptr)
 		{ // プレイヤーが NULL じゃない場合
 
-			if (pPlayer->GetType() == CPlayer::TYPE_CAT)
+			if (pPlayer->GetType() == CPlayer::TYPE_CAT &&
+				pPlayer->GetItemCount() < 2)
 			{ // ネコの場合
 
 				// アイテムの取得処理

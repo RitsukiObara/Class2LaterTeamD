@@ -18,6 +18,7 @@
 #include "debugproc.h"
 #include "useful.h"
 #include "MultiCamera.h"
+#include "sound.h"
 
 #include "motion.h"
 #include "player_idUI.h"
@@ -413,6 +414,9 @@ void CPlayer::Smash(const float fAngle)
 
 		// 位置設定
 		SetPos(pos);
+
+		// チュッ再生
+		CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_CHU);
 
 		// 吹き飛び状態にする
 		m_StunState = STUNSTATE_SMASH;
@@ -951,6 +955,18 @@ void CPlayer::GetItem(const CItem::TYPE type)
 }
 
 //=======================================
+// アイテムの総数の取得処理
+//=======================================
+int CPlayer::GetItemCount(void) const
+{
+	// 停止
+	assert(false);
+
+	// 0を返す
+	return 0;
+}
+
+//=======================================
 // ジャンプの設定処理
 //=======================================
 void CPlayer::SetEnableJump(const bool bJump)
@@ -1054,6 +1070,7 @@ void CPlayer::StunStateManager(void)
 			// 無敵状態にする
 			m_StunState = STUNSTATE_WAIT;
 			m_StunStateCount = STUN_WAIT;
+			m_bSe = false;
 
 			if (m_pStun != nullptr)
 			{ // 気絶演出が NULL の場合
@@ -1061,6 +1078,15 @@ void CPlayer::StunStateManager(void)
 				// 気絶演出を削除する
 				m_pStun->Uninit();
 				m_pStun = nullptr;
+			}
+		}
+		else
+		{
+			if (m_bSe == false)
+			{ // SE再生してない
+				// ピヨピヨ再生
+				CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_PIYOPIYO);
+				m_bSe = true;
 			}
 		}
 
@@ -1696,4 +1722,24 @@ bool CPlayer::IsDispRecoveringUI(void)
 {
 	// 回復状態を返す
 	return m_pRecoveringUI->GetDisplayUI();
+}
+
+//=======================================
+// SEの再生設定
+//=======================================
+void CPlayer::SetSE(bool bSe)
+{
+	if (m_StunState != STUNSTATE_STUN)
+	{
+		m_bSe = bSe;
+
+	}
+}
+
+//=======================================
+// SEの再生取得
+//=======================================
+bool CPlayer::GetSE(void)
+{ 
+	return m_bSe; 
 }

@@ -65,6 +65,7 @@ private:		// 自分だけアクセスできる
 
 	// メンバ変数
 	SPress m_aPress[TYPE_MAX];			// プレスの情報構造体
+	bool m_bSe;							// SEの再生状況
 };
 
 #endif

@@ -61,9 +61,10 @@ public:			// 誰でもアクセスできる
 	void GetItem(const CItem::TYPE type);	// アイテムの取得処理
 
 	// セット・ゲット関数
-	void SetItemUI(void);				// アイテムUIの設定処理
-	CItemUI* GetItemUI(void) const;		// アイテムUIの取得処理
-	void DeleteItemUI(void);			// アイテムUIの消去処理
+	void SetItemUI(void);					// アイテムUIの設定処理
+	CItemUI* GetItemUI(void) const;			// アイテムUIの取得処理
+	void DeleteItemUI(void);				// アイテムUIの消去処理
+	int GetItemCount(void) const override;	// アイテムの総数の取得処理
 
 	bool GetAttack_Jump(void) { return m_bAttack; }	// アタックジャンプ状態の取得処理
 	bool GetItem_MultiAction(void) { return m_bItem; }
