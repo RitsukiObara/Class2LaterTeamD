@@ -318,6 +318,9 @@ void CRat::MotionManager(void)
 
 				// モーションの設定処理
 				GetMotion()->Set(nMotionType);
+
+				// ジャンプ再生
+				CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_JUMP);
 			}
 		}
 		else if (GetMove().x > 0.05f || GetMove().x < -0.05f ||
@@ -709,9 +712,12 @@ void CRat::ResurrectionCollision(void)
 						// 復活させてる状態にする
 						m_bResurrection = true;
 
-						// 復活パーティクル生成
-						CParticle::Create(pPlayer->GetPos(), CParticle::TYPE_RESURRECTION);
+						// 回復中の音再生
+						CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_WATERBIRIBIRI);
 					}
+
+					// 復活パーティクル生成
+					CParticle::Create(pPlayer->GetPos(), CParticle::TYPE_RESURRECTION);
 
 					// 回復させてる状態にする
 					abRez[nCnt] = true;
@@ -753,6 +759,9 @@ void CRat::ResurrectionCollision(void)
 
 						// 復活させてない状態にする
 						m_bResurrection = false;
+
+						// 回復中の音再生
+						CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_HONEYBREAK);
 					}
 				}
 				else if (m_bResurrection == false && (bCollXY == false || bCollXZ == false))
@@ -792,5 +801,8 @@ void CRat::ResurrectionCollision(void)
 
 		// 復活させてない状態にする
 		m_bResurrection = false;
+
+		// 回復中の音停止
+		CManager::Get()->GetSound()->Stop(CSound::SOUND_LABEL_SE_WATERBIRIBIRI);
 	}
 }

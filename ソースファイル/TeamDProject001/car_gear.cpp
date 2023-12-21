@@ -12,6 +12,8 @@
 #include "renderer.h"
 #include "car_gear.h"
 #include "useful.h"
+#include "sound.h"
+#include "game.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -23,7 +25,7 @@
 //==============================
 CCarGear::CCarGear() : CModel(CObject::TYPE_NONE, CObject::PRIORITY_BLOCK)
 {
-
+	m_bSe = false;		// SE再生状況
 }
 
 //==============================
@@ -45,6 +47,8 @@ HRESULT CCarGear::Init(void)
 		// 失敗を返す
 		return E_FAIL;
 	}
+
+	m_bSe = false;		// SE再生状況
 
 	// 値を返す
 	return S_OK;
@@ -75,6 +79,13 @@ void CCarGear::Update(void)
 
 	// 向きを設定する
 	SetRot(rot);
+
+	if (m_bSe == false && CGame::GetState() == CGame::STATE_PLAY)
+	{
+		// ねじ再生
+		CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_NEZI);
+		m_bSe = true;
+	}
 }
 
 //=====================================

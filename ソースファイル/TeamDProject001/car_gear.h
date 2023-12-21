@@ -34,6 +34,7 @@ public:			// 誰でもアクセスできる
 	static CCarGear* Create(const D3DXVECTOR3& pos);	// 生成処理
 
 private:		// 自分だけアクセスできる
+	bool m_bSe;		// SE再生状況
 
 };
 

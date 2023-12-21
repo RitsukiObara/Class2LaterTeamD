@@ -117,6 +117,8 @@ void CToyCar::Update(void)
 
 			// カーブ状態にする
 			m_state = STATE_CURVE;
+			SetFileData((CXFile::TYPE)(CXFile::TYPE_TOYCARBODY));
+			m_pGear->SetFileData((CXFile::TYPE)(CXFile::TYPE_TOYCARSCREW));
 
 			// 向きの計算処理
 			RotCalc();
@@ -144,6 +146,8 @@ void CToyCar::Update(void)
 
 			// ドライブ状態にする
 			m_state = STATE_DRIVE;
+			SetFileData((CXFile::TYPE)(CXFile::TYPE_RED_TOYCARBODY));
+			m_pGear->SetFileData((CXFile::TYPE)(CXFile::TYPE_RED_TOYCARSCREW));
 		}
 
 		break;

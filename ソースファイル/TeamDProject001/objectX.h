@@ -42,15 +42,15 @@ public:			// 誰でもアクセスできる
 		TYPE_HONEY,					// 蜂蜜
 		TYPE_TOYCARSCREW,			// おもちゃの車(ネジ)
 		TYPE_TITLEWALL,				// タイトルの壁
-		TYPE_ROOMBA_SUB,			// ルンバのプロペラ
+		TYPE_RED_ROOMBA_SUB,		// ルンバのプロペラ{赤のアウトライン}
 		TYPE_TARAI,					// たらい
-		TYPE_NOTE4,					// 4分音符
-		TYPE_NOTE8,					// 8分音符
-		TYPE_NOTE16,				// 16分音符
+		TYPE_RED_NOTE4,				// 4分音符{赤のアウトライン}
+		TYPE_RED_NOTE8,				// 8分音符{赤のアウトライン}
+		TYPE_RED_NOTE16,			// 16分音符{赤のアウトライン}
 		TYPE_TRAPIRON,				// ネズミ捕りの鉄部分
 		TYPE_TRAPITEM,				// ネズミ捕り(アイテム)
-		TYPE_LEASHSET,				// 設置状態のリード
-		TYPE_PINSET,				// 設置状態の画鋲
+		TYPE_RED_LEASHSET,			// 設置状態のリード{赤のアウトライン}
+		TYPE_RED_PINSET,			// 設置状態の画鋲{赤のアウトライン}
 		TYPE_PINONE,				// 破片用の画鋲
 		TYPE_FANBLADE,				// 扇風機(羽根)
 		TYPE_CONSENT,				// コンセント
@@ -61,6 +61,14 @@ public:			// 誰でもアクセスできる
 		TYPE_BOOKYELLOW,			// 本(黄)
 		TYPE_LEVERBODY,				// レバー(本体)
 		TYPE_LEVERSTICK,			// レバー(棒)
+		TYPE_RED_BOOKRED,			// 本(赤){赤のアウトライン}
+		TYPE_RED_BOOKBLUE,			// 本(青){赤のアウトライン}
+		TYPE_RED_BOOKGREEN,			// 本(緑){赤のアウトライン}
+		TYPE_RED_BOOKYELLOW,		// 本(黄){赤のアウトライン}
+		TYPE_RED_TOYCARBODY,		// おもちゃの車(本体){赤のアウトライン}
+		TYPE_RED_TOYCARSCREW,		// おもちゃの車(ネジ){赤のアウトライン}
+		TYPE_RED_HAIRBALL,			// 毬{赤のアウトライン}
+		TYPE_RED_PETBOTTLE,			// ペットボトル{赤のアウトライン}
 
 		// ブロックモデル
 		TYPE_CARDBOARD,				// 段ボール
@@ -113,7 +121,7 @@ public:			// 誰でもアクセスできる
 		TYPE_HAIRBALL,				// 毬
 		TYPE_PETBOTTLE,				// ペットボトル
 		TYPE_TOYCARBODY,			// おもちゃの車(本体)
-		TYPE_ROOMBA_MAIN,			// ルンバの本体
+		TYPE_RED_ROOMBA_MAIN,		// ルンバの本体{赤のアウトライン}
 		TYPE_HIMO,					// ひも
 		TYPE_SPEAKER,				// スピーカー
 		TYPE_MOUSETRAP,				// ネズミ捕り
@@ -126,6 +134,7 @@ public:			// 誰でもアクセスできる
 		TYPE_DYNAMITE,				// 爆弾
 		TYPE_BOOKRED,				// 本(赤)
 		TYPE_REDKATEN,				// 赤のカーテン
+		TYPE_RATMECHA,				// ネズミメカ
 
 		//ネズミモデル
 		TYPE_RAT_BODY,				// 体
@@ -163,9 +172,9 @@ public:			// 誰でもアクセスできる
 		TYPE_ENTRANCE_FRONT,		// 玄関の奥の壁
 		TYPE_ENTRANCE_SHOEFLOOR,	// 靴履き場の床
 		TYPE_ENTRANCE_SIDEWALL,		// 横の壁
-		TYPE_BOOTS,					//ブーツ
-		TYPE_SANDAL,				//サンダル
-		TYPE_LESTHERSHOES,			//レザーシューズ
+		TYPE_BOOTS,					// ブーツ
+		TYPE_SANDAL,				// サンダル
+		TYPE_LESTHERSHOES,			// レザーシューズ
 
 		// 当たり判定モデル
 		TYPE_COLLISION,				// 当たり判定のエディットモデル

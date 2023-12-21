@@ -119,13 +119,13 @@ void CNote::SetData(const D3DXVECTOR3& pos)
 	switch (m_nRandHeight)
 	{
 	case 0:
-		SetFileData(CXFile::TYPE_NOTE4);			// モデル情報
+		SetFileData(CXFile::TYPE_RED_NOTE4);			// モデル情報
 		break;
 	case 1:
-		SetFileData(CXFile::TYPE_NOTE8);			// モデル情報
+		SetFileData(CXFile::TYPE_RED_NOTE8);			// モデル情報
 		break;
 	case 2:
-		SetFileData(CXFile::TYPE_NOTE16);			// モデル情報
+		SetFileData(CXFile::TYPE_RED_NOTE16);			// モデル情報
 		break;
 	}
 	m_StartPosY = pos.y;

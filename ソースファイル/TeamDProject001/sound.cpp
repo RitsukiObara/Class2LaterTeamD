@@ -33,11 +33,15 @@ CSound::SOUNDINFO CSound::m_aSoundInfo[CSound::SOUND_LABEL_MAX] =
 	{ "data\\SE\\cleaning.wav",-1 },		// 掃除機(ルンバ)
 	{ "data\\SE\\Fan.wav",-1 },				// 扇風機
 	{ "data\\SE\\med_bottle04.wav",0 },		// 画鋲
-	{ "data\\SE\\Terai_Hit.wav",0,},		// タライが頭に当たる
+	{ "data\\SE\\Tarai_Hit.wav",0,},		// タライが頭に当たる
 	{ "data\\SE\\bottle_roll.wav",-1 },		// ペットボトルが転がる音
 	{ "data\\SE\\bottle_over.wav",0 },		// ペットボトルが倒れる音
 	{ "data\\SE\\Pick_up.wav",0 },			// 拾った音
 	{ "data\\SE\\tutorial_check.wav",0 },	// チュートリアルのチェック音
+	{ "data\\SE\\TitleStart.wav",0 },		// タイトルのスタート音
+	{ "data\\SE\\bubble.wav",0 },			// チュートリアルのふきだし出現音
+	{ "data\\SE\\revival_gauge_save.wav",0 },	// 復活最中の音
+	{ "data\\SE\\mouse_revival.wav",0 },	// 復活音
 	{ "data\\SE\\himo.wav",0 },				// ひも引っ張る音
 	{ "data\\SE\\mari.wav",0 },				// まりの音
 	{ "data\\SE\\honey_break.wav",0 },		// 蜂蜜の瓶が割れる音
@@ -49,8 +53,22 @@ CSound::SOUNDINFO CSound::m_aSoundInfo[CSound::SOUND_LABEL_MAX] =
 	{ "data\\SE\\banana_down.wav",0 },		// バナナ落ちる音
 	{ "data\\SE\\banana_turuturu.wav",0 },	// バナナ落ちる音
 	{ "data\\SE\\leash.wav",0 },			// リード音
-
-
+	{ "data\\SE\\Chu.wav",0 },				// ネズミの鳴き声の音
+	{ "data\\SE\\finish.wav",0 },			// 終了の音
+	{ "data\\SE\\rat_Chuchu.wav",0 },		// 文字が穴に入る音(タイトル)
+	{ "data\\SE\\title_blown_away.wav",0 },	// 文字が吹き飛ばされる音(タイトル)
+	{ "data\\SE\\START_collide.wav",0 },	// 文字がぶつかる音(タイトル)
+	{ "data\\SE\\confusion.wav",0 },		// 気絶音
+	{ "data\\SE\\screw_winding.wav",-1 },	// 車のねじ巻き音
+	{ "data\\SE\\jump.wav",0 },				// ネズミのジャンプ音
+	{ "data\\SE\\Ratmecha_Run.wav",0 },		// ネズミメカの走行音
+	{ "data\\SE\\Tutorial_OK.wav",0 },		// チュートリアルの実行完了音
+	{ "data\\SE\\dynamite_explosion.wav",0 },	// ダイナマイトの爆発音
+	{ "data\\SE\\CurtainOpen.wav",0 },		// カーテンの開く音
+	{ "data\\SE\\Ratmecha_Break.wav",0 },	// ネズミメカの破壊音
+	{ "data\\SE\\CatDamage.wav",0 },		// ネコのダメージ音
+	{ "data\\SE\\CountStart.wav",0 },		// 最初のカウントダウン音
+	{ "data\\SE\\CountEnd.wav",0 },			// 最後のカウントダウン音
 };
 
 //=============================================================================

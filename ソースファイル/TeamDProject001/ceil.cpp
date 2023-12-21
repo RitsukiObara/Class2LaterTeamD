@@ -6,21 +6,39 @@
 //=======================================
 #include "manager.h"
 #include "ceil.h"
+#include "object3D.h"
 #include "texture.h"
 #include "useful.h"
 
-//=======================================
-// マクロ定義
-//=======================================
-#define CEIL_ROT		(D3DXVECTOR3(0.0f, 0.0f, D3DX_PI))		// 天井のサイズ
-#define CEIL_SIZE		(D3DXVECTOR3(1600.0f, 0.0f, 1000.0f))		// 天井のサイズ
+//---------------------------------------
+// 無名名前空間
+//---------------------------------------
+namespace
+{
+	const D3DXVECTOR3 CEIL_SHIFT[MAX_CEIL] =		// 天井のずらす幅
+	{
+		D3DXVECTOR3(0.0f, 0.0f, 1000.0f),
+		D3DXVECTOR3(0.0f, 0.0f, -1000.0f),
+	};
+	const D3DXVECTOR3 CEIL_ROT[MAX_CEIL] =			// 天井の向き
+	{
+		D3DXVECTOR3(-D3DX_PI * 0.8f, 0.0f, 0.0f),
+		D3DXVECTOR3(D3DX_PI * 0.8f, 0.0f, 0.0f),
+	};
+	const D3DXVECTOR3 CEIL_SIZE = D3DXVECTOR3(1600.0f, 0.0f, 2000.0f);	// 天井のサイズ
+	const char* CEIL_TEXTURE = "data\\TEXTURE\\ground001.jpg";			// 天井テクスチャ
+}
 
 //=========================
 // コンストラクタ
 //=========================
-CCeil::CCeil() : CObject3D(CObject::TYPE_MAP, CObject::PRIORITY_BG)
+CCeil::CCeil() : CObject(CObject::TYPE_MAP, CObject::PRIORITY_BG)
 {
-
+	// 全ての値をクリアする
+	for (int nCnt = 0; nCnt < MAX_CEIL; nCnt++)
+	{
+		m_apCeil[nCnt] = nullptr;		// 天井のポリゴン
+	}
 }
 
 //=========================
@@ -36,11 +54,10 @@ CCeil::~CCeil()
 //=========================
 HRESULT CCeil::Init(void)
 {
-	if (FAILED(CObject3D::Init()))
-	{ // 初期化に失敗した場合
-
-		// 失敗を返す
-		return E_FAIL;
+	// 全ての値をクリアする
+	for (int nCnt = 0; nCnt < MAX_CEIL; nCnt++)
+	{
+		m_apCeil[nCnt] = nullptr;		// 天井のポリゴン
 	}
 
 	// 成功を返す
@@ -52,8 +69,19 @@ HRESULT CCeil::Init(void)
 //=========================
 void CCeil::Uninit(void)
 {
-	// 終了
-	CObject3D::Uninit();
+	for (int nCnt = 0; nCnt < MAX_CEIL; nCnt++)
+	{
+		if (m_apCeil[nCnt] != nullptr)
+		{ // 天井が NULL じゃない場合
+
+			// 天井の終了処理
+			m_apCeil[nCnt]->Uninit();
+			m_apCeil[nCnt] = nullptr;
+		}
+	}
+
+	// 本体の終了処理
+	Release();
 }
 
 //=========================
@@ -61,8 +89,15 @@ void CCeil::Uninit(void)
 //=========================
 void CCeil::Update(void)
 {
-	// 頂点座標の設定処理
-	SetVertex();
+	for (int nCnt = 0; nCnt < MAX_CEIL; nCnt++)
+	{
+		if (m_apCeil[nCnt] != nullptr)
+		{ // 天井が NULL じゃない場合
+
+			// 頂点座標の設定処理
+			m_apCeil[nCnt]->SetVertex();
+		}
+	}
 }
 
 //=========================
@@ -70,8 +105,15 @@ void CCeil::Update(void)
 //=========================
 void CCeil::Draw(void)
 {
-	// 描画処理
-	CObject3D::DrawLightOff();
+	for (int nCnt = 0; nCnt < MAX_CEIL; nCnt++)
+	{
+		if (m_apCeil[nCnt] != nullptr)
+		{ // 天井が NULL じゃない場合
+
+			// 描画処理
+			m_apCeil[nCnt]->DrawLightOff();
+		}
+	}
 }
 
 //=========================
@@ -79,14 +121,27 @@ void CCeil::Draw(void)
 //=========================
 void CCeil::SetData(const D3DXVECTOR3& pos)
 {
-	// スクロールの設定処理
-	SetPos(pos);			// 位置設定
-	SetPosOld(pos);			// 前回の位置設定
-	SetRot(CEIL_ROT);		// 向き設定
-	SetSize(CEIL_SIZE);		// サイズ設定
+	for (int nCnt = 0; nCnt < MAX_CEIL; nCnt++)
+	{
+		if (m_apCeil[nCnt] == nullptr)
+		{ // 天井が NULL の場合
 
-	// 頂点座標の設定処理
-	SetVertex();
+			// 天井を生成する
+			m_apCeil[nCnt] = CObject3D::Create(TYPE_NONE, PRIORITY_BG);
+
+			// スクロールの設定処理
+			m_apCeil[nCnt]->SetPos(pos + CEIL_SHIFT[nCnt]);			// 位置設定
+			m_apCeil[nCnt]->SetPosOld(pos + CEIL_SHIFT[nCnt]);			// 前回の位置設定
+			m_apCeil[nCnt]->SetRot(CEIL_ROT[nCnt]);		// 向き設定
+			m_apCeil[nCnt]->SetSize(CEIL_SIZE);		// サイズ設定
+
+			// テクスチャの割り当て処理
+			m_apCeil[nCnt]->BindTexture(CManager::Get()->GetTexture()->Regist(CEIL_TEXTURE));
+
+			// 頂点座標の設定処理
+			m_apCeil[nCnt]->SetVertex();
+		}
+	}
 }
 
 //=========================
@@ -140,6 +195,6 @@ CCeil* CCeil::Create(const D3DXVECTOR3& pos)
 		return nullptr;
 	}
 
-	// 紙吹雪のポインタを返す
+	// 天井のポインタを返す
 	return pCeil;
 }

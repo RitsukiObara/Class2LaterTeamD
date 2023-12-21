@@ -286,6 +286,9 @@ void CEntry::Update(void)
 				m_apPlayer[m_EntryId[nCnt]]->SetPos(D3DXVECTOR3(-500.0f + (350.0f * nCnt), 0.0f, -150.0f));	// 位置
 				m_apPlayer[m_EntryId[nCnt]]->SetMove(D3DXVECTOR3(0.0f, 0.0f, 0.0f));							// 移動量
 				m_apPlayer[m_EntryId[nCnt]]->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));								// 向き
+
+				// ジャンプ状況を false にする
+				m_apPlayer[nCnt]->SetEnableJump(false);
 			}
 		}
 	}
@@ -300,6 +303,8 @@ void CEntry::Update(void)
 				m_apPlayer[m_EntryId[nCnt]]->SetPos(D3DXVECTOR3(-500.0f + (350.0f * nCnt), -2.0f, -150.0f));
 				m_apPlayer[m_EntryId[nCnt]]->SetMove(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
+				// ジャンプ状況を false にする
+				m_apPlayer[nCnt]->SetEnableJump(false);
 			}
 			else
 			{	// それ以外

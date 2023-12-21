@@ -47,6 +47,7 @@ private:		// 自分だけアクセスできる
 	float m_fSize;				// 拡大率
 	CObject2D* m_pFinish;		// ポリゴンの情報
 	bool m_bFinish;				// 終了したか
+	bool m_bSe;					// SE再生状況
 	// 静的メンバ変数
 	static CGameTime* m_pGameTime;		// ゲームタイムの情報
 	static CCountdown* m_pCountdown;	// カウントダウンの情報

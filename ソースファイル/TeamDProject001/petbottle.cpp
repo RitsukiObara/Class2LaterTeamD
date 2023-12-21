@@ -281,6 +281,7 @@ void CPetbottle::Action(void)
 
 	// “|‚êó‘Ô‚É‚·‚é
 	m_state = STATE_COLLAPSE;
+	SetFileData(CXFile::TYPE_RED_PETBOTTLE);
 
 	// ƒAƒNƒVƒ‡ƒ“ó‹µ‚ğ true ‚É‚·‚é
 	SetAction(true);

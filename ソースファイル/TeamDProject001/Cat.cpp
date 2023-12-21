@@ -401,6 +401,7 @@ void CCat::AttackStateManager(void)
 		if (m_nAtkStateCount <= 0)
 		{//状態カウントが0になった時
 			m_AttackState = ATTACKSTATE_MOVE;
+			m_bAttack = false;		// 攻撃してない状態にする
 		}
 		break;
 	}
@@ -767,4 +768,13 @@ void CCat::DeleteItemUI(void)
 		m_pItemUI->Uninit();
 		m_pItemUI = nullptr;
 	}
+}
+
+//=====================================
+// アイテムの総数の取得処理
+//=====================================
+int CCat::GetItemCount(void) const
+{
+	// アイテムの総数を返す
+	return m_nItemCount;
 }
