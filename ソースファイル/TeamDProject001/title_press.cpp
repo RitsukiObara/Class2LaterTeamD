@@ -12,6 +12,7 @@
 #include "object2D.h"
 #include "texture.h"
 #include "useful.h"
+#include "sound.h"
 
 #include "title.h"
 
@@ -46,6 +47,8 @@ CTitlePress::CTitlePress() : CObject(CObject::TYPE_PRESSENTER, PRIORITY_UI)
 		m_aPress[nCnt].fAlpha = 0.0f;				// 透明度
 		m_aPress[nCnt].fAlphaDest = 0.0f;			// 目的の透明度
 	}
+
+	m_bSe = false;									// SEの再生状況
 }
 
 //============================
@@ -100,6 +103,8 @@ HRESULT CTitlePress::Init(void)
 		m_aPress[nCnt].fAlpha = 0.0f;				// 透明度
 		m_aPress[nCnt].fAlphaDest = 0.0f;			// 目的の透明度
 	}
+
+	m_bSe = false;									// SEの再生状況
 
 	// 成功を返す
 	return S_OK;
@@ -159,6 +164,14 @@ void CTitlePress::Update(void)
 
 				// 向きの移動量を設定する
 				m_aPress[nCnt].fRotMove = (float)((rand() % 11 - 5) * 0.01f);
+
+				if (m_bSe == false)
+				{ // SE再生してない
+
+					// ホールイン再生
+					CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_TITLECOLLIDE);
+					m_bSe = true;
+				}
 			}
 		}
 
