@@ -189,7 +189,7 @@ HRESULT CGame::Init(void)
 	CManager::Get()->GetFile()->SetMap();
 
 	// カウントダウンの生成処理
-	CCountdown::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f), D3DXVECTOR3(200.0f, 250.0f, 0.0f), START_COUNT);
+	CCountdown::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f), D3DXVECTOR3(200.0f, 250.0f, 0.0f), START_COUNT, false);
 
 	// メッシュのテキスト読み込み
 	//CMesh::TxtSet();
