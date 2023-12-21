@@ -70,6 +70,7 @@ private:		// 自分だけアクセスできる
 	// メンバ変数
 	int m_nRezCounter;				// 回復するまでのカウンター
 	bool m_bJump;					// ジャンプ状況
+	bool m_bSe;						// SE再生状況
 
 	// 静的メンバ関数
 	static bool m_bResurrection;	// 復活させてるのか

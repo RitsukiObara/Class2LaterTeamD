@@ -662,6 +662,9 @@ void CTutorial::PlayFalse(void)
 				if (m_pAnswer != NULL)
 				{
 					m_pAnswer->SetAnswer(true, nCnt);
+
+					// 実行完了音再生
+					CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_TUTORIAL_OK);
 				}
 			}
 		}
@@ -677,6 +680,9 @@ void CTutorial::PlayFalse(void)
 				if (m_pAnswer != NULL)
 				{
 					m_pAnswer->SetAnswer(true, nCnt);
+
+					// 実行完了音再生
+					CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_TUTORIAL_OK);
 				}
 			}
 		}
@@ -697,6 +703,9 @@ void CTutorial::PlayFalse(void)
 						if (m_pAnswer != NULL)
 						{
 							m_pAnswer->SetAnswer(true, nCnt);
+
+							// 実行完了音再生
+							CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_TUTORIAL_OK);
 						}
 					}
 				}
@@ -719,6 +728,9 @@ void CTutorial::PlayFalse(void)
 						if (m_pAnswer != NULL)
 						{
 							m_pAnswer->SetAnswer(true, nCnt);
+
+							// 実行完了音再生
+							CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_TUTORIAL_OK);
 						}
 					}
 				}
@@ -741,6 +753,9 @@ void CTutorial::PlayFalse(void)
 						if (m_pAnswer != NULL)
 						{
 							m_pAnswer->SetAnswer(true, nCnt);
+
+							// 実行完了音再生
+							CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_TUTORIAL_OK);
 						}
 					}
 				}
@@ -761,6 +776,9 @@ void CTutorial::PlayFalse(void)
 
 					// チュートリアル達成時に動けないようチュートリアル状態にする
 					m_apPlayer[nCnt]->SetTutorial(true);
+
+					// 実行完了音再生
+					CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_TUTORIAL_OK);
 				}
 			}
 		}
@@ -778,6 +796,9 @@ void CTutorial::PlayFalse(void)
 					if (m_pAnswer != NULL)
 					{
 						m_pAnswer->SetAnswer(true, nCnt);
+
+						// 実行完了音再生
+						CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_TUTORIAL_OK);
 					}
 				}
 			}
@@ -790,6 +811,9 @@ void CTutorial::PlayFalse(void)
 				if (m_pAnswer != NULL)
 				{
 					m_pAnswer->SetAnswer(true, nCnt);
+
+					// 実行完了音再生
+					CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_TUTORIAL_OK);
 				}
 			}
 		}

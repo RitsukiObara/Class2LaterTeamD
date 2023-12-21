@@ -40,7 +40,7 @@ CSound::SOUNDINFO CSound::m_aSoundInfo[CSound::SOUND_LABEL_MAX] =
 	{ "data\\SE\\tutorial_check.wav",0 },	// チュートリアルのチェック音
 	{ "data\\SE\\TitleStart.wav",0 },		// タイトルのスタート音
 	{ "data\\SE\\bubble.wav",0 },			// チュートリアルのふきだし出現音
-	{ "data\\SE\\revival_gauge_save.wav",0 },	// 復活最中の音
+	{ "data\\SE\\revival_gauge_save.wav",-1 },	// 復活最中の音
 	{ "data\\SE\\mouse_revival.wav",0 },	// 復活音
 	{ "data\\SE\\himo.wav",0 },				// ひも引っ張る音
 	{ "data\\SE\\mari.wav",0 },				// まりの音
