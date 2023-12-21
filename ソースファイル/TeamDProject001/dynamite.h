@@ -13,6 +13,7 @@
 #include "obstacle.h"
 #include "object3Dfan.h"
 
+class CObject3D;
 
 class CExplosionFan : public CObject3DFan
 {
@@ -74,12 +75,14 @@ private:		// 自分だけアクセスできる
 
 	// メンバ変数
 	CExplosionFan* m_pFan;
+	CObject3D* m_pExWind[4];		// ポリゴン情報
 	STATE m_state;				// 状態
 	int m_nExplosion;			// 爆発タイミング
 	int m_nDelTyming;			// 爆発の判定時間
 	D3DXCOLOR m_col;
 	float m_fRadius;
 	D3DXVECTOR3 m_SizeChangeSpeed;
+	D3DXVECTOR3 m_WindSize;
 	D3DXCOLOR m_ColChangeSpeed;
 };
 

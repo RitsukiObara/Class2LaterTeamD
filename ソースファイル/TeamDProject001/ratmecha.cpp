@@ -21,6 +21,7 @@
 #include "obstacle_manager.h"
 #include "game.h"
 #include "input.h"
+#include "sound.h"
 
 //-------------------------------------------
 // マクロ定義
@@ -32,6 +33,12 @@
 #define ROTDEST_MAGNI_MIN	(8)				// 目的の向きの倍率の最小値
 #define ROTDEST_MAGNI_RANGE	(11)			// 目的の向きの倍率の範囲
 #define ATTACK_SIZE		(D3DXVECTOR3(95.0f, 150.0f, 95.0f))		// 攻撃の判定の大きさ
+
+//-------------------------------------------
+// 静的メンバ変数
+//-------------------------------------------
+int CRatMecha::m_nBgmAll[SOUNDTYPE_MAX] = { 0,0 };				// BGMを鳴らした音の総数
+
 //==============================
 // コンストラクタ
 //==============================
@@ -101,6 +108,33 @@ void CRatMecha::Uninit(void)
 
 	// 終了処理
 	CObstacle::Uninit();
+
+	for (int nCnt = 0; nCnt < SOUNDTYPE_MAX; nCnt++)
+	{
+		// BGMを鳴らした総数を減算する
+		m_nBgmAll[nCnt]--;
+
+		if (m_nBgmAll[nCnt] <= 0)
+		{ // 総数が0未満になった場合
+
+			// 総数を補正する
+			m_nBgmAll[nCnt] = 0;
+
+			switch (nCnt)
+			{
+			case SOUNDTYPE_RUN:
+
+				// ネズミメカの走行音を鳴らす
+				CManager::Get()->GetSound()->Stop(CSound::SOUND_LABEL_SE_RATMECHA_RUN);
+
+				break;
+
+			case SOUNDTYPE_BREAK:
+
+				break;
+			}
+		}
+	}
 }
 
 //=====================================
@@ -261,7 +295,7 @@ void CRatMecha::Drive(void)
 	D3DXVECTOR3 pos = GetPos();		// 位置
 	D3DXVECTOR3 rot = GetRot();		// 向き
 
-									// 位置を移動する
+	// 位置を移動する
 	pos += m_move;
 
 	// 位置を適用する
@@ -320,7 +354,7 @@ void CRatMecha::RotCalc(void)
 	D3DXVECTOR3 rot = GetRot();		// 向き
 	float fRotDiff;					// 向きの差分
 
-									// 目的の向きを設定する
+	// 目的の向きを設定する
 	m_fRotDest = rot.y + (D3DX_PI * m_fRotMagni);
 
 	// 向きの正規化
@@ -335,13 +369,13 @@ void CRatMecha::RotCalc(void)
 	if (fRotDiff >= 0.0f)
 	{ // 向きの差分がプラスの値の場合
 
-	  // 右向きにする
+		// 右向きにする
 		m_bRight = true;
 	}
 	else
 	{ // 上記以外
 
-	  // 左向きにする
+		// 左向きにする
 		m_bRight = false;
 	}
 }
@@ -372,7 +406,7 @@ bool CRatMecha::Block(void)
 		) == true)
 		{ // 六面体の当たり判定に当たった場合
 
-		  // 衝突判定を true にする
+			// 衝突判定を true にする
 			bClush = true;
 		}
 
@@ -413,7 +447,7 @@ bool CRatMecha::Obstacle(void)
 		) == true)
 		{ // 六面体の当たり判定に当たった場合
 
-		  // 衝突判定を true にする
+			// 衝突判定を true にする
 			bClush = true;
 		}
 
@@ -441,7 +475,7 @@ bool CRatMecha::MagicWall(void)
 	if (pos.x - fRadius <= -MAP_SIZE.x)
 	{ // 位置が左から出そうな場合
 
-	  // 位置を設定する
+		// 位置を設定する
 		pos.x = -MAP_SIZE.x + fRadius;
 
 		// 衝突状況を true にする
@@ -451,7 +485,7 @@ bool CRatMecha::MagicWall(void)
 	if (pos.x + fRadius >= MAP_SIZE.x)
 	{ // 位置が右から出そうな場合
 
-	  // 位置を設定する
+		// 位置を設定する
 		pos.x = MAP_SIZE.x - fRadius;
 
 		// 衝突状況を true にする
@@ -461,7 +495,7 @@ bool CRatMecha::MagicWall(void)
 	if (pos.z - fRadius <= -MAP_SIZE.z)
 	{ // 位置が手前から出そうな場合
 
-	  // 位置を設定する
+		// 位置を設定する
 		pos.z = -MAP_SIZE.z + fRadius;
 
 		// 衝突状況を true にする
@@ -471,7 +505,7 @@ bool CRatMecha::MagicWall(void)
 	if (pos.z + fRadius >= MAP_SIZE.z)
 	{ // 位置が奥から出そうな場合
 
-	  // 位置を設定する
+		// 位置を設定する
 		pos.z = MAP_SIZE.z - fRadius;
 
 		// 衝突状況を true にする
@@ -510,6 +544,14 @@ void CRatMecha::Action(void)
 					// 押したプレイヤーのIDを取得して保存する
 					m_nIdnumber = nCnt;
 
+					if (m_nBgmAll[SOUNDTYPE_RUN] <= 0)
+					{ // 総数が0以下の場合
+
+						// ネズミメカの走行音を鳴らす
+						CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_RATMECHA_RUN);
+					}
+						// 走行音を鳴らした数を加算する
+					m_nBgmAll[SOUNDTYPE_RUN]++;
 				}
 			
 			}

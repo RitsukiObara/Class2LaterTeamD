@@ -273,6 +273,9 @@ bool CHimo::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 				useful::CylinderInner(pPlayer->GetPos(), m_apTarai[nCntTarai]->GetPos(), m_apTarai[nCntTarai]->GetFileData().fRadius + collSize.x) == true)
 			{ // タライが頭上に落ちてきた場合
 
+				// タライが頭に落ちる音を鳴らす
+				CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_TUB);
+
 				// true を返す
 				return true;
 			}
