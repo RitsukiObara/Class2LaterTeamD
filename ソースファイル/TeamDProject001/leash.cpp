@@ -35,6 +35,8 @@ CLeash::CLeash() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK)
 	m_vtxMax = NONE_D3DXVECTOR3;			// 最大値
 	m_vtxMin = NONE_D3DXVECTOR3;			// 最小値
 	m_State = STATE_FALSE;
+	m_bSe = false;							// SEの再生状況
+
 	for (int nCnt = 0; nCnt < 4; nCnt++)
 	{
 		m_bSetHead[nCnt] = false;
@@ -63,6 +65,14 @@ HRESULT CLeash::Init(void)
 	  // 失敗を返す
 		return E_FAIL;
 	}
+
+	m_move = NONE_D3DXVECTOR3;
+	ActionPosHead = NONE_D3DXVECTOR3;
+	ActionPosToes = NONE_D3DXVECTOR3;
+	m_vtxMax = NONE_D3DXVECTOR3;			// 最大値
+	m_vtxMin = NONE_D3DXVECTOR3;			// 最小値
+	m_State = STATE_FALSE;
+	m_bSe = false;							// SEの再生状況
 
 	// 値を返す
 	return S_OK;
@@ -206,6 +216,8 @@ void CLeash::StateManager(D3DXVECTOR3 *pos)
 			m_State = STATE_TRUE;
 			m_StateCount = ACTION_TIME;
 			SetFileData(CXFile::TYPE_RED_LEASHSET);
+
+			
 		}
 		break;
 
@@ -216,6 +228,14 @@ void CLeash::StateManager(D3DXVECTOR3 *pos)
 		{
 			pos->y = 200.0f;
 			m_move.y = 0.0f;
+
+			if (m_bSe == false)
+			{ // SE再生してなかったら
+				// リード音再生
+				CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_LEASH);
+
+				m_bSe = true;
+			}
 		}
 
 		if (m_StateCount <= 0)
