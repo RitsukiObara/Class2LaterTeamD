@@ -37,7 +37,7 @@
 //-------------------------------------------
 // 静的メンバ変数
 //-------------------------------------------
-int CRatMecha::m_nBgmAll[SOUNDTYPE_MAX] = { 0,0 };				// BGMを鳴らした音の総数
+int CRatMecha::m_nBgmAll = 0;				// BGMを鳴らした音の総数
 
 //==============================
 // コンストラクタ
@@ -109,31 +109,17 @@ void CRatMecha::Uninit(void)
 	// 終了処理
 	CObstacle::Uninit();
 
-	for (int nCnt = 0; nCnt < SOUNDTYPE_MAX; nCnt++)
-	{
-		// BGMを鳴らした総数を減算する
-		m_nBgmAll[nCnt]--;
+	// BGMを鳴らした総数を減算する
+	m_nBgmAll--;
 
-		if (m_nBgmAll[nCnt] <= 0)
-		{ // 総数が0未満になった場合
+	if (m_nBgmAll <= 0)
+	{ // 総数が0未満になった場合
 
-			// 総数を補正する
-			m_nBgmAll[nCnt] = 0;
+		// 総数を補正する
+		m_nBgmAll = 0;
 
-			switch (nCnt)
-			{
-			case SOUNDTYPE_RUN:
-
-				// ネズミメカの走行音を鳴らす
-				CManager::Get()->GetSound()->Stop(CSound::SOUND_LABEL_SE_RATMECHA_RUN);
-
-				break;
-
-			case SOUNDTYPE_BREAK:
-
-				break;
-			}
-		}
+		// ネズミメカの走行音を止める
+		CManager::Get()->GetSound()->Stop(CSound::SOUND_LABEL_SE_RATMECHA_RUN);
 	}
 }
 
@@ -276,8 +262,12 @@ bool CRatMecha::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 					D3DXVECTOR3(-ATTACK_SIZE.x, -ATTACK_SIZE.y, -ATTACK_SIZE.z),
 					D3DXVECTOR3(-10.0f, -50.0f, -10.0f)) == true)
 				{ // XZの矩形に当たってたら
-					return true;
 
+					// ネズミメカの破壊音を鳴らす
+					CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_RATMECHA_BREAK);
+
+					// true を返す
+					return true;
 				}
 			}
 		}
@@ -544,14 +534,15 @@ void CRatMecha::Action(void)
 					// 押したプレイヤーのIDを取得して保存する
 					m_nIdnumber = nCnt;
 
-					if (m_nBgmAll[SOUNDTYPE_RUN] <= 0)
+					if (m_nBgmAll <= 0)
 					{ // 総数が0以下の場合
 
 						// ネズミメカの走行音を鳴らす
 						CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_RATMECHA_RUN);
 					}
-						// 走行音を鳴らした数を加算する
-					m_nBgmAll[SOUNDTYPE_RUN]++;
+
+					// 走行音を鳴らした数を加算する
+					m_nBgmAll++;
 				}
 			
 			}

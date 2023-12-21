@@ -586,6 +586,18 @@ void CObstacle::GimmickUI(bool Set, int Player_Idx)
 						GetPos().z));
 					m_pGimmickUI->SetVertex();
 				}
+				else if (m_type == TYPE::TYPE_TV)
+				{
+					m_pGimmickUI->SetPos(D3DXVECTOR3(
+						GetPos().x,
+						GetPos().y + 310.0f,
+						GetPos().z));
+					m_pGimmickUI->SetPosOld(D3DXVECTOR3(
+						GetPos().x,
+						GetPos().y + 310.0f,
+						GetPos().z));
+					m_pGimmickUI->SetVertex();
+				}
 				else
 				{
 					m_pGimmickUI->SetPos(D3DXVECTOR3(

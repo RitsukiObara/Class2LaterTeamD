@@ -66,6 +66,7 @@ CRat::CRat() : CPlayer(CObject::TYPE_PLAYER, CObject::PRIORITY_PLAYER)
 	// 全ての値をクリアする
 	m_nRezCounter = 0;					// 回復するまでのカウンター
 	m_bJump = false;					// ジャンプ状況
+	m_bSe = false;						// SE再生状況
 }
 
 //==============================
@@ -137,6 +138,7 @@ HRESULT CRat::Init(void)
 
 	// 全ての値を初期化する
 	m_bJump = false;				// ジャンプ状況
+	m_bSe = false;						// SE再生状況
 
 	// 値を返す
 	return S_OK;
@@ -712,8 +714,12 @@ void CRat::ResurrectionCollision(void)
 						// 復活させてる状態にする
 						m_bResurrection = true;
 
-						// 回復中の音再生
-						CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_WATERBIRIBIRI);
+						if (m_bSe == false)
+						{
+							// 回復中の音再生
+							CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_REVIVAL_SAVE);
+							m_bSe = true;
+						}
 					}
 
 					// 復活パーティクル生成
@@ -760,8 +766,12 @@ void CRat::ResurrectionCollision(void)
 						// 復活させてない状態にする
 						m_bResurrection = false;
 
+						// 回復中の音停止
+						CManager::Get()->GetSound()->Stop(CSound::SOUND_LABEL_SE_REVIVAL_SAVE);
+						m_bSe = false;
+
 						// 回復中の音再生
-						CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_HONEYBREAK);
+						CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_REVIVAL);
 					}
 				}
 				else if (m_bResurrection == false && (bCollXY == false || bCollXZ == false))
@@ -769,6 +779,10 @@ void CRat::ResurrectionCollision(void)
 
 					// 回復中UI表示設定
 					pPlayer->SetDispRecoveringUI(false);
+
+					// 回復中の音停止
+					CManager::Get()->GetSound()->Stop(CSound::SOUND_LABEL_SE_REVIVAL_SAVE);
+					m_bSe = false;
 
 					if (pPlayer->GetResurrectionTime() > 0)
 					{ // 生き返りのカウンターが加算されてたら
@@ -801,8 +815,5 @@ void CRat::ResurrectionCollision(void)
 
 		// 復活させてない状態にする
 		m_bResurrection = false;
-
-		// 回復中の音停止
-		CManager::Get()->GetSound()->Stop(CSound::SOUND_LABEL_SE_WATERBIRIBIRI);
 	}
 }

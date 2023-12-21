@@ -1033,7 +1033,7 @@ void collision::ItemCollision(CPlayer& pPlayer, const int nHave)
 			pPlayer.GetItem(pItem->GetType());
 
 			// Žæ“¾‰¹–Â‚ç‚·
-			CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_THUMBTACK);
+			CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_PICKED_UP);
 
 			// I—¹ˆ—
 			pItem->Uninit();

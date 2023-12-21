@@ -14,6 +14,7 @@
 #include "input.h"
 #include "collision.h"
 #include "game.h"
+#include "sound.h"
 
 #include "switch.h"
 
@@ -79,6 +80,7 @@ CCurtain::CCurtain() : CObstacle(CObject::TYPE_OBSTACLE, CObject::PRIORITY_BLOCK
 		m_apSwitch[nCnt] = nullptr;		// スイッチの情報
 	}
 	m_state = STATE_CLOSE;				// 状態
+	m_stateOld = m_state;				// 前回の状態
 	m_vtxMax = NONE_D3DXVECTOR3;		// 最大値
 	m_vtxMin = NONE_D3DXVECTOR3;		// 最小値
 	m_fEdge = 0.0f;						// カーテンの端の座標
@@ -112,6 +114,7 @@ HRESULT CCurtain::Init(void)
 		m_apSwitch[nCnt] = nullptr;		// モデルの情報
 	}
 	m_state = STATE_CLOSE;				// 状態
+	m_stateOld = m_state;				// 前回の状態
 	m_vtxMax = NONE_D3DXVECTOR3;		// 最大値
 	m_vtxMin = NONE_D3DXVECTOR3;		// 最小値
 	m_fEdge = 0.0f;						// カーテンの端の座標
@@ -175,6 +178,16 @@ void CCurtain::Update(void)
 		// 閉じる
 		m_state = STATE_CLOSE;
 	}
+
+	if (m_stateOld != m_state)
+	{ // 状態が切り替わった場合
+
+		// カーテンの稼働音を鳴らす
+		CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_CURTAIN_OPEN);
+	}
+
+	// 前回の状態を設定する
+	m_stateOld = m_state;
 
 	// 拡大率の設定処理
 	ScaleVtxSet();

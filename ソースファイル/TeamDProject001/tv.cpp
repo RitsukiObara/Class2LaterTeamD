@@ -570,7 +570,7 @@ void CTv::PowerAction(void)
 
 		// ìdåπONÇ…Ç∑ÇÈ
 		m_bPower = true;
-		SetAction(true);
+		SetAction(false);
 
 		break;
 	}
