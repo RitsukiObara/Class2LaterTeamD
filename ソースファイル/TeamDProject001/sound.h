@@ -47,6 +47,9 @@ public:			// 誰でもアクセス出来る
 		SOUND_LABEL_SE_PICKED_UP,		//拾った音
 		SOUND_LABEL_SE_CHECK,			// チュートリアルのチェック音
 		SOUND_LABEL_SE_TITLE_START,		// タイトルのスタート音
+		SOUND_LABEL_SE_TUTORIAL_BUBBLE,	// 吹き出しの出現音
+		SOUND_LABEL_SE_REVIVAL_SAVE,	// 復活最中の音
+		SOUND_LABEL_SE_REVIVAL,			// 復活音
 		SOUND_LABEL_SE_HIMO,			// ひもの音
 		SOUND_LABEL_SE_HAIRBALL,		// まりの音
 		SOUND_LABEL_SE_HONEYBREAK,		// 蜂蜜の瓶が割れる音
@@ -66,6 +69,14 @@ public:			// 誰でもアクセス出来る
 		SOUND_LABEL_SE_PIYOPIYO,		// 気絶音
 		SOUND_LABEL_SE_NEZI,			// 車のねじ巻き音
 		SOUND_LABEL_SE_JUMP,			// ネズミのジャンプ音
+		SOUND_LABEL_SE_RATMECHA_RUN,	// ネズミメカの走行音
+		SOUND_LABEL_SE_TUTORIAL_OK,		// チュートリアルの実行完了
+		SOUND_LABEL_SE_DYNAMITE,		// ダイナマイト爆発音
+		SOUND_LABEL_SE_CURTAIN_OPEN,	// カーテンの開く音
+		SOUND_LABEL_SE_RATMECHA_BREAK,	// ネズミメカの破壊音
+		SOUND_LABEL_SE_CATDAMAGE,		// ネコのダメージ音
+		SOUND_LABEL_SE_COUNT_START,		// 最初のカウントダウン音
+		SOUND_LABEL_SE_COUNT_END,		// 最後のカウントダウン音
 
 		SOUND_LABEL_MAX					// この列挙型の総数
 	};
