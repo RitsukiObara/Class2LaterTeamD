@@ -234,6 +234,8 @@ private:		// 自分だけアクセスできる
 	bool m_bRescue;				// 救助を行ったかどうか
 	bool m_bAction;				// 起動を行ったかどうか
 	bool m_bSe;					// SE再生したかどうか
+	bool m_bCatSe;				// ネコ用SE再生状況
+	bool m_bRatSe;				// ネズミ用SE再生状況
 };
 
 #endif

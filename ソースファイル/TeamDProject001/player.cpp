@@ -115,6 +115,8 @@ void CPlayer::Box(void)
 	m_bTutorial = false;
 	m_bKill = false;
 	m_bSe = false;						// SE再生したかどうか
+	m_bCatSe = false;					// ネコ用SE再生状況
+	m_bRatSe = false;					// ネズミ用SE再生状況
 
 	for (int nCnt = 0; nCnt < MAX_PLAY; nCnt++)
 	{
@@ -164,6 +166,8 @@ HRESULT CPlayer::Init(void)
 	m_bMove = false;					// 移動しているか
 	m_bDisp = true;						// 表示するか
 	m_bDispSmash = false;				// 吹き飛び用の表示するか
+	m_bCatSe = false;					// ネコ用SE再生状況
+	m_bRatSe = false;					// ネズミ用SE再生状況
 	m_nResurrectionTime = 0;			// 復活するまでの時間
 	m_nLogPlayer = 0;
 
@@ -415,8 +419,20 @@ void CPlayer::Smash(const float fAngle)
 		// 位置設定
 		SetPos(pos);
 
-		// チュッ再生
-		CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_CHU);
+		if (m_type == TYPE_RAT)
+		{
+			// チュッ再生
+			CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_CHU);
+			m_bRatSe = true;
+		}
+		else if (m_type == TYPE_CAT)
+		{
+			// にゃ～ん再生
+			CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_CATDAMAGE);
+			m_bCatSe = true;
+
+
+		}
 
 		// 吹き飛び状態にする
 		m_StunState = STUNSTATE_SMASH;
@@ -1012,6 +1028,14 @@ void CPlayer::StunStateManager(void)
 			m_StunState = STUNSTATE_STUN;
 			SetRatStun(true);
 
+			if (m_type == TYPE_CAT && m_bCatSe == false)
+			{
+				// にゃ～ん再生
+				CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_CATDAMAGE);
+
+				m_bCatSe = true;
+			}
+
 			// スタン時間の設定
 			if (m_type == TYPE::TYPE_CAT)
 			{// ネコの場合
@@ -1061,6 +1085,20 @@ void CPlayer::StunStateManager(void)
 			m_pStun->SetPos(D3DXVECTOR3(GetPos().x, GetPos().y + m_fStunHeight, GetPos().z));
 		}
 
+		if (m_type == TYPE_RAT && m_bRatSe == false)
+		{
+			// チュッ再生
+			CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_CHU);
+			m_bRatSe = true;
+		}
+		else if (m_type == TYPE_CAT && m_bCatSe == false)
+		{
+			// にゃ～ん再生
+			CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_CATDAMAGE);
+
+			m_bCatSe = true;
+		}
+
 		// カウントを減算する
 		m_StunStateCount--;
 
@@ -1071,6 +1109,17 @@ void CPlayer::StunStateManager(void)
 			m_StunState = STUNSTATE_WAIT;
 			m_StunStateCount = STUN_WAIT;
 			m_bSe = false;
+
+			if (m_type == TYPE_RAT)
+			{
+				m_bRatSe = false;
+
+			}
+			else if (m_type == TYPE_CAT)
+			{
+				m_bCatSe = false;
+
+			}
 
 			if (m_pStun != nullptr)
 			{ // 気絶演出が NULL の場合
