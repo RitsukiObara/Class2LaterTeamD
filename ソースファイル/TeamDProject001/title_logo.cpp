@@ -14,6 +14,7 @@
 #include "locus2D.h"
 #include "texture.h"
 #include "useful.h"
+#include "sound.h"
 
 #include "title_press.h"
 
@@ -63,6 +64,7 @@ CTitleLogo::CTitleLogo() : CObject(CObject::TYPE_TITLELOGO, PRIORITY_UI)
 
 	m_state = STATE_ESCAPE;		// 状態
 	m_nStateCount = 0;			// 状態カウント
+	m_bSe = false;				// SE再生状況
 }
 
 //============================
@@ -101,6 +103,7 @@ HRESULT CTitleLogo::Init(void)
 
 	m_state = STATE_ESCAPE;		// 状態
 	m_nStateCount = 0;			// 状態カウント
+	m_bSe = false;				// SE再生状況
 
 	// 成功を返す
 	return S_OK;
@@ -198,6 +201,14 @@ void CTitleLogo::Update(void)
 
 			// 穴入り状態の処理
 			HoleInProcess();
+
+			if (m_bSe == false)
+			{ // SE鳴らしてなかったら
+
+				// ホールイン再生
+				CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_TITLEHOLE);
+				m_bSe = true;
+			}
 
 			break;
 
@@ -526,6 +537,8 @@ void CTitleLogo::ShakeOffProcess(void)
 		Locus(TYPE_RAT);
 	}
 
+	m_bSe = false;		// SE再生しない
+
 	// 残像の発生カウントを加算する
 	m_nStateCount++;
 }
@@ -561,6 +574,8 @@ void CTitleLogo::HoleInProcess(void)
 
 		// タイトルを穴の中に入った状態にする
 		CTitle::SetState(CTitle::STATE_HOLEIN);
+
+		m_bSe = false;		// SE再生しない
 	}
 
 	// ネズミの情報を適用する
@@ -726,6 +741,16 @@ void CTitleLogo::FrameOutCatPosSet(void)
 		// 画面外時のネズミの設定処理
 		FrameOutSetRat();
 	}
+	else
+	{
+		if (m_bSe == false)
+		{ // SE鳴らしてなかったら
+
+			// ホールイン再生
+			CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_TITLEBLOW);
+			m_bSe = true;
+		}
+	}
 
 	// 位置を適用する
 	m_aTitle[TYPE_CAT].pLogo->SetPos(pos);
@@ -778,6 +803,8 @@ void CTitleLogo::FrameOutAnd(void)
 
 		// アンドの描画をしないようにする
 		m_aTitle[TYPE_AND].bDisp = false;
+
+		//m_bSe = false;
 	}
 
 	// 位置とサイズを適用する
