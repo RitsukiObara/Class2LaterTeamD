@@ -769,3 +769,12 @@ void CCat::DeleteItemUI(void)
 		m_pItemUI = nullptr;
 	}
 }
+
+//=====================================
+// アイテムの総数の取得処理
+//=====================================
+int CCat::GetItemCount(void) const
+{
+	// アイテムの総数を返す
+	return m_nItemCount;
+}

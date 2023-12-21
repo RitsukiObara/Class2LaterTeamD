@@ -955,6 +955,18 @@ void CPlayer::GetItem(const CItem::TYPE type)
 }
 
 //=======================================
+// アイテムの総数の取得処理
+//=======================================
+int CPlayer::GetItemCount(void) const
+{
+	// 停止
+	assert(false);
+
+	// 0を返す
+	return 0;
+}
+
+//=======================================
 // ジャンプの設定処理
 //=======================================
 void CPlayer::SetEnableJump(const bool bJump)
