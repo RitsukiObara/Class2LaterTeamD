@@ -134,6 +134,9 @@ void CTitle::Update(void)
 				CManager::Get()->GetInputGamePad()->GetTrigger(CInputGamePad::JOYKEY_A, 0) == true)
 			{ // ENTERキーを押した場合
 
+				// タイトルのスタート音を鳴らす
+				CManager::Get()->GetSound()->Play(CSound::SOUND_LABEL_SE_TITLE_START);
+
 				// 遷移状態に設定する
 				m_state = STATE_TRANS;
 
