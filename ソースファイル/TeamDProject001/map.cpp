@@ -1,10 +1,12 @@
 #include "map.h"
 #include "block.h"
+#include "map.h"
+
 //========================
 //マクロ定義
 //========================
 #define WALLSIZE_LONG D3DXVECTOR3(1600,0,1000)
-#define WALLSIZE_SHORT D3DXVECTOR3(1000,0,1000)
+#define WALLSIZE_SHORT D3DXVECTOR3(1000,0,2600)
 
 //========================
 //静的メンバ変数
@@ -55,6 +57,9 @@ HRESULT CMap::Init(void)
 	m_Wall[6]->SetVtxColor(D3DXCOLOR(255, 255, 255, 0.2f));
 	m_Wall[7]->SetVtxColor(D3DXCOLOR(255, 255, 255, 0.2f));
 
+	// 天井の生成処理
+	m_pCeil = m_pCeil->Create(D3DXVECTOR3(0.0f, 1300.0f, 0.0f));
+
 	for (int nCnt = 0; nCnt < WALL_NUM; nCnt++)
 	{
 		// 頂点座標の設定処理
@@ -72,6 +77,12 @@ void CMap::Uninit(void)
 	{
 		m_Ground->Uninit();
 		m_Ground = NULL;
+	}
+
+	if (m_pCeil != nullptr)
+	{
+		m_pCeil->Uninit();
+		m_pCeil = nullptr;
 	}
 
 	//================================

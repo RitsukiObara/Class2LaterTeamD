@@ -95,6 +95,7 @@ private:		// 自分だけアクセスできる
 	STitleLogo m_aTitle[TYPE_MAX];		// タイトルのポリゴン
 	STATE m_state;						// 状態
 	int m_nStateCount;					// 状態カウント
+	bool m_bSe;							// SE再生状況
 };
 
 #endif

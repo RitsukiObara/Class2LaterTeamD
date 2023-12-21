@@ -121,6 +121,7 @@ const char* CXFile::c_apModelData[CXFile::TYPE_MAX] =		// モデルの名前
 	"data\\MODEL\\Dynamite.x",				// 爆弾
 	"data\\MODEL\\Book000.x",				// 本(赤)
 	"data\\MODEL\\Red_Katen.x",				// 赤のカーテン
+	"data\\MODEL\\chuchumecha.x",			// ネズミメカ
 
 	// ネズミモデル
 	"data\\MODEL\\rat\\00_rat_body.x",		// 体

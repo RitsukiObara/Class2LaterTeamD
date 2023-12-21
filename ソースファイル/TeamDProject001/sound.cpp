@@ -49,7 +49,12 @@ CSound::SOUNDINFO CSound::m_aSoundInfo[CSound::SOUND_LABEL_MAX] =
 	{ "data\\SE\\banana_down.wav",0 },		// バナナ落ちる音
 	{ "data\\SE\\banana_turuturu.wav",0 },	// バナナ落ちる音
 	{ "data\\SE\\leash.wav",0 },			// リード音
-
+	{ "data\\SE\\Chu.wav",0 },				// ネズミの鳴き声の音
+	{ "data\\SE\\finish.wav",0 },			// 終了の音
+	{ "data\\SE\\rat_Chuchu.wav",0 },		// 文字が穴に入る音(タイトル)
+	{ "data\\SE\\title_blown_away.wav",0 },	// 文字が吹き飛ばされる音(タイトル)
+	{ "data\\SE\\START_collide.wav",0 },	// 文字がぶつかる音(タイトル)
+	{ "data\\SE\\confusion.wav",0 },		// 気絶音
 
 };
 

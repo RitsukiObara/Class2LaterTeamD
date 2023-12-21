@@ -42,7 +42,7 @@ public:			// 誰でもアクセスできる
 		TYPE_HONEY,					// 蜂蜜
 		TYPE_TOYCARSCREW,			// おもちゃの車(ネジ)
 		TYPE_TITLEWALL,				// タイトルの壁
-		TYPE_RED_ROOMBA_SUB,			// ルンバのプロペラ{赤のアウトライン}
+		TYPE_RED_ROOMBA_SUB,		// ルンバのプロペラ{赤のアウトライン}
 		TYPE_TARAI,					// たらい
 		TYPE_RED_NOTE4,				// 4分音符{赤のアウトライン}
 		TYPE_RED_NOTE8,				// 8分音符{赤のアウトライン}
@@ -134,6 +134,7 @@ public:			// 誰でもアクセスできる
 		TYPE_DYNAMITE,				// 爆弾
 		TYPE_BOOKRED,				// 本(赤)
 		TYPE_REDKATEN,				// 赤のカーテン
+		TYPE_RATMECHA,				// ネズミメカ
 
 		//ネズミモデル
 		TYPE_RAT_BODY,				// 体
@@ -171,9 +172,9 @@ public:			// 誰でもアクセスできる
 		TYPE_ENTRANCE_FRONT,		// 玄関の奥の壁
 		TYPE_ENTRANCE_SHOEFLOOR,	// 靴履き場の床
 		TYPE_ENTRANCE_SIDEWALL,		// 横の壁
-		TYPE_BOOTS,					//ブーツ
-		TYPE_SANDAL,				//サンダル
-		TYPE_LESTHERSHOES,			//レザーシューズ
+		TYPE_BOOTS,					// ブーツ
+		TYPE_SANDAL,				// サンダル
+		TYPE_LESTHERSHOES,			// レザーシューズ
 
 		// 当たり判定モデル
 		TYPE_COLLISION,				// 当たり判定のエディットモデル

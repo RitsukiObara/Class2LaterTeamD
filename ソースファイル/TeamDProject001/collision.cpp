@@ -333,6 +333,13 @@ void collision::ObstacleHit(CPlayer* pPlayer, const float fWidth, const float fH
 
 				break;
 
+			case CObstacle::TYPE_RATMECHA:
+
+				CParticle::Create(pObstacle->GetPos(), CParticle::TYPE_ENEMYDEATH); //パーティクル
+				pObstacle->Uninit();
+
+				break;
+
 			default:
 
 				//特になし
