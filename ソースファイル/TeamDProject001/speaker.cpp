@@ -95,6 +95,8 @@ HRESULT CSpeaker::Init(void)
 //========================================
 void CSpeaker::Uninit(void)
 {
+	m_nNumBgmAll = 0;
+
 	for (int nCnt = 0; nCnt < MAX_NOTE; nCnt++)
 	{
 		if (m_apNote[nCnt] != nullptr)
