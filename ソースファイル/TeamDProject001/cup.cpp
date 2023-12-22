@@ -250,6 +250,7 @@ bool CCup::Hit(CPlayer* pPlayer, const D3DXVECTOR3& collSize)
 
 		if (posWater.y >= pPlayer->GetPos().y &&
 			posWater.y <= pPlayer->GetPos().y + collSize.y &&
+			pPlayer->GetState() != CPlayer::STATE_INVINCIBLE &&
 			useful::CylinderInner(pPlayer->GetPos(), posWater, radiusWater) == true)
 		{ // “–‚½‚è”»’è‚Ì’†‚É“ü‚Á‚½ê‡
 

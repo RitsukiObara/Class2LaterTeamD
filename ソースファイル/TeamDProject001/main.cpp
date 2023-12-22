@@ -94,7 +94,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE /*hInstancePrev*/, LPSTR /*lpC
 	{ // マネージャーが nullptr じゃない場合
 
 		// マネージャーの初期化
-		CManager::Get()->Init(hInstance, hWnd, TRUE);
+		CManager::Get()->Init(hInstance, hWnd, FALSE);
 	}
 	else
 	{ // 上記以外
